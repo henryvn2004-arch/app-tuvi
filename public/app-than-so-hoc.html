@@ -3,8 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Thần số học — Tử Vi Minh Bảo</title>
-<meta name="description" content="Tính 13 chỉ số Thần Số Học: Đường Đời, Định Mệnh, Linh Hồn, Sứ Mệnh, Ngày Sinh, Thái Độ, Trưởng Thành, biểu đồ ngày sinh, nợ nghiệp quật, năm cá nhân, đỉnh cao & thử thách, nghề nghiệp phù hợp, tam giác vàng hướng nghiệp. Hỏi Thầy luận sâu.">
+<title data-i18n="thansohoc.than-so-hoc-tu-vi-minh">Thần số học — Tử Vi Minh Bảo</title>
+<meta data-i18n-attr="content:thansohoc.tinh-13-chi-so-than-so" name="description" content="Tính 13 chỉ số Thần Số Học: Đường Đời, Định Mệnh, Linh Hồn, Sứ Mệnh, Ngày Sinh, Thái Độ, Trưởng Thành, biểu đồ ngày sinh, nợ nghiệp quật, năm cá nhân, đỉnh cao & thử thách, nghề nghiệp phù hợp, tam giác vàng hướng nghiệp. Hỏi Thầy luận sâu.">
 <link rel="icon" type="image/webp" href="/seal.webp">
 <link rel="preload" href="/fonts/noto-serif-latin-400.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="/fonts/noto-serif-vietnamese-400.woff2" as="font" type="font/woff2" crossorigin>
@@ -44,10 +44,10 @@
   <main class="ws" id="ws">
     <div class="ws-top">
       <button class="btn mobile-only" onclick="document.getElementById('shell-sidebar').classList.toggle('open');window.shellSyncBackdrop&&shellSyncBackdrop()" aria-label="Menu">☰</button>
-      <div class="ws-title"><b>Thần số học</b><span>13 chỉ số theo hệ Pythagoras</span></div>
+      <div data-i18n="thansohoc.than-so-hoc-13-chi-so" class="ws-title"><b>Thần số học</b><span>13 chỉ số theo hệ Pythagoras</span></div>
       <div class="ws-actions">
-        <button class="btn" id="btnEdit" onclick="showForm()" style="display:none">Sửa</button>
-        <button class="btn mobile-only" onclick="Shell.openRail()">✦ Hỏi</button>
+        <button data-i18n="napam.sua" class="btn" id="btnEdit" onclick="showForm()" style="display:none">Sửa</button>
+        <button data-i18n="battu.hoi" class="btn mobile-only" onclick="Shell.openRail()">✦ Hỏi</button>
       </div>
     </div>
     <div class="ws-body">
@@ -61,15 +61,15 @@
         <img class="intro-avatar" src="/tool-avatars/than-so-hoc.webp" alt="" onerror="this.remove()">
         <div class="intro-body">
           <div class="intro-text">
-            <div class="intro-t">Thần số học</div>
-            <div class="intro-d">Ngày sinh của bạn ẩn chứa 13 con số riêng — từ đường đời đến năm cá nhân hiện tại — nói lên cách bạn đang nghĩ và đang chọn. Xem ngay để hiểu rõ hơn chính mình.</div>
+            <div data-i18n="thansohoc.than-so-hoc" class="intro-t">Thần số học</div>
+            <div data-i18n="thansohoc.ngay-sinh-cua-ban-an-chua" class="intro-d">Ngày sinh của bạn ẩn chứa 13 con số riêng — từ đường đời đến năm cá nhân hiện tại — nói lên cách bạn đang nghĩ và đang chọn. Xem ngay để hiểu rõ hơn chính mình.</div>
             <div id="introSrc"></div>
           </div>
         </div>
         <div class="hero-pills">
-          <div class="hero-pill"><span class="hp-ic" data-icon="hash"></span><span>13 chỉ số<br>Pythagoras</span></div>
-          <div class="hero-pill"><span class="hp-ic" data-icon="compass"></span><span>Đường Đời,<br>Định Mệnh</span></div>
-          <div class="hero-pill"><span class="hp-ic" data-icon="calendar"></span><span>Năm cá nhân,<br>đỉnh cao</span></div>
+          <div data-i18n="thansohoc.13-chi-so-pythagoras" class="hero-pill"><span class="hp-ic" data-icon="hash"></span><span>13 chỉ số<br>Pythagoras</span></div>
+          <div data-i18n="thansohoc.duong-doi-dinh-menh" class="hero-pill"><span class="hp-ic" data-icon="compass"></span><span>Đường Đời,<br>Định Mệnh</span></div>
+          <div data-i18n="thansohoc.nam-ca-nhan-dinh-cao" class="hero-pill"><span class="hp-ic" data-icon="calendar"></span><span>Năm cá nhân,<br>đỉnh cao</span></div>
         </div>
       </div></div>
       <div class="ws-main-col">
@@ -77,29 +77,29 @@
            tại đúng chỗ trạng thái đã đổi trong flow cũ (calculate/showForm).
            Tool này MIỄN PHÍ, không có bước Thanh toán — chỉ 2 bước. -->
       <div class="ws-steps" id="wsSteps">
-        <div class="wss-step active"><span class="wss-n">1</span><span class="wss-l">Nhập thông tin</span></div>
-        <div class="wss-step"><span class="wss-n">2</span><span class="wss-l">Nhận kết quả</span></div>
+        <div data-i18n="battu.1-nhap-thong-tin" class="wss-step active"><span class="wss-n">1</span><span class="wss-l">Nhập thông tin</span></div>
+        <div data-i18n="boibai.2-nhan-ket-qua" class="wss-step"><span class="wss-n">2</span><span class="wss-l">Nhận kết quả</span></div>
       </div>
       <div class="form-card" id="birthPanel" style="display:none">
-        <div class="fc-head"><span class="fc-ic" data-icon="hash"></span><h2>Ngày sinh & tên đầy đủ</h2></div>
-        <p class="sub">Nhập ngày sinh và họ tên đầy đủ. Hệ thống tính theo hệ Pythagoras — Đường Đời, Định Mệnh, Linh Hồn, Sứ Mệnh và năm cá nhân hiện tại.</p>
+        <div class="fc-head"><span class="fc-ic" data-icon="hash"></span><h2 data-i18n="thansohoc.ngay-sinh-ten-day-du">Ngày sinh & tên đầy đủ</h2></div>
+        <p data-i18n="thansohoc.nhap-ngay-sinh-va-ho-ten" class="sub">Nhập ngày sinh và họ tên đầy đủ. Hệ thống tính theo hệ Pythagoras — Đường Đời, Định Mệnh, Linh Hồn, Sứ Mệnh và năm cá nhân hiện tại.</p>
         <div class="cost-box">
           <div class="cb-l">
             <span class="cb-ic" data-icon="wallet"></span>
             <div>
-              <div class="cb-title">Chi phí sử dụng</div>
+              <div data-i18n="battu.chi-phi-su-dung" class="cb-title">Chi phí sử dụng</div>
               <div class="cb-amt" data-tvp-price-label="than-so-hoc">…</div>
             </div>
           </div>
         </div>
         <div class="frow">
-          <div class="fg" style="width:74px"><label>Ngày</label><input type="number" id="ngay" placeholder="15" min="1" max="31"></div>
-          <div class="fg" style="width:74px"><label>Tháng</label><input type="number" id="thang" placeholder="6" min="1" max="12"></div>
-          <div class="fg" style="width:90px"><label>Năm</label><input type="number" id="nam" placeholder="1990"></div>
-          <div class="fg" style="flex:1;min-width:160px"><label>Họ tên đầy đủ</label><input type="text" id="hoten" placeholder="Nguyễn Văn An"></div>
+          <div class="fg" style="width:74px"><label data-i18n="thansohoc.ngay">Ngày</label><input type="number" id="ngay" placeholder="15" min="1" max="31"></div>
+          <div class="fg" style="width:74px"><label data-i18n="thansohoc.thang">Tháng</label><input type="number" id="thang" placeholder="6" min="1" max="12"></div>
+          <div class="fg" style="width:90px"><label data-i18n="thansohoc.nam">Năm</label><input type="number" id="nam" placeholder="1990"></div>
+          <div class="fg" style="flex:1;min-width:160px"><label data-i18n="thansohoc.ho-ten-day-du">Họ tên đầy đủ</label><input data-i18n-attr="placeholder:thansohoc.nguyen-van-an" type="text" id="hoten" placeholder="Nguyễn Văn An"></div>
         </div>
-        <div class="hint">Nhập tên khai sinh đầy đủ — <b>gõ có dấu hay không dấu đều được</b>, kết quả như nhau.</div>
-        <button class="btn-go" id="btnGo" onclick="calculate()">
+        <div data-i18n="thansohoc.nhap-ten-khai-sinh-day-du" class="hint">Nhập tên khai sinh đầy đủ — <b>gõ có dấu hay không dấu đều được</b>, kết quả như nhau.</div>
+        <button data-i18n="thansohoc.tinh-than-so-mien-phi" class="btn-go" id="btnGo" onclick="calculate()">
           <span class="bg-label"><span class="ic" data-icon="hash"></span><b id="btnGoLabel">Tính thần số →</b></span>
           <small>Miễn phí</small>
         </button>
@@ -107,14 +107,14 @@
       </div>
       <div class="ws-intake-hint" id="wsIntakeHint">
         <span class="ic" data-icon="message-circle"></span>
-        <p>Trả lời thầy ở khung chat để lập bản đồ thần số — chỉ cần ngày sinh và họ tên.</p>
+        <p data-i18n="thansohoc.tra-loi-thay-o-khung-chat">Trả lời thầy ở khung chat để lập bản đồ thần số — chỉ cần ngày sinh và họ tên.</p>
       </div>
       </div>
       <div class="ws-side-col">
       <div class="ws-promo">
-        <div class="wsp-eyebrow"><span class="wsp-ic" data-icon="book-open"></span><span>Giới thiệu</span></div>
-        <div class="wsp-title">Thần số học</div>
-        <p class="wsp-desc">Thần số học (Numerology) theo trường phái Pythagoras quy đổi các con số trong ngày sinh và họ tên thành những chỉ số mang ý nghĩa riêng, như Đường Đời hay Đỉnh Cao. Trường phái này bắt nguồn từ tư tưởng của nhà toán học Hy Lạp cổ đại Pythagoras về mối liên hệ giữa con số và vũ trụ.</p>
+        <div data-i18n="battu.gioi-thieu" class="wsp-eyebrow"><span class="wsp-ic" data-icon="book-open"></span><span>Giới thiệu</span></div>
+        <div data-i18n="thansohoc.than-so-hoc" class="wsp-title">Thần số học</div>
+        <p data-i18n="thansohoc.than-so-hoc-numerology-theo-truong" class="wsp-desc">Thần số học (Numerology) theo trường phái Pythagoras quy đổi các con số trong ngày sinh và họ tên thành những chỉ số mang ý nghĩa riêng, như Đường Đời hay Đỉnh Cao. Trường phái này bắt nguồn từ tư tưởng của nhà toán học Hy Lạp cổ đại Pythagoras về mối liên hệ giữa con số và vũ trụ.</p>
       </div>
       <div id="shellRecent"></div>
       </div>
@@ -122,7 +122,7 @@
 
       <div id="resPanel" data-ws-result>
         <div class="res-block"><div id="numResults"></div></div>
-        <div class="ask" data-ask="Luận giúp tôi bản đồ thần số này: 4 số cốt lõi bổ trợ hay mâu thuẫn nhau, biểu đồ ngày sinh mạnh yếu chỗ nào, và tôi đang ở chặng nào của đời.">✦ Hỏi Thầy luận sâu thần số</div>
+        <div data-i18n="thansohoc.hoi-thay-luan-sau-than-so" class="ask" data-ask="Luận giúp tôi bản đồ thần số này: 4 số cốt lõi bổ trợ hay mâu thuẫn nhau, biểu đồ ngày sinh mạnh yếu chỗ nào, và tôi đang ở chặng nào của đời.">✦ Hỏi Thầy luận sâu thần số</div>
       </div>
     </div>
   </main>
@@ -169,16 +169,16 @@ function calculate(){
   if(window.SHELL_INTRO)Shell.dismissIntro(window.SHELL_INTRO.key);
   Shell.setContext({
     scenario:{type:'than-so-hoc',data:r.data},
-    label:'Thần số học · '+r.data.ten,
-    greeting:'Đã lập bản đồ thần số cho **'+r.data.ten+'** (Đường Đời **'+r.data.soDuongDoi+'**, Định Mệnh '+r.data.soDinhMenh+', Linh Hồn '+r.data.soLinhHon+', Sứ Mệnh '+r.data.soSuMenh+') — kèm biểu đồ ngày sinh, nợ nghiệp quật và đỉnh cao/thử thách theo giai đoạn. Bạn muốn tôi luận gì trước?',
-    chips:['Số Đường Đời nói gì về tôi?','Năm '+r.data.namXemThanSo+' của tôi nên làm gì?','Tôi đang ở chặng nào, thử thách gì?','Biểu đồ ngày sinh tôi thiếu gì?','Nghề nghiệp nào hợp?']
+    label:_tvmbT('js.thansohoc.than-so-hoc', 'Thần số học · ')+r.data.ten,
+    greeting:_tvmbT('js.thansohoc.da-lap-ban-do-than-so', 'Đã lập bản đồ thần số cho **')+r.data.ten+_tvmbT('js.thansohoc.duong-doi', '** (Đường Đời **')+r.data.soDuongDoi+_tvmbT('js.thansohoc.dinh-menh', '**, Định Mệnh ')+r.data.soDinhMenh+_tvmbT('js.thansohoc.linh-hon', ', Linh Hồn ')+r.data.soLinhHon+_tvmbT('js.thansohoc.su-menh', ', Sứ Mệnh ')+r.data.soSuMenh+_tvmbT('js.thansohoc.kem-bieu-do-ngay-sinh-no', ') — kèm biểu đồ ngày sinh, nợ nghiệp quật và đỉnh cao/thử thách theo giai đoạn. Bạn muốn tôi luận gì trước?'),
+    chips:[_tvmbT('js.thansohoc.so-duong-doi-noi-gi-ve', 'Số Đường Đời nói gì về tôi?'),_tvmbT('js.thansohoc.nam-cua-toi-nen-lam-gi', 'Năm {y} của tôi nên làm gì?', {y:r.data.namXemThanSo}),_tvmbT('js.thansohoc.toi-dang-o-chang-nao-thu', 'Tôi đang ở chặng nào, thử thách gì?'),_tvmbT('js.thansohoc.bieu-do-ngay-sinh-toi-thieu', 'Biểu đồ ngày sinh tôi thiếu gì?'),_tvmbT('js.thansohoc.nghe-nghiep-nao-hop', 'Nghề nghiệp nào hợp?')]
   });
-  var _tsLines=['Thần số học — '+r.data.ten+' ('+r.data.dob+')'];
-  _tsLines.push('Đường Đời: '+r.data.soDuongDoi+' · Định Mệnh: '+r.data.soDinhMenh+' · Linh Hồn: '+r.data.soLinhHon+' · Sứ Mệnh: '+r.data.soSuMenh);
-  _tsLines.push('Ngày Sinh: '+r.data.soNgaySinh+' · Thái Độ: '+r.data.soThaiDo+(r.data.soTruongThanh?' · Trưởng Thành: '+r.data.soTruongThanh:''));
-  _tsLines.push('Năm cá nhân '+r.data.namXemThanSo+': '+r.data.namCaNhan+'/9 · Biểu đồ thiếu: '+r.data.bieuDoThieu);
-  if(r.data.noNghiepQuat!=='(không có)')_tsLines.push('Nợ nghiệp quật: '+r.data.noNghiepQuat);
-  Shell.setShareable({kind:'text',toolId:'than-so-hoc',title:'Thần số học của '+r.data.ten,text:_tsLines.join('\n')});
+  var _tsLines=[_tvmbT('js.thansohoc.than-so-hoc-r6ky', 'Thần số học — ')+r.data.ten+' ('+r.data.dob+')'];
+  _tsLines.push(_tvmbT('js.thansohoc.duong-doi-6p15', 'Đường Đời: ')+r.data.soDuongDoi+_tvmbT('js.thansohoc.dinh-menh-sba7', ' · Định Mệnh: ')+r.data.soDinhMenh+_tvmbT('js.thansohoc.linh-hon-avwt', ' · Linh Hồn: ')+r.data.soLinhHon+_tvmbT('js.thansohoc.su-menh-jyge', ' · Sứ Mệnh: ')+r.data.soSuMenh);
+  _tsLines.push(_tvmbT('js.thansohoc.ngay-sinh', 'Ngày Sinh: ')+r.data.soNgaySinh+_tvmbT('js.thansohoc.thai-do', ' · Thái Độ: ')+r.data.soThaiDo+(r.data.soTruongThanh?_tvmbT('js.thansohoc.truong-thanh', ' · Trưởng Thành: ')+r.data.soTruongThanh:''));
+  _tsLines.push(_tvmbT('js.thansohoc.nam-ca-nhan', 'Năm cá nhân ')+r.data.namXemThanSo+': '+r.data.namCaNhan+_tvmbT('js.thansohoc.9-bieu-do-thieu', '/9 · Biểu đồ thiếu: ')+r.data.bieuDoThieu);
+  if(r.data.noNghiepQuat!=='(không có)')_tsLines.push(_tvmbT('js.thansohoc.no-nghiep-quat', 'Nợ nghiệp quật: ')+r.data.noNghiepQuat);
+  Shell.setShareable({kind:'text',toolId:'than-so-hoc',title:_tvmbT('js.thansohoc.than-so-hoc-cua', 'Thần số học của ')+r.data.ten,text:_tsLines.join('\n')});
   document.querySelectorAll('#resPanel [data-ask]').forEach(function(el){ el.addEventListener('click',function(){ Shell.ask(el.getAttribute('data-ask')); }); });
   appendHighlightCard(r);
 }
@@ -194,15 +194,15 @@ function appendHighlightCard(r){
   var chat=document.getElementById('chat');
   if(!chat) return;
   var av=(function(){ var a=document.querySelector('.rail-ava'); return a?a.src:'/authors/thai-hu.jpg'; })();
-  var nums=[['Đường Đời',r.data.soDuongDoi],['Định Mệnh',r.data.soDinhMenh],['Linh Hồn',r.data.soLinhHon],['Sứ Mệnh',r.data.soSuMenh]];
+  var nums=[[_tvmbT('js.thansohoc.duong-doi-653r', 'Đường Đời'),r.data.soDuongDoi],[_tvmbT('js.thansohoc.dinh-menh-sxmj', 'Định Mệnh'),r.data.soDinhMenh],[_tvmbT('js.thansohoc.linh-hon-oll4', 'Linh Hồn'),r.data.soLinhHon],[_tvmbT('js.thansohoc.su-menh-hzws', 'Sứ Mệnh'),r.data.soSuMenh]];
   var rowHtml=nums.map(function(n){ return '<div class="chat-hl-n"><b>'+esc(n[1])+'</b><span>'+esc(n[0])+'</span></div>'; }).join('');
   var el=document.createElement('div'); el.className='msg a';
   el.innerHTML='<img class="msg-ava" src="'+av+'" alt="">'+
     '<div class="msg-body"><div class="chat-hl"><div class="chat-hl-row">'+rowHtml+'</div>'+
-    '<button type="button" class="chat-hl-cta" id="tshOpenSheet">Xem đầy đủ 13 chỉ số →</button></div></div>';
+    _tvmbT('js.thansohoc.xem-day-du-13-chi-so', '<button type="button" class="chat-hl-cta" id="tshOpenSheet">Xem đầy đủ 13 chỉ số →</button></div></div>');
   chat.appendChild(el); chat.scrollTop=chat.scrollHeight;
   document.getElementById('tshOpenSheet').addEventListener('click',function(){
-    Shell.openSheet(document.getElementById('numResults').innerHTML, {title:'Thần số học · '+r.data.ten});
+    Shell.openSheet(document.getElementById('numResults').innerHTML, {title:_tvmbT('js.thansohoc.than-so-hoc', 'Thần số học · ')+r.data.ten});
   });
 }
 function showForm(){
@@ -240,8 +240,8 @@ function startIntake(){
     showGender: false,
     skipHour: true,
     requireName: true,
-    q1: 'Cho thầy xin họ tên đầy đủ khai sinh nhé — có dấu hay không đều được.',
-    submitLabel: 'Tính thần số →',
+    q1: _tvmbT('js.thansohoc.cho-thay-xin-ho-ten-day', 'Cho thầy xin họ tên đầy đủ khai sinh nhé — có dấu hay không đều được.'),
+    submitLabel: _tvmbT('js.thansohoc.tinh-than-so', 'Tính thần số →'),
     onDone: calculate
   });
 }

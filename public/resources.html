@@ -3,10 +3,10 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Thư Viện Tài Liệu Tử Vi — Tử Vi Minh Bảo</title>
-<meta name="description" content="Kho tài liệu học thuật Tử Vi Đẩu Số — hơn 200 cuốn sách tiếng Việt và tiếng Trung về Tử Vi, từ cổ điển đến hiện đại. Download miễn phí.">
-<meta property="og:title" content="Thư Viện Tài Liệu Tử Vi — Tử Vi Minh Bảo">
-<meta property="og:description" content="Hơn 200 tài liệu học thuật Tử Vi Đẩu Số — tiếng Việt và tiếng Trung. Miễn phí cho cộng đồng nghiên cứu.">
+<title data-i18n="resources.thu-vien-tai-lieu-tu-vi">Thư Viện Tài Liệu Tử Vi — Tử Vi Minh Bảo</title>
+<meta data-i18n-attr="content:resources.kho-tai-lieu-hoc-thuat-tu" name="description" content="Kho tài liệu học thuật Tử Vi Đẩu Số — hơn 200 cuốn sách tiếng Việt và tiếng Trung về Tử Vi, từ cổ điển đến hiện đại. Download miễn phí.">
+<meta data-i18n-attr="content:resources.thu-vien-tai-lieu-tu-vi" property="og:title" content="Thư Viện Tài Liệu Tử Vi — Tử Vi Minh Bảo">
+<meta data-i18n-attr="content:resources.hon-200-tai-lieu-hoc-thuat" property="og:description" content="Hơn 200 tài liệu học thuật Tử Vi Đẩu Số — tiếng Việt và tiếng Trung. Miễn phí cho cộng đồng nghiên cứu.">
 <meta property="og:image" content="https://www.tuviminhbao.com/seal.webp">
 <meta property="og:url" content="https://www.tuviminhbao.com/resources.html">
 <meta property="og:type" content="website">
@@ -111,24 +111,24 @@ body { font-family: "Be Vietnam Pro", sans-serif; background: var(--bg); color: 
 <div id="nav-ph" style="height:60px;background:#FBFAF6"></div>
 
 <div class="hero">
-  <div class="hero-eyebrow">Thư Viện</div>
-  <h1 class="hero-title">Tài Liệu Tử Vi Đẩu Số</h1>
-  <p class="hero-sub">Kho tài liệu học thuật sưu tầm từ nhiều nguồn — tiếng Việt và tiếng Trung. Chia sẻ miễn phí cho cộng đồng nghiên cứu và học tập Tử Vi.</p>
+  <div data-i18n="resources.thu-vien" class="hero-eyebrow">Thư Viện</div>
+  <h1 data-i18n="resources.tai-lieu-tu-vi-dau-so" class="hero-title">Tài Liệu Tử Vi Đẩu Số</h1>
+  <p data-i18n="resources.kho-tai-lieu-hoc-thuat-suu" class="hero-sub">Kho tài liệu học thuật sưu tầm từ nhiều nguồn — tiếng Việt và tiếng Trung. Chia sẻ miễn phí cho cộng đồng nghiên cứu và học tập Tử Vi.</p>
   <div class="hero-stats">
-    <div class="hero-stat"><div class="hero-stat-n">62</div><div class="hero-stat-l">Tài liệu tiếng Việt</div></div>
-    <div class="hero-stat"><div class="hero-stat-n">168</div><div class="hero-stat-l">Tài liệu tiếng Trung</div></div>
-    <div class="hero-stat"><div class="hero-stat-n">230+</div><div class="hero-stat-l">Tổng cộng</div></div>
+    <div class="hero-stat"><div class="hero-stat-n">62</div><div data-i18n="resources.tai-lieu-tieng-viet" class="hero-stat-l">Tài liệu tiếng Việt</div></div>
+    <div class="hero-stat"><div class="hero-stat-n">168</div><div data-i18n="resources.tai-lieu-tieng-trung" class="hero-stat-l">Tài liệu tiếng Trung</div></div>
+    <div class="hero-stat"><div class="hero-stat-n">230+</div><div data-i18n="resources.tong-cong" class="hero-stat-l">Tổng cộng</div></div>
   </div>
 </div>
 
 <div class="search-bar">
-  <input class="search-input" type="text" id="search-input" placeholder="Tìm tên sách hoặc tác giả..." oninput="filterBooks()">
+  <input data-i18n-attr="placeholder:resources.tim-ten-sach-hoac-tac-gia" class="search-input" type="text" id="search-input" placeholder="Tìm tên sách hoặc tác giả..." oninput="filterBooks()">
   <span class="search-count" id="search-count"></span>
 </div>
 
 <div class="tabs">
-  <button class="tab-btn active" onclick="switchTab('viet', this)"><span class="ic-inline" data-icon-emoji="📗" style="display:inline-flex;width:1em;height:1em;vertical-align:-2px;color:#7C6942">📗</span> Tiếng Việt <span id="count-viet"></span></button>
-  <button class="tab-btn" onclick="switchTab('trung', this)"><span class="ic-inline" data-icon-emoji="📕" style="display:inline-flex;width:1em;height:1em;vertical-align:-2px;color:#7C6942">📕</span> Tiếng Trung <span id="count-trung"></span></button>
+  <button data-i18n="resources.tieng-viet" class="tab-btn active" onclick="switchTab('viet', this)"><span class="ic-inline" data-icon-emoji="📗" style="display:inline-flex;width:1em;height:1em;vertical-align:-2px;color:#7C6942">📗</span> Tiếng Việt <span id="count-viet"></span></button>
+  <button data-i18n="resources.tieng-trung" class="tab-btn" onclick="switchTab('trung', this)"><span class="ic-inline" data-icon-emoji="📕" style="display:inline-flex;width:1em;height:1em;vertical-align:-2px;color:#7C6942">📕</span> Tiếng Trung <span id="count-trung"></span></button>
 </div>
 
 <div class="page-body">
@@ -136,8 +136,8 @@ body { font-family: "Be Vietnam Pro", sans-serif; background: var(--bg); color: 
   <!-- TIẾNG VIỆT -->
   <div class="tab-content active" id="tab-viet">
     <div class="section-header">
-      <h2 class="section-title">Tài liệu tiếng Việt</h2>
-      <p class="section-sub">Sắp xếp theo thứ tự A–Z. Nhấn tên sách để tải xuống (nếu có link).</p>
+      <h2 data-i18n="resources.tai-lieu-tieng-viet" class="section-title">Tài liệu tiếng Việt</h2>
+      <p data-i18n="resources.sap-xep-theo-thu-tu-a" class="section-sub">Sắp xếp theo thứ tự A–Z. Nhấn tên sách để tải xuống (nếu có link).</p>
     </div>
     <ul class="book-list" id="list-viet">
           <li class="book-item"><span class="book-title"><a href="/tai-lieu/sach/bat-tu-luan-doan-tuan-hoan">Bát tự luận đoán tuần hoàn - Phan Tử Ngư</a></span></li>
@@ -208,8 +208,8 @@ body { font-family: "Be Vietnam Pro", sans-serif; background: var(--bg); color: 
   <!-- TIẾNG TRUNG -->
   <div class="tab-content" id="tab-trung">
     <div class="section-header">
-      <h2 class="section-title">Tài liệu tiếng Trung</h2>
-      <p class="section-sub">Sắp xếp theo thứ tự A–Z. Nhấn tên sách để tải xuống (nếu có link).</p>
+      <h2 data-i18n="resources.tai-lieu-tieng-trung" class="section-title">Tài liệu tiếng Trung</h2>
+      <p data-i18n="resources.sap-xep-theo-thu-tu-a" class="section-sub">Sắp xếp theo thứ tự A–Z. Nhấn tên sách để tải xuống (nếu có link).</p>
     </div>
     <ul class="book-list" id="list-trung">
           <li class="book-item"><span class="book-title"><a href="/tai-lieu/sach/bach-y-tu-si-dau-so-dac-le">Bạch y tú sĩ - Đấu sổ đặc lệ mệnh phổ</a></span></li>
@@ -379,6 +379,9 @@ body { font-family: "Be Vietnam Pro", sans-serif; background: var(--bg); color: 
 </div>
 
 <script>
+var T = function (k, d, v) { var I = window.I18n; return I && I.tv ? I.tv(k, d, v) : (v ? String(d).replace(/\{(\w+)\}/g, function (x, n) { return v[n] !== undefined ? v[n] : x; }) : d); };
+</script>
+<script>
 let activeTab = 'viet';
 
 function switchTab(id, btn) {
@@ -403,8 +406,8 @@ function filterBooks() {
   });
   const total = items.length;
   document.getElementById('search-count').textContent = q
-    ? visible + ' / ' + total + ' kết quả'
-    : total + ' tài liệu';
+    ? T('js.resources.ket-qua', '{visible} / {total} kết quả', { visible: visible, total: total })
+    : T('js.resources.tai-lieu', '{total} tài liệu', { total: total });
 }
 
 // Init counts
@@ -413,7 +416,7 @@ window.onload = () => {
   const nt = document.querySelectorAll('#list-trung .book-item').length;
   document.getElementById('count-viet').textContent = '(' + nv + ')';
   document.getElementById('count-trung').textContent = '(' + nt + ')';
-  document.getElementById('search-count').textContent = nv + ' tài liệu';
+  document.getElementById('search-count').textContent = T('js.resources.tai-lieu', '{total} tài liệu', { total: nv });
 };
 </script>
 <script src="/nav.js?v=49"></script>

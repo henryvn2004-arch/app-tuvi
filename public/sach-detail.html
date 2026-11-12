@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Tài Liệu Tử Vi — Tử Vi Minh Bảo</title>
+<title data-i18n="tailieu.tai-lieu-tu-vi-tu-vi">Tài Liệu Tử Vi — Tử Vi Minh Bảo</title>
 <meta name="description" content="">
 <meta property="og:title" content="">
 <meta property="og:description" content="">
@@ -69,7 +69,7 @@ body{font-family:'Be Vietnam Pro',sans-serif;background:var(--bg);color:var(--te
 <script src="/nav.js?v=49"></script>
 
 
-<div class="breadcrumb">
+<div data-i18n="sachdetail.trang-chu-tai-lieu-dang-tai" class="breadcrumb">
   <a href="/">Trang Chủ</a>
   <span>›</span>
   <a href="/resources.html">Tài Liệu</a>
@@ -78,15 +78,15 @@ body{font-family:'Be Vietnam Pro',sans-serif;background:var(--bg);color:var(--te
 </div>
 
 <div id="state-loading" class="state-wrap">
-  <div><div class="spinner"></div><div style="font-size:14px;color:#aaa">Đang tải...</div></div>
+  <div><div class="spinner"></div><div data-i18n="sachdetail.dang-tai" style="font-size:14px;color:#aaa">Đang tải...</div></div>
 </div>
 
 <div id="state-error" class="state-wrap" style="display:none">
   <div>
     <div style="font-size:40px;margin-bottom:16px"><span class="ic" data-icon="book-open"></span></div>
-    <div style="font-family:'Noto Serif',serif;font-size:22px;color:var(--navy);margin-bottom:10px">Không tìm thấy tài liệu</div>
-    <div style="font-size:14px;color:var(--text-lt);margin-bottom:24px">Tài liệu không tồn tại hoặc đang được cập nhật.</div>
-    <a href="/resources.html" style="padding:10px 24px;background:var(--navy);color:#fff;border-radius:6px;font-size:13px;text-decoration:none">← Về Thư Viện</a>
+    <div data-i18n="sachdetail.khong-tim-thay-tai-lieu" style="font-family:'Noto Serif',serif;font-size:22px;color:var(--navy);margin-bottom:10px">Không tìm thấy tài liệu</div>
+    <div data-i18n="sachdetail.tai-lieu-khong-ton-tai-hoac" style="font-size:14px;color:var(--text-lt);margin-bottom:24px">Tài liệu không tồn tại hoặc đang được cập nhật.</div>
+    <a data-i18n="sachdetail.ve-thu-vien" href="/resources.html" style="padding:10px 24px;background:var(--navy);color:#fff;border-radius:6px;font-size:13px;text-decoration:none">← Về Thư Viện</a>
   </div>
 </div>
 
@@ -96,10 +96,10 @@ body{font-family:'Be Vietnam Pro',sans-serif;background:var(--bg);color:var(--te
   <p class="book-excerpt" id="book-excerpt"></p>
   <div class="download-box" id="download-box">
     <div class="dl-text" id="dl-text"></div>
-    <a id="dl-btn" class="btn-dl disabled" href="#" target="_blank" rel="noopener">Tải xuống</a>
+    <a data-i18n="sachdetail.tai-xuong" id="dl-btn" class="btn-dl disabled" href="#" target="_blank" rel="noopener">Tải xuống</a>
   </div>
   <div class="article-body" id="article-body"></div>
-  <div class="article-back">
+  <div data-i18n="sachdetail.ve-thu-vien-tai-lieu" class="article-back">
     <a href="/resources.html">← Về Thư Viện Tài Liệu</a>
   </div>
 </article>
@@ -134,7 +134,7 @@ function renderMarkdown(text) {
 
 function updateSEO(book) {
   const url = `https://www.tuviminhbao.com/tai-lieu/sach/${book.slug}`;
-  const title = `${book.title} — ${book.author} | Tử Vi Minh Bảo`;
+  const title = `${book.title} — ${book.author} | ${_tvmbT('js.sachdetail.tu-vi-minh-bao', 'Tử Vi Minh Bảo')}`;
   document.title = title;
   document.querySelector('meta[name="description"]')?.setAttribute('content', book.excerpt || book.title);
   document.querySelector('meta[property="og:title"]')?.setAttribute('content', title);
@@ -202,10 +202,10 @@ function render(book) {
   document.getElementById('bc-title').textContent = book.title;
 
   // Meta badges
-  const langLabel = book.language === 'vi' ? 'Tiếng Việt' : 'Tiếng Trung';
+  const langLabel = book.language === 'vi' ? _tvmbT('js.sachdetail.tieng-viet', 'Tiếng Việt') : _tvmbT('js.sachdetail.tieng-trung', 'Tiếng Trung');
   const langCls   = book.language === 'vi' ? 'lang-vi' : 'lang-zh';
   document.getElementById('book-meta').innerHTML = `
-    <span class="meta-author">${window.iconHtml?window.iconHtml('pen-line'):''} ${book.author || 'Không rõ tác giả'}</span>
+    <span class="meta-author">${window.iconHtml?window.iconHtml('pen-line'):''} ${book.author || _tvmbT('js.sachdetail.khong-ro-tac-gia', 'Không rõ tác giả')}</span>
     <span class="meta-lang ${langCls}">${langLabel}</span>
     ${(book.tags||[]).slice(0,3).map(t=>`<span class="meta-tag">${t}</span>`).join('')}
   `;
@@ -224,13 +224,13 @@ function render(book) {
   const dlTxt = document.getElementById('dl-text');
   if (book.drive_url) {
     dlBox.classList.remove('no-link');
-    dlTxt.innerHTML = `<strong>${window.iconHtml?window.iconHtml('inbox'):''} Tải xuống miễn phí</strong><br>File PDF — chia sẻ cho cộng đồng nghiên cứu Tử Vi.`;
+    dlTxt.innerHTML = `<strong>${window.iconHtml?window.iconHtml('inbox'):''} ${_tvmbT('js.sachdetail.tai-xuong-mien-phi', 'Tải xuống miễn phí')}</strong><br>${_tvmbT('js.sachdetail.file-pdf-chia-se-cho', 'File PDF — chia sẻ cho cộng đồng nghiên cứu Tử Vi.')}`;
     dlBtn.href = book.drive_url;
     dlBtn.classList.remove('disabled');
-    dlBtn.textContent = '⬇ Tải xuống';
+    dlBtn.textContent = _tvmbT('js.sachdetail.tai-xuong', '⬇ Tải xuống');
   } else {
     dlBox.classList.add('no-link');
-    dlTxt.innerHTML = `<strong>Chưa có link tải xuống</strong><br>Tài liệu đang được cập nhật. Quay lại sau hoặc liên hệ để yêu cầu.`;
+    dlTxt.innerHTML = `<strong>${_tvmbT('js.sachdetail.chua-co-link-tai-xuong', 'Chưa có link tải xuống')}</strong><br>${_tvmbT('js.sachdetail.tai-lieu-dang-duoc-cap-nhat', 'Tài liệu đang được cập nhật. Quay lại sau hoặc liên hệ để yêu cầu.')}`;
     dlBtn.onclick = (e) => e.preventDefault();
   }
 

@@ -3,8 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Thanh Tướng Pro — Tử Vi Minh Bảo</title>
-<meta name="description" content="Bốn bài đo giọng nói chuyên sâu — hệ thống phân tích Ngũ Âm theo Ma Y Thần Tướng, Thần Tướng Toàn Biên, Thủy Kính Tập.">
+<title data-i18n="thtp.thanh-tuong-pro-tu-vi-minh">Thanh Tướng Pro — Tử Vi Minh Bảo</title>
+<meta data-i18n-attr="content:thtp.bon-bai-do-giong-noi-chuyen" name="description" content="Bốn bài đo giọng nói chuyên sâu — hệ thống phân tích Ngũ Âm theo Ma Y Thần Tướng, Thần Tướng Toàn Biên, Thủy Kính Tập.">
 <link rel="icon" type="image/webp" href="/seal.webp">
 <link rel="preload" href="/fonts/noto-serif-latin-400.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="/fonts/noto-serif-vietnamese-400.woff2" as="font" type="font/woff2" crossorigin>
@@ -85,9 +85,9 @@
   <main class="ws" id="ws">
     <div class="ws-top">
       <button class="btn mobile-only" onclick="document.getElementById('shell-sidebar').classList.toggle('open');window.shellSyncBackdrop&&shellSyncBackdrop()" aria-label="Menu">☰</button>
-      <div class="ws-title"><b>Thanh Tướng Pro</b><span>4 bài đo giọng nói chuyên sâu — <span data-tvp-price="thanh-tuong-pro">…</span> Lượng</span></div>
+      <div data-i18n="thtp.thanh-tuong-pro-4-bai-do" class="ws-title"><b>Thanh Tướng Pro</b><span>4 bài đo giọng nói chuyên sâu — <span data-tvp-price="thanh-tuong-pro">…</span> Lượng</span></div>
       <div class="ws-actions">
-        <button class="btn mobile-only" onclick="Shell.openRail()">✦ Hỏi</button>
+        <button data-i18n="battu.hoi" class="btn mobile-only" onclick="Shell.openRail()">✦ Hỏi</button>
       </div>
     </div>
     <div class="ws-body">
@@ -101,15 +101,15 @@
         <img class="intro-avatar" src="/tool-avatars/thanh-tuong.webp" alt="" onerror="this.remove()">
         <div class="intro-body">
           <div class="intro-text">
-            <div class="intro-t">Thanh Tướng Pro</div>
-            <div class="intro-d">Giọng nói mang nhiều thông tin hơn ta tưởng — 12 chỉ số âm học từ 4 bài đo chuyên sâu vẽ ra bức tranh Ngũ Âm và khí lực đầy đủ nhất. Dành cho ai muốn đi sâu hơn bản Thanh Tướng thường.</div>
+            <div data-i18n="thtp.thanh-tuong-pro" class="intro-t">Thanh Tướng Pro</div>
+            <div data-i18n="thtp.giong-noi-mang-nhieu-thong-tin" class="intro-d">Giọng nói mang nhiều thông tin hơn ta tưởng — 12 chỉ số âm học từ 4 bài đo chuyên sâu vẽ ra bức tranh Ngũ Âm và khí lực đầy đủ nhất. Dành cho ai muốn đi sâu hơn bản Thanh Tướng thường.</div>
             <div id="introSrc"></div>
           </div>
         </div>
         <div class="hero-pills">
-          <div class="hero-pill"><span class="hp-ic" data-icon="mic"></span><span>4 bài đo<br>giọng chuyên sâu</span></div>
-          <div class="hero-pill"><span class="hp-ic" data-icon="bar-chart-3"></span><span>12 chỉ số<br>âm học</span></div>
-          <div class="hero-pill"><span class="hp-ic" data-icon="scroll-text"></span><span>Luận Ngũ Âm<br>và khí lực</span></div>
+          <div data-i18n="thtp.4-bai-do-giong-chuyen-sau" class="hero-pill"><span class="hp-ic" data-icon="mic"></span><span>4 bài đo<br>giọng chuyên sâu</span></div>
+          <div data-i18n="thtp.12-chi-so-am-hoc" class="hero-pill"><span class="hp-ic" data-icon="bar-chart-3"></span><span>12 chỉ số<br>âm học</span></div>
+          <div data-i18n="thtp.luan-ngu-am-va-khi-luc" class="hero-pill"><span class="hp-ic" data-icon="scroll-text"></span><span>Luận Ngũ Âm<br>và khí lực</span></div>
         </div>
       </div></div>
       <div class="ws-main-col">
@@ -119,28 +119,28 @@
            kết quả). Không có nút "làm lại từ đầu" trong flow này nên không
            có lượt reset về bước 1. -->
       <div class="ws-steps" id="wsSteps">
-        <div class="wss-step active"><span class="wss-n">1</span><span class="wss-l">Nhập thông tin</span></div>
-        <div class="wss-step"><span class="wss-n">2</span><span class="wss-l">Xem kết quả đo</span></div>
-        <div class="wss-step"><span class="wss-n">3</span><span class="wss-l">Thanh toán</span></div>
-        <div class="wss-step"><span class="wss-n">4</span><span class="wss-l">Nhận kết quả</span></div>
+        <div data-i18n="battu.1-nhap-thong-tin" class="wss-step active"><span class="wss-n">1</span><span class="wss-l">Nhập thông tin</span></div>
+        <div data-i18n="thtp.2-xem-ket-qua-do" class="wss-step"><span class="wss-n">2</span><span class="wss-l">Xem kết quả đo</span></div>
+        <div data-i18n="battu.3-thanh-toan" class="wss-step"><span class="wss-n">3</span><span class="wss-l">Thanh toán</span></div>
+        <div data-i18n="battu.4-nhan-ket-qua" class="wss-step"><span class="wss-n">4</span><span class="wss-l">Nhận kết quả</span></div>
       </div>
       <div class="dt-card" id="setupCard">
-        <div class="fc-head"><span class="fc-ic" data-icon="mic"></span><h2>Bước 1 · Thông Tin Cơ Bản</h2></div>
-        <p class="sub">Ghi âm đủ 4 bài đo theo giới tính và tuổi của bạn. Hệ thống phân tích chuyên sâu, luận khí, tính cách, vận mệnh và cách dưỡng thanh dưỡng khí.</p>
-        <div class="setup-label">Giới Tính</div>
+        <div class="fc-head"><span class="fc-ic" data-icon="mic"></span><h2 data-i18n="thtp.buoc-1-thong-tin-co-ban">Bước 1 · Thông Tin Cơ Bản</h2></div>
+        <p data-i18n="thtp.ghi-am-du-4-bai-do" class="sub">Ghi âm đủ 4 bài đo theo giới tính và tuổi của bạn. Hệ thống phân tích chuyên sâu, luận khí, tính cách, vận mệnh và cách dưỡng thanh dưỡng khí.</p>
+        <div data-i18n="laso.gioi-tinh" class="setup-label">Giới Tính</div>
         <div class="gender-opts" id="genderOpts">
           <div class="gender-opt" data-gender="nam">Nam</div>
-          <div class="gender-opt" data-gender="nu">Nữ</div>
+          <div data-i18n="laso.nu" class="gender-opt" data-gender="nu">Nữ</div>
         </div>
-        <div class="setup-label" style="margin-top:6px">Tuổi</div>
-        <input type="number" class="age-input" id="ageInput" placeholder="Ví dụ: 32" min="10" max="100">
+        <div data-i18n="thtp.tuoi" class="setup-label" style="margin-top:6px">Tuổi</div>
+        <input data-i18n-attr="placeholder:thtp.vi-du-32" type="number" class="age-input" id="ageInput" placeholder="Ví dụ: 32" min="10" max="100">
         <div class="record-wrap" style="padding-top:16px">
-          <button class="btn-record" id="startBtn" disabled>Bắt Đầu Bài Đo</button>
+          <button data-i18n="thtp.bat-dau-bai-do" class="btn-record" id="startBtn" disabled>Bắt Đầu Bài Đo</button>
         </div>
       </div>
 
       <div class="dt-card" id="tasksSection" style="display:none">
-        <h2>Bước 2 · Bốn Bài Đo Giọng</h2>
+        <h2 data-i18n="thtp.buoc-2-bon-bai-do-giong">Bước 2 · Bốn Bài Đo Giọng</h2>
         <div class="task-progress" id="taskProgress">
           <div class="task-pip" data-idx="0"></div>
           <div class="task-pip" data-idx="1"></div>
@@ -149,34 +149,34 @@
         </div>
 
         <div id="taskCard">
-          <div class="task-header">
+          <div data-i18n="thtp.bai-1-4-10-giay" class="task-header">
             <span class="task-num" id="taskNum">Bài 1/4</span>
             <span class="task-time" id="taskTime">10 giây</span>
           </div>
-          <h3 class="task-title" id="taskTitle">Đọc Đoạn Văn</h3>
-          <div class="task-instruction" id="taskInstruction">Đọc bình thường, rõ ràng, không gấp.</div>
+          <h3 data-i18n="thtp.doc-doan-van" class="task-title" id="taskTitle">Đọc Đoạn Văn</h3>
+          <div data-i18n="thtp.doc-binh-thuong-ro-rang-khong" class="task-instruction" id="taskInstruction">Đọc bình thường, rõ ràng, không gấp.</div>
           <div class="task-text" id="taskText"></div>
 
           <div class="record-wrap">
             <div class="countdown-badge" id="countdown"></div>
-            <button class="btn-record" id="recordBtn">Bắt Đầu Thu Âm</button>
+            <button data-i18n="thtp.bat-dau-thu-am" class="btn-record" id="recordBtn">Bắt Đầu Thu Âm</button>
           </div>
           <div class="timer-bar-wrap" id="timerWrap"><div class="timer-bar" id="timerBar"></div></div>
           <div class="waveform-wrap" id="waveWrap"><canvas id="waveCanvas" width="800" height="56"></canvas></div>
           <div class="record-status" id="recordStatus"></div>
 
           <div class="task-done-mini" id="taskDone">
-            <div id="taskDoneText">✓ Đã ghi xong.</div>
-            <button class="btn-next-task" id="nextBtn">Bài Tiếp Theo →</button>
-            <button class="btn-retry" id="retryBtn">Thu Lại</button>
+            <div data-i18n="thtp.da-ghi-xong" id="taskDoneText">✓ Đã ghi xong.</div>
+            <button data-i18n="thtp.bai-tiep-theo" class="btn-next-task" id="nextBtn">Bài Tiếp Theo →</button>
+            <button data-i18n="thtp.thu-lai" class="btn-retry" id="retryBtn">Thu Lại</button>
           </div>
         </div>
       </div>
 
       <div class="dt-card" id="featuresPanel" style="display:none">
         <div class="features-head">
-          <h2 style="margin:0">Bước 3 · Kết Quả Đo</h2>
-          <span class="nguam-badge" id="nguamBadge">Ngũ Âm: —</span>
+          <h2 data-i18n="thtp.buoc-3-ket-qua-do" style="margin:0">Bước 3 · Kết Quả Đo</h2>
+          <span data-i18n="thtp.ngu-am" class="nguam-badge" id="nguamBadge">Ngũ Âm: —</span>
         </div>
         <div class="features-grid" id="featuresGrid"></div>
         <div class="warn-card" id="featuresWarn"></div>
@@ -192,9 +192,9 @@
           <div class="cb-l">
             <span class="cb-ic" data-icon="wallet"></span>
             <div>
-              <div class="cb-title">Chi phí sử dụng</div>
-              <div class="cb-amt"><span class="vnd" data-tvp-price-vnd="thanh-tuong-pro"></span> mỗi lượt <span class="cb-sub">(<span data-tvp-price="thanh-tuong-pro">…</span> Lượng)</span></div>
-              <div class="cb-pay">
+              <div data-i18n="battu.chi-phi-su-dung" class="cb-title">Chi phí sử dụng</div>
+              <div data-i18n="thtp.moi-luot-luong" class="cb-amt"><span class="vnd" data-tvp-price-vnd="thanh-tuong-pro"></span> mỗi lượt <span class="cb-sub">(<span data-tvp-price="thanh-tuong-pro">…</span> Lượng)</span></div>
+              <div data-i18n="luangiai.chuyen-khoan-qua-qr-ngan-hang" class="cb-pay">
                 <span><span class="ic" data-icon="qr-code"></span> Chuyển khoản (qua QR ngân hàng)</span>
                 <span><span class="ic" data-icon="credit-card"></span> PayPal / Thẻ quốc tế</span>
               </div>
@@ -202,10 +202,10 @@
           </div>
           <div class="cb-r">
             <span class="cb-ic" data-icon="gift"></span>
-            <div class="cb-r-txt">Mua gói để nhận nhiều ưu đãi hơn.<br><a href="/topup.html">Xem các gói ngay →</a></div>
+            <div data-i18n="luangiai.mua-goi-de-nhan-nhieu-uu" class="cb-r-txt">Mua gói để nhận nhiều ưu đãi hơn.<br><a href="/topup.html">Xem các gói ngay →</a></div>
           </div>
         </div>
-        <button class="btn-go" id="analyzeBtn">
+        <button data-i18n="thtp.luan-giai-thanh-tuong-ton-luong" class="btn-go" id="analyzeBtn">
           <span class="bg-label"><span class="ic" data-icon="music"></span><b id="analyzeBtnLabel">Luận Giải Thanh Tướng →</b></span>
           <small>Tốn <span class="vnd" data-tvp-price-vnd="thanh-tuong-pro"></span> <span class="cb-sub">(<span data-tvp-price="thanh-tuong-pro">…</span> Lượng)</span></small>
         </button>
@@ -213,22 +213,22 @@
       </div>
       <div class="ws-side-col">
       <div class="ws-promo">
-        <div class="wsp-eyebrow"><span class="wsp-ic" data-icon="book-open"></span><span>Giới thiệu</span></div>
-        <div class="wsp-title">Thanh Tướng Pro</div>
-        <p class="wsp-desc">Ngũ Âm tướng pháp là một nhánh của nhân tướng học luận đoán qua giọng nói, phân loại âm thanh theo Cung, Thương, Giốc, Chủy, Vũ tương ứng với Ngũ Hành. Phương pháp này được ghi nhận trong các cổ thư tướng học như Ma Y Thần Tướng.</p>
+        <div data-i18n="battu.gioi-thieu" class="wsp-eyebrow"><span class="wsp-ic" data-icon="book-open"></span><span>Giới thiệu</span></div>
+        <div data-i18n="thtp.thanh-tuong-pro" class="wsp-title">Thanh Tướng Pro</div>
+        <p data-i18n="thtp.ngu-am-tuong-phap-la-mot" class="wsp-desc">Ngũ Âm tướng pháp là một nhánh của nhân tướng học luận đoán qua giọng nói, phân loại âm thanh theo Cung, Thương, Giốc, Chủy, Vũ tương ứng với Ngũ Hành. Phương pháp này được ghi nhận trong các cổ thư tướng học như Ma Y Thần Tướng.</p>
       </div>
       <div class="samp-cta" id="sampCta">
         <span class="sc-ic" data-icon="lightbulb"></span>
-        <span class="sc-txt"><b>Chưa muốn ghi âm?</b><span>Bạn có thể xem một bản mẫu để trải nghiệm trước.</span></span>
-        <button type="button" id="btnSample" data-sample-tool="thanh-tuong-pro" onclick="SampleHint.open(this)">Xem bản mẫu →</button>
+        <span data-i18n="thtp.chua-muon-ghi-am-ban-co" class="sc-txt"><b>Chưa muốn ghi âm?</b><span>Bạn có thể xem một bản mẫu để trải nghiệm trước.</span></span>
+        <button data-i18n="thtp.xem-ban-mau" type="button" id="btnSample" data-sample-tool="thanh-tuong-pro" onclick="SampleHint.open(this)">Xem bản mẫu →</button>
       </div>
       <div id="shellRecent"></div>
       </div>
       </div>
 
       <div class="dt-card" id="resultsCard" data-ws-result style="display:none">
-        <h2>Phân Tích Thanh Tướng Chuyên Sâu</h2>
-        <p class="sub">Ngũ Âm Cổ Pháp · Ma Y · Thần Tướng Toàn Biên · Thủy Kính Tập</p>
+        <h2 data-i18n="thtp.phan-tich-thanh-tuong-chuyen-sau">Phân Tích Thanh Tướng Chuyên Sâu</h2>
+        <p data-i18n="thtp.ngu-am-co-phap-ma-y" class="sub">Ngũ Âm Cổ Pháp · Ma Y · Thần Tướng Toàn Biên · Thủy Kính Tập</p>
         <div class="dt-result" id="resultsPanel"></div>
       </div>
     </div>
@@ -245,6 +245,7 @@ window.SHELL_CHATFIRST=true;
 window.SHELL_INTRO={key:'thanh-tuong-pro'};</script>
 <script src="/auth.js?v=9"></script>
 <script src="/tuvi-paywall.js?v=44"></script>
+<script src="/tools-shared/glossary.js?v=4"></script>
 <script src="/tools-shared/hook-layer.js?v=8"></script>
   <script src="/nav.js?v=49" data-icons-only></script><script src="/tools-shared/sample-hint.js?v=2"></script>
 <script src="/tools-shared/fbcard-topic.js?v=2"></script>
@@ -263,37 +264,37 @@ var TASKS = [
   {
     id: 'baseline',
     num: '1/4',
-    title: 'Đọc Đoạn Văn',
+    title: _tvmbT('js.thtp.doc-doan-van', 'Đọc Đoạn Văn'),
     duration: 10,
-    instruction: 'Đọc bình thường, rõ ràng, không gấp, không cố ý lên trầm/cao. Đây là giọng nền cơ bản.',
-    text: 'Công cha như núi Thái Sơn,\nnghĩa mẹ như nước trong nguồn chảy ra.',
+    instruction: _tvmbT('js.thtp.doc-binh-thuong-ro-rang-khong', 'Đọc bình thường, rõ ràng, không gấp, không cố ý lên trầm/cao. Đây là giọng nền cơ bản.'),
+    text: _tvmbT('js.thtp.cong-cha-nhu-nui-thai-son', 'Công cha như núi Thái Sơn,\nnghĩa mẹ như nước trong nguồn chảy ra.'),
     vowel: false
   },
   {
     id: 'sustain',
     num: '2/4',
-    title: 'Ngân Âm "A" — Bài Đo Khí',
+    title: _tvmbT('js.thtp.ngan-am-a-bai-do-khi', 'Ngân Âm "A" — Bài Đo Khí'),
     duration: 5,
-    instruction: 'Hít một hơi sâu, sau đó ngân chữ "A" liên tục CÙNG MỘT TONE, không lên xuống, giữ càng đều càng tốt. Đây là bài quan trọng nhất — đo khí lực.',
+    instruction: _tvmbT('js.thtp.hit-mot-hoi-sau-sau-do', 'Hít một hơi sâu, sau đó ngân chữ "A" liên tục CÙNG MỘT TONE, không lên xuống, giữ càng đều càng tốt. Đây là bài quan trọng nhất — đo khí lực.'),
     text: 'A',
     vowel: true
   },
   {
     id: 'count',
     num: '3/4',
-    title: 'Đếm Số 1 → 15',
+    title: _tvmbT('js.thtp.dem-so-1-15', 'Đếm Số 1 → 15'),
     duration: 12,
-    instruction: 'Đếm đều tốc độ, không gấp, không chậm. Mỗi số cách nhau khoảng nửa giây.',
-    text: 'Một, hai, ba, bốn, năm, sáu,\nbảy, tám, chín, mười, mười một,\nmười hai, mười ba, mười bốn, mười lăm.',
+    instruction: _tvmbT('js.thtp.dem-deu-toc-do-khong-gap', 'Đếm đều tốc độ, không gấp, không chậm. Mỗi số cách nhau khoảng nửa giây.'),
+    text: _tvmbT('js.thtp.mot-hai-ba-bon-nam-sau', 'Một, hai, ba, bốn, năm, sáu,\nbảy, tám, chín, mười, mười một,\nmười hai, mười ba, mười bốn, mười lăm.'),
     vowel: false
   },
   {
     id: 'tonal',
     num: '4/4',
-    title: 'Đọc Thơ — Bài Đo Pitch Range',
+    title: _tvmbT('js.thtp.doc-tho-bai-do-pitch-range', 'Đọc Thơ — Bài Đo Pitch Range'),
     duration: 10,
-    instruction: 'Đọc có ngữ điệu, lên xuống tự nhiên. Đây là câu mở đầu Truyện Kiều — đọc như đang đọc thơ.',
-    text: 'Trăm năm trong cõi người ta,\nchữ tài chữ mệnh khéo là ghét nhau.',
+    instruction: _tvmbT('js.thtp.doc-co-ngu-dieu-len-xuong', 'Đọc có ngữ điệu, lên xuống tự nhiên. Đây là câu mở đầu Truyện Kiều — đọc như đang đọc thơ.'),
+    text: _tvmbT('js.thtp.tram-nam-trong-coi-nguoi-ta', 'Trăm năm trong cõi người ta,\nchữ tài chữ mệnh khéo là ghét nhau.'),
     vowel: false
   }
 ];
@@ -381,14 +382,14 @@ startBtn.addEventListener('click', () => {
 function loadTask(idx) {
   state.currentIdx = idx;
   const t = TASKS[idx];
-  taskNum.textContent = 'Bài ' + t.num;
-  taskTime.textContent = t.duration + ' giây';
+  taskNum.textContent = _tvmbT('js.thtp.bai-n', 'Bài {n}', { n: t.num });
+  taskTime.textContent = _tvmbT('js.thtp.n-giay', '{n} giây', { n: t.duration });
   taskTitle.textContent = t.title;
   taskInstruction.textContent = t.instruction;
   taskText.textContent = t.text;
   taskText.classList.toggle('vowel', !!t.vowel);
   recordBtn.disabled = false;
-  recordBtn.textContent = 'Bắt Đầu Thu Âm';
+  recordBtn.textContent = _tvmbT('js.thtp.bat-dau-thu-am', 'Bắt Đầu Thu Âm');
   recordBtn.classList.remove('recording','processing');
   taskDone.classList.remove('visible');
   countdown.classList.remove('visible');
@@ -442,21 +443,21 @@ async function startRecording() {
     if (state._leftPage) return;
     recordBtn.classList.remove('recording');
     recordBtn.classList.add('processing');
-    recordBtn.textContent = 'Đang phân tích…';
-    recordStatus.textContent = 'Đang tính toán đặc trưng âm học…';
+    recordBtn.textContent = _tvmbT('js.thtp.dang-phan-tich', 'Đang phân tích…');
+    recordStatus.textContent = _tvmbT('js.thtp.dang-tinh-toan-dac-trung-am', 'Đang tính toán đặc trưng âm học…');
     await wait(60);
     if (state._leftPage) return;
     const features = analyzeTask(t.id, state._lastBuffer, state._sampleRate);
     state.results[t.id] = features;
     recordBtn.classList.remove('processing');
     recordBtn.disabled = true;
-    recordBtn.textContent = 'Đã ghi xong';
+    recordBtn.textContent = _tvmbT('js.thtp.da-ghi-xong', 'Đã ghi xong');
     const summary = miniSummary(t.id, features);
     taskDoneText.innerHTML = '✓ ' + summary;
     if (state.currentIdx < TASKS.length - 1) {
-      nextBtn.textContent = 'Bài Tiếp Theo →';
+      nextBtn.textContent = _tvmbT('js.thtp.bai-tiep-theo', 'Bài Tiếp Theo →');
     } else {
-      nextBtn.textContent = 'Xem Kết Quả →';
+      nextBtn.textContent = _tvmbT('js.thtp.xem-ket-qua', 'Xem Kết Quả →');
     }
     taskDone.classList.add('visible');
     timerWrap.classList.remove('visible');
@@ -464,9 +465,9 @@ async function startRecording() {
     updateProgressPips();
   } catch (err) {
     console.error(err);
-    recordStatus.textContent = 'Lỗi: ' + (err.message || 'không truy cập được microphone');
+    recordStatus.textContent = _tvmbT('js.thtp.loi', 'Lỗi: ') + (err.message || _tvmbT('js.thtp.khong-truy-cap-duoc-microphone', 'không truy cập được microphone'));
     recordBtn.disabled = false;
-    recordBtn.textContent = 'Thử Lại';
+    recordBtn.textContent = _tvmbT('js.thtp.thu-lai', 'Thử Lại');
     recordBtn.classList.remove('recording','processing');
   }
 }
@@ -490,8 +491,8 @@ async function recordBuffer(durationSec) {
   waveWrap.classList.add('visible');
   timerWrap.classList.add('visible');
   recordBtn.classList.add('recording');
-  recordBtn.textContent = 'Đang ghi âm…';
-  recordStatus.textContent = 'Đọc/ngân theo hướng dẫn.';
+  recordBtn.textContent = _tvmbT('js.thtp.dang-ghi-am', 'Đang ghi âm…');
+  recordStatus.textContent = _tvmbT('js.thtp.doc-ngan-theo-huong-dan', 'Đọc/ngân theo hướng dẫn.');
   state.isRecording = true;
 
   processor.onaudioprocess = e => {
@@ -941,17 +942,17 @@ function analyzeTask(taskId, buf, fs) {
 
 function miniSummary(taskId, f) {
   if (taskId === 'baseline') {
-    return 'Giọng nền: F0 trung bình <strong>' + f.f0Mean.toFixed(0) + 'Hz</strong>, tốc độ ' + f.speechRate.toFixed(1) + ' âm tiết/giây.';
+    return _tvmbT('js.thtp.giong-nen-f0', 'Giọng nền: F0 trung bình <strong>{f0}Hz</strong>, tốc độ {rate} âm tiết/giây.', { f0: f.f0Mean.toFixed(0), rate: f.speechRate.toFixed(1) });
   }
   if (taskId === 'sustain') {
-    const q = f.sustainDuration >= 3.5 ? 'khí lực tốt' : f.sustainDuration >= 2.5 ? 'khí trung bình' : 'khí bất túc';
-    return 'Ngân dài <strong>' + f.sustainDuration.toFixed(1) + 's</strong>, shimmer ' + f.shimmer.toFixed(2) + 'dB — <em>' + q + '</em>.';
+    const q = f.sustainDuration >= 3.5 ? _tvmbT('js.thtp.khi-luc-tot', 'khí lực tốt') : f.sustainDuration >= 2.5 ? _tvmbT('js.thtp.khi-trung-binh', 'khí trung bình') : _tvmbT('js.thtp.khi-bat-tuc', 'khí bất túc');
+    return _tvmbT('js.thtp.ngan-dai-shimmer', 'Ngân dài <strong>{d}s</strong>, shimmer {sh}dB — <em>{q}</em>.', { d: f.sustainDuration.toFixed(1), sh: f.shimmer.toFixed(2), q: q });
   }
   if (taskId === 'count') {
-    return 'Tốc độ đếm: <strong>' + f.speechRate.toFixed(1) + '</strong> âm tiết/giây.';
+    return _tvmbT('js.thtp.toc-do-dem-am-tiet', 'Tốc độ đếm: <strong>{rate}</strong> âm tiết/giây.', { rate: f.speechRate.toFixed(1) });
   }
   if (taskId === 'tonal') {
-    return 'Pitch range: <strong>' + f.f0Range.toFixed(0) + 'Hz</strong>, độ uyển chuyển ' + f.pitchAgility.toFixed(1) + 'Hz/bước.';
+    return _tvmbT('js.thtp.pitch-range-uyen-chuyen', 'Pitch range: <strong>{r}Hz</strong>, độ uyển chuyển {a}Hz/bước.', { r: f.f0Range.toFixed(0), a: f.pitchAgility.toFixed(1) });
   }
   return 'Xong.';
 }
@@ -962,18 +963,18 @@ function compileAndShowFeatures() {
   const b = r.baseline, s = r.sustain, c = r.count, t = r.tonal;
 
   const items = [
-    { name: 'F0 Trung Bình', value: b.f0Mean.toFixed(0) + ' Hz', interp: interpF0(b.f0Mean), bar: clamp((b.f0Mean - 60) / 240, 0, 1) },
-    { name: 'Khí (Sustain)', value: s.sustainDuration.toFixed(1) + ' s', interp: interpSustain(s.sustainDuration), bar: clamp(s.sustainDuration / 5, 0, 1) },
-    { name: 'Jitter (Ngân)', value: s.jitter.toFixed(2) + ' %', interp: interpJitter(s.jitter), bar: 1 - clamp(s.jitter / 2, 0, 1) },
-    { name: 'Shimmer (Ngân)', value: s.shimmer.toFixed(2) + ' dB', interp: interpShimmer(s.shimmer), bar: 1 - clamp(s.shimmer / 1.5, 0, 1) },
-    { name: 'HNR (Độ Trong)', value: s.hnrMean.toFixed(1) + ' dB', interp: interpHNR(s.hnrMean), bar: clamp(s.hnrMean / 25, 0, 1) },
+    { name: _tvmbT('js.thtp.f0-trung-binh', 'F0 Trung Bình'), value: b.f0Mean.toFixed(0) + ' Hz', interp: interpF0(b.f0Mean), bar: clamp((b.f0Mean - 60) / 240, 0, 1) },
+    { name: _tvmbT('js.thtp.khi-sustain', 'Khí (Sustain)'), value: s.sustainDuration.toFixed(1) + ' s', interp: interpSustain(s.sustainDuration), bar: clamp(s.sustainDuration / 5, 0, 1) },
+    { name: _tvmbT('js.thtp.jitter-ngan', 'Jitter (Ngân)'), value: s.jitter.toFixed(2) + ' %', interp: interpJitter(s.jitter), bar: 1 - clamp(s.jitter / 2, 0, 1) },
+    { name: _tvmbT('js.thtp.shimmer-ngan', 'Shimmer (Ngân)'), value: s.shimmer.toFixed(2) + ' dB', interp: interpShimmer(s.shimmer), bar: 1 - clamp(s.shimmer / 1.5, 0, 1) },
+    { name: _tvmbT('js.thtp.hnr-do-trong', 'HNR (Độ Trong)'), value: s.hnrMean.toFixed(1) + ' dB', interp: interpHNR(s.hnrMean), bar: clamp(s.hnrMean / 25, 0, 1) },
     { name: 'Decay Slope', value: s.decaySlope.toFixed(1) + ' dB/s', interp: interpDecay(s.decaySlope), bar: 1 - clamp(Math.abs(s.decaySlope) / 10, 0, 1) },
     { name: 'Spectral Centroid', value: b.centroid.toFixed(0) + ' Hz', interp: interpCentroid(b.centroid), bar: clamp(b.centroid / 3000, 0, 1) },
-    { name: 'Formant F1 / F2', value: b.f1.toFixed(0) + ' / ' + b.f2.toFixed(0) + ' Hz', interp: 'Vùng cộng hưởng giọng.', bar: clamp(b.f2 / 3000, 0, 1) },
+    { name: 'Formant F1 / F2', value: b.f1.toFixed(0) + ' / ' + b.f2.toFixed(0) + ' Hz', interp: _tvmbT('js.thtp.vung-cong-huong-giong', 'Vùng cộng hưởng giọng.'), bar: clamp(b.f2 / 3000, 0, 1) },
     { name: 'Pitch Range', value: t.f0Range.toFixed(0) + ' Hz', interp: interpRange(t.f0Range), bar: clamp(t.f0Range / 150, 0, 1) },
-    { name: 'Pitch Agility', value: t.pitchAgility.toFixed(1) + ' Hz', interp: 'Độ uyển chuyển tông giọng.', bar: clamp(t.pitchAgility / 40, 0, 1) },
-    { name: 'Tốc Độ Nói', value: b.speechRate.toFixed(1) + ' âm/s', interp: interpRate(b.speechRate), bar: clamp(b.speechRate / 6, 0, 1) },
-    { name: 'Độ Ổn Định F0', value: (b.f0Std / (b.f0Mean || 1) * 100).toFixed(1) + ' %', interp: interpStability(b.f0Std / (b.f0Mean || 1)), bar: 1 - clamp(b.f0Std / (b.f0Mean || 1) / 0.4, 0, 1) }
+    { name: 'Pitch Agility', value: t.pitchAgility.toFixed(1) + ' Hz', interp: _tvmbT('js.thtp.do-uyen-chuyen-tong-giong', 'Độ uyển chuyển tông giọng.'), bar: clamp(t.pitchAgility / 40, 0, 1) },
+    { name: _tvmbT('js.thtp.toc-do-noi', 'Tốc Độ Nói'), value: b.speechRate.toFixed(1) + _tvmbT('js.thtp.am-s', ' âm/s'), interp: interpRate(b.speechRate), bar: clamp(b.speechRate / 6, 0, 1) },
+    { name: _tvmbT('js.thtp.do-on-dinh-f0', 'Độ Ổn Định F0'), value: (b.f0Std / (b.f0Mean || 1) * 100).toFixed(1) + ' %', interp: interpStability(b.f0Std / (b.f0Mean || 1)), bar: 1 - clamp(b.f0Std / (b.f0Mean || 1) / 0.4, 0, 1) }
   ];
 
   featuresGrid.innerHTML = items.map(it => `
@@ -986,15 +987,15 @@ function compileAndShowFeatures() {
   `).join('');
 
   const nguam = estimateNguAm(r, state.gender);
-  nguamBadge.textContent = 'Ngũ Âm ước tính: ' + nguam.label;
+  nguamBadge.textContent = _tvmbT('js.thtp.ngu-am-uoc-tinh-n', 'Ngũ Âm ước tính: {n}', { n: nguam.shown });
   mountHook(items, nguam);
 
   const warns = [];
-  if (s.sustainDuration < 2.5) warns.push('⚠ Ngân âm quá ngắn (<2.5s) — khí bất túc hoặc mic không thu trọn. Nếu không cố ý, nên thu lại bài 2.');
-  if (s.shimmer > 1.2) warns.push('⚠ Shimmer cao (>1.2dB) — giọng không ổn định khi ngân. Có thể do run giọng hoặc micro chất lượng thấp.');
-  if (s.hnrMean < 8) warns.push('⚠ HNR thấp (<8dB) — nhiều tạp âm. Kiểm tra môi trường yên tĩnh hơn.');
-  if (b.f0Mean > 260 && state.gender === 'nam') warns.push('ℹ Giọng cao bất thường cho nam. Có thể đang nói giọng giả hoặc dữ liệu không ổn định.');
-  if (b.f0Mean < 150 && state.gender === 'nu') warns.push('ℹ Giọng trầm bất thường cho nữ. Có thể đang nói giọng giả hoặc dữ liệu không ổn định.');
+  if (s.sustainDuration < 2.5) warns.push(_tvmbT('js.thtp.ngan-am-qua-ngan-2-5s', '⚠ Ngân âm quá ngắn (<2.5s) — khí bất túc hoặc mic không thu trọn. Nếu không cố ý, nên thu lại bài 2.'));
+  if (s.shimmer > 1.2) warns.push(_tvmbT('js.thtp.shimmer-cao-1-2db-giong-khong', '⚠ Shimmer cao (>1.2dB) — giọng không ổn định khi ngân. Có thể do run giọng hoặc micro chất lượng thấp.'));
+  if (s.hnrMean < 8) warns.push(_tvmbT('js.thtp.hnr-thap-8db-nhieu-tap-am', '⚠ HNR thấp (<8dB) — nhiều tạp âm. Kiểm tra môi trường yên tĩnh hơn.'));
+  if (b.f0Mean > 260 && state.gender === 'nam') warns.push(_tvmbT('js.thtp.giong-cao-bat-thuong-cho-nam', 'ℹ Giọng cao bất thường cho nam. Có thể đang nói giọng giả hoặc dữ liệu không ổn định.'));
+  if (b.f0Mean < 150 && state.gender === 'nu') warns.push(_tvmbT('js.thtp.giong-tram-bat-thuong-cho-nu', 'ℹ Giọng trầm bất thường cho nữ. Có thể đang nói giọng giả hoặc dữ liệu không ổn định.'));
 
   if (warns.length) {
     featuresWarn.innerHTML = warns.join('<br>');
@@ -1014,71 +1015,71 @@ function clamp(x, lo, hi){ return Math.max(lo, Math.min(hi, x)); }
 
 function interpF0(f){
   if (state.gender === 'nam') {
-    if (f < 90) return 'Rất trầm — vùng Thổ/Hổ Hống.';
-    if (f < 120) return 'Trầm — vùng Kim/Thổ.';
-    if (f < 150) return 'Trung bình.';
-    if (f < 180) return 'Cao — vùng Mộc.';
-    return 'Rất cao — bất thường cho nam.';
+    if (f < 90) return _tvmbT('js.thtp.rat-tram-vung-tho-ho-hong', 'Rất trầm — vùng Thổ/Hổ Hống.');
+    if (f < 120) return _tvmbT('js.thtp.tram-vung-kim-tho', 'Trầm — vùng Kim/Thổ.');
+    if (f < 150) return _tvmbT('js.thtp.trung-binh', 'Trung bình.');
+    if (f < 180) return _tvmbT('js.thtp.cao-vung-moc', 'Cao — vùng Mộc.');
+    return _tvmbT('js.thtp.rat-cao-bat-thuong-cho-nam', 'Rất cao — bất thường cho nam.');
   } else {
-    if (f < 170) return 'Trầm — vùng Thổ.';
-    if (f < 210) return 'Trung bình — vùng Kim.';
-    if (f < 250) return 'Sáng — vùng Mộc/Oanh Minh.';
-    return 'Rất cao — kiểm tra lại.';
+    if (f < 170) return _tvmbT('js.thtp.tram-vung-tho', 'Trầm — vùng Thổ.');
+    if (f < 210) return _tvmbT('js.thtp.trung-binh-vung-kim', 'Trung bình — vùng Kim.');
+    if (f < 250) return _tvmbT('js.thtp.sang-vung-moc-oanh-minh', 'Sáng — vùng Mộc/Oanh Minh.');
+    return _tvmbT('js.thtp.rat-cao-kiem-tra-lai', 'Rất cao — kiểm tra lại.');
   }
 }
 function interpSustain(s){
-  if (s >= 4.0) return 'Khí lực rất tốt — "khí túc thanh viên".';
-  if (s >= 3.0) return 'Khí đủ — vùng quý tướng.';
-  if (s >= 2.0) return 'Khí trung bình.';
-  return 'Khí bất túc — cần luyện dưỡng.';
+  if (s >= 4.0) return _tvmbT('js.thtp.khi-luc-rat-tot-khi-tuc', 'Khí lực rất tốt — "khí túc thanh viên".');
+  if (s >= 3.0) return _tvmbT('js.thtp.khi-du-vung-quy-tuong', 'Khí đủ — vùng quý tướng.');
+  if (s >= 2.0) return _tvmbT('js.thtp.khi-trung-binh-dogb', 'Khí trung bình.');
+  return _tvmbT('js.thtp.khi-bat-tuc-can-luyen-duong', 'Khí bất túc — cần luyện dưỡng.');
 }
 function interpJitter(j){
-  if (j < 0.5) return 'Rất ổn định — giọng "viên mãn".';
-  if (j < 1.0) return 'Ổn định — bình thường.';
-  if (j < 2.0) return 'Hơi rung — có thể căng thẳng.';
-  return 'Rung rõ rệt — chú ý sức khoẻ giọng.';
+  if (j < 0.5) return _tvmbT('js.thtp.rat-on-dinh-giong-vien-man', 'Rất ổn định — giọng "viên mãn".');
+  if (j < 1.0) return _tvmbT('js.thtp.on-dinh-binh-thuong', 'Ổn định — bình thường.');
+  if (j < 2.0) return _tvmbT('js.thtp.hoi-rung-co-the-cang-thang', 'Hơi rung — có thể căng thẳng.');
+  return _tvmbT('js.thtp.rung-ro-ret-chu-y-suc', 'Rung rõ rệt — chú ý sức khoẻ giọng.');
 }
 function interpShimmer(s){
-  if (s < 0.35) return 'Amplitude rất ổn định.';
-  if (s < 0.7) return 'Bình thường.';
-  if (s < 1.2) return 'Hơi lệch — dấu hiệu khí không đều.';
-  return 'Dao động mạnh — kỵ cách "Phá La".';
+  if (s < 0.35) return _tvmbT('js.thtp.amplitude-rat-on-dinh', 'Amplitude rất ổn định.');
+  if (s < 0.7) return _tvmbT('js.thtp.binh-thuong', 'Bình thường.');
+  if (s < 1.2) return _tvmbT('js.thtp.hoi-lech-dau-hieu-khi-khong', 'Hơi lệch — dấu hiệu khí không đều.');
+  return _tvmbT('js.thtp.dao-dong-manh-ky-cach-pha', 'Dao động mạnh — kỵ cách "Phá La".');
 }
 function interpHNR(h){
-  if (h >= 20) return 'Giọng "Thanh" — trong vang.';
-  if (h >= 15) return 'Giọng vừa thanh vừa có lực.';
-  if (h >= 10) return 'Có tạp âm — vùng giữa Thanh/Trọc.';
-  if (h >= 5) return 'Giọng "Trọc" — đục.';
-  return 'Rất đục — có thể mic kém hoặc giọng rè.';
+  if (h >= 20) return _tvmbT('js.thtp.giong-thanh-trong-vang', 'Giọng "Thanh" — trong vang.');
+  if (h >= 15) return _tvmbT('js.thtp.giong-vua-thanh-vua-co-luc', 'Giọng vừa thanh vừa có lực.');
+  if (h >= 10) return _tvmbT('js.thtp.co-tap-am-vung-giua-thanh', 'Có tạp âm — vùng giữa Thanh/Trọc.');
+  if (h >= 5) return _tvmbT('js.thtp.giong-troc-duc', 'Giọng "Trọc" — đục.');
+  return _tvmbT('js.thtp.rat-duc-co-the-mic-kem', 'Rất đục — có thể mic kém hoặc giọng rè.');
 }
 function interpDecay(d){
-  if (d > -3) return 'Giữ đều — khí đáy tốt.';
-  if (d > -7) return 'Suy nhẹ — bình thường.';
-  return 'Suy nhanh — "hữu đầu vô vĩ", khí yếu về sau.';
+  if (d > -3) return _tvmbT('js.thtp.giu-deu-khi-day-tot', 'Giữ đều — khí đáy tốt.');
+  if (d > -7) return _tvmbT('js.thtp.suy-nhe-binh-thuong', 'Suy nhẹ — bình thường.');
+  return _tvmbT('js.thtp.suy-nhanh-huu-dau-vo-vi', 'Suy nhanh — "hữu đầu vô vĩ", khí yếu về sau.');
 }
 function interpCentroid(c){
-  if (c < 1000) return 'Âm sắc ấm, tối — Thổ/Kim trầm.';
-  if (c < 1800) return 'Âm sắc trung bình.';
-  if (c < 2500) return 'Âm sắc sáng.';
-  return 'Rất sáng — có thể chói.';
+  if (c < 1000) return _tvmbT('js.thtp.am-sac-am-toi-tho-kim', 'Âm sắc ấm, tối — Thổ/Kim trầm.');
+  if (c < 1800) return _tvmbT('js.thtp.am-sac-trung-binh', 'Âm sắc trung bình.');
+  if (c < 2500) return _tvmbT('js.thtp.am-sac-sang', 'Âm sắc sáng.');
+  return _tvmbT('js.thtp.rat-sang-co-the-choi', 'Rất sáng — có thể chói.');
 }
 function interpRange(r){
-  if (r < 40) return 'Đơn điệu — ít biểu cảm.';
-  if (r < 80) return 'Vừa phải.';
-  if (r < 120) return 'Uyển chuyển — vùng Thủy.';
-  return 'Rất biến ảo — có thể kịch tính.';
+  if (r < 40) return _tvmbT('js.thtp.don-dieu-it-bieu-cam', 'Đơn điệu — ít biểu cảm.');
+  if (r < 80) return _tvmbT('js.thtp.vua-phai', 'Vừa phải.');
+  if (r < 120) return _tvmbT('js.thtp.uyen-chuyen-vung-thuy', 'Uyển chuyển — vùng Thủy.');
+  return _tvmbT('js.thtp.rat-bien-ao-co-the-kich', 'Rất biến ảo — có thể kịch tính.');
 }
 function interpRate(r){
-  if (r < 3.5) return 'Chậm — điềm đạm.';
-  if (r < 5) return 'Trung bình.';
-  if (r < 6) return 'Nhanh — linh hoạt.';
-  return 'Rất nhanh — có thể gấp gáp.';
+  if (r < 3.5) return _tvmbT('js.thtp.cham-diem-dam', 'Chậm — điềm đạm.');
+  if (r < 5) return _tvmbT('js.thtp.trung-binh', 'Trung bình.');
+  if (r < 6) return _tvmbT('js.thtp.nhanh-linh-hoat', 'Nhanh — linh hoạt.');
+  return _tvmbT('js.thtp.rat-nhanh-co-the-gap-gap', 'Rất nhanh — có thể gấp gáp.');
 }
 function interpStability(cv){
-  if (cv < 0.10) return 'Rất ổn định.';
-  if (cv < 0.20) return 'Ổn định.';
-  if (cv < 0.30) return 'Có biến động.';
-  return 'Biến động lớn.';
+  if (cv < 0.10) return _tvmbT('js.thtp.rat-on-dinh', 'Rất ổn định.');
+  if (cv < 0.20) return _tvmbT('js.thtp.on-dinh', 'Ổn định.');
+  if (cv < 0.30) return _tvmbT('js.thtp.co-bien-dong', 'Có biến động.');
+  return _tvmbT('js.thtp.bien-dong-lon', 'Biến động lớn.');
 }
 
 // Khối hook (2 fact) — CHỈ dùng dữ liệu ĐÃ MIỄN PHÍ của chính lượt đo này
@@ -1091,15 +1092,15 @@ function mountHook(items, nguam) {
   const facts = [{
     tone: 'neutral',
     title: f0.name + ': ' + f0.value,
-    body: f0.interp + ' Đo trực tiếp từ giọng nói qua micro. 11 chỉ số âm học còn lại và luận giải đầy đủ nằm trong bản phân tích chuyên sâu.',
+    body: f0.interp + _tvmbT('js.thtp.do-truc-tiep-tu-giong-noi', ' Đo trực tiếp từ giọng nói qua micro. 11 chỉ số âm học còn lại và luận giải đầy đủ nằm trong bản phân tích chuyên sâu.'),
     source: 'engine · thanh-tuong-pro F0 analysis',
   }, {
     tone: 'neutral',
-    title: 'Ngũ Âm ước tính: ' + nguam.label,
-    body: 'Xếp theo 12 chỉ số âm học đo được (HNR, sustain, jitter, centroid…). Ý nghĩa đầy đủ theo Ngũ Âm cổ pháp nằm trong bản phân tích chuyên sâu.',
+    title: _tvmbT('js.thtp.ngu-am-uoc-tinh-n', 'Ngũ Âm ước tính: {n}', { n: nguam.shown }),
+    body: _tvmbT('js.thtp.xep-theo-12-chi-so-am', 'Xếp theo 12 chỉ số âm học đo được (HNR, sustain, jitter, centroid…). Ý nghĩa đầy đủ theo Ngũ Âm cổ pháp nằm trong bản phân tích chuyên sâu.'),
     source: 'engine · estimateNguAm',
   }];
-  const spec = { tool: 'thanh-tuong-pro', toolLabel: 'Thanh Tướng Pro', charts: [], facts: facts };
+  const spec = { tool: 'thanh-tuong-pro', toolLabel: _tvmbT('js.thtp.thanh-tuong-pro', 'Thanh Tướng Pro'), charts: [], facts: facts };
   window.HookLayer.run(host, spec);
 }
 
@@ -1136,13 +1137,17 @@ function estimateNguAm(r, gender){
   const second = sorted[1];
   const names = { Kim:'Kim (金)', Moc:'Mộc (木)', Thuy:'Thủy (水)', Hoa:'Hỏa (火)', Tho:'Thổ (土)' };
   let label = names[top[0]];
+  // `label` (tiếng Việt) đi vào văn bản gửi server; `shown` chỉ để HIỂN THỊ (glossary 'hanh').
+  const hanhBase = (k) => names[k].split(' ')[0];
+  let shown = _tvmbG('hanh', hanhBase(top[0])) === hanhBase(top[0]) ? names[top[0]] : _tvmbG('hanh', hanhBase(top[0]));
   if (second[1] >= top[1] - 1 && second[1] >= 3) {
     label += ' chen ' + names[second[0]].split(' ')[0];
+    shown = _tvmbT('js.thtp.nguam-chen', '{a} chen {b}', { a: shown, b: _tvmbG('hanh', hanhBase(second[0])) });
   }
-  if (s.hnrMean >= 15) label = 'Thanh ' + label;
-  else if (s.hnrMean < 8) label = 'Trọc ' + label;
+  if (s.hnrMean >= 15) { label = 'Thanh ' + label; shown = _tvmbT('js.thtp.nguam-thanh', 'Thanh {x}', { x: shown }); }
+  else if (s.hnrMean < 8) { label = 'Trọc ' + label; shown = _tvmbT('js.thtp.nguam-troc', 'Trọc {x}', { x: shown }); }
 
-  return { label, scores, primary: top[0], secondary: second[0] };
+  return { label, shown, scores, primary: top[0], secondary: second[0] };
 }
 
 function buildGeoNote(gender, age, nguamEstimate, results) {
@@ -1220,9 +1225,9 @@ analyzeBtn.addEventListener('click', async () => {
 async function _doThanhTuongAnalyze() {
   wsStepsSet(4); // Nhận kết quả — đã trả tiền, bắt đầu luận giải
   analyzeBtn.disabled = true;
-  var _analyzeBtnLb = document.getElementById('analyzeBtnLabel'); if (_analyzeBtnLb) _analyzeBtnLb.textContent = 'Đang luận giải…';
+  var _analyzeBtnLb = document.getElementById('analyzeBtnLabel'); if (_analyzeBtnLb) _analyzeBtnLb.textContent = _tvmbT('js.thtp.dang-luan-giai', 'Đang luận giải…');
   resultsCard.style.display = 'block';
-  resultsPanel.innerHTML = '<p class="loading-dots" style="text-align:center;color:var(--text-lt);padding:30px 0">Đang phân tích theo cổ pháp</p>';
+  resultsPanel.innerHTML = '<p class="loading-dots" style="text-align:center;color:var(--text-lt);padding:30px 0">' + _tvmbT('js.thtp.dang-phan-tich-theo-co-phap', 'Đang phân tích theo cổ pháp') + '</p>';
   resultsCard.scrollIntoView({behavior:'smooth',block:'nearest'});
 
   const nguam = estimateNguAm(state.results, state.gender);
@@ -1269,34 +1274,34 @@ async function _doThanhTuongAnalyze() {
             resultsPanel.innerHTML = renderMarkdown(content);
           }
           if (json.err) {
-            resultsPanel.innerHTML += '<p style="color:#C0392B;margin-top:14px">Lỗi stream: ' + json.err + '</p>';
+            resultsPanel.innerHTML += '<p style="color:#C0392B;margin-top:14px">' + _tvmbT('js.thtp.loi-stream-e', 'Lỗi stream: {e}', { e: json.err }) + '</p>';
           }
         } catch(_) { /* ignore malformed chunks */ }
       }
     }
 
     if (!content) {
-      resultsPanel.innerHTML = '<p style="color:#C0392B;padding:20px;text-align:center">Không nhận được nội dung trả về. Thử lại.</p>';
+      resultsPanel.innerHTML = '<p style="color:#C0392B;padding:20px;text-align:center">' + _tvmbT('js.thtp.khong-nhan-duoc-noi-dung-tra', 'Không nhận được nội dung trả về. Thử lại.') + '</p>';
     } else {
       _saveTuongReading('thanh-tuong-pro', content, null, null);
       // Chia sẻ CHỈ text luận giải của AI — KHÔNG đính kèm bản ghi âm giọng
       // nói thật của user (riêng tư).
-      Shell.setShareable({ kind:'text', toolId:'thanh-tuong-pro', title:'Thanh Tướng Pro của tôi', text:content });
+      Shell.setShareable({ kind:'text', toolId:'thanh-tuong-pro', title:_tvmbT('js.thtp.thanh-tuong-pro-cua-toi', 'Thanh Tướng Pro của tôi'), text:content });
 
       if (window.SHELL_INTRO) Shell.dismissIntro(window.SHELL_INTRO.key);
       Shell.setContext({
-        label: 'Thanh Tướng Pro — ' + nguam.label,
-        greeting: 'Giọng của bạn thuộc **' + nguam.label + '** (đo qua 4 bài, 12 chỉ số âm học). Bạn muốn hỏi thêm về thanh tướng học?',
-        chips: ['Jitter và Shimmer là gì?', 'HNR thấp nói lên điều gì?', 'Khác gì bản Thanh Tướng thường?']
+        label: _tvmbT('js.thtp.thanh-tuong-pro-n', 'Thanh Tướng Pro — {n}', { n: nguam.shown }),
+        greeting: _tvmbT('js.thtp.giong-cua-ban-thuoc-n', 'Giọng của bạn thuộc **{n}** (đo qua 4 bài, 12 chỉ số âm học). Bạn muốn hỏi thêm về thanh tướng học?', { n: nguam.shown }),
+        chips: [_tvmbT('js.thtp.jitter-va-shimmer-la-gi', 'Jitter và Shimmer là gì?'), _tvmbT('js.thtp.hnr-thap-noi-len-dieu-gi', 'HNR thấp nói lên điều gì?'), _tvmbT('js.thtp.khac-gi-ban-thanh-tuong-thuong', 'Khác gì bản Thanh Tướng thường?')]
       });
     }
 
-    if (_analyzeBtnLb) _analyzeBtnLb.textContent = 'Luận Giải Lại';
+    if (_analyzeBtnLb) _analyzeBtnLb.textContent = _tvmbT('js.thtp.luan-giai-lai', 'Luận Giải Lại');
     analyzeBtn.disabled = false;
   } catch (err) {
     console.error(err);
-    resultsPanel.innerHTML = '<p style="color:#C0392B;padding:20px;text-align:center">Lỗi: ' + (err.message || err) + '</p>';
-    if (_analyzeBtnLb) _analyzeBtnLb.textContent = 'Thử Lại';
+    resultsPanel.innerHTML = '<p style="color:#C0392B;padding:20px;text-align:center">' + _tvmbT('js.thtp.loi-e', 'Lỗi: {e}', { e: err.message || err }) + '</p>';
+    if (_analyzeBtnLb) _analyzeBtnLb.textContent = _tvmbT('js.thtp.thu-lai', 'Thử Lại');
     analyzeBtn.disabled = false;
   }
 }

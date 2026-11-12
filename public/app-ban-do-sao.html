@@ -3,8 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Bản Đồ Sao Lúc Sinh — Tử Vi Minh Bảo</title>
-<meta name="description" content="Lập bản đồ sao lúc sinh theo chiêm tinh phương Tây — cung Mọc, 12 nhà, vị trí 10 hành tinh và các góc chiếu. Tải bánh xe bản đồ về để chia sẻ.">
+<title data-i18n="bandosao.ban-do-sao-luc-sinh-tu">Bản Đồ Sao Lúc Sinh — Tử Vi Minh Bảo</title>
+<meta data-i18n-attr="content:bandosao.lap-ban-do-sao-luc-sinh" name="description" content="Lập bản đồ sao lúc sinh theo chiêm tinh phương Tây — cung Mọc, 12 nhà, vị trí 10 hành tinh và các góc chiếu. Tải bánh xe bản đồ về để chia sẻ.">
 <link rel="icon" type="image/webp" href="/seal.webp">
 <link rel="preload" href="/fonts/noto-serif-latin-400.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="/fonts/noto-serif-vietnamese-400.woff2" as="font" type="font/woff2" crossorigin>
@@ -38,10 +38,10 @@
   <main class="ws" id="ws">
     <div class="ws-top">
       <button class="btn mobile-only" onclick="document.getElementById('shell-sidebar').classList.toggle('open');window.shellSyncBackdrop&&shellSyncBackdrop()" aria-label="Menu">☰</button>
-      <div class="ws-title"><b>Bản Đồ Sao Lúc Sinh</b><span>Chiêm tinh phương Tây — cung Mọc, 12 nhà, góc chiếu</span></div>
+      <div data-i18n="bandosao.ban-do-sao-luc-sinh-chiem" class="ws-title"><b>Bản Đồ Sao Lúc Sinh</b><span>Chiêm tinh phương Tây — cung Mọc, 12 nhà, góc chiếu</span></div>
       <div class="ws-actions">
-        <button class="btn" id="btnEdit" onclick="showForm()" style="display:none">Sửa</button>
-        <button class="btn mobile-only" onclick="Shell.openRail()">✦ Hỏi</button>
+        <button data-i18n="napam.sua" class="btn" id="btnEdit" onclick="showForm()" style="display:none">Sửa</button>
+        <button data-i18n="battu.hoi" class="btn mobile-only" onclick="Shell.openRail()">✦ Hỏi</button>
       </div>
     </div>
     <div class="ws-body">
@@ -55,15 +55,15 @@
         <img class="intro-avatar" src="/tool-avatars/ban-do-sao.webp" alt="" onerror="this.remove()">
         <div class="intro-body">
           <div class="intro-text">
-            <div class="intro-t">Bản Đồ Sao Lúc Sinh</div>
-            <div class="intro-d">Mỗi người sinh ra dưới một bầu trời khác nhau — vị trí 12 nhà lúc bạn chào đời nói gì về con người bạn? Dựng bản đồ sao đúng khoảnh khắc ấy, xem và lưu lại miễn phí.</div>
+            <div data-i18n="bandosao.ban-do-sao-luc-sinh" class="intro-t">Bản Đồ Sao Lúc Sinh</div>
+            <div data-i18n="bandosao.moi-nguoi-sinh-ra-duoi-mot" class="intro-d">Mỗi người sinh ra dưới một bầu trời khác nhau — vị trí 12 nhà lúc bạn chào đời nói gì về con người bạn? Dựng bản đồ sao đúng khoảnh khắc ấy, xem và lưu lại miễn phí.</div>
             <div id="introSrc"></div>
           </div>
         </div>
         <div class="hero-pills">
-          <div class="hero-pill"><span class="hp-ic" data-icon="compass"></span><span>4 trục<br>chính</span></div>
-          <div class="hero-pill"><span class="hp-ic" data-icon="sun"></span><span>10 hành tinh<br>vị trí</span></div>
-          <div class="hero-pill"><span class="hp-ic" data-icon="share-2"></span><span>Góc chiếu<br>nổi bật</span></div>
+          <div data-i18n="bandosao.4-truc-chinh" class="hero-pill"><span class="hp-ic" data-icon="compass"></span><span>4 trục<br>chính</span></div>
+          <div data-i18n="bandosao.10-hanh-tinh-vi-tri" class="hero-pill"><span class="hp-ic" data-icon="sun"></span><span>10 hành tinh<br>vị trí</span></div>
+          <div data-i18n="bandosao.goc-chieu-noi-bat" class="hero-pill"><span class="hp-ic" data-icon="share-2"></span><span>Góc chiếu<br>nổi bật</span></div>
         </div>
       </div></div>
       <div class="ws-main-col">
@@ -71,25 +71,25 @@
            lẫn thanh toán (form → kết quả thẳng). JS chuyển bước ở `wsStepsSet`
            (cuối file), gọi tại đúng chỗ trạng thái đã đổi (lapBanDo/showForm). -->
       <div class="ws-steps" id="wsSteps">
-        <div class="wss-step active"><span class="wss-n">1</span><span class="wss-l">Nhập thông tin</span></div>
-        <div class="wss-step"><span class="wss-n">2</span><span class="wss-l">Nhận kết quả</span></div>
+        <div data-i18n="battu.1-nhap-thong-tin" class="wss-step active"><span class="wss-n">1</span><span class="wss-l">Nhập thông tin</span></div>
+        <div data-i18n="boibai.2-nhan-ket-qua" class="wss-step"><span class="wss-n">2</span><span class="wss-l">Nhận kết quả</span></div>
       </div>
       <div class="form-card" id="birthPanel">
-        <div class="fc-head"><span class="fc-ic" data-icon="sun"></span><h2>Ngày giờ và nơi sinh</h2></div>
-        <p class="sub">Nhập chính xác ngày, giờ và nơi sinh. Nhận về 4 trục, vị trí hành tinh, góc chiếu nổi bật và bảng cân bằng nguyên tố.</p>
+        <div class="fc-head"><span class="fc-ic" data-icon="sun"></span><h2 data-i18n="bandosao.ngay-gio-va-noi-sinh">Ngày giờ và nơi sinh</h2></div>
+        <p data-i18n="bandosao.nhap-chinh-xac-ngay-gio-va" class="sub">Nhập chính xác ngày, giờ và nơi sinh. Nhận về 4 trục, vị trí hành tinh, góc chiếu nổi bật và bảng cân bằng nguyên tố.</p>
         <div class="frow">
-          <div class="fg"><label>Ngày</label><input type="number" id="ngay" min="1" max="31" placeholder="1–31"></div>
-          <div class="fg"><label>Tháng</label><input type="number" id="thang" min="1" max="12" placeholder="1–12"></div>
-          <div class="fg"><label>Năm</label><input type="number" id="nam" min="1800" max="2200" placeholder="1998"></div>
-          <div class="fg"><label>Giờ</label><input type="number" id="gio" min="0" max="23" placeholder="0–23"></div>
-          <div class="fg"><label>Phút</label><input type="number" id="phut" min="0" max="59" placeholder="0–59"></div>
+          <div class="fg"><label data-i18n="thansohoc.ngay">Ngày</label><input type="number" id="ngay" min="1" max="31" placeholder="1–31"></div>
+          <div class="fg"><label data-i18n="thansohoc.thang">Tháng</label><input type="number" id="thang" min="1" max="12" placeholder="1–12"></div>
+          <div class="fg"><label data-i18n="thansohoc.nam">Năm</label><input type="number" id="nam" min="1800" max="2200" placeholder="1998"></div>
+          <div class="fg"><label data-i18n="laso.gio">Giờ</label><input type="number" id="gio" min="0" max="23" placeholder="0–23"></div>
+          <div class="fg"><label data-i18n="laso.phut">Phút</label><input type="number" id="phut" min="0" max="59" placeholder="0–59"></div>
         </div>
         <div class="frow">
-          <div class="fg"><label>Nơi sinh</label><select id="noi" onchange="chonNoi()"></select></div>
-          <div class="fg"><label>Vĩ độ</label><input type="number" id="vido" step="0.0001"></div>
-          <div class="fg"><label>Kinh độ</label><input type="number" id="kinhdo" step="0.0001"></div>
-          <div class="fg"><label>Múi giờ</label><input type="number" id="tz" step="0.5" value="7"></div>
-          <button class="btn-go" id="btnGo" onclick="lapBanDo()">
+          <div class="fg"><label data-i18n="bandosao.noi-sinh">Nơi sinh</label><select id="noi" onchange="chonNoi()"></select></div>
+          <div class="fg"><label data-i18n="bandosao.vi-do">Vĩ độ</label><input type="number" id="vido" step="0.0001"></div>
+          <div class="fg"><label data-i18n="bandosao.kinh-do">Kinh độ</label><input type="number" id="kinhdo" step="0.0001"></div>
+          <div class="fg"><label data-i18n="bandosao.mui-gio">Múi giờ</label><input type="number" id="tz" step="0.5" value="7"></div>
+          <button data-i18n="bandosao.lap-ban-do-mien-phi" class="btn-go" id="btnGo" onclick="lapBanDo()">
             <span class="bg-label"><span class="ic" data-icon="sun"></span><b id="btnGoLabel">Lập bản đồ →</b></span>
             <small>Miễn phí</small>
           </button>
@@ -98,7 +98,7 @@
           <div class="cb-l">
             <span class="cb-ic" data-icon="wallet"></span>
             <div>
-              <div class="cb-title">Chi phí sử dụng</div>
+              <div data-i18n="battu.chi-phi-su-dung" class="cb-title">Chi phí sử dụng</div>
               <div class="cb-amt" data-tvp-price-label="ban-do-sao">…</div>
             </div>
           </div>
@@ -108,9 +108,9 @@
       </div>
       <div class="ws-side-col">
       <div class="ws-promo">
-        <div class="wsp-eyebrow"><span class="wsp-ic" data-icon="book-open"></span><span>Giới thiệu</span></div>
-        <div class="wsp-title">Bản Đồ Sao Lúc Sinh</div>
-        <p class="wsp-desc">Chiêm tinh học phương Tây (Western Astrology) là hệ thống giải đoán dựa trên vị trí các hành tinh và cung hoàng đạo tại thời điểm sinh, chia bầu trời thành 12 nhà tương ứng các lĩnh vực đời sống. Bản đồ sao (natal chart) là công cụ trung tâm để đọc tính cách và xu hướng của một người.</p>
+        <div data-i18n="battu.gioi-thieu" class="wsp-eyebrow"><span class="wsp-ic" data-icon="book-open"></span><span>Giới thiệu</span></div>
+        <div data-i18n="bandosao.ban-do-sao-luc-sinh" class="wsp-title">Bản Đồ Sao Lúc Sinh</div>
+        <p data-i18n="bandosao.chiem-tinh-hoc-phuong-tay-western" class="wsp-desc">Chiêm tinh học phương Tây (Western Astrology) là hệ thống giải đoán dựa trên vị trí các hành tinh và cung hoàng đạo tại thời điểm sinh, chia bầu trời thành 12 nhà tương ứng các lĩnh vực đời sống. Bản đồ sao (natal chart) là công cụ trung tâm để đọc tính cách và xu hướng của một người.</p>
       </div>
       <div id="shellRecent"></div>
       </div>
@@ -120,16 +120,16 @@
         <div class="res-block">
           <div class="res-block-header">
             <span class="res-block-title" id="resTitle">—</span>
-            <button class="btn-tai" id="taiBtn" onclick="taiAnh()">⬇ Tải ảnh bản đồ</button>
+            <button data-i18n="bandosao.tai-anh-ban-do" class="btn-tai" id="taiBtn" onclick="taiAnh()">⬇ Tải ảnh bản đồ</button>
           </div>
           <div class="res-block-body">
             <canvas id="wheel"></canvas>
             <div class="err" id="taiErr"></div>
             <div id="chiTiet"></div>
-            <div class="note">Bánh xe vẽ theo quy ước chuẩn: <b>Cung Mọc nằm bên trái</b>, các cung chạy ngược chiều kim đồng hồ. Đường xanh là góc thuận, đường đỏ là góc căng — chỉ vẽ những góc mạnh, nếu vẽ hết thì rối không đọc được.<br><b>Đây không phải Tử Vi.</b> Hai môn cùng dùng chữ “cung” và “nhà” nhưng chỉ những thứ khác hẳn — đừng đem đối chiếu với lá số Tử Vi của bạn.</div>
+            <div data-i18n="bandosao.banh-xe-ve-theo-quy-uoc" class="note">Bánh xe vẽ theo quy ước chuẩn: <b>Cung Mọc nằm bên trái</b>, các cung chạy ngược chiều kim đồng hồ. Đường xanh là góc thuận, đường đỏ là góc căng — chỉ vẽ những góc mạnh, nếu vẽ hết thì rối không đọc được.<br><b>Đây không phải Tử Vi.</b> Hai môn cùng dùng chữ “cung” và “nhà” nhưng chỉ những thứ khác hẳn — đừng đem đối chiếu với lá số Tử Vi của bạn.</div>
           </div>
         </div>
-        <div class="ask" data-ask="Đọc giúp tôi bản đồ sao này: tính cách cốt lõi, điểm mạnh, chỗ dễ vướng, và lĩnh vực đời sống nào nổi bật nhất?">✦ Hỏi Thầy đọc bản đồ này</div>
+        <div data-i18n="bandosao.hoi-thay-doc-ban-do-nay" class="ask" data-ask="Đọc giúp tôi bản đồ sao này: tính cách cốt lõi, điểm mạnh, chỗ dễ vướng, và lĩnh vực đời sống nào nổi bật nhất?">✦ Hỏi Thầy đọc bản đồ này</div>
       </div>
     </div>
   </main>
