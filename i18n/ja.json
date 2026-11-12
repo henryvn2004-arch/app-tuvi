@@ -359,6 +359,98 @@
   "t": "← 今日に戻る",
   "h": "24faf89e"
  },
+ "cs.2-xem-truoc-ho-so": {
+  "t": "<span class=\"wss-n\">2</span><span class=\"wss-l\">プロフィールを先読み</span>",
+  "h": "cdf8b027"
+ },
+ "cs.40-nam-4-chang": {
+  "t": "<span class=\"hp-ic\" data-icon=\"trending-up\"></span><span>40年を<br>4つの区間で</span>",
+  "h": "62f02f8b"
+ },
+ "cs.ban-dang-o-vi-tri-nao": {
+  "t": "現在の立場",
+  "h": "ae96bb68"
+ },
+ "cs.ban-luan-giai-mau-tai-pdf": {
+  "t": "<span class=\"sc-ic\" data-icon=\"file-text\"></span> <span class=\"sc-txt\"><b>サンプル鑑定書</b><span>サンプル命盤の「紫微斗数 職場・結婚」フル版PDFをダウンロードして、実際の内容を先にご確認いただけます。</span></span> <a class=\"sc-btn\" href=\"/tai-mau/mau-cong-so.pdf\" target=\"_blank\" rel=\"noopener\">PDFをダウンロード →</a>",
+  "h": "2538ba5a"
+ },
+ "cs.bon-ten-goi-khai-sang-lanh": {
+  "t": "<b>開拓・リーダー・サポート・協調</b>の4つの名称は、読みやすいように当ページが付けた現代的なラベルで、古典にはこうした呼び方はありません。分け方には古法の土台があります：<b>四象</b>（老陽・少陰・少陽・老陰）を14の主星に当てはめると、古典の星の組み合わせにちょうど収まります。<br> これは<b>命盤を読むための一つの枠組み</b>であり、検証済みの心理テストではありません。裏付けとなる対照研究もありません。自分を理解し、話のきっかけにするために使い、人の採用や他人への仕事の割り振りには使わないでください。",
+  "h": "4b3842bc"
+ },
+ "cs.chu-doanh-nghiep": {
+  "t": "事業主",
+  "h": "0ec2b6b1"
+ },
+ "cs.cung-mot-nang-luc-co-nguoi": {
+  "t": "同じ能力でも、順調に昇進する人もいれば、ずっと足踏みする人もいます — その違いの多くは、合う環境を選ぶことと、自分の見せ方にあります。職場でのあなたのタイプを読んで、方向をはっきりさせましょう。",
+  "h": "af9f49d9"
+ },
+ "cs.dang-tim-viec-chuyen-huong": {
+  "t": "求職中／転職を考えている",
+  "h": "de0479f2"
+ },
+ "cs.doc-la-so-tu-vi-bang": {
+  "t": "紫微斗数の命盤を仕事の言葉で読みます：職場でのあなたのタイプ、12の側面の強みと弱み、40年の職業人生を分けた4つの区間、そして誰とチームを組むとよいか。",
+  "h": "7c9e83ec"
+ },
+ "cs.dung-ho-so-kieu-nguoi-12": {
+  "t": "タイプ＋12の側面のプロフィール作成は<b>無料</b>です。具体的な職種の分かれ道を開くときだけ両が差し引かれます。",
+  "h": "8ad49bf1"
+ },
+ "cs.dung-ho-so-mien-phi": {
+  "t": "<span class=\"bg-label\"><span class=\"ic\" data-icon=\"briefcase\"></span><b id=\"btnGoLabel\">プロフィールを作成 →</b></span> <small>無料</small>",
+  "h": "d7386efe"
+ },
+ "cs.hoi-thay-doc-ky-ho-so": {
+  "t": "✦ 先生にこのプロフィールを詳しく読んでもらう",
+  "h": "dfa970e5"
+ },
+ "cs.kieu-nguoi-noi-cong-so": {
+  "t": "<span class=\"hp-ic\" data-icon=\"briefcase\"></span><span>職場での<br>タイプ</span>",
+  "h": "31b69ffd"
+ },
+ "cs.lam-tu-do-nghe-rieng": {
+  "t": "フリーランス／自営",
+  "h": "1d5e99e6"
+ },
+ "cs.ngay-gio-sinh-va-cho-dung": {
+  "t": "生年月日・時刻と現在の立場",
+  "h": "ade29838"
+ },
+ "cs.nhan-vien-lam-thue": {
+  "t": "会社員",
+  "h": "0c9557d1"
+ },
+ "cs.nhanh-nghe-ghep-doi": {
+  "t": "<span class=\"hp-ic\" data-icon=\"users\"></span><span>職種の分かれ道、<br>チーム編成</span>",
+  "h": "f7580d7f"
+ },
+ "cs.nhap-ngay-gio-sinh-va-vi": {
+  "t": "生年月日と時刻、現在の立場を入力してください。システムが古法と照らし合わせます — 職場でのタイプ、合う職種の分かれ道、そして40年のキャリアを4つの区間に分けて。",
+  "h": "f54c5793"
+ },
+ "cs.quan-ly-lam-thue": {
+  "t": "雇われ管理職",
+  "h": "9e6cb7ab"
+ },
+ "cs.tai-anh": {
+  "t": "⬇ 画像を保存",
+  "h": "eb8a56af"
+ },
+ "cs.tu-vi-cong-so": {
+  "t": "紫微斗数 職場・結婚",
+  "h": "9d18a955"
+ },
+ "cs.tu-vi-cong-so-la-so": {
+  "t": "<b>紫微職場</b><span>仕事の言葉で読む命盤</span>",
+  "h": "af1a1cbe"
+ },
+ "cs.tu-vi-cong-so-tu-vi": {
+  "t": "紫微職場 — 明宝紫微斗数",
+  "h": "91365f7b"
+ },
  "ctk.2-xem-truoc-chan-dung": {
   "t": "<span class=\"wss-n\">2</span><span class=\"wss-l\">肖像を先読み</span>",
   "h": "db8c9fa4"
@@ -2082,6 +2174,570 @@
  "js.chutrinh.tieu-van-nam": {
   "t": "小運の年：",
   "h": "1979c56a"
+ },
+ "js.cs.ba-nhanh-nay-khac-nhau-o": {
+  "t": "この3つの分かれ道は、どこが違いますか？",
+  "h": "19e39a35"
+ },
+ "js.cs.ba-nhanh-nghe-cu-the-ben": {
+  "t": "あなたの分野の中にある3つの具体的な職種の分かれ道",
+  "h": "879d2594"
+ },
+ "js.cs.ba-tang-o-tren-noi-ban": {
+  "t": "上の3つの層は、あなたがどの<b>分野</b>に合うか、そして",
+  "h": "d7fe12dc"
+ },
+ "js.cs.bac-chuc-phan": {
+  "t": "職分の等級",
+  "h": "73d28e4f"
+ },
+ "js.cs.ban-hop-lam-gi": {
+  "t": "あなたに合う仕事",
+  "h": "7bf8b024"
+ },
+ "js.cs.ban-hop-lam-nganh-gi-linh": {
+  "t": "あなたに合う職業 — 分野・役割・規模",
+  "h": "ee981a25"
+ },
+ "js.cs.ban-nghieng-ve-kieu-full": {
+  "t": "あなたは**{kieu}**タイプ寄りです（{tt}）。アカウント登録（無料の両をプレゼント）をすると、12の側面、4つの区間のロードマップ、チーム編成がすべて見られます — その部分を開いたあとで、私が詳しく掘り下げます。",
+  "h": "711e5f38"
+ },
+ "js.cs.boi-canh-viet-nam-dang-lam": {
+  "t": "ベトナムの事情に合わせて作ったものです。リストにない仕事をしている場合は、",
+  "h": "18705d1c"
+ },
+ "js.cs.bon-dai-van-lien-tiep-phu": {
+  "t": "連続する4つの大運が職業人生の期間を覆っています。点数はエンジンが採点した大運の点数で、",
+  "h": "5fe06b87"
+ },
+ "js.cs.bon-kieu-nguoi-va-cach-goi": {
+  "t": "4つのタイプと職種の提案の仕方は、<b>明宝紫微斗数の専門家チーム</b>が独自に構築した手法です。<br><br>",
+  "h": "24a12349"
+ },
+ "js.cs.bon-muoi-nam-di-lam-chia": {
+  "t": "働く40年を4つの区間に",
+  "h": "ae99b53d"
+ },
+ "js.cs.bon-muoi-nam-di-lam-chia-90zk": {
+  "t": "働く40年を4つの区間に分ける",
+  "h": "ced9f68e"
+ },
+ "js.cs.bon-viec-phai-hoc-khi-bat": {
+  "t": "人を率い始めるときに学ぶべき4つのこと",
+  "h": "d246f547"
+ },
+ "js.cs.cac-nhanh-duoi-day-hop-voi": {
+  "t": "以下の分かれ道は、あなたの<b>人としての資質</b>には合いますが、",
+  "h": "f9533187"
+ },
+ "js.cs.cach-cuc-tai-cung-quan-loc": {
+  "t": "官禄宮の格局",
+  "h": "2c8aa204"
+ },
+ "js.cs.cai-thuc-ban-di": {
+  "t": "あなたを突き動かすもの",
+  "h": "e34c0d1a"
+ },
+ "js.cs.cau-hoi-chay-ngam-trong-dau": {
+  "t": "頭の中で働いている問い",
+  "h": "92b9b591"
+ },
+ "js.cs.chang-nghe-tiep-theo-cua-toi": {
+  "t": "私の次のキャリアの区間はどうなりますか？",
+  "h": "7e97fdda"
+ },
+ "js.cs.chat-nguoi-noi-bat": {
+  "t": "際立つ人としての資質",
+  "h": "31efa257"
+ },
+ "js.cs.chat-nguoi-noi-bat-va-thu": {
+  "t": "際立つ人としての資質と、あなたに合う仕事が求めないこと",
+  "h": "5b90f04f"
+ },
+ "js.cs.chat-viec-dung-doc-thanh-ban": {
+  "t": "<b>仕事の性質</b>で照らし合わせてください。「あなたは職業を間違えている」とは読まないでください。",
+  "h": "4728caa7"
+ },
+ "js.cs.chat-viec-thay-vi-doi-chieu": {
+  "t": "業種名ではなく、<i>仕事の性質</i>で照らし合わせてください。</p>",
+  "h": "94306405"
+ },
+ "js.cs.chinh-tinh-cung-menh": {
+  "t": "命宮の主星",
+  "h": "dcba7b35"
+ },
+ "js.cs.chinh-tinh-cung-quan-loc": {
+  "t": "官禄宮の主星",
+  "h": "9c8bc6b2"
+ },
+ "js.cs.cho-hay-vap": {
+  "t": "<b>つまずきやすいところ</b>",
+  "h": "0fe4ac0b"
+ },
+ "js.cs.cho-nguoi-dang-o-vi-tri": {
+  "t": "この立場にいる人へ：",
+  "h": "c0aba160"
+ },
+ "js.cs.chua-dung-duoc-anh-thu-lai": {
+  "t": "画像を作成できませんでした。少し待ってから、もう一度お試しください。",
+  "h": "f8055429"
+ },
+ "js.cs.chua-dung-duoc-ho-so-luc": {
+  "t": "今はプロフィールを作成できませんでした — もう一度お試しください。",
+  "h": "3f85746f"
+ },
+ "js.cs.chua-khop-bac-chuc-phan-hien": {
+  "t": "<b>現在の職分の等級とはまだ合っていません</b>。今すぐの居場所ではなく、進む方向として読んでください。",
+  "h": "cfa2e82b"
+ },
+ "js.cs.chua-mo-duoc-phan-nhanh-nghe": {
+  "t": "職種の分かれ道の部分を開けませんでした — もう一度お試しください。",
+  "h": "f13e7f15"
+ },
+ "js.cs.chuc-phan-theo-loi-co": {
+  "t": "古式の職分",
+  "h": "0504275b"
+ },
+ "js.cs.co-so-trong-la-so": {
+  "t": "命盤上の根拠",
+  "h": "43f95044"
+ },
+ "js.cs.con-so-phan-tram-la-do": {
+  "t": "パーセントの数字は、<b>人の資質と仕事の性質の合致度</b>です。",
+  "h": "65261dc8"
+ },
+ "js.cs.cung-mot-nganh-nhung-moi-nhanh": {
+  "t": "同じ業種でも、枝分かれごとに必要な人の資質はまったく異なります。</p>",
+  "h": "b2d6705d"
+ },
+ "js.cs.cung-name": {
+  "t": "{name}",
+  "h": "3cb49303"
+ },
+ "js.cs.da-mo-phan-nhanh-nghe-ten": {
+  "t": "職種の分かれ道の部分を開きました。あなたに最も合う分かれ道は**{ten}**です。どの分かれ道を詳しく見たいですか？それとも特定の職業について聞きますか？",
+  "h": "68b42e6e"
+ },
+ "js.cs.dang-dung": {
+  "t": "作成中…",
+  "h": "88400b94"
+ },
+ "js.cs.dang-dung-anh": {
+  "t": "画像を作成中…",
+  "h": "7bce9760"
+ },
+ "js.cs.dang-mo-phan-nhanh-nghe": {
+  "t": "職種の分かれ道の部分を開いています…",
+  "h": "f58ba0b1"
+ },
+ "js.cs.dang-o-day": {
+  "t": "現在ここ",
+  "h": "aa7d3c7e"
+ },
+ "js.cs.day-la-goi-y-huong-khong": {
+  "t": "これは方向の提案であり、職業の指定ではありません。古典が語るのは<b>仕事の性質</b>です",
+  "h": "0573bbbd"
+ },
+ "js.cs.day-la-the-manh-tuong-doi": {
+  "t": "これは、あなた自身の中での<b>各側面の相対的な強み</b>であり、他の人と比べた点数ではありません。</p>",
+  "h": "3cea3811"
+ },
+ "js.cs.diem": {
+  "t": " · 点数 ",
+  "h": "0ea58cf8"
+ },
+ "js.cs.diem-8vmw": {
+  "t": "点数",
+  "h": "024af419"
+ },
+ "js.cs.diem-do-engine-cham-tren-chinh": {
+  "t": "あなたの命盤に基づきエンジンが採点した点数です（10点満点）。",
+  "h": "03be4bad"
+ },
+ "js.cs.doc-ca-hai-phan-dung-ep": {
+  "t": "</b>の影響もかなりはっきり出ています。両方の部分を読み、自分を一つの枠に押し込めないでください。</div>",
+  "h": "24fcc1c0"
+ },
+ "js.cs.doc-theo-cap-dong-cung": {
+  "t": " — 同宮のペアとして読む",
+  "h": "249d9a92"
+ },
+ "js.cs.doc-theo-co-phap-phu-mau": {
+  "t": "古法による読み方：<b>父母宮</b>は目上、<b>兄弟宮</b>は同じ立場の人、",
+  "h": "4f1fa3e2"
+ },
+ "js.cs.doi-mat-hay-ban-giay-cam": {
+  "t": "（対面か事務か、人を率いるか技を磨くか）。上にある現代の職業リストは、当ページが読み替えたものです。",
+  "h": "84acb782"
+ },
+ "js.cs.dung-ngay-bay-gio": {
+  "t": "現在すぐ立つ場所ではありません。</div>",
+  "h": "cebffac0"
+ },
+ "js.cs.ghep-doi-ai-do-duoc-ban": {
+  "t": "チーム編成 — 誰があなたを支えてくれるか",
+  "h": "616debca"
+ },
+ "js.cs.ho-so": {
+  "t": "プロフィール",
+  "h": "ebe439c1"
+ },
+ "js.cs.ho-so-cong-so-da-dung-full": {
+  "t": "職場プロフィールが完成しました — あなたは**{kieu}**タイプ寄りです（{tt}）。最も強いのは**{manh}**です。どの部分を詳しく掘り下げましょうか？",
+  "h": "e1d2fcd1"
+ },
+ "js.cs.ho-so-day-du-chua-mo": {
+  "t": "⊙ フル版のプロフィールはまだ開かれていません",
+  "h": "7e47b133"
+ },
+ "js.cs.ho-tro": {
+  "t": "サポート",
+  "h": "ed2a55ae"
+ },
+ "js.cs.hop-tac": {
+  "t": "協調",
+  "h": "d934a7d7"
+ },
+ "js.cs.huong-tham-khao-dung-doc-nhu": {
+  "t": "あくまで参考の方向であり、断定として読まないでください。</div>",
+  "h": "dede2dae"
+ },
+ "js.cs.khai-sang": {
+  "t": "開拓",
+  "h": "b6833673"
+ },
+ "js.cs.khi-duoc-giao-quyen": {
+  "t": "権限を任されたとき",
+  "h": "90c9e1e0"
+ },
+ "js.cs.khong-co-ten-nganh-ban-dang": {
+  "t": "あなたが就いている職業名がリストにないことは、あなたが間違っているという意味では<b>ありません</b> — ",
+  "h": "e9ea00be"
+ },
+ "js.cs.khong-phai-kha-nang-thanh-cong": {
+  "t": "<b>成功の可能性ではありません</b>。職業リストは、ベトナムの事情に合わせて当ページが読み替えたものです。",
+  "h": "a0d5aaf7"
+ },
+ "js.cs.khop": {
+  "t": "合致",
+  "h": "06321169"
+ },
+ "js.cs.kieu": {
+  "t": " · タイプ ",
+  "h": "6d81ffdf"
+ },
+ "js.cs.kieu-4mx9": {
+  "t": "タイプ ",
+  "h": "6d21ae2a"
+ },
+ "js.cs.kieu-lai-toa-do-cua-ban": {
+  "t": "⚠ <b>ハイブリッド型。</b>あなたの座標は境界線に近いため<b>",
+  "h": "11aff2e8"
+ },
+ "js.cs.kieu-nguoi-nay-la-gi": {
+  "t": "このタイプとはどんな人ですか？",
+  "h": "dd192f9f"
+ },
+ "js.cs.kieu-nguoi-o-cho-lam": {
+  "t": "職場でのタイプ",
+  "h": "399f87f5"
+ },
+ "js.cs.la-so-cua-ban-khong-chi": {
+  "t": "あなたの命盤には、<b>際立った分かれ道が一つも示されていません</b>",
+  "h": "77e78dd8"
+ },
+ "js.cs.lanh-dao": {
+  "t": "リーダー",
+  "h": "d9b13441"
+ },
+ "js.cs.luong": {
+  "t": "両)",
+  "h": "c99d25aa"
+ },
+ "js.cs.luu-nien-nam-nay": {
+  "t": "今年の流年",
+  "h": "1b558770"
+ },
+ "js.cs.luu-nien-o-cung": {
+  "t": " · 流年は ",
+  "h": "f72ac853"
+ },
+ "js.cs.manh-nhat": {
+  "t": "最も強い：",
+  "h": "b67b37ca"
+ },
+ "js.cs.manh-nhat-gixi": {
+  "t": "<b>最も強いところ</b>",
+  "h": "fe6a0e48"
+ },
+ "js.cs.mat": {
+  "t": "側面",
+  "h": "473db18f"
+ },
+ "js.cs.mat-can-boi-them-nhat": {
+  "t": "最も補いたい側面：",
+  "h": "91c25ad4"
+ },
+ "js.cs.mat-manh-nhat-trong-12-mat": {
+  "t": "12の側面の中で最も強いもの：",
+  "h": "01df7a24"
+ },
+ "js.cs.mo-ho-so-day-du": {
+  "t": "フル版のプロフィールを開く",
+  "h": "3757bf2c"
+ },
+ "js.cs.mo-phan-nhanh-nghe": {
+  "t": "<b>職種の分かれ道の部分を開く →</b>",
+  "h": "d178dc5c"
+ },
+ "js.cs.moi-truong-hop": {
+  "t": "合う環境",
+  "h": "14808d08"
+ },
+ "js.cs.moi-truong-ky": {
+  "t": "避けたい環境",
+  "h": "0edcadd9"
+ },
+ "js.cs.muoi-hai-mat-cua-doi-di": {
+  "t": "働く人生の12の側面 — 各側面の点数と理由",
+  "h": "b36da1b8"
+ },
+ "js.cs.muoi-hai-mat-cua-doi-di-gqoe": {
+  "t": "働く人生の12の側面",
+  "h": "7612512c"
+ },
+ "js.cs.muoi-hai-thang-toi-nen-lam": {
+  "t": "これからの12か月は何をすべきですか？",
+  "h": "f98b733c"
+ },
+ "js.cs.muon-cung-xung-chieu": {
+  "t": " — 対宮を借りる",
+  "h": "1fb340ea"
+ },
+ "js.cs.muon-xung-chieu": {
+  "t": "（対宮を借りる）",
+  "h": "7363dfe3"
+ },
+ "js.cs.nam-nay-chieu-kep": {
+  "t": "今年は二重に照らされる",
+  "h": "b582a95f"
+ },
+ "js.cs.neu-toi-dang-lam-nghe-khac": {
+  "t": "今別の仕事をしている場合はどうなりますか？",
+  "h": "efac8cf1"
+ },
+ "js.cs.nghe-hop-voi-ban-thuong-khong": {
+  "t": "あなたに合う仕事がたいてい求めないこと",
+  "h": "48816f36"
+ },
+ "js.cs.nguoc-da": {
+  "t": "勢いに逆らう",
+  "h": "50f7d6cf"
+ },
+ "js.cs.nguon-cach-chia-bon-kieu": {
+  "t": "4つのタイプの分け方の出典",
+  "h": "8144bf17"
+ },
+ "js.cs.nguon-du-lieu": {
+  "t": "データの出典 →",
+  "h": "78319924"
+ },
+ "js.cs.nguon-theo-tu-vi-dau-so": {
+  "t": "📚 <b>出典：</b><i>『紫微斗数新編』</i>に基づく",
+  "h": "0917536a"
+ },
+ "js.cs.nhan-ra-o-cho-lam": {
+  "t": "職場で見分けられるサイン",
+  "h": "b6e2a171"
+ },
+ "js.cs.nhanh-dau-tien-cu-the-phai": {
+  "t": "最初の具体的な分かれ道は、どこから始めればよいですか？",
+  "h": "a9550e65"
+ },
+ "js.cs.nhanh-nay-thuong-o-bac-khac": {
+  "t": "この分かれ道は、命盤が示す職分の等級とは通常別の等級にあります。",
+  "h": "a815d5d0"
+ },
+ "js.cs.nhanh-nghe-hop-voi-ban": {
+  "t": "あなたに合う職種の分かれ道",
+  "h": "488563f6"
+ },
+ "js.cs.nhung-pha-kha-ro": {
+  "t": "</b>寄りですが、<b>",
+  "h": "e4d67d67"
+ },
+ "js.cs.nhuong": {
+  "t": "譲る",
+  "h": "c0333abd"
+ },
+ "js.cs.no-boc-la-thuoc-ha-va": {
+  "t": "<b>僕役宮</b>は部下や仕事仲間です。補い合いの法則は、陰と陽を組み合わせることです。</p>",
+  "h": "f843e58b"
+ },
+ "js.cs.no-noi-ve": {
+  "t": "何についてか",
+  "h": "2247dbea"
+ },
+ "js.cs.o-quy-mo-nao-phan-nay": {
+  "t": "どの<b>規模</b>で合うかを示します。この部分は、その分野の中の<b>具体的な分かれ道</b>を示します — ",
+  "h": "ab6aae0b"
+ },
+ "js.cs.phu-tinh-dong-tai-cung-quan": {
+  "t": "官禄宮にある副星は、上の分野の<b>内側で絞り込む</b>ものであり、分野そのものを置き換えるものではありません。",
+  "h": "c3fd465d"
+ },
+ "js.cs.quet-ma-xem-kieu-nguoi-cua": {
+  "t": "QRコードを読み取って、あなたのタイプを見る",
+  "h": "abb7f441"
+ },
+ "js.cs.quy-mo-ganh-duoc-bac": {
+  "t": "担える規模 — 等級 ",
+  "h": "43f37473"
+ },
+ "js.cs.sao-quyet-dinh-linh-vuc": {
+  "t": "分野を決める星",
+  "h": "31023c67"
+ },
+ "js.cs.thuan-da": {
+  "t": "勢いに乗る",
+  "h": "c65246fb"
+ },
+ "js.cs.thuan-da-nguoc-da-la-so": {
+  "t": "「勢いに乗る／逆らう」は、大運の陰陽の性質をあなたの本命のタイプと比べたものです。</p>",
+  "h": "41c5ce0c"
+ },
+ "js.cs.tieu-han-nam-nay": {
+  "t": "今年の小限",
+  "h": "62da8d5f"
+ },
+ "js.cs.tieu-han-o-cung": {
+  "t": "小限は ",
+  "h": "aef732f3"
+ },
+ "js.cs.toa-do": {
+  "t": "座標",
+  "h": "6fda44e7"
+ },
+ "js.cs.toi-co-hop-lam-nganh-x": {
+  "t": "私は業種Xに向いていますか？",
+  "h": "ac81904f"
+ },
+ "js.cs.toi-con-thieu-gi-de-vao": {
+  "t": "その分かれ道に入るには、あと何が足りませんか？",
+  "h": "4e41376f"
+ },
+ "js.cs.toi-hop-lam-viec-voi-kieu": {
+  "t": "私はどんなタイプの人と働くのが合いますか？",
+  "h": "3fbf2004"
+ },
+ "js.cs.toi-nen-tranh-moi-truong-nao": {
+  "t": "どんな環境を避けるべきですか？",
+  "h": "14ba354e"
+ },
+ "js.cs.ton": {
+  "t": "<small>必要：",
+  "h": "ca8d4e90"
+ },
+ "js.cs.tram-on": {
+  "t": "落ち着き",
+  "h": "78f14035"
+ },
+ "js.cs.tranh-nhuong": {
+  "t": "競う ↔ 譲る：",
+  "h": "93f67a9e"
+ },
+ "js.cs.tren-thang-10-diem-11-mat": {
+  "t": "10点満点 — 残り11の側面、それぞれの理由、そして完全な表は、無料で閲覧できる登録後のプロフィールにあります。",
+  "h": "5ada4a9d"
+ },
+ "js.cs.tren-thang-10-diem-ly-do": {
+  "t": "10点満点 — 各側面の理由と補い方は、無料で閲覧できる登録後のプロフィールにあります。",
+  "h": "e5560e3d"
+ },
+ "js.cs.trich-dan-co-thu": {
+  "t": "古典からの引用",
+  "h": "1a48a14b"
+ },
+ "js.cs.trong-linh-vuc-do-ban-nghieng": {
+  "t": "<b>その分野の中で、あなたはどの分かれ道に傾いているか</b>",
+  "h": "46deb5f7"
+ },
+ "js.cs.trong-linh-vuc-nay-noi-thang": {
+  "t": "この分野の中で。率直に言うと、決めるには信号が足りません — 以下はあくまで ",
+  "h": "288c730f"
+ },
+ "js.cs.trong-may-nganh-do-toi-nen": {
+  "t": "そのいくつかの業種の中で、私はどれを選ぶべきですか？",
+  "h": "a94bba40"
+ },
+ "js.cs.tu-cach-theo-cung-menh": {
+  "t": "命宮から見た立場",
+  "h": "3623d661"
+ },
+ "js.cs.tu-vi-cong-so-kieu": {
+  "t": "紫微職場 — タイプ ",
+  "h": "910e8c28"
+ },
+ "js.cs.tu-vi-cong-so-ordd": {
+  "t": "紫微職場",
+  "h": "9d18a955"
+ },
+ "js.cs.tuoi": {
+  "t": " 歳",
+  "h": "2e261bf5"
+ },
+ "js.cs.vai-ban-nen-nhan-trong-nganh": {
+  "t": "その業界であなたが引き受けるとよい役割",
+  "h": "f8b3215e"
+ },
+ "js.cs.van-dang-thai-thu-lang-va": {
+  "t": "（雲騰太次郎）と<i>『中州派 六十星系』</i>（王亭之）。",
+  "h": "77b93310"
+ },
+ "js.cs.van-nam": {
+  "t": "年運 ",
+  "h": "86712c6e"
+ },
+ "js.cs.vi-du-nghieng-chu-nghia-trong": {
+  "t": "たとえば医療分野で「言葉・文章」に傾くなら、教育、研究、専門的な執筆の道です — それでも医療分野です。",
+  "h": "db475758"
+ },
+ "js.cs.vi-sao-hop": {
+  "t": "<b>合う理由：</b>",
+  "h": "6a37b393"
+ },
+ "js.cs.vi-sao-la-so-hop-nhanh": {
+  "t": "なぜ命盤がその分かれ道に合うのか — 人の資質を名指しで",
+  "h": "0ab395f8"
+ },
+ "js.cs.vi-sao-la-so-lai-ra": {
+  "t": "なぜ命盤からこのタイプになるのですか？",
+  "h": "ed996a33"
+ },
+ "js.cs.viec-lam-duoc-ngay-o-tung": {
+  "t": "各分かれ道ですぐにできること（ベトナムの事情に合わせて）",
+  "h": "3851e61e"
+ },
+ "js.cs.vo-chinh-dieu": {
+  "t": " · 主星なし",
+  "h": "46b7d17a"
+ },
+ "js.cs.vo-chinh-dieu-pwt9": {
+  "t": "無正曜",
+  "h": "bd07d7a9"
+ },
+ "js.cs.vui-long-nhap-du-ngay-thang": {
+  "t": "生年月日をすべて入力してください。",
+  "h": "771ff27f"
+ },
+ "js.cs.xong-pha": {
+  "t": "攻める",
+  "h": "3b22b749"
+ },
+ "js.cs.xong-tram": {
+  "t": " · 攻める ↔ 落ち着き：",
+  "h": "71afe77a"
  },
  "js.ctk.anh-dang-tai-co-the-hoi": {
   "t": "画像を読み込み中です。少し時間がかかることがあります — しばらくお待ちいただくか、",

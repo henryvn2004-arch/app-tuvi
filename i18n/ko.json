@@ -359,6 +359,98 @@
   "t": "← 오늘로 돌아가기",
   "h": "24faf89e"
  },
+ "cs.2-xem-truoc-ho-so": {
+  "t": "<span class=\"wss-n\">2</span><span class=\"wss-l\">프로필 미리보기</span>",
+  "h": "cdf8b027"
+ },
+ "cs.40-nam-4-chang": {
+  "t": "<span class=\"hp-ic\" data-icon=\"trending-up\"></span><span>40년을<br>4구간으로</span>",
+  "h": "62f02f8b"
+ },
+ "cs.ban-dang-o-vi-tri-nao": {
+  "t": "현재 어떤 위치에 있나요",
+  "h": "ae96bb68"
+ },
+ "cs.ban-luan-giai-mau-tai-pdf": {
+  "t": "<span class=\"sc-ic\" data-icon=\"file-text\"></span> <span class=\"sc-txt\"><b>샘플 풀이서</b><span>샘플 명반으로 만든 「자미두수 직장」 전체 PDF를 내려받아 실제 내용을 미리 확인해 보세요.</span></span> <a class=\"sc-btn\" href=\"/tai-mau/mau-cong-so.pdf\" target=\"_blank\" rel=\"noopener\">PDF 받기 →</a>",
+  "h": "2538ba5a"
+ },
+ "cs.bon-ten-goi-khai-sang-lanh": {
+  "t": "<b>개척·리더·서포터·협력</b>이라는 네 가지 이름은 읽기 쉽도록 이 페이지가 붙인 현대적인 라벨이며 고전에는 이런 호칭이 없어요. 나누는 방식에는 고법의 바탕이 있어요: <b>사상</b>(노양·소음·소양·노음)을 14주성에 대응시키면 고전의 별 조합에 정확히 들어맞아요.<br> 이것은 <b>명반을 읽는 하나의 틀</b>이지 검증을 거친 심리 검사가 아니에요. 뒷받침하는 대조 연구도 없어요. 나를 이해하고 대화의 실마리로 쓰되, 사람을 뽑거나 남에게 일을 배정하는 데 쓰지 마세요.",
+  "h": "4b3842bc"
+ },
+ "cs.chu-doanh-nghiep": {
+  "t": "사업주",
+  "h": "0ec2b6b1"
+ },
+ "cs.cung-mot-nang-luc-co-nguoi": {
+  "t": "같은 능력이라도 순조롭게 승진하는 사람이 있고 계속 제자리걸음인 사람이 있어요 — 대부분 맞는 환경을 고르고 자신을 드러내는 방식에서 갈려요. 직장에서의 내 유형을 읽고 방향을 더 분명히 잡아 보세요.",
+  "h": "af9f49d9"
+ },
+ "cs.dang-tim-viec-chuyen-huong": {
+  "t": "구직 중 / 방향 전환 중",
+  "h": "de0479f2"
+ },
+ "cs.doc-la-so-tu-vi-bang": {
+  "t": "자미두수 명반을 일의 언어로 읽어요: 직장에서 나는 어떤 유형인지, 열두 가지 측면의 강점과 약점, 일하는 40년을 나눈 네 구간, 그리고 누구와 팀을 짜면 좋은지요.",
+  "h": "7c9e83ec"
+ },
+ "cs.dung-ho-so-kieu-nguoi-12": {
+  "t": "유형 + 12가지 측면 프로필 만들기는 <b>무료</b>예요. 구체적인 직업 갈래를 열 때만 냥이 차감돼요.",
+  "h": "8ad49bf1"
+ },
+ "cs.dung-ho-so-mien-phi": {
+  "t": "<span class=\"bg-label\"><span class=\"ic\" data-icon=\"briefcase\"></span><b id=\"btnGoLabel\">프로필 만들기 →</b></span> <small>무료</small>",
+  "h": "d7386efe"
+ },
+ "cs.hoi-thay-doc-ky-ho-so": {
+  "t": "✦ 선생님께 이 프로필을 자세히 읽어 달라고 하기",
+  "h": "dfa970e5"
+ },
+ "cs.kieu-nguoi-noi-cong-so": {
+  "t": "<span class=\"hp-ic\" data-icon=\"briefcase\"></span><span>직장에서의<br>유형</span>",
+  "h": "31b69ffd"
+ },
+ "cs.lam-tu-do-nghe-rieng": {
+  "t": "프리랜서 / 개인 사업",
+  "h": "1d5e99e6"
+ },
+ "cs.ngay-gio-sinh-va-cho-dung": {
+  "t": "생년월일·시간과 현재 위치",
+  "h": "ade29838"
+ },
+ "cs.nhan-vien-lam-thue": {
+  "t": "직장인",
+  "h": "0c9557d1"
+ },
+ "cs.nhanh-nghe-ghep-doi": {
+  "t": "<span class=\"hp-ic\" data-icon=\"users\"></span><span>직업 갈래,<br>팀 짜기</span>",
+  "h": "f7580d7f"
+ },
+ "cs.nhap-ngay-gio-sinh-va-vi": {
+  "t": "생년월일과 시간, 현재 위치를 입력하세요. 시스템이 고법과 대조해요 — 직장에서의 유형, 맞는 직업 갈래, 그리고 40년 커리어를 4구간으로 나눠서요.",
+  "h": "f54c5793"
+ },
+ "cs.quan-ly-lam-thue": {
+  "t": "직장 내 관리자",
+  "h": "9e6cb7ab"
+ },
+ "cs.tai-anh": {
+  "t": "⬇ 이미지 저장",
+  "h": "eb8a56af"
+ },
+ "cs.tu-vi-cong-so": {
+  "t": "자미두수 직장·결혼",
+  "h": "9d18a955"
+ },
+ "cs.tu-vi-cong-so-la-so": {
+  "t": "<b>자미 직장</b><span>일의 언어로 읽는 명반</span>",
+  "h": "af1a1cbe"
+ },
+ "cs.tu-vi-cong-so-tu-vi": {
+  "t": "자미 직장 — 명보 자미두수",
+  "h": "91365f7b"
+ },
  "ctk.2-xem-truoc-chan-dung": {
   "t": "<span class=\"wss-n\">2</span><span class=\"wss-l\">초상 미리보기</span>",
   "h": "db8c9fa4"
@@ -2082,6 +2174,570 @@
  "js.chutrinh.tieu-van-nam": {
   "t": "소한 ‘ ",
   "h": "1979c56a"
+ },
+ "js.cs.ba-nhanh-nay-khac-nhau-o": {
+  "t": "이 세 갈래는 어디가 다른가요?",
+  "h": "19e39a35"
+ },
+ "js.cs.ba-nhanh-nghe-cu-the-ben": {
+  "t": "당신의 분야 안에 있는 세 가지 구체적인 직업 갈래",
+  "h": "879d2594"
+ },
+ "js.cs.ba-tang-o-tren-noi-ban": {
+  "t": "위의 세 층은 당신에게 맞는 <b>분야</b>와",
+  "h": "d7fe12dc"
+ },
+ "js.cs.bac-chuc-phan": {
+  "t": "직분 등급",
+  "h": "73d28e4f"
+ },
+ "js.cs.ban-hop-lam-gi": {
+  "t": "나에게 맞는 일",
+  "h": "7bf8b024"
+ },
+ "js.cs.ban-hop-lam-nganh-gi-linh": {
+  "t": "나에게 맞는 직업 — 분야 · 역할 · 규모",
+  "h": "ee981a25"
+ },
+ "js.cs.ban-nghieng-ve-kieu-full": {
+  "t": "당신은 **{kieu}** 유형에 가까워요({tt}). 계정을 등록하면(무료 냥 증정) 12가지 측면, 4구간 로드맵, 팀 짜기를 모두 볼 수 있어요 — 그 부분을 연 뒤에 제가 깊이 짚어 드릴게요.",
+  "h": "711e5f38"
+ },
+ "js.cs.boi-canh-viet-nam-dang-lam": {
+  "t": "베트남 상황에 맞춘 것이에요. 목록에 없는 일을 하고 있다면 ",
+  "h": "18705d1c"
+ },
+ "js.cs.bon-dai-van-lien-tiep-phu": {
+  "t": "이어지는 네 개의 대운이 일하는 시기를 덮고 있어요. 점수는 엔진이 매긴 대운 점수이고,",
+  "h": "5fe06b87"
+ },
+ "js.cs.bon-kieu-nguoi-va-cach-goi": {
+  "t": "네 가지 유형과 직업을 제안하는 방식은 <b>명보 자미두수 전문가 팀</b>이 직접 만든 방법이에요.<br><br>",
+  "h": "24a12349"
+ },
+ "js.cs.bon-muoi-nam-di-lam-chia": {
+  "t": "일하는 40년을 4구간으로",
+  "h": "ae99b53d"
+ },
+ "js.cs.bon-muoi-nam-di-lam-chia-90zk": {
+  "t": "일하는 40년을 네 구간으로 나누기",
+  "h": "ced9f68e"
+ },
+ "js.cs.bon-viec-phai-hoc-khi-bat": {
+  "t": "사람을 이끌기 시작할 때 배워야 할 네 가지",
+  "h": "d246f547"
+ },
+ "js.cs.cac-nhanh-duoi-day-hop-voi": {
+  "t": "아래 갈래들은 당신의 <b>사람으로서의 기질</b>에는 맞지만",
+  "h": "f9533187"
+ },
+ "js.cs.cach-cuc-tai-cung-quan-loc": {
+  "t": "관록궁의 격국",
+  "h": "2c8aa204"
+ },
+ "js.cs.cai-thuc-ban-di": {
+  "t": "당신을 움직이는 것",
+  "h": "e34c0d1a"
+ },
+ "js.cs.cau-hoi-chay-ngam-trong-dau": {
+  "t": "머릿속에서 늘 돌아가는 질문",
+  "h": "92b9b591"
+ },
+ "js.cs.chang-nghe-tiep-theo-cua-toi": {
+  "t": "제 다음 커리어 구간은 어떨까요?",
+  "h": "7e97fdda"
+ },
+ "js.cs.chat-nguoi-noi-bat": {
+  "t": "두드러진 사람으로서의 기질",
+  "h": "31efa257"
+ },
+ "js.cs.chat-nguoi-noi-bat-va-thu": {
+  "t": "두드러진 사람으로서의 기질과 나에게 맞는 일이 요구하지 않는 것",
+  "h": "5b90f04f"
+ },
+ "js.cs.chat-viec-dung-doc-thanh-ban": {
+  "t": "<b>일의 성격</b>으로 대조해 보세요. “당신이 직업을 잘못 골랐다”는 뜻으로 읽지 마세요. ",
+  "h": "4728caa7"
+ },
+ "js.cs.chat-viec-thay-vi-doi-chieu": {
+  "t": "업종 이름이 아니라 <i>일의 성격</i>으로 대조해 보세요.</p>",
+  "h": "94306405"
+ },
+ "js.cs.chinh-tinh-cung-menh": {
+  "t": "명궁의 주성",
+  "h": "dcba7b35"
+ },
+ "js.cs.chinh-tinh-cung-quan-loc": {
+  "t": "관록궁의 주성",
+  "h": "9c8bc6b2"
+ },
+ "js.cs.cho-hay-vap": {
+  "t": "<b>잘 걸려 넘어지는 부분</b>",
+  "h": "0fe4ac0b"
+ },
+ "js.cs.cho-nguoi-dang-o-vi-tri": {
+  "t": "이 위치에 있는 사람에게:",
+  "h": "c0aba160"
+ },
+ "js.cs.chua-dung-duoc-anh-thu-lai": {
+  "t": "이미지를 만들지 못했어요. 잠시 후 다시 시도해 주세요.",
+  "h": "f8055429"
+ },
+ "js.cs.chua-dung-duoc-ho-so-luc": {
+  "t": "지금은 프로필을 만들지 못했어요 — 다시 시도해 주세요.",
+  "h": "3f85746f"
+ },
+ "js.cs.chua-khop-bac-chuc-phan-hien": {
+  "t": "<b>현재 직분 등급과는 아직 맞지 않아요</b>. 지금 서 있을 자리가 아니라 나아갈 방향으로 읽어 주세요. ",
+  "h": "cfa2e82b"
+ },
+ "js.cs.chua-mo-duoc-phan-nhanh-nghe": {
+  "t": "직업 갈래 부분을 열지 못했어요 — 다시 시도해 주세요.",
+  "h": "f13e7f15"
+ },
+ "js.cs.chuc-phan-theo-loi-co": {
+  "t": "고법식 직분",
+  "h": "0504275b"
+ },
+ "js.cs.co-so-trong-la-so": {
+  "t": "명반상의 근거",
+  "h": "43f95044"
+ },
+ "js.cs.con-so-phan-tram-la-do": {
+  "t": "퍼센트 숫자는 <b>사람의 기질과 일의 성격이 맞는 정도</b>이고, ",
+  "h": "65261dc8"
+ },
+ "js.cs.cung-mot-nganh-nhung-moi-nhanh": {
+  "t": "같은 업종이라도 갈래마다 필요한 사람의 기질이 완전히 달라요.</p>",
+  "h": "b2d6705d"
+ },
+ "js.cs.cung-name": {
+  "t": "{name}",
+  "h": "3cb49303"
+ },
+ "js.cs.da-mo-phan-nhanh-nghe-ten": {
+  "t": "직업 갈래 부분을 열었어요. 당신에게 가장 맞는 갈래는 **{ten}**이에요. 어떤 갈래를 깊이 짚어 볼까요, 아니면 특정 직업에 대해 물어볼까요?",
+  "h": "68b42e6e"
+ },
+ "js.cs.dang-dung": {
+  "t": "만드는 중…",
+  "h": "88400b94"
+ },
+ "js.cs.dang-dung-anh": {
+  "t": "이미지 만드는 중…",
+  "h": "7bce9760"
+ },
+ "js.cs.dang-mo-phan-nhanh-nghe": {
+  "t": "직업 갈래 부분을 여는 중이에요…",
+  "h": "f58ba0b1"
+ },
+ "js.cs.dang-o-day": {
+  "t": "지금 여기",
+  "h": "aa7d3c7e"
+ },
+ "js.cs.day-la-goi-y-huong-khong": {
+  "t": "이것은 방향에 대한 제안이지 직업 지정이 아니에요. 고서가 말하는 것은 <b>일의 성격</b>이에요",
+  "h": "0573bbbd"
+ },
+ "js.cs.day-la-the-manh-tuong-doi": {
+  "t": "이것은 당신 안에서 <b>각 측면 사이의 상대적인 강점</b>이지 다른 사람과 비교한 점수가 아니에요.</p>",
+  "h": "3cea3811"
+ },
+ "js.cs.diem": {
+  "t": " · 점수 ",
+  "h": "0ea58cf8"
+ },
+ "js.cs.diem-8vmw": {
+  "t": "점수",
+  "h": "024af419"
+ },
+ "js.cs.diem-do-engine-cham-tren-chinh": {
+  "t": "엔진이 당신의 명반을 바탕으로 매긴 점수예요(10점 만점).",
+  "h": "03be4bad"
+ },
+ "js.cs.doc-ca-hai-phan-dung-ep": {
+  "t": "</b>의 색채도 꽤 뚜렷해요. 두 부분을 모두 읽고 자신을 한 칸에 억지로 끼워 넣지 마세요.</div>",
+  "h": "24fcc1c0"
+ },
+ "js.cs.doc-theo-cap-dong-cung": {
+  "t": " — 같은 궁의 짝으로 읽음",
+  "h": "249d9a92"
+ },
+ "js.cs.doc-theo-co-phap-phu-mau": {
+  "t": "고법으로 읽으면 <b>부모궁</b>은 윗사람, <b>형제궁</b>은 동등한 사람,",
+  "h": "4f1fa3e2"
+ },
+ "js.cs.doi-mat-hay-ban-giay-cam": {
+  "t": "(대면인지 사무인지, 사람을 이끄는지 기술을 다루는지). 위의 현대 직업 목록은 이 페이지가 옮겨 놓은 것이에요. ",
+  "h": "84acb782"
+ },
+ "js.cs.dung-ngay-bay-gio": {
+  "t": "지금 당장 서 있을 자리가 아니에요.</div>",
+  "h": "cebffac0"
+ },
+ "js.cs.ghep-doi-ai-do-duoc-ban": {
+  "t": "팀 짜기 — 누가 나를 받쳐 줄 수 있나",
+  "h": "616debca"
+ },
+ "js.cs.ho-so": {
+  "t": "프로필",
+  "h": "ebe439c1"
+ },
+ "js.cs.ho-so-cong-so-da-dung-full": {
+  "t": "직장 프로필이 완성됐어요 — 당신은 **{kieu}** 유형에 가까워요({tt}). 가장 강한 것은 **{manh}**예요. 어느 부분을 깊이 짚어 볼까요?",
+  "h": "e1d2fcd1"
+ },
+ "js.cs.ho-so-day-du-chua-mo": {
+  "t": "⊙ 전체 프로필이 아직 열리지 않았어요",
+  "h": "7e47b133"
+ },
+ "js.cs.ho-tro": {
+  "t": "지원",
+  "h": "ed2a55ae"
+ },
+ "js.cs.hop-tac": {
+  "t": "협력",
+  "h": "d934a7d7"
+ },
+ "js.cs.huong-tham-khao-dung-doc-nhu": {
+  "t": "참고용 방향일 뿐이니 단정으로 읽지 마세요.</div>",
+  "h": "dede2dae"
+ },
+ "js.cs.khai-sang": {
+  "t": "개척",
+  "h": "b6833673"
+ },
+ "js.cs.khi-duoc-giao-quyen": {
+  "t": "권한을 위임받았을 때",
+  "h": "90c9e1e0"
+ },
+ "js.cs.khong-co-ten-nganh-ban-dang": {
+  "t": "지금 하고 있는 직업 이름이 목록에 없다고 해서 당신이 잘못 가고 있다는 뜻은 <b>아니에요</b> — ",
+  "h": "e9ea00be"
+ },
+ "js.cs.khong-phai-kha-nang-thanh-cong": {
+  "t": "<b>성공 가능성이 아니에요</b>. 직업 목록은 베트남 상황에 맞춰 이 페이지가 옮겨 놓은 것이에요. ",
+  "h": "a0d5aaf7"
+ },
+ "js.cs.khop": {
+  "t": "일치",
+  "h": "06321169"
+ },
+ "js.cs.kieu": {
+  "t": " · 유형 ",
+  "h": "6d81ffdf"
+ },
+ "js.cs.kieu-4mx9": {
+  "t": "유형 ",
+  "h": "6d21ae2a"
+ },
+ "js.cs.kieu-lai-toa-do-cua-ban": {
+  "t": "⚠ <b>혼합형.</b> 당신의 좌표가 경계선 가까이에 있어서 <b>",
+  "h": "11aff2e8"
+ },
+ "js.cs.kieu-nguoi-nay-la-gi": {
+  "t": "이 유형은 어떤 사람인가요?",
+  "h": "dd192f9f"
+ },
+ "js.cs.kieu-nguoi-o-cho-lam": {
+  "t": "직장에서의 유형",
+  "h": "399f87f5"
+ },
+ "js.cs.la-so-cua-ban-khong-chi": {
+  "t": "당신의 명반에는 <b>두드러지는 갈래가 하나도 나타나지 않아요</b>",
+  "h": "77e78dd8"
+ },
+ "js.cs.lanh-dao": {
+  "t": "리더",
+  "h": "d9b13441"
+ },
+ "js.cs.luong": {
+  "t": "냥)",
+  "h": "c99d25aa"
+ },
+ "js.cs.luu-nien-nam-nay": {
+  "t": "올해의 유년",
+  "h": "1b558770"
+ },
+ "js.cs.luu-nien-o-cung": {
+  "t": " · 유년은 ",
+  "h": "f72ac853"
+ },
+ "js.cs.manh-nhat": {
+  "t": "가장 강함: ",
+  "h": "b67b37ca"
+ },
+ "js.cs.manh-nhat-gixi": {
+  "t": "<b>가장 강한 부분</b>",
+  "h": "fe6a0e48"
+ },
+ "js.cs.mat": {
+  "t": "측면",
+  "h": "473db18f"
+ },
+ "js.cs.mat-can-boi-them-nhat": {
+  "t": "가장 보완이 필요한 측면: ",
+  "h": "91c25ad4"
+ },
+ "js.cs.mat-manh-nhat-trong-12-mat": {
+  "t": "열두 가지 측면 중 가장 강한 것: ",
+  "h": "01df7a24"
+ },
+ "js.cs.mo-ho-so-day-du": {
+  "t": "전체 프로필 열기",
+  "h": "3757bf2c"
+ },
+ "js.cs.mo-phan-nhanh-nghe": {
+  "t": "<b>직업 갈래 부분 열기 →</b>",
+  "h": "d178dc5c"
+ },
+ "js.cs.moi-truong-hop": {
+  "t": "맞는 환경",
+  "h": "14808d08"
+ },
+ "js.cs.moi-truong-ky": {
+  "t": "피해야 할 환경",
+  "h": "0edcadd9"
+ },
+ "js.cs.muoi-hai-mat-cua-doi-di": {
+  "t": "일하는 인생의 열두 가지 측면 — 측면별 점수와 이유",
+  "h": "b36da1b8"
+ },
+ "js.cs.muoi-hai-mat-cua-doi-di-gqoe": {
+  "t": "일하는 인생의 열두 가지 측면",
+  "h": "7612512c"
+ },
+ "js.cs.muoi-hai-thang-toi-nen-lam": {
+  "t": "앞으로 12개월 동안 무엇을 해야 할까요?",
+  "h": "f98b733c"
+ },
+ "js.cs.muon-cung-xung-chieu": {
+  "t": " — 맞은편 궁을 빌림",
+  "h": "1fb340ea"
+ },
+ "js.cs.muon-xung-chieu": {
+  "t": " (맞은편 궁을 빌림)",
+  "h": "7363dfe3"
+ },
+ "js.cs.nam-nay-chieu-kep": {
+  "t": "올해는 겹으로 비침",
+  "h": "b582a95f"
+ },
+ "js.cs.neu-toi-dang-lam-nghe-khac": {
+  "t": "지금 다른 일을 하고 있다면 어떨까요?",
+  "h": "efac8cf1"
+ },
+ "js.cs.nghe-hop-voi-ban-thuong-khong": {
+  "t": "나에게 맞는 일이 보통 요구하지 않는 것",
+  "h": "48816f36"
+ },
+ "js.cs.nguoc-da": {
+  "t": "흐름을 거스름",
+  "h": "50f7d6cf"
+ },
+ "js.cs.nguon-cach-chia-bon-kieu": {
+  "t": "네 가지 유형으로 나눈 방식의 출처",
+  "h": "8144bf17"
+ },
+ "js.cs.nguon-du-lieu": {
+  "t": "데이터 출처 →",
+  "h": "78319924"
+ },
+ "js.cs.nguon-theo-tu-vi-dau-so": {
+  "t": "📚 <b>출처:</b> <i>『자미두수 신편』</i>에 따름",
+  "h": "0917536a"
+ },
+ "js.cs.nhan-ra-o-cho-lam": {
+  "t": "직장에서 알아볼 수 있는 모습",
+  "h": "b6e2a171"
+ },
+ "js.cs.nhanh-dau-tien-cu-the-phai": {
+  "t": "가장 먼저 잡을 구체적인 갈래는 어디서부터 시작해야 할까요?",
+  "h": "a9550e65"
+ },
+ "js.cs.nhanh-nay-thuong-o-bac-khac": {
+  "t": "이 갈래는 보통 명반이 가리키는 직분 등급과 다른 등급에 있어요.",
+  "h": "a815d5d0"
+ },
+ "js.cs.nhanh-nghe-hop-voi-ban": {
+  "t": "나에게 맞는 직업 갈래",
+  "h": "488563f6"
+ },
+ "js.cs.nhung-pha-kha-ro": {
+  "t": "</b>에 가깝지만 <b>",
+  "h": "e4d67d67"
+ },
+ "js.cs.nhuong": {
+  "t": "양보",
+  "h": "c0333abd"
+ },
+ "js.cs.no-boc-la-thuoc-ha-va": {
+  "t": "<b>복역궁</b>은 부하와 동업자예요. 서로 채우는 법칙은 음과 양을 짝짓는 거예요.</p>",
+  "h": "f843e58b"
+ },
+ "js.cs.no-noi-ve": {
+  "t": "무엇에 대한 것인가",
+  "h": "2247dbea"
+ },
+ "js.cs.o-quy-mo-nao-phan-nay": {
+  "t": "어느 <b>규모</b>에서 맞는지를 말해요. 이 부분은 그 분야 안의 <b>구체적인 갈래</b>를 말해요 — ",
+  "h": "ab6aae0b"
+ },
+ "js.cs.phu-tinh-dong-tai-cung-quan": {
+  "t": "관록궁에 있는 보조성은 위 분야 <b>안에서 범위를 좁히는</b> 것이지 분야를 바꾸는 것이 아니에요. ",
+  "h": "c3fd465d"
+ },
+ "js.cs.quet-ma-xem-kieu-nguoi-cua": {
+  "t": "QR 코드를 스캔해 나의 유형 보기",
+  "h": "abb7f441"
+ },
+ "js.cs.quy-mo-ganh-duoc-bac": {
+  "t": "감당할 수 있는 규모 — 등급 ",
+  "h": "43f37473"
+ },
+ "js.cs.sao-quyet-dinh-linh-vuc": {
+  "t": "분야를 결정하는 별",
+  "h": "31023c67"
+ },
+ "js.cs.thuan-da": {
+  "t": "흐름을 탐",
+  "h": "c65246fb"
+ },
+ "js.cs.thuan-da-nguoc-da-la-so": {
+  "t": "“흐름을 탐 / 거스름”은 대운의 음양 성질을 당신의 본명 유형과 견준 거예요.</p>",
+  "h": "41c5ce0c"
+ },
+ "js.cs.tieu-han-nam-nay": {
+  "t": "올해의 소한",
+  "h": "62da8d5f"
+ },
+ "js.cs.tieu-han-o-cung": {
+  "t": "소한은 ",
+  "h": "aef732f3"
+ },
+ "js.cs.toa-do": {
+  "t": "좌표",
+  "h": "6fda44e7"
+ },
+ "js.cs.toi-co-hop-lam-nganh-x": {
+  "t": "저는 X 업종이 맞을까요?",
+  "h": "ac81904f"
+ },
+ "js.cs.toi-con-thieu-gi-de-vao": {
+  "t": "그 갈래에 들어가려면 무엇이 더 필요할까요?",
+  "h": "4e41376f"
+ },
+ "js.cs.toi-hop-lam-viec-voi-kieu": {
+  "t": "저는 어떤 유형의 사람과 일하면 잘 맞을까요?",
+  "h": "3fbf2004"
+ },
+ "js.cs.toi-nen-tranh-moi-truong-nao": {
+  "t": "어떤 환경을 피해야 할까요?",
+  "h": "14ba354e"
+ },
+ "js.cs.ton": {
+  "t": "<small>비용",
+  "h": "ca8d4e90"
+ },
+ "js.cs.tram-on": {
+  "t": "차분함",
+  "h": "78f14035"
+ },
+ "js.cs.tranh-nhuong": {
+  "t": "겨룸 ↔ 양보: ",
+  "h": "93f67a9e"
+ },
+ "js.cs.tren-thang-10-diem-11-mat": {
+  "t": "10점 만점 — 나머지 11가지 측면, 측면별 이유, 전체 표는 무료로 볼 수 있는 가입 후 프로필에 들어 있어요.",
+  "h": "5ada4a9d"
+ },
+ "js.cs.tren-thang-10-diem-ly-do": {
+  "t": "10점 만점 — 측면별 이유와 보완 방법은 무료로 볼 수 있는 가입 후 프로필에 들어 있어요.",
+  "h": "e5560e3d"
+ },
+ "js.cs.trich-dan-co-thu": {
+  "t": "고서 인용",
+  "h": "1a48a14b"
+ },
+ "js.cs.trong-linh-vuc-do-ban-nghieng": {
+  "t": "<b>그 분야 안에서 당신은 어느 갈래로 기울어 있나</b>",
+  "h": "46deb5f7"
+ },
+ "js.cs.trong-linh-vuc-nay-noi-thang": {
+  "t": "이 분야 안에서요. 솔직히 말해 단정하기에는 신호가 부족해요 — 아래는 그저 ",
+  "h": "288c730f"
+ },
+ "js.cs.trong-may-nganh-do-toi-nen": {
+  "t": "그 몇 가지 업종 중에서 저는 어느 것을 골라야 할까요?",
+  "h": "a94bba40"
+ },
+ "js.cs.tu-cach-theo-cung-menh": {
+  "t": "명궁에서 본 자격",
+  "h": "3623d661"
+ },
+ "js.cs.tu-vi-cong-so-kieu": {
+  "t": "자미 직장 — 유형 ",
+  "h": "910e8c28"
+ },
+ "js.cs.tu-vi-cong-so-ordd": {
+  "t": "자미 직장",
+  "h": "9d18a955"
+ },
+ "js.cs.tuoi": {
+  "t": " 세",
+  "h": "2e261bf5"
+ },
+ "js.cs.vai-ban-nen-nhan-trong-nganh": {
+  "t": "그 업계에서 맡으면 좋은 역할",
+  "h": "f8b3215e"
+ },
+ "js.cs.van-dang-thai-thu-lang-va": {
+  "t": "(운등태차랑)과 <i>『중주파 육십성계』</i>(왕정지). ",
+  "h": "77b93310"
+ },
+ "js.cs.van-nam": {
+  "t": "연운 ",
+  "h": "86712c6e"
+ },
+ "js.cs.vi-du-nghieng-chu-nghia-trong": {
+  "t": "예를 들어 의료 분야에서 “글·문장” 쪽으로 기울면 강의, 연구, 전문 집필 갈래예요 — 그래도 의료 분야예요.",
+  "h": "db475758"
+ },
+ "js.cs.vi-sao-hop": {
+  "t": "<b>맞는 이유:</b>",
+  "h": "6a37b393"
+ },
+ "js.cs.vi-sao-la-so-hop-nhanh": {
+  "t": "왜 명반이 그 갈래에 맞는지 — 사람의 기질을 이름 붙여서",
+  "h": "0ab395f8"
+ },
+ "js.cs.vi-sao-la-so-lai-ra": {
+  "t": "왜 명반에서 이런 유형이 나오나요?",
+  "h": "ed996a33"
+ },
+ "js.cs.viec-lam-duoc-ngay-o-tung": {
+  "t": "각 갈래에서 바로 할 수 있는 일 (베트남 상황 기준)",
+  "h": "3851e61e"
+ },
+ "js.cs.vo-chinh-dieu": {
+  "t": " · 주성 없음",
+  "h": "46b7d17a"
+ },
+ "js.cs.vo-chinh-dieu-pwt9": {
+  "t": "무정요",
+  "h": "bd07d7a9"
+ },
+ "js.cs.vui-long-nhap-du-ngay-thang": {
+  "t": "생년월일을 모두 입력해 주세요.",
+  "h": "771ff27f"
+ },
+ "js.cs.xong-pha": {
+  "t": "돌진",
+  "h": "3b22b749"
+ },
+ "js.cs.xong-tram": {
+  "t": " · 돌진 ↔ 차분함: ",
+  "h": "71afe77a"
  },
  "js.ctk.anh-dang-tai-co-the-hoi": {
   "t": "이미지를 불러오는 중이에요. 다소 느릴 수 있어요 — 잠시 기다리시거나",

@@ -359,6 +359,98 @@
   "t": "← Back to today",
   "h": "24faf89e"
  },
+ "cs.2-xem-truoc-ho-so": {
+  "t": "<span class=\"wss-n\">2</span><span class=\"wss-l\">Preview the profile</span>",
+  "h": "cdf8b027"
+ },
+ "cs.40-nam-4-chang": {
+  "t": "<span class=\"hp-ic\" data-icon=\"trending-up\"></span><span>40 years<br>in 4 stretches</span>",
+  "h": "62f02f8b"
+ },
+ "cs.ban-dang-o-vi-tri-nao": {
+  "t": "Where you are now",
+  "h": "ae96bb68"
+ },
+ "cs.ban-luan-giai-mau-tai-pdf": {
+  "t": "<span class=\"sc-ic\" data-icon=\"file-text\"></span> <span class=\"sc-txt\"><b>Sample reading</b><span>Download the full “Zi Wei Workplace” PDF for a sample chart to preview the real content.</span></span> <a class=\"sc-btn\" href=\"/tai-mau/mau-cong-so.pdf\" target=\"_blank\" rel=\"noopener\">Download PDF →</a>",
+  "h": "2538ba5a"
+ },
+ "cs.bon-ten-goi-khai-sang-lanh": {
+  "t": "The four names <b>Pioneer · Leader · Supporter · Collaborator</b> are modern labels this page chose for readability — the classics don't call them that. The way of dividing has a classical basis: the <b>four images</b> (old yang · young yin · young yang · old yin) applied to the 14 major stars, falling exactly on the classic star groupings.<br> This is <b>a framework for reading a chart</b>, not a validated psychological test. No controlled research stands behind it. Use it to understand yourself and start conversations — not to hire people or assign work to others.",
+  "h": "4b3842bc"
+ },
+ "cs.chu-doanh-nghiep": {
+  "t": "Business owner",
+  "h": "0ec2b6b1"
+ },
+ "cs.cung-mot-nang-luc-co-nguoi": {
+  "t": "With the same ability, some people rise smoothly and others stay stuck — largely a matter of choosing the right environment and how you present yourself. Read your type at work to find a clearer direction.",
+  "h": "af9f49d9"
+ },
+ "cs.dang-tim-viec-chuyen-huong": {
+  "t": "Job hunting / changing direction",
+  "h": "de0479f2"
+ },
+ "cs.doc-la-so-tu-vi-bang": {
+  "t": "Reads the Zi Wei Dou Shu chart in the language of work: which type you are at work, your strengths and weaknesses across twelve aspects, the four stretches of a forty-year working life, and who to team up with.",
+  "h": "7c9e83ec"
+ },
+ "cs.dung-ho-so-kieu-nguoi-12": {
+  "t": "Building the type + 12 aspects profile is <b>free</b>. Credits are only charged when you open the specific career-branch section.",
+  "h": "8ad49bf1"
+ },
+ "cs.dung-ho-so-mien-phi": {
+  "t": "<span class=\"bg-label\"><span class=\"ic\" data-icon=\"briefcase\"></span><b id=\"btnGoLabel\">Build the profile →</b></span> <small>Free</small>",
+  "h": "d7386efe"
+ },
+ "cs.hoi-thay-doc-ky-ho-so": {
+  "t": "✦ Ask the Master to read this profile closely",
+  "h": "dfa970e5"
+ },
+ "cs.kieu-nguoi-noi-cong-so": {
+  "t": "<span class=\"hp-ic\" data-icon=\"briefcase\"></span><span>Type<br>at work</span>",
+  "h": "31b69ffd"
+ },
+ "cs.lam-tu-do-nghe-rieng": {
+  "t": "Freelance / self-employed",
+  "h": "1d5e99e6"
+ },
+ "cs.ngay-gio-sinh-va-cho-dung": {
+  "t": "Birth date and time, and your current position",
+  "h": "ade29838"
+ },
+ "cs.nhan-vien-lam-thue": {
+  "t": "Employee",
+  "h": "0c9557d1"
+ },
+ "cs.nhanh-nghe-ghep-doi": {
+  "t": "<span class=\"hp-ic\" data-icon=\"users\"></span><span>Career branches,<br>team pairing</span>",
+  "h": "f7580d7f"
+ },
+ "cs.nhap-ngay-gio-sinh-va-vi": {
+  "t": "Enter your birth date and time and your current position. The system cross-checks classical methods — your type at work, fitting career branches and a 40-year career in 4 stretches.",
+  "h": "f54c5793"
+ },
+ "cs.quan-ly-lam-thue": {
+  "t": "Employed manager",
+  "h": "9e6cb7ab"
+ },
+ "cs.tai-anh": {
+  "t": "⬇ Save image",
+  "h": "eb8a56af"
+ },
+ "cs.tu-vi-cong-so": {
+  "t": "Zi Wei Workplace",
+  "h": "9d18a955"
+ },
+ "cs.tu-vi-cong-so-la-so": {
+  "t": "<b>Zi Wei Workplace</b><span>The chart read in the language of work</span>",
+  "h": "af1a1cbe"
+ },
+ "cs.tu-vi-cong-so-tu-vi": {
+  "t": "Zi Wei Workplace — Minh Bao Zi Wei Dou Shu",
+  "h": "91365f7b"
+ },
  "ctk.2-xem-truoc-chan-dung": {
   "t": "<span class=\"wss-n\">2</span><span class=\"wss-l\">Preview the portrait</span>",
   "h": "db8c9fa4"
@@ -2082,6 +2174,570 @@
  "js.chutrinh.tieu-van-nam": {
   "t": "Annual cycle for ",
   "h": "1979c56a"
+ },
+ "js.cs.ba-nhanh-nay-khac-nhau-o": {
+  "t": "How do these three branches differ?",
+  "h": "19e39a35"
+ },
+ "js.cs.ba-nhanh-nghe-cu-the-ben": {
+  "t": "Three specific career branches within your field",
+  "h": "879d2594"
+ },
+ "js.cs.ba-tang-o-tren-noi-ban": {
+  "t": "The three layers above say which <b>field</b> suits you and at what",
+  "h": "d7fe12dc"
+ },
+ "js.cs.bac-chuc-phan": {
+  "t": "Role rank",
+  "h": "73d28e4f"
+ },
+ "js.cs.ban-hop-lam-gi": {
+  "t": "What suits you",
+  "h": "7bf8b024"
+ },
+ "js.cs.ban-hop-lam-nganh-gi-linh": {
+  "t": "Which career suits you — field · role · scale",
+  "h": "ee981a25"
+ },
+ "js.cs.ban-nghieng-ve-kieu-full": {
+  "t": "You lean toward the **{kieu}** type ({tt}). Register an account (with free credits) to see all 12 aspects, the 4-stretch roadmap and team pairing — I can go deeper once you've opened those parts.",
+  "h": "711e5f38"
+ },
+ "js.cs.boi-canh-viet-nam-dang-lam": {
+  "t": "for the Vietnamese context; if your work isn't on the list, match by ",
+  "h": "18705d1c"
+ },
+ "js.cs.bon-dai-van-lien-tiep-phu": {
+  "t": "Four consecutive major cycles cover the working years. The score is the major-cycle score given by the engine;",
+  "h": "5fe06b87"
+ },
+ "js.cs.bon-kieu-nguoi-va-cach-goi": {
+  "t": "The four types and the way careers are suggested are a method built by the <b>Minh Bao Zi Wei Dou Shu expert team</b>.<br><br>",
+  "h": "24a12349"
+ },
+ "js.cs.bon-muoi-nam-di-lam-chia": {
+  "t": "Forty working years in four stretches",
+  "h": "ae99b53d"
+ },
+ "js.cs.bon-muoi-nam-di-lam-chia-90zk": {
+  "t": "Forty working years divided into four stretches",
+  "h": "ced9f68e"
+ },
+ "js.cs.bon-viec-phai-hoc-khi-bat": {
+  "t": "Four things to learn when you start leading people",
+  "h": "d246f547"
+ },
+ "js.cs.cac-nhanh-duoi-day-hop-voi": {
+  "t": "The branches below suit your <b>personal strengths</b> but",
+  "h": "f9533187"
+ },
+ "js.cs.cach-cuc-tai-cung-quan-loc": {
+  "t": "Chart patterns in the Career Palace",
+  "h": "2c8aa204"
+ },
+ "js.cs.cai-thuc-ban-di": {
+  "t": "What drives you",
+  "h": "e34c0d1a"
+ },
+ "js.cs.cau-hoi-chay-ngam-trong-dau": {
+  "t": "The question running quietly in your mind",
+  "h": "92b9b591"
+ },
+ "js.cs.chang-nghe-tiep-theo-cua-toi": {
+  "t": "What will my next career stretch look like?",
+  "h": "7e97fdda"
+ },
+ "js.cs.chat-nguoi-noi-bat": {
+  "t": "Prominent personal strengths",
+  "h": "31efa257"
+ },
+ "js.cs.chat-nguoi-noi-bat-va-thu": {
+  "t": "Prominent personal strengths and what a career that suits you does NOT demand",
+  "h": "5b90f04f"
+ },
+ "js.cs.chat-viec-dung-doc-thanh-ban": {
+  "t": "the <b>nature of the work</b>, and don't read it as “you're in the wrong job”. ",
+  "h": "4728caa7"
+ },
+ "js.cs.chat-viec-thay-vi-doi-chieu": {
+  "t": "Match by the <i>nature of the work</i> rather than by industry name.</p>",
+  "h": "94306405"
+ },
+ "js.cs.chinh-tinh-cung-menh": {
+  "t": "Major stars of the Life Palace",
+  "h": "dcba7b35"
+ },
+ "js.cs.chinh-tinh-cung-quan-loc": {
+  "t": "Major stars of the Career Palace",
+  "h": "9c8bc6b2"
+ },
+ "js.cs.cho-hay-vap": {
+  "t": "<b>Where you tend to stumble</b>",
+  "h": "0fe4ac0b"
+ },
+ "js.cs.cho-nguoi-dang-o-vi-tri": {
+  "t": "For someone in this position:",
+  "h": "c0aba160"
+ },
+ "js.cs.chua-dung-duoc-anh-thu-lai": {
+  "t": "Couldn't build the image. Please try again in a few seconds.",
+  "h": "f8055429"
+ },
+ "js.cs.chua-dung-duoc-ho-so-luc": {
+  "t": "Couldn't build the profile right now — please try again.",
+  "h": "3f85746f"
+ },
+ "js.cs.chua-khop-bac-chuc-phan-hien": {
+  "t": "<b>don't yet match your current role rank</b>. Read them as a direction to head in, not a place to stand right now. ",
+  "h": "cfa2e82b"
+ },
+ "js.cs.chua-mo-duoc-phan-nhanh-nghe": {
+  "t": "Couldn't open the career-branch section — please try again.",
+  "h": "f13e7f15"
+ },
+ "js.cs.chuc-phan-theo-loi-co": {
+  "t": "Role in the classical manner",
+  "h": "0504275b"
+ },
+ "js.cs.co-so-trong-la-so": {
+  "t": "Basis in the chart",
+  "h": "43f95044"
+ },
+ "js.cs.con-so-phan-tram-la-do": {
+  "t": "The percentage is the degree of <b>fit between personal strengths and the nature of the work</b>, ",
+  "h": "65261dc8"
+ },
+ "js.cs.cung-mot-nganh-nhung-moi-nhanh": {
+  "t": "the same industry, but each branch needs a quite different kind of person.</p>",
+  "h": "b2d6705d"
+ },
+ "js.cs.cung-name": {
+  "t": "{name}",
+  "h": "3cb49303"
+ },
+ "js.cs.da-mo-phan-nhanh-nghe-ten": {
+  "t": "The career-branch section is open. The branch that suits you best is **{ten}**. Which branch would you like to go deeper into, or would you like to ask about a specific industry?",
+  "h": "68b42e6e"
+ },
+ "js.cs.dang-dung": {
+  "t": "Building…",
+  "h": "88400b94"
+ },
+ "js.cs.dang-dung-anh": {
+  "t": "Building image…",
+  "h": "7bce9760"
+ },
+ "js.cs.dang-mo-phan-nhanh-nghe": {
+  "t": "Opening the career-branch section…",
+  "h": "f58ba0b1"
+ },
+ "js.cs.dang-o-day": {
+  "t": "you are here",
+  "h": "aa7d3c7e"
+ },
+ "js.cs.day-la-goi-y-huong-khong": {
+  "t": "This is a suggestion of DIRECTION, not a career assignment. The classics speak of the <b>nature of the work</b>",
+  "h": "0573bbbd"
+ },
+ "js.cs.day-la-the-manh-tuong-doi": {
+  "t": "This is <b>the relative strength between your own aspects</b>, not a score compared with other people.</p>",
+  "h": "3cea3811"
+ },
+ "js.cs.diem": {
+  "t": " · score ",
+  "h": "0ea58cf8"
+ },
+ "js.cs.diem-8vmw": {
+  "t": "Score",
+  "h": "024af419"
+ },
+ "js.cs.diem-do-engine-cham-tren-chinh": {
+  "t": "Scores given by the engine on your own chart (out of 10).",
+  "h": "03be4bad"
+ },
+ "js.cs.doc-ca-hai-phan-dung-ep": {
+  "t": "</b> clearly. Read both parts and don't force yourself into one box.</div>",
+  "h": "24fcc1c0"
+ },
+ "js.cs.doc-theo-cap-dong-cung": {
+  "t": " — read as a pair in the same palace",
+  "h": "249d9a92"
+ },
+ "js.cs.doc-theo-co-phap-phu-mau": {
+  "t": "Read by the classical method: the <b>Parents Palace</b> is superiors, the <b>Siblings Palace</b> is peers,",
+  "h": "4f1fa3e2"
+ },
+ "js.cs.doi-mat-hay-ban-giay-cam": {
+  "t": "(face to face or desk work, leading people or practising a craft); the modern list of careers above is this page's own mapping. ",
+  "h": "84acb782"
+ },
+ "js.cs.dung-ngay-bay-gio": {
+  "t": "not a place to stand right now.</div>",
+  "h": "cebffac0"
+ },
+ "js.cs.ghep-doi-ai-do-duoc-ban": {
+  "t": "Team pairing — who can support you",
+  "h": "616debca"
+ },
+ "js.cs.ho-so": {
+  "t": "Profile",
+  "h": "ebe439c1"
+ },
+ "js.cs.ho-so-cong-so-da-dung-full": {
+  "t": "The workplace profile is ready — you lean toward the **{kieu}** type ({tt}). Your strongest is **{manh}**. Which part would you like me to go deeper into?",
+  "h": "e1d2fcd1"
+ },
+ "js.cs.ho-so-day-du-chua-mo": {
+  "t": "⊙ The full profile is not unlocked yet",
+  "h": "7e47b133"
+ },
+ "js.cs.ho-tro": {
+  "t": "Support",
+  "h": "ed2a55ae"
+ },
+ "js.cs.hop-tac": {
+  "t": "Collaborator",
+  "h": "d934a7d7"
+ },
+ "js.cs.huong-tham-khao-dung-doc-nhu": {
+  "t": "is only a direction for reference — don't read it as a firm statement.</div>",
+  "h": "dede2dae"
+ },
+ "js.cs.khai-sang": {
+  "t": "Pioneer",
+  "h": "b6833673"
+ },
+ "js.cs.khi-duoc-giao-quyen": {
+  "t": "When given authority",
+  "h": "90c9e1e0"
+ },
+ "js.cs.khong-co-ten-nganh-ban-dang": {
+  "t": "Your current line of work not being on the list does <b>not</b> mean you're doing it wrong — ",
+  "h": "e9ea00be"
+ },
+ "js.cs.khong-phai-kha-nang-thanh-cong": {
+  "t": "<b>not</b> the chance of success. The list of careers is this page's own mapping for the Vietnamese context. ",
+  "h": "a0d5aaf7"
+ },
+ "js.cs.khop": {
+  "t": "fit",
+  "h": "06321169"
+ },
+ "js.cs.kieu": {
+  "t": " · type ",
+  "h": "6d81ffdf"
+ },
+ "js.cs.kieu-4mx9": {
+  "t": "Type ",
+  "h": "6d21ae2a"
+ },
+ "js.cs.kieu-lai-toa-do-cua-ban": {
+  "t": "⚠ <b>Hybrid type.</b> Your coordinates sit close to the boundary, so you lean toward <b>",
+  "h": "11aff2e8"
+ },
+ "js.cs.kieu-nguoi-nay-la-gi": {
+  "t": "What kind of person is this type?",
+  "h": "dd192f9f"
+ },
+ "js.cs.kieu-nguoi-o-cho-lam": {
+  "t": "TYPE AT WORK",
+  "h": "399f87f5"
+ },
+ "js.cs.la-so-cua-ban-khong-chi": {
+  "t": "Your chart <b>doesn't point to any single standout branch</b>",
+  "h": "77e78dd8"
+ },
+ "js.cs.lanh-dao": {
+  "t": "Leader",
+  "h": "d9b13441"
+ },
+ "js.cs.luong": {
+  "t": "credits)",
+  "h": "c99d25aa"
+ },
+ "js.cs.luu-nien-nam-nay": {
+  "t": "this year's Liu Nian",
+  "h": "1b558770"
+ },
+ "js.cs.luu-nien-o-cung": {
+  "t": " · Liu Nian in ",
+  "h": "f72ac853"
+ },
+ "js.cs.manh-nhat": {
+  "t": "Strongest: ",
+  "h": "b67b37ca"
+ },
+ "js.cs.manh-nhat-gixi": {
+  "t": "<b>Your strongest</b>",
+  "h": "fe6a0e48"
+ },
+ "js.cs.mat": {
+  "t": "Aspect",
+  "h": "473db18f"
+ },
+ "js.cs.mat-can-boi-them-nhat": {
+  "t": "Aspect most in need of support: ",
+  "h": "91c25ad4"
+ },
+ "js.cs.mat-manh-nhat-trong-12-mat": {
+  "t": "Strongest of the 12 aspects: ",
+  "h": "01df7a24"
+ },
+ "js.cs.mo-ho-so-day-du": {
+  "t": "Open the full profile",
+  "h": "3757bf2c"
+ },
+ "js.cs.mo-phan-nhanh-nghe": {
+  "t": "<b>Open the career-branch section →</b>",
+  "h": "d178dc5c"
+ },
+ "js.cs.moi-truong-hop": {
+  "t": "Suitable environment",
+  "h": "14808d08"
+ },
+ "js.cs.moi-truong-ky": {
+  "t": "Environment to avoid",
+  "h": "0edcadd9"
+ },
+ "js.cs.muoi-hai-mat-cua-doi-di": {
+  "t": "Twelve aspects of a working life — a score and reason for each",
+  "h": "b36da1b8"
+ },
+ "js.cs.muoi-hai-mat-cua-doi-di-gqoe": {
+  "t": "Twelve Aspects of a Working Life",
+  "h": "7612512c"
+ },
+ "js.cs.muoi-hai-thang-toi-nen-lam": {
+  "t": "What should I do in the next 12 months?",
+  "h": "f98b733c"
+ },
+ "js.cs.muon-cung-xung-chieu": {
+  "t": " — borrowed from the opposite palace",
+  "h": "1fb340ea"
+ },
+ "js.cs.muon-xung-chieu": {
+  "t": " (borrowed from the opposite palace)",
+  "h": "7363dfe3"
+ },
+ "js.cs.nam-nay-chieu-kep": {
+  "t": "doubly aspected this year",
+  "h": "b582a95f"
+ },
+ "js.cs.neu-toi-dang-lam-nghe-khac": {
+  "t": "What if I'm working in a different field?",
+  "h": "efac8cf1"
+ },
+ "js.cs.nghe-hop-voi-ban-thuong-khong": {
+  "t": "What a career that suits you usually doesn't demand",
+  "h": "48816f36"
+ },
+ "js.cs.nguoc-da": {
+  "t": "against the flow",
+  "h": "50f7d6cf"
+ },
+ "js.cs.nguon-cach-chia-bon-kieu": {
+  "t": "Source of the four-type split",
+  "h": "8144bf17"
+ },
+ "js.cs.nguon-du-lieu": {
+  "t": "Data sources →",
+  "h": "78319924"
+ },
+ "js.cs.nguon-theo-tu-vi-dau-so": {
+  "t": "📚 <b>Source:</b> After <i>Zi Wei Dou Shu Xin Bian</i> (Tử Vi Đẩu Số Tân Biên)",
+  "h": "0917536a"
+ },
+ "js.cs.nhan-ra-o-cho-lam": {
+  "t": "How to recognise it at work",
+  "h": "b6e2a171"
+ },
+ "js.cs.nhanh-dau-tien-cu-the-phai": {
+  "t": "Where should the first specific branch start?",
+  "h": "a9550e65"
+ },
+ "js.cs.nhanh-nay-thuong-o-bac-khac": {
+  "t": "This branch usually sits at a different rank from the role rank your chart indicates.",
+  "h": "a815d5d0"
+ },
+ "js.cs.nhanh-nghe-hop-voi-ban": {
+  "t": "Career branches that suit you",
+  "h": "488563f6"
+ },
+ "js.cs.nhung-pha-kha-ro": {
+  "t": "</b>, but with a clear touch of <b>",
+  "h": "e4d67d67"
+ },
+ "js.cs.nhuong": {
+  "t": "yield",
+  "h": "c0333abd"
+ },
+ "js.cs.no-boc-la-thuoc-ha-va": {
+  "t": "the <b>Friends Palace</b> is subordinates and colleagues in the trade. The rule of complement is yin paired with yang.</p>",
+  "h": "f843e58b"
+ },
+ "js.cs.no-noi-ve": {
+  "t": "What it says",
+  "h": "2247dbea"
+ },
+ "js.cs.o-quy-mo-nao-phan-nay": {
+  "t": "<b>scale</b> it fits. This part speaks of the <b>specific branch</b> within that field — ",
+  "h": "ab6aae0b"
+ },
+ "js.cs.phu-tinh-dong-tai-cung-quan": {
+  "t": "Minor stars in the Career Palace <b>narrow down within</b> the field above; they don't replace it. ",
+  "h": "c3fd465d"
+ },
+ "js.cs.quet-ma-xem-kieu-nguoi-cua": {
+  "t": "Scan the code — see your own type",
+  "h": "abb7f441"
+ },
+ "js.cs.quy-mo-ganh-duoc-bac": {
+  "t": "Scale you can carry — rank ",
+  "h": "43f37473"
+ },
+ "js.cs.sao-quyet-dinh-linh-vuc": {
+  "t": "Star that decides the field",
+  "h": "31023c67"
+ },
+ "js.cs.thuan-da": {
+  "t": "with the flow",
+  "h": "c65246fb"
+ },
+ "js.cs.thuan-da-nguoc-da-la-so": {
+  "t": "“with the flow / against the flow” compares the yin–yang nature of the major cycle with your own natal type.</p>",
+  "h": "41c5ce0c"
+ },
+ "js.cs.tieu-han-nam-nay": {
+  "t": "this year's Xiao Xian",
+  "h": "62da8d5f"
+ },
+ "js.cs.tieu-han-o-cung": {
+  "t": "Xiao Xian in ",
+  "h": "aef732f3"
+ },
+ "js.cs.toa-do": {
+  "t": "Coordinates",
+  "h": "6fda44e7"
+ },
+ "js.cs.toi-co-hop-lam-nganh-x": {
+  "t": "Am I suited to industry X?",
+  "h": "ac81904f"
+ },
+ "js.cs.toi-con-thieu-gi-de-vao": {
+  "t": "What am I still missing to enter that branch?",
+  "h": "4e41376f"
+ },
+ "js.cs.toi-hop-lam-viec-voi-kieu": {
+  "t": "Which type of person suits me to work with?",
+  "h": "3fbf2004"
+ },
+ "js.cs.toi-nen-tranh-moi-truong-nao": {
+  "t": "Which environments should I avoid?",
+  "h": "14ba354e"
+ },
+ "js.cs.ton": {
+  "t": "<small>Costs",
+  "h": "ca8d4e90"
+ },
+ "js.cs.tram-on": {
+  "t": "steady",
+  "h": "78f14035"
+ },
+ "js.cs.tranh-nhuong": {
+  "t": "compete ↔ yield: ",
+  "h": "93f67a9e"
+ },
+ "js.cs.tren-thang-10-diem-11-mat": {
+  "t": "Out of 10 — the other 11 aspects, the reason for each and the full table are in the profile you can view free after registering.",
+  "h": "5ada4a9d"
+ },
+ "js.cs.tren-thang-10-diem-ly-do": {
+  "t": "Out of 10 — the reason for each aspect and how to support it are in the profile you can view free after registering.",
+  "h": "e5560e3d"
+ },
+ "js.cs.trich-dan-co-thu": {
+  "t": "Quote from the classics",
+  "h": "1a48a14b"
+ },
+ "js.cs.trong-linh-vuc-do-ban-nghieng": {
+  "t": "<b>Within that field, which branch do you lean toward</b>",
+  "h": "46deb5f7"
+ },
+ "js.cs.trong-linh-vuc-nay-noi-thang": {
+  "t": "in this field. Frankly there isn't enough signal to settle it — what follows is only a ",
+  "h": "288c730f"
+ },
+ "js.cs.trong-may-nganh-do-toi-nen": {
+  "t": "Among those industries, which should I choose?",
+  "h": "a94bba40"
+ },
+ "js.cs.tu-cach-theo-cung-menh": {
+  "t": "Standing according to the Life Palace",
+  "h": "3623d661"
+ },
+ "js.cs.tu-vi-cong-so-kieu": {
+  "t": "Zi Wei Workplace — type ",
+  "h": "910e8c28"
+ },
+ "js.cs.tu-vi-cong-so-ordd": {
+  "t": "Zi Wei Workplace",
+  "h": "9d18a955"
+ },
+ "js.cs.tuoi": {
+  "t": " years old",
+  "h": "2e261bf5"
+ },
+ "js.cs.vai-ban-nen-nhan-trong-nganh": {
+  "t": "The role you should take in that industry",
+  "h": "f8b3215e"
+ },
+ "js.cs.van-dang-thai-thu-lang-va": {
+  "t": "(by Vân Đằng Thái Thứ Lang) and <i>Zhong Zhou School — Sixty Star Systems</i> (Vương Đình Chi). ",
+  "h": "77b93310"
+ },
+ "js.cs.van-nam": {
+  "t": "Annual outlook ",
+  "h": "86712c6e"
+ },
+ "js.cs.vi-du-nghieng-chu-nghia-trong": {
+  "t": "For example, leaning toward “words” within medicine is the teaching, research and professional-writing branch — still medicine.",
+  "h": "db475758"
+ },
+ "js.cs.vi-sao-hop": {
+  "t": "<b>Why it fits:</b>",
+  "h": "6a37b393"
+ },
+ "js.cs.vi-sao-la-so-hop-nhanh": {
+  "t": "Why the chart suits that branch — naming the personal strengths",
+  "h": "0ab395f8"
+ },
+ "js.cs.vi-sao-la-so-lai-ra": {
+  "t": "Why does the chart give this type?",
+  "h": "ed996a33"
+ },
+ "js.cs.viec-lam-duoc-ngay-o-tung": {
+  "t": "What you can do right away in each branch (for the Vietnamese context)",
+  "h": "3851e61e"
+ },
+ "js.cs.vo-chinh-dieu": {
+  "t": " · no major star",
+  "h": "46b7d17a"
+ },
+ "js.cs.vo-chinh-dieu-pwt9": {
+  "t": "no major star",
+  "h": "bd07d7a9"
+ },
+ "js.cs.vui-long-nhap-du-ngay-thang": {
+  "t": "Please enter the full birth date.",
+  "h": "771ff27f"
+ },
+ "js.cs.xong-pha": {
+  "t": "drive",
+  "h": "3b22b749"
+ },
+ "js.cs.xong-tram": {
+  "t": " · drive ↔ steady: ",
+  "h": "71afe77a"
  },
  "js.ctk.anh-dang-tai-co-the-hoi": {
   "t": "The image is loading and may be a little slow — please wait, or",

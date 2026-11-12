@@ -359,6 +359,98 @@
   "t": "← 回到今天",
   "h": "24faf89e"
  },
+ "cs.2-xem-truoc-ho-so": {
+  "t": "<span class=\"wss-n\">2</span><span class=\"wss-l\">預覽檔案</span>",
+  "h": "cdf8b027"
+ },
+ "cs.40-nam-4-chang": {
+  "t": "<span class=\"hp-ic\" data-icon=\"trending-up\"></span><span>40 年<br>分四階段</span>",
+  "h": "62f02f8b"
+ },
+ "cs.ban-dang-o-vi-tri-nao": {
+  "t": "您目前的位置",
+  "h": "ae96bb68"
+ },
+ "cs.ban-luan-giai-mau-tai-pdf": {
+  "t": "<span class=\"sc-ic\" data-icon=\"file-text\"></span> <span class=\"sc-txt\"><b>範例解讀報告</b><span>下載範例命盤的「紫微職場」完整 PDF，先預覽真實內容。</span></span> <a class=\"sc-btn\" href=\"/tai-mau/mau-cong-so.pdf\" target=\"_blank\" rel=\"noopener\">下載 PDF →</a>",
+  "h": "2538ba5a"
+ },
+ "cs.bon-ten-goi-khai-sang-lanh": {
+  "t": "<b>開創・領導・輔佐・協作</b>這四個名稱，是本頁為了方便閱讀而訂的現代標籤，古籍並沒有這樣的稱呼。分法則有古法的根基：把<b>四象</b>（老陽・少陰・少陽・老陰）套到 14 顆主星上，正好落在經典的星曜組合裡。<br> 這是<b>一個解讀命盤的框架</b>，並不是經過驗證的心理測驗，背後也沒有對照研究。請用來了解自己、引發話題，不要用來招聘或替別人安排工作。",
+  "h": "4b3842bc"
+ },
+ "cs.chu-doanh-nghiep": {
+  "t": "企業主",
+  "h": "0ec2b6b1"
+ },
+ "cs.cung-mot-nang-luc-co-nguoi": {
+  "t": "同樣的能力，有人升遷順利，有人卻一直原地踏步——大多取決於選對環境與展現自己的方式。讀讀您在職場上的類型，讓方向更清楚。",
+  "h": "af9f49d9"
+ },
+ "cs.dang-tim-viec-chuyen-huong": {
+  "t": "求職中／轉換跑道",
+  "h": "de0479f2"
+ },
+ "cs.doc-la-so-tu-vi-bang": {
+  "t": "用工作的語言解讀紫微斗數命盤：您在職場上屬於哪種類型、十二個面向的強弱、工作四十年分成的四個階段，以及該跟誰組隊。",
+  "h": "7c9e83ec"
+ },
+ "cs.dung-ho-so-kieu-nguoi-12": {
+  "t": "建立類型 + 12 個面向的檔案<b>免費</b>。開啟具體職業分支的部分才會扣除兩。",
+  "h": "8ad49bf1"
+ },
+ "cs.dung-ho-so-mien-phi": {
+  "t": "<span class=\"bg-label\"><span class=\"ic\" data-icon=\"briefcase\"></span><b id=\"btnGoLabel\">建立檔案 →</b></span> <small>免費</small>",
+  "h": "d7386efe"
+ },
+ "cs.hoi-thay-doc-ky-ho-so": {
+  "t": "✦ 請老師細讀這份檔案",
+  "h": "dfa970e5"
+ },
+ "cs.kieu-nguoi-noi-cong-so": {
+  "t": "<span class=\"hp-ic\" data-icon=\"briefcase\"></span><span>職場<br>類型</span>",
+  "h": "31b69ffd"
+ },
+ "cs.lam-tu-do-nghe-rieng": {
+  "t": "自由工作者／自營",
+  "h": "1d5e99e6"
+ },
+ "cs.ngay-gio-sinh-va-cho-dung": {
+  "t": "出生日期時辰與目前位置",
+  "h": "ade29838"
+ },
+ "cs.nhan-vien-lam-thue": {
+  "t": "受僱員工",
+  "h": "0c9557d1"
+ },
+ "cs.nhanh-nghe-ghep-doi": {
+  "t": "<span class=\"hp-ic\" data-icon=\"users\"></span><span>職業分支、<br>組隊</span>",
+  "h": "f7580d7f"
+ },
+ "cs.nhap-ngay-gio-sinh-va-vi": {
+  "t": "輸入出生日期時辰與目前位置。系統會對照古法——職場類型、適合的職業分支，以及分成四階段的 40 年職涯。",
+  "h": "f54c5793"
+ },
+ "cs.quan-ly-lam-thue": {
+  "t": "受僱管理者",
+  "h": "9e6cb7ab"
+ },
+ "cs.tai-anh": {
+  "t": "⬇ 下載圖片",
+  "h": "eb8a56af"
+ },
+ "cs.tu-vi-cong-so": {
+  "t": "紫微職場",
+  "h": "9d18a955"
+ },
+ "cs.tu-vi-cong-so-la-so": {
+  "t": "<b>紫微職場</b><span>用工作語言解讀的命盤</span>",
+  "h": "af1a1cbe"
+ },
+ "cs.tu-vi-cong-so-tu-vi": {
+  "t": "紫微職場——明寶紫微斗數",
+  "h": "91365f7b"
+ },
  "ctk.2-xem-truoc-chan-dung": {
   "t": "<span class=\"wss-n\">2</span><span class=\"wss-l\">預覽肖像</span>",
   "h": "db8c9fa4"
@@ -2082,6 +2174,570 @@
  "js.chutrinh.tieu-van-nam": {
   "t": "流年小運 ",
   "h": "1979c56a"
+ },
+ "js.cs.ba-nhanh-nay-khac-nhau-o": {
+  "t": "這三個分支差在哪裡？",
+  "h": "19e39a35"
+ },
+ "js.cs.ba-nhanh-nghe-cu-the-ben": {
+  "t": "您領域內的三個具體職業分支",
+  "h": "879d2594"
+ },
+ "js.cs.ba-tang-o-tren-noi-ban": {
+  "t": "上面三個層次說的是您適合哪個<b>領域</b>，以及",
+  "h": "d7fe12dc"
+ },
+ "js.cs.bac-chuc-phan": {
+  "t": "職分等級",
+  "h": "73d28e4f"
+ },
+ "js.cs.ban-hop-lam-gi": {
+  "t": "您適合做什麼",
+  "h": "7bf8b024"
+ },
+ "js.cs.ban-hop-lam-nganh-gi-linh": {
+  "t": "您適合的行業——領域・角色・規模",
+  "h": "ee981a25"
+ },
+ "js.cs.ban-nghieng-ve-kieu-full": {
+  "t": "您偏向**{kieu}**類型（{tt}）。註冊帳號（贈送免費兩）即可看到完整的 12 個面向、四階段路線圖與組隊——開啟那些部分之後，我才能更深入解說。",
+  "h": "711e5f38"
+ },
+ "js.cs.boi-canh-viet-nam-dang-lam": {
+  "t": "針對越南的情境；若您從事的行業不在清單中，請對照 ",
+  "h": "18705d1c"
+ },
+ "js.cs.bon-dai-van-lien-tiep-phu": {
+  "t": "連續四個大運涵蓋了工作的歲月。分數是引擎評定的大運分數；",
+  "h": "5fe06b87"
+ },
+ "js.cs.bon-kieu-nguoi-va-cach-goi": {
+  "t": "四種類型與建議行業的方式，是<b>明寶紫微斗數專家團隊</b>自行建立的方法。<br><br>",
+  "h": "24a12349"
+ },
+ "js.cs.bon-muoi-nam-di-lam-chia": {
+  "t": "工作四十年分成四階段",
+  "h": "ae99b53d"
+ },
+ "js.cs.bon-muoi-nam-di-lam-chia-90zk": {
+  "t": "工作四十年分成四個階段",
+  "h": "ced9f68e"
+ },
+ "js.cs.bon-viec-phai-hoc-khi-bat": {
+  "t": "開始帶人時必學的四件事",
+  "h": "d246f547"
+ },
+ "js.cs.cac-nhanh-duoi-day-hop-voi": {
+  "t": "以下這些分支適合您的<b>人格特質</b>，但",
+  "h": "f9533187"
+ },
+ "js.cs.cach-cuc-tai-cung-quan-loc": {
+  "t": "官祿宮的格局",
+  "h": "2c8aa204"
+ },
+ "js.cs.cai-thuc-ban-di": {
+  "t": "驅動您前進的力量",
+  "h": "e34c0d1a"
+ },
+ "js.cs.cau-hoi-chay-ngam-trong-dau": {
+  "t": "腦中暗自運轉的問題",
+  "h": "92b9b591"
+ },
+ "js.cs.chang-nghe-tiep-theo-cua-toi": {
+  "t": "我的下一個職涯階段會是怎樣？",
+  "h": "7e97fdda"
+ },
+ "js.cs.chat-nguoi-noi-bat": {
+  "t": "突出的人格特質",
+  "h": "31efa257"
+ },
+ "js.cs.chat-nguoi-noi-bat-va-thu": {
+  "t": "突出的人格特質，以及適合您的行業不要求的事",
+  "h": "5b90f04f"
+ },
+ "js.cs.chat-viec-dung-doc-thanh-ban": {
+  "t": "<b>工作特質</b>；請不要讀成「您做錯行了」。",
+  "h": "4728caa7"
+ },
+ "js.cs.chat-viec-thay-vi-doi-chieu": {
+  "t": "請對照<i>工作特質</i>，而不是對照行業名稱。</p>",
+  "h": "94306405"
+ },
+ "js.cs.chinh-tinh-cung-menh": {
+  "t": "命宮的主星",
+  "h": "dcba7b35"
+ },
+ "js.cs.chinh-tinh-cung-quan-loc": {
+  "t": "官祿宮的主星",
+  "h": "9c8bc6b2"
+ },
+ "js.cs.cho-hay-vap": {
+  "t": "<b>容易絆倒之處</b>",
+  "h": "0fe4ac0b"
+ },
+ "js.cs.cho-nguoi-dang-o-vi-tri": {
+  "t": "給目前處於此位置的人：",
+  "h": "c0aba160"
+ },
+ "js.cs.chua-dung-duoc-anh-thu-lai": {
+  "t": "無法產生圖片。請稍後幾秒再試。",
+  "h": "f8055429"
+ },
+ "js.cs.chua-dung-duoc-ho-so-luc": {
+  "t": "目前無法建立檔案——請再試一次。",
+  "h": "3f85746f"
+ },
+ "js.cs.chua-khop-bac-chuc-phan-hien": {
+  "t": "<b>尚未符合目前的職分等級</b>。請當作努力的方向來讀，而不是現在就該站的位置。",
+  "h": "cfa2e82b"
+ },
+ "js.cs.chua-mo-duoc-phan-nhanh-nghe": {
+  "t": "無法開啟職業分支的部分——請再試一次。",
+  "h": "f13e7f15"
+ },
+ "js.cs.chuc-phan-theo-loi-co": {
+  "t": "古式職分",
+  "h": "0504275b"
+ },
+ "js.cs.co-so-trong-la-so": {
+  "t": "命盤中的依據",
+  "h": "43f95044"
+ },
+ "js.cs.con-so-phan-tram-la-do": {
+  "t": "百分比數字是<b>人格特質與工作特質的契合度</b>，",
+  "h": "65261dc8"
+ },
+ "js.cs.cung-mot-nganh-nhung-moi-nhanh": {
+  "t": "同一個行業，每個分支需要的人格特質卻截然不同。</p>",
+  "h": "b2d6705d"
+ },
+ "js.cs.cung-name": {
+  "t": "{name}",
+  "h": "3cb49303"
+ },
+ "js.cs.da-mo-phan-nhanh-nghe-ten": {
+  "t": "已開啟職業分支的部分。最適合您的分支是**{ten}**。您想深入哪個分支，還是想問某個具體行業？",
+  "h": "68b42e6e"
+ },
+ "js.cs.dang-dung": {
+  "t": "建立中…",
+  "h": "88400b94"
+ },
+ "js.cs.dang-dung-anh": {
+  "t": "圖片製作中…",
+  "h": "7bce9760"
+ },
+ "js.cs.dang-mo-phan-nhanh-nghe": {
+  "t": "正在開啟職業分支的部分…",
+  "h": "f58ba0b1"
+ },
+ "js.cs.dang-o-day": {
+  "t": "目前在此",
+  "h": "aa7d3c7e"
+ },
+ "js.cs.day-la-goi-y-huong-khong": {
+  "t": "這是方向上的建議，不是指定職業。古籍談的是<b>工作特質</b>",
+  "h": "0573bbbd"
+ },
+ "js.cs.day-la-the-manh-tuong-doi": {
+  "t": "這是您自己各面向之間的<b>相對強項</b>，不是與別人比較的分數。</p>",
+  "h": "3cea3811"
+ },
+ "js.cs.diem": {
+  "t": " · 分數 ",
+  "h": "0ea58cf8"
+ },
+ "js.cs.diem-8vmw": {
+  "t": "分數",
+  "h": "024af419"
+ },
+ "js.cs.diem-do-engine-cham-tren-chinh": {
+  "t": "分數由引擎依您自己的命盤評定（滿分 10 分）。",
+  "h": "03be4bad"
+ },
+ "js.cs.doc-ca-hai-phan-dung-ep": {
+  "t": "</b>的色彩也相當明顯。兩部分都讀一讀，不要硬把自己塞進一個格子。</div>",
+  "h": "24fcc1c0"
+ },
+ "js.cs.doc-theo-cap-dong-cung": {
+  "t": " ——依同宮的一對來讀",
+  "h": "249d9a92"
+ },
+ "js.cs.doc-theo-co-phap-phu-mau": {
+  "t": "依古法來讀：<b>父母宮</b>是長輩上位者，<b>兄弟宮</b>是平輩，",
+  "h": "4f1fa3e2"
+ },
+ "js.cs.doi-mat-hay-ban-giay-cam": {
+  "t": "（面對人還是案頭工作、帶人還是帶技藝）；上方的現代行業清單是本頁自行對應出來的。",
+  "h": "84acb782"
+ },
+ "js.cs.dung-ngay-bay-gio": {
+  "t": "並不是現在就該站的位置。</div>",
+  "h": "cebffac0"
+ },
+ "js.cs.ghep-doi-ai-do-duoc-ban": {
+  "t": "組隊——誰能支撐您",
+  "h": "616debca"
+ },
+ "js.cs.ho-so": {
+  "t": "檔案",
+  "h": "ebe439c1"
+ },
+ "js.cs.ho-so-cong-so-da-dung-full": {
+  "t": "職場檔案已建立完成——您偏向**{kieu}**類型（{tt}）。目前最強的是**{manh}**。想讓我深入哪個部分？",
+  "h": "e1d2fcd1"
+ },
+ "js.cs.ho-so-day-du-chua-mo": {
+  "t": "⊙ 完整檔案尚未開啟",
+  "h": "7e47b133"
+ },
+ "js.cs.ho-tro": {
+  "t": "支援",
+  "h": "ed2a55ae"
+ },
+ "js.cs.hop-tac": {
+  "t": "協作",
+  "h": "d934a7d7"
+ },
+ "js.cs.huong-tham-khao-dung-doc-nhu": {
+  "t": "只是供參考的方向，請不要讀成肯定的論斷。</div>",
+  "h": "dede2dae"
+ },
+ "js.cs.khai-sang": {
+  "t": "開創",
+  "h": "b6833673"
+ },
+ "js.cs.khi-duoc-giao-quyen": {
+  "t": "被授予權限時",
+  "h": "90c9e1e0"
+ },
+ "js.cs.khong-co-ten-nganh-ban-dang": {
+  "t": "清單中沒有您目前從事的行業名稱，<b>並不</b>代表您做錯了——請以 ",
+  "h": "e9ea00be"
+ },
+ "js.cs.khong-phai-kha-nang-thanh-cong": {
+  "t": "<b>並不是</b>成功的可能性。行業清單是本頁針對越南情境自行對應出來的。",
+  "h": "a0d5aaf7"
+ },
+ "js.cs.khop": {
+  "t": "契合",
+  "h": "06321169"
+ },
+ "js.cs.kieu": {
+  "t": " · 類型 ",
+  "h": "6d81ffdf"
+ },
+ "js.cs.kieu-4mx9": {
+  "t": "類型 ",
+  "h": "6d21ae2a"
+ },
+ "js.cs.kieu-lai-toa-do-cua-ban": {
+  "t": "⚠ <b>混合型。</b>您的座標貼近邊界，因此偏向<b>",
+  "h": "11aff2e8"
+ },
+ "js.cs.kieu-nguoi-nay-la-gi": {
+  "t": "這種類型是怎樣的人？",
+  "h": "dd192f9f"
+ },
+ "js.cs.kieu-nguoi-o-cho-lam": {
+  "t": "職場類型",
+  "h": "399f87f5"
+ },
+ "js.cs.la-so-cua-ban-khong-chi": {
+  "t": "您的命盤<b>沒有指出任何一個突出的分支</b>",
+  "h": "77e78dd8"
+ },
+ "js.cs.lanh-dao": {
+  "t": "領導",
+  "h": "d9b13441"
+ },
+ "js.cs.luong": {
+  "t": "兩)",
+  "h": "c99d25aa"
+ },
+ "js.cs.luu-nien-nam-nay": {
+  "t": "今年的流年",
+  "h": "1b558770"
+ },
+ "js.cs.luu-nien-o-cung": {
+  "t": " · 流年在 ",
+  "h": "f72ac853"
+ },
+ "js.cs.manh-nhat": {
+  "t": "最強：",
+  "h": "b67b37ca"
+ },
+ "js.cs.manh-nhat-gixi": {
+  "t": "<b>最強之處</b>",
+  "h": "fe6a0e48"
+ },
+ "js.cs.mat": {
+  "t": "面向",
+  "h": "473db18f"
+ },
+ "js.cs.mat-can-boi-them-nhat": {
+  "t": "最需要加強的面向：",
+  "h": "91c25ad4"
+ },
+ "js.cs.mat-manh-nhat-trong-12-mat": {
+  "t": "12 個面向中最強的：",
+  "h": "01df7a24"
+ },
+ "js.cs.mo-ho-so-day-du": {
+  "t": "開啟完整檔案",
+  "h": "3757bf2c"
+ },
+ "js.cs.mo-phan-nhanh-nghe": {
+  "t": "<b>開啟職業分支的部分 →</b>",
+  "h": "d178dc5c"
+ },
+ "js.cs.moi-truong-hop": {
+  "t": "適合的環境",
+  "h": "14808d08"
+ },
+ "js.cs.moi-truong-ky": {
+  "t": "忌諱的環境",
+  "h": "0edcadd9"
+ },
+ "js.cs.muoi-hai-mat-cua-doi-di": {
+  "t": "工作生涯的十二個面向——各面向的分數與理由",
+  "h": "b36da1b8"
+ },
+ "js.cs.muoi-hai-mat-cua-doi-di-gqoe": {
+  "t": "工作生涯的十二個面向",
+  "h": "7612512c"
+ },
+ "js.cs.muoi-hai-thang-toi-nen-lam": {
+  "t": "接下來十二個月該做什麼？",
+  "h": "f98b733c"
+ },
+ "js.cs.muon-cung-xung-chieu": {
+  "t": " ——借對宮",
+  "h": "1fb340ea"
+ },
+ "js.cs.muon-xung-chieu": {
+  "t": "（借對宮）",
+  "h": "7363dfe3"
+ },
+ "js.cs.nam-nay-chieu-kep": {
+  "t": "今年雙重照應",
+  "h": "b582a95f"
+ },
+ "js.cs.neu-toi-dang-lam-nghe-khac": {
+  "t": "如果我目前從事別的行業呢？",
+  "h": "efac8cf1"
+ },
+ "js.cs.nghe-hop-voi-ban-thuong-khong": {
+  "t": "適合您的行業通常不要求的",
+  "h": "48816f36"
+ },
+ "js.cs.nguoc-da": {
+  "t": "逆勢",
+  "h": "50f7d6cf"
+ },
+ "js.cs.nguon-cach-chia-bon-kieu": {
+  "t": "四種類型分法的出處",
+  "h": "8144bf17"
+ },
+ "js.cs.nguon-du-lieu": {
+  "t": "資料出處 →",
+  "h": "78319924"
+ },
+ "js.cs.nguon-theo-tu-vi-dau-so": {
+  "t": "📚 <b>出處：</b>依<i>《紫微斗數新編》</i>",
+  "h": "0917536a"
+ },
+ "js.cs.nhan-ra-o-cho-lam": {
+  "t": "在職場上可辨認的特徵",
+  "h": "b6e2a171"
+ },
+ "js.cs.nhanh-dau-tien-cu-the-phai": {
+  "t": "第一個具體分支該從哪裡開始？",
+  "h": "a9550e65"
+ },
+ "js.cs.nhanh-nay-thuong-o-bac-khac": {
+  "t": "這個分支通常所處的等級，與命盤所指的職分等級不同。",
+  "h": "a815d5d0"
+ },
+ "js.cs.nhanh-nghe-hop-voi-ban": {
+  "t": "適合您的職業分支",
+  "h": "488563f6"
+ },
+ "js.cs.nhung-pha-kha-ro": {
+  "t": "</b>，但<b>",
+  "h": "e4d67d67"
+ },
+ "js.cs.nhuong": {
+  "t": "禮讓",
+  "h": "c0333abd"
+ },
+ "js.cs.no-boc-la-thuoc-ha-va": {
+  "t": "<b>僕役宮</b>是部屬與同行。互補的法則是陰配陽。</p>",
+  "h": "f843e58b"
+ },
+ "js.cs.no-noi-ve": {
+  "t": "說的是什麼",
+  "h": "2247dbea"
+ },
+ "js.cs.o-quy-mo-nao-phan-nay": {
+  "t": "在哪種<b>規模</b>最合適。這部分說的是該領域內的<b>具體分支</b>—— ",
+  "h": "ab6aae0b"
+ },
+ "js.cs.phu-tinh-dong-tai-cung-quan": {
+  "t": "官祿宮中的輔星是在上述領域<b>之內縮小範圍</b>，並不取代該領域。",
+  "h": "c3fd465d"
+ },
+ "js.cs.quet-ma-xem-kieu-nguoi-cua": {
+  "t": "掃描 QR 碼——查看您的類型",
+  "h": "abb7f441"
+ },
+ "js.cs.quy-mo-ganh-duoc-bac": {
+  "t": "能承擔的規模——等級 ",
+  "h": "43f37473"
+ },
+ "js.cs.sao-quyet-dinh-linh-vuc": {
+  "t": "決定領域的星",
+  "h": "31023c67"
+ },
+ "js.cs.thuan-da": {
+  "t": "順勢",
+  "h": "c65246fb"
+ },
+ "js.cs.thuan-da-nguoc-da-la-so": {
+  "t": "「順勢／逆勢」是把大運的陰陽屬性與您本命的類型相比較。</p>",
+  "h": "41c5ce0c"
+ },
+ "js.cs.tieu-han-nam-nay": {
+  "t": "今年的小限",
+  "h": "62da8d5f"
+ },
+ "js.cs.tieu-han-o-cung": {
+  "t": "小限在 ",
+  "h": "aef732f3"
+ },
+ "js.cs.toa-do": {
+  "t": "座標",
+  "h": "6fda44e7"
+ },
+ "js.cs.toi-co-hop-lam-nganh-x": {
+  "t": "我適合從事 X 行業嗎？",
+  "h": "ac81904f"
+ },
+ "js.cs.toi-con-thieu-gi-de-vao": {
+  "t": "要進入那個分支，我還缺什麼？",
+  "h": "4e41376f"
+ },
+ "js.cs.toi-hop-lam-viec-voi-kieu": {
+  "t": "我適合跟哪種類型的人共事？",
+  "h": "3fbf2004"
+ },
+ "js.cs.toi-nen-tranh-moi-truong-nao": {
+  "t": "我該避開哪種環境？",
+  "h": "14ba354e"
+ },
+ "js.cs.ton": {
+  "t": "<small>需",
+  "h": "ca8d4e90"
+ },
+ "js.cs.tram-on": {
+  "t": "沉穩",
+  "h": "78f14035"
+ },
+ "js.cs.tranh-nhuong": {
+  "t": "爭 ↔ 讓：",
+  "h": "93f67a9e"
+ },
+ "js.cs.tren-thang-10-diem-11-mat": {
+  "t": "滿分 10 分——其餘 11 個面向、各面向的理由與完整表格，都在註冊後可免費查看的檔案中。",
+  "h": "5ada4a9d"
+ },
+ "js.cs.tren-thang-10-diem-ly-do": {
+  "t": "滿分 10 分——各面向的理由與加強方式，都在註冊後可免費查看的檔案中。",
+  "h": "e5560e3d"
+ },
+ "js.cs.trich-dan-co-thu": {
+  "t": "古籍引文",
+  "h": "1a48a14b"
+ },
+ "js.cs.trong-linh-vuc-do-ban-nghieng": {
+  "t": "<b>在該領域內，您偏向哪個分支</b>",
+  "h": "46deb5f7"
+ },
+ "js.cs.trong-linh-vuc-nay-noi-thang": {
+  "t": "——在這個領域內。坦白說，訊號還不足以下定論——下面只是 ",
+  "h": "288c730f"
+ },
+ "js.cs.trong-may-nganh-do-toi-nen": {
+  "t": "在那幾個行業中，我該選哪一個？",
+  "h": "a94bba40"
+ },
+ "js.cs.tu-cach-theo-cung-menh": {
+  "t": "依命宮所見的資格",
+  "h": "3623d661"
+ },
+ "js.cs.tu-vi-cong-so-kieu": {
+  "t": "紫微職場——類型 ",
+  "h": "910e8c28"
+ },
+ "js.cs.tu-vi-cong-so-ordd": {
+  "t": "紫微職場",
+  "h": "9d18a955"
+ },
+ "js.cs.tuoi": {
+  "t": " 歲",
+  "h": "2e261bf5"
+ },
+ "js.cs.vai-ban-nen-nhan-trong-nganh": {
+  "t": "您在該行業中適合擔任的角色",
+  "h": "f8b3215e"
+ },
+ "js.cs.van-dang-thai-thu-lang-va": {
+  "t": "（雲騰太次郎）與<i>《中州派 六十星系》</i>（王亭之）。",
+  "h": "77b93310"
+ },
+ "js.cs.van-nam": {
+  "t": "年運 ",
+  "h": "86712c6e"
+ },
+ "js.cs.vi-du-nghieng-chu-nghia-trong": {
+  "t": "例如在醫療領域偏向「文字」，就是教學、研究、專業寫作這個分支——仍然是醫療領域。",
+  "h": "db475758"
+ },
+ "js.cs.vi-sao-hop": {
+  "t": "<b>為什麼適合：</b>",
+  "h": "6a37b393"
+ },
+ "js.cs.vi-sao-la-so-hop-nhanh": {
+  "t": "為什麼命盤適合那個分支——點名指出人格特質",
+  "h": "0ab395f8"
+ },
+ "js.cs.vi-sao-la-so-lai-ra": {
+  "t": "為什麼命盤會得出這種類型？",
+  "h": "ed996a33"
+ },
+ "js.cs.viec-lam-duoc-ngay-o-tung": {
+  "t": "各分支馬上可做的事（依越南情境）",
+  "h": "3851e61e"
+ },
+ "js.cs.vo-chinh-dieu": {
+  "t": " · 無主星",
+  "h": "46b7d17a"
+ },
+ "js.cs.vo-chinh-dieu-pwt9": {
+  "t": "無正曜",
+  "h": "bd07d7a9"
+ },
+ "js.cs.vui-long-nhap-du-ngay-thang": {
+  "t": "請完整輸入出生年月日。",
+  "h": "771ff27f"
+ },
+ "js.cs.xong-pha": {
+  "t": "衝鋒",
+  "h": "3b22b749"
+ },
+ "js.cs.xong-tram": {
+  "t": " · 衝 ↔ 穩：",
+  "h": "71afe77a"
  },
  "js.ctk.anh-dang-tai-co-the-hoi": {
   "t": "圖片載入中，可能稍慢——請稍候，或",
