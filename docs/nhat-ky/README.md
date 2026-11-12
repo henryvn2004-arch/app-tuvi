@@ -1,7 +1,8 @@
 # Nhật ký phát triển — mục lục
 
-575 mục ghi chép từng PR, tách khỏi `CLAUDE.md` để nó thôi ngốn ~350k token mỗi lượt.
+578 mục ghi chép từng PR, tách khỏi `CLAUDE.md` để nó thôi ngốn ~350k token mỗi lượt.
 574 mục ghi chép từng PR, tách khỏi `CLAUDE.md` để nó thôi ngốn ~350k token mỗi lượt.
+578 mục ghi chép từng PR, tách khỏi `CLAUDE.md` để nó thôi ngốn ~350k token mỗi lượt.
 
 **Sáu file dưới đây KHÔNG được nạp tự động.** Cần thì tra:
 
@@ -13,9 +14,7 @@ sed -n '120,190p' docs/nhat-ky/2026-08.md    # đọc đúng đoạn, đừng ca
 
 | file | số mục | dung lượng |
 |---|---:|---:|
-| `2026-11.md` | 34 | 118,077 B |
-| `2026-11.md` | 34 | 121,075 B |
-| `2026-11.md` | 33 | 112,788 B |
+| `2026-11.md` | 37 | 126,471 B |
 | `2026-10.md` | 16 | 39,635 B |
 | `2026-09.md` | 360 | 1,241,867 B |
 | `2026-08.md` | 148 | 1,024,027 B |
@@ -32,6 +31,9 @@ Luật rút ra từ các mục này đã được cô đọng lên `CLAUDE.md`. 
 | # | tháng | file | mục |
 |---:|---|---|---|
 | 1 | 2026-11 | `2026-11.md` | 🗓️ W24 — Công cụ ngày giờ · đặt tên · phong thuỷ: 11/12 trang 5 ngôn ngữ (còn `so-dep`); route `xem-tuoi` đặt tên/chọn ngày sinh chữ theo trang |
+| 1 | 2026-11 | `2026-11.md` | 💳 W21 — Đường tiền + niềm tin: 16 trang đủ 5 ngôn ngữ (Hồ sơ, xác nhận thanh toán, combo, báo cáo, thầy, FAQ…) · khuôn "Thầy {tên}" · PayPal trả về đúng `/<locale>` |
+| 1 | 2026-11 | `2026-11.md` | 🧒 W22 — 10 trang gia đình/công sở (Dạy Con · Người Khác · Duyên Nợ · Hướng Nghiệp Trẻ · Chân Dung ×2 · Nhân Mạch · Công Sở · Cả Nhà · Sinh Con) đủ 5 ngôn ngữ; văn engine TS còn tiếng Việt |
+| 1 | 2026-11 | `2026-11.md` | 🧩 W26b — Widget dùng chung (2): hook-layer · ai-loading-steps · cung-ngay-sinh · sample-hint · laso-chart (62 khoá) |
 | 1 | 2026-11 | `2026-11.md` | 🃏 W25 — Tarot · Bói Bài Tây · Oracle đủ 5 ngôn ngữ; khung tĩnh 10 trang (thần số học, bản đồ sao, phong thủy ×3, mệnh khố, công cụ, tài liệu) vào từ điển; tên sách giữ gốc; bẫy `i18n:prune` · chuỗi Việt không dấu |
 | 1 | 2026-11 | `2026-11.md` | 🎙️ W23 — Thanh Tướng Pro · Thanh Tướng · Nhãn Tướng đủ 5 ngôn ngữ; Thủ Tướng dở dang; 9 trang còn lại chưa làm |
 | 1 | 2026-11 | `2026-11.md` | 🧩 W26a — Widget dùng chung: `tuvi-form.js` + `noi-sinh.js` theo ngôn ngữ (114 khoá, tên nước qua Intl.DisplayNames) |

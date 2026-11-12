@@ -1,4 +1,392 @@
 {
+ "about.1-nen-tang-du-lieu-thuc": {
+  "t": "1. 實證資料基礎",
+  "h": "06f1cf11"
+ },
+ "about.2-he-thong-hoa-co-phap": {
+  "t": "2. 古法系統化",
+  "h": "c85d8fdb"
+ },
+ "about.3-mo-hinh-hoa-va-kiem": {
+  "t": "3. 建模與驗證",
+  "h": "1d0efb46"
+ },
+ "about.4-dien-giai-bang-he-thong": {
+  "t": "4. 以語言系統解說",
+  "h": "00f2b090"
+ },
+ "about.5-hieu-chinh-boi-chuyen-gia": {
+  "t": "5. 專家校正",
+  "h": "ca3a8140"
+ },
+ "about.bat-ky-he-thong-luan-giai": {
+  "t": "任何解讀系統，無論建構得多麼用心，都有一定的侷限。",
+  "h": "0e8a20f5"
+ },
+ "about.biet-menh-khong-phai-de-pho": {
+  "t": "知命，不是為了聽天由命，而是為了順應時勢、趨吉避凶、發揮所長。",
+  "h": "aefd2bae"
+ },
+ "about.cac-chuyen-gia-nghien-cuu-tu": {
+  "t": "研究紫微斗數的專家",
+  "h": "6d130b45"
+ },
+ "about.cac-hoc-gia-va-nha-nghien": {
+  "t": "歷史、東方哲學等相關領域的學者與研究者",
+  "h": "9593da42"
+ },
+ "about.cac-ket-qua-luan-giai-nen": {
+  "t": "解讀結果應視為有根據的參考，而非最終定論。",
+  "h": "cd55943a"
+ },
+ "about.cac-kinh-dien-ve-tu-vi": {
+  "t": "紫微斗數的經典有許多異本，詮釋也不盡相同，因此系統化必然需要取捨與參照。",
+  "h": "1b957db9"
+ },
+ "about.cac-mo-hinh-duoc-xay-dung": {
+  "t": "建立模型，以辨識命盤與現實之間的關聯",
+  "h": "5de73c5a"
+ },
+ "about.cac-nguyen-ly-va-cau-truc": {
+  "t": "傳統紫微斗數的原理與結構",
+  "h": "a25d74ee"
+ },
+ "about.cac-quy-tac-duoc-dieu-chinh": {
+  "t": "依與現實的吻合程度調整規則",
+  "h": "4ceb5ffc"
+ },
+ "about.cac-thay-va-nguoi-thuc-hanh": {
+  "t": "多年從事紫微斗數與玄學的老師和實務者",
+  "h": "01aafa8a"
+ },
+ "about.cach-xay-dung-he-thong-luan": {
+  "t": "解讀系統如何建立",
+  "h": "b8c3ccad"
+ },
+ "about.chung-toi-xay-dung-he-thong": {
+  "t": "我們以下列基礎建立系統：",
+  "h": "eeb432ac"
+ },
+ "about.cong-nghe-duoc-su-dung-o": {
+  "t": "在此使用技術的目的是：",
+  "h": "93bb9357"
+ },
+ "about.dam-bao-tinh-can-bang-giua": {
+  "t": "確保理論與實務之間的平衡",
+  "h": "01471d41"
+ },
+ "about.dieu-quan-trong-la": {
+  "t": "重要的是：",
+  "h": "0d9b396c"
+ },
+ "about.do-do-phuong-phap-ma-chung": {
+  "t": "因此，我們所追求的方法，是將傳統原則的系統化與已記錄的實際案例比對結合起來。技術只是輔助研究的工具，而不是取代人的判斷。",
+  "h": "8fb84663"
+ },
+ "about.doi-chieu-voi-cac-dien-bien": {
+  "t": "與他們人生中實際發生的事件比對",
+  "h": "e59344b7"
+ },
+ "about.du-lieu-ngay-gio-sinh-cua": {
+  "t": "超過 270,000 人的出生年月日時資料",
+  "h": "b1e54c19"
+ },
+ "about.du-lieu-nguyen-ly-mo-hinh": {
+  "t": "資料 → 原理 → 模型 → 驗證 → 解說 → 校正——多層次的流程，讓每一則解讀不只合乎邏輯，也能與現實相互對照。",
+  "h": "47a0b07e"
+ },
+ "about.gia-tri-cua-tu-vi-dau": {
+  "t": "紫微斗數的價值不在於絕對的預言，而在於啟發人更了解自己。",
+  "h": "37d2ea4c"
+ },
+ "about.giam-sai-lech-do-yeu-to": {
+  "t": "減少主觀因素造成的偏差",
+  "h": "dd267c7a"
+ },
+ "about.gioi-han-cua-he-thong": {
+  "t": "系統的侷限",
+  "h": "7fa9c9a0"
+ },
+ "about.gioi-thieu-phuong-phap-tinh-than": {
+  "t": "關於我們 — 方法與精神 | 明寶紫微斗數",
+  "h": "6455ef7c"
+ },
+ "about.gioi-thieu-tu-vi-minh-bao": {
+  "t": "明寶紫微斗數介紹 — 方法與精神",
+  "h": "6eee8cba"
+ },
+ "about.giu-vung-tinh-than-cua-co": {
+  "t": "堅守古法的精神",
+  "h": "9e74633e"
+ },
+ "about.han-che-cac-dien-giai-cuc": {
+  "t": "減少極端或缺乏根據的詮釋",
+  "h": "7537c280"
+ },
+ "about.he-thong-an-sao-tu-vi": {
+  "t": "依古法的紫微斗數安星排盤與深入解讀。了解明寶紫微斗數的解讀方法與原則。",
+  "h": "4a00d1c0"
+ },
+ "about.he-thong-khong-tu-suy-doan": {
+  "t": "系統不會自行推測論點",
+  "h": "e89edab4"
+ },
+ "about.he-thong-luan-giai-tai-tu": {
+  "t": "明寶紫微斗數的解讀系統，是以結合古學基礎、實證資料與現代技術的方向建立，力求一致性、可驗證性與實際應用價值。",
+  "h": "6d5da226"
+ },
+ "about.he-thong-ngon-ngu-duoc-su": {
+  "t": "以語言系統將內容解說得清楚、易懂且實用",
+  "h": "2caad752"
+ },
+ "about.ket-hop-giua-ly-thuyet-va": {
+  "t": "理論與實務結合",
+  "h": "c0fb9eab"
+ },
+ "about.ket-hop-voi-co-so-du": {
+  "t": "結合 AstroDataBank 的國際資料庫",
+  "h": "cbdd4e16"
+ },
+ "about.ket-qua-duoc-doi-chieu-nguoc": {
+  "t": "將結果反向與既有資料比對",
+  "h": "24c827a1"
+ },
+ "about.khong-gay-hoang-mang": {
+  "t": "不製造恐慌",
+  "h": "e0832f25"
+ },
+ "about.khong-phan-xet": {
+  "t": "不評判",
+  "h": "b0409d0a"
+ },
+ "about.khong-tuyet-doi-hoa": {
+  "t": "不絕對化",
+  "h": "4df88785"
+ },
+ "about.kiem-nghiem-lai-cac-nguyen-ly": {
+  "t": "以實際資料重新驗證古學原理",
+  "h": "b2f40cd9"
+ },
+ "about.la-so-chi-phan-anh-nhung": {
+  "t": "命盤只反映可能發生的傾向，而非一成不變的定數。",
+  "h": "2f15ed93"
+ },
+ "about.lien-he": {
+  "t": "聯絡",
+  "h": "603522f1"
+ },
+ "about.lien-tuc-hieu-chinh": {
+  "t": "持續校正",
+  "h": "45ab3f13"
+ },
+ "about.loai-bo-cac-yeu-to-mang": {
+  "t": "剔除憑感覺臆斷或缺乏根據的因素",
+  "h": "e9b79749"
+ },
+ "about.ma-chi-dien-giai-lai-cac": {
+  "t": "只是重新解說事先已確定的結果",
+  "h": "101c64d5"
+ },
+ "about.mo-dau": {
+  "t": "開篇",
+  "h": "44717b8f"
+ },
+ "about.mo-rong-quy-mo-kiem-nghiem": {
+  "t": "擴大驗證規模",
+  "h": "ab8a2f59"
+ },
+ "about.moi-mo-hinh-luan-giai-duoc": {
+  "t": "所有解讀模型都會依累積的資料與實際回饋重新檢視與驗證。",
+  "h": "4f3e7b8d"
+ },
+ "about.moi-nhan-dinh-deu-nham-giup": {
+  "t": "每一則論斷都是為了幫助讀者更了解自身處境，做出合適的選擇。",
+  "h": "6a29f2d0"
+ },
+ "about.moi-y-kien-trao-doi-gop": {
+  "t": "凡是關於解讀內容、研究方法或系統使用的意見、建議與問題，歡迎與我們聯絡。",
+  "h": "0b3d271b"
+ },
+ "about.mot-so-thanh-vien-theo-duoi": {
+  "t": "有些成員以命理解讀為本業，另一些成員則來自不同的專業領域，但都經過長期認真的研究與實踐。",
+  "h": "a852a127"
+ },
+ "about.muc-tieu-chung-cua-nhom-khong": {
+  "t": "團隊的共同目標不是給出絕對的結論，而是建立一套有根據、經過驗證、能在現實中應用的解讀系統。",
+  "h": "81a815ce"
+ },
+ "about.muc-tieu-la-chuyen-tu-cac": {
+  "t": "目標是把經典中零散的知識，轉化為有結構、一致且可驗證的解讀系統。",
+  "h": "fbf9c61c"
+ },
+ "about.nguyen-tac": {
+  "t": "原則",
+  "h": "17807d55"
+ },
+ "about.nguyen-tac-luan-giai": {
+  "t": "解讀原則",
+  "h": "23987592"
+ },
+ "about.nhan-dien-cac-mo-hinh-lap": {
+  "t": "辨識命盤結構與人生變化之間反覆出現的模式",
+  "h": "d2f81c8f"
+ },
+ "about.nhieu-thanh-vien-da-co-kinh": {
+  "t": "許多成員曾在中國與香港學習、接觸紫微斗數與玄學的各個流派——這些理論體系正是在當地發展並廣為流傳。",
+  "h": "3b355fa3"
+ },
+ "about.nhom-nghien-cuu": {
+  "t": "研究團隊",
+  "h": "91d9432b"
+ },
+ "about.nhung-nguoi-co-kinh-nghiem-thuc": {
+  "t": "在玄學領域具實務經驗的人",
+  "h": "e3fc3042"
+ },
+ "about.nhung-nguoi-lam-viec-trong-moi": {
+  "t": "在學術環境工作的人，包括大學講師與研究者",
+  "h": "4e7bc04a"
+ },
+ "about.noi-dung-duoc-trinh-bay-theo": {
+  "t": "內容依個人情境呈現，而非籠統的描述",
+  "h": "997e3c47"
+ },
+ "about.o-nuoc-ta-viec-nghien-cuu": {
+  "t": "在越南，紫微斗數的研究由來已久。正因如此，我們認為需要回到基本原理，審慎而系統地考察。",
+  "h": "8b0850cc"
+ },
+ "about.phan-hoi-trong-vong-24-48": {
+  "t": "工作日 24–48 小時內回覆",
+  "h": "ff250e5f"
+ },
+ "about.phuong-phap": {
+  "t": "方法",
+  "h": "4f7ecd74"
+ },
+ "about.phuong-phap-luan": {
+  "t": "方法論",
+  "h": "2c2e64e2"
+ },
+ "about.qua-trinh-nay-cho-phep": {
+  "t": "這個過程讓我們能：",
+  "h": "e87bc961"
+ },
+ "about.quan-diem": {
+  "t": "觀點",
+  "h": "b9aa2091"
+ },
+ "about.quy-trinh-nay-giup": {
+  "t": "這套流程有助於：",
+  "h": "196d0c1e"
+ },
+ "about.sai-lech-co-the-phat-sinh": {
+  "t": "偏差可能來自輸入的資料——出生時辰不準確，或各傳統安星方式的差異。",
+  "h": "bfa633e6"
+ },
+ "about.sau-khi-xac-dinh-duoc-cau": {
+  "t": "確定結構與主要論點之後：",
+  "h": "8b98ad49"
+ },
+ "about.su-bien-chuyen-cua-doi-nguoi": {
+  "t": "人生的變遷，歸根結柢仍是多種因素交織的結果，其中也包括每個人的選擇與行動。研究與應用紫微斗數若有意義，正在於幫助人在人生的轉折點前多一分清醒。",
+  "h": "2d06614d"
+ },
+ "about.su-da-dang-ve-nen-tang": {
+  "t": "背景的多元讓團隊能：",
+  "h": "ff2c1cfd"
+ },
+ "about.tang-tinh-nhat-quan-trong-luan": {
+  "t": "提高解讀的一致性",
+  "h": "66a7712a"
+ },
+ "about.thanh-phan-nhom-bao-gom": {
+  "t": "團隊成員包括：",
+  "h": "62092e20"
+ },
+ "about.thanh-that-ma-noi": {
+  "t": "坦白說",
+  "h": "b765edeb"
+ },
+ "about.theo-truyen-thong-luu-truyen-mon": {
+  "t": "據傳統流傳，此學由宋代博學的理學家希夷子陳摶所創。此後歷經多代，學者們不斷補充、詮釋與系統化，使紫微斗數成為一門有規矩、有條理的學問。",
+  "h": "6de49b2f"
+ },
+ "about.tiep-can-van-de-tu-nhieu": {
+  "t": "從多種角度切入問題",
+  "h": "db146275"
+ },
+ "about.toan-bo-he-thong-duoc-ra": {
+  "t": "整套系統由以下協作團隊審視與校正：",
+  "h": "9ed0fc71"
+ },
+ "about.toan-bo-logic-luan-giai-duoc": {
+  "t": "整套解讀邏輯建立在：",
+  "h": "b742fa01"
+ },
+ "about.tranh-su-phien-dien-trong-qua": {
+  "t": "在系統化與解讀過程中避免片面",
+  "h": "f4dc0a94"
+ },
+ "about.trao-doi-gop-y": {
+  "t": "交流與建議",
+  "h": "f6890a8e"
+ },
+ "about.tren-nen-tang-du-lieu-va": {
+  "t": "在已系統化的資料與古法基礎上：",
+  "h": "d691aa6d"
+ },
+ "about.tri-tue-nhan-tao-chi-xu": {
+  "t": "人工智慧只能依據所提供的資料與規則來處理。超出此範圍的事，仍需要人的斟酌。",
+  "h": "32a7ac28"
+ },
+ "about.tu-vi-dau-so": {
+  "t": "紫微斗數 · Zi Wei Dou Shu",
+  "h": "33616a8e"
+ },
+ "about.tu-vi-dau-so-hemc": {
+  "t": "紫微斗數",
+  "h": "cdc48904"
+ },
+ "about.tu-vi-dau-so-la-mot": {
+  "t": "紫微斗數是一門東方古學，藉此人們可以在定數的框架內，窺探人生前後運行的部分道理。學紫微，要在知己，也在知人。",
+  "h": "176262d0"
+ },
+ "about.tu-vi-la-cong-cu-quan": {
+  "t": "紫微斗數是觀察與分析的工具，不是衡量人品的尺度，也不是評斷他人的依據。",
+  "h": "317bf0cc"
+ },
+ "about.tu-vi-minh-bao-duoc-phat": {
+  "t": "明寶紫微斗數由一個獨立研究團隊開發，成員背景與方向各異，但都對東方命理學有著深切的關注。",
+  "h": "81fe0d3c"
+ },
+ "about.tu-vi-minh-bao-la-he": {
+  "t": "明寶紫微斗數是依古法安星排盤與解讀紫微斗數的系統。了解系統的方法、原則與精神。",
+  "h": "2f6ab085"
+ },
+ "about.ve-chung-toi": {
+  "t": "關於我們",
+  "h": "e96992fa"
+ },
+ "about.ve-phuong-phap-tinh-than-va": {
+  "t": "關於明寶紫微斗數解讀系統的方法、精神與侷限",
+  "h": "2a8ba5a3"
+ },
+ "about.viec-chuan-hoa-cac-cach-cuc": {
+  "t": "格局、規則與論斷順序的標準化",
+  "h": "0ef7ac43"
+ },
+ "about.viec-luan-giai-tu-vi-dau": {
+  "t": "依我們淺見，紫微斗數的解讀首先應立足於經典，其次才考量現實中的變化。若離開原理而只憑感覺臆斷，容易流於武斷；反之，若只拘泥文字而不考驗實證，則難免僵化。",
+  "h": "86255e75"
+ },
+ "about.xac-dinh-cac-giai-doan-bien": {
+  "t": "找出隨時間變動的階段",
+  "h": "e0adca76"
+ },
+ "about.y-nghia-cua-tu-vi": {
+  "t": "紫微斗數的意義",
+  "h": "835e8685"
+ },
  "bandosao.10-hanh-tinh-vi-tri": {
   "t": "<span class=\"hp-ic\" data-icon=\"sun\"></span><span>10 顆行星<br>位置</span>",
   "h": "86d502e2"
@@ -194,6 +582,42 @@
  "banlamviec.vat-pham-nen-them": {
   "t": "<span class=\"ic\" data-icon=\"store\"></span> 建議添置的物品",
   "h": "b07795fe"
+ },
+ "baocao.bao-cao-moi-ban-luan-ban": {
+  "t": "<b>報告</b><span>您打開過的所有解讀——重看不再扣兩</span>",
+  "h": "03ea853c"
+ },
+ "baocao.bao-cao-tu-vi-minh-bao": {
+  "t": "報告 — 明寶紫微斗數",
+  "h": "424869c8"
+ },
+ "baocao.cap-nhat": {
+  "t": "更新",
+  "h": "8f92d966"
+ },
+ "baocao.chua-co-bao-cao-nao-ket": {
+  "t": "還沒有任何報告。<br>您在任何工具看過的結果（包括預覽）都會自動存到這裡。",
+  "h": "8daa85e0"
+ },
+ "baocao.dang-nhap-dang-ky": {
+  "t": "登入／註冊",
+  "h": "2bcf279e"
+ },
+ "baocao.dang-nhap-de-xem-cac-bao": {
+  "t": "登入後即可查看您已有的報告。",
+  "h": "4afe4408"
+ },
+ "baocao.ten": {
+  "t": "名稱",
+  "h": "e826b62a"
+ },
+ "baocao.tim-bao-cao": {
+  "t": "搜尋報告",
+  "h": "dac215a4"
+ },
+ "baocao.tim-theo-ten-cong-cu": {
+  "t": "依名稱、工具搜尋…",
+  "h": "86f221f0"
  },
  "battrach2.4-huong-dai-cat": {
   "t": "4個<br>大吉方位",
@@ -443,6 +867,122 @@
   "t": "<span class=\"bg-label\"><span class=\"ic\" data-icon=\"spade\"></span><b id=\"drawBtnLabel\">洗牌並抽牌</b></span>",
   "h": "e53dcebd"
  },
+ "cdvc.2-xem-truoc-cung-phu-the": {
+  "t": "<span class=\"wss-n\">2</span><span class=\"wss-l\">預覽夫妻宮</span>",
+  "h": "108dcc06"
+ },
+ "cdvc.anh-chan-dung-minh-hoa": {
+  "t": "<span class=\"hp-ic\" data-icon=\"image\"></span><span>示意<br>肖像圖</span>",
+  "h": "493170c3"
+ },
+ "cdvc.ban-luan-giai-mau-tai-pdf": {
+  "t": "<span class=\"sc-ic\" data-icon=\"file-text\"></span> <span class=\"sc-txt\"><b>範例解讀報告</b><span>下載範例命盤的「夫妻肖像」完整 PDF，先預覽真實內容。</span></span> <a class=\"sc-btn\" href=\"/tai-mau/mau-chan-dung-vo-chong.pdf\" target=\"_blank\" rel=\"noopener\">下載 PDF →</a>",
+  "h": "53e5a8b4"
+ },
+ "cdvc.bang-tren-la-tra-bang-co": {
+  "t": "上表是依古法查表，對照您自己的命盤得出——尚未經過解讀這一步。",
+  "h": "e321a90c"
+ },
+ "cdvc.cach-cuc-dac-biet": {
+  "t": "特殊格局",
+  "h": "f0db7ce5"
+ },
+ "cdvc.chan-dung-nay-chi-mang-tinh": {
+  "t": "<span class=\"ic\" data-icon=\"lightbulb\"></span> 這幅肖像僅供示意與參考，是系統依據您命盤夫妻宮中的主星、輔星所對應的外貌特徵模擬而成——並不是照片，也不是對現實中伴侶容貌的準確預測。若要得到更貼近現實的結果，還需要再對照對方本人的命盤。",
+  "h": "38ea85e6"
+ },
+ "cdvc.chan-dung-nguoi-phoi-ngau": {
+  "t": "<span class=\"res-block-title\">配偶肖像</span>",
+  "h": "6c75b667"
+ },
+ "cdvc.chan-dung-nguoi-phoi-ngau-xs4t": {
+  "t": "配偶肖像",
+  "h": "b3c9f474"
+ },
+ "cdvc.chan-dung-vo-chong": {
+  "t": "夫妻肖像",
+  "h": "ed0abbb5"
+ },
+ "cdvc.chan-dung-vo-chong-tu-vi": {
+  "t": "夫妻肖像——明寶紫微斗數",
+  "h": "192e3111"
+ },
+ "cdvc.chan-dung-vo-chong-ve-chan": {
+  "t": "<b>夫妻肖像</b><span>由夫妻宮繪製配偶的肖像</span>",
+  "h": "00184059"
+ },
+ "cdvc.chia-se-cho-ban-be-xem": {
+  "t": "分享給朋友看 →",
+  "h": "d4cae66e"
+ },
+ "cdvc.chinh-tinh": {
+  "t": "<b>主星：</b> <span id=\"ptChinh\">—</span>",
+  "h": "bddb0cff"
+ },
+ "cdvc.cung-phu-the-trong-la-so": {
+  "t": "<span class=\"res-block-title\">您命盤中的夫妻宮</span>",
+  "h": "f96e4460"
+ },
+ "cdvc.hinh-the-suy-tu-sao": {
+  "t": "<span class=\"hp-ic\" data-icon=\"user\"></span><span>由星曜推得的<br>體型外貌</span>",
+  "h": "ca30f981"
+ },
+ "cdvc.hinh-the-suy-tu-sao-tai": {
+  "t": "<span class=\"res-block-title\">由夫妻宮星曜推得的體型外貌</span>",
+  "h": "5207236c"
+ },
+ "cdvc.hoan-canh-gap-go": {
+  "t": "相遇的情境",
+  "h": "084d34b9"
+ },
+ "cdvc.luan-giai-cung-phu-the": {
+  "t": "<span class=\"hp-ic\" data-icon=\"heart\"></span><span>夫妻宮<br>解讀</span>",
+  "h": "72f3c0e5"
+ },
+ "cdvc.luan-giai-cung-phu-the-e93e": {
+  "t": "<span class=\"res-block-title\">夫妻宮解讀</span>",
+  "h": "a976e83a"
+ },
+ "cdvc.mo-ta": {
+  "t": "描述",
+  "h": "0bf67d8a"
+ },
+ "cdvc.moi-luot-luong": {
+  "t": "<span class=\"vnd\" data-tvp-price-vnd=\"chan-dung-vo-chong\"></span> 每次 <span class=\"cb-sub\">(<span data-tvp-price=\"chan-dung-vo-chong\">…</span> 兩)</span>",
+  "h": "32e5c174"
+ },
+ "cdvc.nhap-ngay-sinh-khong-can-them": {
+  "t": "輸入出生日期即可，不需要再提供其他資料。系統會讀取夫妻宮並繪製肖像——包含由星曜推得的體型外貌、圖像與詳細解讀。",
+  "h": "091107bb"
+ },
+ "cdvc.phan-tich-cung-phu-the-trong": {
+  "t": "分析命盤中的夫妻宮，繪製伴侶的肖像，並附上性格與氣質風度的描述。",
+  "h": "b63e4e9d"
+ },
+ "cdvc.phu-tinh": {
+  "t": "<b>輔星：</b> <span id=\"ptPhu\">—</span>",
+  "h": "5e60dcdc"
+ },
+ "cdvc.tra-loi-thay-o-khung-chat": {
+  "t": "請在聊天欄回覆老師來繪製肖像——只需要您的出生日期與時辰。",
+  "h": "1933e964"
+ },
+ "cdvc.truoc-khi-gap-dung-nguoi-nhieu": {
+  "t": "在遇見對的人之前，許多人對對方的想像完全走樣。命盤中的夫妻宮會描繪出未來伴侶的肖像與氣質——比任何揣測都更清楚。",
+  "h": "d009dcc3"
+ },
+ "cdvc.ve-chan-dung-ton-luong": {
+  "t": "<span class=\"bg-label\"><span class=\"ic\" data-icon=\"image\"></span><b id=\"btnGoLabel\">繪製肖像 →</b></span> <small>費用 <span class=\"vnd\" data-tvp-price-vnd=\"chan-dung-vo-chong\"></span> <span class=\"cb-sub\">(<span data-tvp-price=\"chan-dung-vo-chong\">…</span> 兩)</span></small>",
+  "h": "33f06010"
+ },
+ "cdvc.ve-lai": {
+  "t": "重新繪製",
+  "h": "fb8e0b72"
+ },
+ "cdvc.y-nghia-co-phap": {
+  "t": "古法的意涵",
+  "h": "c6403cb5"
+ },
  "chat.ke-chuyen-cua-ban-minh-bao": {
   "t": "說說您的故事，明寶團隊會從 15 位老師中請出最合適的一位為您解讀：紫微斗數命盤、八字、合婚、取名、擇日。",
   "h": "0f564294"
@@ -619,6 +1159,138 @@
   "t": "<span class=\"hp-ic\" data-icon=\"calendar\"></span><span>流年<br>小運</span>",
   "h": "d0e7d2f5"
  },
+ "cn.12-thang-am-toi": {
+  "t": "未來十二個農曆月",
+  "h": "c0166830"
+ },
+ "cn.ca-nha-minh-la-so-cua": {
+  "t": "<b>我們一家</b><span id=\"cnSub\">把全家人的命盤並排，看未來十二個農曆月。</span>",
+  "h": "f42a18f8"
+ },
+ "cn.ca-nha-minh-tu-vi-minh": {
+  "t": "我們一家——明寶紫微斗數",
+  "h": "12013a8d"
+ },
+ "cn.dang-nhap-dang-ky": {
+  "t": "登入／註冊",
+  "h": "2bcf279e"
+ },
+ "cn.dang-nhap-de-xem-la-so": {
+  "t": "請登入以查看全家人的命盤。",
+  "h": "6ccac799"
+ },
+ "cn.dang-xep-la-so-ca-nha": {
+  "t": "正在排列全家人的命盤…",
+  "h": "9c8b78a5"
+ },
+ "cn.dua-ngay-tot-va-ngay-xung": {
+  "t": "把專屬於孩子的吉日與沖日放進手機行事曆。行事曆會每天自動更新。",
+  "h": "b5850267"
+ },
+ "cn.google-lich": {
+  "t": "Google 日曆",
+  "h": "8cdb619a"
+ },
+ "cn.hoi-thay-ve-ca-nha-so": {
+  "t": "<a class=\"go\" id=\"cnAsk\" href=\"/app\">就全家問問老師</a> <a class=\"sub\" href=\"/app/so-la-so\">命盤簿</a>",
+  "h": "c7bd3311"
+ },
+ "cn.iphone-mac": {
+  "t": "iPhone / Mac",
+  "h": "9a2b7d51"
+ },
+ "cn.lich-rieng": {
+  "t": "專屬行事曆",
+  "h": "6ff9fdd9"
+ },
+ "cn.moi-o-la-cung-nguyet-han": {
+  "t": "每一格是該月的月限宮位。黃色格：兩人以上同時行限入同一宮的月份。點一格可查看星曜。",
+  "h": "8a6d6f48"
+ },
+ "cn.so-la-so-chua-co-nguoi": {
+  "t": "命盤簿裡還沒有任何家人。<br>直接問老師關於丈夫、孩子或父母的事——老師會在對話中順勢邀請您加入命盤。<br> 已儲存的命盤，請移到<a href=\"/app/so-la-so\">命盤簿</a>的<b>家人</b>群組。",
+  "h": "75422ea1"
+ },
+ "cn.thang-ca-nha-nen-de-y": {
+  "t": "全家該留意的月份",
+  "h": "e66184b3"
+ },
+ "combolt.combo-luan-giai-tu-binh-mua": {
+  "t": "<b>組合：命盤解讀＋子平八字</b><span>兩份完整解讀一次購入，比分開買更划算</span>",
+  "h": "af0cc437"
+ },
+ "combolt.combo-luan-giai-tu-binh-tu": {
+  "t": "命盤解讀＋子平八字組合 — 明寶紫微斗數",
+  "h": "0df54f90"
+ },
+ "combolt.da-mo-khoa-ca-hai-ban": {
+  "t": "兩份解讀皆已解鎖",
+  "h": "91f94c21"
+ },
+ "combolt.luong": {
+  "t": "<span data-tvp-price=\"combo-laso-tubinh\">…</span> 兩",
+  "h": "8fbbb057"
+ },
+ "combolt.mua-tron-luan-giai-tu-vi": {
+  "t": "一次購入紫微斗數 13 部分解讀與子平八字，比分開買更划算。",
+  "h": "05aa9b4c"
+ },
+ "combolt.xem-luan-giai-tu-vi-xem": {
+  "t": "<a href=\"/app/luan-giai\" id=\"cbLinkLaso\">查看紫微斗數解讀 →</a> <a href=\"/app/bat-tu\" id=\"cbLinkTuBinh\">查看子平八字 →</a>",
+  "h": "4bf08a19"
+ },
+ "combotb.chu-trinh-cuoc-doi-9-chang": {
+  "t": "✦ <b>人生週期</b>——9 段大運，人生的高峰與低谷",
+  "h": "af10818a"
+ },
+ "combotb.combo": {
+  "t": "紫微明寶 · 組合",
+  "h": "da13096a"
+ },
+ "combotb.combo-tron-bo-4-tool-mua": {
+  "t": "<b>組合：4 項工具全套</b><span>4 份解讀一次購入，比分開買更划算</span>",
+  "h": "c20edb9c"
+ },
+ "combotb.combo-tron-bo-4-tool-tu": {
+  "t": "4 項工具全套組合 — 明寶紫微斗數",
+  "h": "e2aba5d5"
+ },
+ "combotb.da-mo-khoa-ca-4-ban": {
+  "t": "4 份解讀皆已解鎖",
+  "h": "809c0f7b"
+ },
+ "combotb.dang-tai-gia": {
+  "t": "正在載入價格…",
+  "h": "d6a0be25"
+ },
+ "combotb.luan-giai-tu-vi-tron-13": {
+  "t": "✦ <b>紫微斗數解讀</b>——完整 13 部分，十二宮＋總論",
+  "h": "adbc495f"
+ },
+ "combotb.luong": {
+  "t": "<span data-tvp-price=\"combo-tron-bo\">…</span> 兩",
+  "h": "9b9ca891"
+ },
+ "combotb.mua-combo": {
+  "t": "購買組合 →",
+  "h": "7eaa5de2"
+ },
+ "combotb.mua-tron-luan-giai-tu-vi": {
+  "t": "一次購入紫微斗數解讀、子平八字、人生週期與流年運勢，比分開買更划算。",
+  "h": "8103dab5"
+ },
+ "combotb.tu-binh-bat-tu-nhat-can": {
+  "t": "✦ <b>子平八字</b>——日干、用神、格局、大運",
+  "h": "67131116"
+ },
+ "combotb.van-han-nam-12-thang-toi": {
+  "t": "✦ <b>流年運勢</b>——從今天起的 12 個月",
+  "h": "4dba2179"
+ },
+ "combotb.xem-luan-giai-tu-vi-xem": {
+  "t": "<a href=\"/app/luan-giai\" id=\"cbLinkLaso\">查看紫微斗數解讀 →</a> <a href=\"/app/bat-tu\" id=\"cbLinkTuBinh\">查看子平八字 →</a> <a href=\"/app/chu-trinh-cuoc-doi\" id=\"cbLinkCtcd\">查看人生週期 →</a> <a href=\"/app/van-han-nam\" id=\"cbLinkVhn\">查看流年運勢 →</a>",
+  "h": "8849b82c"
+ },
  "congcu.3-ngay-toi": {
   "t": "未來 3 天",
   "h": "a9fe9d66"
@@ -762,6 +1434,190 @@
  "congcutr.tu-vi": {
   "t": "紫微",
   "h": "f49901f4"
+ },
+ "cs.2-xem-truoc-ho-so": {
+  "t": "<span class=\"wss-n\">2</span><span class=\"wss-l\">預覽檔案</span>",
+  "h": "cdf8b027"
+ },
+ "cs.40-nam-4-chang": {
+  "t": "<span class=\"hp-ic\" data-icon=\"trending-up\"></span><span>40 年<br>分四階段</span>",
+  "h": "62f02f8b"
+ },
+ "cs.ban-dang-o-vi-tri-nao": {
+  "t": "您目前的位置",
+  "h": "ae96bb68"
+ },
+ "cs.ban-luan-giai-mau-tai-pdf": {
+  "t": "<span class=\"sc-ic\" data-icon=\"file-text\"></span> <span class=\"sc-txt\"><b>範例解讀報告</b><span>下載範例命盤的「紫微職場」完整 PDF，先預覽真實內容。</span></span> <a class=\"sc-btn\" href=\"/tai-mau/mau-cong-so.pdf\" target=\"_blank\" rel=\"noopener\">下載 PDF →</a>",
+  "h": "2538ba5a"
+ },
+ "cs.bon-ten-goi-khai-sang-lanh": {
+  "t": "<b>開創・領導・輔佐・協作</b>這四個名稱，是本頁為了方便閱讀而訂的現代標籤，古籍並沒有這樣的稱呼。分法則有古法的根基：把<b>四象</b>（老陽・少陰・少陽・老陰）套到 14 顆主星上，正好落在經典的星曜組合裡。<br> 這是<b>一個解讀命盤的框架</b>，並不是經過驗證的心理測驗，背後也沒有對照研究。請用來了解自己、引發話題，不要用來招聘或替別人安排工作。",
+  "h": "4b3842bc"
+ },
+ "cs.chu-doanh-nghiep": {
+  "t": "企業主",
+  "h": "0ec2b6b1"
+ },
+ "cs.cung-mot-nang-luc-co-nguoi": {
+  "t": "同樣的能力，有人升遷順利，有人卻一直原地踏步——大多取決於選對環境與展現自己的方式。讀讀您在職場上的類型，讓方向更清楚。",
+  "h": "af9f49d9"
+ },
+ "cs.dang-tim-viec-chuyen-huong": {
+  "t": "求職中／轉換跑道",
+  "h": "de0479f2"
+ },
+ "cs.doc-la-so-tu-vi-bang": {
+  "t": "用工作的語言解讀紫微斗數命盤：您在職場上屬於哪種類型、十二個面向的強弱、工作四十年分成的四個階段，以及該跟誰組隊。",
+  "h": "7c9e83ec"
+ },
+ "cs.dung-ho-so-kieu-nguoi-12": {
+  "t": "建立類型 + 12 個面向的檔案<b>免費</b>。開啟具體職業分支的部分才會扣除兩。",
+  "h": "8ad49bf1"
+ },
+ "cs.dung-ho-so-mien-phi": {
+  "t": "<span class=\"bg-label\"><span class=\"ic\" data-icon=\"briefcase\"></span><b id=\"btnGoLabel\">建立檔案 →</b></span> <small>免費</small>",
+  "h": "d7386efe"
+ },
+ "cs.hoi-thay-doc-ky-ho-so": {
+  "t": "✦ 請老師細讀這份檔案",
+  "h": "dfa970e5"
+ },
+ "cs.kieu-nguoi-noi-cong-so": {
+  "t": "<span class=\"hp-ic\" data-icon=\"briefcase\"></span><span>職場<br>類型</span>",
+  "h": "31b69ffd"
+ },
+ "cs.lam-tu-do-nghe-rieng": {
+  "t": "自由工作者／自營",
+  "h": "1d5e99e6"
+ },
+ "cs.ngay-gio-sinh-va-cho-dung": {
+  "t": "出生日期時辰與目前位置",
+  "h": "ade29838"
+ },
+ "cs.nhan-vien-lam-thue": {
+  "t": "受僱員工",
+  "h": "0c9557d1"
+ },
+ "cs.nhanh-nghe-ghep-doi": {
+  "t": "<span class=\"hp-ic\" data-icon=\"users\"></span><span>職業分支、<br>組隊</span>",
+  "h": "f7580d7f"
+ },
+ "cs.nhap-ngay-gio-sinh-va-vi": {
+  "t": "輸入出生日期時辰與目前位置。系統會對照古法——職場類型、適合的職業分支，以及分成四階段的 40 年職涯。",
+  "h": "f54c5793"
+ },
+ "cs.quan-ly-lam-thue": {
+  "t": "受僱管理者",
+  "h": "9e6cb7ab"
+ },
+ "cs.tai-anh": {
+  "t": "⬇ 下載圖片",
+  "h": "eb8a56af"
+ },
+ "cs.tu-vi-cong-so": {
+  "t": "紫微職場",
+  "h": "9d18a955"
+ },
+ "cs.tu-vi-cong-so-la-so": {
+  "t": "<b>紫微職場</b><span>用工作語言解讀的命盤</span>",
+  "h": "af1a1cbe"
+ },
+ "cs.tu-vi-cong-so-tu-vi": {
+  "t": "紫微職場——明寶紫微斗數",
+  "h": "91365f7b"
+ },
+ "ctk.2-xem-truoc-chan-dung": {
+  "t": "<span class=\"wss-n\">2</span><span class=\"wss-l\">預覽肖像</span>",
+  "h": "db8c9fa4"
+ },
+ "ctk.5-nen-van-minh-co": {
+  "t": "<span class=\"hp-ic\" data-icon=\"landmark\"></span><span>5 個<br>古文明</span>",
+  "h": "88178537"
+ },
+ "ctk.ban-luan-giai-mau-tai-pdf": {
+  "t": "<span class=\"sc-ic\" data-icon=\"file-text\"></span> <span class=\"sc-txt\"><b>範例解讀報告</b><span>下載範例命盤的「前世肖像」完整 PDF，先預覽真實內容。</span></span> <a class=\"sc-btn\" href=\"/tai-mau/mau-chan-dung-tien-kiep.pdf\" target=\"_blank\" rel=\"noopener\">下載 PDF →</a>",
+  "h": "d3ec11c0"
+ },
+ "ctk.chan-dung-cot-cach": {
+  "t": "<span class=\"res-block-title\">肖像與風骨</span>",
+  "h": "236dac15"
+ },
+ "ctk.chan-dung-tien-kiep": {
+  "t": "前世肖像",
+  "h": "e7d0f866"
+ },
+ "ctk.chan-dung-tien-kiep-gxr5": {
+  "t": "前世肖像",
+  "h": "7aa2c297"
+ },
+ "ctk.chan-dung-tien-kiep-la-so": {
+  "t": "<b>前世肖像</b><span>如果您的命盤生在古代</span>",
+  "h": "b05fc22e"
+ },
+ "ctk.chan-dung-tien-kiep-tu-vi": {
+  "t": "前世肖像——明寶紫微斗數",
+  "h": "ecf8e25b"
+ },
+ "ctk.chan-dung-va-cau-chuyen-phia": {
+  "t": "<span class=\"ic\" data-icon=\"lightbulb\"></span> 上方的肖像與故事，依據您紫微斗數命盤中的資料，並結合前人留下的研究經驗描繪而成，僅供參考與娛樂。",
+  "h": "2e5ddc71"
+ },
+ "ctk.chan-dung-ve-rieng": {
+  "t": "<span class=\"hp-ic\" data-icon=\"image\"></span><span>專屬於您的<br>肖像</span>",
+  "h": "bac45794"
+ },
+ "ctk.da-ve-truoc-do": {
+  "t": "<span class=\"res-block-title\">先前繪製過的</span>",
+  "h": "44b01ab4"
+ },
+ "ctk.dang-ve-chan-dung-khoang-45": {
+  "t": "正在繪製肖像…<br>（約 45–60 秒）",
+  "h": "7a762c71"
+ },
+ "ctk.dat-chinh-la-so-cua-ban": {
+  "t": "把您自己的命盤放進古代東亞五大文明之一——透過九個大運講述一個人一生的肖像與故事。",
+  "h": "9d55b734"
+ },
+ "ctk.dung-la-so-da-lap-khong": {
+  "t": "使用已排好的命盤，不需要再輸入任何東西。即可得到肖像、風骨，以及分五回講述的一生故事。",
+  "h": "1220c601"
+ },
+ "ctk.khung-5-hoi-o-tren-do": {
+  "t": "上方的五回架構由您的命盤決定——每一回的文字都在完整版中。",
+  "h": "9c6e9720"
+ },
+ "ctk.la-so-khong-chi-ke-chuyen": {
+  "t": "命盤不只講今生——放進一個古文明，它還會透露一則專屬於您的前世故事。從現成的命盤，就能得到一幅完整的肖像與故事可讀。",
+  "h": "558d4af3"
+ },
+ "ctk.mo-ta-nhan-vat": {
+  "t": "人物描述",
+  "h": "e5b0eb52"
+ },
+ "ctk.mo-ta-nhan-vat-ban-mau": {
+  "t": "人物描述（範例）",
+  "h": "a3b1a797"
+ },
+ "ctk.moi-luot-luong": {
+  "t": "<span class=\"vnd\" data-tvp-price-vnd=\"chan-dung-tien-kiep\"></span> 每次 <span class=\"cb-sub\">(<span data-tvp-price=\"chan-dung-tien-kiep\">…</span> 兩)</span>",
+  "h": "a0c1a032"
+ },
+ "ctk.mot-doi-5-hoi": {
+  "t": "<span class=\"hp-ic\" data-icon=\"scroll-text\"></span><span>一生<br>五回</span>",
+  "h": "a838f04e"
+ },
+ "ctk.mot-doi-nguoi-5-hoi": {
+  "t": "<span class=\"res-block-title\">一個人的一生——五回</span>",
+  "h": "a7f7daa3"
+ },
+ "ctk.nhap-ngay-sinh-cua-ban-duong": {
+  "t": "輸入您的出生日期（國曆）",
+  "h": "1958d7e8"
+ },
+ "ctk.xem-tien-kiep-ton-luong": {
+  "t": "<span class=\"bg-label\"><span class=\"ic\" data-icon=\"temple\"></span><b>查看前世 →</b></span> <small>費用 <span class=\"vnd\" data-tvp-price-vnd=\"chan-dung-tien-kiep\"></span> <span class=\"cb-sub\">(<span data-tvp-price=\"chan-dung-tien-kiep\">…</span> 兩)</span></small>",
+  "h": "055f7d8e"
  },
  "cuahang.anh-khu-vuc-vat-dung-nhan": {
   "t": "<span class=\"ic\" data-icon=\"camera\"></span> 照片與辨識區域／物品",
@@ -1055,6 +1911,210 @@
   "t": "醫療／健康",
   "h": "13ca73cd"
  },
+ "daycon.2-xem-truoc-chan-dung-con": {
+  "t": "<span class=\"wss-n\">2</span><span class=\"wss-l\">預覽孩子的肖像</span>",
+  "h": "d8f50448"
+ },
+ "daycon.5-la-muc-giua-cua-hang": {
+  "t": "<b>5 是中間值</b>，是數千份孩童命盤的中間水準，並不是「10 分得 5 分」。灰色帶是孩子兩種方式都能適應的範圍。軸的兩端都各有價值。",
+  "h": "0a475048"
+ },
+ "daycon.5-truc-tinh-khi": {
+  "t": "<span class=\"hp-ic\" data-icon=\"scale\"></span><span>5 條<br>氣質軸</span>",
+  "h": "2ee56c76"
+ },
+ "daycon.8-chat-nang-khieu": {
+  "t": "<span class=\"hp-ic\" data-icon=\"star\"></span><span>8 種<br>天賦特質</span>",
+  "h": "a2098312"
+ },
+ "daycon.ban-luan-giai-mau-tai-pdf": {
+  "t": "<span class=\"sc-ic\" data-icon=\"file-text\"></span> <span class=\"sc-txt\"><b>範例解讀報告</b><span>下載範例命盤的「依命盤教養孩子」完整 PDF，先預覽真實內容。</span></span> <a class=\"sc-btn\" href=\"/tai-mau/mau-day-con.pdf\" target=\"_blank\" rel=\"noopener\">下載 PDF →</a>",
+  "h": "93827cd3"
+ },
+ "daycon.ban-nay-phac-hoa-tu-cac": {
+  "t": "<span class=\"ic\" data-icon=\"lightbulb\"></span> 本解讀依據紫微斗數命盤中的資料，並結合前人留下的研究經驗描繪而成。<b>教養方式</b>的部分是本頁自行的對應與詮釋，並非古籍原文，僅供參考。<br><br> <span class=\"ic\" data-icon=\"scale\"></span> 這是一個<b>了解孩子、因材施教</b>的框架。孩子尚未成年，也不在這裡，因此本解讀刻意<b>不預測考試成敗、不斷定職業、不談健康或感情</b>。天生氣質沒有好壞，只有適合或不適合大人目前的做法。<br><br> <span class=\"ic\" data-icon=\"book-open\"></span> <b>出處：</b>命宮、福德宮、父母宮等，依<i>《紫微斗數新編》</i>（雲騰太次郎，Vân Đằng Thái Thứ Lang）排定。5 條軸・8 種特質的框架與依類型而定的教養方式，是<b>明寶紫微斗數專家團隊</b>自行建立的方法。<a href=\"/nguon-du-lieu.html\" target=\"_blank\" rel=\"noopener\" style=\"color:#9A7B3A\">查看完整資料出處 →</a>",
+  "h": "77ff2cc9"
+ },
+ "daycon.boi-canh": {
+  "t": "<b>背景</b><i></i>",
+  "h": "a85d826c"
+ },
+ "daycon.buong-cai-lai-noi-khong-nghe": {
+  "t": "倔強、頂嘴、不聽話",
+  "h": "76509c43"
+ },
+ "daycon.cac-chang-di-hoc": {
+  "t": "<span class=\"res-block-title\">求學各階段</span>",
+  "h": "b2c2bb10"
+ },
+ "daycon.cach-day-con-nay": {
+  "t": "<span class=\"res-block-title\">這個孩子的教養方式</span>",
+  "h": "e203e71f"
+ },
+ "daycon.chon-dieu-dang-lo-nhap-ngay": {
+  "t": "選擇您擔心的事，輸入孩子的出生日期與時辰，即可得到適合孩子的教養方式，以及今晚就能做的事。",
+  "h": "b14b84f4"
+ },
+ "daycon.co-la-so-cua-ban-thi": {
+  "t": "若有您自己的命盤，解讀會多出<b>「雙方關係」</b>一節——親子容易起衝突之處，以及減少衝突的方法。留空也能看到其餘完整內容。",
+  "h": "0ea6e4fe"
+ },
+ "daycon.co-so-trong-la-so": {
+  "t": "<span class=\"res-block-title\">命盤中的依據</span>",
+  "h": "c215623b"
+ },
+ "daycon.con-khong-chiu-noi-chuyen-voi": {
+  "t": "孩子不再願意跟我說話",
+  "h": "245ca1b1"
+ },
+ "daycon.con-la-nguoi-the-nao": {
+  "t": "<span class=\"res-block-title\">孩子是怎樣的人</span>",
+  "h": "d97bd561"
+ },
+ "daycon.cung-mot-cach-day-co-dua": {
+  "t": "同樣的教法，有的孩子進步明顯，有的孩子卻越教越疏遠——因為每個孩子吸收的方式不同。從孩子的命盤，看出哪種做法正在適得其反。",
+  "h": "eec3a103"
+ },
+ "daycon.da-xem-truoc-do": {
+  "t": "<span class=\"res-block-title\">先前看過的內容</span>",
+  "h": "5dc13a72"
+ },
+ "daycon.dau-hieu-nhan-ra-o-nha": {
+  "t": "在家中可以辨認的跡象",
+  "h": "a07a9d36"
+ },
+ "daycon.day-con-theo-la-so": {
+  "t": "依命盤教養孩子",
+  "h": "2013a771"
+ },
+ "daycon.day-con-theo-la-so-dua": {
+  "t": "<b>依命盤教養孩子</b><span>這個孩子需要催一把，還是需要靜靜等待</span>",
+  "h": "89056d92"
+ },
+ "daycon.day-con-theo-la-so-tu": {
+  "t": "依命盤教養孩子——明寶紫微斗數",
+  "h": "43088648"
+ },
+ "daycon.day-la-kieu-moi-truong-hoc": {
+  "t": "這是適合孩子的<b>學習環境類型</b>，刻意不指定科系或職業。",
+  "h": "db05bd75"
+ },
+ "daycon.diem-o-day-la-muc-thuan": {
+  "t": "這裡的分數是<b>該階段順或逆的程度</b>，不是學業成績，也不是孩子的分數。",
+  "h": "799bb1dc"
+ },
+ "daycon.dieu-ban-dang-lo": {
+  "t": "您擔心的事",
+  "h": "bd0e3bcd"
+ },
+ "daycon.dieu-ban-dang-lo-pjp3": {
+  "t": "<span class=\"res-block-title\" id=\"loTitle\">您擔心的事</span>",
+  "h": "86a3d90a"
+ },
+ "daycon.dinh-huong": {
+  "t": "<span class=\"res-block-title\">方向建議</span>",
+  "h": "ee21cc8a"
+ },
+ "daycon.dinh-huong-cach-day": {
+  "t": "<span class=\"hp-ic\" data-icon=\"compass\"></span><span>教養方式<br>的方向</span>",
+  "h": "c22dffe6"
+ },
+ "daycon.do-duoc-gi": {
+  "t": "<b>測得出什麼</b><i></i>",
+  "h": "0ae0b676"
+ },
+ "daycon.goi-y-de-thu-khong-phai": {
+  "t": "這些是可以嘗試的建議，不是指定。古籍談的是人的特質，並不知道您所在的地方開了哪些社團或課程。讓孩子試上一堂，再觀察真實的反應。",
+  "h": "5f3bcee3"
+ },
+ "daycon.hai-ben-voi-nhau": {
+  "t": "<span class=\"res-block-title\">雙方關係</span>",
+  "h": "12457260"
+ },
+ "daycon.hoat-dong-nen-cho-con-thu": {
+  "t": "<span class=\"res-block-title\">適合讓孩子嘗試的活動</span>",
+  "h": "f4d526be"
+ },
+ "daycon.hoc-hanh-sa-sut-ngoi-vao": {
+  "t": "成績下滑，坐不住、無法坐在書桌前",
+  "h": "fab00484"
+ },
+ "daycon.khong-co-gi-gap-chi-muon": {
+  "t": "沒有什麼急事，只是想更了解孩子",
+  "h": "cf2efa39"
+ },
+ "daycon.lam-gi-tu-toi-nay": {
+  "t": "<span class=\"res-block-title\">今晚起可以做的事</span>",
+  "h": "1f882975"
+ },
+ "daycon.moi-luot-luong": {
+  "t": "<span class=\"vnd\" data-tvp-price-vnd=\"day-con\"></span> 每次 <span class=\"cb-sub\">(<span data-tvp-price=\"day-con\">…</span> 兩)</span>",
+  "h": "10afd8c1"
+ },
+ "daycon.nam-truc-tinh-khi": {
+  "t": "<span class=\"res-block-title\">五條氣質軸</span>",
+  "h": "587fa869"
+ },
+ "daycon.nen": {
+  "t": "宜",
+  "h": "078cfc62"
+ },
+ "daycon.nen-lam-gi": {
+  "t": "<b>該怎麼做</b><i></i>",
+  "h": "021dc84d"
+ },
+ "daycon.neu-chi-nho-mot-cau": {
+  "t": "<span class=\"res-block-title\">只記住一句話</span>",
+  "h": "6e372478"
+ },
+ "daycon.ngay-sinh-cua-con": {
+  "t": "孩子的出生日期",
+  "h": "3837783b"
+ },
+ "daycon.nhap-la-so-cua-con-nhan": {
+  "t": "輸入孩子的命盤，即可知道孩子如何吸收、怎麼出作業孩子才肯做、哪種管教會適得其反，以及親子容易起衝突之處。",
+  "h": "244ebedb"
+ },
+ "daycon.phan-luan-chua-mo": {
+  "t": "<span class=\"res-block-title\">尚未開啟的解讀</span>",
+  "h": "68cac5d9"
+ },
+ "daycon.rut-re-ngai-dam-dong-it": {
+  "t": "害羞、怕人多、朋友少",
+  "h": "56c6a43d"
+ },
+ "daycon.sap-phai-chon-truong-chon-nganh": {
+  "t": "即將要選學校／選科系",
+  "h": "926ae29e"
+ },
+ "daycon.tam-chat-nang-khieu": {
+  "t": "<span class=\"res-block-title\">八種天賦特質</span>",
+  "h": "8ac0e142"
+ },
+ "daycon.them-la-so-cua-ban-cha": {
+  "t": "加入您自己的命盤——父親或母親（非必填）",
+  "h": "e158b2b1"
+ },
+ "daycon.thoi": {
+  "t": "忌",
+  "h": "aa7d2f5d"
+ },
+ "daycon.tra-loi-thay-o-khung-chat": {
+  "t": "請在聊天欄回覆老師，告訴老師您擔心的事與孩子的出生日期。",
+  "h": "4cf5eddf"
+ },
+ "daycon.vuot-vach-dut-la-chat-dang": {
+  "t": "超過虛線的特質是<b>值得嘗試</b>的方向，並非已證實的天賦。請對照在家中看到的跡象——若不吻合，就相信自己的眼睛。",
+  "h": "fbb5fd98"
+ },
+ "daycon.xem-be-khac": {
+  "t": "查看另一個孩子",
+  "h": "3ff33fa6"
+ },
+ "daycon.xem-cach-day-con-ton-luong": {
+  "t": "<span class=\"bg-label\"><span class=\"ic\" data-icon=\"baby\"></span><b>查看教養方式 →</b></span> <small>費用 <span class=\"vnd\" data-tvp-price-vnd=\"day-con\"></span> <span class=\"cb-sub\">(<span data-tvp-price=\"day-con\">…</span> 兩)</span></small>",
+  "h": "ccbaaea3"
+ },
  "disclaimer.1-tinh-chat-tham-khao": {
   "t": "1. 僅供參考",
   "h": "99856a52"
@@ -1118,6 +2178,554 @@
  "disclaimer.xem-them-dieu-khoan-day-du": {
   "t": "完整條款請見<a href=\"/dieu-khoan-dich-vu.html\">服務條款</a>（第 2 節——責任限制），服務說明請見<a href=\"/san-pham-dich-vu.html\">產品與服務</a>頁面。",
   "h": "dc202339"
+ },
+ "duyenno.2-thanh-toan": {
+  "t": "<span class=\"wss-n\">2</span><span class=\"wss-l\">付款</span>",
+  "h": "67c0b759"
+ },
+ "duyenno.3-nhan-ket-qua": {
+  "t": "<span class=\"wss-n\">3</span><span class=\"wss-l\">取得結果</span>",
+  "h": "5b1e84a0"
+ },
+ "duyenno.ban-luan-giai-mau-tai-pdf": {
+  "t": "<span class=\"sc-ic\" data-icon=\"file-text\"></span> <span class=\"sc-txt\"><b>範例解讀報告</b><span>下載範例命盤的「前世緣分」完整 PDF，先預覽真實內容。</span></span> <a class=\"sc-btn\" href=\"/tai-mau/mau-duyen-no-tien-kiep.pdf\" target=\"_blank\" rel=\"noopener\">下載 PDF →</a>",
+  "h": "c48f94d9"
+ },
+ "duyenno.buc-tranh-ve-ca-nhom": {
+  "t": "<span class=\"hp-ic\" data-icon=\"image\"></span><span>為全組人<br>繪製的畫作</span>",
+  "h": "43567703"
+ },
+ "duyenno.cau-chuyen-4-hoi": {
+  "t": "<span class=\"hp-ic\" data-icon=\"book-open\"></span><span>四回的<br>故事</span>",
+  "h": "824bdaa8"
+ },
+ "duyenno.co-nhung-moi-quan-he-vua": {
+  "t": "有些關係一見如故，有些相遇彷彿早已約定。把兩份命盤合在一起，找出這種感覺背後的緣分故事，並附上插畫。",
+  "h": "370ab59d"
+ },
+ "duyenno.co-so-trong-la-so": {
+  "t": "命盤中的依據",
+  "h": "43f95044"
+ },
+ "duyenno.dang-ve-buc-tranh-khoang-45": {
+  "t": "正在繪製畫作…<br>（約 45–60 秒）",
+  "h": "28b5d982"
+ },
+ "duyenno.duyen-no-tien-kiep": {
+  "t": "前世緣分",
+  "h": "c6b0ccb5"
+ },
+ "duyenno.duyen-no-tien-kiep-kiep-truoc": {
+  "t": "<b>前世緣分</b><span>前世這些人彼此是什麼關係</span>",
+  "h": "89867b1c"
+ },
+ "duyenno.duyen-no-tien-kiep-tu-vi": {
+  "t": "前世緣分——明寶紫微斗數",
+  "h": "f1c11bb4"
+ },
+ "duyenno.gui-ket-qua-nay-cho-ho": {
+  "t": "把這份結果傳給他們 →",
+  "h": "69958b00"
+ },
+ "duyenno.hai-den-nam-la-so-kiep": {
+  "t": "輸入二到五份命盤，解讀前世這些人彼此是什麼關係。緣分的類型依古法推得，並附上四回故事與一幅為全組人繪製的畫作。",
+  "h": "109c47c2"
+ },
+ "duyenno.lam-lai": {
+  "t": "重新來過",
+  "h": "d3a72f2a"
+ },
+ "duyenno.loai-duyen-no-theo-co-phap": {
+  "t": "<span class=\"hp-ic\" data-icon=\"scroll-text\"></span><span>依古法判定的<br>緣分類型</span>",
+  "h": "50fab9c4"
+ },
+ "duyenno.moi-duyen-4-hoi": {
+  "t": "<span class=\"res-block-title\">緣分故事——四回</span>",
+  "h": "d1b7220b"
+ },
+ "duyenno.moi-duyen-kiep-truoc": {
+  "t": "<span class=\"res-block-title\">前世的緣分</span>",
+  "h": "5c0af936"
+ },
+ "duyenno.moi-duyen-va-cau-chuyen-phia": {
+  "t": "<span class=\"ic\" data-icon=\"lightbulb\"></span> 上方的緣分與故事，依據紫微斗數各命盤之間的關係，並結合前人留下的研究經驗描繪而成，僅供參考與娛樂。",
+  "h": "e81a1fdc"
+ },
+ "duyenno.moi-luot-luong": {
+  "t": "<span class=\"vnd\" data-tvp-price-vnd=\"duyen-no-tien-kiep\"></span> 每次 <span class=\"cb-sub\">(<span data-tvp-price=\"duyen-no-tien-kiep\">…</span> 兩)</span>",
+  "h": "19bc9353"
+ },
+ "duyenno.nhap-ho-ten-gioi-tinh-va": {
+  "t": "輸入想查看的人（2–5 人）的姓名、性別與出生日期時辰，即可編寫附插畫的緣分故事。",
+  "h": "f61856b4"
+ },
+ "duyenno.nhap-ngay-sinh-duong-lich": {
+  "t": "輸入出生日期（國曆）",
+  "h": "6983427a"
+ },
+ "duyenno.tai-anh-dang-story": {
+  "t": "⬇ 下載限時動態用圖片",
+  "h": "2c46ee3c"
+ },
+ "duyenno.them-nguoi": {
+  "t": "+ 新增人物",
+  "h": "79cf4ccf"
+ },
+ "duyenno.tra-loi-thay-o-khung-chat": {
+  "t": "請在聊天欄回覆老師，逐一告知每個人的出生日期（2–5 人）。",
+  "h": "672120ed"
+ },
+ "duyenno.tranh-duyen-no-tien-kiep": {
+  "t": "前世緣分畫作",
+  "h": "95122c03"
+ },
+ "duyenno.xem-duyen-no-ton-luong": {
+  "t": "<span class=\"bg-label\"><span class=\"ic\" data-icon=\"sparkles\"></span><b id=\"btnGoLabel\">查看緣分 →</b></span> <small>費用 <span class=\"vnd\" data-tvp-price-vnd=\"duyen-no-tien-kiep\"></span> <span class=\"cb-sub\">(<span data-tvp-price=\"duyen-no-tien-kiep\">…</span> 兩)</span></small>",
+  "h": "990649b6"
+ },
+ "faqs.1-chuyen-khoan-ngan-hang-vnd": {
+  "t": "<strong>(1) 越南盾銀行轉帳</strong>（限越南境內）——透過 payOS，用越南銀行 App 掃描 QR 碼，兩會自動存入錢包。",
+  "h": "e24f0f9d"
+ },
+ "faqs.2-paypal-the-quoc-te-nhan": {
+  "t": "<strong>(2) PayPal／國際信用卡</strong>——接受 Visa、Mastercard、JCB；在 PayPal 視窗中可選「Pay with Debit or Credit Card」，不需 PayPal 帳號即可刷卡。",
+  "h": "1c2327ba"
+ },
+ "faqs.ai-dung-sau-he-thong-nay": {
+  "t": "這套系統背後是誰？ <span class=\"icon\">+</span>",
+  "h": "cbc0edbf"
+ },
+ "faqs.anh-huong-den-toan-bo-luan": {
+  "t": "影響整份解讀",
+  "h": "ec484c31"
+ },
+ "faqs.ban-co-the-gui-phan-hoi": {
+  "t": "您可以透過<a href=\"/contact.html\">聯絡我們頁面</a>送出回饋，協助系統改進。",
+  "h": "5c411910"
+ },
+ "faqs.ban-nen-xem-luan-giai-nhu": {
+  "t": "建議您把解讀看作：",
+  "h": "55e40baf"
+ },
+ "faqs.ban-than": {
+  "t": "自己",
+  "h": "b2d3973b"
+ },
+ "faqs.cac-cong-cu-phan-tich-van": {
+  "t": "依時間分析運勢的工具",
+  "h": "8bbb8706"
+ },
+ "faqs.cac-giai-doan-trong-cuoc-doi": {
+  "t": "人生的各個階段",
+  "h": "6c24f2a6"
+ },
+ "faqs.cac-nguyen-ly-co-hoc-duoc": {
+  "t": "古學原理經過資料驗證，而非只憑感覺臆斷。因此結果更有根據，但仍應視為有價值的參考。比對流程的詳細說明請見<a href=\"/phuong-phap\">系統如何運作</a>，其他關於可信度的問題請見<a href=\"/van-dap/do-tin-cay\">問答——可信度</a>。",
+  "h": "78384f09"
+ },
+ "faqs.cac-noi-dung-nghien-cuu-va": {
+  "t": "研究內容與應用指南",
+  "h": "b8acb1ad"
+ },
+ "faqs.cau-hoi-thuong-gap-q-a": {
+  "t": "常見問題（Q&amp;A）— 明寶紫微斗數",
+  "h": "c5f5cedb"
+ },
+ "faqs.cau-hoi-thuong-gap-q-a-q5rv": {
+  "t": "常見問題（Q&A）— 明寶紫微斗數",
+  "h": "6090dd15"
+ },
+ "faqs.cau-truc-la-so-co-tinh": {
+  "t": "命盤結構具有系統性",
+  "h": "657db941"
+ },
+ "faqs.chi-phi-bao-gom": {
+  "t": "費用涵蓋：",
+  "h": "b91ae52a"
+ },
+ "faqs.co-he-thong-duoc-cai-thien": {
+  "t": "會。系統依據以下各項持續改進：",
+  "h": "1e990dc4"
+ },
+ "faqs.co-hoan-tien-khong": {
+  "t": "可以退款嗎？ <span class=\"icon\">+</span>",
+  "h": "b6d3b591"
+ },
+ "faqs.co-nhung-cach-thanh-toan-nao": {
+  "t": "有哪些付款方式？ <span class=\"icon\">+</span>",
+  "h": "ed0165ac"
+ },
+ "faqs.co-phap": {
+  "t": "古法",
+  "h": "2f658ba5"
+ },
+ "faqs.cong-cu-tra-cuu-doi-chieu": {
+  "t": "查詢與比對命理的工具",
+  "h": "0a4b7d02"
+ },
+ "faqs.day-co-phai-chi-la-website": {
+  "t": "這只是一個算紫微的網站嗎？ <span class=\"icon\">+</span>",
+  "h": "9af05020"
+ },
+ "faqs.day-la-cau-hoi-ve-he": {
+  "t": "這裡是關於系統與交易的問題。若您想問的是自己的命盤——婚姻、財運、事業、運勢——請見<a href=\"/van-dap\">紫微問答</a>。",
+  "h": "79a010b3"
+ },
+ "faqs.dien-giai-noi-dung": {
+  "t": "解說內容",
+  "h": "324af67f"
+ },
+ "faqs.dieu-nay-co-the-do": {
+  "t": "可能的原因：",
+  "h": "90c41523"
+ },
+ "faqs.dieu-nay-den-tu": {
+  "t": "這來自於：",
+  "h": "8448adbc"
+ },
+ "faqs.do-tinh-chat-la-ket-qua": {
+  "t": "由於屬數位化結果，結果顯示後系統<a href=\"/dieu-khoan-dich-vu.html#thanh-toan-va-hoan-tien\">不予退款</a>。若遇交易錯誤——已扣款卻未收到結果——請立即<a href=\"/contact.html\">聯絡我們</a>，以便查核處理。",
+  "h": "2a30361f"
+ },
+ "faqs.doi-chieu-voi-cac-dien-bien": {
+  "t": "與人生中實際發生的事件比對",
+  "h": "6a063fc7"
+ },
+ "faqs.doi-chieu-voi-du-lieu-thuc": {
+  "t": "與實際資料比對",
+  "h": "94bad6e5"
+ },
+ "faqs.du-lieu-moi": {
+  "t": "新資料",
+  "h": "d2983792"
+ },
+ "faqs.du-lieu-ngay-gio-sinh-cua": {
+  "t": "超過 270,000 位真人的出生年月日時資料",
+  "h": "234d93e8"
+ },
+ "faqs.du-lieu-thuc-te-giup-xac": {
+  "t": "以實際資料找出規律",
+  "h": "9f6ebf01"
+ },
+ "faqs.duy-tri-ha-tang-cong-nghe": {
+  "t": "維護技術基礎設施",
+  "h": "7d34730c"
+ },
+ "faqs.giai-dap-ve-he-thong-luan": {
+  "t": "解答關於解讀系統、準確度，以及兩與付款的問題。",
+  "h": "b23b0625"
+ },
+ "faqs.giai-dap-ve-he-thong-luan-4j0m": {
+  "t": "解答關於明寶紫微斗數解讀系統的問題——運作方式、準確度，以及兩、付款、退款等問題。",
+  "h": "c5884acb"
+ },
+ "faqs.giai-dap-ve-he-thong-luan-cptq": {
+  "t": "解答關於明寶紫微斗數解讀系統的問題——運作方式、準確度、背後的研究團隊，以及兩、付款、退款等問題。",
+  "h": "29c93c9e"
+ },
+ "faqs.giao-dich-luong-thanh-toan": {
+  "t": "交易、兩與付款",
+  "h": "6de5f2ee"
+ },
+ "faqs.gio-sinh-la-yeu-to-quan": {
+  "t": "出生時辰是紫微斗數的重要因素。微小的偏差可能：",
+  "h": "638bef44"
+ },
+ "faqs.he-thong-chi-dung-de": {
+  "t": "系統只用來：",
+  "h": "9b5aa25a"
+ },
+ "faqs.he-thong-co-duoc-cap-nhat": {
+  "t": "系統會更新嗎？ <span class=\"icon\">+</span>",
+  "h": "d573dfc9"
+ },
+ "faqs.he-thong-co-tu-bia-noi": {
+  "t": "系統會自己「編造」內容嗎？ <span class=\"icon\">+</span>",
+  "h": "9163335f"
+ },
+ "faqs.he-thong-dien-giai-noi-dung": {
+  "t": "系統解說內容",
+  "h": "45f13e71"
+ },
+ "faqs.he-thong-dien-giai-theo-dung": {
+  "t": "系統依個人情境解說",
+  "h": "f598cd0b"
+ },
+ "faqs.he-thong-giup-ban-hieu-ro": {
+  "t": "系統幫助您更了解：",
+  "h": "e0d167f6"
+ },
+ "faqs.he-thong-hoat-dong-nhu-the": {
+  "t": "系統如何運作？ <span class=\"icon\">+</span>",
+  "h": "879a3e4e"
+ },
+ "faqs.he-thong-khong-tu-doan-ma": {
+  "t": "系統不會自行「猜測」，只會重新解說已確定的結論。完整的 5 步驟流程請見<a href=\"/phuong-phap\">紫微驗證</a>。",
+  "h": "4480c36f"
+ },
+ "faqs.hieu-chinh-boi-chuyen-gia": {
+  "t": "專家校正",
+  "h": "10b36d86"
+ },
+ "faqs.hieu-chinh-noi-dung-lien-tuc": {
+  "t": "持續校正內容",
+  "h": "69973443"
+ },
+ "faqs.ket-hop-voi-phuong-phap-va": {
+  "t": "結合現代方法與技術",
+  "h": "9ecf21e0"
+ },
+ "faqs.kha-nang": {
+  "t": "可能性",
+  "h": "550f7b6b"
+ },
+ "faqs.khac-biet-trong-truong-phai": {
+  "t": "流派差異",
+  "h": "28a67aec"
+ },
+ "faqs.khong": {
+  "t": "不會。",
+  "h": "f102a5bb"
+ },
+ "faqs.khong-co-he-thong-nao-co": {
+  "t": "沒有任何系統能給出絕對的結論。",
+  "h": "bb36c938"
+ },
+ "faqs.khong-luong-duoc-luu-vinh-vien": {
+  "t": "不會。兩永久保存在帳號中，隨時可用。",
+  "h": "ed0f9e73"
+ },
+ "faqs.khong-moi-la-so-hay-ket": {
+  "t": "不會。每份命盤或結果只在首次解讀時扣一次兩。之後無論再看多少次都免費。",
+  "h": "75165ddc"
+ },
+ "faqs.khong-nen-phu-thuoc-hoan-toan": {
+  "t": "不應完全依賴結果。",
+  "h": "cb04372e"
+ },
+ "faqs.khong-tu-vi-minh-bao-la": {
+  "t": "不是。明寶紫微斗數是由多種研究與解讀工具組成的系統，紫微斗數是其中的核心部分。",
+  "h": "6d75d055"
+ },
+ "faqs.la-so-phan-anh": {
+  "t": "命盤反映的是：",
+  "h": "784be23d"
+ },
+ "faqs.lam-ro-luan-diem": {
+  "t": "釐清論點",
+  "h": "6e34e839"
+ },
+ "faqs.lam-sao-de-nap-luong": {
+  "t": "如何儲值兩？ <span class=\"icon\">+</span>",
+  "h": "73577e49"
+ },
+ "faqs.lam-thay-doi-vi-tri-sao": {
+  "t": "改變星曜位置",
+  "h": "9ecafe04"
+ },
+ "faqs.lay-kinh-dien-lam-nen-tang": {
+  "t": "以經典為基礎",
+  "h": "a47b04f6"
+ },
+ "faqs.lay-thuc-chung-lam-tieu-chuan": {
+  "t": "以實證為標準",
+  "h": "d1df793c"
+ },
+ "faqs.logic-luan-giai-da-duoc-xay": {
+  "t": "解讀邏輯已事先依據以下建立：",
+  "h": "6084cf0a"
+ },
+ "faqs.luong-co-het-han-khong": {
+  "t": "兩會過期嗎？ <span class=\"icon\">+</span>",
+  "h": "05ce0b06"
+ },
+ "faqs.luong-la-don-vi-dung-de": {
+  "t": "兩是在明寶紫微斗數上解鎖深度解讀工具的單位。儲值一次即可用於所有工具——不必按功能分別購買。",
+  "h": "fe222fa9"
+ },
+ "faqs.luong-la-gi": {
+  "t": "兩是什麼？ <span class=\"icon\">+</span>",
+  "h": "af09a5b2"
+ },
+ "faqs.moi-lan-mo-lai-ket-qua": {
+  "t": "每次重新打開舊結果都會再扣兩嗎？ <span class=\"icon\">+</span>",
+  "h": "8d7c06a5"
+ },
+ "faqs.mot-cong-cu-ho-tro-quyet": {
+  "t": "輔助決策的工具",
+  "h": "b3fa5457"
+ },
+ "faqs.mot-goc-nhin-co-he-thong": {
+  "t": "有系統的觀點",
+  "h": "b79d8456"
+ },
+ "faqs.mot-nguon-tham-khao-co-co": {
+  "t": "有根據的參考",
+  "h": "5a51df4e"
+ },
+ "faqs.muc-tieu-khong-chi-la-xem": {
+  "t": "目標不只是「算命」，而是建立一個工具生態系，幫助人理解並在生活中應用命理。",
+  "h": "90ed16bd"
+ },
+ "faqs.neu-khong-chac-chan-ban-nen": {
+  "t": "若不確定，建議以更偏參考的程度使用結果。",
+  "h": "e402d31b"
+ },
+ "faqs.neu-toi-thay-noi-dung-chua": {
+  "t": "如果我覺得內容不對怎麼辦？ <span class=\"icon\">+</span>",
+  "h": "8818d326"
+ },
+ "faqs.ngoai-ra-nen-tang-con-bao": {
+  "t": "此外，平台還包括：",
+  "h": "c98ec9b0"
+ },
+ "faqs.nhom-bao-gom-cac-hoc-gia": {
+  "t": "團隊成員包括紫微斗數的學者與研究者，以及實際解讀過大量命盤的實務者。每個人從學術到實務各有視角，但共同目標是認真地理解並系統化命理。更多請見<a href=\"/about.html\">關於我們</a>頁面。",
+  "h": "fd39d8c1"
+ },
+ "faqs.nhung-ket-qua-cuoi-cung-van": {
+  "t": "但最終結果仍取決於每個人的行動與選擇。",
+  "h": "8d1d8452"
+ },
+ "faqs.nhung-xu-huong-co-the-xay": {
+  "t": "可能發生的傾向",
+  "h": "e3dbdcb7"
+ },
+ "faqs.noi-dung-luan-giai-co-thuc": {
+  "t": "解讀內容真的準確嗎？ <span class=\"icon\">+</span>",
+  "h": "08936df9"
+ },
+ "faqs.phan-hoi-nguoi-dung": {
+  "t": "使用者回饋",
+  "h": "fe75cdef"
+ },
+ "faqs.phan-tich-cau-truc-theo-nguyen": {
+  "t": "依紫微原理分析結構",
+  "h": "3b937e5e"
+ },
+ "faqs.phat-trien-he-thong-luan-giai": {
+  "t": "發展解讀系統",
+  "h": "cb9ef15b"
+ },
+ "faqs.phi-dich-vu-giup-dam-bao": {
+  "t": "服務費用確保系統的品質與認真投入。",
+  "h": "19322883"
+ },
+ "faqs.qua-trinh-kiem-nghiem-thuc-te": {
+  "t": "實際驗證的過程",
+  "h": "de20f584"
+ },
+ "faqs.quy-tac-da-kiem-nghiem": {
+  "t": "經驗證的規則",
+  "h": "bfadc1f0"
+ },
+ "faqs.quy-trinh-luan-giai-gom-nhieu": {
+  "t": "解讀流程包含多個步驟：",
+  "h": "dc04d724"
+ },
+ "faqs.sai-gio-sinh": {
+  "t": "出生時辰錯誤",
+  "h": "740a22eb"
+ },
+ "faqs.su-dung-la-ket-qua-cua": {
+  "t": "「準」是方法的結果，不是隨機猜中。",
+  "h": "517839bc"
+ },
+ "faqs.tai-sao-noi-dung-doc-giong": {
+  "t": "為什麼內容讀起來「很像我」？ <span class=\"icon\">+</span>",
+  "h": "f5983ec4"
+ },
+ "faqs.thanh-toan-xong-ma-chua-thay": {
+  "t": "付款完成卻沒看到兩入錢包？ <span class=\"icon\">+</span>",
+  "h": "eab1cb35"
+ },
+ "faqs.thoi-diem": {
+  "t": "時機",
+  "h": "020b0562"
+ },
+ "faqs.thu-lam-moi-trang-f5-hoac": {
+  "t": "請重新整理頁面（F5），或前往<a href=\"/app/ho-so\">個人檔案</a> →「兩錢包」分頁再次確認餘額。若 1–2 分鐘後仍未看到，請附上交易編號（PayPal 或 payOS），透過<a href=\"/contact.html\">聯絡我們頁面</a>與我們聯繫處理。",
+  "h": "226c73c9"
+ },
+ "faqs.toan-bo-noi-dung-luan-giai": {
+  "t": "該工具的完整深度解讀內容——依您的命盤與個人情境撰寫——以及無限次重看，工具支援時也可下載。",
+  "h": "f4f821fa"
+ },
+ "faqs.toi-co-the-thay-doi-van": {
+  "t": "我能改變命運嗎？ <span class=\"icon\">+</span>",
+  "h": "5dfa0b85"
+ },
+ "faqs.toi-nen-su-dung-ket-qua": {
+  "t": "我該如何運用結果？ <span class=\"icon\">+</span>",
+  "h": "01d8b923"
+ },
+ "faqs.tra-phi-xong-toi-nhan-duoc": {
+  "t": "付費後我會得到什麼？ <span class=\"icon\">+</span>",
+  "h": "7bfad677"
+ },
+ "faqs.tu-vi-khong-phai-la-su": {
+  "t": "紫微不是絕對的定數。",
+  "h": "cbd47d29"
+ },
+ "faqs.tu-vi-minh-bao-duoc-xay": {
+  "t": "明寶紫微斗數由一個命理研究團隊依以下方向建立：",
+  "h": "6fb267dd"
+ },
+ "faqs.tu-vi-minh-bao-la-gi": {
+  "t": "明寶紫微斗數是什麼？ <span class=\"icon\">+</span>",
+  "h": "7085b3b2"
+ },
+ "faqs.tu-vi-minh-bao-la-he": {
+  "t": "明寶紫微斗數是個人化的解讀系統，結合東方古學、實際資料與現代技術。",
+  "h": "253a2e07"
+ },
+ "faqs.tuy-nhien-tu-vi-minh-bao": {
+  "t": "不過，明寶紫微斗數建立在：",
+  "h": "3adb9017"
+ },
+ "faqs.vao-ho-so-tab-vi-luong": {
+  "t": "前往<a href=\"/app/ho-so\">個人檔案</a> →「兩錢包」分頁，可查看目前餘額與所有儲值、扣除兩的紀錄。",
+  "h": "1b550c61"
+ },
+ "faqs.vao-trang-nap-luong-chon-mot": {
+  "t": "前往<a href=\"/topup.html\">儲值兩</a>頁面，選擇合適的方案並付款。交易成功後兩會立即加入錢包。",
+  "h": "a8423928"
+ },
+ "faqs.ve-he-thong": {
+  "t": "關於系統",
+  "h": "f81106ca"
+ },
+ "faqs.vi-sao-phai-nhap-chinh-xac": {
+  "t": "為什麼要準確輸入出生時辰？ <span class=\"icon\">+</span>",
+  "h": "28f58ae2"
+ },
+ "faqs.vi-sao-phai-tra-phi-de": {
+  "t": "為什麼看完整內容要付費？ <span class=\"icon\">+</span>",
+  "h": "9fa7926b"
+ },
+ "faqs.xay-dung-la-so-tu-ngay": {
+  "t": "依出生年月日時排出命盤",
+  "h": "82018c4e"
+ },
+ "faqs.xay-dung-va-xu-ly-du": {
+  "t": "建立並處理大規模資料",
+  "h": "5b3550e6"
+ },
+ "faqs.xem-lai-lich-su-giao-dich": {
+  "t": "在哪裡查看交易紀錄？ <span class=\"icon\">+</span>",
+  "h": "c1de6029"
+ },
+ "faqs.xem-them": {
+  "t": "延伸閱讀",
+  "h": "55d48a8e"
+ },
+ "faqs.xu-huong": {
+  "t": "傾向",
+  "h": "7964ab99"
+ },
+ "faqs.yeu-to-ca-nhan-chua-duoc": {
+  "t": "個人因素未被充分反映",
+  "h": "4fbc118f"
  },
  "giosinh.12-la-so-kha-nghi": {
   "t": "12張候選<br>命盤",
@@ -1274,6 +2882,226 @@
  "giosinh.xep-hang-do-khop": {
   "t": "依吻合度<br>排名",
   "h": "a6655e79"
+ },
+ "hdtt.cach-hoat-dong": {
+  "t": "使用流程",
+  "h": "8ad7f762"
+ },
+ "hdtt.cau-hoi-thuong-gap": {
+  "t": "常見問題",
+  "h": "ef0eb919"
+ },
+ "hdtt.chi-phi": {
+  "t": "費用",
+  "h": "3c453110"
+ },
+ "hdtt.chon-goi-nap-luong": {
+  "t": "選擇兩的儲值方案",
+  "h": "a8809b21"
+ },
+ "hdtt.cong-cu": {
+  "t": "工具",
+  "h": "6029ffef"
+ },
+ "hdtt.dang-ky-tai-khoan-mien-phi": {
+  "t": "免費註冊帳號",
+  "h": "dc9cfb39"
+ },
+ "hdtt.gia-doc-truc-tiep-tu-he": {
+  "t": "價格直接讀取自系統，可能會調整。完整方案請見<a href=\"/topup.html\">儲值兩</a>頁面。",
+  "h": "40462886"
+ },
+ "hdtt.he-thong-luong-nap-1-lan": {
+  "t": "兩（點數）· 儲值一次，所有工具通用 · 永不過期 · 最後更新：2026 年 9 月",
+  "h": "393b8272"
+ },
+ "hdtt.ho-tro": {
+  "t": "支援",
+  "h": "01dbe5e4"
+ },
+ "hdtt.huong-dan-nap-luong-va-su": {
+  "t": "儲值兩與使用明寶紫微斗數的說明——儲值一次，所有工具通用，永不過期。",
+  "h": "24909177"
+ },
+ "hdtt.huong-dan-thanh-toan": {
+  "t": "付款指南",
+  "h": "52fb0da5"
+ },
+ "hdtt.huong-dan-thanh-toan-tu-vi": {
+  "t": "付款指南 — 明寶紫微斗數",
+  "h": "68863047"
+ },
+ "hdtt.luan-giai-la-so-24-phan": {
+  "t": "<span class=\"ic\" data-icon=\"sparkles\"></span> 命盤解讀（24 部分）",
+  "h": "5f257ac9"
+ },
+ "hdtt.luong-co-het-han-khong-khong": {
+  "t": "<strong>兩會過期嗎？</strong><br> 不會。兩永遠不會過期。",
+  "h": "fa64598b"
+ },
+ "hdtt.moi-ket-qua-chi-tru-luong": {
+  "t": "✓ 每個結果只扣<strong>一次</strong>兩。您隨時可以從個人檔案頁免費再次查看。",
+  "h": "70edf1aa"
+ },
+ "hdtt.nap-xong-luong-nhung-chua-thay": {
+  "t": "<strong>儲值完成卻在帳號中看不到兩？</strong><br> 請重新整理頁面（F5），或前往<a href=\"/app/ho-so\">個人檔案</a> → <strong>兩錢包</strong>分頁查看。若仍看不到，請附上交易編號，透過<a href=\"/contact.html\">聯絡我們頁面</a>與我們聯繫。",
+  "h": "2751c285"
+ },
+ "hdtt.neu-gap-bat-ky-van-de": {
+  "t": "付款若遇到任何問題，請先聯絡我們再重新交易，以免被重複扣款。",
+  "h": "be148f9d"
+ },
+ "hdtt.nhan-dang-nhap-o-goc-tren": {
+  "t": "點右上角的<strong>登入</strong>。可使用 Google、Facebook，或電子郵件／密碼。帳號會保存您的餘額與使用紀錄。",
+  "h": "74382ed3"
+ },
+ "hdtt.quy-doi": {
+  "t": "換算",
+  "h": "7fedefea"
+ },
+ "hdtt.sau-khi-nap-xong-quay-lai": {
+  "t": "儲值完成後，回到任一工具並點<strong>解鎖</strong>。兩會立即自動扣除——不需跳轉，也不必等待確認。",
+  "h": "68a4a3c2"
+ },
+ "hdtt.su-dung-cong-cu": {
+  "t": "使用工具",
+  "h": "db5111aa"
+ },
+ "hdtt.toi-co-the-chuyen-luong-cho": {
+  "t": "<strong>可以把兩轉給別人嗎？</strong><br> 不行。兩綁定個人帳號，無法轉讓。",
+  "h": "8fa6a001"
+ },
+ "hdtt.toi-co-the-dung-luong-cho": {
+  "t": "<strong>兩可以用在多個工具上嗎？</strong><br> 可以。儲值一次即可用於所有工具：命盤、夫妻合婚、合夥合盤，以及日後推出的所有工具。",
+  "h": "efdd8796"
+ },
+ "hdtt.toi-co-the-thanh-toan-bang": {
+  "t": "<strong>沒有 PayPal 帳號可以刷卡嗎？</strong><br> 可以。在儲值兩頁面選擇<strong>Visa / Mastercard 信用卡</strong>——PayPal 會直接開啟刷卡表單，不需登入 PayPal。",
+  "h": "07387ee6"
+ },
+ "hdtt.vao-trang-nap-luong-va-chon": {
+  "t": "前往<a href=\"/topup.html\"><strong>儲值兩</strong></a>頁面，選擇下方任一方案。以<strong>美元</strong>透過<strong>PayPal</strong>或<strong>Visa / Mastercard 信用卡</strong>（不需 PayPal 帳號）付款，兩會自動存入帳號。",
+  "h": "0cf8596a"
+ },
+ "hdtt.xem-tuoi-lam-an": {
+  "t": "<span class=\"ic\" data-icon=\"briefcase\"></span> 合夥合盤",
+  "h": "d5dec0bd"
+ },
+ "hdtt.xem-tuoi-vo-chong": {
+  "t": "<span class=\"ic\" data-icon=\"heart-handshake\"></span> 夫妻合婚",
+  "h": "177d20f4"
+ },
+ "hnt.2-xem-truoc": {
+  "t": "<span class=\"wss-n\">2</span><span class=\"wss-l\">預覽</span>",
+  "h": "93d60bc7"
+ },
+ "hnt.3-huong-dang-thu": {
+  "t": "<span class=\"hp-ic\" data-icon=\"star\"></span><span>3 個<br>值得嘗試的方向</span>",
+  "h": "cf93e32b"
+ },
+ "hnt.ba-huong-dang-cho-con-thu": {
+  "t": "<span class=\"res-block-title\">值得讓孩子嘗試的三個方向</span>",
+  "h": "116b88f2"
+ },
+ "hnt.ban-luan-giai-mau-tai-pdf": {
+  "t": "<span class=\"sc-ic\" data-icon=\"file-text\"></span> <span class=\"sc-txt\"><b>範例解讀報告</b><span>下載範例命盤的「孩子的早期職涯方向」完整 PDF，先預覽真實內容。</span></span> <a class=\"sc-btn\" href=\"/tai-mau/mau-huong-nghiep-tre.pdf\" target=\"_blank\" rel=\"noopener\">下載 PDF →</a>",
+  "h": "13902c17"
+ },
+ "hnt.ban-nay-phac-hoa-tu-cac": {
+  "t": "<span class=\"ic\" data-icon=\"lightbulb\"></span> 本解讀依據紫微斗數命盤中的資料，依<i>《紫微斗數新編》</i>（Vân Đằng Thái Thứ Lang）排定，並結合前人留下的研究經驗描繪而成。<b>傾向與活動</b>的部分是<b>明寶紫微斗數專家團隊</b>自行建立的方法，並非古籍原文。請參閱<a href=\"/nguon-du-lieu.html\">資料出處</a>。<br><br> <span class=\"ic\" data-icon=\"scale\"></span> 這是<b>供參考的方向建議</b>，並不是替孩子決定人生道路。孩子尚未成年，也不在這裡，因此本解讀刻意<b>不預測考試成敗、不保證成功、不談健康或感情</b>。傾向所說的是孩子<i>適合嘗試什麼</i>，而不是孩子<i>必須從事什麼職業</i>。",
+  "h": "6a1cfd57"
+ },
+ "hnt.bat-dau-tu-dau": {
+  "t": "<span class=\"res-block-title\" id=\"doTitle\">從哪裡開始</span>",
+  "h": "2bb617bb"
+ },
+ "hnt.chat-nguoi-doc-ra-tu-la": {
+  "t": "<span class=\"res-block-title\">從命盤讀出的特質</span>",
+  "h": "d983261f"
+ },
+ "hnt.ep-con-hoc-dieu-con-khong": {
+  "t": "硬逼孩子學他沒有緣分的事，只會讓雙方更疲累。從孩子的命盤，看出每個年齡階段適合讓孩子接觸哪些活動。",
+  "h": "aa788dd7"
+ },
+ "hnt.huong-nghiep-som-cho-con": {
+  "t": "孩子的早期職涯方向",
+  "h": "2735212c"
+ },
+ "hnt.huong-nghiep-som-cho-con-nen": {
+  "t": "<b>孩子的早期職涯方向</b><span>從現在起該讓孩子接觸什麼</span>",
+  "h": "14295eac"
+ },
+ "hnt.huong-nghiep-som-cho-con-tu": {
+  "t": "孩子的早期職涯方向——明寶紫微斗數",
+  "h": "9c8cd322"
+ },
+ "hnt.lam-trong-thang-nay": {
+  "t": "這個月該做",
+  "h": "a8ab8a7b"
+ },
+ "hnt.may-mat-nay-khong-phai-cho": {
+  "t": "<span class=\"ic\" data-icon=\"alert-triangle\"></span> 這幾個面向<b>並不是孩子欠缺的地方</b>，只是代表適合孩子的事不以這些面向來評分。",
+  "h": "c58a74dd"
+ },
+ "hnt.mo-loi-voi-con-the-nao": {
+  "t": "<span class=\"res-block-title\">怎麼對孩子開口</span>",
+  "h": "b216c079"
+ },
+ "hnt.moi-luot-luong": {
+  "t": "<span class=\"vnd\" data-tvp-price-vnd=\"huong-nghiep-tre\"></span> 每次 <span class=\"cb-sub\">(<span data-tvp-price=\"huong-nghiep-tre\">…</span> 兩)</span>",
+  "h": "bdeef95d"
+ },
+ "hnt.nhap-la-so-cua-con-nhan": {
+  "t": "輸入孩子的命盤，即可得到從命盤讀出的傾向、適合孩子年齡的接觸活動，以及大人該做與該停止的事。",
+  "h": "d1c6abd2"
+ },
+ "hnt.nhap-ngay-gio-sinh-cua-con": {
+  "t": "輸入孩子的出生日期與時辰，以及您擔心的事，即可得到最突出的傾向、值得嘗試的活動，以及從哪裡開始。",
+  "h": "3d914a45"
+ },
+ "hnt.nhin-ra-con": {
+  "t": "<span class=\"res-block-title\">看見孩子</span>",
+  "h": "a6d52b8a"
+ },
+ "hnt.noi-nhat": {
+  "t": "最突出",
+  "h": "b4fa86fd"
+ },
+ "hnt.phan-dinh-huong-chua-mo": {
+  "t": "<span class=\"res-block-title\">尚未開啟的方向建議</span>",
+  "h": "a76cca13"
+ },
+ "hnt.sang-lua-sau-thi-doi-gi": {
+  "t": "<span class=\"res-block-title\">下一個年齡層會有什麼不同</span>",
+  "h": "b5257805"
+ },
+ "hnt.thien-huong-la-xu-huong-de": {
+  "t": "傾向是<b>讓孩子嘗試接觸的方向</b>，並不是已定下的職業。這張表是本頁自行的對應與詮釋，並非古籍原文。<br> 這個工具以與<a href=\"/app/day-con\">依命盤教養孩子</a>相<b>同的尺度</b>（同樣的 5 條氣質軸與 8 種天賦特質）來看孩子，但回答的是不同的問題：那邊問的是<i>孩子擅長什麼科目</i>，這裡問的是<i>孩子適合哪種做事方式</i>。因為尺度相同，兩邊不會說出相反的話；因為問題不同，排序可能不會完全一致。",
+  "h": "fc1b1e95"
+ },
+ "hnt.thien-huong-noi-nhat": {
+  "t": "<span class=\"hp-ic\" data-icon=\"compass\"></span><span>最突出的<br>傾向</span>",
+  "h": "b3d9e48c"
+ },
+ "hnt.thien-huong-noi-nhat-91zz": {
+  "t": "<span class=\"res-block-title\">最突出的傾向</span>",
+  "h": "2954ceff"
+ },
+ "hnt.thoi-lam": {
+  "t": "該停止",
+  "h": "ef8d27c0"
+ },
+ "hnt.viec-hop-voi-con-thuong-khong": {
+  "t": "適合孩子的事通常不要求的",
+  "h": "513e2289"
+ },
+ "hnt.viec-lam-theo-lua-tuoi": {
+  "t": "<span class=\"hp-ic\" data-icon=\"hourglass\"></span><span>依年齡層<br>安排的事</span>",
+  "h": "56da2915"
+ },
+ "hnt.xem-thien-huong-cua-con-ton": {
+  "t": "<span class=\"bg-label\"><span class=\"ic\" data-icon=\"compass\"></span><b>查看孩子的傾向 →</b></span> <small>費用 <span class=\"vnd\" data-tvp-price-vnd=\"huong-nghiep-tre\"></span> <span class=\"cb-sub\">(<span data-tvp-price=\"huong-nghiep-tre\">…</span> 兩)</span></small>",
+  "h": "ebca1bd6"
  },
  "hoangdao.1-nhap-ngay": {
   "t": "<span class=\"wss-n\">1</span><span class=\"wss-l\">輸入日期</span>",
@@ -2055,6 +3883,82 @@
   "t": "請填寫電子郵件與密碼。",
   "h": "d84b9abd"
  },
+ "js.baocao.bao-cao": {
+  "t": "報告",
+  "h": "7013ca8b"
+ },
+ "js.baocao.bao-cao-nay-trong": {
+  "t": "這份報告是空的。",
+  "h": "173edc16"
+ },
+ "js.baocao.chua-gui-duoc-thu-lai-sau": {
+  "t": "尚未送出，請稍後再試。",
+  "h": "22c4f6e1"
+ },
+ "js.baocao.chua-mo-duoc-bao-cao-thu": {
+  "t": "無法打開報告，請稍後再試。",
+  "h": "881dfbd0"
+ },
+ "js.baocao.chua-tai-duoc-danh-sach-bao": {
+  "t": "無法載入報告列表，請重新整理頁面。",
+  "h": "ebdf3123"
+ },
+ "js.baocao.da-gui-vao-email": {
+  "t": "✓ 已寄到電子郵件",
+  "h": "9a79e18c"
+ },
+ "js.baocao.da-gui-vao-zalo": {
+  "t": "✓ 已傳到 Zalo",
+  "h": "8b84b9e9"
+ },
+ "js.baocao.dang-gui": {
+  "t": "傳送中…",
+  "h": "f04c8be3"
+ },
+ "js.baocao.dang-mo-bao-cao": {
+  "t": "正在打開報告…",
+  "h": "401bc684"
+ },
+ "js.baocao.gio-truoc": {
+  "t": " 小時前",
+  "h": "ce828227"
+ },
+ "js.baocao.gui-lai-chua-thanh-cong": {
+  "t": "重新傳送未成功：",
+  "h": "b6ab8dbd"
+ },
+ "js.baocao.gui-lai-loi": {
+  "t": "重新傳送錯誤：",
+  "h": "1364cea5"
+ },
+ "js.baocao.gui-loi": {
+  "t": "傳送錯誤：",
+  "h": "485901a2"
+ },
+ "js.baocao.gui-pdf": {
+  "t": "寄送 PDF",
+  "h": "c2a33934"
+ },
+ "js.baocao.gui-ve-zalo": {
+  "t": "傳到 Zalo",
+  "h": "3ae6f411"
+ },
+ "js.baocao.loi-khong-ro": {
+  "t": "未知錯誤",
+  "h": "33ea1001"
+ },
+ "js.baocao.ngay-truoc": {
+  "t": " 天前",
+  "h": "92423d27"
+ },
+ "js.baocao.phut-truoc": {
+  "t": " 分鐘前",
+  "h": "b1017a2c"
+ },
+ "js.baocao.thu-lai-sau-it-phut": {
+  "t": "。請稍後再試。",
+  "h": "0795401e"
+ },
  "js.battrach.chip1": {
   "t": "房屋哪個方位最適合我？",
   "h": "cc262fd1"
@@ -2671,6 +4575,202 @@
   "t": "即將發生的趨勢",
   "h": "6e5a1980"
  },
+ "js.cdvc.anh-dang-tai-co-the-hoi": {
+  "t": "圖片載入中，可能稍慢——請稍候，或",
+  "h": "c4e9709b"
+ },
+ "js.cdvc.anh-minh-hoa-chua-mo": {
+  "t": "示意圖——尚未開啟",
+  "h": "bef5f6d7"
+ },
+ "js.cdvc.anh-minh-hoa-mo-mo-khoa": {
+  "t": "示意圖（模糊）——解鎖後即可看到真正的肖像",
+  "h": "9e03ce37"
+ },
+ "js.cdvc.ban-da-tao-ket-qua-cho": {
+  "t": "✓ 您已為這張命盤產生過結果——重新開啟，不會扣兩",
+  "h": "d59efda4"
+ },
+ "js.cdvc.bao-gio-toi-lap-gia-dinh": {
+  "t": "我什麼時候會成家？",
+  "h": "359ca64d"
+ },
+ "js.cdvc.cach-cuc-dac-biet": {
+  "t": "特殊格局：",
+  "h": "f4dcacee"
+ },
+ "js.cdvc.chan-dung-nguoi-chong-cua-toi": {
+  "t": "我的丈夫肖像",
+  "h": "8037fff1"
+ },
+ "js.cdvc.chan-dung-nguoi-phoi-ngau": {
+  "t": "配偶肖像",
+  "h": "78b47413"
+ },
+ "js.cdvc.chan-dung-nguoi-phoi-ngau-chua": {
+  "t": "⊙ 配偶肖像尚未開啟",
+  "h": "c91a9a69"
+ },
+ "js.cdvc.chan-dung-nguoi-vo-cua-toi": {
+  "t": "我的妻子肖像",
+  "h": "54b4f3b2"
+ },
+ "js.cdvc.chinh-tinh-chu": {
+  "t": "<b>核心主星：</b> ",
+  "h": "a189d8a3"
+ },
+ "js.cdvc.chinh-tinh-ds": {
+  "t": "主星：{ds}",
+  "h": "0594f4e0"
+ },
+ "js.cdvc.chong": {
+  "t": "丈夫",
+  "h": "92a6f17f"
+ },
+ "js.cdvc.cung-phu-the": {
+  "t": "夫妻宮：",
+  "h": "42367865"
+ },
+ "js.cdvc.cung-phu-the-cua-toi-co-gi": {
+  "t": "我的夫妻宮有什麼特別之處？",
+  "h": "2ec84146"
+ },
+ "js.cdvc.cung-phu-the-trong-la-so": {
+  "t": "您命盤中的夫妻宮",
+  "h": "cf3fd3a1"
+ },
+ "js.cdvc.da-ve-xong-chan-dung-dua": {
+  "t": "已依據您的夫妻宮繪製完肖像。還想多問關於婚姻、夫妻宮或命盤的什麼嗎？",
+  "h": "777cc6a3"
+ },
+ "js.cdvc.dang-dung-anh": {
+  "t": "圖片製作中…",
+  "h": "7bce9760"
+ },
+ "js.cdvc.dang-ve-chan-dung-thuong-45": {
+  "t": "正在繪製肖像（通常 45–60 秒）",
+  "h": "8fb2076c"
+ },
+ "js.cdvc.dung-gu-ban-chua-gui-anh": {
+  "t": "合不合您的口味？把這張圖傳給朋友看，再邀他們也來畫畫看<b>自己未來的另一半</b>。",
+  "h": "d435c12c"
+ },
+ "js.cdvc.hoan-canh-gap-go": {
+  "t": "\n\n相遇的情境：",
+  "h": "7878e939"
+ },
+ "js.cdvc.hon-nhan-cua-toi-co-thuan": {
+  "t": "我的婚姻會順利嗎？",
+  "h": "9c01a229"
+ },
+ "js.cdvc.khong-the-ket-noi-vui-long": {
+  "t": "無法連線，請再試一次。",
+  "h": "bf0b6e7b"
+ },
+ "js.cdvc.lap-la-so-xac-dinh-cung": {
+  "t": "排出命盤並定出夫妻宮",
+  "h": "f8f01348"
+ },
+ "js.cdvc.loi": {
+  "t": "錯誤 ",
+  "h": "1b80116b"
+ },
+ "js.cdvc.loi-8d72": {
+  "t": "錯誤：",
+  "h": "471c0087"
+ },
+ "js.cdvc.luan-giai-chua-mo": {
+  "t": "解讀——尚未開啟",
+  "h": "4c4f7020"
+ },
+ "js.cdvc.luan-giai-cung-phu-the": {
+  "t": "夫妻宮解讀",
+  "h": "8e52b135"
+ },
+ "js.cdvc.luan-giai-cung-phu-the-p43z": {
+  "t": "夫妻宮解讀",
+  "h": "fee63cc7"
+ },
+ "js.cdvc.luc-giac-cung-phu-the": {
+  "t": "夫妻宮六角圖",
+  "h": "c1463a39"
+ },
+ "js.cdvc.luot-ve": {
+  "t": "次繪製",
+  "h": "85f72421"
+ },
+ "js.cdvc.mo-chan-dung-day-du": {
+  "t": "開啟完整肖像",
+  "h": "9f515b09"
+ },
+ "js.cdvc.n-tuoi-hist": {
+  "t": "{n} 歲",
+  "h": "25e7a2be"
+ },
+ "js.cdvc.nguoi-chong": {
+  "t": "丈夫",
+  "h": "bce4fcfa"
+ },
+ "js.cdvc.nguoi-vo": {
+  "t": "妻子",
+  "h": "f1b7338b"
+ },
+ "js.cdvc.phac-hoa-tu-cung-phu-the": {
+  "t": "依命盤中的夫妻宮描繪",
+  "h": "adeba7b7"
+ },
+ "js.cdvc.phac-thao-mo-ta-uoc-luong": {
+  "t": "草擬描述並估計伴侶年齡",
+  "h": "7ce20134"
+ },
+ "js.cdvc.phu-tinh-ds": {
+  "t": "輔星：{ds}",
+  "h": "7e63fae4"
+ },
+ "js.cdvc.quet-ma-xem-chan-dung-cua": {
+  "t": "掃描 QR 碼——查看您的肖像",
+  "h": "2b62e4a0"
+ },
+ "js.cdvc.sat-tinh-pha-cach": {
+  "t": "（煞星——破格）",
+  "h": "742dce66"
+ },
+ "js.cdvc.sat-tinh-pha-cach-ngay-tu": {
+  "t": " ——煞星，從根本破格",
+  "h": "14fa5401"
+ },
+ "js.cdvc.tai-lai": {
+  "t": "重新載入",
+  "h": "16371241"
+ },
+ "js.cdvc.theo-chinh-tinh": {
+  "t": "依主星 ",
+  "h": "ec1e2e45"
+ },
+ "js.cdvc.theo-phu-tinh": {
+  "t": "依輔星 ",
+  "h": "4c2c8bf3"
+ },
+ "js.cdvc.vo": {
+  "t": "妻子",
+  "h": "98c0d1da"
+ },
+ "js.cdvc.vo-chinh-dieu": {
+  "t": "無主星",
+  "h": "bb1c972d"
+ },
+ "js.cdvc.vui-long-nhap-day-du-ngay": {
+  "t": "請完整輸入出生年月日。",
+  "h": "2545b4dd"
+ },
+ "js.cdvc.xem-them-ve-tinh-cach": {
+  "t": "看看更多關於我個性的內容",
+  "h": "0c0df338"
+ },
+ "js.cdvc.y-nghia-co-phap": {
+  "t": "古法的意涵：",
+  "h": "396825c1"
+ },
  "js.chat.chao": {
   "t": "您好 ",
   "h": "35004652"
@@ -2839,6 +4939,210 @@
   "t": "流年小運 ",
   "h": "1979c56a"
  },
+ "js.cn.ai-cung-han-vao": {
+  "t": "{ai}同時行限入<b>{cung}</b>。",
+  "h": "8f48fa76"
+ },
+ "js.cn.ask": {
+  "t": "我們家未來十二個月會怎樣？全家該留意哪幾個月？",
+  "h": "5106642f"
+ },
+ "js.cn.bai-tinh-ds": {
+  "t": "敗星：{ds}",
+  "h": "6fbe9f13"
+ },
+ "js.cn.cat-tinh-ds": {
+  "t": "吉星：{ds}",
+  "h": "d335af36"
+ },
+ "js.cn.cham": {
+  "t": "。",
+  "h": "3a52ce78"
+ },
+ "js.cn.chua-co-gio-sinh": {
+  "t": "沒有出生時辰，因此還無法排出紫微斗數命盤。",
+  "h": "3d8d3bbd"
+ },
+ "js.cn.chua-tai-duoc-la-so": {
+  "t": "無法載入全家人的命盤，請重新整理頁面。",
+  "h": "131469d8"
+ },
+ "js.cn.chua-them-duoc-lich": {
+  "t": "無法新增行事曆，請稍後再試。",
+  "h": "6075add3"
+ },
+ "js.cn.han-vao-cung": {
+  "t": "行限入<b>{cung}</b>",
+  "h": "593101c7"
+ },
+ "js.cn.mang-chap-chon": {
+  "t": "網路不穩，無法載入，請重新整理頁面。",
+  "h": "2adc56e0"
+ },
+ "js.cn.nam-nay-tieu-han-vao": {
+  "t": "今年小限入<b>{th}</b>，流年入<b>{ln}</b>。",
+  "h": "b4b04598"
+ },
+ "js.cn.nguoi": {
+  "t": "成員",
+  "h": "65ae37a4"
+ },
+ "js.cn.nguoi-nha": {
+  "t": "家人",
+  "h": "447d96d6"
+ },
+ "js.cn.nha-ten-n-nguoi": {
+  "t": "{ten}一家 · {n} 人 · 未來十二個農曆月",
+  "h": "174da578"
+ },
+ "js.cn.nhuan-ngan": {
+  "t": "閏",
+  "h": "6eb03d88"
+ },
+ "js.cn.sat-tinh-ds": {
+  "t": "煞星：{ds}",
+  "h": "5d9f3071"
+ },
+ "js.cn.thang-ngan": {
+  "t": "{n}月",
+  "h": "efb66afc"
+ },
+ "js.cn.vai-bo": {
+  "t": "爸爸",
+  "h": "dbbdf270"
+ },
+ "js.cn.vai-chong": {
+  "t": "丈夫",
+  "h": "92a6f17f"
+ },
+ "js.cn.vai-con": {
+  "t": "子女",
+  "h": "eb70b34b"
+ },
+ "js.cn.vai-me": {
+  "t": "媽媽",
+  "h": "dfc6f90b"
+ },
+ "js.cn.vai-sinh-nam": {
+  "t": "{vai} · {nam} 年出生",
+  "h": "3d5b8ffa"
+ },
+ "js.cn.vai-toi": {
+  "t": "您",
+  "h": "40ffd8d0"
+ },
+ "js.cn.vai-vo": {
+  "t": "妻子",
+  "h": "98c0d1da"
+ },
+ "js.cn.xac-dinh-gio-sinh": {
+  "t": "確認出生時辰 →",
+  "h": "5122b0fd"
+ },
+ "js.cn.xong-roi-lich-tu-cap-nhat": {
+  "t": "完成了——行事曆會每天自動更新。",
+  "h": "d89d8f57"
+ },
+ "js.cns.ai-sinh": {
+  "t": "與你同日出生的人",
+  "h": "33d96a43"
+ },
+ "js.cns.al": {
+  "t": "農曆{m}月{d}日（{cc}）",
+  "h": "cc05e85c"
+ },
+ "js.cns.am-ban": {
+  "t": "你的農曆日期：<b>{m}月{d}日（{cc}）</b>。",
+  "h": "5bd9c1aa"
+ },
+ "js.cns.anh": {
+  "t": "圖片：{nguon}",
+  "h": "ac251971"
+ },
+ "js.cns.ghi": {
+  "t": "僅顯示出生日期與時間資料，不對他人進行解讀。為便於比較，出生時間已換算為越南時間。來源：Wikidata（CC0）・圖片來自 Wikimedia Commons（授權標示於各圖下方）・出生時間來自 Astro-Databank。",
+  "h": "bb2a4862"
+ },
+ "js.cns.gio-chi": {
+  "t": "{chi}時",
+  "h": "305f8351"
+ },
+ "js.cns.gio-sinh": {
+  "t": "出生時間 {gio}",
+  "h": "f4e26258"
+ },
+ "js.cns.khung-gio-vn": {
+  "t": "越南時間 {khung}",
+  "h": "a67644fa"
+ },
+ "js.cns.nam": {
+  "t": "男",
+  "h": "b580ba1b"
+ },
+ "js.cns.nguoi-noi-tieng": {
+  "t": "與你生日相同的名人——請看每張卡片上的標籤，了解是以農曆或國曆相符。",
+  "h": "fbb49f18"
+ },
+ "js.cns.nu": {
+  "t": "女",
+  "h": "feb92ccd"
+ },
+ "js.cns.rodden": {
+  "t": "羅登評級的出生時間可信度",
+  "h": "45221bc0"
+ },
+ "js.cns.tim-hieu": {
+  "t": "了解更多",
+  "h": "90b61c50"
+ },
+ "js.cns.trung-ca": {
+  "t": "有人與你<b>出生日期和時辰都相同</b>——排出來的命盤完全一樣。",
+  "h": "3272dba6"
+ },
+ "js.combo.cham-tran": {
+  "t": "已達試用次數上限。",
+  "h": "2fdb2e1a"
+ },
+ "js.combo.dang-tinh": {
+  "t": "計算中…",
+  "h": "76a9d5f0"
+ },
+ "js.combo.dang-xu-ly": {
+  "t": "處理中…",
+  "h": "a2e96c58"
+ },
+ "js.combo.het-phien": {
+  "t": "登入已逾時，請重新登入。",
+  "h": "aba6739e"
+ },
+ "js.combo.khong-du-luong": {
+  "t": "兩不足——請先儲值。",
+  "h": "1d9e17da"
+ },
+ "js.combo.khong-dung-khung": {
+  "t": "無法建立流年運勢的框架，請再試一次。",
+  "h": "07f0a83f"
+ },
+ "js.combo.loi": {
+  "t": "錯誤：",
+  "h": "471c0087"
+ },
+ "js.combo.loi-ket-noi": {
+  "t": "連線錯誤：",
+  "h": "46e34d76"
+ },
+ "js.combo.ngoai-pham-vi": {
+  "t": "出生日期超出支援範圍（1900–2100）。",
+  "h": "5e5d6ef9"
+ },
+ "js.combo.nhap-du-ngay": {
+  "t": "請完整輸入出生的日、月、年。",
+  "h": "075a6b15"
+ },
+ "js.combo.thu-lai": {
+  "t": "請再試一次。",
+  "h": "2f1d18ee"
+ },
  "js.congcutr.chua-xep-vao-nhom-nao": {
   "t": "尚未歸類",
   "h": "7ea3cc13"
@@ -2898,6 +5202,774 @@
  "js.congcutr.xep-theo-mon-tu-vi-tu": {
   "t": "依術數分類：紫微斗數、八字、相學、風水…",
   "h": "cf4f8ecc"
+ },
+ "js.cs.ba-nhanh-nay-khac-nhau-o": {
+  "t": "這三個分支差在哪裡？",
+  "h": "19e39a35"
+ },
+ "js.cs.ba-nhanh-nghe-cu-the-ben": {
+  "t": "您領域內的三個具體職業分支",
+  "h": "879d2594"
+ },
+ "js.cs.ba-tang-o-tren-noi-ban": {
+  "t": "上面三個層次說的是您適合哪個<b>領域</b>，以及",
+  "h": "d7fe12dc"
+ },
+ "js.cs.bac-chuc-phan": {
+  "t": "職分等級",
+  "h": "73d28e4f"
+ },
+ "js.cs.ban-hop-lam-gi": {
+  "t": "您適合做什麼",
+  "h": "7bf8b024"
+ },
+ "js.cs.ban-hop-lam-nganh-gi-linh": {
+  "t": "您適合的行業——領域・角色・規模",
+  "h": "ee981a25"
+ },
+ "js.cs.ban-nghieng-ve-kieu-full": {
+  "t": "您偏向**{kieu}**類型（{tt}）。註冊帳號（贈送免費兩）即可看到完整的 12 個面向、四階段路線圖與組隊——開啟那些部分之後，我才能更深入解說。",
+  "h": "711e5f38"
+ },
+ "js.cs.boi-canh-viet-nam-dang-lam": {
+  "t": "針對越南的情境；若您從事的行業不在清單中，請對照 ",
+  "h": "18705d1c"
+ },
+ "js.cs.bon-dai-van-lien-tiep-phu": {
+  "t": "連續四個大運涵蓋了工作的歲月。分數是引擎評定的大運分數；",
+  "h": "5fe06b87"
+ },
+ "js.cs.bon-kieu-nguoi-va-cach-goi": {
+  "t": "四種類型與建議行業的方式，是<b>明寶紫微斗數專家團隊</b>自行建立的方法。<br><br>",
+  "h": "24a12349"
+ },
+ "js.cs.bon-muoi-nam-di-lam-chia": {
+  "t": "工作四十年分成四階段",
+  "h": "ae99b53d"
+ },
+ "js.cs.bon-muoi-nam-di-lam-chia-90zk": {
+  "t": "工作四十年分成四個階段",
+  "h": "ced9f68e"
+ },
+ "js.cs.bon-viec-phai-hoc-khi-bat": {
+  "t": "開始帶人時必學的四件事",
+  "h": "d246f547"
+ },
+ "js.cs.cac-nhanh-duoi-day-hop-voi": {
+  "t": "以下這些分支適合您的<b>人格特質</b>，但",
+  "h": "f9533187"
+ },
+ "js.cs.cach-cuc-tai-cung-quan-loc": {
+  "t": "官祿宮的格局",
+  "h": "2c8aa204"
+ },
+ "js.cs.cai-thuc-ban-di": {
+  "t": "驅動您前進的力量",
+  "h": "e34c0d1a"
+ },
+ "js.cs.cau-hoi-chay-ngam-trong-dau": {
+  "t": "腦中暗自運轉的問題",
+  "h": "92b9b591"
+ },
+ "js.cs.chang-nghe-tiep-theo-cua-toi": {
+  "t": "我的下一個職涯階段會是怎樣？",
+  "h": "7e97fdda"
+ },
+ "js.cs.chat-nguoi-noi-bat": {
+  "t": "突出的人格特質",
+  "h": "31efa257"
+ },
+ "js.cs.chat-nguoi-noi-bat-va-thu": {
+  "t": "突出的人格特質，以及適合您的行業不要求的事",
+  "h": "5b90f04f"
+ },
+ "js.cs.chat-viec-dung-doc-thanh-ban": {
+  "t": "<b>工作特質</b>；請不要讀成「您做錯行了」。",
+  "h": "4728caa7"
+ },
+ "js.cs.chat-viec-thay-vi-doi-chieu": {
+  "t": "請對照<i>工作特質</i>，而不是對照行業名稱。</p>",
+  "h": "94306405"
+ },
+ "js.cs.chinh-tinh-cung-menh": {
+  "t": "命宮的主星",
+  "h": "dcba7b35"
+ },
+ "js.cs.chinh-tinh-cung-quan-loc": {
+  "t": "官祿宮的主星",
+  "h": "9c8bc6b2"
+ },
+ "js.cs.cho-hay-vap": {
+  "t": "<b>容易絆倒之處</b>",
+  "h": "0fe4ac0b"
+ },
+ "js.cs.cho-nguoi-dang-o-vi-tri": {
+  "t": "給目前處於此位置的人：",
+  "h": "c0aba160"
+ },
+ "js.cs.chua-dung-duoc-anh-thu-lai": {
+  "t": "無法產生圖片。請稍後幾秒再試。",
+  "h": "f8055429"
+ },
+ "js.cs.chua-dung-duoc-ho-so-luc": {
+  "t": "目前無法建立檔案——請再試一次。",
+  "h": "3f85746f"
+ },
+ "js.cs.chua-khop-bac-chuc-phan-hien": {
+  "t": "<b>尚未符合目前的職分等級</b>。請當作努力的方向來讀，而不是現在就該站的位置。",
+  "h": "cfa2e82b"
+ },
+ "js.cs.chua-mo-duoc-phan-nhanh-nghe": {
+  "t": "無法開啟職業分支的部分——請再試一次。",
+  "h": "f13e7f15"
+ },
+ "js.cs.chuc-phan-theo-loi-co": {
+  "t": "古式職分",
+  "h": "0504275b"
+ },
+ "js.cs.co-so-trong-la-so": {
+  "t": "命盤中的依據",
+  "h": "43f95044"
+ },
+ "js.cs.con-so-phan-tram-la-do": {
+  "t": "百分比數字是<b>人格特質與工作特質的契合度</b>，",
+  "h": "65261dc8"
+ },
+ "js.cs.cung-mot-nganh-nhung-moi-nhanh": {
+  "t": "同一個行業，每個分支需要的人格特質卻截然不同。</p>",
+  "h": "b2d6705d"
+ },
+ "js.cs.cung-name": {
+  "t": "{name}",
+  "h": "3cb49303"
+ },
+ "js.cs.da-mo-phan-nhanh-nghe-ten": {
+  "t": "已開啟職業分支的部分。最適合您的分支是**{ten}**。您想深入哪個分支，還是想問某個具體行業？",
+  "h": "68b42e6e"
+ },
+ "js.cs.dang-dung": {
+  "t": "建立中…",
+  "h": "88400b94"
+ },
+ "js.cs.dang-dung-anh": {
+  "t": "圖片製作中…",
+  "h": "7bce9760"
+ },
+ "js.cs.dang-mo-phan-nhanh-nghe": {
+  "t": "正在開啟職業分支的部分…",
+  "h": "f58ba0b1"
+ },
+ "js.cs.dang-o-day": {
+  "t": "目前在此",
+  "h": "aa7d3c7e"
+ },
+ "js.cs.day-la-goi-y-huong-khong": {
+  "t": "這是方向上的建議，不是指定職業。古籍談的是<b>工作特質</b>",
+  "h": "0573bbbd"
+ },
+ "js.cs.day-la-the-manh-tuong-doi": {
+  "t": "這是您自己各面向之間的<b>相對強項</b>，不是與別人比較的分數。</p>",
+  "h": "3cea3811"
+ },
+ "js.cs.diem": {
+  "t": " · 分數 ",
+  "h": "0ea58cf8"
+ },
+ "js.cs.diem-8vmw": {
+  "t": "分數",
+  "h": "024af419"
+ },
+ "js.cs.diem-do-engine-cham-tren-chinh": {
+  "t": "分數由引擎依您自己的命盤評定（滿分 10 分）。",
+  "h": "03be4bad"
+ },
+ "js.cs.doc-ca-hai-phan-dung-ep": {
+  "t": "</b>的色彩也相當明顯。兩部分都讀一讀，不要硬把自己塞進一個格子。</div>",
+  "h": "24fcc1c0"
+ },
+ "js.cs.doc-theo-cap-dong-cung": {
+  "t": " ——依同宮的一對來讀",
+  "h": "249d9a92"
+ },
+ "js.cs.doc-theo-co-phap-phu-mau": {
+  "t": "依古法來讀：<b>父母宮</b>是長輩上位者，<b>兄弟宮</b>是平輩，",
+  "h": "4f1fa3e2"
+ },
+ "js.cs.doi-mat-hay-ban-giay-cam": {
+  "t": "（面對人還是案頭工作、帶人還是帶技藝）；上方的現代行業清單是本頁自行對應出來的。",
+  "h": "84acb782"
+ },
+ "js.cs.dung-ngay-bay-gio": {
+  "t": "並不是現在就該站的位置。</div>",
+  "h": "cebffac0"
+ },
+ "js.cs.ghep-doi-ai-do-duoc-ban": {
+  "t": "組隊——誰能支撐您",
+  "h": "616debca"
+ },
+ "js.cs.ho-so": {
+  "t": "檔案",
+  "h": "ebe439c1"
+ },
+ "js.cs.ho-so-cong-so-da-dung-full": {
+  "t": "職場檔案已建立完成——您偏向**{kieu}**類型（{tt}）。目前最強的是**{manh}**。想讓我深入哪個部分？",
+  "h": "e1d2fcd1"
+ },
+ "js.cs.ho-so-day-du-chua-mo": {
+  "t": "⊙ 完整檔案尚未開啟",
+  "h": "7e47b133"
+ },
+ "js.cs.ho-tro": {
+  "t": "支援",
+  "h": "ed2a55ae"
+ },
+ "js.cs.hop-tac": {
+  "t": "協作",
+  "h": "d934a7d7"
+ },
+ "js.cs.huong-tham-khao-dung-doc-nhu": {
+  "t": "只是供參考的方向，請不要讀成肯定的論斷。</div>",
+  "h": "dede2dae"
+ },
+ "js.cs.khai-sang": {
+  "t": "開創",
+  "h": "b6833673"
+ },
+ "js.cs.khi-duoc-giao-quyen": {
+  "t": "被授予權限時",
+  "h": "90c9e1e0"
+ },
+ "js.cs.khong-co-ten-nganh-ban-dang": {
+  "t": "清單中沒有您目前從事的行業名稱，<b>並不</b>代表您做錯了——請以 ",
+  "h": "e9ea00be"
+ },
+ "js.cs.khong-phai-kha-nang-thanh-cong": {
+  "t": "<b>並不是</b>成功的可能性。行業清單是本頁針對越南情境自行對應出來的。",
+  "h": "a0d5aaf7"
+ },
+ "js.cs.khop": {
+  "t": "契合",
+  "h": "06321169"
+ },
+ "js.cs.kieu": {
+  "t": " · 類型 ",
+  "h": "6d81ffdf"
+ },
+ "js.cs.kieu-4mx9": {
+  "t": "類型 ",
+  "h": "6d21ae2a"
+ },
+ "js.cs.kieu-lai-toa-do-cua-ban": {
+  "t": "⚠ <b>混合型。</b>您的座標貼近邊界，因此偏向<b>",
+  "h": "11aff2e8"
+ },
+ "js.cs.kieu-nguoi-nay-la-gi": {
+  "t": "這種類型是怎樣的人？",
+  "h": "dd192f9f"
+ },
+ "js.cs.kieu-nguoi-o-cho-lam": {
+  "t": "職場類型",
+  "h": "399f87f5"
+ },
+ "js.cs.la-so-cua-ban-khong-chi": {
+  "t": "您的命盤<b>沒有指出任何一個突出的分支</b>",
+  "h": "77e78dd8"
+ },
+ "js.cs.lanh-dao": {
+  "t": "領導",
+  "h": "d9b13441"
+ },
+ "js.cs.luong": {
+  "t": "兩)",
+  "h": "c99d25aa"
+ },
+ "js.cs.luu-nien-nam-nay": {
+  "t": "今年的流年",
+  "h": "1b558770"
+ },
+ "js.cs.luu-nien-o-cung": {
+  "t": " · 流年在 ",
+  "h": "f72ac853"
+ },
+ "js.cs.manh-nhat": {
+  "t": "最強：",
+  "h": "b67b37ca"
+ },
+ "js.cs.manh-nhat-gixi": {
+  "t": "<b>最強之處</b>",
+  "h": "fe6a0e48"
+ },
+ "js.cs.mat": {
+  "t": "面向",
+  "h": "473db18f"
+ },
+ "js.cs.mat-can-boi-them-nhat": {
+  "t": "最需要加強的面向：",
+  "h": "91c25ad4"
+ },
+ "js.cs.mat-manh-nhat-trong-12-mat": {
+  "t": "12 個面向中最強的：",
+  "h": "01df7a24"
+ },
+ "js.cs.mo-ho-so-day-du": {
+  "t": "開啟完整檔案",
+  "h": "3757bf2c"
+ },
+ "js.cs.mo-phan-nhanh-nghe": {
+  "t": "<b>開啟職業分支的部分 →</b>",
+  "h": "d178dc5c"
+ },
+ "js.cs.moi-truong-hop": {
+  "t": "適合的環境",
+  "h": "14808d08"
+ },
+ "js.cs.moi-truong-ky": {
+  "t": "忌諱的環境",
+  "h": "0edcadd9"
+ },
+ "js.cs.muoi-hai-mat-cua-doi-di": {
+  "t": "工作生涯的十二個面向——各面向的分數與理由",
+  "h": "b36da1b8"
+ },
+ "js.cs.muoi-hai-mat-cua-doi-di-gqoe": {
+  "t": "工作生涯的十二個面向",
+  "h": "7612512c"
+ },
+ "js.cs.muoi-hai-thang-toi-nen-lam": {
+  "t": "接下來十二個月該做什麼？",
+  "h": "f98b733c"
+ },
+ "js.cs.muon-cung-xung-chieu": {
+  "t": " ——借對宮",
+  "h": "1fb340ea"
+ },
+ "js.cs.muon-xung-chieu": {
+  "t": "（借對宮）",
+  "h": "7363dfe3"
+ },
+ "js.cs.nam-nay-chieu-kep": {
+  "t": "今年雙重照應",
+  "h": "b582a95f"
+ },
+ "js.cs.neu-toi-dang-lam-nghe-khac": {
+  "t": "如果我目前從事別的行業呢？",
+  "h": "efac8cf1"
+ },
+ "js.cs.nghe-hop-voi-ban-thuong-khong": {
+  "t": "適合您的行業通常不要求的",
+  "h": "48816f36"
+ },
+ "js.cs.nguoc-da": {
+  "t": "逆勢",
+  "h": "50f7d6cf"
+ },
+ "js.cs.nguon-cach-chia-bon-kieu": {
+  "t": "四種類型分法的出處",
+  "h": "8144bf17"
+ },
+ "js.cs.nguon-du-lieu": {
+  "t": "資料出處 →",
+  "h": "78319924"
+ },
+ "js.cs.nguon-theo-tu-vi-dau-so": {
+  "t": "📚 <b>出處：</b>依<i>《紫微斗數新編》</i>",
+  "h": "0917536a"
+ },
+ "js.cs.nhan-ra-o-cho-lam": {
+  "t": "在職場上可辨認的特徵",
+  "h": "b6e2a171"
+ },
+ "js.cs.nhanh-dau-tien-cu-the-phai": {
+  "t": "第一個具體分支該從哪裡開始？",
+  "h": "a9550e65"
+ },
+ "js.cs.nhanh-nay-thuong-o-bac-khac": {
+  "t": "這個分支通常所處的等級，與命盤所指的職分等級不同。",
+  "h": "a815d5d0"
+ },
+ "js.cs.nhanh-nghe-hop-voi-ban": {
+  "t": "適合您的職業分支",
+  "h": "488563f6"
+ },
+ "js.cs.nhung-pha-kha-ro": {
+  "t": "</b>，但<b>",
+  "h": "e4d67d67"
+ },
+ "js.cs.nhuong": {
+  "t": "禮讓",
+  "h": "c0333abd"
+ },
+ "js.cs.no-boc-la-thuoc-ha-va": {
+  "t": "<b>僕役宮</b>是部屬與同行。互補的法則是陰配陽。</p>",
+  "h": "f843e58b"
+ },
+ "js.cs.no-noi-ve": {
+  "t": "說的是什麼",
+  "h": "2247dbea"
+ },
+ "js.cs.o-quy-mo-nao-phan-nay": {
+  "t": "在哪種<b>規模</b>最合適。這部分說的是該領域內的<b>具體分支</b>—— ",
+  "h": "ab6aae0b"
+ },
+ "js.cs.phu-tinh-dong-tai-cung-quan": {
+  "t": "官祿宮中的輔星是在上述領域<b>之內縮小範圍</b>，並不取代該領域。",
+  "h": "c3fd465d"
+ },
+ "js.cs.quet-ma-xem-kieu-nguoi-cua": {
+  "t": "掃描 QR 碼——查看您的類型",
+  "h": "abb7f441"
+ },
+ "js.cs.quy-mo-ganh-duoc-bac": {
+  "t": "能承擔的規模——等級 ",
+  "h": "43f37473"
+ },
+ "js.cs.sao-quyet-dinh-linh-vuc": {
+  "t": "決定領域的星",
+  "h": "31023c67"
+ },
+ "js.cs.thuan-da": {
+  "t": "順勢",
+  "h": "c65246fb"
+ },
+ "js.cs.thuan-da-nguoc-da-la-so": {
+  "t": "「順勢／逆勢」是把大運的陰陽屬性與您本命的類型相比較。</p>",
+  "h": "41c5ce0c"
+ },
+ "js.cs.tieu-han-nam-nay": {
+  "t": "今年的小限",
+  "h": "62da8d5f"
+ },
+ "js.cs.tieu-han-o-cung": {
+  "t": "小限在 ",
+  "h": "aef732f3"
+ },
+ "js.cs.toa-do": {
+  "t": "座標",
+  "h": "6fda44e7"
+ },
+ "js.cs.toi-co-hop-lam-nganh-x": {
+  "t": "我適合從事 X 行業嗎？",
+  "h": "ac81904f"
+ },
+ "js.cs.toi-con-thieu-gi-de-vao": {
+  "t": "要進入那個分支，我還缺什麼？",
+  "h": "4e41376f"
+ },
+ "js.cs.toi-hop-lam-viec-voi-kieu": {
+  "t": "我適合跟哪種類型的人共事？",
+  "h": "3fbf2004"
+ },
+ "js.cs.toi-nen-tranh-moi-truong-nao": {
+  "t": "我該避開哪種環境？",
+  "h": "14ba354e"
+ },
+ "js.cs.ton": {
+  "t": "<small>需",
+  "h": "ca8d4e90"
+ },
+ "js.cs.tram-on": {
+  "t": "沉穩",
+  "h": "78f14035"
+ },
+ "js.cs.tranh-nhuong": {
+  "t": "爭 ↔ 讓：",
+  "h": "93f67a9e"
+ },
+ "js.cs.tren-thang-10-diem-11-mat": {
+  "t": "滿分 10 分——其餘 11 個面向、各面向的理由與完整表格，都在註冊後可免費查看的檔案中。",
+  "h": "5ada4a9d"
+ },
+ "js.cs.tren-thang-10-diem-ly-do": {
+  "t": "滿分 10 分——各面向的理由與加強方式，都在註冊後可免費查看的檔案中。",
+  "h": "e5560e3d"
+ },
+ "js.cs.trich-dan-co-thu": {
+  "t": "古籍引文",
+  "h": "1a48a14b"
+ },
+ "js.cs.trong-linh-vuc-do-ban-nghieng": {
+  "t": "<b>在該領域內，您偏向哪個分支</b>",
+  "h": "46deb5f7"
+ },
+ "js.cs.trong-linh-vuc-nay-noi-thang": {
+  "t": "——在這個領域內。坦白說，訊號還不足以下定論——下面只是 ",
+  "h": "288c730f"
+ },
+ "js.cs.trong-may-nganh-do-toi-nen": {
+  "t": "在那幾個行業中，我該選哪一個？",
+  "h": "a94bba40"
+ },
+ "js.cs.tu-cach-theo-cung-menh": {
+  "t": "依命宮所見的資格",
+  "h": "3623d661"
+ },
+ "js.cs.tu-vi-cong-so-kieu": {
+  "t": "紫微職場——類型 ",
+  "h": "910e8c28"
+ },
+ "js.cs.tu-vi-cong-so-ordd": {
+  "t": "紫微職場",
+  "h": "9d18a955"
+ },
+ "js.cs.tuoi": {
+  "t": " 歲",
+  "h": "2e261bf5"
+ },
+ "js.cs.vai-ban-nen-nhan-trong-nganh": {
+  "t": "您在該行業中適合擔任的角色",
+  "h": "f8b3215e"
+ },
+ "js.cs.van-dang-thai-thu-lang-va": {
+  "t": "（雲騰太次郎）與<i>《中州派 六十星系》</i>（王亭之）。",
+  "h": "77b93310"
+ },
+ "js.cs.van-nam": {
+  "t": "年運 ",
+  "h": "86712c6e"
+ },
+ "js.cs.vi-du-nghieng-chu-nghia-trong": {
+  "t": "例如在醫療領域偏向「文字」，就是教學、研究、專業寫作這個分支——仍然是醫療領域。",
+  "h": "db475758"
+ },
+ "js.cs.vi-sao-hop": {
+  "t": "<b>為什麼適合：</b>",
+  "h": "6a37b393"
+ },
+ "js.cs.vi-sao-la-so-hop-nhanh": {
+  "t": "為什麼命盤適合那個分支——點名指出人格特質",
+  "h": "0ab395f8"
+ },
+ "js.cs.vi-sao-la-so-lai-ra": {
+  "t": "為什麼命盤會得出這種類型？",
+  "h": "ed996a33"
+ },
+ "js.cs.viec-lam-duoc-ngay-o-tung": {
+  "t": "各分支馬上可做的事（依越南情境）",
+  "h": "3851e61e"
+ },
+ "js.cs.vo-chinh-dieu": {
+  "t": " · 無主星",
+  "h": "46b7d17a"
+ },
+ "js.cs.vo-chinh-dieu-pwt9": {
+  "t": "無正曜",
+  "h": "bd07d7a9"
+ },
+ "js.cs.vui-long-nhap-du-ngay-thang": {
+  "t": "請完整輸入出生年月日。",
+  "h": "771ff27f"
+ },
+ "js.cs.xong-pha": {
+  "t": "衝鋒",
+  "h": "3b22b749"
+ },
+ "js.cs.xong-tram": {
+  "t": " · 衝 ↔ 穩：",
+  "h": "71afe77a"
+ },
+ "js.ctk.anh-dang-tai-co-the-hoi": {
+  "t": "圖片載入中，可能稍慢——請稍候，或",
+  "h": "c4e9709b"
+ },
+ "js.ctk.anh-minh-hoa": {
+  "t": "示意圖",
+  "h": "f37e2fa9"
+ },
+ "js.ctk.anh-minh-hoa-mo-mo-khoa": {
+  "t": "示意圖（模糊）——解鎖後即可看到您真正的肖像",
+  "h": "e7c8b779"
+ },
+ "js.ctk.ba": {
+  "t": "她",
+  "h": "6edcd5c8"
+ },
+ "js.ctk.ba-ay-co-benh-tat-hay-tai": {
+  "t": "{ba}有沒有什麼疾病或災厄？",
+  "h": "1df5a238"
+ },
+ "js.ctk.ba-ay-lay-vo-chong-the": {
+  "t": "{ba}的婚姻是怎麼樣的？",
+  "h": "c22fea33"
+ },
+ "js.ctk.bac-chuc-phan-engine-cham": {
+  "t": "引擎評定的職分等級",
+  "h": "694a2943"
+ },
+ "js.ctk.ban-da-tao-ket-qua-cho": {
+  "t": "✓ 您已為這張命盤產生過結果——重新開啟，不會扣兩",
+  "h": "d59efda4"
+ },
+ "js.ctk.bien-co": {
+  "t": "▼ 變故",
+  "h": "69c46bc9"
+ },
+ "js.ctk.buc-tranh-chan-dung-ve-rieng": {
+  "t": "依您的命盤專屬繪製的肖像畫",
+  "h": "998f85c8"
+ },
+ "js.ctk.chan-dung-cau-chuyen-chua-mo": {
+  "t": "⊙ 肖像與故事尚未開啟",
+  "h": "2df0a1d7"
+ },
+ "js.ctk.chan-dung-tien-kiep": {
+  "t": "前世肖像",
+  "h": "e7d0f866"
+ },
+ "js.ctk.chan-dung-tien-kiep-cua-toi": {
+  "t": "我的前世肖像",
+  "h": "7f493523"
+ },
+ "js.ctk.chan-dung-tien-kiep-gxr5": {
+  "t": "前世肖像",
+  "h": "7aa2c297"
+ },
+ "js.ctk.chinh-tinh-tai-cung-menh": {
+  "t": "命宮中的主星",
+  "h": "64538c55"
+ },
+ "js.ctk.chinh-tinh-tai-cung-quan-loc": {
+  "t": "官祿宮中的主星",
+  "h": "2a194366"
+ },
+ "js.ctk.chuc-phan-suy-ra": {
+  "t": "推得的職分",
+  "h": "f76c76b7"
+ },
+ "js.ctk.chuyen-doi-nv-het-phan-chinh": {
+  "t": "**{nv}**的一生故事，主要內容到這裡。命盤裡還有許多故事沒說到的事——您想多問關於{short}的什麼？",
+  "h": "12c81ad9"
+ },
+ "js.ctk.cung-an-than": {
+  "t": "身宮所在",
+  "h": "778b10ab"
+ },
+ "js.ctk.dang-dung-anh": {
+  "t": "圖片製作中…",
+  "h": "7bce9760"
+ },
+ "js.ctk.dang-ve-chan-dung": {
+  "t": "正在繪製肖像…",
+  "h": "8da3d107"
+ },
+ "js.ctk.dinh-cao": {
+  "t": "★ 巔峰",
+  "h": "329f34c6"
+ },
+ "js.ctk.doc-9-dai-van-chia-dong": {
+  "t": "解讀九個大運，將人生分為五回",
+  "h": "6d04f8ee"
+ },
+ "js.ctk.khong-the-ket-noi-vui-long": {
+  "t": "無法連線，請再試一次。",
+  "h": "bf0b6e7b"
+ },
+ "js.ctk.khong-ve-duoc-chan-dung-lan": {
+  "t": "這次無法繪製肖像，下方的故事部分仍然完整。",
+  "h": "45ebec08"
+ },
+ "js.ctk.la-so": {
+  "t": "命盤：",
+  "h": "2644d5f2"
+ },
+ "js.ctk.lap-la-so-xac-dinh-chuc": {
+  "t": "排出命盤並判定古代職分",
+  "h": "5bf8b6ae"
+ },
+ "js.ctk.loi": {
+  "t": "錯誤 ",
+  "h": "1b80116b"
+ },
+ "js.ctk.loi-8d72": {
+  "t": "錯誤：",
+  "h": "471c0087"
+ },
+ "js.ctk.loi-ket": {
+  "t": "結語",
+  "h": "319ac5e1"
+ },
+ "js.ctk.luc-giac-cung-menh": {
+  "t": "命宮六角圖",
+  "h": "e7542de0"
+ },
+ "js.ctk.luot-ve": {
+  "t": "次繪製",
+  "h": "85f72421"
+ },
+ "js.ctk.mat-ket-noi-luc-tai-tranh": {
+  "t": "載入圖片時連線中斷——正在嘗試重新取得…",
+  "h": "48d6deaf"
+ },
+ "js.ctk.mo-chan-dung-day-du": {
+  "t": "開啟完整肖像",
+  "h": "9f515b09"
+ },
+ "js.ctk.mo-ta": {
+  "t": "描述 ",
+  "h": "9465dd78"
+ },
+ "js.ctk.mo-ta-nhan-vat-chu-viet": {
+  "t": "人物描述，以及五回中每一回的文字",
+  "h": "da0a1288"
+ },
+ "js.ctk.mot-doi-nguoi-5-hoi": {
+  "t": "一個人的一生——五回",
+  "h": "551d79c7"
+ },
+ "js.ctk.n-tuoi": {
+  "t": "{n} 歲",
+  "h": "25e7a2be"
+ },
+ "js.ctk.nhan-vat": {
+  "t": "人物",
+  "h": "c80feef9"
+ },
+ "js.ctk.nhan-vat-nay": {
+  "t": "這個人物",
+  "h": "6350a62b"
+ },
+ "js.ctk.nv-co-giau-khong": {
+  "t": "{nv}富有嗎？",
+  "h": "586c4799"
+ },
+ "js.ctk.ong": {
+  "t": "他",
+  "h": "73f16f79"
+ },
+ "js.ctk.phu-tinh-tai-cung-menh": {
+  "t": "命宮中的輔星",
+  "h": "3d194cb8"
+ },
+ "js.ctk.quet-ma-xem-tien-kiep-cua": {
+  "t": "掃描 QR 碼——查看您的前世",
+  "h": "fb7663cd"
+ },
+ "js.ctk.tai-lai": {
+  "t": "重新載入",
+  "h": "16371241"
+ },
+ "js.ctk.thang-tram": {
+  "t": "★▼ 起伏",
+  "h": "3ec8b7b2"
+ },
+ "js.ctk.tuoi-nhan-vat-trong-tranh": {
+  "t": "畫中人物的年齡",
+  "h": "f6ab55f4"
+ },
+ "js.ctk.vi-sao-lai-luan-ra-nhu-vay": {
+  "t": "為什麼會這樣論斷？",
+  "h": "ef2cc0e9"
+ },
+ "js.ctk.viet-cau-chuyen-cuoc-doi": {
+  "t": "撰寫一生的故事",
+  "h": "2971394d"
+ },
+ "js.ctk.vo-chinh-dieu-muon-cung-xung": {
+  "t": " ——無主星，借對宮",
+  "h": "90aab3d9"
+ },
+ "js.ctk.vui-long-nhap-day-du-ngay": {
+  "t": "請完整輸入出生年月日。",
+  "h": "2545b4dd"
  },
  "js.datten.be-gai": {
   "t": "女孩",
@@ -3038,6 +6110,766 @@
  "js.dattendn.vui-long-nhap-nam-sinh": {
   "t": "請輸入負責人的出生年並選擇行業別。",
   "h": "20fcc631"
+ },
+ "js.daycon.5-la-muc-giua-cua-hang": {
+  "t": "\n\n5 是數千份孩童命盤的中間水準，並不是「10 分得 5 分」。軸的兩端都各有價值。",
+  "h": "99fb1a17"
+ },
+ "js.daycon.7-chat-con-lai-5-truc": {
+  "t": "其餘 7 種特質、5 條氣質軸與教養方向，都在完整版中。",
+  "h": "00fde99c"
+ },
+ "js.daycon.ba-chat-dung-dau-o-duoi": {
+  "t": "排在前面的三種特質是值得優先嘗試之處，並不是結論。</p></div>",
+  "h": "fa2636f2"
+ },
+ "js.daycon.ban-co-muon-doi-chieu-them": {
+  "t": "要不要再對照您自己（父親或母親）的命盤？這樣會多出「雙方關係」一節。",
+  "h": "1fea98b9"
+ },
+ "js.daycon.ban-da-xem-ban-nay-roi": {
+  "t": "✓ 您已看過這份解讀——再次開啟不會扣除兩",
+  "h": "7d2c6a5b"
+ },
+ "js.daycon.ban-huong-dan-day-du-chua": {
+  "t": "⊙ 完整教養指南尚未開啟",
+  "h": "1e7a8a78"
+ },
+ "js.daycon.ban-luan": {
+  "t": "解讀報告",
+  "h": "b6f609bf"
+ },
+ "js.daycon.ban-nay-doc-tu": {
+  "t": "本解讀讀取了依您輸入的出生日期與時辰所排出的<b>",
+  "h": "d989b954"
+ },
+ "js.daycon.ban-se-nhan-cach-ra-bai": {
+  "t": "您將得到：與孩子吸收方式相符的出作業方式與書桌擺設，而不是硬加讀書時間。",
+  "h": "49791304"
+ },
+ "js.daycon.ban-se-nhan-chat-viec-hop": {
+  "t": "您將得到：適合孩子的工作特質，以及讓孩子自己開口說的提問方式——而不是一個科系名稱。",
+  "h": "dd0da12e"
+ },
+ "js.daycon.ban-se-nhan-chuyen-gi-con": {
+  "t": "您將得到：孩子還願意聽什麼，以及哪種開口方式會讓孩子立刻關上心門。",
+  "h": "20335789"
+ },
+ "js.daycon.ban-se-nhan-dua-nay-can": {
+  "t": "您將得到：這個孩子需要被推一把，還是需要被留在原地。兩種孩子外表看起來相似，其實完全不同。",
+  "h": "cd7192ac"
+ },
+ "js.daycon.ban-se-nhan-mot-ban-mo": {
+  "t": "您將得到：一份描述這個孩子是怎樣的人的文字，足以讓您在日常中認出他／她。",
+  "h": "2846cd50"
+ },
+ "js.daycon.ban-se-nhan-phan-nao-la": {
+  "t": "您將得到：哪些是天生氣質、必須順著引導，哪些是大人說話方式造成的——可以馬上調整。",
+  "h": "565f27fd"
+ },
+ "js.daycon.bat-dau-the-nao": {
+  "t": "<b>該怎麼開始：</b>",
+  "h": "ac776bdf"
+ },
+ "js.daycon.bay-cua-chat-nay": {
+  "t": "<b>這項特質的陷阱：</b>",
+  "h": "1847b63e"
+ },
+ "js.daycon.be-gai": {
+  "t": "女孩",
+  "h": "af93dba0"
+ },
+ "js.daycon.be-trai": {
+  "t": "男孩",
+  "h": "274225bc"
+ },
+ "js.daycon.bo-qua": {
+  "t": "略過",
+  "h": "861dafde"
+ },
+ "js.daycon.bo-qua-doi-chieu-la-so": {
+  "t": "已略過與您命盤的對照。",
+  "h": "7c25b196"
+ },
+ "js.daycon.cach-choi-ngay-o-nha-hop": {
+  "t": " 種在家就能玩的方式</b> — 具體名稱請開啟完整版查看。</p>",
+  "h": "4d33ef7d"
+ },
+ "js.daycon.cach-con-tiep-thu": {
+  "t": "孩子如何吸收學習",
+  "h": "d4eac771"
+ },
+ "js.daycon.cach-cuc": {
+  "t": " 種格局、",
+  "h": "a4f8bc9a"
+ },
+ "js.daycon.cat": {
+  "t": "吉 ",
+  "h": "bbbbd4e0"
+ },
+ "js.daycon.chan-dung": {
+  "t": "肖像",
+  "h": "30421728"
+ },
+ "js.daycon.chang-dai-van": {
+  "t": " 個大運階段。",
+  "h": "0bc2d397"
+ },
+ "js.daycon.chat-can-boi-them-nhat": {
+  "t": "最需要加強的特質：",
+  "h": "4c7acf8e"
+ },
+ "js.daycon.chat-nang-khieu-cao-nhat": {
+  "t": "最突出的天賦特質：",
+  "h": "1018ec48"
+ },
+ "js.daycon.chat-nua-cung-noi": {
+  "t": " 種特質</b>也很突出（",
+  "h": "7f9974ca"
+ },
+ "js.daycon.cho-con-tham-gia-kieu-nao": {
+  "t": "<h5>用什麼方式讓孩子參與</h5>",
+  "h": "1b74c443"
+ },
+ "js.daycon.cho-nguoi-lon-hay-hieu-nham": {
+  "t": "大人常誤解之處",
+  "h": "f78ab78d"
+ },
+ "js.daycon.cho-thay-xin-thong-tin-cua": {
+  "t": "請告訴老師孩子的資料。",
+  "h": "e81463c3"
+ },
+ "js.daycon.chua-cham": {
+  "t": "尚未評分",
+  "h": "a20bbf69"
+ },
+ "js.daycon.chua-chat-nao-noi-han-len": {
+  "t": "目前還沒有特別突出的特質",
+  "h": "44a78494"
+ },
+ "js.daycon.chua-chat-nao-noi-han-nen": {
+  "t": " · 目前沒有特別突出的特質，所以列出<b>最值得優先嘗試的三種特質</b>",
+  "h": "95fc607c"
+ },
+ "js.daycon.chua-chat-nao-vuot-nguong-nen": {
+  "t": "目前沒有特質超過門檻——建議讓孩子廣泛嘗試，再觀察真實的反應。",
+  "h": "986be904"
+ },
+ "js.daycon.chua-vuot-nguong-nhung-cao-nhat": {
+  "t": "尚未超過門檻，但在 8 種特質中最高。",
+  "h": "7b04f512"
+ },
+ "js.daycon.co-doi-chieu": {
+  "t": "好，來對照 →",
+  "h": "a3846e57"
+ },
+ "js.daycon.cung-an-than": {
+  "t": "<li><b>身宮所在</b>—— ",
+  "h": "23b5a7a9"
+ },
+ "js.daycon.cung-name": {
+  "t": "{name}",
+  "h": "3cb49303"
+ },
+ "js.daycon.cung-tinh-am-duong-de-va": {
+  "t": "陰陽屬性相同——容易起衝突",
+  "h": "38ee66ae"
+ },
+ "js.daycon.cung-tu-tuc-cua-ban": {
+  "t": "您的子女宮",
+  "h": "f546ca50"
+ },
+ "js.daycon.da": {
+  "t": "走勢 ",
+  "h": "ea471098"
+ },
+ "js.daycon.da-chon-san": {
+  "t": "<p>已為這項特質預先選好 <b>",
+  "h": "0f8b5933"
+ },
+ "js.daycon.dang-o-chang-nay": {
+  "t": " · 目前正處於這個階段",
+  "h": "dca615be"
+ },
+ "js.daycon.day-con-theo-la-so": {
+  "t": "依命盤教養孩子",
+  "h": "2013a771"
+ },
+ "js.daycon.day-con-theo-la-so-6c04": {
+  "t": "依命盤教養孩子",
+  "h": "80688ea6"
+ },
+ "js.daycon.day-con-theo-la-so-l6v3": {
+  "t": "依命盤教養孩子—— ",
+  "h": "90ccd72e"
+ },
+ "js.daycon.day-la-ban-huong-dan-nuoi-ten": {
+  "t": "這是**{ten}**的教養指南。還想多問哪個情境嗎？",
+  "h": "6e9c3d69"
+ },
+ "js.daycon.dieu-ban-dang-lo-ve-con": {
+  "t": "您對孩子最擔心的是什麼呢？",
+  "h": "75d020b9"
+ },
+ "js.daycon.dieu-ban-dang-lo-viet-rieng": {
+  "t": "針對您擔心的事，依孩子的命盤個別撰寫",
+  "h": "3f67856e"
+ },
+ "js.daycon.dieu-cha-me-dang-lo": {
+  "t": "父母擔心的事：{lo}",
+  "h": "cc98d53f"
+ },
+ "js.daycon.dieu-dang-lo": {
+  "t": "擔心的事",
+  "h": "1c1218e7"
+ },
+ "js.daycon.dieu-dang-lo-s1b1": {
+  "t": "擔心的事：<b>",
+  "h": "707a2eb1"
+ },
+ "js.daycon.dinh-huong-cach-day": {
+  "t": "教養方向與方式",
+  "h": "fb8a0485"
+ },
+ "js.daycon.dinh-huong-dh": {
+  "t": "方向：{dh}",
+  "h": "c20461b0"
+ },
+ "js.daycon.dinh-huong-moi-truong-hoc-phuong": {
+  "t": "學習環境的方向 + 適合孩子的教養方法",
+  "h": "9673ce91"
+ },
+ "js.daycon.do-5-truc-tinh-khi-va": {
+  "t": "測量 5 條氣質軸與 8 種天賦特質",
+  "h": "44451f2e"
+ },
+ "js.daycon.doi-chieu-them-voi-la-so": {
+  "t": "已加入與您命盤的對照 ✓",
+  "h": "65992be6"
+ },
+ "js.daycon.doi-chieu-voi-la-so-cua": {
+  "t": "與您命盤的對照：",
+  "h": "69111647"
+ },
+ "js.daycon.dong-vien-kieu-nay-moi-vao": {
+  "t": "這樣的鼓勵方式才聽得進去",
+  "h": "8615f222"
+ },
+ "js.daycon.du-kien-lap-ra-tu-chinh": {
+  "t": " 筆資料</b> — ",
+  "h": "fdb76ddf"
+ },
+ "js.daycon.gio-sinh-cua-ban-la-may": {
+  "t": "您的出生時辰是幾點？",
+  "h": "3e121266"
+ },
+ "js.daycon.gioi-tinh-cua-ban-cha-me": {
+  "t": "請問您的性別（父親／母親）是？",
+  "h": "3e7f29e6"
+ },
+ "js.daycon.hai-me-con-hay-va-nhau": {
+  "t": "母子（親子）兩人容易在哪些地方起衝突？",
+  "h": "8121e071"
+ },
+ "js.daycon.hay-bi-doc-nham": {
+  "t": "<p><b>常被誤解之處：</b> ",
+  "h": "560ec4eb"
+ },
+ "js.daycon.hoat-dong-de-dang-ky-ra": {
+  "t": " 項需報名／外出的活動</b>與 <b>",
+  "h": "047d6333"
+ },
+ "js.daycon.hoi-nha-truong": {
+  "t": "<b>可以問學校的事：</b>",
+  "h": "2b67b4bb"
+ },
+ "js.daycon.hop": {
+  "t": "<p><b>適合：</b> ",
+  "h": "23262161"
+ },
+ "js.daycon.khac-tinh-am-duong-de-bu": {
+  "t": "陰陽屬性不同——容易互補",
+  "h": "b5f77a93"
+ },
+ "js.daycon.khoa": {
+  "t": "鎖定",
+  "h": "393cb36a"
+ },
+ "js.daycon.khoang-mot-phan-bay-so-la": {
+  "t": "大約每七份命盤就有一份屬於這種情況。</p>",
+  "h": "ff8e890c"
+ },
+ "js.daycon.khong-co-buoc-nao-doan-mo": {
+  "t": "沒有任何一步是猜的：出生資料改動一個細節，上面整張表都會跟著變。",
+  "h": "065d23da"
+ },
+ "js.daycon.khong-co-chinh-tinh": {
+  "t": "無主星",
+  "h": "753ded73"
+ },
+ "js.daycon.khong-dat-ten": {
+  "t": "未命名",
+  "h": "295915d5"
+ },
+ "js.daycon.khong-the-ket-noi-vui-long": {
+  "t": "無法連線，請再試一次。",
+  "h": "bf0b6e7b"
+ },
+ "js.daycon.khung-dai-van": {
+  "t": "大運區間 ",
+  "h": "06be9124"
+ },
+ "js.daycon.kieu-cua-ban-kieu": {
+  "t": "您的類型：{kieu}",
+  "h": "1f89ad05"
+ },
+ "js.daycon.ky-luat-kieu-nay-phan-tac": {
+  "t": "會適得其反的管教方式",
+  "h": "0af70e1c"
+ },
+ "js.daycon.ky-luat-phan-tac-dung-kl": {
+  "t": "會適得其反的管教方式：{kl}",
+  "h": "4ed18b67"
+ },
+ "js.daycon.la-so": {
+  "t": "命盤：",
+  "h": "2644d5f2"
+ },
+ "js.daycon.la-so-cua-con-khong-nghieng": {
+  "t": "<p>孩子的命盤<b>沒有明顯偏向</b>任何領域——這是真實的結果，不是機器漏讀。",
+  "h": "4465b58f"
+ },
+ "js.daycon.lam-con-bo-ngang": {
+  "t": "<p><b>會讓孩子半途放棄的事：</b> ",
+  "h": "4bfcce62"
+ },
+ "js.daycon.lam-gi-tu-toi-nay-nen": {
+  "t": "今晚起可以做的事——宜做與宜避免的",
+  "h": "fabc2ced"
+ },
+ "js.daycon.lap-la-so-phan-kieu-nguoi": {
+  "t": "排出命盤並判定類型",
+  "h": "61f07874"
+ },
+ "js.daycon.loi": {
+  "t": "錯誤 ",
+  "h": "1b80116b"
+ },
+ "js.daycon.loi-8d72": {
+  "t": "錯誤：",
+  "h": "471c0087"
+ },
+ "js.daycon.luong": {
+  "t": "兩 →",
+  "h": "36d6704d"
+ },
+ "js.daycon.luu-nien-cung": {
+  "t": "流年宮 ",
+  "h": "8f5a16cc"
+ },
+ "js.daycon.mo-ban-huong-dan-day-du": {
+  "t": "開啟完整教養指南",
+  "h": "5b95fbd4"
+ },
+ "js.daycon.muc-trong-la-so": {
+  "t": "項命盤依據",
+  "h": "4e83a32a"
+ },
+ "js.daycon.muon-xung-chieu": {
+  "t": "（借對宮）",
+  "h": "7363dfe3"
+ },
+ "js.daycon.nam-giua-dung-duoc-ca-hai": {
+  "t": "位於中間，兩種方式都能用",
+  "h": "88eb619c"
+ },
+ "js.daycon.nam-truc-tinh-khi": {
+  "t": "五條氣質軸",
+  "h": "9d3afdaa"
+ },
+ "js.daycon.nam-truc-tinh-khi-tam-chat": {
+  "t": "五條氣質軸 + 八種天賦特質，依孩子的命盤評分",
+  "h": "3ff91004"
+ },
+ "js.daycon.nen": {
+  "t": "<p><b>宜：</b> ",
+  "h": "96dd52e2"
+ },
+ "js.daycon.nen-cho-ten-thu-hoat-dong": {
+  "t": "先讓{ten}試哪一種活動比較好？",
+  "h": "c13288e1"
+ },
+ "js.daycon.ngay-sinh-duong-lich-cua-ban": {
+  "t": "您的國曆（陽曆）出生日期是哪一天？",
+  "h": "ef23d3fb"
+ },
+ "js.daycon.nhom-tuoi": {
+  "t": "年齡層：<b>",
+  "h": "974ef95b"
+ },
+ "js.daycon.o-nha": {
+  "t": "<p><b>在家的表現：</b> ",
+  "h": "adc7648c"
+ },
+ "js.daycon.pha-them": {
+  "t": "另外混有",
+  "h": "4b629d3a"
+ },
+ "js.daycon.ra-bai-giao-viec": {
+  "t": "出作業／交辦事情的方式",
+  "h": "2dde825d"
+ },
+ "js.daycon.sach-dan-ve-sao": {
+  "t": "——命宮之星「",
+  "h": "7b5e7401"
+ },
+ "js.daycon.sao-an-tren-12-cung": {
+  "t": " 顆星安在十二宮、",
+  "h": "a6914f13"
+ },
+ "js.daycon.sat": {
+  "t": " / 煞 ",
+  "h": "c472d1aa"
+ },
+ "js.daycon.suy-tu": {
+  "t": "</b>——推斷依據：",
+  "h": "55a15f14"
+ },
+ "js.daycon.tai-cung-menh": {
+  "t": "」的典籍引文</span></div>",
+  "h": "173c6b01"
+ },
+ "js.daycon.tam-chat-nang-khieu": {
+  "t": "八種天賦特質",
+  "h": "10c9f44e"
+ },
+ "js.daycon.ten-nghieng-ve-kieu-kieu": {
+  "t": "{ten}偏向{kieu}類型（{tutuong}）",
+  "h": "aea15b43"
+ },
+ "js.daycon.thap-nhat-trong-8-chat-cach": {
+  "t": "在 8 種特質中最低——如何加強與具體方向，都在完整版中。",
+  "h": "a2f3c473"
+ },
+ "js.daycon.thu-con-can-duoc-day-them": {
+  "t": "孩子還需要多學的事",
+  "h": "45fd44a4"
+ },
+ "js.daycon.tiep-tuc": {
+  "t": "繼續 →",
+  "h": "86f35ed9"
+ },
+ "js.daycon.tieu-han-cung": {
+  "t": "小限宮 ",
+  "h": "4d7ba471"
+ },
+ "js.daycon.toi-nay-ten-lai-khong-chiu": {
+  "t": "今晚{ten}又不肯讀書，我該怎麼開口？",
+  "h": "5cea25be"
+ },
+ "js.daycon.tuoi": {
+  "t": " 歲</b>",
+  "h": "e5f74880"
+ },
+ "js.daycon.tuoi-3v6h": {
+  "t": " 歲",
+  "h": "2e261bf5"
+ },
+ "js.daycon.tuoi-tuoi-mu": {
+  "t": " 歲（虛歲）",
+  "h": "f62485fd"
+ },
+ "js.daycon.vach-dut-nguong-dang-cho-thu": {
+  "t": "▲ 虛線 = 「值得嘗試」的門檻",
+  "h": "16e23b36"
+ },
+ "js.daycon.van-nam": {
+  "t": "<li><b>年運 ",
+  "h": "1192aa32"
+ },
+ "js.daycon.vi-sao-la-so-lai-do": {
+  "t": "為什麼命盤能量出這幾條軸？",
+  "h": "f65c0dfb"
+ },
+ "js.daycon.viec-dung-luc-nay-la-cho": {
+  "t": "現在最該做的是<b>讓孩子廣泛嘗試，再觀察真實的反應</b>，不要替孩子做選擇。",
+  "h": "b4af8a17"
+ },
+ "js.daycon.viet-dinh-huong-va-huong-dan": {
+  "t": "撰寫方向與教養指南",
+  "h": "10f821e4"
+ },
+ "js.daycon.vui-long-nhap-day-du-ngay": {
+  "t": "請完整輸入孩子的出生年、月、日。",
+  "h": "784233ac"
+ },
+ "js.daycon.vuot-nguong-dang-cho-thu": {
+  "t": "已超過門檻（「值得嘗試」）。",
+  "h": "ee663dd4"
+ },
+ "js.daycon.vuot-nguong-dang-cho-thu-khong": {
+  "t": "★ = 超過門檻的特質（「值得嘗試」），並非已證實的天賦。",
+  "h": "1dec3af7"
+ },
+ "js.daycon.xem-ban-huong-dan-day-du": {
+  "t": "✦ 查看完整教養指南 —",
+  "h": "3a668eed"
+ },
+ "js.daycon.xem-diem-o-bieu-do-tren": {
+  "t": "）——分數請見上方圖表，各項特質的詳細內容請開啟完整版閱讀。",
+  "h": "edfabb37"
+ },
+ "js.daycon.xem-them": {
+  "t": "<summary>再看 ",
+  "h": "c5afdcd1"
+ },
+ "js.duyenno.anh-dang-tai-co-the-hoi": {
+  "t": "圖片載入中，可能稍慢——請稍候，或",
+  "h": "c4e9709b"
+ },
+ "js.duyenno.anh-minh-hoa-mo": {
+  "t": "示意圖（模糊）",
+  "h": "bb4bd552"
+ },
+ "js.duyenno.ban-co-muon-them-who": {
+  "t": "要把{who}加入故事嗎？（最多 {max} 人）",
+  "h": "b57078f6"
+ },
+ "js.duyenno.ban-da-xem-duyen-no-cua": {
+  "t": "✓ 您已看過這組命盤的緣分——再次開啟不會扣除兩",
+  "h": "60fbdfb0"
+ },
+ "js.duyenno.bo-nguoi-nay": {
+  "t": "移除此人",
+  "h": "690b6802"
+ },
+ "js.duyenno.buc-tranh-chung-minh-hoa": {
+  "t": "全組畫作——示意",
+  "h": "0e03eaba"
+ },
+ "js.duyenno.cac-dau-hieu-con-lai-va": {
+  "t": " ——其餘跡象與所有人之間完整的緣分網絡，都在完整版中。",
+  "h": "c9821896"
+ },
+ "js.duyenno.cac-moi-duyen-trong-nhom": {
+  "t": "組內的各段緣分",
+  "h": "d40e26f3"
+ },
+ "js.duyenno.can-it-nhat-hai-la-so": {
+  "t": "至少需要兩份命盤。",
+  "h": "4708eed7"
+ },
+ "js.duyenno.cho-thay-xin-thong-tin-cua-who": {
+  "t": "請告訴老師{who}的資料。",
+  "h": "471d6f1e"
+ },
+ "js.duyenno.co-them-nguoi": {
+  "t": "好，新增 →",
+  "h": "ff2cea9c"
+ },
+ "js.duyenno.dang-dung-anh": {
+  "t": "圖片製作中…",
+  "h": "7bce9760"
+ },
+ "js.duyenno.dang-ve-buc-tranh-ca-nhom": {
+  "t": "正在為全組人繪製畫作…",
+  "h": "dcd60961"
+ },
+ "js.duyenno.dau-hieu-label": {
+  "t": "跡象：{label}",
+  "h": "cae6f731"
+ },
+ "js.duyenno.doi-chieu-dia-chi-ngu-hanh": {
+  "t": "對照地支、五行與主星",
+  "h": "7e76a0f2"
+ },
+ "js.duyenno.du-n-nguoi-xem-ngay": {
+  "t": "就以 {n} 人來看吧。",
+  "h": "fcfd4d3d"
+ },
+ "js.duyenno.du-roi-xem-ngay": {
+  "t": "夠了，立即查看 →",
+  "h": "d8de245d"
+ },
+ "js.duyenno.dung-tu-la-so": {
+  "t": "<b>依命盤編寫</b><br>",
+  "h": "5de147a7"
+ },
+ "js.duyenno.duyen-no-tien-kiep": {
+  "t": "前世緣分",
+  "h": "c6b0ccb5"
+ },
+ "js.duyenno.duyen-no-tien-kiep-r7a2": {
+  "t": "前世緣分",
+  "h": "fc5445d2"
+ },
+ "js.duyenno.giua-a-va-b-gist": {
+  "t": "{a}與{b}之間：{gist} 四回故事與全組的畫作，都在完整版中。",
+  "h": "b21b2737"
+ },
+ "js.duyenno.gui-ket-qua-nay-cho-ca-nhom-names": {
+  "t": "把這份結果傳給整組人（{names}）看吧——每個人都會好奇自己扮演的角色，忍不住想查自己的命盤。",
+  "h": "a9813a1c"
+ },
+ "js.duyenno.gui-ket-qua-nay-cho-name-xem": {
+  "t": "把這份結果傳給<b>{name}</b>看吧——對方好奇起來，就會想查自己的命盤。",
+  "h": "a89262bb"
+ },
+ "js.duyenno.hai-nguoi-de-va-nhau-o": {
+  "t": "兩人容易在哪些地方起衝突？",
+  "h": "7d27557f"
+ },
+ "js.duyenno.khong-the-ket-noi-vui-long": {
+  "t": "無法連線，請再試一次。",
+  "h": "bf0b6e7b"
+ },
+ "js.duyenno.khong-ve-duoc-buc-tranh-lan": {
+  "t": "這次無法繪製畫作，下方的故事部分仍然完整。",
+  "h": "8610db8b"
+ },
+ "js.duyenno.kiep-nay-gap-lai-thi-nen": {
+  "t": "今生再次相遇，該保持怎樣的距離？",
+  "h": "c7c61218"
+ },
+ "js.duyenno.la-so": {
+  "t": "命盤：",
+  "h": "2644d5f2"
+ },
+ "js.duyenno.la-so-vjrb": {
+  "t": " ——命盤：",
+  "h": "2a79724a"
+ },
+ "js.duyenno.lap-la-so-dung-nhan-vat": {
+  "t": "排出命盤並建立人物",
+  "h": "86c4f80f"
+ },
+ "js.duyenno.loai-duyen-label": {
+  "t": "緣分類型：{label}",
+  "h": "943e47bf"
+ },
+ "js.duyenno.loi": {
+  "t": "錯誤 ",
+  "h": "1b80116b"
+ },
+ "js.duyenno.loi-8d72": {
+  "t": "錯誤：",
+  "h": "471c0087"
+ },
+ "js.duyenno.loi-ket": {
+  "t": "結語",
+  "h": "319ac5e1"
+ },
+ "js.duyenno.luot-xem": {
+  "t": "次查看",
+  "h": "980f8057"
+ },
+ "js.duyenno.mac-dinh-hai-nguoi-them-max": {
+  "t": "預設兩人，最多可新增至 {max} 人——整組人會一起放進同一個故事與同一幅畫作。",
+  "h": "18e1432f"
+ },
+ "js.duyenno.mat-ket-noi-luc-tai-tranh": {
+  "t": "載入圖片時連線中斷——正在嘗試重新取得…",
+  "h": "48d6deaf"
+ },
+ "js.duyenno.moi-duyen": {
+  "t": "緣分",
+  "h": "eb37f74e"
+ },
+ "js.duyenno.moi-duyen-4-hoi": {
+  "t": "緣分故事——四回",
+  "h": "982f3e5a"
+ },
+ "js.duyenno.moi-duyen-giua-names": {
+  "t": "**{names}**的緣分，主要內容到這裡。還想多問些什麼嗎？",
+  "h": "ea285156"
+ },
+ "js.duyenno.nam": {
+  "t": "南",
+  "h": "b580ba1b"
+ },
+ "js.duyenno.name-la-nguoi-the-nao": {
+  "t": "{name}是怎樣的人？",
+  "h": "03c43db7"
+ },
+ "js.duyenno.nguoi-ban-muon-xem-duyen-no": {
+  "t": "您想看緣分的那個人",
+  "h": "0f74fdf8"
+ },
+ "js.duyenno.nguoi-thu-ba": {
+  "t": "第三位",
+  "h": "ed014d5c"
+ },
+ "js.duyenno.nguoi-thu-hai": {
+  "t": "第二位",
+  "h": "b330c7a6"
+ },
+ "js.duyenno.nguoi-thu-nam": {
+  "t": "第五位",
+  "h": "b2a0303b"
+ },
+ "js.duyenno.nguoi-thu-nhat": {
+  "t": "第一位",
+  "h": "955e7151"
+ },
+ "js.duyenno.nguoi-thu-tu": {
+  "t": "第四位",
+  "h": "12dadc83"
+ },
+ "js.duyenno.nhan-vat-cua-ban": {
+  "t": "您的角色",
+  "h": "850ad819"
+ },
+ "js.duyenno.nu": {
+  "t": "女",
+  "h": "feb92ccd"
+ },
+ "js.duyenno.quet-ma-xem-duyen-no-cua": {
+  "t": "掃描 QR 碼——查看您的緣分",
+  "h": "2d7c866a"
+ },
+ "js.duyenno.tai-lai": {
+  "t": "重新載入",
+  "h": "16371241"
+ },
+ "js.duyenno.them-vao-nhom": {
+  "t": "加入此組",
+  "h": "366d87cc"
+ },
+ "js.duyenno.them-who": {
+  "t": "已加入{who} ✓",
+  "h": "6ed59d06"
+ },
+ "js.duyenno.thuong-la-ban": {
+  "t": "通常是您自己",
+  "h": "a9671f02"
+ },
+ "js.duyenno.toi-da-max-nguoi-mot-luot": {
+  "t": "每次最多 {max} 人。",
+  "h": "05bf983e"
+ },
+ "js.duyenno.trong-nhom-nay-ai-de-va": {
+  "t": "這一組裡誰最容易起衝突？",
+  "h": "4deab4cd"
+ },
+ "js.duyenno.truc-cua-cau-chuyen": {
+  "t": "故事的主軸",
+  "h": "1b316be1"
+ },
+ "js.duyenno.truc-cua-cau-chuyen-j6j5": {
+  "t": "（故事的主軸）",
+  "h": "de7a2dcc"
+ },
+ "js.duyenno.vi-sao-lai-luan-ra-moi-duyen": {
+  "t": "為什麼會讀出這樣的緣分？",
+  "h": "1ac5d62d"
+ },
+ "js.duyenno.viet-cau-chuyen-moi-duyen": {
+  "t": "撰寫緣分故事",
+  "h": "980f94e2"
+ },
+ "js.duyenno.vui-long-nhap-day-du-ngay-who": {
+  "t": "請完整輸入{who}的出生年、月、日。",
+  "h": "5698e85d"
  },
  "js.giosinh.am-lich": {
   "t": "（農曆）",
@@ -3230,6 +7062,294 @@
  "js.giosinh.xem-12-gio-kha-nghi": {
   "t": "查看12個候選時辰",
   "h": "3cd9aabf"
+ },
+ "js.hdtt.goi-cao-cap": {
+  "t": "高級",
+  "h": "12f26fd0"
+ },
+ "js.hdtt.goi-khoi-dau": {
+  "t": "入門",
+  "h": "fd7bbfc8"
+ },
+ "js.hdtt.goi-n": {
+  "t": "方案 {n}",
+  "h": "dde5589f"
+ },
+ "js.hdtt.goi-pho-thong": {
+  "t": "標準",
+  "h": "01d0c63f"
+ },
+ "js.hdtt.n-luong": {
+  "t": "{n} 兩",
+  "h": "c4904a65"
+ },
+ "js.hnt.ba-huong-dang-cho-con-thu": {
+  "t": "三個值得孩子嘗試的方向，附依年齡安排的具體活動",
+  "h": "b8c61ec7"
+ },
+ "js.hnt.ban-da-xem-ban-nay-roi": {
+  "t": "✓ 您已看過這份解讀——再次開啟不會扣除兩",
+  "h": "7d2c6a5b"
+ },
+ "js.hnt.ban-dinh-huong-day-du-chua": {
+  "t": "⊙ 完整方向建議尚未開啟",
+  "h": "0cc8ad2a"
+ },
+ "js.hnt.ban-se-nhan-cai-con-me": {
+  "t": "您將得到：孩子著迷的事是不是真正的強項，以及為了平衡還該再開啟哪些方向。",
+  "h": "3adee970"
+ },
+ "js.hnt.ban-se-nhan-chat-viec-hop": {
+  "t": "您將得到：適合孩子的工作特質，以及讓孩子自己開口說的提問方式——而不是預先決定的科系名稱。",
+  "h": "51f3fd6d"
+ },
+ "js.hnt.ban-se-nhan-cho-nen-bay": {
+  "t": "您將得到：先擺出什麼，孩子才有機會碰到適合的東西，以及到什麼時點就不必再擔心。",
+  "h": "120130d2"
+ },
+ "js.hnt.ban-se-nhan-mot-ban-mo": {
+  "t": "您將得到：一份清楚到足以在日常中認出孩子的傾向描述，以及適合讓孩子接觸的事。",
+  "h": "e48e5660"
+ },
+ "js.hnt.ban-se-nhan-phan-nao-trong": {
+  "t": "您將得到：孩子的想法中哪些是真正的強項，以及不把孩子推得更遠的說話方式。",
+  "h": "24a0fdb2"
+ },
+ "js.hnt.be-gai": {
+  "t": "女孩",
+  "h": "af93dba0"
+ },
+ "js.hnt.be-trai": {
+  "t": "男孩",
+  "h": "274225bc"
+ },
+ "js.hnt.cham-21-truc-tinh-khi-chon": {
+  "t": "為 21 條氣質軸評分並選出傾向",
+  "h": "f27b81b0"
+ },
+ "js.hnt.chang-dang-o-full": {
+  "t": "<li><b>目前所處階段</b>：{a}–{b} 歲（{y1}–{y2} 年），{cung}</li>",
+  "h": "894bc892"
+ },
+ "js.hnt.chat-nguoi-noi-nhat": {
+  "t": "最突出的特質：",
+  "h": "5bb97cff"
+ },
+ "js.hnt.chat-nguoi-noi-thu-nhi": {
+  "t": "第二突出的特質：",
+  "h": "cd07e9dc"
+ },
+ "js.hnt.chat-viec-ve-sau": {
+  "t": "日後的工作特質",
+  "h": "614a78bb"
+ },
+ "js.hnt.cho-hay-bi-hieu-nham": {
+  "t": "常被誤解之處",
+  "h": "9d96dce2"
+ },
+ "js.hnt.con-chi-me-dung-mot-thu": {
+  "t": "孩子只迷一件事，擔心會偏頗",
+  "h": "37b2feb7"
+ },
+ "js.hnt.con-chua-thich-gi-ro-ret": {
+  "t": "孩子沒有明顯喜歡的事，對什麼都淡淡的",
+  "h": "3c4412e1"
+ },
+ "js.hnt.con-thich-huong-ma-minh-khong": {
+  "t": "孩子喜歡的是我不想要的方向",
+  "h": "b2e58212"
+ },
+ "js.hnt.cung-name": {
+  "t": "{name}",
+  "h": "3cb49303"
+ },
+ "js.hnt.cuoi-tuan-nay-toi-nen-cho-ten": {
+  "t": "這個週末我該先讓{ten}試什麼？",
+  "h": "f2a056eb"
+ },
+ "js.hnt.dau-hieu-o-nha": {
+  "t": "在家中的跡象",
+  "h": "df425a5c"
+ },
+ "js.hnt.day-la-ban-dinh-huong-som-ten": {
+  "t": "這是給**{ten}**的早期方向建議。還想多問些什麼嗎？",
+  "h": "fa23b364"
+ },
+ "js.hnt.do-nghieng": {
+  "t": "傾斜程度",
+  "h": "f640298c"
+ },
+ "js.hnt.do-nghieng-pct-phan-tram": {
+  "t": "相對於最高傾向，傾斜程度為百分之 {pct}",
+  "h": "c8321ffe"
+ },
+ "js.hnt.huong-nghiep-som": {
+  "t": "早期職涯方向—— ",
+  "h": "9779b5fc"
+ },
+ "js.hnt.huong-nghiep-som-cho-con": {
+  "t": "孩子的早期職涯方向",
+  "h": "2735212c"
+ },
+ "js.hnt.khoa": {
+  "t": "鎖定",
+  "h": "393cb36a"
+ },
+ "js.hnt.khong-co-chinh-tinh": {
+  "t": "無主星",
+  "h": "753ded73"
+ },
+ "js.hnt.khong-co-gi-gap-chi-muon": {
+  "t": "沒有什麼急事，只是想更了解孩子",
+  "h": "cf2efa39"
+ },
+ "js.hnt.khong-ten": {
+  "t": "未命名",
+  "h": "7c5b38ee"
+ },
+ "js.hnt.khong-the-ket-noi-vui-long": {
+  "t": "無法連線，請再試一次。",
+  "h": "bf0b6e7b"
+ },
+ "js.hnt.kieu": {
+  "t": "類型",
+  "h": "17afe1d6"
+ },
+ "js.hnt.la-so": {
+  "t": "命盤：",
+  "h": "2644d5f2"
+ },
+ "js.hnt.la-so-con-chua-nghieng-han-full": {
+  "t": "⚠️ <b>孩子的命盤目前還沒有明顯偏向任何方向。</b>在這個年紀，這是很正常的事——現在最適合的建議是<b>讓孩子廣泛嘗試</b>，不要太早定案。下面是最偏向的方向，但請當作可以嘗試的提示來讀，而不是結論。",
+  "h": "f97c9830"
+ },
+ "js.hnt.la-so-nay": {
+  "t": "這份命盤",
+  "h": "9d459fb1"
+ },
+ "js.hnt.la-so-nay-da-tuoi-link": {
+  "t": "<b>這份命盤已是{tuoi}</b>——這已不是<i>孩子的早期方向</i>這個問題，因此家長讀孩子的方向建議<b>不在這裡開啟</b>，也<b>不扣除兩</b>。<br><br>上方的傾向部分仍可閱讀，且依舊免費——它是從命盤讀出的，所以在任何年齡都成立。若想讀成年人的職涯方向（領域、角色、規模、職業分支），請使用{link}。",
+  "h": "32842316"
+ },
+ "js.hnt.lap-la-so-phan-kieu-nguoi": {
+  "t": "排出命盤並判定類型",
+  "h": "61f07874"
+ },
+ "js.hnt.loi": {
+  "t": "錯誤 ",
+  "h": "1b80116b"
+ },
+ "js.hnt.loi-8d72": {
+  "t": "錯誤：",
+  "h": "471c0087"
+ },
+ "js.hnt.luong": {
+  "t": "兩 →",
+  "h": "36d6704d"
+ },
+ "js.hnt.mo-ban-dinh-huong-day-du": {
+  "t": "開啟完整方向建議",
+  "h": "88ead889"
+ },
+ "js.hnt.muon-xung-chieu": {
+  "t": " <i>——借對宮</i>",
+  "h": "77b3f2b2"
+ },
+ "js.hnt.nen-cho-lam-quen-hd": {
+  "t": "適合讓孩子接觸：{hd}",
+  "h": "699e4a26"
+ },
+ "js.hnt.nen-cho-lam-quen-o-lua": {
+  "t": "這個年齡層適合接觸的事",
+  "h": "cd2440b6"
+ },
+ "js.hnt.nghe-co-chat-do-chi-de": {
+  "t": "具備該特質的職業——僅供想像",
+  "h": "1377df2f"
+ },
+ "js.hnt.nguoi-lon-nen": {
+  "t": "大人該做的",
+  "h": "f397c75d"
+ },
+ "js.hnt.nguoi-lon-nen-nen": {
+  "t": "大人該做：{nen}",
+  "h": "8198bc18"
+ },
+ "js.hnt.nguoi-lon-tranh": {
+  "t": "大人該避免的",
+  "h": "5dd28891"
+ },
+ "js.hnt.nu": {
+  "t": "女",
+  "h": "feb92ccd"
+ },
+ "js.hnt.sap-phai-chon-mon-to-hop": {
+  "t": "即將要選科目／組合／學校",
+  "h": "8e562a93"
+ },
+ "js.hnt.so-thua-kem-hint": {
+  "t": "您將得到：孩子在哪些地方被用別人的尺來衡量，以及哪一把尺才是屬於孩子的。",
+  "h": "94d7dbae"
+ },
+ "js.hnt.so-thua-kem-lbl": {
+  "t": "擔心孩子跟不上朋友",
+  "h": "2c7bbfec"
+ },
+ "js.hnt.ten-dang-me-mot-thu-khac": {
+  "t": "{ten}迷上了完全不同的東西——該讓他／她去嗎？",
+  "h": "b40a573a"
+ },
+ "js.hnt.thien-huong-noi-nhat-ten-chat": {
+  "t": "最突出的傾向：{ten}——{chat}",
+  "h": "208d9982"
+ },
+ "js.hnt.thien-huong-noi-nhat-va-cach": {
+  "t": " ——最突出的傾向，以及如何讓孩子開始接觸，都在完整方向建議中。",
+  "h": "a193a19d"
+ },
+ "js.hnt.toi-nen-hoi-ten-cau-gi": {
+  "t": "我該問{ten}什麼問題，孩子才會自己說出來？",
+  "h": "01a73584"
+ },
+ "js.hnt.truong-thanh": {
+  "t": "成年",
+  "h": "8971ff40"
+ },
+ "js.hnt.tu-vi-cong-so-huong-nghiep": {
+  "t": "紫微斗數 職場與職涯",
+  "h": "45d9ae37"
+ },
+ "js.hnt.tuoi": {
+  "t": " 歲",
+  "h": "2e261bf5"
+ },
+ "js.hnt.tuoi-tuoi-mu": {
+  "t": " 歲（虛歲）",
+  "h": "f62485fd"
+ },
+ "js.hnt.vi": {
+  "t": "<b>原因：</b>",
+  "h": "58409548"
+ },
+ "js.hnt.vi-sao-la-so-lai-nghieng": {
+  "t": "為什麼命盤會偏向這個方向？",
+  "h": "11faf439"
+ },
+ "js.hnt.viec-nen-lam-trong-thang-nay": {
+  "t": "這個月該做與該停止的事，以及怎麼對孩子開口",
+  "h": "6f97a853"
+ },
+ "js.hnt.viet-ban-dinh-huong-theo-lua": {
+  "t": "撰寫依年齡安排的方向建議",
+  "h": "6ca12949"
+ },
+ "js.hnt.vui-long-nhap-day-du-ngay": {
+  "t": "請完整輸入孩子的出生年、月、日。",
+  "h": "784233ac"
+ },
+ "js.hnt.xem-ban-dinh-huong-day-du": {
+  "t": "✦ 查看完整方向建議 —",
+  "h": "efa29b24"
  },
  "js.home.3-buoc-dau-tien": {
   "t": "最初的 3 步",
@@ -3731,6 +7851,50 @@
   "t": "沖生肖 ",
   "h": "e92ab4fa"
  },
+ "js.hooklayer.5-8-giay": {
+  "t": "5–8 秒",
+  "h": "cbbdee08"
+ },
+ "js.hooklayer.da-lap-xong": {
+  "t": "命盤已完成 · {n} 個值得留意的重點",
+  "h": "124b920b"
+ },
+ "js.hooklayer.dang-ky-de-xem": {
+  "t": "免費註冊帳號即可獲得更多預覽次數，或儲值後立即無限次查看。",
+  "h": "0c412f92"
+ },
+ "js.hooklayer.dang-ky-mien-phi": {
+  "t": "免費註冊 →",
+  "h": "89d5985d"
+ },
+ "js.hooklayer.dang-soan": {
+  "t": "正在撰寫更吸引人的開場…",
+  "h": "edd225b5"
+ },
+ "js.hooklayer.dang-soan-eta": {
+  "t": "正在撰寫更吸引人的開場…（通常需 5–8 秒）",
+  "h": "96371284"
+ },
+ "js.hooklayer.dieu-quan-trong": {
+  "t": "你的{tool}中最重要的 {n} 點 <span>（預覽）</span>",
+  "h": "bcfab32e"
+ },
+ "js.hooklayer.het-luot": {
+  "t": "免費預覽次數已用完",
+  "h": "7fc6be3c"
+ },
+ "js.hooklayer.mo-ban-day-du": {
+  "t": "開啟完整版",
+  "h": "84fe9699"
+ },
+ "js.hooklayer.nap-de-xem": {
+  "t": "儲值後即可在本站所有工具中無限次查看這段精選開場。",
+  "h": "151e4adb"
+ },
+ "js.hooklayer.nap-luong": {
+  "t": "儲值 →",
+  "h": "96c6fb5d"
+ },
  "js.kimlau.chip1": {
   "t": "哪一年最適合蓋房？",
   "h": "992ff775"
@@ -3978,6 +8142,150 @@
  "js.laso.xuat-that-bai": {
   "t": "匯出失敗：",
   "h": "b105cd2a"
+ },
+ "js.lasochart.am": {
+  "t": "陰",
+  "h": "99492f1a"
+ },
+ "js.lasochart.am-duong-nam": {
+  "t": "{ad}{gt} · 陰陽{tl}",
+  "h": "749576bd"
+ },
+ "js.lasochart.am-lich": {
+  "t": "{ngay}（農曆）· {chi}時",
+  "h": "15f51c93"
+ },
+ "js.lasochart.cuc-l": {
+  "t": "局：",
+  "h": "aac31479"
+ },
+ "js.lasochart.dai-van": {
+  "t": "大運：{chi}（{a}–{b} 歲）",
+  "h": "f2d3551d"
+ },
+ "js.lasochart.diem": {
+  "t": "{n} 分",
+  "h": "295a951c"
+ },
+ "js.lasochart.duong": {
+  "t": "陽",
+  "h": "0efa2ecf"
+ },
+ "js.lasochart.duong-lich": {
+  "t": "{y}/{m}/{d}（國曆）· {chi}時",
+  "h": "499f734e"
+ },
+ "js.lasochart.gioi-tinh": {
+  "t": "性別：{gt}",
+  "h": "72c2c73e"
+ },
+ "js.lasochart.lap-la-so": {
+  "t": "排盤時間：{t}",
+  "h": "188a89be"
+ },
+ "js.lasochart.luu-dai-han": {
+  "t": "流大限：{chi} · {cung}",
+  "h": "0ee60780"
+ },
+ "js.lasochart.luu-tip": {
+  "t": "{ten} — 僅在推算年份作用",
+  "h": "e2da452a"
+ },
+ "js.lasochart.luu-tip-sao": {
+  "t": "{ten}（{sao}）— 僅在推算年份作用",
+  "h": "943e2001"
+ },
+ "js.lasochart.menh-l": {
+  "t": "命：",
+  "h": "d24288f5"
+ },
+ "js.lasochart.nam": {
+  "t": "男",
+  "h": "b580ba1b"
+ },
+ "js.lasochart.nam-l": {
+  "t": "年：",
+  "h": "3731977b"
+ },
+ "js.lasochart.nam-xem-tuoi": {
+  "t": "{chi}年 — {n} 歲",
+  "h": "32dd7a23"
+ },
+ "js.lasochart.nghich-ly": {
+  "t": "逆理",
+  "h": "7fd88b7f"
+ },
+ "js.lasochart.nu": {
+  "t": "女",
+  "h": "feb92ccd"
+ },
+ "js.lasochart.than-l": {
+  "t": "身：",
+  "h": "dfb815b4"
+ },
+ "js.lasochart.thuan-ly": {
+  "t": "順理",
+  "h": "f85a07ab"
+ },
+ "js.lasochart.tieu-han": {
+  "t": "小限：{chi} · {cung}",
+  "h": "72610665"
+ },
+ "js.lasochart.tieu-han-title": {
+  "t": "{y}年小限入{c}宮",
+  "h": "4d69ee5c"
+ },
+ "js.lasochart.tuoi-al": {
+  "t": "{n} 歲（虛歲）",
+  "h": "cd4bc076"
+ },
+ "js.lienhe.gui-email": {
+  "t": "寄送電子郵件",
+  "h": "5901b176"
+ },
+ "js.loading.45-60": {
+  "t": "約 45–60 秒",
+  "h": "faa5fa7c"
+ },
+ "js.loading.con-1-phut": {
+  "t": "還剩約 1 分鐘",
+  "h": "3a0f6379"
+ },
+ "js.loading.con-giay": {
+  "t": "還剩約 {n} 秒",
+  "h": "37f5b771"
+ },
+ "js.loading.con-phut": {
+  "t": "還剩約 {n} 分鐘",
+  "h": "dd8b53f1"
+ },
+ "js.loading.da-cho": {
+  "t": "已等待 {s} 秒",
+  "h": "6315aab2"
+ },
+ "js.loading.da-cho-dots": {
+  "t": "已等待 {s} 秒…",
+  "h": "a98f17f2"
+ },
+ "js.loading.dang-ve": {
+  "t": "繪製圖像中…",
+  "h": "9806c851"
+ },
+ "js.loading.khoang-giay": {
+  "t": "約 {n} 秒",
+  "h": "bd9c1ed0"
+ },
+ "js.loading.lau-hon": {
+  "t": "比平常久——仍在繪製中，請勿關閉頁面（已等待 {s} 秒）",
+  "h": "771e54dd"
+ },
+ "js.loading.thuong-mat": {
+  "t": "通常需要{eta} · 已等待 {s} 秒",
+  "h": "31ef12fb"
+ },
+ "js.loading.van-chay": {
+  "t": "仍在處理中，請勿關閉頁面（已等待 {s} 秒）",
+  "h": "a61e402a"
  },
  "js.luangiai.10-8-dai-van-con-lai": {
   "t": "/10。其餘 8 個大運與逐年小運，都收錄在「人生週期」中。",
@@ -4531,6 +8839,402 @@
   "t": "{n}畫，{h}",
   "h": "341d0ba2"
  },
+ "js.nguoikhac.ban-cam-nang": {
+  "t": "指南",
+  "h": "a9696c9f"
+ },
+ "js.nguoikhac.ban-co-muon-doi-chieu-them": {
+  "t": "要不要再對照您自己的命盤？這樣會多出「此人與您」一節。",
+  "h": "e86dc3aa"
+ },
+ "js.nguoikhac.ban-da-xem-ban-nay-roi": {
+  "t": "✓ 您已看過這份解讀——再次開啟不會扣除兩",
+  "h": "7d2c6a5b"
+ },
+ "js.nguoikhac.ban-dang-can-lam": {
+  "t": "您需要做的事",
+  "h": "91e799f3"
+ },
+ "js.nguoikhac.ban-dang-can-lam-gi-voi": {
+  "t": "您需要對這個人做什麼？",
+  "h": "a3a85f1f"
+ },
+ "js.nguoikhac.ban-day-du-se-co-mot": {
+  "t": "完整版有專門針對這件事的獨立章節。",
+  "h": "6c907e5e"
+ },
+ "js.nguoikhac.ban-nay-doc-tu": {
+  "t": "本解讀讀取了依您輸入的出生日期與時辰所排出的<b>",
+  "h": "d989b954"
+ },
+ "js.nguoikhac.ban-se-nhan-chia-viec-the": {
+  "t": "您將得到：如何分工才不會互相踩線，以及避免什麼才不會傷了和氣。",
+  "h": "8824cf10"
+ },
+ "js.nguoikhac.ban-se-nhan-cho-nao-la": {
+  "t": "您將得到：哪些只是個性差異，並不是感情已經消退。",
+  "h": "93bae219"
+ },
+ "js.nguoikhac.ban-se-nhan-dua-tre-nay": {
+  "t": "您將得到：這個孩子需要催一把，還是需要靜靜等待。",
+  "h": "d6a5344d"
+ },
+ "js.nguoikhac.ban-se-nhan-giao-viec-kieu": {
+  "t": "您將得到：怎麼交辦事情對方才肯動，怎麼提醒對方才聽得進去。",
+  "h": "753ebc00"
+ },
+ "js.nguoikhac.ban-se-nhan-ho-quyet-bang": {
+  "t": "您將得到：對方依什麼做決定，以及什麼會讓對方退縮。",
+  "h": "65d83930"
+ },
+ "js.nguoikhac.ban-se-nhan-noi-the-nao": {
+  "t": "您將得到：怎麼說話才不會又為了同一件老事吵起來。",
+  "h": "e80b5e7c"
+ },
+ "js.nguoikhac.ban-se-nhan-trinh-bay-the": {
+  "t": "您將得到：怎麼提案才能獲得核准，以及什麼時候不該提。",
+  "h": "ba10c251"
+ },
+ "js.nguoikhac.ban-se-nhan-trong-cay-duoc": {
+  "t": "您將得到：哪些事可以倚靠對方，哪些事不要指望對方。",
+  "h": "19b64bfa"
+ },
+ "js.nguoikhac.bo-qua": {
+  "t": "略過",
+  "h": "861dafde"
+ },
+ "js.nguoikhac.bo-qua-doi-chieu-la-so": {
+  "t": "已略過與您命盤的對照。",
+  "h": "7c25b196"
+ },
+ "js.nguoikhac.cach-cuc": {
+  "t": " 種格局、",
+  "h": "a4f8bc9a"
+ },
+ "js.nguoikhac.cach-cuc-dai-van-van-nam": {
+  "t": "格局、大運、年運，以及對這個人的具體相處方式，都在完整指南中。",
+  "h": "7a23f4d4"
+ },
+ "js.nguoikhac.cach-di-cho-viec": {
+  "t": "這件事的做法：",
+  "h": "36885ebf"
+ },
+ "js.nguoikhac.cam-nang-ung-xu": {
+  "t": "相處指南—— ",
+  "h": "2aba8d61"
+ },
+ "js.nguoikhac.can-giao-viec-nhac-viec-cho": {
+  "t": "需要交辦／提醒對方做事",
+  "h": "8a5c5843"
+ },
+ "js.nguoikhac.cat": {
+  "t": "吉 ",
+  "h": "bbbbd4e0"
+ },
+ "js.nguoikhac.chang-dai-van": {
+  "t": " 個大運階段。",
+  "h": "0bc2d397"
+ },
+ "js.nguoikhac.chinh-tinh-tai-cung": {
+  "t": "主星所在宮位：",
+  "h": "37742cf1"
+ },
+ "js.nguoikhac.cho-thay-xin-thong-tin-cua": {
+  "t": "請告訴老師這個人的資料。",
+  "h": "4704e927"
+ },
+ "js.nguoikhac.chon-mot-viec-cu-the-thi": {
+  "t": "選擇具體的事項，解讀會多出專屬於那件事的「做法」。",
+  "h": "29c1bbf5"
+ },
+ "js.nguoikhac.chua-cham": {
+  "t": "尚未評分",
+  "h": "a20bbf69"
+ },
+ "js.nguoikhac.co-doi-chieu": {
+  "t": "好，來對照 →",
+  "h": "a3846e57"
+ },
+ "js.nguoikhac.con": {
+  "t": "還有 ",
+  "h": "be81ceb0"
+ },
+ "js.nguoikhac.cung-an-than": {
+  "t": "<li><b>身宮所在</b>—— ",
+  "h": "23b5a7a9"
+ },
+ "js.nguoikhac.cung-cung-trong-la-so-cua": {
+  "t": "您命盤中的{cung}",
+  "h": "85ab2993"
+ },
+ "js.nguoikhac.cung-name": {
+  "t": "{name}",
+  "h": "3cb49303"
+ },
+ "js.nguoikhac.cung-tinh-am-duong-de-va": {
+  "t": "陰陽屬性相同——容易起衝突",
+  "h": "38ee66ae"
+ },
+ "js.nguoikhac.da": {
+  "t": "走勢 ",
+  "h": "ea471098"
+ },
+ "js.nguoikhac.dai-van-dang-chay": {
+  "t": "<li><b>目前的大運</b>—— ",
+  "h": "7e2a0133"
+ },
+ "js.nguoikhac.dang-co-bat-dong-chua-go": {
+  "t": "目前有尚未化解的分歧",
+  "h": "f32b8bb1"
+ },
+ "js.nguoikhac.day-la-ban-cam-nang-ung-ten": {
+  "t": "這是與**{ten}**相處的指南。還想多問哪個情境嗎？",
+  "h": "10e397ff"
+ },
+ "js.nguoikhac.doc-menh-phuc-duc-thien-di": {
+  "t": "解讀命宮・福德宮・遷移宮・官祿宮・僕役宮",
+  "h": "1a737bb6"
+ },
+ "js.nguoikhac.doi-chieu-them-voi-la-so": {
+  "t": "已加入與您命盤的對照 ✓",
+  "h": "65992be6"
+ },
+ "js.nguoikhac.doi-chieu-voi-la-so-cua": {
+  "t": "與您命盤的對照：",
+  "h": "69111647"
+ },
+ "js.nguoikhac.du-kien-lap-ra-tu-chinh": {
+  "t": " 筆資料</b> — ",
+  "h": "fdb76ddf"
+ },
+ "js.nguoikhac.hai-ben-de-va-nhau-o": {
+  "t": "雙方容易在哪些地方起衝突？",
+  "h": "4604fce9"
+ },
+ "js.nguoikhac.ho-coi-trong-cai-gi-va": {
+  "t": "對方重視什麼，又怕失去什麼",
+  "h": "cb1b27aa"
+ },
+ "js.nguoikhac.khac-tinh-am-duong-de-bu": {
+  "t": "陰陽屬性不同——容易互補",
+  "h": "b5f77a93"
+ },
+ "js.nguoikhac.khoa": {
+  "t": "鎖定",
+  "h": "393cb36a"
+ },
+ "js.nguoikhac.khong-co-buoc-nao-doan-mo": {
+  "t": "沒有任何一步是猜的：出生資料改動一個細節，上面整張表都會跟著變。",
+  "h": "065d23da"
+ },
+ "js.nguoikhac.khong-co-chinh-tinh": {
+  "t": "無主星",
+  "h": "753ded73"
+ },
+ "js.nguoikhac.khong-co-gi-gap-chi-muon": {
+  "t": "沒有什麼急事，只是想更了解這個人",
+  "h": "7c188ebe"
+ },
+ "js.nguoikhac.khong-dat-ten": {
+  "t": "未命名",
+  "h": "295915d5"
+ },
+ "js.nguoikhac.khong-the-ket-noi-vui-long": {
+  "t": "無法連線，請再試一次。",
+  "h": "bf0b6e7b"
+ },
+ "js.nguoikhac.khung-dai-van": {
+  "t": "大運區間 ",
+  "h": "06be9124"
+ },
+ "js.nguoikhac.la-so": {
+  "t": "命盤：",
+  "h": "2644d5f2"
+ },
+ "js.nguoikhac.la-so-nguoi-khac": {
+  "t": "他人的命盤",
+  "h": "e454923c"
+ },
+ "js.nguoikhac.lap-la-so-phan-kieu-nguoi": {
+  "t": "排出命盤並判定類型",
+  "h": "61f07874"
+ },
+ "js.nguoikhac.loi": {
+  "t": "錯誤 ",
+  "h": "1b80116b"
+ },
+ "js.nguoikhac.loi-8d72": {
+  "t": "錯誤：",
+  "h": "471c0087"
+ },
+ "js.nguoikhac.luc-nao-nen-dua-viec-lon": {
+  "t": "何時提出大事",
+  "h": "94a8e09a"
+ },
+ "js.nguoikhac.luong": {
+  "t": "兩 →",
+  "h": "36d6704d"
+ },
+ "js.nguoikhac.luu-nien-cung": {
+  "t": "流年宮 ",
+  "h": "8f5a16cc"
+ },
+ "js.nguoikhac.mo-cam-nang-day-du": {
+  "t": "開啟完整指南",
+  "h": "1e071c6b"
+ },
+ "js.nguoikhac.mot-cau-chot": {
+  "t": "一句話總結",
+  "h": "9e19232a"
+ },
+ "js.nguoikhac.muc-trong-la-so": {
+  "t": "項命盤依據",
+  "h": "4e83a32a"
+ },
+ "js.nguoikhac.muon-gan-lai-sau-mot-thoi": {
+  "t": "想在疏遠一段時間後重新拉近距離",
+  "h": "30e6d4da"
+ },
+ "js.nguoikhac.muon-ru-ho-lam-chung-mot": {
+  "t": "想邀對方一起做一件大事",
+  "h": "9c94c0ef"
+ },
+ "js.nguoikhac.muon-xung-chieu": {
+  "t": "（借對宮）",
+  "h": "7363dfe3"
+ },
+ "js.nguoikhac.nen-noi-gi-3-viec-kem": {
+  "t": "該說什麼——三件事，附真實說法",
+  "h": "e6639d28"
+ },
+ "js.nguoikhac.nguoi-ban-muon-hieu-la-ai": {
+  "t": "您想了解的人，與您是什麼關係？",
+  "h": "4f8c6227"
+ },
+ "js.nguoikhac.nguoi-nay": {
+  "t": "這個人",
+  "h": "bed03c25"
+ },
+ "js.nguoikhac.nguoi-nay-la": {
+  "t": "這個人是您的",
+  "h": "d70093a0"
+ },
+ "js.nguoikhac.nguoi-nay-la-jle1": {
+  "t": "這個人是：<b>",
+  "h": "bdd5dac7"
+ },
+ "js.nguoikhac.nguoi-nay-rxn3": {
+  "t": "這個人",
+  "h": "794cf474"
+ },
+ "js.nguoikhac.pha-them": {
+  "t": "另外混有",
+  "h": "4b629d3a"
+ },
+ "js.nguoikhac.phai-tu-choi-ho-ma-khong": {
+  "t": "必須拒絕對方，又不想失去這段關係",
+  "h": "c189e09a"
+ },
+ "js.nguoikhac.phan-chua-mo-ve-nguoi-nay": {
+  "t": " 個尚未開啟的部分（關於這個人）",
+  "h": "45be6b61"
+ },
+ "js.nguoikhac.sach-dan-ve-sao": {
+  "t": "——命宮之星「",
+  "h": "7b5e7401"
+ },
+ "js.nguoikhac.sao-an-tren-12-cung": {
+  "t": " 顆星安在十二宮、",
+  "h": "a6914f13"
+ },
+ "js.nguoikhac.sap-gap-lam-viec-lan-dau": {
+  "t": "即將初次見面／共事，對對方一無所知",
+  "h": "e36b0cd8"
+ },
+ "js.nguoikhac.sap-nho-ho-mot-viec-trinh": {
+  "t": "即將請對方幫忙／提出提案",
+  "h": "60e6e0e6"
+ },
+ "js.nguoikhac.sap-phai-bao-mot-tin-ho": {
+  "t": "必須告知對方一個他不想聽的消息",
+  "h": "0d739532"
+ },
+ "js.nguoikhac.sap-phai-trao-doi-mot-viec-kho": {
+  "t": "我即將要跟{ten}談一件棘手的事，該怎麼開口？",
+  "h": "db0677dd"
+ },
+ "js.nguoikhac.sap-thuong-luong-quyen-loi-luong": {
+  "t": "即將協商權益（薪資、分成）",
+  "h": "93d154e1"
+ },
+ "js.nguoikhac.sat": {
+  "t": " / 煞 ",
+  "h": "c472d1aa"
+ },
+ "js.nguoikhac.tai-cung-menh": {
+  "t": "」的典籍引文</span></div>",
+  "h": "173c6b01"
+ },
+ "js.nguoikhac.tiep-tuc": {
+  "t": "繼續 →",
+  "h": "86f35ed9"
+ },
+ "js.nguoikhac.tieu-han-cung": {
+  "t": "小限宮 ",
+  "h": "4d7ba471"
+ },
+ "js.nguoikhac.tranh-noi-gi-3-viec-kem": {
+  "t": "該避免說什麼——三件事，附真實說法",
+  "h": "3031b0e9"
+ },
+ "js.nguoikhac.tuoi": {
+  "t": " 歲",
+  "h": "2e261bf5"
+ },
+ "js.nguoikhac.tuoi-cung": {
+  "t": " 歲，",
+  "h": "b6a16394"
+ },
+ "js.nguoikhac.van-nam": {
+  "t": "<li><b>年運 ",
+  "h": "1192aa32"
+ },
+ "js.nguoikhac.vi-sao-la-so-lai-luan-ra": {
+  "t": "為什麼命盤能讀出這樣的個性？",
+  "h": "e91e824f"
+ },
+ "js.nguoikhac.viec-can-lam": {
+  "t": "需要做的事",
+  "h": "33183420"
+ },
+ "js.nguoikhac.viec-can-lam-20zs": {
+  "t": "需要做的事：<b>",
+  "h": "50291106"
+ },
+ "js.nguoikhac.viec-gi-thi-dung-giao-cho": {
+  "t": "哪些事不要交給{ten}？",
+  "h": "3e1787c1"
+ },
+ "js.nguoikhac.viet-cam-nang-ung-xu": {
+  "t": "撰寫相處指南",
+  "h": "20a60416"
+ },
+ "js.nguoikhac.vui-long-nhap-day-du-ngay": {
+  "t": "請完整輸入您想了解的人的出生年、月、日。",
+  "h": "62f8b003"
+ },
+ "js.nguoikhac.who-nghieng-ve-kieu-kieu": {
+  "t": "{who}偏向{kieu}類型",
+  "h": "03d0db57"
+ },
+ "js.nguoikhac.xem-cam-nang-day-du": {
+  "t": "✦ 查看完整指南 —",
+  "h": "de73e107"
+ },
+ "js.nguoikhac.xem-them": {
+  "t": "<summary>再看 ",
+  "h": "c5afdcd1"
+ },
  "js.nhtg.anh-mat-noi-len-dieu-gi": {
   "t": "眼神代表什麼？",
   "h": "dca0ccee"
@@ -4642,6 +9346,242 @@
  "js.nhtg.vui-long-chon-file-anh": {
   "t": "請選擇圖片檔。",
   "h": "71a61127"
+ },
+ "js.nm.ban-be": {
+  "t": "朋友",
+  "h": "159fe485"
+ },
+ "js.nm.ban-doc-nhom": {
+  "t": "群體解讀",
+  "h": "fb21922c"
+ },
+ "js.nm.ban-doi": {
+  "t": "另一半",
+  "h": "08ebb385"
+ },
+ "js.nm.ban-nay-doc-tu-full": {
+  "t": "本解讀讀取了依您輸入的 {n} 份命盤所排出的 <b>{tong} 筆資料</b>——各宮中安置的 {sao} 顆星、{cc} 種格局、{dv} 個大運階段。沒有任何一步是猜的：任何一個人的出生資料改動一個細節，上面整張表都會跟著變。",
+  "h": "87d23b00"
+ },
+ "js.nm.bu-nhau": {
+  "t": "互補",
+  "h": "909aca10"
+ },
+ "js.nm.can-dang-nhap-de-luu-vao": {
+  "t": "需要登入才能存入簿中。",
+  "h": "5d26d852"
+ },
+ "js.nm.can-it-nhat-2": {
+  "t": " ——至少需要 2 人。",
+  "h": "724525c8"
+ },
+ "js.nm.cap-duoi": {
+  "t": "部屬",
+  "h": "4c2caab8"
+ },
+ "js.nm.cat-sat": {
+  "t": "吉−煞 ",
+  "h": "ba23fbfb"
+ },
+ "js.nm.cha-me": {
+  "t": "父母",
+  "h": "efc7bb83"
+ },
+ "js.nm.chon-it-nhat-2-nguoi-trong": {
+  "t": "請從簿中至少選出 2 人，才能讀整個群體。",
+  "h": "49d52946"
+ },
+ "js.nm.chua-cham-van-nam": {
+  "t": " ——年運尚未評分",
+  "h": "e73fd33a"
+ },
+ "js.nm.chua-chon-ai": {
+  "t": "尚未選擇任何人。",
+  "h": "21f52574"
+ },
+ "js.nm.chua-luu-duoc": {
+  "t": "無法儲存。",
+  "h": "0fe9713c"
+ },
+ "js.nm.chua-luu-duoc-kiem-tra-dang": {
+  "t": "無法儲存——請檢查登入狀態。",
+  "h": "08d31926"
+ },
+ "js.nm.co-nguoi-trong-so-thieu-ngay": {
+  "t": "簿中有人缺少出生日期——請重新選擇。",
+  "h": "6e0349ce"
+ },
+ "js.nm.con-cai": {
+  "t": "子女",
+  "h": "eb70b34b"
+ },
+ "js.nm.dang-chon": {
+  "t": "已選 ",
+  "h": "9795c6eb"
+ },
+ "js.nm.dat-ten-goi-de-con-phan": {
+  "t": "請取一個稱呼，才能在簿中分辨。",
+  "h": "689ee850"
+ },
+ "js.nm.day-la-ban-doc-n-nguoi": {
+  "t": "這是您簿中 **{n} 人**的解讀。想更深入詢問哪一位？",
+  "h": "2c925bdc"
+ },
+ "js.nm.de-giam-chan": {
+  "t": "容易踩線",
+  "h": "3cd381b5"
+ },
+ "js.nm.doi-co-du-bon-kieu": {
+  "t": "團隊四種類型齊全。",
+  "h": "16d74569"
+ },
+ "js.nm.doi-dang-thieu-kieu-ds": {
+  "t": "團隊缺少的類型：{ds}",
+  "h": "60efbac2"
+ },
+ "js.nm.doi-tac-khach": {
+  "t": "合作夥伴／客戶",
+  "h": "7e407353"
+ },
+ "js.nm.dong-nghiep": {
+  "t": "同事",
+  "h": "d8e2bdd8"
+ },
+ "js.nm.khong-ai-kieu": {
+  "t": "沒有人屬於此類型：",
+  "h": "18a19cc7"
+ },
+ "js.nm.khong-the-ket-noi-vui-long": {
+  "t": "無法連線，請再試一次。",
+  "h": "bf0b6e7b"
+ },
+ "js.nm.khung-dai-van": {
+  "t": " · 大運區間 ",
+  "h": "0beb874f"
+ },
+ "js.nm.khung-dai-van-dlx0": {
+  "t": "大運區間 ",
+  "h": "06be9124"
+ },
+ "js.nm.kieu": {
+  "t": " · 類型 ",
+  "h": "6d81ffdf"
+ },
+ "js.nm.la-so-cua-ban": {
+  "t": "您的命盤：",
+  "h": "0202ce58"
+ },
+ "js.nm.lap-la-so-tung-nguoi": {
+  "t": "逐一排出每個人的命盤",
+  "h": "a94af28e"
+ },
+ "js.nm.loi": {
+  "t": "錯誤 ",
+  "h": "1b80116b"
+ },
+ "js.nm.loi-8d72": {
+  "t": "錯誤：",
+  "h": "471c0087"
+ },
+ "js.nm.moi-luot-doc-toi-da-8": {
+  "t": "每次最多讀 8 人——再多的話，解讀就變成通訊錄了。",
+  "h": "e35f50af"
+ },
+ "js.nm.moi-luot-doc-toi-da-8-l7vo": {
+  "t": "每次最多讀 8 人。",
+  "h": "12b66f54"
+ },
+ "js.nm.nam": {
+  "t": "南",
+  "h": "b580ba1b"
+ },
+ "js.nm.nen-tim-them": {
+  "t": "建議再找：",
+  "h": "b500e6d6"
+ },
+ "js.nm.nen-tim-them-kieu-ten": {
+  "t": "建議再找的類型：{ten}",
+  "h": "22272ef1"
+ },
+ "js.nm.nguoi": {
+  "t": " 人",
+  "h": "e4c8f1aa"
+ },
+ "js.nm.nguoi-kgnv": {
+  "t": " 人 — ",
+  "h": "b0f59658"
+ },
+ "js.nm.nhap-du-ngay-thang-nam-sinh": {
+  "t": "請完整輸入出生年月日。",
+  "h": "370f8e82"
+ },
+ "js.nm.nhom-dang-thieu-chat-gi-ai": {
+  "t": "這個組缺少什麼特質，又是誰在扛？",
+  "h": "760f9c41"
+ },
+ "js.nm.nhom-n-nguoi": {
+  "t": "這個組共 {n} 人。",
+  "h": "8c677b9d"
+ },
+ "js.nm.nu": {
+  "t": "女",
+  "h": "feb92ccd"
+ },
+ "js.nm.phan-kieu-do-cho-trong-cua": {
+  "t": "分類型並找出組內的空缺",
+  "h": "338c1abe"
+ },
+ "js.nm.qua-nua-nhom-la-kieu": {
+  "t": "超過半數的人屬於此類型：",
+  "h": "5c247c71"
+ },
+ "js.nm.sep-cap-tren": {
+  "t": "上司／長官",
+  "h": "976d7a60"
+ },
+ "js.nm.so-dang-trong-bam-them-nguoi": {
+  "t": "簿中目前是空的。請按下方的<b>＋ 新增人物到簿中</b>，至少加入 2 人——上司、同事、部屬或客戶。需要登入，簿才會依帳號儲存。",
+  "h": "564308fe"
+ },
+ "js.nm.so-nhan-mach-doc-nhom-n": {
+  "t": "人脈簿——讀 {n} 人的群體",
+  "h": "08a560d8"
+ },
+ "js.nm.toi-da-8": {
+  "t": " ——最多 8 人。",
+  "h": "0bccf420"
+ },
+ "js.nm.tuan-nay-nen-gap-ai-truoc": {
+  "t": "這週該先見誰，又該怎麼開口？",
+  "h": "9337d347"
+ },
+ "js.nm.van-nam": {
+  "t": " · 年運 ",
+  "h": "357d4194"
+ },
+ "js.nm.van-nam-1z56": {
+  "t": " ——年運 ",
+  "h": "12429204"
+ },
+ "js.nm.vi-sao-hai-nguoi-do-de-giam": {
+  "t": "為什麼那兩個人容易踩線？",
+  "h": "9fbac3bc"
+ },
+ "js.nm.viec-sap-toi-nen-giao-cho-ai": {
+  "t": "接下來的事該交給這個組裡的誰？",
+  "h": "a25cdab3"
+ },
+ "js.nm.viet-ban-doc-ca-so": {
+  "t": "撰寫整本簿的解讀",
+  "h": "c9c08f4c"
+ },
+ "js.nm.xoa-khoi-so": {
+  "t": "從簿中移除",
+  "h": "4ba4a755"
+ },
+ "js.nm.xoa-la-so-nay-khoi-so": {
+  "t": "要把這份命盤從簿中移除嗎？",
+  "h": "d9231d4e"
  },
  "js.noisinh.noi-khac": {
   "t": "其他（選擇時區）",
@@ -5979,6 +10919,74 @@
   "t": "檢視生活中哪些事失去了平衡。工作／休息、付出／接受、行動／反思——重新調整。",
   "h": "64dee7e0"
  },
+ "js.paysuc.cam-on": {
+  "t": "感謝您使用明寶紫微斗數。<br>兩可用於命盤解讀與合婚等工具。",
+  "h": "25108a9b"
+ },
+ "js.paysuc.co-loi": {
+  "t": "發生錯誤",
+  "h": "f2ebd14e"
+ },
+ "js.paysuc.cong-credits": {
+  "t": "+{n} 兩",
+  "h": "2b2cc385"
+ },
+ "js.paysuc.dang-quay-lai": {
+  "t": "正在返回以繼續解鎖…",
+  "h": "018f2e01"
+ },
+ "js.paysuc.hoac-dung-ngay": {
+  "t": "或立即使用",
+  "h": "53432ef3"
+ },
+ "js.paysuc.lien-he-ho-tro": {
+  "t": "聯絡客服",
+  "h": "554c1a63"
+ },
+ "js.paysuc.loi-ket-noi": {
+  "t": "連線錯誤，請稍後再試。",
+  "h": "8d18d14b"
+ },
+ "js.paysuc.luan-giai-la-so": {
+  "t": "命盤解讀",
+  "h": "72f1fa6d"
+ },
+ "js.paysuc.nap-thanh-cong": {
+  "t": "儲值成功！",
+  "h": "897b5556"
+ },
+ "js.paysuc.nap-them": {
+  "t": "再儲值兩",
+  "h": "70a597bd"
+ },
+ "js.paysuc.quay-lai-nap": {
+  "t": "← 返回儲值",
+  "h": "477330f2"
+ },
+ "js.paysuc.so-du": {
+  "t": "目前餘額：{n} 兩",
+  "h": "0ed1f309"
+ },
+ "js.paysuc.that-bai": {
+  "t": "付款失敗，請聯絡客服。",
+  "h": "bddbcf89"
+ },
+ "js.paysuc.thieu-thong-tin": {
+  "t": "缺少付款資訊，請聯絡客服。",
+  "h": "1309e497"
+ },
+ "js.paysuc.xem-tai-khoan": {
+  "t": "查看帳號 →",
+  "h": "0ad98c44"
+ },
+ "js.paysuc.xem-tuoi-lam-an": {
+  "t": "合夥合盤",
+  "h": "5f5ba4e2"
+ },
+ "js.paysuc.xem-tuoi-vo-chong": {
+  "t": "夫妻合婚",
+  "h": "f3e7b1ed"
+ },
  "js.paywall.bam-mo-la-tra-tien-va": {
   "t": " · 點開即付款並立即閱讀，",
   "h": "9a6023cd"
@@ -6602,6 +11610,110 @@
  "js.sachdetail.tu-vi-minh-bao": {
   "t": "明寶紫微斗數",
   "h": "33336b26"
+ },
+ "js.samplehint.dang-chuan-bi": {
+  "t": "範例準備中，請稍後再來！",
+  "h": "992fd7e6"
+ },
+ "js.sc.binh-thuong": {
+  "t": "普通 ★",
+  "h": "d49b9158"
+ },
+ "js.sc.bo": {
+  "t": "爸爸",
+  "h": "dbbdf270"
+ },
+ "js.sc.can-luu-y": {
+  "t": "需留意",
+  "h": "def723aa"
+ },
+ "js.sc.con-tuoi-gi-hop-voi": {
+  "t": "孩子屬什麼生肖與父母最合？",
+  "h": "702bccb6"
+ },
+ "js.sc.da-cham-hop-xung-dia-chi": {
+  "t": "已為未來 15 年的地支合沖評分（父親**{bo}**・母親**{me}**）。最順遂的年份：**{tot}**。您想先諮詢什麼？",
+  "h": "669ae596"
+ },
+ "js.sc.ket-qua-a-b": {
+  "t": "{a} – {b} 年結果",
+  "h": "67cbb5f6"
+ },
+ "js.sc.loi": {
+  "t": "錯誤：",
+  "h": "471c0087"
+ },
+ "js.sc.luc-hop-voi-bo": {
+  "t": "與父親六合 ✓",
+  "h": "e0214f73"
+ },
+ "js.sc.luc-hop-voi-me": {
+  "t": "與母親六合 ✓",
+  "h": "f42895e4"
+ },
+ "js.sc.luc-xung-voi-bo": {
+  "t": "與父親六沖 ✗",
+  "h": "fef3a745"
+ },
+ "js.sc.luc-xung-voi-me": {
+  "t": "與母親六沖 ✗",
+  "h": "b043bcf2"
+ },
+ "js.sc.me": {
+  "t": "媽媽",
+  "h": "dfc6f90b"
+ },
+ "js.sc.nam-nao-nen-tranh-sinh-con": {
+  "t": "哪一年應避免生孩子？",
+  "h": "45ae05ad"
+ },
+ "js.sc.nam-nao-tot-nhat-de-sinh": {
+  "t": "哪一年最適合生孩子？",
+  "h": "345bd2a8"
+ },
+ "js.sc.nam-thuan-nhat-top-3": {
+  "t": "最順遂的年份（前三名）",
+  "h": "d65badf2"
+ },
+ "js.sc.nam-thuan-nhat-top-3-ds": {
+  "t": "最順遂的年份（前三名）：{ds}",
+  "h": "41c0bad6"
+ },
+ "js.sc.rat-thuan": {
+  "t": "非常順遂 ★★★",
+  "h": "ea8da095"
+ },
+ "js.sc.tam-hinh-voi-bo": {
+  "t": "與父親三刑",
+  "h": "0099e1e7"
+ },
+ "js.sc.tam-hinh-voi-me": {
+  "t": "與母親三刑",
+  "h": "996d2b57"
+ },
+ "js.sc.tam-hop-voi-bo": {
+  "t": "與父親三合",
+  "h": "117b9ae6"
+ },
+ "js.sc.tam-hop-voi-me": {
+  "t": "與母親三合",
+  "h": "5a98a39d"
+ },
+ "js.sc.thuan": {
+  "t": "順遂 ★★",
+  "h": "7a571e7c"
+ },
+ "js.sc.trung-tinh": {
+  "t": "中性",
+  "h": "308793c3"
+ },
+ "js.sc.vi-sao-nam-do-hop-ca": {
+  "t": "為什麼那一年同時適合爸爸和媽媽？",
+  "h": "bc9256b2"
+ },
+ "js.sc.vui-long-nhap-nam-sinh": {
+  "t": "請輸入有效的父親與母親出生年。",
+  "h": "ad827462"
  },
  "js.shell.an": {
   "t": "隱藏",
@@ -11035,6 +16147,466 @@
   "t": "要將這張命盤從簿冊中移除嗎？",
   "h": "d9231d4e"
  },
+ "js.taikhoan.ban-chua-chia-se-luot-nao": {
+  "t": "您還沒有分享過任何內容。",
+  "h": "4be43058"
+ },
+ "js.taikhoan.ban-chua-gui-gop-y-nao": {
+  "t": "您還沒有送出任何建議。",
+  "h": "ed1ab4a7"
+ },
+ "js.taikhoan.ban-da-dung-het-luot-moi": {
+  "t": "您已用完過去 30 天內 <strong>{n}</strong> 次有獎勵的邀請—— ",
+  "h": "fbab17bd"
+ },
+ "js.taikhoan.ban-muon-noi-gi": {
+  "t": "您想說些什麼？",
+  "h": "7a12a7f9"
+ },
+ "js.taikhoan.ban-tu-them": {
+  "t": "您自行新增",
+  "h": "39ff4ca3"
+ },
+ "js.taikhoan.buoc-xong": {
+  "t": "{a}/{b} 步",
+  "h": "ab8c9cf8"
+ },
+ "js.taikhoan.cap-luong-quan-tri": {
+  "t": "兩發放（管理員）",
+  "h": "24c9d12a"
+ },
+ "js.taikhoan.chua-co-giao-dich-nao": {
+  "t": "還沒有任何交易。",
+  "h": "eca9ffd5"
+ },
+ "js.taikhoan.chua-dung": {
+  "t": " 不對",
+  "h": "ddd914ee"
+ },
+ "js.taikhoan.chua-lien-ket": {
+  "t": "尚未連結。",
+  "h": "e0fe1693"
+ },
+ "js.taikhoan.da-chep": {
+  "t": "已複製 ✓",
+  "h": "846252e0"
+ },
+ "js.taikhoan.da-copy": {
+  "t": "✓ 已複製",
+  "h": "86409906"
+ },
+ "js.taikhoan.da-doi-mat-khau-thanh-cong": {
+  "t": "✓ 密碼已變更。",
+  "h": "b0be11cd"
+ },
+ "js.taikhoan.da-hoan-tat-luong": {
+  "t": "✓ 已完成——+{n} 兩已存入錢包。",
+  "h": "7974b68b"
+ },
+ "js.taikhoan.da-lien-ket-bot-messenger-dung": {
+  "t": "✓ 已連結——Messenger 機器人共用此兩錢包。",
+  "h": "ead6c730"
+ },
+ "js.taikhoan.da-lien-ket-bot-telegram-dung": {
+  "t": "✓ 已連結——Telegram 機器人共用此兩錢包。",
+  "h": "6f58b63f"
+ },
+ "js.taikhoan.da-lien-ket-bot-whatsapp-dung": {
+  "t": "✓ 已連結——WhatsApp 機器人共用此兩錢包。",
+  "h": "882115d7"
+ },
+ "js.taikhoan.da-lien-ket-bot-zalo-dung": {
+  "t": "✓ 已連結——Zalo 機器人共用此兩錢包。",
+  "h": "deed0e79"
+ },
+ "js.taikhoan.da-luu-ten-hien-thi": {
+  "t": "✓ 已儲存顯示名稱。",
+  "h": "48253036"
+ },
+ "js.taikhoan.da-mo-messenger-bam-bat-dau": {
+  "t": " 已開啟 Messenger——點「Get Started」或傳一則訊息完成連結，再重新整理頁面。",
+  "h": "e353366d"
+ },
+ "js.taikhoan.da-mo-telegram-bam-bat-dau": {
+  "t": " 已開啟 Telegram——在機器人中點「Start」完成連結，再重新整理頁面。",
+  "h": "4d2c8d09"
+ },
+ "js.taikhoan.da-mo-whatsapp-bam-gui-tin": {
+  "t": " 已開啟 WhatsApp——送出預先寫好的訊息完成連結，再重新整理頁面。",
+  "h": "c9e07106"
+ },
+ "js.taikhoan.da-nhan-cam-on-ban-trang": {
+  "t": "已收到——謝謝您。處理狀態會顯示在下方。",
+  "h": "a25f2423"
+ },
+ "js.taikhoan.dang-gui": {
+  "t": "傳送中…",
+  "h": "f04c8be3"
+ },
+ "js.taikhoan.dang-nhap-de-xem-ho-so": {
+  "t": "登入以查看個人檔案。",
+  "h": "1bfe72cf"
+ },
+ "js.taikhoan.dang-tai": {
+  "t": "載入中…",
+  "h": "577a1d59"
+ },
+ "js.taikhoan.dang-tao": {
+  "t": "建立中…",
+  "h": "47662404"
+ },
+ "js.taikhoan.dang-tao-lien-ket": {
+  "t": "正在建立連結…",
+  "h": "c32c93b3"
+ },
+ "js.taikhoan.dang-tao-ma": {
+  "t": "正在產生代碼…",
+  "h": "a761e1d7"
+ },
+ "js.taikhoan.day-la-hop-thu-toi-thang": {
+  "t": "這是直接寄給營運者的信箱——不是問老師的地方。",
+  "h": "4eeaf74a"
+ },
+ "js.taikhoan.doi-mat-khau-that-bai": {
+  "t": "✗ 密碼變更失敗。",
+  "h": "85e611bb"
+ },
+ "js.taikhoan.dung": {
+  "t": " 正確",
+  "h": "552da34c"
+ },
+ "js.taikhoan.fb-bug": {
+  "t": "技術錯誤",
+  "h": "ac755291"
+ },
+ "js.taikhoan.fb-da-nhan": {
+  "t": "已收到",
+  "h": "efb7534b"
+ },
+ "js.taikhoan.fb-da-xem": {
+  "t": "已查看",
+  "h": "f9809904"
+ },
+ "js.taikhoan.fb-da-xu-ly": {
+  "t": "已處理",
+  "h": "500a2314"
+ },
+ "js.taikhoan.fb-dang-xu-ly": {
+  "t": "處理中",
+  "h": "39fc9334"
+ },
+ "js.taikhoan.fb-noi-dung": {
+  "t": "解讀內容",
+  "h": "535d1e57"
+ },
+ "js.taikhoan.fb-placeholder": {
+  "t": "越具體越容易修正。例如：&quot;1990 年生命盤解讀中的財運一節，和大運一節說法相反&quot;，遠比 &quot;解讀不夠好&quot; 有用。",
+  "h": "e9db4ac9"
+ },
+ "js.taikhoan.fb-thanh-toan": {
+  "t": "付款 · 兩",
+  "h": "8987b413"
+ },
+ "js.taikhoan.fb-tinh-nang": {
+  "t": "功能建議",
+  "h": "f6ecc4b0"
+ },
+ "js.taikhoan.giu-toi-da-muc": {
+  "t": "最多保留 {n} 項——超過時老師會自動刪去最舊的項目。",
+  "h": "1ca9d45e"
+ },
+ "js.taikhoan.gop-y-da-gui": {
+  "t": "已送出的建議",
+  "h": "edc5809d"
+ },
+ "js.taikhoan.gui-gop-y-ka3h": {
+  "t": "送出建議",
+  "h": "9e3497a6"
+ },
+ "js.taikhoan.gui-gop-y-tieu-de": {
+  "t": "送出建議",
+  "h": "dc7d7429"
+ },
+ "js.taikhoan.hien-thi-giao-dich": {
+  "t": "顯示第 {a}–{b} 筆 / 共 {n} 筆交易",
+  "h": "7ab97fcf"
+ },
+ "js.taikhoan.hoac": {
+  "t": "或",
+  "h": "2797f4b3"
+ },
+ "js.taikhoan.hoi-dap-tu-tu-vi-minh": {
+  "t": "明寶紫微斗數的回覆",
+  "h": "dd209967"
+ },
+ "js.taikhoan.hoi-thay": {
+  "t": "問老師",
+  "h": "c9ffbbaf"
+ },
+ "js.taikhoan.huong-dan-thanh-toan": {
+  "t": "付款指南",
+  "h": "53371141"
+ },
+ "js.taikhoan.huy": {
+  "t": "取消",
+  "h": "33639e92"
+ },
+ "js.taikhoan.huy-lien-ket-messenger-bot-se": {
+  "t": "要取消連結 Messenger 嗎？機器人將無法再使用您的兩錢包。",
+  "h": "e19d5555"
+ },
+ "js.taikhoan.huy-lien-ket-telegram-bot-se": {
+  "t": "要取消連結 Telegram 嗎？機器人將無法再使用您的兩錢包。",
+  "h": "6c158247"
+ },
+ "js.taikhoan.huy-lien-ket-whatsapp-bot-se": {
+  "t": "要取消連結 WhatsApp 嗎？機器人將無法再使用您的兩錢包。",
+  "h": "31f159a4"
+ },
+ "js.taikhoan.huy-lien-ket-zalo-bot-se": {
+  "t": "要取消連結 Zalo 嗎？機器人將無法再使用您的兩錢包。",
+  "h": "a3a4a628"
+ },
+ "js.taikhoan.ket-qua": {
+  "t": "結果",
+  "h": "c9f95514"
+ },
+ "js.taikhoan.khac": {
+  "t": "其他",
+  "h": "5b8a28ab"
+ },
+ "js.taikhoan.khi-ho-nap-luong-lan-dau": {
+  "t": "對方第一次儲值兩時，雙方再各得 <strong>30 兩</strong>。",
+  "h": "201f2475"
+ },
+ "js.taikhoan.khong-co-giao-dich-khop-bo": {
+  "t": "沒有符合篩選條件的交易。",
+  "h": "b78b80e3"
+ },
+ "js.taikhoan.khong-doc-duoc-ho-so-thu": {
+  "t": "無法讀取個人檔案，請重新整理頁面。",
+  "h": "ac5f4991"
+ },
+ "js.taikhoan.khong-doc-duoc-lich-su": {
+  "t": "無法讀取紀錄。",
+  "h": "c7ccf5f8"
+ },
+ "js.taikhoan.khong-doc-duoc-tien-do-thu": {
+  "t": "無法讀取進度，請重新整理頁面。",
+  "h": "873418be"
+ },
+ "js.taikhoan.khong-gui-duoc-xin-thu-lai": {
+  "t": "送出失敗，請再試一次。",
+  "h": "c29e25ae"
+ },
+ "js.taikhoan.khong-tai-duoc-danh-sach-gop": {
+  "t": "無法載入建議列表。",
+  "h": "56f9aa7c"
+ },
+ "js.taikhoan.khong-tai-duoc-trang-thai-lien": {
+  "t": "無法載入連結狀態。",
+  "h": "d42a2701"
+ },
+ "js.taikhoan.khong-tao-duoc-key-thu-lai": {
+  "t": "無法建立金鑰，請稍後再試。",
+  "h": "d5bedd90"
+ },
+ "js.taikhoan.khong-tao-duoc-lien-ket-thu": {
+  "t": "無法建立連結，請稍後再試。",
+  "h": "095112a9"
+ },
+ "js.taikhoan.khong-the-tai-lich-su": {
+  "t": "無法載入紀錄。",
+  "h": "034a35a9"
+ },
+ "js.taikhoan.khong-thuc-hien-duoc": {
+  "t": "無法執行。",
+  "h": "ec9f72a3"
+ },
+ "js.taikhoan.lien-he": {
+  "t": "聯絡我們",
+  "h": "603522f1"
+ },
+ "js.taikhoan.lien-ket-messenger": {
+  "t": "連結 Messenger",
+  "h": "99c405ee"
+ },
+ "js.taikhoan.lien-ket-telegram": {
+  "t": "連結 Telegram",
+  "h": "e4c7777f"
+ },
+ "js.taikhoan.lien-ket-whatsapp": {
+  "t": "連結 WhatsApp",
+  "h": "007375bb"
+ },
+ "js.taikhoan.lien-ket-zalo": {
+  "t": "連結 Zalo",
+  "h": "73727376"
+ },
+ "js.taikhoan.loi-mang": {
+  "t": "網路錯誤。",
+  "h": "8fe8f313"
+ },
+ "js.taikhoan.loi-mang-thu-lai-sau-nhe": {
+  "t": "網路錯誤，請稍後再試。",
+  "h": "e09e98e7"
+ },
+ "js.taikhoan.loi-mang-xin-thu-lai": {
+  "t": "網路錯誤——請再試一次。",
+  "h": "1464653a"
+ },
+ "js.taikhoan.luan-giai-la-so": {
+  "t": "命盤解讀",
+  "h": "72f1fa6d"
+ },
+ "js.taikhoan.luong-khi-xong-ca-n": {
+  "t": "完成全部 {b} 項可得 +{n} 兩",
+  "h": "6a55c9a9"
+ },
+ "js.taikhoan.luot-moi-se-mo-lai-dan": {
+  "t": "邀請次數會隨每個人滿 30 天陸續恢復。",
+  "h": "3ce174a5"
+ },
+ "js.taikhoan.luu": {
+  "t": "儲存",
+  "h": "a306970e"
+ },
+ "js.taikhoan.luu-that-bai-thu-lai": {
+  "t": "✗ 儲存失敗，請再試一次。",
+  "h": "0543df5d"
+ },
+ "js.taikhoan.mat-khau-khong-khop": {
+  "t": "密碼不一致。",
+  "h": "782aade8"
+ },
+ "js.taikhoan.mat-khau-toi-thieu-6-ky": {
+  "t": "密碼至少需 6 個字元。",
+  "h": "56257bc3"
+ },
+ "js.taikhoan.moi-nguoi-dang-ky-thuong": {
+  "t": "每有一人透過您的連結註冊：對方建立帳號時，您的錢包立即獲得 <strong>+{n} 兩</strong>。",
+  "h": "a78b2e10"
+ },
+ "js.taikhoan.moi-y-kien-ve-noi-dung": {
+  "t": "凡是關於解讀內容、技術錯誤、兩的價格或您想要的功能等任何意見，",
+  "h": "76ce940d"
+ },
+ "js.taikhoan.n-luong": {
+  "t": "{n} 兩",
+  "h": "c4904a65"
+ },
+ "js.taikhoan.n-luong-thuong": {
+  "t": "{n} 兩",
+  "h": "4c7471c6"
+ },
+ "js.taikhoan.n-luot-xem": {
+  "t": "{n} 次瀏覽",
+  "h": "b99dc30e"
+ },
+ "js.taikhoan.nap-luong": {
+  "t": "儲值兩",
+  "h": "b70a5d1d"
+ },
+ "js.taikhoan.nap-thuong": {
+  "t": "儲值／獎勵",
+  "h": "1f6352ba"
+ },
+ "js.taikhoan.neu-chua-tu-lien-ket": {
+  "t": " 若未自動連結，請傳送：/link {t}",
+  "h": "4271bec8"
+ },
+ "js.taikhoan.nguoi-dung": {
+  "t": "使用者",
+  "h": "06f23b4d"
+ },
+ "js.taikhoan.nhan-cho-oa-zalo": {
+  "t": " 在 Zalo 上傳送以下這一行給明寶紫微斗數 OA（代碼 15 分鐘內有效），再重新整理頁面：<code>/link {t}</code>",
+  "h": "1cbb362f"
+ },
+ "js.taikhoan.noi-dung-gop-y-ve": {
+  "t": "建議的主題",
+  "h": "b744e759"
+ },
+ "js.taikhoan.sao-chep": {
+  "t": "複製",
+  "h": "09a1db3e"
+ },
+ "js.taikhoan.su-dung": {
+  "t": "使用",
+  "h": "a6ee0e07"
+ },
+ "js.taikhoan.sua": {
+  "t": "編輯",
+  "h": "0963749f"
+ },
+ "js.taikhoan.tao-duong-ket-noi": {
+  "t": "建立連線網址",
+  "h": "1ea224f1"
+ },
+ "js.taikhoan.tat-ca-loai-giao-dich": {
+  "t": "所有交易類型",
+  "h": "32529f70"
+ },
+ "js.taikhoan.thanh-vien-tu": {
+  "t": "{d} 加入",
+  "h": "43b4abd6"
+ },
+ "js.taikhoan.thay-chua-ghi-lai": {
+  "t": "老師還沒有記下關於您的任何事。<br>多聊幾次，老師會自己記住值得記的事。",
+  "h": "9f324126"
+ },
+ "js.taikhoan.thay-tu-ghi": {
+  "t": "老師記下",
+  "h": "4a9b5be3"
+ },
+ "js.taikhoan.thoi-gian-loai-noi-dung-so": {
+  "t": "<th>#</th><th>時間</th><th>類型</th><th>內容</th><th>數量</th><th>交易編號</th>",
+  "h": "a6125b8d"
+ },
+ "js.taikhoan.thu-hoi-key-hien-tai-ket": {
+  "t": "要撤銷目前的金鑰嗎？使用舊金鑰的連線將停止——您會立即獲得新金鑰。",
+  "h": "92016734"
+ },
+ "js.taikhoan.trang-thiet-bi-ban-dang-dung": {
+  "t": " 您正在使用的頁面與裝置會自動附上，方便我們追查錯誤——您不需另外描述。",
+  "h": "62db43d2"
+ },
+ "js.taikhoan.viec-gap-ve-thanh-toan-xem": {
+  "t": "付款的急事請見",
+  "h": "ba40de24"
+ },
+ "js.taikhoan.viet-dai-hon-mot-chut-nhe": {
+  "t": "請再多寫一點。",
+  "h": "42a09878"
+ },
+ "js.taikhoan.viet-giup-vai-dong-de-chung": {
+  "t": "請寫幾行，讓我們了解您的意思。",
+  "h": "d9864f5c"
+ },
+ "js.taikhoan.viet-vao-day-chung-toi-doc": {
+  "t": "寫在這裡。我們會全部讀過，並直接在本頁回覆。",
+  "h": "d8eb64da"
+ },
+ "js.taikhoan.vua-cong-luong": {
+  "t": "✓ 剛剛已將 <b>+{n} 兩</b>加入您的錢包。",
+  "h": "32cba2ec"
+ },
+ "js.taikhoan.xem-tuoi-lam-an": {
+  "t": "合夥合盤",
+  "h": "5f5ba4e2"
+ },
+ "js.taikhoan.xem-tuoi-vo-chong": {
+  "t": "夫妻合婚",
+  "h": "f3e7b1ed"
+ },
+ "js.taikhoan.xoa": {
+  "t": "刪除",
+  "h": "82339c0a"
+ },
+ "js.taikhoan.xoa-dieu-nay-khoi-ho-so": {
+  "t": "要從個人檔案刪除這一項嗎？老師會完全忘記。",
+  "h": "d35cee4f"
+ },
  "js.tailieu.cat-cach-cuc": {
   "t": "格局",
   "h": "760d1ac9"
@@ -13327,6 +18899,206 @@
   "t": "<button type=\"button\" class=\"chat-hl-cta\" id=\"tshOpenSheet\">查看完整 13 項指數 →</button></div></div>",
   "h": "f89bb371"
  },
+ "js.thay.disc-bac-minh": {
+  "t": "相術",
+  "h": "ae8ee50b"
+ },
+ "js.thay.disc-co-nguyet": {
+  "t": "紫微斗數根本與解讀",
+  "h": "582cc3fc"
+ },
+ "js.thay.disc-dau-nam": {
+  "t": "感情與婚姻",
+  "h": "03de9681"
+ },
+ "js.thay.disc-dieu-khong": {
+  "t": "事業與財運",
+  "h": "5866572a"
+ },
+ "js.thay.disc-huyen-khong": {
+  "t": "風水",
+  "h": "181a3d4e"
+ },
+ "js.thay.disc-linh-co": {
+  "t": "易經與梅花易數",
+  "h": "deb6aa38"
+ },
+ "js.thay.disc-linh-son": {
+  "t": "競爭型事業與人脈",
+  "h": "074cb601"
+ },
+ "js.thay.disc-ngoc-tinh": {
+  "t": "合婚與緣分",
+  "h": "bf736fe8"
+ },
+ "js.thay.disc-nhat-nguyen": {
+  "t": "短期運勢與擇日",
+  "h": "4649ae54"
+ },
+ "js.thay.disc-tam-kinh": {
+  "t": "八字與奇門",
+  "h": "f8e8d286"
+ },
+ "js.thay.disc-thai-hu": {
+  "t": "快問快答、反問",
+  "h": "2b657843"
+ },
+ "js.thay.disc-thanh-hu": {
+  "t": "塔羅與生命靈數",
+  "h": "bf665759"
+ },
+ "js.thay.disc-thien-an": {
+  "t": "取名與教養",
+  "h": "049ae929"
+ },
+ "js.thay.disc-tinh-quang": {
+  "t": "西洋占星",
+  "h": "d690a059"
+ },
+ "js.thay.disc-tu-nguyen": {
+  "t": "大運與人生週期",
+  "h": "8dfa0970"
+ },
+ "js.thay.greet-bac-minh": {
+  "t": "我是北冥。傳張照片，或描述你的面容、走路的樣子給我聽——我替你看相。",
+  "h": "c8d61d46"
+ },
+ "js.thay.greet-co-nguyet": {
+  "t": "我是古月。把出生年月日時給我，我替你排命盤，再一起把根本看仔細。",
+  "h": "0167331e"
+ },
+ "js.thay.greet-dau-nam": {
+  "t": "我是斗南。感情的事別怕說實話——我說話直，但總是為了你好。",
+  "h": "ecce6c42"
+ },
+ "js.thay.greet-dieu-khong": {
+  "t": "我是妙空。錢財、工作的事——直說就好，我不繞彎子。",
+  "h": "8d902959"
+ },
+ "js.thay.greet-huyen-khong": {
+  "t": "我是玄空。你現在住的空間，讓我看看合不合你。",
+  "h": "95554030"
+ },
+ "js.thay.greet-linh-co": {
+  "t": "我是靈機。心裡有猶豫就起一卦——我替你解卦。",
+  "h": "7b0cb4da"
+ },
+ "js.thay.greet-linh-son": {
+  "t": "我是靈山。你身邊的人際圈，讓我看看誰值得留、誰該放手。",
+  "h": "da3eb08e"
+ },
+ "js.thay.greet-ngoc-tinh": {
+  "t": "我是玉星。兩人之間的緣分，讓我用一個截然不同的故事講給你聽。",
+  "h": "63614772"
+ },
+ "js.thay.greet-nhat-nguyen": {
+  "t": "我是日元。急事就馬上問——趁你還沒忘，我先替你算出時間點。",
+  "h": "c7694458"
+ },
+ "js.thay.greet-tam-kinh": {
+  "t": "我是心鏡。告訴我出生時辰，我用八字和奇門一起看，再告訴你兩者共同指向什麼。",
+  "h": "b8879f89"
+ },
+ "js.thay.greet-thai-hu": {
+  "t": "我是太虛。回答之前，我先反問你一句——你確定問的是自己真正需要的事嗎？",
+  "h": "85a85832"
+ },
+ "js.thay.greet-thanh-hu": {
+  "t": "我是清虛！抽一張牌，或問問你的幸運數字，我們一起來看吧。",
+  "h": "61e37793"
+ },
+ "js.thay.greet-thien-an": {
+  "t": "我是天隱。孩子的事、名字的事——儘管問，我慢慢回答你。",
+  "h": "80ff291c"
+ },
+ "js.thay.greet-tinh-quang": {
+  "t": "我是星光。我用西方天文的方式看命盤——你想從哪裡開始？",
+  "h": "50328bf9"
+ },
+ "js.thay.greet-tu-nguyen": {
+  "t": "我是紫元。談大運就別拐彎抹角——拿出命盤，我一句話說定。",
+  "h": "5910c96c"
+ },
+ "js.thay.tag-bac-minh": {
+  "t": "在懂得看的人面前，臉藏不住任何事。",
+  "h": "dedb2c1b"
+ },
+ "js.thay.tag-co-nguyet": {
+  "t": "先看清根本，再論枝節。",
+  "h": "c13f4553"
+ },
+ "js.thay.tag-dau-nam": {
+  "t": "真話難聽，但你需要聽。",
+  "h": "b0888693"
+ },
+ "js.thay.tag-dieu-khong": {
+  "t": "你的才華正浪費在這個地方。",
+  "h": "c8ebbbce"
+ },
+ "js.thay.tag-huyen-khong": {
+  "t": "房子座向不對，住的人累了也不知為何。",
+  "h": "71c8a862"
+ },
+ "js.thay.tag-linh-co": {
+  "t": "一卦、一象、一個答案。",
+  "h": "d0c7ad43"
+ },
+ "js.thay.tag-linh-son": {
+  "t": "誰能幫你、誰只是擋路——看命盤就知道。",
+  "h": "fb8e84e7"
+ },
+ "js.thay.tag-ngoc-tinh": {
+  "t": "拿一件你意想不到的事來比喻。",
+  "h": "d4381ff1"
+ },
+ "js.thay.tag-nhat-nguyen": {
+  "t": "還有多久？馬上替你倒數。",
+  "h": "f8d8a373"
+ },
+ "js.thay.tag-tam-kinh": {
+  "t": "對照三套體系，找出交會之處。",
+  "h": "0d0249f0"
+ },
+ "js.thay.tag-thai-hu": {
+  "t": "問題不在你以為的地方。",
+  "h": "915233ed"
+ },
+ "js.thay.tag-thanh-hu": {
+  "t": "抽一張牌，看看你真正想聽的是什麼。",
+  "h": "c2a5a989"
+ },
+ "js.thay.tag-thien-an": {
+  "t": "話不多，但字字斟酌。",
+  "h": "a23f6db3"
+ },
+ "js.thay.tag-tinh-quang": {
+  "t": "看遍整片星空，去理解一個人。",
+  "h": "9913b826"
+ },
+ "js.thay.tag-tu-nguyen": {
+  "t": "一句話說定——不多解釋。",
+  "h": "cfa2af4b"
+ },
+ "js.thaycct.chua-dung-ten-cong-cu": {
+  "t": "{ten}老師目前還沒有負責的工具——仍可透過「問老師」直接提問。",
+  "h": "fda6df93"
+ },
+ "js.thaycct.cong-cu-thay-dung-ten": {
+  "t": "{ten}老師負責的工具",
+  "h": "657398c9"
+ },
+ "js.thaycct.hoi-thay-ten": {
+  "t": "問{ten}老師",
+  "h": "e23cca0d"
+ },
+ "js.thaycct.khong-tim-thay-thay-nay": {
+  "t": "找不到這位老師。",
+  "h": "d044e6e1"
+ },
+ "js.thaycct.tieu-de-duoi": {
+  "t": " — 明寶紫微斗數",
+  "h": "ef7f10f4"
+ },
  "js.thtg.am-luong": {
   "t": "音量",
   "h": "71662f1b"
@@ -14007,6 +19779,138 @@
   "t": "依據測得的 12 項聲學指標（HNR、持續時間、jitter、頻譜重心…）歸類。依五音古法的完整意涵，收錄於深度分析中。",
   "h": "0c3c0a37"
  },
+ "js.toolsrc.data": {
+  "t": "以{name}作為衡量基準，並非用於顯示的目錄。",
+  "h": "acff5b26"
+ },
+ "js.toolsrc.data-mac-dinh": {
+  "t": "開放資料集",
+  "h": "db94840d"
+ },
+ "js.toolsrc.lib": {
+  "t": "透過開源程式庫（MIT 授權）交叉核對。",
+  "h": "77e23ad9"
+ },
+ "js.toolsrc.nguon": {
+  "t": "來源：",
+  "h": "dcd2b5f7"
+ },
+ "js.toolsrc.nguon-du-lieu": {
+  "t": "資料來源 →",
+  "h": "78319924"
+ },
+ "js.toolsrc.nm-am-duong-ngu-hanh-bat-quai": {
+  "t": "陰陽、五行、八卦",
+  "h": "6a566782"
+ },
+ "js.toolsrc.nm-bat-trach-minh-kinh": {
+  "t": "八宅明鏡",
+  "h": "cc15ba54"
+ },
+ "js.toolsrc.nm-bat-trach-minh-kinh-loan-dau": {
+  "t": "八宅明鏡、巒頭",
+  "h": "1998ad34"
+ },
+ "js.toolsrc.nm-boi-bai-tay-truyen-thong-bo-52-la": {
+  "t": "西洋傳統撲克牌占卜（52張）",
+  "h": "3f744877"
+ },
+ "js.toolsrc.nm-cau-truc-tarot-78-la-major-amp-minor-arcana": {
+  "t": "塔羅78張牌的結構（大阿爾克那與小阿爾克那）",
+  "h": "fd0e71e3"
+ },
+ "js.toolsrc.nm-chi-tuong-hoc-phuong-dong": {
+  "t": "東方手相學",
+  "h": "966bd835"
+ },
+ "js.toolsrc.nm-dai-luc-nham": {
+  "t": "大六壬",
+  "h": "0787f5fc"
+ },
+ "js.toolsrc.nm-dong-tay-y-ket-hop-tuong-hoc-da-mat-phuong-dong": {
+  "t": "結合中西醫的東方面部肌膚相學",
+  "h": "c68a02d7"
+ },
+ "js.toolsrc.nm-hoang-lich": {
+  "t": "皇曆",
+  "h": "06d0c30d"
+ },
+ "js.toolsrc.nm-kim-lau": {
+  "t": "金樓",
+  "h": "fdeb6811"
+ },
+ "js.toolsrc.nm-kinh-dich": {
+  "t": "易經",
+  "h": "9e1c199b"
+ },
+ "js.toolsrc.nm-ky-mon-don-giap": {
+  "t": "奇門遁甲",
+  "h": "857ee290"
+ },
+ "js.toolsrc.nm-luc-thap-hoa-giap": {
+  "t": "六十花甲子",
+  "h": "514b67b8"
+ },
+ "js.toolsrc.nm-ma-y-than-tuong-lieu-trang-than-tuong-thuy-kinh-tap": {
+  "t": "麻衣神相、柳莊神相、水鏡集",
+  "h": "c678958d"
+ },
+ "js.toolsrc.nm-ma-y-than-tuong-ngu-am-tuong-phap": {
+  "t": "麻衣神相、五音相法",
+  "h": "591efba5"
+ },
+ "js.toolsrc.nm-mai-hoa-dich-so": {
+  "t": "梅花易數",
+  "h": "9093e560"
+ },
+ "js.toolsrc.nm-ngu-hanh-nap-am-bat-trach": {
+  "t": "五行納音、八宅",
+  "h": "00ae64d4"
+ },
+ "js.toolsrc.nm-nhan-tuong-hoc-phuong-dong-hinh-tuong-ngu-hanh": {
+  "t": "東方人相學（五行形相）",
+  "h": "a704a7a9"
+ },
+ "js.toolsrc.nm-nhan-tuong-hoc-phuong-dong-nap-am-ngu-hanh": {
+  "t": "東方人相學、納音五行",
+  "h": "f456450e"
+ },
+ "js.toolsrc.nm-personal-color-phan-tich-mau-sac-ca-nhan": {
+  "t": "個人色彩 Personal Color 分析",
+  "h": "6a35b8eb"
+ },
+ "js.toolsrc.nm-than-so-hoc-pythagoras": {
+  "t": "畢達哥拉斯數字學",
+  "h": "8b181ba4"
+ },
+ "js.toolsrc.nm-trung-chau-phai-luc-thap-tinh-he-vuong-dinh-chi": {
+  "t": "中州派 — 六十星系（王亭之）",
+  "h": "743388f3"
+ },
+ "js.toolsrc.nm-tu-binh": {
+  "t": "子平",
+  "h": "66c4edf1"
+ },
+ "js.toolsrc.nm-tu-vi-dau-so-tan-bien-van-dang-thai-thu-lang": {
+  "t": "紫微斗數新編（Van Dang Thai Thu Lang）",
+  "h": "2e7fd5a8"
+ },
+ "js.toolsrc.theo": {
+  "t": "依據<i>{s}</i>。",
+  "h": "e7fd9754"
+ },
+ "js.toolsrc.tvmb": {
+  "t": "由<b>明寶紫微斗數專家團隊</b>自行建立的參照體系。",
+  "h": "43366641"
+ },
+ "js.toolsrc.va": {
+  "t": "{a}、{b}",
+  "h": "cd730a63"
+ },
+ "js.toolsrc.xem-day-du": {
+  "t": "查看完整資料來源 →",
+  "h": "833fe188"
+ },
  "js.topup.aria-label-thanh-toan": {
   "t": " aria-label=\"付款 ",
   "h": "3d7d89ae"
@@ -14286,6 +20190,94 @@
  "js.topup.xem-lich-su": {
   "t": "查看紀錄",
   "h": "21a19fb0"
+ },
+ "js.trochuyen.gio-truoc": {
+  "t": "{n} 小時前",
+  "h": "19a19d72"
+ },
+ "js.trochuyen.ngay-truoc": {
+  "t": "{n} 天前",
+  "h": "21fad5cc"
+ },
+ "js.trochuyen.phut-truoc": {
+  "t": "{n} 分鐘前",
+  "h": "f63d5687"
+ },
+ "js.trochuyen.tool-bat-trach": {
+  "t": "八宅方位",
+  "h": "a9176f82"
+ },
+ "js.trochuyen.tool-bat-tu": {
+  "t": "八字命盤",
+  "h": "8959032f"
+ },
+ "js.trochuyen.tool-chon-ngay": {
+  "t": "擇日",
+  "h": "bac69f03"
+ },
+ "js.trochuyen.tool-dat-ten": {
+  "t": "寶寶取名",
+  "h": "8debaf02"
+ },
+ "js.trochuyen.tool-dat-ten-dn": {
+  "t": "企業取名",
+  "h": "86ab8b27"
+ },
+ "js.trochuyen.tool-kim-lau": {
+  "t": "金樓與三災",
+  "h": "541e773b"
+ },
+ "js.trochuyen.tool-kinh-dich": {
+  "t": "易經",
+  "h": "9e1c199b"
+ },
+ "js.trochuyen.tool-la-so": {
+  "t": "紫微斗數命盤",
+  "h": "d6fada77"
+ },
+ "js.trochuyen.tool-luan-giai": {
+  "t": "紫微斗數解讀",
+  "h": "19e52bc9"
+ },
+ "js.trochuyen.tool-nap-am": {
+  "t": "納音五行",
+  "h": "0de9a4ee"
+ },
+ "js.trochuyen.tool-ngu-hanh-ten": {
+  "t": "姓名五行",
+  "h": "9b92ea0c"
+ },
+ "js.trochuyen.tool-phong-thuy": {
+  "t": "風水",
+  "h": "06ec3c82"
+ },
+ "js.trochuyen.tool-sinh-con": {
+  "t": "生育年份合盤",
+  "h": "2e015092"
+ },
+ "js.trochuyen.tool-than-so-hoc": {
+  "t": "生命靈數",
+  "h": "686db34b"
+ },
+ "js.trochuyen.tool-tuong-hop": {
+  "t": "年齡相合",
+  "h": "e9fd3f4c"
+ },
+ "js.trochuyen.tool-xem-lam-an": {
+  "t": "合夥合盤",
+  "h": "791a32dc"
+ },
+ "js.trochuyen.tool-xem-tuoi": {
+  "t": "夫妻合婚",
+  "h": "d6d67d5c"
+ },
+ "js.trochuyen.tool-xem-tuong": {
+  "t": "相術",
+  "h": "7460a628"
+ },
+ "js.trochuyen.vua-xong": {
+  "t": "剛剛",
+  "h": "d1a7c7fa"
  },
  "js.tuviform.ca-nhan": {
   "t": "個人資料",
@@ -15135,6 +21127,34 @@
   "t": "只需出生年，快速判斷兩人的生肖是否相合——立即得到答案，不必深入解讀。",
   "h": "ee011392"
  },
+ "js.xlg.chon-gio": {
+  "t": "選擇時間",
+  "h": "c10b0d98"
+ },
+ "js.xlg.gio": {
+  "t": "{h} 時",
+  "h": "68dda372"
+ },
+ "js.xlg.gio-chi": {
+  "t": "{h} 時（{chi}時）",
+  "h": "349b413b"
+ },
+ "js.xlg.nam": {
+  "t": "年",
+  "h": "98926c7e"
+ },
+ "js.xlg.ngay": {
+  "t": "日",
+  "h": "368c4575"
+ },
+ "js.xlg.thang": {
+  "t": "月",
+  "h": "0e2b3099"
+ },
+ "js.xlg.thang-n": {
+  "t": "{n} 月",
+  "h": "4dd9659f"
+ },
  "kimlau.bang-tra-20-nam-toi": {
   "t": "未來20年<br>查詢表",
   "h": "ded0c033"
@@ -15466,6 +21486,90 @@
  "laso.tu-vi-minh-bao": {
   "t": "明寶紫微斗數",
   "h": "33336b26"
+ },
+ "lienhe.24-48-gio": {
+  "t": "24 – 48 小時",
+  "h": "dbc9b8ce"
+ },
+ "lienhe.an-sao-va-luan-giai-truc": {
+  "t": "在首頁即可直接排盤與解讀",
+  "h": "df0989a0"
+ },
+ "lienhe.cau-hoi-ve-luan-giai-la": {
+  "t": "<b>關於命盤解讀的問題</b>——請寫明結果中哪個部分需要釐清，並具體說明哪裡不明白或覺得不夠妥當。",
+  "h": "814a0c60"
+ },
+ "lienhe.chung-toi-tran-trong-moi-phan": {
+  "t": "我們珍視每一則回饋，並會盡力回覆",
+  "h": "2f5ea451"
+ },
+ "lienhe.de-chung-toi-co-the-ho": {
+  "t": "為了讓我們更好地協助您",
+  "h": "6a75128e"
+ },
+ "lienhe.gop-y-ve-phuong-phap-neu": {
+  "t": "<b>對方法的建議</b>——若您認為安星或論斷的方式有可改進之處，我們很希望聽到具體的意見，若能附上佐證更好。",
+  "h": "429de005"
+ },
+ "lienhe.hop-tac-nghien-cuu-chung-toi": {
+  "t": "<b>研究合作</b>——我們始終歡迎同樣有志以學術精神研究與驗證紫微斗數的朋友。",
+  "h": "2f2bc8e0"
+ },
+ "lienhe.huong-dan-lien-he": {
+  "t": "聯絡說明",
+  "h": "dfd0a511"
+ },
+ "lienhe.kenh-lien-he-chinh-phan-hoi": {
+  "t": "主要聯絡管道——工作日 24–48 小時內回覆",
+  "h": "cb8ce6fa"
+ },
+ "lienhe.lien-he-tu-vi-minh-bao": {
+  "t": "聯絡我們 — 明寶紫微斗數",
+  "h": "6036fce9"
+ },
+ "lienhe.lien-he-voi-tu-vi-minh": {
+  "t": "聯絡明寶紫微斗數——知命理，順勢而行。",
+  "h": "1a5c4e42"
+ },
+ "lienhe.moi-y-kien-trao-doi-gop": {
+  "t": "凡是關於解讀內容、研究方法或系統使用的意見、建議與問題，我們都誠摯歡迎。",
+  "h": "0a0f0110"
+ },
+ "lienhe.nhung-y-kien-dong-gop-xac": {
+  "t": "中肯的意見不僅有助於完善系統，也有助於釐清紫微斗數研究中仍存疑的問題。",
+  "h": "9d745b63"
+ },
+ "lienhe.thoi-gian-phan-hoi": {
+  "t": "回覆時間",
+  "h": "b2537f52"
+ },
+ "lienhe.thu-dien-tu": {
+  "t": "電子郵件",
+  "h": "472b2949"
+ },
+ "lienhe.trao-doi-gop-y-cau-hoi": {
+  "t": "交流 · 建議 · 提問",
+  "h": "2e532773"
+ },
+ "lienhe.tri-menh-ly-thuan-the-hanh": {
+  "t": "知命理，順勢而行。依古法的紫微斗數與解讀。",
+  "h": "677cab94"
+ },
+ "lienhe.trong-cac-ngay-lam-viec-nhung": {
+  "t": "以工作日計。中肯的建議將納入系統改進的過程。",
+  "h": "2458c959"
+ },
+ "lienhe.tu-vi-minh-bao-la-so": {
+  "t": "明寶紫微斗數 – 精準的紫微斗數命盤",
+  "h": "6f4cabbc"
+ },
+ "lienhe.van-de-ky-thuat-neu-gap": {
+  "t": "<b>技術問題</b>——使用系統時若遇到問題，請簡要描述：當時的操作、出現的錯誤訊息（如有）以及使用的裝置。",
+  "h": "bd4a69d1"
+ },
+ "lienhe.website": {
+  "t": "網站",
+  "h": "2e8a57cc"
  },
  "luangiai.an-la-so": {
   "t": "▾ 收起命盤",
@@ -16495,6 +22599,258 @@
   "t": "例：Nguyễn Văn An",
   "h": "4811bda0"
  },
+ "nguoikhac.2-xem-truoc-cam-nang": {
+  "t": "<span class=\"wss-n\">2</span><span class=\"wss-l\">預覽相處指南</span>",
+  "h": "f63afb72"
+ },
+ "nguoikhac.ban-be": {
+  "t": "朋友",
+  "h": "159fe485"
+ },
+ "nguoikhac.ban-cam-nang-nay-phac-hoa": {
+  "t": "<span class=\"ic\" data-icon=\"lightbulb\"></span> 本相處指南依據紫微斗數命盤中的資料，並結合前人留下的研究經驗描繪而成，僅供參考。<br><br> <span class=\"ic\" data-icon=\"scale\"></span> 這是一個<b>為了好好相處而去了解對方</b>的框架，並非用來操控任何人。被解讀的人不在這裡，因此本解讀刻意<b>不談對方的健康、個人財務或婚姻</b>。個性沒有好壞，只有適合或不適合當下的情境。",
+  "h": "d4cf893e"
+ },
+ "nguoikhac.ban-dang-can-lam-gi-voi": {
+  "t": "您需要對這個人做什麼",
+  "h": "c237535b"
+ },
+ "nguoikhac.ban-luan-giai-mau-tai-pdf": {
+  "t": "<span class=\"sc-ic\" data-icon=\"file-text\"></span> <span class=\"sc-txt\"><b>範例解讀報告</b><span>下載範例命盤的「他人的命盤」完整 PDF，先預覽真實內容。</span></span> <a class=\"sc-btn\" href=\"/tai-mau/mau-nguoi-khac.pdf\" target=\"_blank\" rel=\"noopener\">下載 PDF →</a>",
+  "h": "90ab14f5"
+ },
+ "nguoikhac.cam-nang-ung-xu": {
+  "t": "<span class=\"hp-ic\" data-icon=\"scroll-text\"></span><span>相處<br>指南</span>",
+  "h": "02dec92e"
+ },
+ "nguoikhac.cap-duoi-nguoi-minh-quan": {
+  "t": "部屬／我管理的人",
+  "h": "eb2f06ee"
+ },
+ "nguoikhac.cau-hoi-chay-ngam-trong-dau": {
+  "t": "對方腦中暗自運轉的問題",
+  "h": "c0934bd9"
+ },
+ "nguoikhac.cha-me-nguoi-lon-trong-nha": {
+  "t": "父母／家中長輩",
+  "h": "5f1e7b56"
+ },
+ "nguoikhac.co-la-so-cua-ban-thi": {
+  "t": "若有您自己的命盤，解讀會多出<b>「此人與您」</b>一節——雙方容易起衝突之處，以及可以互補之處。留空也能看到其餘完整內容。",
+  "h": "cfbb6a2e"
+ },
+ "nguoikhac.con-cai": {
+  "t": "子女",
+  "h": "eb70b34b"
+ },
+ "nguoikhac.con-nguoi-nay-van-hanh-the": {
+  "t": "這個人如何運作",
+  "h": "444d1e25"
+ },
+ "nguoikhac.dieu-ho-coi-trong": {
+  "t": "<span class=\"res-block-title\">對方重視的事</span>",
+  "h": "5656f5b5"
+ },
+ "nguoikhac.dieu-lam-ho-kho-chiu": {
+  "t": "讓對方不舒服的事",
+  "h": "754ed7ce"
+ },
+ "nguoikhac.doi-chieu-them-voi-la-so": {
+  "t": "加入與您自己命盤的對照（非必填）",
+  "h": "c04c1f4c"
+ },
+ "nguoikhac.doi-tac-khach-hang": {
+  "t": "合作夥伴／客戶",
+  "h": "b39df542"
+ },
+ "nguoikhac.dong-nghiep-ngang-hang": {
+  "t": "同事（平級）",
+  "h": "c2321d8a"
+ },
+ "nguoikhac.hieu-sai-mot-nguoi-quan-trong": {
+  "t": "誤解一個重要的人——上司、合作夥伴、情人——往往是許多本不必要的摩擦的根源。輸入對方的出生日期與時辰，就能得到該說什麼、該避免什麼的相處指南。",
+  "h": "f8a6e6f5"
+ },
+ "nguoikhac.la-so-nguoi-khac": {
+  "t": "他人的命盤",
+  "h": "e454923c"
+ },
+ "nguoikhac.la-so-nguoi-khac-cam-nang": {
+  "t": "<b>他人的命盤</b><span>專為某一個人量身打造的相處指南</span>",
+  "h": "fdca2edd"
+ },
+ "nguoikhac.la-so-nguoi-khac-tu-vi": {
+  "t": "他人的命盤——明寶紫微斗數",
+  "h": "b5ba1ea3"
+ },
+ "nguoikhac.luc-nao-nen-dua-viec-lon": {
+  "t": "<span class=\"hp-ic\" data-icon=\"hourglass\"></span><span>何時<br>提出大事</span>",
+  "h": "ff316436"
+ },
+ "nguoikhac.luc-nay-ho-dang-o-dau": {
+  "t": "<span class=\"res-block-title\">對方此刻處於何處</span>",
+  "h": "85151bc9"
+ },
+ "nguoikhac.moi-luot-luong": {
+  "t": "<span class=\"vnd\" data-tvp-price-vnd=\"nguoi-khac\"></span> 每次 <span class=\"cb-sub\">(<span data-tvp-price=\"nguoi-khac\">…</span> 兩)</span>",
+  "h": "4e692d79"
+ },
+ "nguoikhac.nen-noi-gi-tranh-noi-gi": {
+  "t": "<span class=\"hp-ic\" data-icon=\"message-circle\"></span><span>該說什麼<br>避免說什麼</span>",
+  "h": "686a6593"
+ },
+ "nguoikhac.ngay-sinh-cua-nguoi-ban-muon": {
+  "t": "您想了解的人的出生日期",
+  "h": "983c4051"
+ },
+ "nguoikhac.nguoi-nay-la": {
+  "t": "這個人是您的",
+  "h": "d70093a0"
+ },
+ "nguoikhac.nguoi-nay-la-ai": {
+  "t": "<span class=\"res-block-title\">這個人是誰</span>",
+  "h": "22ef9ce3"
+ },
+ "nguoikhac.nguoi-nay-voi-ban": {
+  "t": "<span class=\"res-block-title\">此人與您</span>",
+  "h": "a89f8cc8"
+ },
+ "nguoikhac.nhap-la-so-sep-dong-nghiep": {
+  "t": "輸入上司、同事、部屬或親近之人的命盤，就能得到相處指南：對方如何運作、該說什麼、避免說什麼、何時提出大事。",
+  "h": "95d5f29c"
+ },
+ "nguoikhac.nhap-ngay-gio-sinh-nguoi-do": {
+  "t": "輸入對方的出生日期與時辰、與您的關係，以及您需要對對方做的事，即可依您提出的事項來分析命盤。",
+  "h": "8d0d8d61"
+ },
+ "nguoikhac.noi-the-nao": {
+  "t": "<span class=\"res-block-title\">怎麼說</span>",
+  "h": "2757978b"
+ },
+ "nguoikhac.sep-cap-tren": {
+  "t": "上司／長官",
+  "h": "976d7a60"
+ },
+ "nguoikhac.tra-loi-thay-o-khung-chat": {
+  "t": "請在聊天欄回覆老師，告訴老師您想了解的人是誰，以及對方的出生日期。",
+  "h": "0b35941d"
+ },
+ "nguoikhac.tranh": {
+  "t": "避",
+  "h": "718a6b75"
+ },
+ "nguoikhac.vo-chong-nguoi-yeu": {
+  "t": "配偶／情人",
+  "h": "4165e532"
+ },
+ "nguoikhac.xem-cam-nang-ung-xu-ton": {
+  "t": "<span class=\"bg-label\"><span class=\"ic\" data-icon=\"user\"></span><b id=\"btnGoLabel\">查看相處指南 →</b></span> <small>費用 <span class=\"vnd\" data-tvp-price-vnd=\"nguoi-khac\"></span> <span class=\"cb-sub\">(<span data-tvp-price=\"nguoi-khac\">…</span> 兩)</span></small>",
+  "h": "da20bb48"
+ },
+ "nguoikhac.xem-nguoi-khac": {
+  "t": "查看另一個人",
+  "h": "a058d2f4"
+ },
+ "nguon.bo-du-lieu-mo": {
+  "t": "開放資料集",
+  "h": "edc59291"
+ },
+ "nguon.cac-nguon-du-lieu-co-thu": {
+  "t": "明寶紫微斗數所使用的資料、古籍與開放資料集，以及相應的授權與出處標示。",
+  "h": "0a800241"
+ },
+ "nguon.chung-toi-cung-khong-goi-bat": {
+  "t": "我們也不會把系統的任何部分稱為「科學」「已驗證」或「基於 N 人統計」。這是一套解讀命盤的框架，而不是有對照組的測量工具。",
+  "h": "b44c3d70"
+ },
+ "nguon.chung-toi-dung-bo-du-lieu": {
+  "t": "我們把這個資料集當作職業方向建議的<b>量尺</b>：每個職業群組都有一份工作特性檔案，作為比對的基準。資料集<b>不</b>用於顯示清單——呈現給讀者的職業列表，是我們針對越南情境自行建立的表格。",
+  "h": "cb4e0e46"
+ },
+ "nguon.chung-toi-dung-du-lieu-nao": {
+  "t": "我們用了哪些資料、從哪裡來、授權如何。",
+  "h": "530e37c8"
+ },
+ "nguon.co-thu-va-tai-lieu-menh": {
+  "t": "古籍與命理資料",
+  "h": "23dd5204"
+ },
+ "nguon.dieu-chung-toi-khong-lam": {
+  "t": "我們不做的事",
+  "h": "d21049b1"
+ },
+ "nguon.do-so-lao-dong-hoa-ky": {
+  "t": "由美國勞工部就業與培訓署（USDOL/ETA）贊助。授權 <a href=\"https://creativecommons.org/licenses/by/4.0/\" rel=\"license noopener\" target=\"_blank\">CC BY 4.0</a>。",
+  "h": "09a551ba"
+ },
+ "nguon.dung-de-doi-chieu-phan-luan": {
+  "t": "用於比對星曜性質與星曜組合的論述，尤其是談職業傾向的部分。",
+  "h": "47c53c54"
+ },
+ "nguon.ghi-ro-de-khong-gay-hieu": {
+  "t": "<b>為避免誤解特此說明：</b>O*NET 是參考資料來源，<b>並非</b>明寶紫微斗數的合作夥伴、贊助者或背書單位。所有詮釋、語言轉換與頁面上的一切結論皆屬於我們，也只由我們負責。",
+  "h": "76f83d0f"
+ },
+ "nguon.khong-muc-nao-tren-trang-duoc": {
+  "t": "頁面上沒有任何項目是抄寫其他作者的解說文字而成。人物類型、職業方向、建議等文字皆由我們撰寫。依據古籍之處會引用原文並註明是引文；屬於本站自訂標準之處也同樣註明。",
+  "h": "541a3011"
+ },
+ "nguon.khong-phai-moi-phan-tren-trang": {
+  "t": "頁面上並非所有內容都直接取自古籍。許多評分量表、分類框架與資料整合方式（例如職業契合度的評分方法、解讀兒童氣質的框架、職能群組的劃分方式……）是<b>明寶紫微斗數專家團隊研究並建立的獨有方法</b>，並非從別處抄來。凡使用這部分的工具，我們都會註明這是本站的參照標準，而非古法原文，讓讀者分得清哪些是古人所言、哪些是我們的詮釋。我們不公開這些量表的建立細節。",
+  "h": "2b715abc"
+ },
+ "nguon.mot-so-cong-cu-ky-mon": {
+  "t": "部分工具（奇門遁甲、黃曆、大六壬、八字、西洋占星星盤、曆法與節氣換算）使用了 <a href=\"https://opensource.org/licenses/MIT\" rel=\"license noopener\" target=\"_blank\">MIT</a> 授權的開源計算函式庫。MIT 授權不要求在產品上公開標示出處，只要求在軟體副本中保留版權聲明——因此我們在此不列出具體套件名稱，以免向競爭對手洩露技術細節。",
+  "h": "d0bcac41"
+ },
+ "nguon.nguon-chinh-cho-phep-an-sao": {
+  "t": "安星法、十二宮論述、格局與官祿宮職能的主要出處。頁面上的引文皆原文引自此書。",
+  "h": "d895afbc"
+ },
+ "nguon.nguon-du-lieu-ghi-cong": {
+  "t": "資料來源與出處標示",
+  "h": "a92c482f"
+ },
+ "nguon.nguon-du-lieu-ghi-cong-tu": {
+  "t": "資料來源與出處標示 | 明寶紫微斗數",
+  "h": "95039fbb"
+ },
+ "nguon.nguon-du-lieu-ghi-cong-tu-bnyf": {
+  "t": "資料來源與出處標示 — 明寶紫微斗數",
+  "h": "942593da"
+ },
+ "nguon.o-net-database": {
+  "t": "O*NET Database",
+  "h": "ae039102"
+ },
+ "nguon.phuong-phap-do-tu-vi-minh": {
+  "t": "明寶紫微斗數自行建立的方法",
+  "h": "b2161377"
+ },
+ "nguon.thu-vien-ma-nguon-mo": {
+  "t": "開源函式庫",
+  "h": "e8b10d2e"
+ },
+ "nguon.trang-nay-liet-ke-nhung-nguon": {
+  "t": "本頁列出系統用於計算的來源及相應授權。公開它有兩個理由：部分來源的授權要求標示出處；而讀者有權知道一個結論是建立在什麼之上。",
+  "h": "23879e75"
+ },
+ "nguon.trung-chau-phai-luc-thap-tinh": {
+  "t": "中州派 — 六十星系",
+  "h": "b80b8a1f"
+ },
+ "nguon.tu-vi-dau-so-tan-bien": {
+  "t": "紫微斗數新編",
+  "h": "34e57a47"
+ },
+ "nguon.van-dang-thai-thu-lang-tai": {
+  "t": "雲騰太次郎 · 參考資料",
+  "h": "c40a58cf"
+ },
+ "nguon.vuong-dinh-chi-tai-lieu-tham": {
+  "t": "王亭之 · 參考資料",
+  "h": "f0de146d"
+ },
  "nhtg.anh-chi-gui-toi-may-chu": {
   "t": "圖片僅傳送至伺服器進行分析，不會儲存在伺服器上。請正面拍攝、光線充足——系統會自動放大眼部區域。",
   "h": "65e7d1ba"
@@ -16619,6 +22975,130 @@
   "t": "✕ 刪除圖片",
   "h": "36e95d9f"
  },
+ "nm.ban-do-ca-nhom": {
+  "t": "<span class=\"hp-ic\" data-icon=\"users\"></span><span>整組<br>人脈地圖</span>",
+  "h": "682f4a1b"
+ },
+ "nm.ban-doc-nay-phac-hoa-tu": {
+  "t": "<span class=\"ic\" data-icon=\"lightbulb\"></span> 本解讀依據紫微斗數命盤中的資料，並結合前人留下的研究經驗描繪而成，僅供參考。<br><br> <span class=\"ic\" data-icon=\"scale\"></span> 這是一個<b>讓事情安排得適合每個人</b>的框架，不是人事考核的評分表。簿中的人不在這裡，因此本解讀刻意<b>不替任何人排名，不談他們的健康、個人財務或家庭私事</b>，也<b>不建議換人</b>。個性沒有好壞，只有適合或不適合某件事。",
+  "h": "9a54fb99"
+ },
+ "nm.ban-dung-o-dau-trong-nhom": {
+  "t": "<span class=\"res-block-title\">您在組內的位置</span>",
+  "h": "e37f7177"
+ },
+ "nm.ban-luan-giai-mau-tai-pdf": {
+  "t": "<span class=\"sc-ic\" data-icon=\"file-text\"></span> <span class=\"sc-txt\"><b>範例解讀報告</b><span>下載範例命盤的「人脈簿」完整 PDF，先預覽真實內容。</span></span> <a class=\"sc-btn\" href=\"/tai-mau/mau-nhan-mach.pdf\" target=\"_blank\" rel=\"noopener\">下載 PDF →</a>",
+  "h": "37e05c5a"
+ },
+ "nm.cac-cap-trong-nhom": {
+  "t": "<span class=\"res-block-title\">組內的各對組合</span>",
+  "h": "1f22e684"
+ },
+ "nm.cap-can-de-y": {
+  "t": "<span class=\"res-block-title\">需要留意的組合</span>",
+  "h": "2fbe6792"
+ },
+ "nm.cap-de-giam-chan": {
+  "t": "<span class=\"hp-ic\" data-icon=\"scale\"></span><span>容易<br>踩線的組合</span>",
+  "h": "81f490fb"
+ },
+ "nm.cho-trong-cua-nhom": {
+  "t": "<span class=\"res-block-title\">組內的空缺</span>",
+  "h": "96c373bb"
+ },
+ "nm.chon-lai": {
+  "t": "重新選擇",
+  "h": "25ee067e"
+ },
+ "nm.chon-nguoi-trong-so": {
+  "t": "從簿中選人",
+  "h": "fb10fef6"
+ },
+ "nm.co-la-so-cua-ban-thi": {
+  "t": "若有您自己的命盤，解讀會多出<b>「您在組內的位置」</b>一節——您容易和誰起衝突、又能補足誰。",
+  "h": "883457f9"
+ },
+ "nm.da-doc-truoc-do": {
+  "t": "<span class=\"res-block-title\">先前讀過的內容</span>",
+  "h": "073f164b"
+ },
+ "nm.doc-ca-so-ton-luong": {
+  "t": "<span class=\"bg-label\"><span class=\"ic\" data-icon=\"users\"></span><b id=\"btnGoLabel\">讀整本簿 →</b></span> <small>費用 <span class=\"vnd\" data-tvp-price-vnd=\"nhan-mach\"></span> <span class=\"cb-sub\">(<span data-tvp-price=\"nhan-mach\">…</span> 兩)</span></small>",
+  "h": "708b8f51"
+ },
+ "nm.dua-ca-doi-hoac-danh-sach": {
+  "t": "把整個團隊或客戶名單放在一起：這個組缺少哪種類型、誰跟誰容易踩線、這週該先見誰。",
+  "h": "6afc2255"
+ },
+ "nm.goi-la": {
+  "t": "稱呼",
+  "h": "1e3d72e2"
+ },
+ "nm.lam-gi-tuan-nay": {
+  "t": "<span class=\"res-block-title\">本週該做的事</span>",
+  "h": "5b333d8e"
+ },
+ "nm.luu-vao-so": {
+  "t": "存入簿中",
+  "h": "e88b1df6"
+ },
+ "nm.moi-luot-luong": {
+  "t": "<span class=\"vnd\" data-tvp-price-vnd=\"nhan-mach\"></span> 每次 <span class=\"cb-sub\">(<span data-tvp-price=\"nhan-mach\">…</span> 兩)</span>",
+  "h": "110df12a"
+ },
+ "nm.nhom-nay-hinh-gi": {
+  "t": "<span class=\"res-block-title\">這個組是什麼樣貌</span>",
+  "h": "f51250a4"
+ },
+ "nm.sep-hung-chi-lan-khach-a": {
+  "t": "興主管、蘭姐、客戶 A…",
+  "h": "503be7e7"
+ },
+ "nm.so-nhan-mach": {
+  "t": "人脈簿",
+  "h": "17e83429"
+ },
+ "nm.so-nhan-mach-doc-ca-nhom": {
+  "t": "<b>人脈簿</b><span>一次讀整個群體，而不是一個一個看</span>",
+  "h": "3b36ced2"
+ },
+ "nm.so-nhan-mach-tu-vi-minh": {
+  "t": "人脈簿——明寶紫微斗數",
+  "h": "d9d679ab"
+ },
+ "nm.them-la-so-cua-chinh-ban": {
+  "t": "加入您自己的命盤（非必填）",
+  "h": "2423d794"
+ },
+ "nm.them-nguoi-vao-so": {
+  "t": "＋ 新增人物到簿中",
+  "h": "364e14c5"
+ },
+ "nm.them-ten-ngay-sinh-va-gioi": {
+  "t": "把每位成員的姓名、出生日期與性別加入簿中，一次分析整個群體。",
+  "h": "7e27671a"
+ },
+ "nm.thu-tu-goi-y-tiep-can": {
+  "t": "<span class=\"res-block-title\">建議的接觸順序</span>",
+  "h": "d0842a6c"
+ },
+ "nm.trong-mot-doi-nhom-ai-hop": {
+  "t": "在一個團隊裡，誰跟誰合得來、誰跟誰容易起衝突，往往要事情發生後才看得出來。加入每位成員的出生日期，就能得到人員地圖，用來重新安排陣容。",
+  "h": "09e8b31f"
+ },
+ "nm.tung-nguoi": {
+  "t": "<span class=\"res-block-title\">每個人</span>",
+  "h": "d587410c"
+ },
+ "nm.viec-nen-lam-tuan-nay": {
+  "t": "<span class=\"hp-ic\" data-icon=\"hourglass\"></span><span>本週<br>該做的事</span>",
+  "h": "7343e7f5"
+ },
+ "nm.xep-theo-van-nam-cua-tung": {
+  "t": "依<b>每個人的年運</b>排序——處於順遂之年的人，比較容易談新事情。這<b>不是</b>重要程度的排名。",
+  "h": "cc8d076f"
+ },
  "oracle.1-chon-kieu-rut": {
   "t": "<span class=\"wss-n\">1</span><span class=\"wss-l\">選擇抽牌方式</span>",
   "h": "36067a21"
@@ -16690,6 +23170,18 @@
  "oracle.vd-toi-can-nhan-ra-dieu": {
   "t": "例：這個階段我需要看清什麼？",
   "h": "fba02ed0"
+ },
+ "paysuc.dang-xac-nhan-thanh-toan": {
+  "t": "正在確認付款...",
+  "h": "d4f224cd"
+ },
+ "paysuc.vui-long-cho-trong-giay-lat": {
+  "t": "請稍候",
+  "h": "f2af1ae9"
+ },
+ "paysuc.xac-nhan-thanh-toan-tu-vi": {
+  "t": "付款確認 — 明寶紫微斗數",
+  "h": "b7b66e97"
  },
  "phongthuy.1-ban-menh-thong-tin-phong": {
   "t": "<span class=\"pt-num\">1</span> 本命與房間資料",
@@ -16942,6 +23434,170 @@
  "phongthuy.xem-ban-mau": {
   "t": "查看範例 →",
   "h": "ba3671b1"
+ },
+ "ppx.10-chuyen-gia-tu-vi-tham": {
+  "t": "<b>10+</b><span>位紫微斗數專家參與審定</span>",
+  "h": "a8396ff8"
+ },
+ "ppx.2-000-quy-tac-luan-giai": {
+  "t": "<b>2,000+</b><span>條經驗證的解讀規則</span>",
+  "h": "2bea45aa"
+ },
+ "ppx.270-000-ho-so-nhan-vat": {
+  "t": "<b>270,000+</b><span>份真實人物檔案（來自 AstroDataBank）</span>",
+  "h": "249ccdc9"
+ },
+ "ppx.5-buoc-tao-nen-moi-ban": {
+  "t": "造就每份解讀的 5 個步驟：排盤、實證比對、專家驗證、模型校正、以文字解說。",
+  "h": "8a0c1f4a"
+ },
+ "ppx.a-global-astrology-database": {
+  "t": "全球性的占星資料庫",
+  "h": "fc9b2e72"
+ },
+ "ppx.buoc-1-tu-ngay-gio-sinh": {
+  "t": "步驟 1：依出生年月日時以古法排出紫微命盤，再轉為結構化資料（宮位、星曜、位置、四化、相互關係）",
+  "h": "a7e27eb8"
+ },
+ "ppx.buoc-2-luan-giai-so-khai": {
+  "t": "步驟 2：初步解讀與 AstroDataBank 經驗證的實際資料比對，逐一評估每個格局為吻合／不夠準確／偏差",
+  "h": "8debaf16"
+ },
+ "ppx.buoc-3-nhom-chuyen-gia-thao": {
+  "t": "步驟 3：專家團隊討論、評估並反駁比對結果，作出審定後的結論——規則被採納、需調整或被剔除",
+  "h": "2c4e81c3"
+ },
+ "ppx.buoc-4-huan-luyen-va-cap": {
+  "t": "步驟 4：持續訓練與更新模型——訓練、測試與評估、改進的循環——直到得出可實際應用的完整解讀模型",
+  "h": "45f6ed84"
+ },
+ "ppx.buoc-5-llm-chuyen-doi-ket": {
+  "t": "步驟 5：LLM 將模型結果轉為自然語言，清楚且個人化地解說，產出呈現給使用者的完整解讀",
+  "h": "d5b4c8b7"
+ },
+ "ppx.cac-quy-tac-da-duoc-chuyen": {
+  "t": "經專家審定的規則會回到模型中繼續訓練。系統持續以新的真實命盤（樣本外）進行測試，並反覆改進，直到達到最佳準確度。",
+  "h": "d91af071"
+ },
+ "ppx.cach-he-thong-hoat-dong": {
+  "t": "系統如何運作",
+  "h": "ef8b9152"
+ },
+ "ppx.cach-he-thong-hoat-dong-tu": {
+  "t": "系統如何運作 — 紫微驗證 | 明寶紫微斗數",
+  "h": "3dffc874"
+ },
+ "ppx.cach-he-thong-hoat-dong-tu-e5d1": {
+  "t": "系統如何運作 — 紫微驗證",
+  "h": "2384f4b7"
+ },
+ "ppx.chi-nhung-ket-luan-da-duoc": {
+  "t": "只有經過驗證的結論。",
+  "h": "34eb8158"
+ },
+ "ppx.dien-giai-ket-qua-thanh-loi": {
+  "t": "將結果解說為自然的文字",
+  "h": "97ea4d62"
+ },
+ "ppx.do-la-cach-chung-toi-tao": {
+  "t": "這就是我們產出有根據、透明而可信的解讀的方式。",
+  "h": "168afdad"
+ },
+ "ppx.doi-chieu-voi-du-lieu-thuc": {
+  "t": "與經驗證的實際資料比對",
+  "h": "539cfe91"
+ },
+ "ppx.he-thong-su-dung-hon-270": {
+  "t": "系統使用來自 <b>AstroDataBank</b>、<b>經過驗證</b>的 270,000 多份出生資料，並結合政治、科學、藝術、商業等各領域人物的生平與人生事件資料。",
+  "h": "c3cee5bc"
+ },
+ "ppx.hieu-chinh-va-toi-uu-mo": {
+  "t": "最終模型的校正與優化",
+  "h": "5af8fc01"
+ },
+ "ppx.input-bo-quy-tac-da-tham": {
+  "t": "<span>輸入：經審定的規則組</span><span class=\"out\">輸出：完整的解讀模型</span>",
+  "h": "93067baf"
+ },
+ "ppx.input-ket-qua-doi-chieu-output": {
+  "t": "<span>輸入：比對結果</span><span class=\"out\">輸出：經專業審定的規則組</span>",
+  "h": "d4af0fe2"
+ },
+ "ppx.input-ket-qua-tu-mo-hinh": {
+  "t": "<span>輸入：模型的結果</span><span class=\"out\">輸出：完整的解讀</span>",
+  "h": "b6d766a4"
+ },
+ "ppx.input-luan-giai-so-khai-du": {
+  "t": "<span>輸入：初步解讀＋真實人生資料</span><span class=\"out\">輸出：準確度評估、找出錯誤、改進建議</span>",
+  "h": "1c5a4557"
+ },
+ "ppx.input-ngay-gio-sinh-co-thu": {
+  "t": "<span>輸入：出生年月日時＋紫微古籍、資料</span><span class=\"out\">輸出：命盤＋初步解讀規則組</span>",
+  "h": "f3dd6403"
+ },
+ "ppx.ket-hop-du-lieu-co-phap": {
+  "t": "<span class=\"ic\" data-icon=\"shield-check\"></span>結合資料、古法、專家與 AI",
+  "h": "a6c14499"
+ },
+ "ppx.ket-qua-sau-doi-chieu-duoc": {
+  "t": "比對後的結果會送交由研究者、紫微命理師與玄學家組成的專家團隊，討論、評估並判定每條解讀規則的可信度。",
+  "h": "b5c2296f"
+ },
+ "ppx.ket-qua-tu-mo-hinh-duoc": {
+  "t": "模型的結果透過 LLM（大型語言 AI）解說為自然易懂、依每份命盤個人化的語言，讓使用者容易理解與應用。AI 不會自行推論，只是重新表述模型已確定的結果。",
+  "h": "7b7eac5a"
+ },
+ "ppx.khong-cam-doan-khong-suy-luan": {
+  "t": "不憑感覺臆斷。不隨意推論。",
+  "h": "1faeab3a"
+ },
+ "ppx.kiem-chung-boi-chuyen-gia": {
+  "t": "專家驗證",
+  "h": "10ee351e"
+ },
+ "ppx.lap-la-so-va-xay-dung": {
+  "t": "排盤並建立初步解讀模型",
+  "h": "8b5789c7"
+ },
+ "ppx.lien-tuc-cap-nhat-va-cai": {
+  "t": "<b>持續</b><span>更新與改進模型</span>",
+  "h": "b810dcc9"
+ },
+ "ppx.luan-giai-so-khai-duoc-doi": {
+  "t": "初步解讀會與資料庫中人物的實際人生資料比對，以評估每個格局的準確度、找出偏差，並測試各種組合方法。",
+  "h": "ed45b0df"
+ },
+ "ppx.mot-luan-giai-dang-tin-cay": {
+  "t": "可信的解讀建立在實際資料與多層驗證流程之上。以下是造就明寶紫微斗數每份解讀的 5 個步驟。",
+  "h": "45694c20"
+ },
+ "ppx.mot-luan-giai-dang-tin-cay-ss0b": {
+  "t": "可信的解讀建立在實際資料與多層驗證流程之上——造就明寶紫微斗數每份解讀的 5 個步驟。",
+  "h": "5c0f6569"
+ },
+ "ppx.muon-thay-he-thong-nay-hoat": {
+  "t": "想看看這套系統用在您的命盤上是什麼樣子嗎？",
+  "h": "afe4354a"
+ },
+ "ppx.nguon-du-lieu-270-000-ho": {
+  "t": "<span class=\"pm-source-eyebrow\">資料來源</span><b>270,000+</b><span>份經驗證的真實人物檔案</span>",
+  "h": "303ab3fd"
+ },
+ "ppx.quay-lai-trang-chu": {
+  "t": "← 返回首頁",
+  "h": "11355810"
+ },
+ "ppx.tu-thong-tin-ngay-gio-sinh": {
+  "t": "系統依出生年月日時以古法排出紫微命盤，並根據紫微與玄學的書籍、資料，解讀與解說命盤中的各項要素。",
+  "h": "845dbbf5"
+ },
+ "ppx.tu-vi-nghiem-chung": {
+  "t": "<span class=\"ic\" data-icon=\"sparkles\"></span>紫微驗證",
+  "h": "4ad3d92e"
+ },
+ "ppx.xem-la-so-cua-ban": {
+  "t": "查看您的命盤 →",
+  "h": "a6169a07"
  },
  "privacy.1-thong-tin-chung-toi-thu": {
   "t": "1. 我們蒐集的資料",
@@ -17207,6 +23863,242 @@
   "t": "<a href=\"/resources.html\">← 回文獻圖書館</a>",
   "h": "99e834b4"
  },
+ "sanpham.1-tu-vi-minh-bao-cung": {
+  "t": "1. 明寶紫微斗數提供哪些服務",
+  "h": "ddb304e7"
+ },
+ "sanpham.2-cach-tinh-phi-he-thong": {
+  "t": "2. 計費方式——兩（點數）",
+  "h": "75e2a0e9"
+ },
+ "sanpham.3-mua-luong-hinh-thuc-thanh": {
+  "t": "3. 購買兩與付款方式",
+  "h": "59dbc44c"
+ },
+ "sanpham.4-hoan-tien": {
+  "t": "4. 退款",
+  "h": "9500f12f"
+ },
+ "sanpham.5-lien-he": {
+  "t": "5. 聯絡我們",
+  "h": "f583579d"
+ },
+ "sanpham.cac-nhom-dich-vu-chinh": {
+  "t": "主要服務類別：",
+  "h": "6873de28"
+ },
+ "sanpham.cau-hoi-ve-san-pham-dich": {
+  "t": "關於產品、服務或價格的問題，請透過<a href=\"/contact.html\">聯絡我們</a>頁面與我們聯繫。",
+  "h": "c9b2038c"
+ },
+ "sanpham.chon-ngay-dat-ten-chon-ngay": {
+  "t": "<strong>擇日、取名</strong>——依事擇吉日、寶寶取名、企業取名",
+  "h": "7bd24940"
+ },
+ "sanpham.danh-muc-day-du-va-cap": {
+  "t": "完整且最新的工具目錄隨時可在<a href=\"/cong-cu.html\">工具</a>頁面查看。",
+  "h": "ed8fd601"
+ },
+ "sanpham.dich-vu": {
+  "t": "服務",
+  "h": "2c509399"
+ },
+ "sanpham.dich-vu-tinh-phi-theo-luong": {
+  "t": "服務以<strong>兩</strong>（點數）計費：儲值一次，即可用於現有的所有工具及日後推出的工具。儲值的兩<strong>不會過期</strong>，也<strong>不是訂閱制</strong>——只在實際使用時扣除，每個結果只扣一次。",
+  "h": "86d16de4"
+ },
+ "sanpham.do-tinh-chat-so-cua-dich": {
+  "t": "由於數位服務的性質，結果在付款後立即解鎖，因此結果顯示後<strong>不適用退款</strong>，但因技術錯誤而未能收到結果的情況除外。完整說明請見服務條款中的<a href=\"/dieu-khoan-dich-vu.html#thanh-toan-va-hoan-tien\">「付款與退款」</a>。",
+  "h": "58bace1c"
+ },
+ "sanpham.gia": {
+  "t": "價格",
+  "h": "71efef06"
+ },
+ "sanpham.gia-doc-truc-tiep-tu-he": {
+  "t": "價格直接讀取自系統，可能會調整。所有工具的完整價目表請見<a href=\"/cong-cu.html\">工具</a>頁面。",
+  "h": "307fe224"
+ },
+ "sanpham.gia-tham-khao-mot-so-dich": {
+  "t": "部分熱門服務的參考價格：",
+  "h": "24342e2e"
+ },
+ "sanpham.huong-dan-tung-buoc-tu-dang": {
+  "t": "從註冊帳號到使用工具的逐步說明，請見<a href=\"/huong-dan-thanh-toan.html\">付款指南</a>頁面。",
+  "h": "fe6dd621"
+ },
+ "sanpham.luan-giai-la-so-day-du": {
+  "t": "命盤解讀完整版（24 部分）",
+  "h": "bd642f37"
+ },
+ "sanpham.luong": {
+  "t": "<span class=\"credits-val\"><span data-tvp-price=\"laso\">…</span>兩</span>",
+  "h": "821dcba7"
+ },
+ "sanpham.luong-211d": {
+  "t": "<span class=\"credits-val\"><span data-tvp-price=\"phong-thuy\">…</span>兩</span>",
+  "h": "c1b9463c"
+ },
+ "sanpham.luong-duoc-ban-theo-cac-goi": {
+  "t": "兩以儲值方案在<a href=\"/topup.html\">儲值兩</a>頁面販售——方案越大，每兩單價越划算。以美元透過 PayPal 或 Visa/Mastercard 信用卡付款（不需 PayPal 帳號）。",
+  "h": "9bcde6e3"
+ },
+ "sanpham.luong-tuy0": {
+  "t": "<span class=\"credits-val\"><span data-tvp-price=\"xem-tuoi\">…</span>兩</span>",
+  "h": "bbfec03e"
+ },
+ "sanpham.luong-w5we": {
+  "t": "<span class=\"credits-val\"><span data-tvp-price=\"xem-lam-an\">…</span>兩</span>",
+  "h": "3d0b4f93"
+ },
+ "sanpham.luong-y747": {
+  "t": "<span class=\"credits-val\"><span data-tvp-price=\"tu-binh\">…</span>兩</span>",
+  "h": "baa134d9"
+ },
+ "sanpham.noi-dung-luan-giai-mang-tinh": {
+  "t": "解讀內容屬文化、學術性質的參考，<strong>並非</strong>財務、醫療或法律建議。詳見<a href=\"/mien-tru-trach-nhiem.html\" style=\"color:#5a4000;text-decoration:underline\">免責聲明</a>頁面。",
+  "h": "8a879070"
+ },
+ "sanpham.phong-thuy-noi-that": {
+  "t": "室內風水",
+  "h": "3f80b53f"
+ },
+ "sanpham.phong-thuy-xem-tuong-phong-thuy": {
+  "t": "<strong>風水與相術</strong>——室內風水、八宅宅向、面相、簽名（筆相）",
+  "h": "e3aa719d"
+ },
+ "sanpham.san-pham": {
+  "t": "產品",
+  "h": "982197dc"
+ },
+ "sanpham.san-pham-dich-vu": {
+  "t": "產品與服務",
+  "h": "5af2d451"
+ },
+ "sanpham.san-pham-dich-vu-tu-vi": {
+  "t": "產品與服務 — 明寶紫微斗數",
+  "h": "95bd5738"
+ },
+ "sanpham.tu-binh-bat-tu": {
+  "t": "子平八字",
+  "h": "6ade52e9"
+ },
+ "sanpham.tu-binh-bat-tu-lap-tru": {
+  "t": "<strong>子平八字</strong>——排八字四柱，依五行論斷",
+  "h": "4c4e3cc3"
+ },
+ "sanpham.tu-vi-dau-so-an-sao": {
+  "t": "<strong>紫微斗數</strong>——安星排盤、命盤解讀完整版（24 部分）、流年／流月／流日運勢、性格畫像",
+  "h": "f2ef7494"
+ },
+ "sanpham.tu-vi-minh-bao-cung-cap": {
+  "t": "明寶紫微斗數提供哪些服務、如何計費——兩（點數）儲值一次即可用於所有工具，永不過期。",
+  "h": "2e334f2c"
+ },
+ "sanpham.tu-vi-minh-bao-tuviminhbao-com": {
+  "t": "明寶紫微斗數（tuviminhbao.com）是依古法查詢與解讀東方命理的平台，根據使用者提供的出生年月日時進行論斷。所有服務皆透過網站線上提供，無需安裝軟體。",
+  "h": "31b96dd9"
+ },
+ "sanpham.xem-tuoi-hop-xem-tuoi-vo": {
+  "t": "<strong>年齡合盤</strong>——夫妻合婚、合夥合盤、親子合盤",
+  "h": "2ca9430c"
+ },
+ "sanpham.xem-tuoi-lam-an": {
+  "t": "合夥合盤",
+  "h": "5f5ba4e2"
+ },
+ "sanpham.xem-tuoi-vo-chong": {
+  "t": "夫妻合婚",
+  "h": "f3e7b1ed"
+ },
+ "sc.2-nhan-ket-qua": {
+  "t": "<span class=\"wss-n\">2</span><span class=\"wss-l\">取得結果</span>",
+  "h": "b0b2f830"
+ },
+ "sc.bang-du-15-nam-toi": {
+  "t": "<span class=\"hp-ic\" data-icon=\"calendar-days\"></span><span>未來 15 年<br>完整表格</span>",
+  "h": "7fd926c3"
+ },
+ "sc.can-chi": {
+  "t": "干支",
+  "h": "8b784611"
+ },
+ "sc.cham-diem-luc-hop-tam-hop": {
+  "t": "為孩子出生年與父母之間的地支六合、三合、六沖評分——未來 15 年的表格與最順遂的一年。也可請老師深入解說。",
+  "h": "1e93ec3a"
+ },
+ "sc.danh-gia": {
+  "t": "評價",
+  "h": "5df137aa"
+ },
+ "sc.ghi-chu-ket-qua-dua-tren": {
+  "t": "<strong style=\"color:#444\">備註：</strong>結果依據出生年的地支（國曆）。若孩子生於國曆 1–2 月，依農曆年計算的實際地支可能相差一年——需要更仔細確認。",
+  "h": "c4463c7c"
+ },
+ "sc.hanh": {
+  "t": "五行",
+  "h": "58608859"
+ },
+ "sc.hoi-thay-luan-sau-nam-nao": {
+  "t": "✦ 請老師深入解說哪一年適合生孩子",
+  "h": "665710f8"
+ },
+ "sc.ket-qua-15-nam-dia-chi": {
+  "t": "<span class=\"res-block-title\" id=\"resultTitle\">15 年結果</span> <span style=\"font-size:11px;color:#666\">地支・六合・三合・六沖</span>",
+  "h": "a7874a13"
+ },
+ "sc.luc-hop-tam-hop-luc-xung": {
+  "t": "<span class=\"hp-ic\" data-icon=\"scale\"></span><span>六合・三合<br>六沖</span>",
+  "h": "3c607a04"
+ },
+ "sc.ly-do": {
+  "t": "理由",
+  "h": "0cbf3763"
+ },
+ "sc.nam": {
+  "t": "年",
+  "h": "98926c7e"
+ },
+ "sc.nam-sinh-bo": {
+  "t": "爸爸的出生年",
+  "h": "a1009c64"
+ },
+ "sc.nam-sinh-cua-bo-va-me": {
+  "t": "父親與母親的出生年",
+  "h": "0cc92594"
+ },
+ "sc.nam-sinh-me": {
+  "t": "媽媽的出生年",
+  "h": "bef8fb8f"
+ },
+ "sc.nam-thuan-nhat-de-sinh-con": {
+  "t": "<span class=\"hp-ic\" data-icon=\"star\"></span><span>最適合<br>生孩子的年份</span>",
+  "h": "456f641b"
+ },
+ "sc.nhap-nam-sinh-bo-va-me": {
+  "t": "輸入父親與母親的出生年，即可看到未來 15 年的評價表與最順遂的一年。",
+  "h": "0cda7d1e"
+ },
+ "sc.sinh-con-dung-nam-hop-tuoi": {
+  "t": "許多家庭都希望在與父母生肖相合的年份生孩子，但要算準並不容易。輸入夫妻兩人的出生年，馬上找出未來 15 年中最順遂的一年。",
+  "h": "34b8b50b"
+ },
+ "sc.xem-15-nam-mien-phi": {
+  "t": "<span class=\"bg-label\"><span class=\"ic\" data-icon=\"hourglass\"></span><b id=\"btnGoLabel\">查看 15 年 →</b></span> <small>免費</small>",
+  "h": "f03c38c9"
+ },
+ "sc.xem-tuoi-sinh-con": {
+  "t": "看生孩子的生肖",
+  "h": "2e015092"
+ },
+ "sc.xem-tuoi-sinh-con-nam-sinh": {
+  "t": "<b>看生孩子的生肖</b><span>依地支看與父母相合的孩子出生年</span>",
+  "h": "9da380f6"
+ },
+ "sc.xem-tuoi-sinh-con-tu-vi": {
+  "t": "看生孩子的生肖——明寶紫微斗數",
+  "h": "23026bbb"
+ },
  "solaso.chua-co-la-so-nao-trong": {
   "t": "簿冊中還沒有命盤。<br>在任何工具輸入出生年月日後，命盤會自動收進這裡。",
   "h": "f40b05ed"
@@ -17226,6 +24118,378 @@
  "solaso.la-so-da-luu-tu-vi": {
   "t": "已儲存的命盤——明寶紫微斗數",
   "h": "183c05e5"
+ },
+ "taikhoan.add-mcp-server-chon-streamable-http": {
+  "t": "<strong>Add MCP server</strong> → 選擇 <strong>Streamable HTTP</strong>。",
+  "h": "f63db93e"
+ },
+ "taikhoan.bam-add-custom-connector": {
+  "t": "點 <strong>Add custom connector</strong>。",
+  "h": "f171eae6"
+ },
+ "taikhoan.bam-nut-chia-se-o-goc": {
+  "t": "在任何結果頁面底部點<strong>「分享」</strong>按鈕即可取得連結——傳給別人或發到 Facebook/Zalo/WhatsApp。您分享過的內容與瀏覽次數會顯示在這裡。",
+  "h": "d3fc4566"
+ },
+ "taikhoan.bao-cao": {
+  "t": "<span data-icon=\"file-text\"></span><span class=\"ml-tx\">報告</span><span class=\"ml-go\">→</span>",
+  "h": "30fcaff2"
+ },
+ "taikhoan.bao-mat": {
+  "t": "<span data-icon=\"lock\"></span> 安全",
+  "h": "a32a24fb"
+ },
+ "taikhoan.bat-settings-connectors-developer-mode": {
+  "t": "開啟 <strong>Settings → Connectors → Developer mode</strong>。",
+  "h": "5ddc655e"
+ },
+ "taikhoan.cai-dat": {
+  "t": "<span class=\"tab-ic\" data-icon=\"settings\"></span> 設定",
+  "h": "de9c2df8"
+ },
+ "taikhoan.chat-voi-bot-bang-dung-vi": {
+  "t": "用同一個兩錢包和機器人聊天",
+  "h": "c6fcc4a8"
+ },
+ "taikhoan.chia-se-lich-su": {
+  "t": "<span data-icon=\"share-2\" style=\"width:15px;height:15px;vertical-align:-2px;color:var(--tx-gold)\"></span> 分享——紀錄",
+  "h": "fc051dae"
+ },
+ "taikhoan.chon-nen-sang-hoac-toi-cho": {
+  "t": "為整個明寶紫微斗數選擇淺色或深色背景——立即套用，下次也會記住。",
+  "h": "ac29b196"
+ },
+ "taikhoan.chua-ket-noi": {
+  "t": "尚未連線",
+  "h": "a6c7297d"
+ },
+ "taikhoan.claude-chatgpt-gemini-grok": {
+  "t": "Claude · ChatGPT · Gemini · Grok",
+  "h": "bbad7d3a"
+ },
+ "taikhoan.cua-ban": {
+  "t": "您的",
+  "h": "4ae2197a"
+ },
+ "taikhoan.da-dung-thang-nay-0-luong": {
+  "t": "<span>本月已使用</span> <span id=\"monthlyUsageLabel\">0 兩</span>",
+  "h": "3be2cf3d"
+ },
+ "taikhoan.da-ket-noi": {
+  "t": "已連線",
+  "h": "5c4300f9"
+ },
+ "taikhoan.da-moi-duoc-thuong-30-ngay": {
+  "t": "<span>有獎勵的邀請（過去 30 天）</span> <span id=\"refProgressLabel\">—</span>",
+  "h": "15ce0d55"
+ },
+ "taikhoan.da-san-sang": {
+  "t": "● 已就緒",
+  "h": "4a6360a8"
+ },
+ "taikhoan.dan-duong-ket-noi-o-tren": {
+  "t": "把上方的連線網址貼到 URL 欄 → <strong>Add</strong>。",
+  "h": "63f3a9b6"
+ },
+ "taikhoan.dan-duong-ket-noi-o-tren-6lkt": {
+  "t": "貼上上方的連線網址 → 儲存。",
+  "h": "5c24e4aa"
+ },
+ "taikhoan.dan-duong-ket-noi-o-tren-bdph": {
+  "t": "貼上上方的連線網址即可。不需其他設定——金鑰已包含在網址中。",
+  "h": "8957fdf6"
+ },
+ "taikhoan.dang-kiem-tra": {
+  "t": "<span class=\"conn-status\"><span class=\"ic\" data-icon=\"hourglass\"></span> 檢查中…</span>",
+  "h": "88fb5296"
+ },
+ "taikhoan.dang-kiem-tra-akb9": {
+  "t": "檢查中…",
+  "h": "05a0307a"
+ },
+ "taikhoan.dang-nhap-dang-ky": {
+  "t": "登入／註冊",
+  "h": "8df57bec"
+ },
+ "taikhoan.dang-nhap-de-xem-ho-so": {
+  "t": "登入以查看個人檔案",
+  "h": "a6bad53c"
+ },
+ "taikhoan.dang-tai": {
+  "t": "載入中...",
+  "h": "3d8a48b7"
+ },
+ "taikhoan.dang-xuat": {
+  "t": "登出",
+  "h": "adff9c76"
+ },
+ "taikhoan.doi-mat-khau": {
+  "t": "變更密碼",
+  "h": "d4e1de23"
+ },
+ "taikhoan.doi-mat-khau-9m0f": {
+  "t": "變更密碼",
+  "h": "6e8da8ff"
+ },
+ "taikhoan.dung-tu-vi-minh-bao-o": {
+  "t": "在您聊天的任何地方使用明寶紫微斗數——在慣用的聊天助理中，或在 Telegram · WhatsApp · Messenger 裡問老師，全部共用同一個兩錢包。",
+  "h": "2c9f35b9"
+ },
+ "taikhoan.duong-ket-noi-rieng-cua-ban": {
+  "t": "您專屬的連線網址",
+  "h": "8dbee506"
+ },
+ "taikhoan.gemini-grok-tro-ly-khac": {
+  "t": "Gemini / Grok / 其他助理",
+  "h": "f0e6a5a3"
+ },
+ "taikhoan.giao-dien": {
+  "t": "<span data-icon=\"sun\"></span> 外觀",
+  "h": "ad9cf22d"
+ },
+ "taikhoan.giao-dien-e4yw": {
+  "t": "外觀",
+  "h": "705b4237"
+ },
+ "taikhoan.gop-y": {
+  "t": "<span data-icon=\"inbox\"></span> 建議",
+  "h": "fa000453"
+ },
+ "taikhoan.ho-so-vi-luong-ket-noi": {
+  "t": "<b>個人檔案</b><span>兩錢包 · 連線 · 設定</span>",
+  "h": "61d17307"
+ },
+ "taikhoan.ho-tro-dang-nhap-qua-google": {
+  "t": "支援以 <strong>Google</strong>、<strong>Facebook</strong> 或電子郵件登入。",
+  "h": "b8ce549c"
+ },
+ "taikhoan.hoi-thay-trong-tro-ly-chat": {
+  "t": "在聊天助理中問老師 <span class=\"conn-badge\">新</span>",
+  "h": "11fcd343"
+ },
+ "taikhoan.huy-lien-ket": {
+  "t": "取消連結",
+  "h": "5f50b732"
+ },
+ "taikhoan.kenh-lien-lac": {
+  "t": "<span data-icon=\"message-circle\" style=\"width:15px;height:15px;vertical-align:-2px;color:var(--tx-gold)\"></span> 聯絡管道",
+  "h": "aa753fc7"
+ },
+ "taikhoan.ket-noi": {
+  "t": "<span class=\"tab-ic\" data-icon=\"link\"></span> 連線",
+  "h": "5ba3bb0d"
+ },
+ "taikhoan.ket-noi-vao-chatgpt": {
+  "t": "連線到 ChatGPT",
+  "h": "20d3bbf9"
+ },
+ "taikhoan.ket-noi-vao-claude": {
+  "t": "連線到 Claude",
+  "h": "f03eaded"
+ },
+ "taikhoan.ket-noi-xong-thi-hoi-the": {
+  "t": "<span data-icon=\"lightbulb\" style=\"width:14px;height:14px;vertical-align:-2px\"></span> 連線好之後要怎麼問？",
+  "h": "c918e147"
+ },
+ "taikhoan.khoi-hanh": {
+  "t": "<span data-icon=\"trophy\" style=\"width:15px;height:15px;vertical-align:-2px;color:var(--tx-gold)\"></span> 啟程",
+  "h": "60535802"
+ },
+ "taikhoan.khong-can-bam-gi-cu-chat": {
+  "t": "不需要按任何東西——照常聊天，系統會自動呼叫工具。記得",
+  "h": "cd1a05b2"
+ },
+ "taikhoan.khong-het-han": {
+  "t": "永不過期",
+  "h": "b4fef21a"
+ },
+ "taikhoan.la-so-da-luu": {
+  "t": "<span data-icon=\"folder\"></span><span class=\"ml-tx\">已儲存的命盤</span><span class=\"ml-go\">→</span>",
+  "h": "6739d4ef"
+ },
+ "taikhoan.lap-la-so-tu-vi-cho": {
+  "t": "「幫 1984 年 5 月 9 日凌晨 1:45 出生的男性排紫微命盤」",
+  "h": "4b2026e7"
+ },
+ "taikhoan.lich-su-giao-dich": {
+  "t": "交易紀錄",
+  "h": "99e8eb90"
+ },
+ "taikhoan.lien-ket-messenger": {
+  "t": "連結 Messenger",
+  "h": "99c405ee"
+ },
+ "taikhoan.lien-ket-telegram": {
+  "t": "連結 Telegram",
+  "h": "e4c7777f"
+ },
+ "taikhoan.lien-ket-whatsapp": {
+  "t": "連結 WhatsApp",
+  "h": "007375bb"
+ },
+ "taikhoan.lien-ket-zalo": {
+  "t": "連結 Zalo",
+  "h": "73727376"
+ },
+ "taikhoan.luan-giai-chi-tiet-la-so": {
+  "t": "「幫我詳細解讀命盤」",
+  "h": "daab7a26"
+ },
+ "taikhoan.luot-hoi-thay": {
+  "t": "<span data-icon=\"message-circle\"></span><span class=\"ml-tx\">問老師紀錄</span><span class=\"ml-go\">→</span>",
+  "h": "2603dd9c"
+ },
+ "taikhoan.luu-ten": {
+  "t": "儲存名稱",
+  "h": "19fd43c9"
+ },
+ "taikhoan.mat-khau-moi": {
+  "t": "新密碼",
+  "h": "4267a600"
+ },
+ "taikhoan.mo-settings-connectors-claude-desktop-ho": {
+  "t": "開啟 <strong>Settings → Connectors</strong>（Claude Desktop 或 claude.ai）。",
+  "h": "b7a053cb"
+ },
+ "taikhoan.moi-ban-nhan-them-luong": {
+  "t": "邀請朋友——多得兩",
+  "h": "c87d6753"
+ },
+ "taikhoan.nam-2027-cua-toi-van-han": {
+  "t": "「我 2027 年的運勢如何？3 月呢？」",
+  "h": "2c70ccfb"
+ },
+ "taikhoan.nap-luong": {
+  "t": "<span data-icon=\"wallet\" style=\"width:16px;height:16px\"></span> 儲值兩",
+  "h": "2fb3641a"
+ },
+ "taikhoan.nap-luong-o-day-nhan-bot": {
+  "t": "在這裡儲值兩，傳訊息給 Telegram 機器人即可用同一個錢包。",
+  "h": "b2be6c64"
+ },
+ "taikhoan.nap-luong-o-day-nhan-bot-1xta": {
+  "t": "在這裡儲值兩，傳訊息給 WhatsApp 機器人即可用同一個錢包。",
+  "h": "76114b7e"
+ },
+ "taikhoan.nap-luong-o-day-nhan-bot-x2oh": {
+  "t": "在這裡儲值兩，傳訊息給 Facebook Messenger 機器人即可用同一個錢包。",
+  "h": "e8af5d50"
+ },
+ "taikhoan.nap-luong-o-day-nhan-zalo": {
+  "t": "在這裡儲值兩，傳訊息給 Zalo OA 明寶紫微斗數即可用同一個錢包。",
+  "h": "f86646c2"
+ },
+ "taikhoan.nguoi-dung": {
+  "t": "使用者",
+  "h": "06f23b4d"
+ },
+ "taikhoan.nhap-lai-mat-khau": {
+  "t": "再次輸入密碼",
+  "h": "4ff37e70"
+ },
+ "taikhoan.nhap-mat-khau-moi": {
+  "t": "輸入新密碼",
+  "h": "62b70346"
+ },
+ "taikhoan.nhap-ten-cua-ban": {
+  "t": "輸入您的名字",
+  "h": "5e6b745a"
+ },
+ "taikhoan.noi-du-ngay-gio-gioi-tinh": {
+  "t": "說齊出生日期、時間與性別",
+  "h": "19c46e88"
+ },
+ "taikhoan.quan-ly-vi-luong-nhan-them": {
+  "t": "管理兩錢包、獲得更多兩、連結聊天管道與帳號設定。",
+  "h": "6233b736"
+ },
+ "taikhoan.quan-trong-trong-khung-chat-bam": {
+  "t": "<strong>重要：</strong>在聊天框點工具按鈕（<strong>+</strong>）→ <strong>Tool access</strong> → 選 <strong>\"Tools already loaded\"</strong>。預設的 \"Load tools when needed\" 會讓 Claude 看不到工具而自行編造命盤。開啟一次，之後的聊天都會保留。",
+  "h": "916eda3a"
+ },
+ "taikhoan.sang": {
+  "t": "<span data-icon=\"sun\" style=\"width:14px;height:14px;vertical-align:-2px\"></span> 淺色",
+  "h": "910fdb50"
+ },
+ "taikhoan.sao-that-sat-o-cung-menh": {
+  "t": "「七殺在命宮代表什麼？」",
+  "h": "5d996c81"
+ },
+ "taikhoan.so-du-luong": {
+  "t": "兩餘額",
+  "h": "2a573b63"
+ },
+ "taikhoan.tai-khoan-dang-nhap-qua-oauth": {
+  "t": "透過 OAuth 登入的帳號不使用密碼。",
+  "h": "4cbe60f1"
+ },
+ "taikhoan.tai-khoan-tu-vi-minh-bao": {
+  "t": "帳號 — 明寶紫微斗數",
+  "h": "0ec3e09f"
+ },
+ "taikhoan.tao-duong-ket-noi": {
+  "t": "建立連線網址",
+  "h": "1ea224f1"
+ },
+ "taikhoan.tao-mot-duong-ket-noi-rieng": {
+  "t": "建立一條專屬連線網址，貼到您的聊天助理中。之後直接問「幫 1984 年 5 月 9 日丑時出生的男性排命盤」「2027 年運勢如何？」——系統從 tuviminhbao.com 的<strong>引擎取得精確</strong>數據，不會編造。",
+  "h": "d3398742"
+ },
+ "taikhoan.tat-ca-loai-giao-dich": {
+  "t": "所有交易類型",
+  "h": "32529f70"
+ },
+ "taikhoan.ten-hien-thi": {
+  "t": "顯示名稱",
+  "h": "1e9d85d8"
+ },
+ "taikhoan.thong-tin": {
+  "t": "<span data-icon=\"user\"></span> 資訊",
+  "h": "ff941fc8"
+ },
+ "taikhoan.thong-tin-ca-nhan": {
+  "t": "個人資訊",
+  "h": "5de3e5eb"
+ },
+ "taikhoan.thu-hoi-tao-key-moi": {
+  "t": "撤銷並建立新金鑰",
+  "h": "8fec8bbc"
+ },
+ "taikhoan.tim-muc-them-mcp-server-custom": {
+  "t": "找到新增 <strong>MCP server</strong> / <strong>custom connector</strong>（Streamable HTTP）的選項。",
+  "h": "07a00e26"
+ },
+ "taikhoan.tim-theo-noi-dung": {
+  "t": "依內容搜尋…",
+  "h": "ad472d5e"
+ },
+ "taikhoan.toi": {
+  "t": "<span data-icon=\"moon\" style=\"width:14px;height:14px;vertical-align:-2px\"></span> 深色",
+  "h": "f4040249"
+ },
+ "taikhoan.tong-da-moi-0-da-nhan": {
+  "t": "共邀請：<strong id=\"refTotalCount\" style=\"color:var(--heading)\">0</strong> · 已獲得：<strong id=\"refEarnedCount\" style=\"color:var(--tx-gold)\">0</strong> 兩",
+  "h": "1aae41a3"
+ },
+ "taikhoan.vi-du": {
+  "t": "。例如：",
+  "h": "4622a94a"
+ },
+ "taikhoan.vi-luong": {
+  "t": "<span class=\"tab-ic\" data-icon=\"wallet\"></span> 兩錢包",
+  "h": "397cf5a3"
+ },
+ "taikhoan.vo-chong-tuoi-1984-va-1986": {
+  "t": "「1984 年和 1986 年出生的夫妻合不合？」",
+  "h": "3cbf661e"
+ },
+ "taikhoan.xac-nhan-mat-khau": {
+  "t": "確認密碼",
+  "h": "7386c6b1"
+ },
+ "taikhoan.xong-hoi-claude-lap-la-so": {
+  "t": "完成！問 Claude「幫 1984 年 5 月 9 日丑時出生的男性排命盤」，它就會自動呼叫明寶紫微斗數的工具。",
+  "h": "88358e38"
  },
  "tailieu.bai-viet-khong-ton-tai-hoac": {
   "t": "文章不存在，或已被刪除。",
@@ -17594,6 +24858,38 @@
  "thansohoc.tra-loi-thay-o-khung-chat": {
   "t": "在對話框回答老師，即可排出生命靈數圖——只需要出生日期與姓名。",
   "h": "8268b781"
+ },
+ "thay.15-thay-luan-giai-cua-tu": {
+  "t": "明寶紫微斗數的 15 位解讀老師——每位都有自己的專長與論命風格。",
+  "h": "619ab125"
+ },
+ "thay.cac-thay-15-thay-luan-giai": {
+  "t": "<b>老師們</b><span>15 位解讀老師——每位各有專長、各有風格</span>",
+  "h": "0d633e5a"
+ },
+ "thay.cac-thay-tu-vi-minh-bao": {
+  "t": "老師們 — 明寶紫微斗數",
+  "h": "ad96cac8"
+ },
+ "thay.khong-tim-thay-thay-nao-khop": {
+  "t": "找不到符合的老師。",
+  "h": "ed5cffeb"
+ },
+ "thay.tim-thay-theo-ten-hoac-chuyen": {
+  "t": "依姓名或專長搜尋老師…",
+  "h": "cb98738e"
+ },
+ "thaycct.cac-thay": {
+  "t": "← 老師們",
+  "h": "4e97c621"
+ },
+ "thaycct.thay-chuyen-mon-cong-cu-va": {
+  "t": "<b id=\"tmTitle\">老師</b><span>專長、工具與如何開始對話</span>",
+  "h": "817a3aa5"
+ },
+ "thaycct.thay-tu-vi-minh-bao": {
+  "t": "老師 — 明寶紫微斗數",
+  "h": "9f2d3044"
  },
  "thtg.1-ghi-am-giong-noi": {
   "t": "<span class=\"wss-n\">1</span><span class=\"wss-l\">錄製聲音</span>",
@@ -18031,6 +25327,26 @@
   "t": "重新查看結果會再扣兩嗎？",
   "h": "64b49a22"
  },
+ "trochuyen.chua-co-hoi-thoai-nao-bam": {
+  "t": "還沒有任何對話。<br>按上方的「新提問」，或打開任一工具向老師提問。",
+  "h": "9f9eecfb"
+ },
+ "trochuyen.hoi-moi-bat-dau-mot-cau": {
+  "t": "<span class=\"tc-plus\">+</span> <span><b>新提問</b><span>開始一個問題——系統會自動選對工具</span></span>",
+  "h": "bb8d13e7"
+ },
+ "trochuyen.hoi-thay-moi-cuoc-hoi-thay": {
+  "t": "<b>問老師</b><span>各工具中與老師的所有對話，集中在此</span>",
+  "h": "f8fc50f0"
+ },
+ "trochuyen.hoi-thay-tu-vi-minh-bao": {
+  "t": "問老師 — 明寶紫微斗數",
+  "h": "ddbd279c"
+ },
+ "trochuyen.toan-bo-cac-cuoc-hoi-thay": {
+  "t": "與老師的所有對話——隨時重新打開，或開始一個新問題。",
+  "h": "f799c12a"
+ },
  "tuonghop.ban-luan-giai-mau-tai-pdf": {
   "t": "<span class=\"sc-ic\" data-icon=\"file-text\"></span> <span class=\"sc-txt\"><b>解讀範本</b><span>下載範例命盤的完整夫妻合婚 PDF，先看看實際內容。</span></span> <a class=\"sc-btn\" href=\"/tai-mau/mau-xem-tuoi.pdf\" target=\"_blank\" rel=\"noopener\">下載 PDF →</a>",
   "h": "17b7eecd"
@@ -18142,5 +25458,85 @@
  "vanhan.xem-van-han-mien-phi": {
   "t": "<span class=\"bg-label\"><span class=\"ic\" data-icon=\"calendar\"></span><b id=\"btnGoLabel\">查看運勢 →</b></span> <small>免費</small>",
   "h": "3895d3c5"
+ },
+ "xlg.gio-sinh-duong-lich": {
+  "t": "出生時間（國曆）",
+  "h": "eefa6274"
+ },
+ "xlg.gioi-tinh": {
+  "t": "性別",
+  "h": "80bbce55"
+ },
+ "xlg.gioi-tinh-nam": {
+  "t": "男",
+  "h": "b580ba1b"
+ },
+ "xlg.ho-ten-khong-bat-buoc": {
+  "t": "姓名 <span class=\"opt\">（選填）</span>",
+  "h": "87ce95fd"
+ },
+ "xlg.khong-nho-chinh-xac-chon-gio": {
+  "t": "記不清楚？選最接近的時間即可，之後還能修改。",
+  "h": "21f75046"
+ },
+ "xlg.la-so-12-cung-day-du": {
+  "t": "<span class=\"ic\" data-icon=\"bar-chart-3\"></span><span><b>十二宮命盤</b>——主星、輔星、四化俱全</span>",
+  "h": "b0b67e2b"
+ },
+ "xlg.luan-giai-la-so-tu-vi": {
+  "t": "依出生年月日時解讀紫微斗數命盤 — 明寶",
+  "h": "ee3ea368"
+ },
+ "xlg.luan-giai-la-so-tu-vi-jv0q": {
+  "t": "依出生年月日時解讀紫微斗數命盤",
+  "h": "cd522af6"
+ },
+ "xlg.luan-rieng-tung-cung-diem-manh": {
+  "t": "<span class=\"ic\" data-icon=\"star\"></span><span><b>逐宮解讀</b>，強弱分析與今年的建議</span>",
+  "h": "60d3c68b"
+ },
+ "xlg.minh-bao": {
+  "t": "明寶",
+  "h": "e4158660"
+ },
+ "xlg.ngay": {
+  "t": "日",
+  "h": "368c4575"
+ },
+ "xlg.nhap-ngay-gio-sinh-he-thong": {
+  "t": "輸入出生年月日時，系統安星排出十二宮命盤並依古法解讀。立即預覽，無需註冊。",
+  "h": "7c5ecf1e"
+ },
+ "xlg.nhap-ngay-gio-sinh-xem-truoc": {
+  "t": "輸入出生年月日時，免費預覽十二宮紫微命盤與總論。只有打開 13 部分完整版時才需付費。",
+  "h": "38c4a34f"
+ },
+ "xlg.thang": {
+  "t": "月",
+  "h": "0e2b3099"
+ },
+ "xlg.thanh-toan-bang-chuyen-khoan-qr": {
+  "t": "可使用 PayPal 或國際信用卡付款。",
+  "h": "84f70dc9"
+ },
+ "xlg.tong-quan-cuoc-doi-tinh-cach": {
+  "t": "<span class=\"ic\" data-icon=\"file-text\"></span><span><b>人生總論</b>：性格、事業、感情、財運</span>",
+  "h": "57dcca8b"
+ },
+ "xlg.vui-long-chon-du-ngay-thang": {
+  "t": "請選齊出生的日、月、年與時間。",
+  "h": "67e1d40f"
+ },
+ "xlg.xem-ban-luan-giai-mau-pdf": {
+  "t": "<a class=\"mini\" href=\"/tai-mau/mau-luan-giai-la-so.pdf\" target=\"_blank\" rel=\"noopener\"> <span class=\"ic\" data-icon=\"file-text\"></span> <span><b>查看解讀範例（PDF・越南文）</b>一份範例命盤的真實內容，決定前先讀讀看</span> </a> <a class=\"mini\" href=\"/app/thay\"> <span class=\"ic\" data-icon=\"book-open\"></span> <span><b>明寶 15 位老師</b>依《紫微斗數新編》與各古法版本論斷</span> </a>",
+  "h": "e8c2bc01"
+ },
+ "xlg.xem-la-so-mien-phi": {
+  "t": "免費查看命盤 →",
+  "h": "97bce6ab"
+ },
+ "xlg.xem-truoc-mien-phi-mo-ban": {
+  "t": "預覽<b>免費</b>。打開 13 部分完整版：<b><span data-lp-vnd>…</span></b>",
+  "h": "741a332d"
  }
 }
