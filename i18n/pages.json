@@ -367,6 +367,39 @@
    "shell"
   ]
  },
+ "/app/hoang-dao": {
+  "file": "app-hoang-dao.html",
+  "keys": [
+   "battu.chi-phi-su-dung",
+   "battu.gioi-thieu",
+   "battu.hoi",
+   "battu.mien-phi",
+   "chonngay.hoang-lich-lich-van-nien-la",
+   "giosinh.nam",
+   "giosinh.ngay",
+   "giosinh.thang",
+   "hoangdao.1-nhap-ngay",
+   "hoangdao.6-gio-tot-nen-dung",
+   "hoangdao.6-gio-xau-can-tranh",
+   "hoangdao.chon-ngay-thang-nam-duong-lich",
+   "hoangdao.cung-mot-viec-lam-gio-nay",
+   "hoangdao.gio-hoang-dao",
+   "hoangdao.gio-hoang-dao-12-gio-tot",
+   "hoangdao.gio-hoang-dao-tu-vi-minh",
+   "hoangdao.hac-dao-6-gio-can-tranh",
+   "hoangdao.hoang-dao-6-gio-tot",
+   "hoangdao.hoang-lich-day-du",
+   "hoangdao.hoi-thay-nen-lam-viec-vao",
+   "hoangdao.ngay-can-xem-duong-lich",
+   "hoangdao.tra-12-gio-hoang-dao-hac",
+   "hoangdao.xem-gio",
+   "napam.sua",
+   "ngaytot.2-nhan-ket-qua"
+  ],
+  "js": [
+   "shell"
+  ]
+ },
  "/app/kinh-dich": {
   "file": "app-kinh-dich.html",
   "keys": [
@@ -594,6 +627,39 @@
   ],
   "js": [
    "nav"
+  ]
+ },
+ "/app/ngay-tot": {
+  "file": "app-ngay-tot.html",
+  "keys": [
+   "battu.1-nhap-thong-tin",
+   "battu.chi-phi-su-dung",
+   "battu.gioi-thieu",
+   "battu.hoi",
+   "battu.mien-phi",
+   "chonngay.hoang-lich-lich-van-nien-la",
+   "giosinh.nam",
+   "giosinh.thang",
+   "napam.sua",
+   "ngaytot.2-nhan-ket-qua",
+   "ngaytot.chon-thang-nam-duong-lich-he",
+   "ngaytot.hoi-thay-chon-ngay-dep-trong",
+   "ngaytot.lich-ngay-tot-xau-ca-thang",
+   "ngaytot.lich-tot-xau-ca-thang",
+   "ngaytot.luu-y-nho-duong-cong-ki",
+   "ngaytot.muon-len-lich-ca-thang-ma",
+   "ngaytot.ngay-ki-tranh-viec-lon",
+   "ngaytot.ngay-ky-can-tranh",
+   "ngaytot.ngay-tot-an-toan",
+   "ngaytot.ngay-tot-trong-thang",
+   "ngaytot.ngay-tot-trong-thang-lich-van",
+   "ngaytot.ngay-tot-trong-thang-tu-vi",
+   "ngaytot.thang-can-xem-duong-lich",
+   "ngaytot.truc-nhi-thap-bat-tu",
+   "ngaytot.xem-lich"
+  ],
+  "js": [
+   "shell"
   ]
  },
  "/app/van-han-nam": {

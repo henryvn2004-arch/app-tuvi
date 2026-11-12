@@ -149,12 +149,13 @@
 window.SHELL_CHATFIRST=true;
 window.SHELL_INTRO={key:'ngay-tot'};</script>
 <script src="/tuvi-ansao-engine.js"></script>
-<script src="/tools-shared/ngay-tot.js?v=3"></script>
+<script src="/tools-shared/ngay-tot.js?v=4"></script>
 <script src="/tools-shared/hoang-lich.js?v=1"></script>
 <script src="/auth.js?v=9"></script>
   <script src="/nav.js?v=49" data-icons-only></script>
 <script src="/shell.js?v=150"></script>
 <script src="/tools-shared/shell-soft-nav.js?v=49"></script>
+<script src="/tools-shared/glossary.js?v=4"></script>
 <script>
 // Thanh tiến trình (`.ws-steps`, xem shell.css) — chỉ phản ánh trạng thái đã
 // có sẵn trong flow cũ (form → kết quả), không tạo trạng thái mới. `n` các
@@ -184,9 +185,9 @@ function calculate(){
   if(window.SHELL_INTRO)Shell.dismissIntro(window.SHELL_INTRO.key);
   Shell.setContext({
     scenario:{type:'ngay-tot',data:r.data},
-    label:'Ngày tốt · tháng '+r.data.thang+'/'+r.data.nam,
-    greeting:'Đã xem lịch **tháng '+r.data.thang+'/'+r.data.nam+'**. Bạn định làm việc gì để tôi chọn ngày đẹp nhất?',
-    chips:['Ngày nào đẹp để cưới hỏi?','Ngày nào tốt để khởi công/nhập trạch?','Vì sao tránh ngày kị?','Khai trương nên chọn ngày nào?']
+    label:_tvmbT('js.ngaytot.label','Ngày tốt · tháng {m}/{y}',{m:r.data.thang,y:r.data.nam}),
+    greeting:_tvmbT('js.ngaytot.greeting','Đã xem lịch **tháng {m}/{y}**. Bạn định làm việc gì để tôi chọn ngày đẹp nhất?',{m:r.data.thang,y:r.data.nam}),
+    chips:[_tvmbT('js.ngaytot.chip1','Ngày nào đẹp để cưới hỏi?'),_tvmbT('js.ngaytot.chip2','Ngày nào tốt để khởi công/nhập trạch?'),_tvmbT('js.ngaytot.chip3','Vì sao tránh ngày kị?'),_tvmbT('js.ngaytot.chip4','Khai trương nên chọn ngày nào?')]
   });
   Shell.setShareable({
     kind:'text',
@@ -202,7 +203,8 @@ function calculate(){
 
   // Hoàng lịch thật về sau thì nâng lưới VÀ nâng ngữ cảnh rail. Đặt context
   // một lần ở trên trước để rail dùng được ngay khi /api/almanac chậm/chết.
-  HoangLich.napThang(document.getElementById('calBody'),_m,_y).then(function(ds){
+  // Hoàng lịch bổ sung (trực · nghi/kỵ) do /api/almanac trả chữ Việt chưa có bản dịch ⇒ chỉ nâng lưới ở bản vi (xem app-hoang-dao.html).
+  (!window.I18n||I18n.locale==='vi'?HoangLich.napThang(document.getElementById('calBody'),_m,_y):Promise.resolve(null)).then(function(ds){
     var extra=HoangLich.railThang(ds); if(!extra)return;
     // ⚠️ payload gửi rail phải PHẲNG — `extractGenericContext` bỏ qua object.
     Shell.setContext({
