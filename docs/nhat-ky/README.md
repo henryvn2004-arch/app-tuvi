@@ -28,6 +28,7 @@ Luật rút ra từ các mục này đã được cô đọng lên `CLAUDE.md`. 
 
 | # | tháng | file | mục |
 |---:|---|---|---|
+| 1 | 2026-11 | `2026-11.md` | 🧩 W26a — Widget dùng chung: `tuvi-form.js` + `noi-sinh.js` theo ngôn ngữ (114 khoá, tên nước qua Intl.DisplayNames) |
 | 1 | 2026-11 | `2026-11.md` | 📨 W17b — "Gửi lại PDF" đọc văn luận theo ngôn ngữ người nhận (`readLuanI18n`), hụt lùi bản Việt |
 | 1 | 2026-11 | `2026-11.md` | 🌐 W18 — Chân dung/cẩm nang theo locale (cache tách ngôn ngữ, sở hữu giữ nguyên) · link email `/<locale>/` · PDF font CJK/Hangul + khung theo ngôn ngữ |
 | 1 | 2026-11 | `2026-11.md` | 🗂️ W17 — Bản luận lá số theo (slug, locale): bảng con `laso_public_i18n`, `/api/laso-luan`, `check:lasoi18n` |
