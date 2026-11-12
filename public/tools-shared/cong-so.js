@@ -41,8 +41,7 @@
   // server"); thiếu mã/bản dịch ⇒ chữ Việt (vi không nạp gì ⇒ byte-giống). Dữ liệu gửi server/rail GIỮ chữ Việt.
   if (window.I18n && window.I18n.loadLong) window.I18n.loadLong('cong-so');
   function L(key, vi, vars) {
-    var I = window.I18n;
-    return I && I.long ? I.long('cong-so', key, vi, vars) : vi;
+    return window.I18n && window.I18n.long ? window.I18n.long('cong-so', key, vi, vars) : vi;
   }
   /** Mục có mã ⇒ tra theo `<bảng>.<mã>`; thiếu mã (payload cũ trong CDN) ⇒ chữ Việt. */
   function LM(prefix, ma, vi, suffix) { return ma ? L(prefix + ma + (suffix || ''), vi) : vi; }
