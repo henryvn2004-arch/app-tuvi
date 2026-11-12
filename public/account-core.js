@@ -1,3 +1,4 @@
+/* global _tvmbT, _tvmbHref, I18n -- auth.js (_tvmbT/_tvmbHref) + tools-shared/i18n.js (I18n) nạp trước file này */
 /* ============================================================
    account-core.js — Logic trang Hồ sơ `/app/ho-so` (= /app/tai-khoan,
    app-tai-khoan.html): 3 tab Ví Lượng / Kết nối / Cài đặt. Lịch sử
