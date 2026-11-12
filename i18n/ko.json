@@ -375,6 +375,126 @@
   "t": "이야기를 들려주세요. 명보가 15분의 선생님 중 알맞은 분을 안내해 드려요: 자미두수 명반, 사주, 궁합, 작명, 길일 택일.",
   "h": "0f564294"
  },
+ "chonngay.2-xem-nen-can-chi": {
+  "t": "<span class=\"wss-n\">2</span><span class=\"wss-l\">간지 기반 보기</span>",
+  "h": "c95e6f79"
+ },
+ "chonngay.an-hoi-dam-ngo": {
+  "t": "약혼 / 상견례",
+  "h": "4b11a176"
+ },
+ "chonngay.chon-ngay-chuyen-sau": {
+  "t": "심층 택일 →",
+  "h": "9bd6a5ed"
+ },
+ "chonngay.chon-ngay-gio-tot": {
+  "t": "길일·길시 고르기",
+  "h": "28b27ec4"
+ },
+ "chonngay.chon-ngay-gio-tot-hop-tuoi": {
+  "t": "간지에 따라 결혼식·개업·입주·지신제 등에 맞는 띠별 길일·길시를 고르세요. 선생님께 좋은 날과 피해야 할 날을 풀이받을 수 있어요.",
+  "h": "a3dfe7f0"
+ },
+ "chonngay.chon-ngay-tot-ngay-gio-hop": {
+  "t": "<b>길일 고르기</b><span>중요한 일을 위한 띠별 날짜와 시각</span>",
+  "h": "ec08df6d"
+ },
+ "chonngay.chon-ngay-tot-tu-vi-minh": {
+  "t": "길일 고르기 — 명보 자미두수",
+  "h": "bad6e5eb"
+ },
+ "chonngay.chon-viec-can-xem-ngay-nhap": {
+  "t": "날짜를 보려는 일을 고르고, 당사자의 이름과 태어난 해, 보려는 달을 입력하세요. 시스템이 간지를 계산해 띠와의 합·충을 대조해 드려요.",
+  "h": "a51a3cec"
+ },
+ "chonngay.chua-muon-khai-thong-tin-ban": {
+  "t": "<b>아직 정보를 입력하고 싶지 않나요?</b><span>먼저 샘플을 보며 체험해 볼 수 있어요.</span>",
+  "h": "0a975603"
+ },
+ "chonngay.cuoi-hoi": {
+  "t": "결혼식",
+  "h": "04a2caa4"
+ },
+ "chonngay.cuoi-hoi-lam-nha-khai-truong": {
+  "t": "결혼식, 집짓기, 개업 — 날짜를 잘못 고르면 평생 아쉬워도 되돌릴 수 없는 일이 많아요. 일의 종류와 기간을 고르면 당사자의 띠에 맞는 날짜·시각 목록을 바로 받아 보실 수 있어요.",
+  "h": "0b16cd85"
+ },
+ "chonngay.danh-sach-ngay-tot": {
+  "t": "길일<br>목록",
+  "h": "b1bf5886"
+ },
+ "chonngay.doi-chieu-hop-xung": {
+  "t": "합·충<br>대조",
+  "h": "c461160d"
+ },
+ "chonngay.dong-tho-khoi-cong": {
+  "t": "지신제 / 착공",
+  "h": "10468f91"
+ },
+ "chonngay.gio-hoang-dao-tung-ngay": {
+  "t": "날짜별<br>황도 시진",
+  "h": "54c78af6"
+ },
+ "chonngay.he-thong-phan-tich-can-chi": {
+  "t": "시스템이 당사자의 간지와 예정한 연월을 분석해, 구체적인 이유와 함께 좋은 날짜 구간을 제안해요.",
+  "h": "ec5043f6"
+ },
+ "chonngay.ho-ten-nguoi-chu-su": {
+  "t": "당사자 성명",
+  "h": "7d21772a"
+ },
+ "chonngay.hoang-lich-lich-van-nien-la": {
+  "t": "황력(만년력)은 간지, 이십팔숙, 길흉의 별을 결합해 일의 종류마다 알맞은 시각과 황도 길일을 정하는 중국 고대의 달력 체계예요. 결혼식·개업·지신제의 날짜와 시각을 고르는 전통적인 근거예요.",
+  "h": "0240b883"
+ },
+ "chonngay.hoi-thay-chon-ngay-dep": {
+  "t": "✦ 선생님께 좋은 날 골라 달라고 묻기",
+  "h": "7d368a1b"
+ },
+ "chonngay.khai-truong": {
+  "t": "개업",
+  "h": "c86ca256"
+ },
+ "chonngay.ky-ket-hop-dong": {
+  "t": "계약 체결",
+  "h": "90e0fb9b"
+ },
+ "chonngay.lap-nen": {
+  "t": "기반 만들기 →",
+  "h": "81b6e6d8"
+ },
+ "chonngay.moi-luot": {
+  "t": "1회당",
+  "h": "2a5c5972"
+ },
+ "chonngay.mua-xe": {
+  "t": "차량 구매",
+  "h": "52d4aa77"
+ },
+ "chonngay.nhap-trach-ve-nha-moi": {
+  "t": "입주 (새집으로 이사)",
+  "h": "fcda52e1"
+ },
+ "chonngay.thong-tin-chon-ngay": {
+  "t": "택일 정보",
+  "h": "9d3045db"
+ },
+ "chonngay.ton": {
+  "t": "소요",
+  "h": "e603a0b9"
+ },
+ "chonngay.viec-can-chon-ngay": {
+  "t": "날짜를 고르려는 일",
+  "h": "e84816a6"
+ },
+ "chonngay.xem-ban-mau": {
+  "t": "샘플 보기 →",
+  "h": "ba3671b1"
+ },
+ "chonngay.xuat-hanh": {
+  "t": "출행 (길 떠나기)",
+  "h": "424fcbb2"
+ },
  "chutrinh.9-dai-van-tron-doi": {
   "t": "<span class=\"hp-ic\" data-icon=\"hourglass\"></span><span>평생<br>9개 대운</span>",
   "h": "5ab04ae7"
@@ -706,6 +826,222 @@
  "disclaimer.xem-them-dieu-khoan-day-du": {
   "t": "이용약관 전문은 <a href=\"/dieu-khoan-dich-vu.html\">이용약관</a>(제2항 — 책임의 제한)에, 서비스 설명은 <a href=\"/san-pham-dich-vu.html\">상품 및 서비스</a> 페이지에 있습니다.",
   "h": "dc202339"
+ },
+ "giosinh.12-la-so-kha-nghi": {
+  "t": "후보 명반<br>12개",
+  "h": "6b8b7bde"
+ },
+ "giosinh.2-xem-12-gio-kha-nghi": {
+  "t": "<span class=\"wss-n\">2</span><span class=\"wss-l\">후보 12개 시각 보기</span>",
+  "h": "41d140ce"
+ },
+ "giosinh.am-lich": {
+  "t": "음력",
+  "h": "b0246c79"
+ },
+ "giosinh.anh-chi-nhap-ngay-sinh-theo": {
+  "t": "생년월일을 <b>음력</b>으로 입력하셨어요. 다른 도구는 <b>양력</b>을 받는데 아직 음력→양력 역변환을 지원하지 않아 자동으로 넘겨 드릴 수 없어요. 위에서 확정한 시각은 그대로 쓸 수 있으니, 다른 도구를 열 때 직접 입력해 주세요.",
+  "h": "edb9dc0c"
+ },
+ "giosinh.anh-chi-von-da-biet-chac": {
+  "t": "출생 시각을 이미 확실히 아시나요?",
+  "h": "d8efb8c1"
+ },
+ "giosinh.buoc-tiep-theo-thu-hep-bang": {
+  "t": "다음 단계 — 설문으로 좁혀 가기",
+  "h": "12044ce6"
+ },
+ "giosinh.buoc-xem-12-la-so-kha": {
+  "t": "후보 명반 12개를 보는 단계는 <b>무료</b>예요. 좁혀 가는 설문과 순위표부터 냥(크레딧)이 들어요.",
+  "h": "88e80a48"
+ },
+ "giosinh.cach-kiem-chac-nhat-lap-la": {
+  "t": "가장 확실한 확인법: <b>상위 두 시각</b>으로 명반을 만들고 최근 5년의 운세 부분을 읽어, 더 잘 맞는 시각을 고르세요.",
+  "h": "9b5f4abc"
+ },
+ "giosinh.cach-nay-thu-hep-bang-muc": {
+  "t": "이 방식은 답변과 각 명반의 일치도로 좁혀 가기 때문에 <b>가능성의 순위</b>를 매길 뿐, 어느 시각이 맞는지 증명하지는 못해요. 실제에 가깝게 답한 경우 대부분 정답 시각이 상위 3개 안에 들지만, 1위인지는 그만큼 확실하지 않아요. 그래서 이 페이지는 그럴듯하게 들리는 숫자 하나 대신 근거와 함께 전체 목록을 보여 드려 직접 확인하실 수 있게 했어요.",
+  "h": "eaefa2a0"
+ },
+ "giosinh.chon-gio-anh-chi-muon-dung": {
+  "t": "사용할 시각을 고르세요. 계정의 <b>명반 보관함</b>에 저장되어 다른 모든 도구에 미리 채워져요. 다시 입력하거나 기억해 둘 필요가 없어요.",
+  "h": "36fd6d7b"
+ },
+ "giosinh.chot-gio-va-dung-tiep": {
+  "t": "시각을 확정하고 이어서 쓰기",
+  "h": "2c33bc41"
+ },
+ "giosinh.cung-mot-ngay-sinh-12-la": {
+  "t": "같은 생년월일 — 완전히 다른 명반 12개",
+  "h": "92803f8c"
+ },
+ "giosinh.duong-lich": {
+  "t": "양력",
+  "h": "dfac44de"
+ },
+ "giosinh.gio-dung-neu-biet": {
+  "t": "실제 시각 (아시는 경우)",
+  "h": "f70330da"
+ },
+ "giosinh.gio-muon-dung": {
+  "t": "사용할 시각",
+  "h": "853206cc"
+ },
+ "giosinh.gio-sinh-doi-thi-cung-menh": {
+  "t": "출생 시각이 바뀌면 명궁이 바뀌고 국이 바뀌며, 별의 위치도 모두 달라져요. 이것이 <b id=\"freeLine\"></b>의 12가지 가능성이고, 이 중 단 하나만이 실제 명반이에요.",
+  "h": "ca364a84"
+ },
+ "giosinh.gio-sinh-kha-nang-cao-nhat": {
+  "t": "가능성이 가장 높은 출생 시각",
+  "h": "449a17e1"
+ },
+ "giosinh.gioi-tinh": {
+  "t": "성별",
+  "h": "80bbce55"
+ },
+ "giosinh.gui-doi-chieu": {
+  "t": "대조 결과 보내기",
+  "h": "50ad4ad2"
+ },
+ "giosinh.khao-sat-thu-hep": {
+  "t": "좁혀 가는<br>설문",
+  "h": "c176396d"
+ },
+ "giosinh.khao-sat-thu-hep-ua1r": {
+  "t": "좁혀 가는 설문",
+  "h": "0d669868"
+ },
+ "giosinh.khong-nho-chinh-xac-gio-sinh": {
+  "t": "출생 시각을 정확히 기억하지 못하면 자미두수 명반이 뿌리부터 어긋나기 쉬워요. 몇 가지 질문에 답하면 시스템이 12개 시간대 안에서 차츰 좁혀 가장 가까운 출생 시각을 찾아 드려요.",
+  "h": "83b0cbd2"
+ },
+ "giosinh.khong-nho-gio-sinh-lap-ca": {
+  "t": "출생 시각이 기억나지 않나요? 후보 명반 12개를 모두 만든 뒤, 건강과 지나온 시기에 관한 몇 가지 질문으로 좁혀 가요.",
+  "h": "b7c6b615"
+ },
+ "giosinh.lam-lai": {
+  "t": "다시 하기",
+  "h": "535fca0d"
+ },
+ "giosinh.loai-lich": {
+  "t": "달력 종류",
+  "h": "4f30f6b5"
+ },
+ "giosinh.luan-giai-la-so-nay": {
+  "t": "이 명반 풀이하기 →",
+  "h": "5fea8efd"
+ },
+ "giosinh.luu-vao-so-la-so": {
+  "t": "명반 보관함에 저장",
+  "h": "b9785d51"
+ },
+ "giosinh.nam": {
+  "t": "연도",
+  "h": "98926c7e"
+ },
+ "giosinh.nam-gioi": {
+  "t": "남",
+  "h": "b580ba1b"
+ },
+ "giosinh.neu-co-giay-khai-sinh-hoac": {
+  "t": "출생증명서가 있거나 확실히 기억하는 가족이 있다면 실제 시각을 알려 주세요. 방금 결과와 대조하면 방법을 보정하는 데 도움이 돼요. 선택 사항이며 풀이 결과에는 전혀 영향이 없어요.",
+  "h": "31f387ef"
+ },
+ "giosinh.ngay": {
+  "t": "일",
+  "h": "368c4575"
+ },
+ "giosinh.nhap-ngay-thang-nam-sinh-gio": {
+  "t": "<b>생년월일</b>을 입력하세요. 출생 시각이 바로 찾으려는 것이에요. 시스템이 <b>후보 명반 12개</b>를 만들고 짧은 설문으로 좁힌 뒤 일치도 순으로 순위를 매겨요.",
+  "h": "287c421e"
+ },
+ "giosinh.thang": {
+  "t": "월",
+  "h": "0e2b3099"
+ },
+ "giosinh.vi-sao-khong-phai-mot-con": {
+  "t": "왜 딱 잘라 말하는 숫자 하나가 아닌가",
+  "h": "2bbd8eab"
+ },
+ "giosinh.xac-dinh-gio-sinh": {
+  "t": "출생 시각 알아보기",
+  "h": "2b570401"
+ },
+ "giosinh.xac-dinh-gio-sinh-khong-nho": {
+  "t": "<b>출생 시각 알아보기</b><span>기억나지 않는다면 여기서 시작하세요</span>",
+  "h": "1407f5d3"
+ },
+ "giosinh.xac-dinh-gio-sinh-tu-vi": {
+  "t": "출생 시각 알아보기 — 명보 자미두수",
+  "h": "c14e875f"
+ },
+ "giosinh.xem-12-gio-kha-nghi": {
+  "t": "후보 12개 시각 보기",
+  "h": "3cd9aabf"
+ },
+ "giosinh.xep-hang-do-khop": {
+  "t": "일치도<br>순위",
+  "h": "a6655e79"
+ },
+ "hoangdao.1-nhap-ngay": {
+  "t": "<span class=\"wss-n\">1</span><span class=\"wss-l\">날짜 입력</span>",
+  "h": "a99fbfcf"
+ },
+ "hoangdao.6-gio-tot-nen-dung": {
+  "t": "쓰면 좋은<br>길시 6개",
+  "h": "ca3f8fea"
+ },
+ "hoangdao.6-gio-xau-can-tranh": {
+  "t": "피해야 할<br>흉시 6개",
+  "h": "4f1e6bfc"
+ },
+ "hoangdao.chon-ngay-thang-nam-duong-lich": {
+  "t": "확인하려는 양력 일·월·연을 고르세요. 시스템이 황도 시진을 계산하고 그날의 황력과 대조해요.",
+  "h": "b7dbabb0"
+ },
+ "hoangdao.cung-mot-viec-lam-gio-nay": {
+  "t": "같은 일도 어떤 시각에는 순조롭고 다른 시각에는 이유 없이 막히기도 해요. 보려는 날을 고르면 황력에 따른 길시와 피해야 할 시각 목록을 바로 받아 볼 수 있어요.",
+  "h": "173c7571"
+ },
+ "hoangdao.gio-hoang-dao": {
+  "t": "황도 시진",
+  "h": "940fb21d"
+ },
+ "hoangdao.gio-hoang-dao-12-gio-tot": {
+  "t": "<b>황도 시진</b><span>간지로 보는 하루 12시진의 길흉</span>",
+  "h": "23839283"
+ },
+ "hoangdao.gio-hoang-dao-tu-vi-minh": {
+  "t": "황도 시진 — 명보 자미두수",
+  "h": "51a0db68"
+ },
+ "hoangdao.hac-dao-6-gio-can-tranh": {
+  "t": "✗ 흑도 — 피해야 할 6개 시진",
+  "h": "39601183"
+ },
+ "hoangdao.hoang-dao-6-gio-tot": {
+  "t": "✦ 황도 — 좋은 6개 시진",
+  "h": "7263a1c8"
+ },
+ "hoangdao.hoang-lich-day-du": {
+  "t": "황력<br>전체",
+  "h": "f4d66b7c"
+ },
+ "hoangdao.hoi-thay-nen-lam-viec-vao": {
+  "t": "✦ 선생님께 몇 시에 하면 좋은지 묻기",
+  "h": "2a9b43ce"
+ },
+ "hoangdao.ngay-can-xem-duong-lich": {
+  "t": "확인할 날짜 (양력)",
+  "h": "a32fbe04"
+ },
+ "hoangdao.tra-12-gio-hoang-dao-hac": {
+  "t": "하루 12시진의 황도·흑도를 간지로 조회해요. 개업·출행·계약에 좋은 시각을 알 수 있어요. 선생님께 내 일에 맞춰 풀이를 물어보세요.",
+  "h": "6f4fa691"
+ },
+ "hoangdao.xem-gio": {
+  "t": "시진 보기 →",
+  "h": "e1db5866"
  },
  "home.270-000-da-quoc-gia-da": {
   "t": "<span><span class=\"ic\" data-icon=\"file-text\"></span>270,000+</span> <span><span class=\"ic\" data-icon=\"globe\"></span>다국적</span> <span><span class=\"ic\" data-icon=\"check\"></span>검증 완료</span>",
@@ -2027,6 +2363,98 @@
   "t": "몇 줄만 적어 주세요. 명보가 15명의 선생님 팀에서 알맞은 분을 모셔 와 봐 드려요.",
   "h": "e43855cc"
  },
+ "js.chonngay.ban-mau-note": {
+  "t": "이것은 설명용 <b>샘플</b>(다른 데이터)이며 회원님의 결과가 아니에요.",
+  "h": "4dc73cd0"
+ },
+ "js.chonngay.chip1": {
+  "t": "이번 달에서 가장 좋은 날은 언제인가요?",
+  "h": "1d6514df"
+ },
+ "js.chonngay.chip2": {
+  "t": "이 일에 맞는 황도 시진은요?",
+  "h": "005ba6f0"
+ },
+ "js.chonngay.chip3": {
+  "t": "절대 피해야 할 날은 언제인가요?",
+  "h": "36a0360f"
+ },
+ "js.chonngay.chip4": {
+  "t": "그날 출행하기 좋은 방향은요?",
+  "h": "0ef8b5dc"
+ },
+ "js.chonngay.chua-mo-duoc-ban-mau": {
+  "t": "샘플을 열지 못했어요. 잠시 후 다시 시도해 주세요.",
+  "h": "05a0f158"
+ },
+ "js.chonngay.dang-mo": {
+  "t": "여는 중…",
+  "h": "a3fdeaab"
+ },
+ "js.chonngay.dang-phan-tich": {
+  "t": "길일을 분석하는 중… 보통 15~25초 걸려요",
+  "h": "2413a48e"
+ },
+ "js.chonngay.greeting": {
+  "t": "**{viec}**을(를) 위한 기반을 만들었어요 (당사자 띠 **{cc}**). 먼저 어떤 조언이 필요하세요?",
+  "h": "37474974"
+ },
+ "js.chonngay.khong-nhan-duoc-ket-qua": {
+  "t": "결과를 받지 못했어요.",
+  "h": "46e8add0"
+ },
+ "js.chonngay.khong-the-ket-noi": {
+  "t": "연결할 수 없어요. 다시 시도해 주세요.",
+  "h": "bf0b6e7b"
+ },
+ "js.chonngay.label": {
+  "t": "택일: {viec} · {ten} · {n}년 {t}월",
+  "h": "c350a6fa"
+ },
+ "js.chonngay.loi-colon": {
+  "t": "오류: ",
+  "h": "471c0087"
+ },
+ "js.chonngay.loi-status": {
+  "t": "오류 {s}",
+  "h": "c406c72b"
+ },
+ "js.chonngay.nam-n": {
+  "t": "{n}년",
+  "h": "e2de29f4"
+ },
+ "js.chonngay.nhap-thong-tin-cua-toi": {
+  "t": "내 정보 입력하기 →",
+  "h": "61666cb3"
+ },
+ "js.chonngay.res-note": {
+  "t": "당사자의 띠는 <b>{cc}</b> ({hanh}). 예정한 달은 <b>{tcc}</b>, 해는 <b>{ncc}</b>. 좋은 날은 당사자의 띠와 <b>합</b>(육합 / 삼합)이 되고 <b>충 / 형</b>을 피해야 해요. <b>{viec}</b>에 맞는 구체적인 날짜와 황도 시진은 선생님께 물어보세요.",
+  "h": "e946d4da"
+ },
+ "js.chonngay.thang-n": {
+  "t": "{n}월",
+  "h": "4dd9659f"
+ },
+ "js.chonngay.thang-n-m": {
+  "t": "{n}년 {t}월",
+  "h": "355a0dcf"
+ },
+ "js.chonngay.tuoi-chu-su": {
+  "t": "당사자 띠",
+  "h": "c6691aae"
+ },
+ "js.chonngay.vui-long-nhap-ho-ten": {
+  "t": "성함, 태어난 해, 예정 월과 연도를 입력해 주세요.",
+  "h": "d60f4f07"
+ },
+ "js.chonngay.vui-long-nhap-thong-tin": {
+  "t": "먼저 정보를 입력해 주세요.",
+  "h": "b73d7304"
+ },
+ "js.chonngay.xem-ban-mau": {
+  "t": "샘플 보기 →",
+  "h": "ba3671b1"
+ },
  "js.chutrinh.10-can-can-trong-dieu-gi": {
   "t": "/10) 어떤 점을 조심해야 하나요?",
   "h": "9fd4a120"
@@ -2146,6 +2574,198 @@
  "js.congcutr.xep-theo-mon-tu-vi-tu": {
   "t": "분야별로 정렬: 자미두수, 사주, 관상, 풍수…",
   "h": "cf4f8ecc"
+ },
+ "js.giosinh.am-lich": {
+  "t": " (음력)",
+  "h": "ebf71daf"
+ },
+ "js.giosinh.anh-chi-chua-chot-duoc-gio": {
+  "t": "아직 출생 시각을 확정하지 못하셨군요. 후보 시각을 구분하는 방법을 저에게 물어보셔도 좋아요.",
+  "h": "fe1408ea"
+ },
+ "js.giosinh.bat-dau-khao-sat": {
+  "t": "좁혀 가는 설문 시작하기 →",
+  "h": "89663d6e"
+ },
+ "js.giosinh.cam-on-dung": {
+  "t": "감사합니다. 실제 시각이 시스템이 제시한 목록 안에 있었네요. 기록해 두었어요.",
+  "h": "816391d2"
+ },
+ "js.giosinh.cam-on-truot": {
+  "t": "감사합니다. 이번에는 시스템이 빗나갔어요. 방법을 다듬는 데 꼭 필요한 사례예요.",
+  "h": "850e32a7"
+ },
+ "js.giosinh.cau-n-toi-da": {
+  "t": "{n}번째 질문 / 최대 {max}개",
+  "h": "37d9a74f"
+ },
+ "js.giosinh.chip-cung-tat-ach": {
+  "t": "질액궁은 무엇을 말해 주나요?",
+  "h": "f6448214"
+ },
+ "js.giosinh.chip-khong-nho-gio": {
+  "t": "출생 시각을 몰라도 자미두수를 볼 수 있나요?",
+  "h": "36b87cba"
+ },
+ "js.giosinh.chip-vi-sao-doi-gio": {
+  "t": "출생 시각이 바뀌면 왜 명반 전체가 바뀌나요?",
+  "h": "eb87751b"
+ },
+ "js.giosinh.chon-gio-dung-truoc": {
+  "t": "먼저 실제 시각을 선택해 주세요.",
+  "h": "b1862011"
+ },
+ "js.giosinh.chua-biet": {
+  "t": "— 모르겠음 —",
+  "h": "555657b4"
+ },
+ "js.giosinh.chua-co-ket-qua": {
+  "t": "대조할 결과가 아직 없어요.",
+  "h": "49c0ec23"
+ },
+ "js.giosinh.chua-doc-duoc-bang-gia": {
+  "t": "가격표를 불러오지 못했어요. 페이지를 새로고침해 주세요.",
+  "h": "247f0130"
+ },
+ "js.giosinh.chua-ghi-duoc-vao-so": {
+  "t": "보관함에 저장하지 못했어요 (네트워크 또는 로그인 세션 문제). 방금 확정한 시각은 이 기기에는 기억돼 있어요.",
+  "h": "d599ae15"
+ },
+ "js.giosinh.co-loi-xay-ra": {
+  "t": "오류가 발생했어요.",
+  "h": "08eddac7"
+ },
+ "js.giosinh.cuc-n": {
+  "t": "{n}",
+  "h": "a0da4ad0"
+ },
+ "js.giosinh.da-luu-vao-so": {
+  "t": "명반 보관함에 저장했어요. 다른 도구에도 이 시각이 미리 채워져요.",
+  "h": "c43dc72d"
+ },
+ "js.giosinh.da-nho-tren-may-nay": {
+  "t": "이 기기에 기억해 두었어요. 다른 도구를 열면 바로 쓸 수 있어요. 로그인하면 명반이 계정 보관함에 들어가 기기를 바꿔도 남아 있어요.",
+  "h": "10b9b2e9"
+ },
+ "js.giosinh.dang-lap-12-la-so": {
+  "t": "명반 12개를 만드는 중…",
+  "h": "1e2ebabc"
+ },
+ "js.giosinh.dang-luu": {
+  "t": "저장하는 중…",
+  "h": "b98712c0"
+ },
+ "js.giosinh.dang-tinh": {
+  "t": "계산하는 중…",
+  "h": "76a9d5f0"
+ },
+ "js.giosinh.dua-tren": {
+  "t": "답변한 {n}개 질문 기준 · 일치도 {p}%",
+  "h": "0fb2318b"
+ },
+ "js.giosinh.duong-lich": {
+  "t": " (양력)",
+  "h": "4471b62b"
+ },
+ "js.giosinh.gio-chi": {
+  "t": "{chi}시",
+  "h": "87e9bdfa"
+ },
+ "js.giosinh.gio-chi-khung": {
+  "t": "{chi}시 ({khung})",
+  "h": "86326af7"
+ },
+ "js.giosinh.khong-gui-duoc": {
+  "t": "보내지 못했지만 괜찮아요. 풀이 결과는 그대로예요.",
+  "h": "5e875ab2"
+ },
+ "js.giosinh.khong-lap-duoc-la-so": {
+  "t": "명반을 만들지 못했어요.",
+  "h": "16f828bd"
+ },
+ "js.giosinh.khong-ro-khong-nho-bo-qua": {
+  "t": "잘 모르겠음 / 기억나지 않음 — 이 질문 건너뛰기",
+  "h": "538ab29a"
+ },
+ "js.giosinh.lock-cta": {
+  "t": "명반 12개 전체 + 설문 열기",
+  "h": "1b686643"
+ },
+ "js.giosinh.lock-i1": {
+  "t": "후보 명반 12개 전체 (시각별 명궁 + 질액궁)",
+  "h": "672803dc"
+ },
+ "js.giosinh.lock-i2": {
+  "t": "생년월일에 맞춰 만든 질문 세트",
+  "h": "229e75db"
+ },
+ "js.giosinh.lock-i3": {
+  "t": "12개 시각을 가능성 순으로 순위화",
+  "h": "b08e68e7"
+ },
+ "js.giosinh.lock-i4": {
+  "t": "질문별 일치/불일치 근거",
+  "h": "ed0e1963"
+ },
+ "js.giosinh.lock-i5": {
+  "t": "신뢰도와 시각 확정을 위한 조언",
+  "h": "4c5e6f1b"
+ },
+ "js.giosinh.lock-title": {
+  "t": "⊙ 출생 시각 보고서가 아직 열리지 않았어요",
+  "h": "75ef5f41"
+ },
+ "js.giosinh.luong": {
+  "t": "냥",
+  "h": "6614284e"
+ },
+ "js.giosinh.menh-colon": {
+  "t": "명궁:",
+  "h": "d24288f5"
+ },
+ "js.giosinh.nhap-nam-sinh-trong-khoang-1900": {
+  "t": "출생 연도는 1900~2030년 사이로 입력해 주세요.",
+  "h": "41815a93"
+ },
+ "js.giosinh.survey-pitch": {
+  "t": "이 생년월일에 맞춰 시스템이 전용 <b>질문 {n}개</b>를 만들어요. 선택지는 <b>바로 이 날짜</b>에서 서로 다른 징후를 보이는 시각 그룹이라 사람마다 질문 세트가 달라요. 답을 마치면 <b>가능성이 가장 높은 2~3개 시각과 질문별 근거</b>가 나와요.",
+  "h": "383cb5d5"
+ },
+ "js.giosinh.tat-ach-colon": {
+  "t": "질액궁:",
+  "h": "80b98397"
+ },
+ "js.giosinh.tc-cao": {
+  "t": "높음",
+  "h": "db10c479"
+ },
+ "js.giosinh.tc-thap": {
+  "t": "낮음",
+  "h": "ecd6f14a"
+ },
+ "js.giosinh.tc-vua": {
+  "t": "보통",
+  "h": "0467562c"
+ },
+ "js.giosinh.tin-cay": {
+  "t": "신뢰도: {m}",
+  "h": "90b46fcf"
+ },
+ "js.giosinh.ton": {
+  "t": "소요",
+  "h": "e603a0b9"
+ },
+ "js.giosinh.vo-chinh-dieu": {
+  "t": "주성 없음",
+  "h": "bd07d7a9"
+ },
+ "js.giosinh.xac-dinh-gio-sinh": {
+  "t": "출생 시각 알아보기",
+  "h": "c3aee594"
+ },
+ "js.giosinh.xem-12-gio-kha-nghi": {
+  "t": "후보 12개 시각 보기",
+  "h": "3cd9aabf"
  },
  "js.home.3-buoc-dau-tien": {
   "t": "처음 3단계",
@@ -2646,6 +3266,34 @@
  "js.home.xung-tuoi-29rp": {
   "t": "충하는 띠: ",
   "h": "e92ab4fa"
+ },
+ "js.kimlau.chip1": {
+  "t": "집을 짓기에 가장 좋은 해는 언제인가요?",
+  "h": "992ff775"
+ },
+ "js.kimlau.chip2": {
+  "t": "결혼할 수 있는 해는 언제인가요?",
+  "h": "5de89c72"
+ },
+ "js.kimlau.chip3": {
+  "t": "금루에 걸리면 어떻게 액막이하나요?",
+  "h": "f9c9cb33"
+ },
+ "js.kimlau.chip4": {
+  "t": "삼재에는 무엇을 피해야 하나요?",
+  "h": "27ba3819"
+ },
+ "js.kimlau.dai-20-nam": {
+  "t": "향후 20년 — 해도 되는 해",
+  "h": "bd73ccbd"
+ },
+ "js.kimlau.greeting": {
+  "t": "**{cc}**의 금루·삼재·황옥(향후 20년)을 조회했어요. 무엇이 궁금하세요?",
+  "h": "cf9daca6"
+ },
+ "js.kimlau.label": {
+  "t": "금루 · {cc}",
+  "h": "2529b317"
  },
  "js.kinhdich.bam-de-bat-dau-gieo-que": {
   "t": "눌러서 괘 뽑기를 시작하세요 — 6번 던지며, 한 번에 효 하나가 정해집니다",
@@ -3334,6 +3982,30 @@
  "js.nav.xem-tuong-qua-anh": {
   "t": "사진으로 관상 보기",
   "h": "24c4d64e"
+ },
+ "js.ngaytot.chip1": {
+  "t": "결혼식을 하기 좋은 날은 언제인가요?",
+  "h": "409c6fd4"
+ },
+ "js.ngaytot.chip2": {
+  "t": "착공이나 입주하기 좋은 날은 언제인가요?",
+  "h": "26db2036"
+ },
+ "js.ngaytot.chip3": {
+  "t": "왜 꺼리는 날은 피하나요?",
+  "h": "2cc8c854"
+ },
+ "js.ngaytot.chip4": {
+  "t": "개업은 어느 날을 고르면 좋을까요?",
+  "h": "b44fce94"
+ },
+ "js.ngaytot.greeting": {
+  "t": "**{y}년 {m}월** 달력을 확인했어요. 어떤 일을 하실 건지 알려 주시면 가장 좋은 날을 골라 드릴게요.",
+  "h": "3a05f3ac"
+ },
+ "js.ngaytot.label": {
+  "t": "길일 · {y}년 {m}월",
+  "h": "cbd777dc"
  },
  "js.nhtg.anh-mat-noi-len-dieu-gi": {
   "t": "눈빛은 무엇을 말해 주나요?",
@@ -6747,9 +7419,25 @@
   "t": "**의 점수 평가인가요, 새 이름 추천인가요?",
   "h": "d922a861"
  },
+ "js.shellui.hc-ban-o-day": {
+  "t": "현재 위치",
+  "h": "0ed02beb"
+ },
+ "js.shellui.hc-duoc": {
+  "t": "가능",
+  "h": "4c144474"
+ },
+ "js.shellui.hd-al": {
+  "t": " (음력 {m}/{d})",
+  "h": "3fd68961"
+ },
  "js.shellui.hd-can-hanh": {
   "t": ", 천간 오행 ",
   "h": "96563d79"
+ },
+ "js.shellui.hd-can-hanh-info": {
+  "t": "천간 <strong>{can}</strong> — 오행 <strong>{hanh}</strong>",
+  "h": "4069d76b"
  },
  "js.shellui.hd-gio-can-tranh-hac-dao": {
   "t": "피해야 할 시진(흑도): ",
@@ -6766,6 +7454,118 @@
  "js.shellui.hd-gio-tot-hoang-dao": {
   "t": "좋은 시진(황도): ",
   "h": "100b31dc"
+ },
+ "js.shellui.hd-ngay-cc": {
+  "t": "일진 <strong>{cc}</strong>",
+  "h": "7f416c3a"
+ },
+ "js.shellui.hd-nhap-ngay-hop-le": {
+  "t": "올바른 날짜를 입력해 주세요.",
+  "h": "11a91c34"
+ },
+ "js.shellui.hd-thang-khong-co-ngay": {
+  "t": "{y}년 {m}월에는 {d}일이 없어요. 다시 선택해 주세요.",
+  "h": "da49ec5e"
+ },
+ "js.shellui.hd-title": {
+  "t": "{date}{al} — {cc}일",
+  "h": "593d5baf"
+ },
+ "js.shellui.hdd-bh": {
+  "t": "살기, 재앙",
+  "h": "28e5f7d8"
+ },
+ "js.shellui.hdd-cht": {
+  "t": "얽힘, 정체",
+  "h": "4363abe5"
+ },
+ "js.shellui.hdd-ct": {
+  "t": "구설, 시비",
+  "h": "845d6380"
+ },
+ "js.shellui.hdd-hv": {
+  "t": "도난, 손실",
+  "h": "cde5c999"
+ },
+ "js.shellui.hdd-kq": {
+  "t": "재물, 돈이 들어옴",
+  "h": "15237468"
+ },
+ "js.shellui.hdd-md": {
+  "t": "귀인의 도움, 순조로움",
+  "h": "a8e75ee4"
+ },
+ "js.shellui.hdd-nd": {
+  "t": "명망, 성취",
+  "h": "b3890138"
+ },
+ "js.shellui.hdd-td": {
+  "t": "복덕, 흉을 풀어줌",
+  "h": "e3a72954"
+ },
+ "js.shellui.hdd-th": {
+  "t": "소송, 분쟁, 흉",
+  "h": "a6198a39"
+ },
+ "js.shellui.hdd-tl": {
+  "t": "재물운, 만사형통",
+  "h": "1ae9748a"
+ },
+ "js.shellui.hdd-tlao": {
+  "t": "구속, 장애",
+  "h": "5d6fac43"
+ },
+ "js.shellui.hdd-tm": {
+  "t": "보호, 복을 기원",
+  "h": "cdb38651"
+ },
+ "js.shellui.hdt-bh": {
+  "t": "백호",
+  "h": "f6380016"
+ },
+ "js.shellui.hdt-cht": {
+  "t": "구진",
+  "h": "36fb04ef"
+ },
+ "js.shellui.hdt-ct": {
+  "t": "주작",
+  "h": "90214276"
+ },
+ "js.shellui.hdt-hv": {
+  "t": "현무",
+  "h": "f27e517b"
+ },
+ "js.shellui.hdt-kq": {
+  "t": "금궤",
+  "h": "6b3e8125"
+ },
+ "js.shellui.hdt-md": {
+  "t": "명당",
+  "h": "323a8d91"
+ },
+ "js.shellui.hdt-nd": {
+  "t": "옥당",
+  "h": "2c94d958"
+ },
+ "js.shellui.hdt-td": {
+  "t": "천덕",
+  "h": "3c86d12a"
+ },
+ "js.shellui.hdt-th": {
+  "t": "천형",
+  "h": "51b356df"
+ },
+ "js.shellui.hdt-tl": {
+  "t": "청룡",
+  "h": "deccb086"
+ },
+ "js.shellui.hdt-tlao": {
+  "t": "천뢰",
+  "h": "44ad7734"
+ },
+ "js.shellui.hdt-tm": {
+  "t": "사명",
+  "h": "fa69d852"
  },
  "js.shellui.het-phan-dung-thu": {
   "t": "체험 분량을 모두 사용했어요.",
@@ -7326,6 +8126,74 @@
  "js.shellui.kinh-mat-nao-hop-tuong-mat": {
   "t": "내 얼굴형에는 어떤 안경이 어울려요?",
   "h": "e2a2a092"
+ },
+ "js.shellui.kl-binh-thuong": {
+  "t": "보통",
+  "h": "7a1fa869"
+ },
+ "js.shellui.kl-cau-hoang-oc": {
+  "t": "올해는 황옥 해예요. 매매와 집짓기는 피하세요.",
+  "h": "50677d38"
+ },
+ "js.shellui.kl-cau-kim-lau": {
+  "t": "올해는 금루({loai}) 해로, {hai}. 결혼, 건축, 큰 착공은 피하세요.",
+  "h": "53df32eb"
+ },
+ "js.shellui.kl-cau-tam-tai": {
+  "t": "올해는 삼재 운에 해당해요. 큰 결정은 신중하게 하세요.",
+  "h": "72ae51c8"
+ },
+ "js.shellui.kl-con-tam-tai": {
+  "t": "올해는 삼재와도 겹치므로 각별히 조심해야 해요.",
+  "h": "6d4d5899"
+ },
+ "js.shellui.kl-hai-luc-suc": {
+  "t": "가축과 재산에 영향을 미치고",
+  "h": "214ff98e"
+ },
+ "js.shellui.kl-hai-than": {
+  "t": "집주인 본인에게 영향을 미치고",
+  "h": "682a3213"
+ },
+ "js.shellui.kl-hai-the": {
+  "t": "아내에게 영향을 미치고",
+  "h": "09bcf309"
+ },
+ "js.shellui.kl-hai-tu": {
+  "t": "자녀에게 영향을 미치고",
+  "h": "f3ad84bb"
+ },
+ "js.shellui.kl-loai-luc-suc": {
+  "t": "육축",
+  "h": "524f4cec"
+ },
+ "js.shellui.kl-loai-than": {
+  "t": "신",
+  "h": "77575b16"
+ },
+ "js.shellui.kl-loai-the": {
+  "t": "처",
+  "h": "ccd000d4"
+ },
+ "js.shellui.kl-loai-tu": {
+  "t": "자",
+  "h": "bef3174e"
+ },
+ "js.shellui.kl-nam-nay-khong-co": {
+  "t": "올해는 금루·황옥·삼재에 해당하지 않아요.",
+  "h": "2d212f11"
+ },
+ "js.shellui.kl-nam-tuoi": {
+  "t": "{y}년 (세는나이 {t}세)",
+  "h": "511d7f9e"
+ },
+ "js.shellui.kl-nhap-nam-hop-le": {
+  "t": "올바른 출생 연도(1900~2010)를 입력해 주세요.",
+  "h": "8363c20b"
+ },
+ "js.shellui.kl-title": {
+  "t": "{cc} ({by}) — {na} · {cy}년 세는나이: {t}세",
+  "h": "f6b9127c"
  },
  "js.shellui.km-cuc": {
   "t": "{dun} {n}국",
@@ -8194,6 +9062,38 @@
  "js.shellui.nghe-them-mon-khac": {
   "t": "다른 분야도 들어 보기</span>",
   "h": "abd835bb"
+ },
+ "js.shellui.ngt-al": {
+  "t": "음 {m}/{d}",
+  "h": "a38795f8"
+ },
+ "js.shellui.ngt-chon-thang": {
+  "t": "월은 1~12 중에서 선택해 주세요.",
+  "h": "ad9727eb"
+ },
+ "js.shellui.ngt-duong-cong-ki": {
+  "t": "양공기",
+  "h": "a919874b"
+ },
+ "js.shellui.ngt-nguyet-ki": {
+  "t": "월기",
+  "h": "53f1d21f"
+ },
+ "js.shellui.ngt-nhap-nam-hop-le": {
+  "t": "올바른 연도(2020~2030)를 입력해 주세요.",
+  "h": "386683dc"
+ },
+ "js.shellui.ngt-tam-nuong": {
+  "t": "삼낭",
+  "h": "a82168f4"
+ },
+ "js.shellui.ngt-title": {
+  "t": "{y}년 {m}월 — 길흉일 달력",
+  "h": "abd229f8"
+ },
+ "js.shellui.ngt-tot": {
+  "t": "길",
+  "h": "f716d517"
  },
  "js.shellui.ngu-hanh-net-lien-quan-gi": {
   "t": "필획의 오행은 용신과 어떤 관계가 있나요?",
@@ -13227,6 +14127,78 @@
   "t": "두 띠가 맞는지 빠르게 확인해요. 출생 연도만 있으면 바로 답이 나와요 — 깊이 보기 전의 간단한 확인이에요.",
   "h": "ee011392"
  },
+ "kimlau.bang-tra-20-nam-toi": {
+  "t": "향후 20년<br>조회표",
+  "h": "ded0c033"
+ },
+ "kimlau.bang-tra-20-nam-toi-9fqx": {
+  "t": "<span class=\"res-block-title\">향후 20년 조회표</span>",
+  "h": "8e04bf8f"
+ },
+ "kimlau.can-chi": {
+  "t": "간지",
+  "h": "8b784611"
+ },
+ "kimlau.cuoi-hoi-lam-nha": {
+  "t": "결혼식·<br>집짓기",
+  "h": "7e98e435"
+ },
+ "kimlau.hoi-thay-nam-dep-cach-hoa": {
+  "t": "✦ 선생님께 좋은 해와 액막이 방법 묻기",
+  "h": "5f76ab82"
+ },
+ "kimlau.ket-luan-ngay-tuc-thi": {
+  "t": "즉시<br>결론",
+  "h": "b2797a93"
+ },
+ "kimlau.kim-lau-la-quan-niem-dan": {
+  "t": "금루는 집주인의 세는나이(음력)에 바탕을 둔 민간 신앙으로, 특정 나이에는 집짓기나 결혼이 불리하다고 봐요. 삼재는 관련된 개념으로, 12지 주기 중 장애를 만나기 쉽다고 여기는 연속 3년을 말해요.",
+  "h": "625e5413"
+ },
+ "kimlau.kim-lau-tam-tai": {
+  "t": "금루와 삼재",
+  "h": "cea3719a"
+ },
+ "kimlau.kim-lau-tam-tai-tu-vi": {
+  "t": "금루와 삼재 — 명보 자미두수",
+  "h": "b2ec2af2"
+ },
+ "kimlau.kim-lau-tam-tai-tuoi-lam": {
+  "t": "<b>금루와 삼재</b><span>집짓기·결혼에 걸리는 나이인지 확인</span>",
+  "h": "1fb12a82"
+ },
+ "kimlau.nam-dl": {
+  "t": "양력 연도",
+  "h": "6c965b9e"
+ },
+ "kimlau.nam-sinh-duong-lich": {
+  "t": "출생 연도 (양력)",
+  "h": "9f8721e0"
+ },
+ "kimlau.nhap-nam-sinh-duong-lich-he": {
+  "t": "출생 연도(양력)를 입력하세요. 시스템이 금루·삼재·황옥의 고법에 따라 대조해 결론과 향후 20년 조회표를 알려 줘요.",
+  "h": "cca6f199"
+ },
+ "kimlau.pham-kim-lau-tam-tai-ma": {
+  "t": "금루나 삼재에 걸린 줄 모르고 결혼하고 집을 지은 뒤에야 알게 되는 사람이 많아요. 출생 연도를 입력하면 바로 결론과 향후 20년 조회표를 받아 볼 수 있어요.",
+  "h": "7e987b4a"
+ },
+ "kimlau.tinh-trang": {
+  "t": "상태",
+  "h": "5a46503e"
+ },
+ "kimlau.tra-cuu": {
+  "t": "조회하기 →",
+  "h": "fd5b08a7"
+ },
+ "kimlau.tuoi-ta": {
+  "t": "세는나이",
+  "h": "536f1746"
+ },
+ "kimlau.xem-tuoi-lam-nha-cuoi-hoi": {
+  "t": "집짓기·결혼을 할 나이가 세는나이로 금루·삼재·황옥에 걸리는지 확인하고 향후 20년 조회표를 보여 줘요. 액막이 방법은 선생님께 물어보세요.",
+  "h": "041eccbd"
+ },
  "kinhdich.1-gieo-que": {
   "t": "<span class=\"wss-n\">1</span><span class=\"wss-l\">괘 뽑기</span>",
   "h": "bf868703"
@@ -14250,6 +15222,70 @@
  "napam.tuoi-hop-ky": {
   "t": "<span class=\"hp-ic\" data-icon=\"users\"></span><span>맞는 띠<br>꺼리는 띠</span>",
   "h": "9a664cc3"
+ },
+ "ngaytot.2-nhan-ket-qua": {
+  "t": "<span class=\"wss-n\">2</span><span class=\"wss-l\">결과 받기</span>",
+  "h": "b0b2f830"
+ },
+ "ngaytot.chon-thang-nam-duong-lich-he": {
+  "t": "양력 월과 연을 고르세요. 시스템이 달력을 계산해 길흉일을 대조하고, 한 달 전체를 좋음·주의·꺼림으로 표시해 돌려줘요.",
+  "h": "0ad99575"
+ },
+ "ngaytot.hoi-thay-chon-ngay-dep-trong": {
+  "t": "✦ 선생님께 이번 달 좋은 날 골라 달라고 묻기",
+  "h": "254611c0"
+ },
+ "ngaytot.lich-ngay-tot-xau-ca-thang": {
+  "t": "음력 기준 한 달 길흉일 달력 — 삼낭, 월기, 양공기. 선생님께 결혼식·착공에 좋은 날을 골라 달라고 할 수 있어요.",
+  "h": "39fc01f0"
+ },
+ "ngaytot.lich-tot-xau-ca-thang": {
+  "t": "한 달 전체<br>길흉 달력",
+  "h": "2da65fe3"
+ },
+ "ngaytot.luu-y-nho-duong-cong-ki": {
+  "t": "가벼운 주의 (양공기)",
+  "h": "72c4ae94"
+ },
+ "ngaytot.muon-len-lich-ca-thang-ma": {
+  "t": "한 달 일정을 짜고 싶은데 어느 날을 피해야 하고 어느 날이 중요한 일을 시작하기 편한지 모르겠나요? 달을 고르면 길흉일을 날짜별로 보기 쉽게 정리한 목록을 바로 받아요.",
+  "h": "b18291cb"
+ },
+ "ngaytot.ngay-ki-tranh-viec-lon": {
+  "t": "꺼리는 날 — 큰일은 피하세요",
+  "h": "c5145190"
+ },
+ "ngaytot.ngay-ky-can-tranh": {
+  "t": "피해야 할<br>꺼리는 날",
+  "h": "22943f84"
+ },
+ "ngaytot.ngay-tot-an-toan": {
+  "t": "좋은 날 — 안전",
+  "h": "3795683e"
+ },
+ "ngaytot.ngay-tot-trong-thang": {
+  "t": "이달의 좋은 날",
+  "h": "c2d7afad"
+ },
+ "ngaytot.ngay-tot-trong-thang-lich-van": {
+  "t": "<b>이달의 좋은 날</b><span>만년력 · 음력 기준 길흉일</span>",
+  "h": "a5097cc1"
+ },
+ "ngaytot.ngay-tot-trong-thang-tu-vi": {
+  "t": "이달의 좋은 날 — 명보 자미두수",
+  "h": "d7f28313"
+ },
+ "ngaytot.thang-can-xem-duong-lich": {
+  "t": "확인할 달 (양력)",
+  "h": "f67dc270"
+ },
+ "ngaytot.truc-nhi-thap-bat-tu": {
+  "t": "십이직·<br>이십팔숙",
+  "h": "d2ad3351"
+ },
+ "ngaytot.xem-lich": {
+  "t": "달력 보기 →",
+  "h": "6fa85107"
  },
  "nhtg.anh-chi-gui-toi-may-chu": {
   "t": "이미지는 분석을 위해 서버로만 보내고, 서버에 저장하지 않아요. 정면에서 밝은 곳에서 찍어 주세요 — 시스템이 눈 부위를 자동으로 확대해요.",

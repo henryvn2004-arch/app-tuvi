@@ -11,6 +11,7 @@ export const maxDuration = 300;
 import { NextRequest } from 'next/server';
 import { ok, err, options, parseBody } from '@/lib/cors';
 import { llmText, llmStreamResponse } from '@/lib/llm/complete';
+import { requestLocale, withLang, type LangLocale } from '@/lib/llm/locale';
 import { withToolOutcome } from '@/lib/ops/tool-outcome';
 import { LUAN_ARC, MAU_ARC, DOC_ARC_TUONG_HOP, ARC_GIONG_NGU_HANH, relevantPalaces } from '@/lib/agent/prompts';
 import { khoiChuDe } from '@/lib/agent/luan-chu-de';
@@ -204,7 +205,7 @@ async function streamAnthropicResponse(system: string, user: string, maxTokens: 
 
 // ─── Đặt tên con ─────────────────────────────────────────────
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-async function handleDatTenCon(body: any): Promise<Response> {
+async function handleDatTenCon(body: any, locale: LangLocale): Promise<Response> {
   const { ho, gioiTinh, namSinhCon, canChiCon, napAmCon, canChiBo, napAmBo, canChiMe, napAmMe } = body;
   if (!ho || !namSinhCon || !canChiCon) return err('Thiếu thông tin', 400);
 
@@ -233,12 +234,12 @@ ${ARC_GIONG_NGU_HANH}`;
 
 Trước khi gợi ý tên, hãy viết 2–3 câu phân tích ngũ hành của gia đình và hành cần bổ trợ cho con. Sau đó gợi ý 12 tên phù hợp chia 3 nhóm.`;
 
-  return streamAnthropicResponse(system, user, 4000);
+  return streamAnthropicResponse(system, withLang(user, locale, [user]), 4000);
 }
 
 // ─── Đặt tên doanh nghiệp ────────────────────────────────────
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-async function handleDatTenDoanhNghiep(body: any): Promise<Response> {
+async function handleDatTenDoanhNghiep(body: any, locale: LangLocale): Promise<Response> {
   const { hoTen, namSinh, canChiChu, napAmChu, linhVuc, loaiHinh, maSo } = body;
   if (!hoTen || !namSinh || !linhVuc) return err('Thiếu thông tin', 400);
 
@@ -265,12 +266,12 @@ ${maSo ? `- Mã số ngành: ${maSo}` : ''}
 
 Phân tích ngắn ngũ hành phù hợp cho lĩnh vực này, sau đó gợi ý 12 tên chia 3 nhóm: Tên Thuần Việt / Tên Hán Việt / Tên Kết Hợp.`;
 
-  return streamAnthropicResponse(system, user, 4000);
+  return streamAnthropicResponse(system, withLang(user, locale, [user]), 4000);
 }
 
 // ─── Chọn ngày tốt ───────────────────────────────────────────
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-async function handleChonNgayTot(body: any): Promise<Response> {
+async function handleChonNgayTot(body: any, locale: LangLocale): Promise<Response> {
   const { suKien, hoTen, namSinh, canChiNguoi, napAmNguoi, thangCanChi, namCanChi, thangNum, namNum } = body;
   if (!suKien || !namSinh || !thangNum || !namNum) return err('Thiếu thông tin', 400);
 
@@ -298,7 +299,7 @@ ${ARC_GIONG_NGU_HANH}`;
 
 Phân tích và gợi ý các khoảng ngày tốt trong tháng này cho sự kiện trên.`;
 
-  return streamAnthropicResponse(system, user, 5000);
+  return streamAnthropicResponse(system, withLang(user, locale, [user]), 5000);
 }
 
 // ─── Route handlers ───────────────────────────────────────────
@@ -320,9 +321,11 @@ async function runPost(request: NextRequest) {
   const action = searchParams.get('action');
 
   if (action === 'chat')                  return handleChat(body);
-  if (action === 'dat-ten-con')           return handleDatTenCon(body);
-  if (action === 'dat-ten-doanh-nghiep')  return handleDatTenDoanhNghiep(body);
-  if (action === 'chon-ngay-tot')         return handleChonNgayTot(body);
+  // W24: ba tool đặt tên / chọn ngày sinh chữ THẲNG bằng ngôn ngữ của trang (câu chỉ định ở USER, system giữ nguyên).
+  const locale = requestLocale(request);
+  if (action === 'dat-ten-con')           return handleDatTenCon(body, locale);
+  if (action === 'dat-ten-doanh-nghiep')  return handleDatTenDoanhNghiep(body, locale);
+  if (action === 'chon-ngay-tot')         return handleChonNgayTot(body, locale);
 
   const { prompt, docs } = body as { prompt?: string; docs?: string };
   if (!prompt) return err('Missing prompt', 400);

@@ -375,6 +375,126 @@
   "t": "Tell your story and Minh Bao will bring in the right Master from our team of 15: Zi Wei Dou Shu chart, BaZi (Four Pillars of Destiny), marriage compatibility, naming, date selection.",
   "h": "0f564294"
  },
+ "chonngay.2-xem-nen-can-chi": {
+  "t": "<span class=\"wss-n\">2</span><span class=\"wss-l\">View the Stems &amp; Branches foundation</span>",
+  "h": "c95e6f79"
+ },
+ "chonngay.an-hoi-dam-ngo": {
+  "t": "Engagement / betrothal visit",
+  "h": "4b11a176"
+ },
+ "chonngay.chon-ngay-chuyen-sau": {
+  "t": "In-depth date selection →",
+  "h": "9bd6a5ed"
+ },
+ "chonngay.chon-ngay-gio-tot": {
+  "t": "Choose auspicious dates and hours",
+  "h": "28b27ec4"
+ },
+ "chonngay.chon-ngay-gio-tot-hop-tuoi": {
+  "t": "Choose auspicious dates and hours matched to your zodiac year by Stems & Branches — for weddings, business openings, moving in, groundbreaking. Ask the Master to read the best days and the days to avoid.",
+  "h": "a3dfe7f0"
+ },
+ "chonngay.chon-ngay-tot-ngay-gio-hop": {
+  "t": "<b>Choose Auspicious Dates</b><span>Dates and hours matched to your zodiac year for life's big events</span>",
+  "h": "ec08df6d"
+ },
+ "chonngay.chon-ngay-tot-tu-vi-minh": {
+  "t": "Choose Auspicious Dates — Minh Bao Zi Wei Dou Shu",
+  "h": "bad6e5eb"
+ },
+ "chonngay.chon-viec-can-xem-ngay-nhap": {
+  "t": "Choose the occasion, enter the principal's name and birth year, and the month you want to check. The system works out the Stems & Branches and compares clashes and harmonies with your zodiac year.",
+  "h": "a51a3cec"
+ },
+ "chonngay.chua-muon-khai-thong-tin-ban": {
+  "t": "<b>Don't want to enter your details yet?</b><span>You can view a sample first to try it out.</span>",
+  "h": "0a975603"
+ },
+ "chonngay.cuoi-hoi": {
+  "t": "Wedding",
+  "h": "04a2caa4"
+ },
+ "chonngay.cuoi-hoi-lam-nha-khai-truong": {
+  "t": "Weddings, building a home, opening a business — picking the wrong date is a regret many carry for life and can never undo. Choose the occasion and time range, and get a list of dates and hours matched to the principal's zodiac year right away.",
+  "h": "0b16cd85"
+ },
+ "chonngay.danh-sach-ngay-tot": {
+  "t": "Auspicious<br>days list",
+  "h": "b1bf5886"
+ },
+ "chonngay.doi-chieu-hop-xung": {
+  "t": "Harmony vs.<br>clash check",
+  "h": "c461160d"
+ },
+ "chonngay.dong-tho-khoi-cong": {
+  "t": "Groundbreaking / start of construction",
+  "h": "10468f91"
+ },
+ "chonngay.gio-hoang-dao-tung-ngay": {
+  "t": "Auspicious hours<br>for each day",
+  "h": "54c78af6"
+ },
+ "chonngay.he-thong-phan-tich-can-chi": {
+  "t": "The system analyzes the principal's Stems & Branches plus the planned month and year, and suggests good date ranges with specific reasons.",
+  "h": "ec5043f6"
+ },
+ "chonngay.ho-ten-nguoi-chu-su": {
+  "t": "Principal's full name",
+  "h": "7d21772a"
+ },
+ "chonngay.hoang-lich-lich-van-nien-la": {
+  "t": "The Huang Li (perpetual calendar) is the traditional Chinese calendar system that combines the Stems & Branches, the 28 Lunar Mansions and auspicious and inauspicious stars to determine the right hours and auspicious (Huang Dao) days for each type of undertaking. It is the traditional basis for choosing dates and hours for weddings, business openings and groundbreaking.",
+  "h": "0240b883"
+ },
+ "chonngay.hoi-thay-chon-ngay-dep": {
+  "t": "✦ Ask the Master to pick good dates",
+  "h": "7d368a1b"
+ },
+ "chonngay.khai-truong": {
+  "t": "Business opening",
+  "h": "c86ca256"
+ },
+ "chonngay.ky-ket-hop-dong": {
+  "t": "Contract signing",
+  "h": "90e0fb9b"
+ },
+ "chonngay.lap-nen": {
+  "t": "Build the foundation →",
+  "h": "81b6e6d8"
+ },
+ "chonngay.moi-luot": {
+  "t": "per use",
+  "h": "2a5c5972"
+ },
+ "chonngay.mua-xe": {
+  "t": "Buying a vehicle",
+  "h": "52d4aa77"
+ },
+ "chonngay.nhap-trach-ve-nha-moi": {
+  "t": "Moving in (new home)",
+  "h": "fcda52e1"
+ },
+ "chonngay.thong-tin-chon-ngay": {
+  "t": "Date-selection details",
+  "h": "9d3045db"
+ },
+ "chonngay.ton": {
+  "t": "Costs",
+  "h": "e603a0b9"
+ },
+ "chonngay.viec-can-chon-ngay": {
+  "t": "Occasion to choose a date for",
+  "h": "e84816a6"
+ },
+ "chonngay.xem-ban-mau": {
+  "t": "View a sample →",
+  "h": "ba3671b1"
+ },
+ "chonngay.xuat-hanh": {
+  "t": "Setting out on a trip",
+  "h": "424fcbb2"
+ },
  "chutrinh.9-dai-van-tron-doi": {
   "t": "<span class=\"hp-ic\" data-icon=\"hourglass\"></span><span>9 major luck cycles<br>of a lifetime</span>",
   "h": "5ab04ae7"
@@ -706,6 +826,222 @@
  "disclaimer.xem-them-dieu-khoan-day-du": {
   "t": "See the full terms in the <a href=\"/dieu-khoan-dich-vu.html\">Terms of Service</a> (section 2 — Limitation of liability) and the service description on the <a href=\"/san-pham-dich-vu.html\">Products &amp; Services</a> page.",
   "h": "dc202339"
+ },
+ "giosinh.12-la-so-kha-nghi": {
+  "t": "12 candidate<br>charts",
+  "h": "6b8b7bde"
+ },
+ "giosinh.2-xem-12-gio-kha-nghi": {
+  "t": "<span class=\"wss-n\">2</span><span class=\"wss-l\">See the 12 candidate hours</span>",
+  "h": "41d140ce"
+ },
+ "giosinh.am-lich": {
+  "t": "Lunar calendar",
+  "h": "b0246c79"
+ },
+ "giosinh.anh-chi-nhap-ngay-sinh-theo": {
+  "t": "You entered the birth date in the <b>lunar calendar</b>. The other tools take the <b>solar calendar</b>, and the system has no reverse lunar-to-solar conversion yet, so the hand-off cannot be automatic. The hour you just confirmed above is still usable — enter it by hand when you open another tool.",
+  "h": "edb9dc0c"
+ },
+ "giosinh.anh-chi-von-da-biet-chac": {
+  "t": "Already sure of your birth hour?",
+  "h": "d8efb8c1"
+ },
+ "giosinh.buoc-tiep-theo-thu-hep-bang": {
+  "t": "Next step — narrow it down with a survey",
+  "h": "12044ce6"
+ },
+ "giosinh.buoc-xem-12-la-so-kha": {
+  "t": "Viewing the 12 candidate charts is <b>free</b>. The narrowing survey and the ranking cost credits.",
+  "h": "88e80a48"
+ },
+ "giosinh.cach-kiem-chac-nhat-lap-la": {
+  "t": "The surest check: build charts for the <b>top two hours</b>, read the last 5 years of the fortune-cycle section, and keep the hour that describes your life better.",
+  "h": "9b5f4abc"
+ },
+ "giosinh.cach-nay-thu-hep-bang-muc": {
+  "t": "This method narrows things down by how well your answers match each chart, so it <b>ranks likelihood</b> rather than proving which hour is right. For people who answer close to reality, the true hour falls within the top 3 in most cases — but being first is less certain. That is why this page shows the whole list with evidence for you to check, instead of one confident-sounding number.",
+  "h": "eaefa2a0"
+ },
+ "giosinh.chon-gio-anh-chi-muon-dung": {
+  "t": "Choose the hour you want to use. It is saved to your account's <b>Chart Book</b>, so every other tool is pre-filled — no retyping, no remembering.",
+  "h": "36fd6d7b"
+ },
+ "giosinh.chot-gio-va-dung-tiep": {
+  "t": "Confirm the hour and keep going",
+  "h": "2c33bc41"
+ },
+ "giosinh.cung-mot-ngay-sinh-12-la": {
+  "t": "Same birth date — 12 completely different charts",
+  "h": "92803f8c"
+ },
+ "giosinh.duong-lich": {
+  "t": "Solar calendar",
+  "h": "dfac44de"
+ },
+ "giosinh.gio-dung-neu-biet": {
+  "t": "Actual hour (if you know it)",
+  "h": "f70330da"
+ },
+ "giosinh.gio-muon-dung": {
+  "t": "Hour to use",
+  "h": "853206cc"
+ },
+ "giosinh.gio-sinh-doi-thi-cung-menh": {
+  "t": "When the birth hour changes, the Life Palace changes, the Bureau changes, and every star position shifts with it. These are the 12 possibilities for <b id=\"freeLine\"></b> — only one of them is your real chart.",
+  "h": "ca364a84"
+ },
+ "giosinh.gio-sinh-kha-nang-cao-nhat": {
+  "t": "Most likely birth hours",
+  "h": "449a17e1"
+ },
+ "giosinh.gioi-tinh": {
+  "t": "Gender",
+  "h": "80bbce55"
+ },
+ "giosinh.gui-doi-chieu": {
+  "t": "Submit for comparison",
+  "h": "50ad4ad2"
+ },
+ "giosinh.khao-sat-thu-hep": {
+  "t": "Narrowing<br>survey",
+  "h": "c176396d"
+ },
+ "giosinh.khao-sat-thu-hep-ua1r": {
+  "t": "Narrowing survey",
+  "h": "0d669868"
+ },
+ "giosinh.khong-nho-chinh-xac-gio-sinh": {
+  "t": "Not remembering your exact birth hour can throw the whole Zi Wei Dou Shu chart off from the very root. Answer a few questions and the system narrows things down within the 12 two-hour periods to find the closest birth hour.",
+  "h": "83b0cbd2"
+ },
+ "giosinh.khong-nho-gio-sinh-lap-ca": {
+  "t": "Don't remember your birth hour? Build all 12 candidate charts, then narrow them down with a few questions about your health and the life stages you have been through.",
+  "h": "b7c6b615"
+ },
+ "giosinh.lam-lai": {
+  "t": "Start over",
+  "h": "535fca0d"
+ },
+ "giosinh.loai-lich": {
+  "t": "Calendar type",
+  "h": "4f30f6b5"
+ },
+ "giosinh.luan-giai-la-so-nay": {
+  "t": "Read this chart →",
+  "h": "5fea8efd"
+ },
+ "giosinh.luu-vao-so-la-so": {
+  "t": "Save to Chart Book",
+  "h": "b9785d51"
+ },
+ "giosinh.nam": {
+  "t": "Year",
+  "h": "98926c7e"
+ },
+ "giosinh.nam-gioi": {
+  "t": "Male",
+  "h": "b580ba1b"
+ },
+ "giosinh.neu-co-giay-khai-sinh-hoac": {
+  "t": "If you have a birth certificate or a family member who remembers for sure, tell us the real hour — comparing it with the result just now helps us calibrate the method. It is optional and does not change your reading at all.",
+  "h": "31f387ef"
+ },
+ "giosinh.ngay": {
+  "t": "Day",
+  "h": "368c4575"
+ },
+ "giosinh.nhap-ngay-thang-nam-sinh-gio": {
+  "t": "Enter your <b>birth date</b> — the birth hour is exactly what we are looking for. The system builds <b>12 candidate charts</b>, narrows them with a short survey, then ranks them by how well they match.",
+  "h": "287c421e"
+ },
+ "giosinh.thang": {
+  "t": "Month",
+  "h": "0e2b3099"
+ },
+ "giosinh.vi-sao-khong-phai-mot-con": {
+  "t": "Why it is not one confident number",
+  "h": "2bbd8eab"
+ },
+ "giosinh.xac-dinh-gio-sinh": {
+  "t": "Find Your Birth Hour",
+  "h": "2b570401"
+ },
+ "giosinh.xac-dinh-gio-sinh-khong-nho": {
+  "t": "<b>Find Your Birth Hour</b><span>Don't remember it? Start here</span>",
+  "h": "1407f5d3"
+ },
+ "giosinh.xac-dinh-gio-sinh-tu-vi": {
+  "t": "Find Your Birth Hour — Minh Bao Zi Wei Dou Shu",
+  "h": "c14e875f"
+ },
+ "giosinh.xem-12-gio-kha-nghi": {
+  "t": "See the 12 candidate hours",
+  "h": "3cd9aabf"
+ },
+ "giosinh.xep-hang-do-khop": {
+  "t": "Rank by<br>match",
+  "h": "a6655e79"
+ },
+ "hoangdao.1-nhap-ngay": {
+  "t": "<span class=\"wss-n\">1</span><span class=\"wss-l\">Enter the date</span>",
+  "h": "a99fbfcf"
+ },
+ "hoangdao.6-gio-tot-nen-dung": {
+  "t": "6 good hours<br>to use",
+  "h": "ca3f8fea"
+ },
+ "hoangdao.6-gio-xau-can-tranh": {
+  "t": "6 bad hours<br>to avoid",
+  "h": "4f1e6bfc"
+ },
+ "hoangdao.chon-ngay-thang-nam-duong-lich": {
+  "t": "Choose the solar-calendar day, month and year you want to check. The system works out the auspicious hours and checks that day against the almanac.",
+  "h": "b7dbabb0"
+ },
+ "hoangdao.cung-mot-viec-lam-gio-nay": {
+  "t": "The same task goes smoothly at one hour and hits unexplained snags at another. Pick the day you want to check and get the list of good hours and hours to avoid, straight from the almanac.",
+  "h": "173c7571"
+ },
+ "hoangdao.gio-hoang-dao": {
+  "t": "Auspicious Hours (Huang Dao)",
+  "h": "940fb21d"
+ },
+ "hoangdao.gio-hoang-dao-12-gio-tot": {
+  "t": "<b>Auspicious Hours (Huang Dao)</b><span>The day's 12 good/bad hours by Stems &amp; Branches</span>",
+  "h": "23839283"
+ },
+ "hoangdao.gio-hoang-dao-tu-vi-minh": {
+  "t": "Auspicious Hours (Huang Dao) — Minh Bao Zi Wei Dou Shu",
+  "h": "51a0db68"
+ },
+ "hoangdao.hac-dao-6-gio-can-tranh": {
+  "t": "✗ Hei Dao — 6 Hours to Avoid",
+  "h": "39601183"
+ },
+ "hoangdao.hoang-dao-6-gio-tot": {
+  "t": "✦ Huang Dao — 6 Good Hours",
+  "h": "7263a1c8"
+ },
+ "hoangdao.hoang-lich-day-du": {
+  "t": "Full<br>almanac",
+  "h": "f4d66b7c"
+ },
+ "hoangdao.hoi-thay-nen-lam-viec-vao": {
+  "t": "✦ Ask the Master which hour to do it",
+  "h": "2a9b43ce"
+ },
+ "hoangdao.ngay-can-xem-duong-lich": {
+  "t": "Date to check (solar calendar)",
+  "h": "a32fbe04"
+ },
+ "hoangdao.tra-12-gio-hoang-dao-hac": {
+  "t": "Look up the day's 12 Huang Dao / Hei Dao hours by Stems & Branches — good hours for opening a business, setting out, signing. Ask the Master to read them for your matter.",
+  "h": "6f4fa691"
+ },
+ "hoangdao.xem-gio": {
+  "t": "See hours →",
+  "h": "e1db5866"
  },
  "home.270-000-da-quoc-gia-da": {
   "t": "<span><span class=\"ic\" data-icon=\"file-text\"></span>270,000+</span> <span><span class=\"ic\" data-icon=\"globe\"></span>Worldwide</span> <span><span class=\"ic\" data-icon=\"check\"></span>Verified</span>",
@@ -2027,6 +2363,98 @@
   "t": "Just a few lines is enough. Minh Bao will bring in the right Master from our team of 15 to look at it for you.",
   "h": "e43855cc"
  },
+ "js.chonngay.ban-mau-note": {
+  "t": "This is a <b>SAMPLE</b> for illustration (different data) — not your result.",
+  "h": "4dc73cd0"
+ },
+ "js.chonngay.chip1": {
+  "t": "Which day is the best this month?",
+  "h": "1d6514df"
+ },
+ "js.chonngay.chip2": {
+  "t": "What are the auspicious hours for this?",
+  "h": "005ba6f0"
+ },
+ "js.chonngay.chip3": {
+  "t": "Which days must be absolutely avoided?",
+  "h": "36a0360f"
+ },
+ "js.chonngay.chip4": {
+  "t": "Which direction is good to set out in on that day?",
+  "h": "0ef8b5dc"
+ },
+ "js.chonngay.chua-mo-duoc-ban-mau": {
+  "t": "Couldn't open the sample. Please try again later.",
+  "h": "05a0f158"
+ },
+ "js.chonngay.dang-mo": {
+  "t": "Opening…",
+  "h": "a3fdeaab"
+ },
+ "js.chonngay.dang-phan-tich": {
+  "t": "Analyzing auspicious dates… usually takes 15–25 seconds",
+  "h": "2413a48e"
+ },
+ "js.chonngay.greeting": {
+  "t": "The foundation for **{viec}** is ready (principal's zodiac year **{cc}**). What would you like advice on first?",
+  "h": "37474974"
+ },
+ "js.chonngay.khong-nhan-duoc-ket-qua": {
+  "t": "No result was received.",
+  "h": "46e8add0"
+ },
+ "js.chonngay.khong-the-ket-noi": {
+  "t": "Couldn't connect. Please try again.",
+  "h": "bf0b6e7b"
+ },
+ "js.chonngay.label": {
+  "t": "Date pick: {viec} · {ten} · {t}/{n}",
+  "h": "c350a6fa"
+ },
+ "js.chonngay.loi-colon": {
+  "t": "Error: ",
+  "h": "471c0087"
+ },
+ "js.chonngay.loi-status": {
+  "t": "Error {s}",
+  "h": "c406c72b"
+ },
+ "js.chonngay.nam-n": {
+  "t": "Year {n}",
+  "h": "e2de29f4"
+ },
+ "js.chonngay.nhap-thong-tin-cua-toi": {
+  "t": "Enter my details →",
+  "h": "61666cb3"
+ },
+ "js.chonngay.res-note": {
+  "t": "Principal's zodiac year: <b>{cc}</b> ({hanh}). Planned month <b>{tcc}</b>, year <b>{ncc}</b>. A good date should <b>harmonize</b> (six harmonies / three harmonies) with the principal's zodiac year and avoid <b>clashes / penalties</b>. Ask the Master for specific dates &amp; auspicious hours for <b>{viec}</b>.",
+  "h": "e946d4da"
+ },
+ "js.chonngay.thang-n": {
+  "t": "Month {n}",
+  "h": "4dd9659f"
+ },
+ "js.chonngay.thang-n-m": {
+  "t": "Month {t}/{n}",
+  "h": "355a0dcf"
+ },
+ "js.chonngay.tuoi-chu-su": {
+  "t": "Principal's zodiac year",
+  "h": "c6691aae"
+ },
+ "js.chonngay.vui-long-nhap-ho-ten": {
+  "t": "Please enter the full name, birth year, and the planned month and year.",
+  "h": "d60f4f07"
+ },
+ "js.chonngay.vui-long-nhap-thong-tin": {
+  "t": "Please enter your details first.",
+  "h": "b73d7304"
+ },
+ "js.chonngay.xem-ban-mau": {
+  "t": "View a sample →",
+  "h": "ba3671b1"
+ },
  "js.chutrinh.10-can-can-trong-dieu-gi": {
   "t": "/10) what should I watch out for?",
   "h": "9fd4a120"
@@ -2146,6 +2574,198 @@
  "js.congcutr.xep-theo-mon-tu-vi-tu": {
   "t": "Sorted by discipline: Zi Wei Dou Shu, BaZi, Face Reading, Feng Shui…",
   "h": "cf4f8ecc"
+ },
+ "js.giosinh.am-lich": {
+  "t": " (lunar)",
+  "h": "ebf71daf"
+ },
+ "js.giosinh.anh-chi-chua-chot-duoc-gio": {
+  "t": "You haven't pinned down your birth hour yet — ask me how to tell the candidate hours apart.",
+  "h": "fe1408ea"
+ },
+ "js.giosinh.bat-dau-khao-sat": {
+  "t": "Start the narrowing survey →",
+  "h": "89663d6e"
+ },
+ "js.giosinh.cam-on-dung": {
+  "t": "Thank you — the true hour is in the list the system gave. Noted.",
+  "h": "816391d2"
+ },
+ "js.giosinh.cam-on-truot": {
+  "t": "Thank you — this time the system missed. Exactly the kind of case we need to refine the method.",
+  "h": "850e32a7"
+ },
+ "js.giosinh.cau-n-toi-da": {
+  "t": "Question {n} / up to {max}",
+  "h": "37d9a74f"
+ },
+ "js.giosinh.chip-cung-tat-ach": {
+  "t": "What does the Health Palace tell us?",
+  "h": "f6448214"
+ },
+ "js.giosinh.chip-khong-nho-gio": {
+  "t": "Can I still read my chart if I don't know my birth hour?",
+  "h": "36b87cba"
+ },
+ "js.giosinh.chip-vi-sao-doi-gio": {
+  "t": "Why does changing the birth hour change the whole chart?",
+  "h": "eb87751b"
+ },
+ "js.giosinh.chon-gio-dung-truoc": {
+  "t": "Please choose the actual hour first.",
+  "h": "b1862011"
+ },
+ "js.giosinh.chua-biet": {
+  "t": "— not sure —",
+  "h": "555657b4"
+ },
+ "js.giosinh.chua-co-ket-qua": {
+  "t": "There is no result to compare yet.",
+  "h": "49c0ec23"
+ },
+ "js.giosinh.chua-doc-duoc-bang-gia": {
+  "t": "Couldn't load the price list — please reload the page.",
+  "h": "247f0130"
+ },
+ "js.giosinh.chua-ghi-duoc-vao-so": {
+  "t": "Couldn't save to the book (network or sign-in session). The hour you just confirmed is still remembered on this device.",
+  "h": "d599ae15"
+ },
+ "js.giosinh.co-loi-xay-ra": {
+  "t": "Something went wrong.",
+  "h": "08eddac7"
+ },
+ "js.giosinh.cuc-n": {
+  "t": "{n}",
+  "h": "a0da4ad0"
+ },
+ "js.giosinh.da-luu-vao-so": {
+  "t": "Saved to your Chart Book. Other tools will pre-fill this hour.",
+  "h": "c43dc72d"
+ },
+ "js.giosinh.da-nho-tren-may-nay": {
+  "t": "Remembered on this device — it will be ready when you open another tool. Sign in and the chart goes into your account's book, staying with you across devices.",
+  "h": "10b9b2e9"
+ },
+ "js.giosinh.dang-lap-12-la-so": {
+  "t": "Building 12 charts…",
+  "h": "1e2ebabc"
+ },
+ "js.giosinh.dang-luu": {
+  "t": "Saving…",
+  "h": "b98712c0"
+ },
+ "js.giosinh.dang-tinh": {
+  "t": "Calculating…",
+  "h": "76a9d5f0"
+ },
+ "js.giosinh.dua-tren": {
+  "t": "Based on {n} answered questions · match {p}%",
+  "h": "0fb2318b"
+ },
+ "js.giosinh.duong-lich": {
+  "t": " (solar)",
+  "h": "4471b62b"
+ },
+ "js.giosinh.gio-chi": {
+  "t": "Hour of {chi}",
+  "h": "87e9bdfa"
+ },
+ "js.giosinh.gio-chi-khung": {
+  "t": "{chi} hour ({khung})",
+  "h": "86326af7"
+ },
+ "js.giosinh.khong-gui-duoc": {
+  "t": "Couldn't send it, but no worries — your reading is unchanged.",
+  "h": "5e875ab2"
+ },
+ "js.giosinh.khong-lap-duoc-la-so": {
+  "t": "Couldn't build the chart.",
+  "h": "16f828bd"
+ },
+ "js.giosinh.khong-ro-khong-nho-bo-qua": {
+  "t": "Not sure / don't remember — skip this question",
+  "h": "538ab29a"
+ },
+ "js.giosinh.lock-cta": {
+  "t": "Unlock all 12 charts + survey",
+  "h": "1b686643"
+ },
+ "js.giosinh.lock-i1": {
+  "t": "All 12 candidate charts (Life + Health Palace for each hour)",
+  "h": "672803dc"
+ },
+ "js.giosinh.lock-i2": {
+  "t": "A question set built for your birth date",
+  "h": "229e75db"
+ },
+ "js.giosinh.lock-i3": {
+  "t": "The 12 hours ranked by likelihood",
+  "h": "b08e68e7"
+ },
+ "js.giosinh.lock-i4": {
+  "t": "Evidence for and against, question by question",
+  "h": "ed0e1963"
+ },
+ "js.giosinh.lock-i5": {
+  "t": "Confidence level and advice on settling the hour",
+  "h": "4c5e6f1b"
+ },
+ "js.giosinh.lock-title": {
+  "t": "⊙ Birth-hour file not unlocked",
+  "h": "75ef5f41"
+ },
+ "js.giosinh.luong": {
+  "t": "credits",
+  "h": "6614284e"
+ },
+ "js.giosinh.menh-colon": {
+  "t": "Life Palace:",
+  "h": "d24288f5"
+ },
+ "js.giosinh.nhap-nam-sinh-trong-khoang-1900": {
+  "t": "Enter a birth year between 1900 and 2030.",
+  "h": "41815a93"
+ },
+ "js.giosinh.survey-pitch": {
+  "t": "For this birth date the system builds <b>{n} questions</b> of its own — the answers are groups of hours that show different signs for <b>this very date</b>, so everyone gets a different question set. When you finish, you get <b>the 2–3 most likely hours with evidence for each answer</b>.",
+  "h": "383cb5d5"
+ },
+ "js.giosinh.tat-ach-colon": {
+  "t": "Health Palace:",
+  "h": "80b98397"
+ },
+ "js.giosinh.tc-cao": {
+  "t": "high",
+  "h": "db10c479"
+ },
+ "js.giosinh.tc-thap": {
+  "t": "low",
+  "h": "ecd6f14a"
+ },
+ "js.giosinh.tc-vua": {
+  "t": "medium",
+  "h": "0467562c"
+ },
+ "js.giosinh.tin-cay": {
+  "t": "Confidence: {m}",
+  "h": "90b46fcf"
+ },
+ "js.giosinh.ton": {
+  "t": "Costs",
+  "h": "e603a0b9"
+ },
+ "js.giosinh.vo-chinh-dieu": {
+  "t": "no major star",
+  "h": "bd07d7a9"
+ },
+ "js.giosinh.xac-dinh-gio-sinh": {
+  "t": "Find your birth hour",
+  "h": "c3aee594"
+ },
+ "js.giosinh.xem-12-gio-kha-nghi": {
+  "t": "See the 12 candidate hours",
+  "h": "3cd9aabf"
  },
  "js.home.3-buoc-dau-tien": {
   "t": "First 3 steps",
@@ -2646,6 +3266,34 @@
  "js.home.xung-tuoi-29rp": {
   "t": "Zodiac clash ",
   "h": "e92ab4fa"
+ },
+ "js.kimlau.chip1": {
+  "t": "Which year is best to build a house?",
+  "h": "992ff775"
+ },
+ "js.kimlau.chip2": {
+  "t": "Which year can I get married?",
+  "h": "5de89c72"
+ },
+ "js.kimlau.chip3": {
+  "t": "How do I remedy Jin Lou?",
+  "h": "f9c9cb33"
+ },
+ "js.kimlau.chip4": {
+  "t": "What should I avoid during San Zai?",
+  "h": "27ba3819"
+ },
+ "js.kimlau.dai-20-nam": {
+  "t": "Next 20 years — which years are clear",
+  "h": "bd73ccbd"
+ },
+ "js.kimlau.greeting": {
+  "t": "I've checked Jin Lou · San Zai · Huang Wu for **{cc}** (next 20 years). What would you like to ask?",
+  "h": "cf9daca6"
+ },
+ "js.kimlau.label": {
+  "t": "Jin Lou · {cc}",
+  "h": "2529b317"
  },
  "js.kinhdich.bam-de-bat-dau-gieo-que": {
   "t": "Tap to start casting — 6 tosses, each one determines a line",
@@ -3334,6 +3982,30 @@
  "js.nav.xem-tuong-qua-anh": {
   "t": "Face reading from photos",
   "h": "24c4d64e"
+ },
+ "js.ngaytot.chip1": {
+  "t": "Which day is good for a wedding?",
+  "h": "409c6fd4"
+ },
+ "js.ngaytot.chip2": {
+  "t": "Which day is good to break ground or move in?",
+  "h": "26db2036"
+ },
+ "js.ngaytot.chip3": {
+  "t": "Why avoid taboo days?",
+  "h": "2cc8c854"
+ },
+ "js.ngaytot.chip4": {
+  "t": "Which day should I choose to open a business?",
+  "h": "b44fce94"
+ },
+ "js.ngaytot.greeting": {
+  "t": "I've looked at the calendar for **{m}/{y}**. What are you planning, so I can pick the best days?",
+  "h": "3a05f3ac"
+ },
+ "js.ngaytot.label": {
+  "t": "Good days · {y}/{m}",
+  "h": "cbd777dc"
  },
  "js.nhtg.anh-mat-noi-len-dieu-gi": {
   "t": "What does a person's gaze reveal?",
@@ -6747,9 +7419,25 @@
   "t": "** or suggest new names?",
   "h": "d922a861"
  },
+ "js.shellui.hc-ban-o-day": {
+  "t": "you are here",
+  "h": "0ed02beb"
+ },
+ "js.shellui.hc-duoc": {
+  "t": "OK",
+  "h": "4c144474"
+ },
+ "js.shellui.hd-al": {
+  "t": " (Lunar {d}/{m})",
+  "h": "3fd68961"
+ },
  "js.shellui.hd-can-hanh": {
   "t": ", Heavenly Stem element ",
   "h": "96563d79"
+ },
+ "js.shellui.hd-can-hanh-info": {
+  "t": "Stem <strong>{can}</strong> — Element <strong>{hanh}</strong>",
+  "h": "4069d76b"
  },
  "js.shellui.hd-gio-can-tranh-hac-dao": {
   "t": "Hours to avoid (Hei Dao): ",
@@ -6766,6 +7454,118 @@
  "js.shellui.hd-gio-tot-hoang-dao": {
   "t": "Good hours (Huang Dao): ",
   "h": "100b31dc"
+ },
+ "js.shellui.hd-ngay-cc": {
+  "t": "Day <strong>{cc}</strong>",
+  "h": "7f416c3a"
+ },
+ "js.shellui.hd-nhap-ngay-hop-le": {
+  "t": "Please enter a valid date.",
+  "h": "11a91c34"
+ },
+ "js.shellui.hd-thang-khong-co-ngay": {
+  "t": "{m}/{y} has no day {d} — please choose again.",
+  "h": "da49ec5e"
+ },
+ "js.shellui.hd-title": {
+  "t": "{date}{al} — Day {cc}",
+  "h": "593d5baf"
+ },
+ "js.shellui.hdd-bh": {
+  "t": "Killing energy, disaster",
+  "h": "28e5f7d8"
+ },
+ "js.shellui.hdd-cht": {
+  "t": "Entanglement, stagnation",
+  "h": "4363abe5"
+ },
+ "js.shellui.hdd-ct": {
+  "t": "Quarrels, gossip",
+  "h": "845d6380"
+ },
+ "js.shellui.hdd-hv": {
+  "t": "Theft, losses",
+  "h": "cde5c999"
+ },
+ "js.shellui.hdd-kq": {
+  "t": "Finances, taking in money",
+  "h": "15237468"
+ },
+ "js.shellui.hdd-md": {
+  "t": "Help from benefactors, smooth progress",
+  "h": "a8e75ee4"
+ },
+ "js.shellui.hdd-nd": {
+  "t": "Reputation, achievement",
+  "h": "b3890138"
+ },
+ "js.shellui.hdd-td": {
+  "t": "Merit and virtue, resolves misfortune",
+  "h": "e3a72954"
+ },
+ "js.shellui.hdd-th": {
+  "t": "Lawsuits, disputes, unlucky",
+  "h": "a6198a39"
+ },
+ "js.shellui.hdd-tl": {
+  "t": "Wealth, everything goes smoothly",
+  "h": "1ae9748a"
+ },
+ "js.shellui.hdd-tlao": {
+  "t": "Confinement, obstacles",
+  "h": "5d6fac43"
+ },
+ "js.shellui.hdd-tm": {
+  "t": "Protection, praying for blessings",
+  "h": "cdb38651"
+ },
+ "js.shellui.hdt-bh": {
+  "t": "Bai Hu",
+  "h": "f6380016"
+ },
+ "js.shellui.hdt-cht": {
+  "t": "Gou Chen",
+  "h": "36fb04ef"
+ },
+ "js.shellui.hdt-ct": {
+  "t": "Zhu Que",
+  "h": "90214276"
+ },
+ "js.shellui.hdt-hv": {
+  "t": "Xuan Wu",
+  "h": "f27e517b"
+ },
+ "js.shellui.hdt-kq": {
+  "t": "Jin Gui",
+  "h": "6b3e8125"
+ },
+ "js.shellui.hdt-md": {
+  "t": "Ming Tang",
+  "h": "323a8d91"
+ },
+ "js.shellui.hdt-nd": {
+  "t": "Yu Tang",
+  "h": "2c94d958"
+ },
+ "js.shellui.hdt-td": {
+  "t": "Tian De",
+  "h": "3c86d12a"
+ },
+ "js.shellui.hdt-th": {
+  "t": "Tian Xing",
+  "h": "51b356df"
+ },
+ "js.shellui.hdt-tl": {
+  "t": "Qing Long",
+  "h": "deccb086"
+ },
+ "js.shellui.hdt-tlao": {
+  "t": "Tian Lao",
+  "h": "44ad7734"
+ },
+ "js.shellui.hdt-tm": {
+  "t": "Si Ming",
+  "h": "fa69d852"
  },
  "js.shellui.het-phan-dung-thu": {
   "t": "The free trial is used up.",
@@ -7326,6 +8126,74 @@
  "js.shellui.kinh-mat-nao-hop-tuong-mat": {
   "t": "Which glasses suit my face?",
   "h": "e2a2a092"
+ },
+ "js.shellui.kl-binh-thuong": {
+  "t": "Normal",
+  "h": "7a1fa869"
+ },
+ "js.shellui.kl-cau-hoang-oc": {
+  "t": "This year is a Huang Wu year for you — avoid buying, selling and building a house.",
+  "h": "50677d38"
+ },
+ "js.shellui.kl-cau-kim-lau": {
+  "t": "This year is a Jin Lou ({loai}) year for you — {hai}. Avoid weddings, construction and major groundbreaking.",
+  "h": "53df32eb"
+ },
+ "js.shellui.kl-cau-tam-tai": {
+  "t": "This year falls in your Three Calamities (San Zai) cycle — be careful with big decisions.",
+  "h": "72ae51c8"
+ },
+ "js.shellui.kl-con-tam-tai": {
+  "t": "This year also coincides with the Three Calamities, so take extra care.",
+  "h": "6d4d5899"
+ },
+ "js.shellui.kl-hai-luc-suc": {
+  "t": "it affects livestock and property",
+  "h": "214ff98e"
+ },
+ "js.shellui.kl-hai-than": {
+  "t": "it affects the homeowner personally",
+  "h": "682a3213"
+ },
+ "js.shellui.kl-hai-the": {
+  "t": "it affects the wife",
+  "h": "09bcf309"
+ },
+ "js.shellui.kl-hai-tu": {
+  "t": "it affects the children",
+  "h": "f3ad84bb"
+ },
+ "js.shellui.kl-loai-luc-suc": {
+  "t": "Livestock",
+  "h": "524f4cec"
+ },
+ "js.shellui.kl-loai-than": {
+  "t": "Self",
+  "h": "77575b16"
+ },
+ "js.shellui.kl-loai-the": {
+  "t": "Wife",
+  "h": "ccd000d4"
+ },
+ "js.shellui.kl-loai-tu": {
+  "t": "Children",
+  "h": "bef3174e"
+ },
+ "js.shellui.kl-nam-nay-khong-co": {
+  "t": "This year has no Jin Lou, Huang Wu or Three Calamities.",
+  "h": "2d212f11"
+ },
+ "js.shellui.kl-nam-tuoi": {
+  "t": "Year {y} (age {t})",
+  "h": "511d7f9e"
+ },
+ "js.shellui.kl-nhap-nam-hop-le": {
+  "t": "Please enter a valid birth year (1900–2010).",
+  "h": "8363c20b"
+ },
+ "js.shellui.kl-title": {
+  "t": "{cc} ({by}) — {na} · Traditional age in {cy}: {t}",
+  "h": "f6b9127c"
  },
  "js.shellui.km-cuc": {
   "t": "{dun}, Ju {n}",
@@ -8194,6 +9062,38 @@
  "js.shellui.nghe-them-mon-khac": {
   "t": "Hear another field</span>",
   "h": "abd835bb"
+ },
+ "js.shellui.ngt-al": {
+  "t": "Lunar {d}/{m}",
+  "h": "a38795f8"
+ },
+ "js.shellui.ngt-chon-thang": {
+  "t": "Choose a month from 1 to 12.",
+  "h": "ad9727eb"
+ },
+ "js.shellui.ngt-duong-cong-ki": {
+  "t": "Yang Gong Ji",
+  "h": "a919874b"
+ },
+ "js.shellui.ngt-nguyet-ki": {
+  "t": "Yue Ji",
+  "h": "53f1d21f"
+ },
+ "js.shellui.ngt-nhap-nam-hop-le": {
+  "t": "Enter a valid year (2020–2030).",
+  "h": "386683dc"
+ },
+ "js.shellui.ngt-tam-nuong": {
+  "t": "San Niang",
+  "h": "a82168f4"
+ },
+ "js.shellui.ngt-title": {
+  "t": "{y}/{m} — Auspicious and Inauspicious Day Calendar",
+  "h": "abd229f8"
+ },
+ "js.shellui.ngt-tot": {
+  "t": "Good",
+  "h": "f716d517"
  },
  "js.shellui.ngu-hanh-net-lien-quan-gi": {
   "t": "How does the stroke's Five Element relate to the Useful God?",
@@ -13227,6 +14127,78 @@
   "t": "Quickly check whether two ages are compatible — just birth years, an instant answer, no deep reading yet.",
   "h": "ee011392"
  },
+ "kimlau.bang-tra-20-nam-toi": {
+  "t": "20-year<br>lookup table",
+  "h": "ded0c033"
+ },
+ "kimlau.bang-tra-20-nam-toi-9fqx": {
+  "t": "<span class=\"res-block-title\">20-Year Lookup Table</span>",
+  "h": "8e04bf8f"
+ },
+ "kimlau.can-chi": {
+  "t": "Stem-Branch",
+  "h": "8b784611"
+ },
+ "kimlau.cuoi-hoi-lam-nha": {
+  "t": "Weddings,<br>building a home",
+  "h": "7e98e435"
+ },
+ "kimlau.hoi-thay-nam-dep-cach-hoa": {
+  "t": "✦ Ask the Master for good years &amp; remedies",
+  "h": "5f76ab82"
+ },
+ "kimlau.ket-luan-ngay-tuc-thi": {
+  "t": "Instant<br>verdict",
+  "h": "b2797a93"
+ },
+ "kimlau.kim-lau-la-quan-niem-dan": {
+  "t": "Jin Lou is a folk belief based on the homeowner's age counted by the lunar calendar, holding that certain ages are unfavorable for building a house or getting married. San Zai (Three Calamities) is a related concept, referring to three consecutive years believed to bring obstacles in the 12-animal cycle.",
+  "h": "625e5413"
+ },
+ "kimlau.kim-lau-tam-tai": {
+  "t": "Jin Lou &amp; San Zai",
+  "h": "cea3719a"
+ },
+ "kimlau.kim-lau-tam-tai-tu-vi": {
+  "t": "Jin Lou & San Zai — Minh Bao Zi Wei Dou Shu",
+  "h": "b2ec2af2"
+ },
+ "kimlau.kim-lau-tam-tai-tuoi-lam": {
+  "t": "<b>Jin Lou & San Zai</b><span>Is your age unlucky for building a home or getting married?</span>",
+  "h": "1fb12a82"
+ },
+ "kimlau.nam-dl": {
+  "t": "Solar year",
+  "h": "6c965b9e"
+ },
+ "kimlau.nam-sinh-duong-lich": {
+  "t": "Birth year (solar calendar)",
+  "h": "9f8721e0"
+ },
+ "kimlau.nhap-nam-sinh-duong-lich-he": {
+  "t": "Enter your birth year (solar calendar). The system checks it against the classical rules for Jin Lou, San Zai and Huang Wu — get a verdict and a lookup table for the next 20 years.",
+  "h": "cca6f199"
+ },
+ "kimlau.pham-kim-lau-tam-tai-ma": {
+  "t": "Many people only discover they have hit Jin Lou or San Zai after it is too late — after the wedding or the build. Enter your birth year for an instant verdict and a ready-made table for the next 20 years.",
+  "h": "7e987b4a"
+ },
+ "kimlau.tinh-trang": {
+  "t": "Status",
+  "h": "5a46503e"
+ },
+ "kimlau.tra-cuu": {
+  "t": "Look up →",
+  "h": "fd5b08a7"
+ },
+ "kimlau.tuoi-ta": {
+  "t": "Traditional age",
+  "h": "536f1746"
+ },
+ "kimlau.xem-tuoi-lam-nha-cuoi-hoi": {
+  "t": "Check whether your age hits Jin Lou, San Zai or Huang Wu for building a home or getting married, by traditional age — with a 20-year lookup table. Ask the Master for remedies.",
+  "h": "041eccbd"
+ },
  "kinhdich.1-gieo-que": {
   "t": "<span class=\"wss-n\">1</span><span class=\"wss-l\">Cast the hexagram</span>",
   "h": "bf868703"
@@ -14250,6 +15222,70 @@
  "napam.tuoi-hop-ky": {
   "t": "<span class=\"hp-ic\" data-icon=\"users\"></span><span>Compatible<br>and clashing years</span>",
   "h": "9a664cc3"
+ },
+ "ngaytot.2-nhan-ket-qua": {
+  "t": "<span class=\"wss-n\">2</span><span class=\"wss-l\">Get the result</span>",
+  "h": "b0b2f830"
+ },
+ "ngaytot.chon-thang-nam-duong-lich-he": {
+  "t": "Choose a solar-calendar month and year. The system works out the calendar and checks good and bad days — returning the whole month marked as good, use-with-care, or to-avoid.",
+  "h": "0ad99575"
+ },
+ "ngaytot.hoi-thay-chon-ngay-dep-trong": {
+  "t": "✦ Ask the Master to pick good days this month",
+  "h": "254611c0"
+ },
+ "ngaytot.lich-ngay-tot-xau-ca-thang": {
+  "t": "A month-long calendar of good and bad days by the lunar calendar — San Niang, Yue Ji, Yang Gong Ji. Ask the Master to pick good days for weddings and groundbreaking.",
+  "h": "39fc01f0"
+ },
+ "ngaytot.lich-tot-xau-ca-thang": {
+  "t": "Whole-month<br>good/bad calendar",
+  "h": "2da65fe3"
+ },
+ "ngaytot.luu-y-nho-duong-cong-ki": {
+  "t": "Minor caution (Yang Gong Ji)",
+  "h": "72c4ae94"
+ },
+ "ngaytot.muon-len-lich-ca-thang-ma": {
+  "t": "Want to plan the whole month but don't know which days to avoid and which are convenient for starting something important? Pick the month and get a day-by-day list of good and bad days, clearly laid out.",
+  "h": "b18291cb"
+ },
+ "ngaytot.ngay-ki-tranh-viec-lon": {
+  "t": "Taboo day — avoid major undertakings",
+  "h": "c5145190"
+ },
+ "ngaytot.ngay-ky-can-tranh": {
+  "t": "Taboo days<br>to avoid",
+  "h": "22943f84"
+ },
+ "ngaytot.ngay-tot-an-toan": {
+  "t": "Good day — safe",
+  "h": "3795683e"
+ },
+ "ngaytot.ngay-tot-trong-thang": {
+  "t": "Good days this month",
+  "h": "c2d7afad"
+ },
+ "ngaytot.ngay-tot-trong-thang-lich-van": {
+  "t": "<b>Good Days This Month</b><span>Perpetual calendar · good/bad days by the lunar calendar</span>",
+  "h": "a5097cc1"
+ },
+ "ngaytot.ngay-tot-trong-thang-tu-vi": {
+  "t": "Good Days This Month — Minh Bao Zi Wei Dou Shu",
+  "h": "d7f28313"
+ },
+ "ngaytot.thang-can-xem-duong-lich": {
+  "t": "Month to check (solar calendar)",
+  "h": "f67dc270"
+ },
+ "ngaytot.truc-nhi-thap-bat-tu": {
+  "t": "Day officers,<br>28 Mansions",
+  "h": "d2ad3351"
+ },
+ "ngaytot.xem-lich": {
+  "t": "See calendar →",
+  "h": "6fa85107"
  },
  "nhtg.anh-chi-gui-toi-may-chu": {
   "t": "The photo is only sent to the server for analysis and isn't stored there. Shoot straight on, in good light — the system zooms in on the eye area automatically.",

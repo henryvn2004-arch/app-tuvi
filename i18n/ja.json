@@ -375,6 +375,126 @@
   "t": "お話を聞かせてください。明宝が15人の先生の中から最適な先生をご案内します：紫微斗数の命盤、四柱推命、相性、命名、吉日選び。",
   "h": "0f564294"
  },
+ "chonngay.2-xem-nen-can-chi": {
+  "t": "<span class=\"wss-n\">2</span><span class=\"wss-l\">干支の土台を見る</span>",
+  "h": "c95e6f79"
+ },
+ "chonngay.an-hoi-dam-ngo": {
+  "t": "結納・顔合わせ",
+  "h": "4b11a176"
+ },
+ "chonngay.chon-ngay-chuyen-sau": {
+  "t": "詳しく日取りを選ぶ →",
+  "h": "9bd6a5ed"
+ },
+ "chonngay.chon-ngay-gio-tot": {
+  "t": "吉日・吉時の選定",
+  "h": "28b27ec4"
+ },
+ "chonngay.chon-ngay-gio-tot-hop-tuoi": {
+  "t": "天干地支にもとづき、結婚式・開業・入居・地鎮祭などに合った吉日・吉時を干支で選びます。先生に、良い日と避けるべき日を読み解いてもらえます。",
+  "h": "a3dfe7f0"
+ },
+ "chonngay.chon-ngay-tot-ngay-gio-hop": {
+  "t": "<b>吉日の選定</b><span>人生の大事に、干支に合う日と時刻を</span>",
+  "h": "ec08df6d"
+ },
+ "chonngay.chon-ngay-tot-tu-vi-minh": {
+  "t": "吉日の選定 — 明宝紫微斗数",
+  "h": "bad6e5eb"
+ },
+ "chonngay.chon-viec-can-xem-ngay-nhap": {
+  "t": "日取りを見たい用件を選び、事主のお名前と生まれ年、見たい月を入力してください。システムが干支を算出し、あなたの干支との相性（合・冲）を照らし合わせます。",
+  "h": "a51a3cec"
+ },
+ "chonngay.chua-muon-khai-thong-tin-ban": {
+  "t": "<b>まだ情報を入力したくありませんか？</b><span>先にサンプルを見て試すこともできます。</span>",
+  "h": "0a975603"
+ },
+ "chonngay.cuoi-hoi": {
+  "t": "結婚式",
+  "h": "04a2caa4"
+ },
+ "chonngay.cuoi-hoi-lam-nha-khai-truong": {
+  "t": "結婚式、家の建築、開業——日取りを誤ると、一生悔やんでも取り返しがつかないこともあります。用件と期間を選べば、事主の干支に合う日と時刻の一覧がすぐに届きます。",
+  "h": "0b16cd85"
+ },
+ "chonngay.danh-sach-ngay-tot": {
+  "t": "吉日の<br>一覧",
+  "h": "b1bf5886"
+ },
+ "chonngay.doi-chieu-hop-xung": {
+  "t": "相性（合・冲）<br>の照合",
+  "h": "c461160d"
+ },
+ "chonngay.dong-tho-khoi-cong": {
+  "t": "地鎮祭・着工",
+  "h": "10468f91"
+ },
+ "chonngay.gio-hoang-dao-tung-ngay": {
+  "t": "日ごとの<br>黄道吉時",
+  "h": "54c78af6"
+ },
+ "chonngay.he-thong-phan-tich-can-chi": {
+  "t": "システムが事主の干支と予定の年月を分析し、具体的な理由を添えて、吉日の期間を提案します。",
+  "h": "ec5043f6"
+ },
+ "chonngay.ho-ten-nguoi-chu-su": {
+  "t": "事主の氏名",
+  "h": "7d21772a"
+ },
+ "chonngay.hoang-lich-lich-van-nien-la": {
+  "t": "黄暦（万年暦）は、干支・二十八宿・吉凶の星を組み合わせ、用件ごとにふさわしい時刻や黄道吉日を定める、中国古来の暦の体系です。結婚式・開業・地鎮祭などの日時選びの伝統的な拠り所となっています。",
+  "h": "0240b883"
+ },
+ "chonngay.hoi-thay-chon-ngay-dep": {
+  "t": "✦ 先生に吉日を選んでもらう",
+  "h": "7d368a1b"
+ },
+ "chonngay.khai-truong": {
+  "t": "開業",
+  "h": "c86ca256"
+ },
+ "chonngay.ky-ket-hop-dong": {
+  "t": "契約の締結",
+  "h": "90e0fb9b"
+ },
+ "chonngay.lap-nen": {
+  "t": "土台を作る →",
+  "h": "81b6e6d8"
+ },
+ "chonngay.moi-luot": {
+  "t": "1回あたり",
+  "h": "2a5c5972"
+ },
+ "chonngay.mua-xe": {
+  "t": "車の購入",
+  "h": "52d4aa77"
+ },
+ "chonngay.nhap-trach-ve-nha-moi": {
+  "t": "入居（新居への引っ越し）",
+  "h": "fcda52e1"
+ },
+ "chonngay.thong-tin-chon-ngay": {
+  "t": "日取りの情報",
+  "h": "9d3045db"
+ },
+ "chonngay.ton": {
+  "t": "費用",
+  "h": "e603a0b9"
+ },
+ "chonngay.viec-can-chon-ngay": {
+  "t": "日取りを選ぶ用件",
+  "h": "e84816a6"
+ },
+ "chonngay.xem-ban-mau": {
+  "t": "サンプルを見る →",
+  "h": "ba3671b1"
+ },
+ "chonngay.xuat-hanh": {
+  "t": "出立（旅立ち）",
+  "h": "424fcbb2"
+ },
  "chutrinh.9-dai-van-tron-doi": {
   "t": "<span class=\"hp-ic\" data-icon=\"hourglass\"></span><span>生涯の<br>9つの大運</span>",
   "h": "5ab04ae7"
@@ -706,6 +826,222 @@
  "disclaimer.xem-them-dieu-khoan-day-du": {
   "t": "利用規約の全文は<a href=\"/dieu-khoan-dich-vu.html\">利用規約</a>（第2項 — 責任の制限）に、サービスの説明は<a href=\"/san-pham-dich-vu.html\">商品・サービス</a>ページに掲載しています。",
   "h": "dc202339"
+ },
+ "giosinh.12-la-so-kha-nghi": {
+  "t": "候補の命盤<br>12枚",
+  "h": "6b8b7bde"
+ },
+ "giosinh.2-xem-12-gio-kha-nghi": {
+  "t": "<span class=\"wss-n\">2</span><span class=\"wss-l\">候補の12時刻を見る</span>",
+  "h": "41d140ce"
+ },
+ "giosinh.am-lich": {
+  "t": "旧暦（太陰暦）",
+  "h": "b0246c79"
+ },
+ "giosinh.anh-chi-nhap-ngay-sinh-theo": {
+  "t": "生年月日を<b>旧暦</b>で入力されました。ほかのツールは<b>新暦</b>で受け付けており、旧暦から新暦への逆変換にはまだ対応していないため、自動で引き継ぐことはできません。上で確定した時刻はそのままお使いいただけます。ほかのツールを開いたときは手入力してください。",
+  "h": "edb9dc0c"
+ },
+ "giosinh.anh-chi-von-da-biet-chac": {
+  "t": "出生時刻がすでに確かな方へ",
+  "h": "d8efb8c1"
+ },
+ "giosinh.buoc-tiep-theo-thu-hep-bang": {
+  "t": "次のステップ：質問で絞り込む",
+  "h": "12044ce6"
+ },
+ "giosinh.buoc-xem-12-la-so-kha": {
+  "t": "12枚の候補命盤を見るステップは<b>無料</b>です。絞り込みの質問とランキングには両（クレジット）がかかります。",
+  "h": "88e80a48"
+ },
+ "giosinh.cach-kiem-chac-nhat-lap-la": {
+  "t": "最も確実な確かめ方：<b>上位2つの時刻</b>で命盤を作り、直近5年の運勢の部分を読んで、より当てはまるほうの時刻を採用してください。",
+  "h": "9b5f4abc"
+ },
+ "giosinh.cach-nay-thu-hep-bang-muc": {
+  "t": "この方法は、あなたの回答と各命盤との一致度で絞り込むため、<b>可能性を順位づけ</b>するもので、どの時刻が正しいかを証明するものではありません。実際に近い回答をした方の場合、多くのケースで正しい時刻は上位3つに入りますが、1位かどうかはそこまで確実ではありません。そのため、このページは断定的に聞こえる数字ひとつではなく、根拠つきのリスト全体をお見せし、ご自身で確かめていただく形にしています。",
+  "h": "eaefa2a0"
+ },
+ "giosinh.chon-gio-anh-chi-muon-dung": {
+  "t": "使いたい時刻を選んでください。アカウントの<b>命盤ノート</b>に保存されるので、ほかのツールにも自動で入力されます。打ち直しも、覚えておく必要もありません。",
+  "h": "36fd6d7b"
+ },
+ "giosinh.chot-gio-va-dung-tiep": {
+  "t": "時刻を確定して次へ",
+  "h": "2c33bc41"
+ },
+ "giosinh.cung-mot-ngay-sinh-12-la": {
+  "t": "同じ生年月日でも、12枚の命盤はまったく異なる",
+  "h": "92803f8c"
+ },
+ "giosinh.duong-lich": {
+  "t": "新暦（太陽暦）",
+  "h": "dfac44de"
+ },
+ "giosinh.gio-dung-neu-biet": {
+  "t": "正しい時刻（わかる場合）",
+  "h": "f70330da"
+ },
+ "giosinh.gio-muon-dung": {
+  "t": "使う時刻",
+  "h": "853206cc"
+ },
+ "giosinh.gio-sinh-doi-thi-cung-menh": {
+  "t": "出生時刻が変わると命宮が変わり、局が変わり、星の配置もすべて変わります。これは<b id=\"freeLine\"></b>の12通りの可能性で、本当の命盤はそのうちの1枚だけです。",
+  "h": "ca364a84"
+ },
+ "giosinh.gio-sinh-kha-nang-cao-nhat": {
+  "t": "最も可能性の高い出生時刻",
+  "h": "449a17e1"
+ },
+ "giosinh.gioi-tinh": {
+  "t": "性別",
+  "h": "80bbce55"
+ },
+ "giosinh.gui-doi-chieu": {
+  "t": "照合を送信",
+  "h": "50ad4ad2"
+ },
+ "giosinh.khao-sat-thu-hep": {
+  "t": "絞り込みの<br>質問",
+  "h": "c176396d"
+ },
+ "giosinh.khao-sat-thu-hep-ua1r": {
+  "t": "絞り込みの質問",
+  "h": "0d669868"
+ },
+ "giosinh.khong-nho-chinh-xac-gio-sinh": {
+  "t": "出生時刻を正確に覚えていないと、紫微斗数の命盤は根本からずれやすくなります。いくつかの質問に答えると、システムが12の時間帯の中から段階的に絞り込み、最も近い出生時刻を探し出します。",
+  "h": "83b0cbd2"
+ },
+ "giosinh.khong-nho-gio-sinh-lap-ca": {
+  "t": "出生時刻を覚えていませんか？候補の命盤12枚をすべて作り、健康状態やこれまでの人生の時期に関するいくつかの質問で絞り込みます。",
+  "h": "b7c6b615"
+ },
+ "giosinh.lam-lai": {
+  "t": "やり直す",
+  "h": "535fca0d"
+ },
+ "giosinh.loai-lich": {
+  "t": "暦の種類",
+  "h": "4f30f6b5"
+ },
+ "giosinh.luan-giai-la-so-nay": {
+  "t": "この命盤を鑑定する →",
+  "h": "5fea8efd"
+ },
+ "giosinh.luu-vao-so-la-so": {
+  "t": "命盤ノートに保存",
+  "h": "b9785d51"
+ },
+ "giosinh.nam": {
+  "t": "年",
+  "h": "98926c7e"
+ },
+ "giosinh.nam-gioi": {
+  "t": "男性",
+  "h": "b580ba1b"
+ },
+ "giosinh.neu-co-giay-khai-sinh-hoac": {
+  "t": "出生証明書や、はっきり覚えているご家族がいれば、正しい時刻を教えてください。先ほどの結果と照らし合わせることで、方法の調整に役立ちます。任意であり、あなたの鑑定結果には一切影響しません。",
+  "h": "31f387ef"
+ },
+ "giosinh.ngay": {
+  "t": "日",
+  "h": "368c4575"
+ },
+ "giosinh.nhap-ngay-thang-nam-sinh-gio": {
+  "t": "<b>生年月日</b>を入力してください。出生時刻こそが探したいものです。システムが<b>12枚の候補命盤</b>を作り、短い質問で絞り込み、一致度の順に並べます。",
+  "h": "287c421e"
+ },
+ "giosinh.thang": {
+  "t": "月",
+  "h": "0e2b3099"
+ },
+ "giosinh.vi-sao-khong-phai-mot-con": {
+  "t": "なぜ断定的な数字ひとつではないのか",
+  "h": "2bbd8eab"
+ },
+ "giosinh.xac-dinh-gio-sinh": {
+  "t": "出生時刻の特定",
+  "h": "2b570401"
+ },
+ "giosinh.xac-dinh-gio-sinh-khong-nho": {
+  "t": "<b>出生時刻の特定</b><span>覚えていなければここから</span>",
+  "h": "1407f5d3"
+ },
+ "giosinh.xac-dinh-gio-sinh-tu-vi": {
+  "t": "出生時刻の特定 — 明宝紫微斗数",
+  "h": "c14e875f"
+ },
+ "giosinh.xem-12-gio-kha-nghi": {
+  "t": "候補の12時刻を見る",
+  "h": "3cd9aabf"
+ },
+ "giosinh.xep-hang-do-khop": {
+  "t": "一致度で<br>ランキング",
+  "h": "a6655e79"
+ },
+ "hoangdao.1-nhap-ngay": {
+  "t": "<span class=\"wss-n\">1</span><span class=\"wss-l\">日付を入力</span>",
+  "h": "a99fbfcf"
+ },
+ "hoangdao.6-gio-tot-nen-dung": {
+  "t": "使うべき<br>吉時6つ",
+  "h": "ca3f8fea"
+ },
+ "hoangdao.6-gio-xau-can-tranh": {
+  "t": "避けるべき<br>凶時6つ",
+  "h": "4f1e6bfc"
+ },
+ "hoangdao.chon-ngay-thang-nam-duong-lich": {
+  "t": "確認したい新暦の日・月・年を選んでください。システムが黄道吉時を算出し、その日の暦と照らし合わせます。",
+  "h": "b7dbabb0"
+ },
+ "hoangdao.cung-mot-viec-lam-gio-nay": {
+  "t": "同じことでも、この時刻なら順調で、別の時刻だとなぜかつまずくことがあります。見たい日を選べば、暦にもとづく吉時と避けるべき時刻の一覧がすぐに届きます。",
+  "h": "173c7571"
+ },
+ "hoangdao.gio-hoang-dao": {
+  "t": "黄道吉時",
+  "h": "940fb21d"
+ },
+ "hoangdao.gio-hoang-dao-12-gio-tot": {
+  "t": "<b>黄道吉時</b><span>干支で見る、その日の吉凶12の時刻</span>",
+  "h": "23839283"
+ },
+ "hoangdao.gio-hoang-dao-tu-vi-minh": {
+  "t": "黄道吉時 — 明宝紫微斗数",
+  "h": "51a0db68"
+ },
+ "hoangdao.hac-dao-6-gio-can-tranh": {
+  "t": "✗ 黒道 — 避けるべき6つの時刻",
+  "h": "39601183"
+ },
+ "hoangdao.hoang-dao-6-gio-tot": {
+  "t": "✦ 黄道 — 吉の6つの時刻",
+  "h": "7263a1c8"
+ },
+ "hoangdao.hoang-lich-day-du": {
+  "t": "黄暦<br>フル版",
+  "h": "f4d66b7c"
+ },
+ "hoangdao.hoi-thay-nen-lam-viec-vao": {
+  "t": "✦ 先生に、何時に行うのがよいか聞く",
+  "h": "2a9b43ce"
+ },
+ "hoangdao.ngay-can-xem-duong-lich": {
+  "t": "確認したい日（新暦）",
+  "h": "a32fbe04"
+ },
+ "hoangdao.tra-12-gio-hoang-dao-hac": {
+  "t": "その日の黄道・黒道12の時刻を干支で調べます。開業・出立・契約に向く吉時がわかります。あなたの用件に合わせて先生に読み解いてもらえます。",
+  "h": "6f4fa691"
+ },
+ "hoangdao.xem-gio": {
+  "t": "時刻を見る →",
+  "h": "e1db5866"
  },
  "home.270-000-da-quoc-gia-da": {
   "t": "<span><span class=\"ic\" data-icon=\"file-text\"></span>270,000+</span> <span><span class=\"ic\" data-icon=\"globe\"></span>多国籍</span> <span><span class=\"ic\" data-icon=\"check\"></span>検証済み</span>",
@@ -2027,6 +2363,98 @@
   "t": "数行で大丈夫です。明宝が、15人の先生のチームからぴったりの先生をご案内します。",
   "h": "e43855cc"
  },
+ "js.chonngay.ban-mau-note": {
+  "t": "これは説明用の<b>サンプル</b>（別のデータ）で、あなたの結果ではありません。",
+  "h": "4dc73cd0"
+ },
+ "js.chonngay.chip1": {
+  "t": "今月で一番良い日はいつですか？",
+  "h": "1d6514df"
+ },
+ "js.chonngay.chip2": {
+  "t": "この件に向く黄道吉時は？",
+  "h": "005ba6f0"
+ },
+ "js.chonngay.chip3": {
+  "t": "絶対に避けるべき日はいつですか？",
+  "h": "36a0360f"
+ },
+ "js.chonngay.chip4": {
+  "t": "その日、出立に良い方角は？",
+  "h": "0ef8b5dc"
+ },
+ "js.chonngay.chua-mo-duoc-ban-mau": {
+  "t": "サンプルを開けませんでした。しばらくしてからもう一度お試しください。",
+  "h": "05a0f158"
+ },
+ "js.chonngay.dang-mo": {
+  "t": "開いています…",
+  "h": "a3fdeaab"
+ },
+ "js.chonngay.dang-phan-tich": {
+  "t": "吉日を分析中…通常15〜25秒かかります",
+  "h": "2413a48e"
+ },
+ "js.chonngay.greeting": {
+  "t": "**{viec}** の土台ができました（事主の干支：**{cc}**）。まず何についてアドバイスしましょうか？",
+  "h": "37474974"
+ },
+ "js.chonngay.khong-nhan-duoc-ket-qua": {
+  "t": "結果を受け取れませんでした。",
+  "h": "46e8add0"
+ },
+ "js.chonngay.khong-the-ket-noi": {
+  "t": "接続できませんでした。もう一度お試しください。",
+  "h": "bf0b6e7b"
+ },
+ "js.chonngay.label": {
+  "t": "日取り：{viec}・{ten}・{n}年{t}月",
+  "h": "c350a6fa"
+ },
+ "js.chonngay.loi-colon": {
+  "t": "エラー：",
+  "h": "471c0087"
+ },
+ "js.chonngay.loi-status": {
+  "t": "エラー {s}",
+  "h": "c406c72b"
+ },
+ "js.chonngay.nam-n": {
+  "t": "{n}年",
+  "h": "e2de29f4"
+ },
+ "js.chonngay.nhap-thong-tin-cua-toi": {
+  "t": "自分の情報を入力する →",
+  "h": "61666cb3"
+ },
+ "js.chonngay.res-note": {
+  "t": "事主の干支は<b>{cc}</b>（{hanh}）。予定の月は<b>{tcc}</b>、年は<b>{ncc}</b>。吉日は、事主の干支と<b>合</b>（六合・三合）であり、<b>冲・刑</b>を避けるものです。<b>{viec}</b>に向く具体的な日付と黄道吉時は、先生にお尋ねください。",
+  "h": "e946d4da"
+ },
+ "js.chonngay.thang-n": {
+  "t": "{n}月",
+  "h": "4dd9659f"
+ },
+ "js.chonngay.thang-n-m": {
+  "t": "{n}年{t}月",
+  "h": "355a0dcf"
+ },
+ "js.chonngay.tuoi-chu-su": {
+  "t": "事主の干支",
+  "h": "c6691aae"
+ },
+ "js.chonngay.vui-long-nhap-ho-ten": {
+  "t": "氏名、生まれ年、予定の月と年を入力してください。",
+  "h": "d60f4f07"
+ },
+ "js.chonngay.vui-long-nhap-thong-tin": {
+  "t": "先に情報を入力してください。",
+  "h": "b73d7304"
+ },
+ "js.chonngay.xem-ban-mau": {
+  "t": "サンプルを見る →",
+  "h": "ba3671b1"
+ },
  "js.chutrinh.10-can-can-trong-dieu-gi": {
   "t": "/10) 注意すべき点は何ですか？",
   "h": "9fd4a120"
@@ -2146,6 +2574,198 @@
  "js.congcutr.xep-theo-mon-tu-vi-tu": {
   "t": "術別に並べています:紫微斗数、四柱推命、人相占い、風水…",
   "h": "cf4f8ecc"
+ },
+ "js.giosinh.am-lich": {
+  "t": "（旧暦）",
+  "h": "ebf71daf"
+ },
+ "js.giosinh.anh-chi-chua-chot-duoc-gio": {
+  "t": "出生時刻がまだ決まっていないのですね。候補の時刻の見分け方について私に聞いてもかまいません。",
+  "h": "fe1408ea"
+ },
+ "js.giosinh.bat-dau-khao-sat": {
+  "t": "絞り込みの質問を始める →",
+  "h": "89663d6e"
+ },
+ "js.giosinh.cam-on-dung": {
+  "t": "ありがとうございます。正しい時刻はシステムが示した一覧に入っていました。記録しました。",
+  "h": "816391d2"
+ },
+ "js.giosinh.cam-on-truot": {
+  "t": "ありがとうございます。今回はシステムの推定が外れました。まさに方法を改善するために必要な事例です。",
+  "h": "850e32a7"
+ },
+ "js.giosinh.cau-n-toi-da": {
+  "t": "質問 {n} / 最大 {max} 問",
+  "h": "37d9a74f"
+ },
+ "js.giosinh.chip-cung-tat-ach": {
+  "t": "疾厄宮は何を表しますか？",
+  "h": "f6448214"
+ },
+ "js.giosinh.chip-khong-nho-gio": {
+  "t": "出生時刻がわからなくても占えますか？",
+  "h": "36b87cba"
+ },
+ "js.giosinh.chip-vi-sao-doi-gio": {
+  "t": "出生時刻が変わると、なぜ命盤全体が変わるのですか？",
+  "h": "eb87751b"
+ },
+ "js.giosinh.chon-gio-dung-truoc": {
+  "t": "先に正しい時刻を選んでください。",
+  "h": "b1862011"
+ },
+ "js.giosinh.chua-biet": {
+  "t": "— わからない —",
+  "h": "555657b4"
+ },
+ "js.giosinh.chua-co-ket-qua": {
+  "t": "照合する結果がまだありません。",
+  "h": "49c0ec23"
+ },
+ "js.giosinh.chua-doc-duoc-bang-gia": {
+  "t": "料金表を読み込めませんでした。ページを再読み込みしてください。",
+  "h": "247f0130"
+ },
+ "js.giosinh.chua-ghi-duoc-vao-so": {
+  "t": "ノートに保存できませんでした（ネットワークまたはログインセッションの問題）。確定した時刻はこの端末には保存されています。",
+  "h": "d599ae15"
+ },
+ "js.giosinh.co-loi-xay-ra": {
+  "t": "エラーが発生しました。",
+  "h": "08eddac7"
+ },
+ "js.giosinh.cuc-n": {
+  "t": "{n}",
+  "h": "a0da4ad0"
+ },
+ "js.giosinh.da-luu-vao-so": {
+  "t": "命盤ノートに保存しました。ほかのツールにもこの時刻が自動で入力されます。",
+  "h": "c43dc72d"
+ },
+ "js.giosinh.da-nho-tren-may-nay": {
+  "t": "この端末に記憶しました。ほかのツールを開けばそのまま使えます。ログインすれば命盤はアカウントのノートに入り、端末を変えても残ります。",
+  "h": "10b9b2e9"
+ },
+ "js.giosinh.dang-lap-12-la-so": {
+  "t": "命盤12枚を作成中…",
+  "h": "1e2ebabc"
+ },
+ "js.giosinh.dang-luu": {
+  "t": "保存中…",
+  "h": "b98712c0"
+ },
+ "js.giosinh.dang-tinh": {
+  "t": "計算中…",
+  "h": "76a9d5f0"
+ },
+ "js.giosinh.dua-tren": {
+  "t": "回答済み{n}問に基づく · 一致度 {p}%",
+  "h": "0fb2318b"
+ },
+ "js.giosinh.duong-lich": {
+  "t": "（新暦）",
+  "h": "4471b62b"
+ },
+ "js.giosinh.gio-chi": {
+  "t": "{chi}の刻",
+  "h": "87e9bdfa"
+ },
+ "js.giosinh.gio-chi-khung": {
+  "t": "{chi}の刻（{khung}）",
+  "h": "86326af7"
+ },
+ "js.giosinh.khong-gui-duoc": {
+  "t": "送信できませんでしたが、ご心配なく。鑑定結果は変わりません。",
+  "h": "5e875ab2"
+ },
+ "js.giosinh.khong-lap-duoc-la-so": {
+  "t": "命盤を作成できませんでした。",
+  "h": "16f828bd"
+ },
+ "js.giosinh.khong-ro-khong-nho-bo-qua": {
+  "t": "わからない／覚えていない — この質問をスキップ",
+  "h": "538ab29a"
+ },
+ "js.giosinh.lock-cta": {
+  "t": "12枚の命盤すべて＋質問を開く",
+  "h": "1b686643"
+ },
+ "js.giosinh.lock-i1": {
+  "t": "候補の命盤12枚すべて（各時刻の命宮＋疾厄宮）",
+  "h": "672803dc"
+ },
+ "js.giosinh.lock-i2": {
+  "t": "生年月日に合わせて作られる質問セット",
+  "h": "229e75db"
+ },
+ "js.giosinh.lock-i3": {
+  "t": "12の時刻を可能性の高さで順位づけ",
+  "h": "b08e68e7"
+ },
+ "js.giosinh.lock-i4": {
+  "t": "各質問ごとの一致・不一致の根拠",
+  "h": "ed0e1963"
+ },
+ "js.giosinh.lock-i5": {
+  "t": "信頼度と、時刻を確定するためのアドバイス",
+  "h": "4c5e6f1b"
+ },
+ "js.giosinh.lock-title": {
+  "t": "⊙ 出生時刻のレポートは未開封です",
+  "h": "75ef5f41"
+ },
+ "js.giosinh.luong": {
+  "t": "両",
+  "h": "6614284e"
+ },
+ "js.giosinh.menh-colon": {
+  "t": "命宮：",
+  "h": "d24288f5"
+ },
+ "js.giosinh.nhap-nam-sinh-trong-khoang-1900": {
+  "t": "出生年は1900〜2030年の範囲で入力してください。",
+  "h": "41815a93"
+ },
+ "js.giosinh.survey-pitch": {
+  "t": "この生年月日に合わせて、システムが専用の<b>{n}問</b>を作成します。選択肢は<b>この日そのもの</b>で異なる兆候を示す時刻のグループなので、質問セットは人によって異なります。回答が終わると、<b>可能性の高い2〜3つの時刻と、各回答ごとの根拠</b>が表示されます。",
+  "h": "383cb5d5"
+ },
+ "js.giosinh.tat-ach-colon": {
+  "t": "疾厄宮：",
+  "h": "80b98397"
+ },
+ "js.giosinh.tc-cao": {
+  "t": "高",
+  "h": "db10c479"
+ },
+ "js.giosinh.tc-thap": {
+  "t": "低",
+  "h": "ecd6f14a"
+ },
+ "js.giosinh.tc-vua": {
+  "t": "中",
+  "h": "0467562c"
+ },
+ "js.giosinh.tin-cay": {
+  "t": "信頼度：{m}",
+  "h": "90b46fcf"
+ },
+ "js.giosinh.ton": {
+  "t": "費用",
+  "h": "e603a0b9"
+ },
+ "js.giosinh.vo-chinh-dieu": {
+  "t": "主星なし",
+  "h": "bd07d7a9"
+ },
+ "js.giosinh.xac-dinh-gio-sinh": {
+  "t": "出生時刻の特定",
+  "h": "c3aee594"
+ },
+ "js.giosinh.xem-12-gio-kha-nghi": {
+  "t": "候補の12時刻を見る",
+  "h": "3cd9aabf"
  },
  "js.home.3-buoc-dau-tien": {
   "t": "最初の3ステップ",
@@ -2646,6 +3266,34 @@
  "js.home.xung-tuoi-29rp": {
   "t": "相冲 ",
   "h": "e92ab4fa"
+ },
+ "js.kimlau.chip1": {
+  "t": "家を建てるのに一番良い年はいつですか？",
+  "h": "992ff775"
+ },
+ "js.kimlau.chip2": {
+  "t": "結婚できる年はいつですか？",
+  "h": "5de89c72"
+ },
+ "js.kimlau.chip3": {
+  "t": "金楼にあたったときの対処法は？",
+  "h": "f9c9cb33"
+ },
+ "js.kimlau.chip4": {
+  "t": "三災のあいだ、何を避けるべきですか？",
+  "h": "27ba3819"
+ },
+ "js.kimlau.dai-20-nam": {
+  "t": "今後20年 — 進めてよい年",
+  "h": "bd73ccbd"
+ },
+ "js.kimlau.greeting": {
+  "t": "**{cc}**の金楼・三災・荒屋（今後20年）を調べました。何を聞きたいですか？",
+  "h": "cf9daca6"
+ },
+ "js.kimlau.label": {
+  "t": "金楼・{cc}",
+  "h": "2529b317"
  },
  "js.kinhdich.bam-de-bat-dau-gieo-que": {
   "t": "押すと卦立てを開始します——6回投げ、1回につき1つの爻が決まります",
@@ -3334,6 +3982,30 @@
  "js.nav.xem-tuong-qua-anh": {
   "t": "写真で相を見る",
   "h": "24c4d64e"
+ },
+ "js.ngaytot.chip1": {
+  "t": "結婚式に良い日はいつですか？",
+  "h": "409c6fd4"
+ },
+ "js.ngaytot.chip2": {
+  "t": "着工や入居に良い日はいつですか？",
+  "h": "26db2036"
+ },
+ "js.ngaytot.chip3": {
+  "t": "なぜ忌日は避けるのですか？",
+  "h": "2cc8c854"
+ },
+ "js.ngaytot.chip4": {
+  "t": "開業にはどの日を選べばよいですか？",
+  "h": "b44fce94"
+ },
+ "js.ngaytot.greeting": {
+  "t": "**{y}年{m}月**の暦を確認しました。何をなさる予定ですか？最適な日をお選びします。",
+  "h": "3a05f3ac"
+ },
+ "js.ngaytot.label": {
+  "t": "吉日・{y}年{m}月",
+  "h": "cbd777dc"
  },
  "js.nhtg.anh-mat-noi-len-dieu-gi": {
   "t": "まなざしは何を表しますか？",
@@ -6747,9 +7419,25 @@
   "t": "**。それとも、新しい名前を提案しましょうか？",
   "h": "d922a861"
  },
+ "js.shellui.hc-ban-o-day": {
+  "t": "現在地",
+  "h": "0ed02beb"
+ },
+ "js.shellui.hc-duoc": {
+  "t": "可",
+  "h": "4c144474"
+ },
+ "js.shellui.hd-al": {
+  "t": "（旧暦{m}/{d}）",
+  "h": "3fd68961"
+ },
  "js.shellui.hd-can-hanh": {
   "t": "、干の五行：",
   "h": "96563d79"
+ },
+ "js.shellui.hd-can-hanh-info": {
+  "t": "天干 <strong>{can}</strong> — 五行 <strong>{hanh}</strong>",
+  "h": "4069d76b"
  },
  "js.shellui.hd-gio-can-tranh-hac-dao": {
   "t": "避けたい時刻（黒道）：",
@@ -6766,6 +7454,118 @@
  "js.shellui.hd-gio-tot-hoang-dao": {
   "t": "吉時（黄道）：",
   "h": "100b31dc"
+ },
+ "js.shellui.hd-ngay-cc": {
+  "t": "日 <strong>{cc}</strong>",
+  "h": "7f416c3a"
+ },
+ "js.shellui.hd-nhap-ngay-hop-le": {
+  "t": "有効な日付を入力してください。",
+  "h": "11a91c34"
+ },
+ "js.shellui.hd-thang-khong-co-ngay": {
+  "t": "{y}年{m}月に{d}日はありません。選び直してください。",
+  "h": "da49ec5e"
+ },
+ "js.shellui.hd-title": {
+  "t": "{date}{al} — {cc}の日",
+  "h": "593d5baf"
+ },
+ "js.shellui.hdd-bh": {
+  "t": "殺気、災い",
+  "h": "28e5f7d8"
+ },
+ "js.shellui.hdd-cht": {
+  "t": "もつれ、停滞",
+  "h": "4363abe5"
+ },
+ "js.shellui.hdd-ct": {
+  "t": "口論、いざこざ",
+  "h": "845d6380"
+ },
+ "js.shellui.hdd-hv": {
+  "t": "盗難、損失",
+  "h": "cde5c999"
+ },
+ "js.shellui.hdd-kq": {
+  "t": "金運、収入",
+  "h": "15237468"
+ },
+ "js.shellui.hdd-md": {
+  "t": "貴人の助け、順調",
+  "h": "a8e75ee4"
+ },
+ "js.shellui.hdd-nd": {
+  "t": "名声、成就",
+  "h": "b3890138"
+ },
+ "js.shellui.hdd-td": {
+  "t": "福徳、凶を和らげる",
+  "h": "e3a72954"
+ },
+ "js.shellui.hdd-th": {
+  "t": "訴訟、争い、凶",
+  "h": "a6198a39"
+ },
+ "js.shellui.hdd-tl": {
+  "t": "財運、万事順調",
+  "h": "1ae9748a"
+ },
+ "js.shellui.hdd-tlao": {
+  "t": "拘束、障害",
+  "h": "5d6fac43"
+ },
+ "js.shellui.hdd-tm": {
+  "t": "守護、祈福",
+  "h": "cdb38651"
+ },
+ "js.shellui.hdt-bh": {
+  "t": "白虎",
+  "h": "f6380016"
+ },
+ "js.shellui.hdt-cht": {
+  "t": "勾陳",
+  "h": "36fb04ef"
+ },
+ "js.shellui.hdt-ct": {
+  "t": "朱雀",
+  "h": "90214276"
+ },
+ "js.shellui.hdt-hv": {
+  "t": "玄武",
+  "h": "f27e517b"
+ },
+ "js.shellui.hdt-kq": {
+  "t": "金匱",
+  "h": "6b3e8125"
+ },
+ "js.shellui.hdt-md": {
+  "t": "明堂",
+  "h": "323a8d91"
+ },
+ "js.shellui.hdt-nd": {
+  "t": "玉堂",
+  "h": "2c94d958"
+ },
+ "js.shellui.hdt-td": {
+  "t": "天徳",
+  "h": "3c86d12a"
+ },
+ "js.shellui.hdt-th": {
+  "t": "天刑",
+  "h": "51b356df"
+ },
+ "js.shellui.hdt-tl": {
+  "t": "青竜",
+  "h": "deccb086"
+ },
+ "js.shellui.hdt-tlao": {
+  "t": "天牢",
+  "h": "44ad7734"
+ },
+ "js.shellui.hdt-tm": {
+  "t": "司命",
+  "h": "fa69d852"
  },
  "js.shellui.het-phan-dung-thu": {
   "t": "お試しはここまでです。",
@@ -7326,6 +8126,74 @@
  "js.shellui.kinh-mat-nao-hop-tuong-mat": {
   "t": "どんなメガネが私の顔に合いますか？",
   "h": "e2a2a092"
+ },
+ "js.shellui.kl-binh-thuong": {
+  "t": "平常",
+  "h": "7a1fa869"
+ },
+ "js.shellui.kl-cau-hoang-oc": {
+  "t": "今年は荒屋の年です。売買や家の建築は避けましょう。",
+  "h": "50677d38"
+ },
+ "js.shellui.kl-cau-kim-lau": {
+  "t": "今年は金楼（{loai}）の年で、{hai}。結婚、建築、大きな着工は避けましょう。",
+  "h": "53df32eb"
+ },
+ "js.shellui.kl-cau-tam-tai": {
+  "t": "今年は三災の運にあたります。大きな決断には慎重に。",
+  "h": "72ae51c8"
+ },
+ "js.shellui.kl-con-tam-tai": {
+  "t": "今年は三災とも重なるため、特に慎重さが必要です。",
+  "h": "6d4d5899"
+ },
+ "js.shellui.kl-hai-luc-suc": {
+  "t": "家畜や財産に影響する",
+  "h": "214ff98e"
+ },
+ "js.shellui.kl-hai-than": {
+  "t": "家主本人に影響する",
+  "h": "682a3213"
+ },
+ "js.shellui.kl-hai-the": {
+  "t": "妻に影響する",
+  "h": "09bcf309"
+ },
+ "js.shellui.kl-hai-tu": {
+  "t": "子どもに影響する",
+  "h": "f3ad84bb"
+ },
+ "js.shellui.kl-loai-luc-suc": {
+  "t": "六畜",
+  "h": "524f4cec"
+ },
+ "js.shellui.kl-loai-than": {
+  "t": "身",
+  "h": "77575b16"
+ },
+ "js.shellui.kl-loai-the": {
+  "t": "妻",
+  "h": "ccd000d4"
+ },
+ "js.shellui.kl-loai-tu": {
+  "t": "子",
+  "h": "bef3174e"
+ },
+ "js.shellui.kl-nam-nay-khong-co": {
+  "t": "今年は金楼・荒屋・三災のいずれにもあたりません。",
+  "h": "2d212f11"
+ },
+ "js.shellui.kl-nam-tuoi": {
+  "t": "{y}年（数え年{t}歳）",
+  "h": "511d7f9e"
+ },
+ "js.shellui.kl-nhap-nam-hop-le": {
+  "t": "有効な生まれ年（1900〜2010）を入力してください。",
+  "h": "8363c20b"
+ },
+ "js.shellui.kl-title": {
+  "t": "{cc}（{by}）— {na} · {cy}年の数え年：{t}歳",
+  "h": "f6b9127c"
  },
  "js.shellui.km-cuc": {
   "t": "{dun}{n}局",
@@ -8194,6 +9062,38 @@
  "js.shellui.nghe-them-mon-khac": {
   "t": "他の分野も聞く</span>",
   "h": "abd835bb"
+ },
+ "js.shellui.ngt-al": {
+  "t": "旧{m}/{d}",
+  "h": "a38795f8"
+ },
+ "js.shellui.ngt-chon-thang": {
+  "t": "月は1〜12から選んでください。",
+  "h": "ad9727eb"
+ },
+ "js.shellui.ngt-duong-cong-ki": {
+  "t": "楊公忌",
+  "h": "a919874b"
+ },
+ "js.shellui.ngt-nguyet-ki": {
+  "t": "月忌",
+  "h": "53f1d21f"
+ },
+ "js.shellui.ngt-nhap-nam-hop-le": {
+  "t": "有効な年（2020〜2030）を入力してください。",
+  "h": "386683dc"
+ },
+ "js.shellui.ngt-tam-nuong": {
+  "t": "三娘",
+  "h": "a82168f4"
+ },
+ "js.shellui.ngt-title": {
+  "t": "{y}年{m}月 — 吉凶日カレンダー",
+  "h": "abd229f8"
+ },
+ "js.shellui.ngt-tot": {
+  "t": "吉",
+  "h": "f716d517"
  },
  "js.shellui.ngu-hanh-net-lien-quan-gi": {
   "t": "筆跡の五行は、用神とどう関係しますか？",
@@ -13227,6 +14127,78 @@
   "t": "生まれ年だけで、お二人の年の相性をさっと確認できます。すぐに答えが出ます（詳しい鑑定ではありません）。",
   "h": "ee011392"
  },
+ "kimlau.bang-tra-20-nam-toi": {
+  "t": "今後20年の<br>早見表",
+  "h": "ded0c033"
+ },
+ "kimlau.bang-tra-20-nam-toi-9fqx": {
+  "t": "<span class=\"res-block-title\">今後20年の早見表</span>",
+  "h": "8e04bf8f"
+ },
+ "kimlau.can-chi": {
+  "t": "干支",
+  "h": "8b784611"
+ },
+ "kimlau.cuoi-hoi-lam-nha": {
+  "t": "結婚式・<br>家の建築",
+  "h": "7e98e435"
+ },
+ "kimlau.hoi-thay-nam-dep-cach-hoa": {
+  "t": "✦ 先生に、良い年と対処法を聞く",
+  "h": "5f76ab82"
+ },
+ "kimlau.ket-luan-ngay-tuc-thi": {
+  "t": "その場で<br>結論",
+  "h": "b2797a93"
+ },
+ "kimlau.kim-lau-la-quan-niem-dan": {
+  "t": "金楼は、家主の数え年にもとづく民間信仰で、特定の年齢は家の建築や結婚に向かないとされます。三災は関連する概念で、十二支の周期のなかで障害に遭いやすいとされる連続3年を指します。",
+  "h": "625e5413"
+ },
+ "kimlau.kim-lau-tam-tai": {
+  "t": "金楼と三災",
+  "h": "cea3719a"
+ },
+ "kimlau.kim-lau-tam-tai-tu-vi": {
+  "t": "金楼と三災 — 明宝紫微斗数",
+  "h": "b2ec2af2"
+ },
+ "kimlau.kim-lau-tam-tai-tuoi-lam": {
+  "t": "<b>金楼と三災</b><span>家の建築・結婚に障りのある年齢かどうか</span>",
+  "h": "1fb12a82"
+ },
+ "kimlau.nam-dl": {
+  "t": "西暦年",
+  "h": "6c965b9e"
+ },
+ "kimlau.nam-sinh-duong-lich": {
+  "t": "生まれ年（新暦）",
+  "h": "9f8721e0"
+ },
+ "kimlau.nhap-nam-sinh-duong-lich-he": {
+  "t": "生まれ年（新暦）を入力してください。システムが金楼・三災・荒屋の古法に照らして確認し、結論と今後20年の早見表を返します。",
+  "h": "cca6f199"
+ },
+ "kimlau.pham-kim-lau-tam-tai-ma": {
+  "t": "金楼や三災にあたっていると知らないまま、結婚や家の建築をしてしまい、手遅れになってから気づく人は少なくありません。生まれ年を入力すれば、すぐに結論と今後20年の早見表が届きます。",
+  "h": "7e987b4a"
+ },
+ "kimlau.tinh-trang": {
+  "t": "状態",
+  "h": "5a46503e"
+ },
+ "kimlau.tra-cuu": {
+  "t": "調べる →",
+  "h": "fd5b08a7"
+ },
+ "kimlau.tuoi-ta": {
+  "t": "数え年",
+  "h": "536f1746"
+ },
+ "kimlau.xem-tuoi-lam-nha-cuoi-hoi": {
+  "t": "家の建築や結婚の年齢が、数え年で金楼・三災・荒屋にあたるかを調べ、今後20年の早見表を示します。対処法は先生に聞けます。",
+  "h": "041eccbd"
+ },
  "kinhdich.1-gieo-que": {
   "t": "<span class=\"wss-n\">1</span><span class=\"wss-l\">卦を立てる</span>",
   "h": "bf868703"
@@ -14250,6 +15222,70 @@
  "napam.tuoi-hop-ky": {
   "t": "<span class=\"hp-ic\" data-icon=\"users\"></span><span>相性の良い年<br>悪い年</span>",
   "h": "9a664cc3"
+ },
+ "ngaytot.2-nhan-ket-qua": {
+  "t": "<span class=\"wss-n\">2</span><span class=\"wss-l\">結果を受け取る</span>",
+  "h": "b0b2f830"
+ },
+ "ngaytot.chon-thang-nam-duong-lich-he": {
+  "t": "新暦の月と年を選んでください。システムが暦を算出して吉凶の日を照合し、ひと月分を「吉」「要注意」「忌避」に色分けして返します。",
+  "h": "0ad99575"
+ },
+ "ngaytot.hoi-thay-chon-ngay-dep-trong": {
+  "t": "✦ 先生に今月の吉日を選んでもらう",
+  "h": "254611c0"
+ },
+ "ngaytot.lich-ngay-tot-xau-ca-thang": {
+  "t": "旧暦にもとづく、ひと月分の吉凶日カレンダー。三娘・月忌・楊公忌がわかります。結婚式や着工に向く日を先生に選んでもらえます。",
+  "h": "39fc01f0"
+ },
+ "ngaytot.lich-tot-xau-ca-thang": {
+  "t": "ひと月分の<br>吉凶カレンダー",
+  "h": "2da65fe3"
+ },
+ "ngaytot.luu-y-nho-duong-cong-ki": {
+  "t": "軽い注意（楊公忌）",
+  "h": "72c4ae94"
+ },
+ "ngaytot.muon-len-lich-ca-thang-ma": {
+  "t": "ひと月の予定を立てたいけれど、避けるべき日や、大事なことを始めるのに都合のよい日がわからない。そんなときは月を選ぶだけで、吉凶の日を一日ずつ見やすく並べた一覧が届きます。",
+  "h": "b18291cb"
+ },
+ "ngaytot.ngay-ki-tranh-viec-lon": {
+  "t": "忌日 — 大事は避ける",
+  "h": "c5145190"
+ },
+ "ngaytot.ngay-ky-can-tranh": {
+  "t": "避けるべき<br>忌日",
+  "h": "22943f84"
+ },
+ "ngaytot.ngay-tot-an-toan": {
+  "t": "吉日 — 安心",
+  "h": "3795683e"
+ },
+ "ngaytot.ngay-tot-trong-thang": {
+  "t": "今月の吉日",
+  "h": "c2d7afad"
+ },
+ "ngaytot.ngay-tot-trong-thang-lich-van": {
+  "t": "<b>今月の吉日</b><span>万年暦 · 旧暦にもとづく吉凶日</span>",
+  "h": "a5097cc1"
+ },
+ "ngaytot.ngay-tot-trong-thang-tu-vi": {
+  "t": "今月の吉日 — 明宝紫微斗数",
+  "h": "d7f28313"
+ },
+ "ngaytot.thang-can-xem-duong-lich": {
+  "t": "確認したい月（新暦）",
+  "h": "f67dc270"
+ },
+ "ngaytot.truc-nhi-thap-bat-tu": {
+  "t": "十二直・<br>二十八宿",
+  "h": "d2ad3351"
+ },
+ "ngaytot.xem-lich": {
+  "t": "カレンダーを見る →",
+  "h": "6fa85107"
  },
  "nhtg.anh-chi-gui-toi-may-chu": {
   "t": "画像は分析のためにサーバーへ送るだけで、サーバーには保存しません。正面から、十分な明るさで撮影してください — システムが自動で目の部分にズームします。",

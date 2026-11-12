@@ -375,6 +375,126 @@
   "t": "說說您的故事，明寶團隊會從 15 位老師中請出最合適的一位為您解讀：紫微斗數命盤、八字、合婚、取名、擇日。",
   "h": "0f564294"
  },
+ "chonngay.2-xem-nen-can-chi": {
+  "t": "<span class=\"wss-n\">2</span><span class=\"wss-l\">查看干支基礎</span>",
+  "h": "c95e6f79"
+ },
+ "chonngay.an-hoi-dam-ngo": {
+  "t": "訂婚／提親",
+  "h": "4b11a176"
+ },
+ "chonngay.chon-ngay-chuyen-sau": {
+  "t": "深度擇日 →",
+  "h": "9bd6a5ed"
+ },
+ "chonngay.chon-ngay-gio-tot": {
+  "t": "擇吉日吉時",
+  "h": "28b27ec4"
+ },
+ "chonngay.chon-ngay-gio-tot-hop-tuoi": {
+  "t": "依天干地支，為婚嫁、開張、入宅、動土等大事擇出合生肖的吉日吉時，並請老師論析好日子與該避開的日子。",
+  "h": "a3dfe7f0"
+ },
+ "chonngay.chon-ngay-tot-ngay-gio-hop": {
+  "t": "<b>擇吉日</b><span>為人生大事擇出合生肖的日子與時辰</span>",
+  "h": "ec08df6d"
+ },
+ "chonngay.chon-ngay-tot-tu-vi-minh": {
+  "t": "擇吉日——明寶紫微斗數",
+  "h": "bad6e5eb"
+ },
+ "chonngay.chon-viec-can-xem-ngay-nhap": {
+  "t": "選擇要擇日的事項，輸入主事者的姓名、出生年與想查的月份。系統會推算干支，再比對與您生肖的相合與相沖。",
+  "h": "a51a3cec"
+ },
+ "chonngay.chua-muon-khai-thong-tin-ban": {
+  "t": "<b>還不想填寫資料嗎？</b><span>您可以先看範例體驗一下。</span>",
+  "h": "0a975603"
+ },
+ "chonngay.cuoi-hoi": {
+  "t": "婚嫁",
+  "h": "04a2caa4"
+ },
+ "chonngay.cuoi-hoi-lam-nha-khai-truong": {
+  "t": "婚嫁、蓋房、開張——擇錯日子，往往是許多人一輩子無法彌補的遺憾。選好事項與時間範圍，即刻獲得合主事者生肖的日期與時辰名單。",
+  "h": "0b16cd85"
+ },
+ "chonngay.danh-sach-ngay-tot": {
+  "t": "吉日<br>清單",
+  "h": "b1bf5886"
+ },
+ "chonngay.doi-chieu-hop-xung": {
+  "t": "相合相沖<br>比對",
+  "h": "c461160d"
+ },
+ "chonngay.dong-tho-khoi-cong": {
+  "t": "動土／開工",
+  "h": "10468f91"
+ },
+ "chonngay.gio-hoang-dao-tung-ngay": {
+  "t": "每日的<br>黃道吉時",
+  "h": "54c78af6"
+ },
+ "chonngay.he-thong-phan-tich-can-chi": {
+  "t": "系統會分析主事者的干支與預定年月，並附上具體理由，建議合適的吉日區間。",
+  "h": "ec5043f6"
+ },
+ "chonngay.ho-ten-nguoi-chu-su": {
+  "t": "主事者姓名",
+  "h": "7d21772a"
+ },
+ "chonngay.hoang-lich-lich-van-nien-la": {
+  "t": "黃曆（萬年曆）是結合干支、二十八宿與吉凶星曜的中國古曆體系，用來為各類事項決定適宜的時辰與黃道吉日，是婚嫁、開張、動土擇日擇時的傳統依據。",
+  "h": "0240b883"
+ },
+ "chonngay.hoi-thay-chon-ngay-dep": {
+  "t": "✦ 請老師擇吉日",
+  "h": "7d368a1b"
+ },
+ "chonngay.khai-truong": {
+  "t": "開張",
+  "h": "c86ca256"
+ },
+ "chonngay.ky-ket-hop-dong": {
+  "t": "簽訂合約",
+  "h": "90e0fb9b"
+ },
+ "chonngay.lap-nen": {
+  "t": "建立基礎 →",
+  "h": "81b6e6d8"
+ },
+ "chonngay.moi-luot": {
+  "t": "每次",
+  "h": "2a5c5972"
+ },
+ "chonngay.mua-xe": {
+  "t": "購車",
+  "h": "52d4aa77"
+ },
+ "chonngay.nhap-trach-ve-nha-moi": {
+  "t": "入宅（遷入新居）",
+  "h": "fcda52e1"
+ },
+ "chonngay.thong-tin-chon-ngay": {
+  "t": "擇日資料",
+  "h": "9d3045db"
+ },
+ "chonngay.ton": {
+  "t": "需",
+  "h": "e603a0b9"
+ },
+ "chonngay.viec-can-chon-ngay": {
+  "t": "要擇日的事項",
+  "h": "e84816a6"
+ },
+ "chonngay.xem-ban-mau": {
+  "t": "查看範例 →",
+  "h": "ba3671b1"
+ },
+ "chonngay.xuat-hanh": {
+  "t": "出行",
+  "h": "424fcbb2"
+ },
  "chutrinh.9-dai-van-tron-doi": {
   "t": "<span class=\"hp-ic\" data-icon=\"hourglass\"></span><span>一生<br>九大運</span>",
   "h": "5ab04ae7"
@@ -706,6 +826,222 @@
  "disclaimer.xem-them-dieu-khoan-day-du": {
   "t": "完整條款請見<a href=\"/dieu-khoan-dich-vu.html\">服務條款</a>（第 2 節——責任限制），服務說明請見<a href=\"/san-pham-dich-vu.html\">產品與服務</a>頁面。",
   "h": "dc202339"
+ },
+ "giosinh.12-la-so-kha-nghi": {
+  "t": "12張候選<br>命盤",
+  "h": "6b8b7bde"
+ },
+ "giosinh.2-xem-12-gio-kha-nghi": {
+  "t": "<span class=\"wss-n\">2</span><span class=\"wss-l\">查看12個候選時辰</span>",
+  "h": "41d140ce"
+ },
+ "giosinh.am-lich": {
+  "t": "農曆",
+  "h": "b0246c79"
+ },
+ "giosinh.anh-chi-nhap-ngay-sinh-theo": {
+  "t": "您輸入的是<b>農曆</b>生日。其他工具接收的是<b>國曆</b>，而系統尚無「農曆轉國曆」的反向換算，因此無法自動帶入。上方剛確定的時辰仍可使用，開啟其他工具時請手動輸入。",
+  "h": "edb9dc0c"
+ },
+ "giosinh.anh-chi-von-da-biet-chac": {
+  "t": "已經確定出生時辰了嗎？",
+  "h": "d8efb8c1"
+ },
+ "giosinh.buoc-tiep-theo-thu-hep-bang": {
+  "t": "下一步——用問卷逐步縮小範圍",
+  "h": "12044ce6"
+ },
+ "giosinh.buoc-xem-12-la-so-kha": {
+  "t": "查看12張候選命盤這一步<b>免費</b>。縮小範圍的問卷與排名才會扣兩（點數）。",
+  "h": "88e80a48"
+ },
+ "giosinh.cach-kiem-chac-nhat-lap-la": {
+  "t": "最穩當的驗證方式：為<b>排名前兩名的時辰</b>各排一張命盤，閱讀近5年的運勢部分，哪個時辰描述得更貼近，就採用哪個。",
+  "h": "9b5f4abc"
+ },
+ "giosinh.cach-nay-thu-hep-bang-muc": {
+  "t": "此方法是依您的回答與各張命盤的吻合度逐步縮小範圍，因此只能<b>排出可能性高低</b>，無法證明哪個時辰才是對的。對於回答貼近實際情況的人，多數情況下正確時辰會落在前3名——但排名第一則沒有那麼確定。所以本頁提供附帶依據的完整名單讓您自行核對，而不是只給一個聽起來很肯定的數字。",
+  "h": "eaefa2a0"
+ },
+ "giosinh.chon-gio-anh-chi-muon-dung": {
+  "t": "請選擇您要使用的時辰。系統會存入帳號的<b>命盤簿</b>，其他工具都會自動帶入——不必重打，也不必牢記。",
+  "h": "36fd6d7b"
+ },
+ "giosinh.chot-gio-va-dung-tiep": {
+  "t": "確定時辰並繼續使用",
+  "h": "2c33bc41"
+ },
+ "giosinh.cung-mot-ngay-sinh-12-la": {
+  "t": "同一個生日——12張截然不同的命盤",
+  "h": "92803f8c"
+ },
+ "giosinh.duong-lich": {
+  "t": "國曆",
+  "h": "dfac44de"
+ },
+ "giosinh.gio-dung-neu-biet": {
+  "t": "正確時辰（若您知道）",
+  "h": "f70330da"
+ },
+ "giosinh.gio-muon-dung": {
+  "t": "要使用的時辰",
+  "h": "853206cc"
+ },
+ "giosinh.gio-sinh-doi-thi-cung-menh": {
+  "t": "出生時辰一改，命宮就變，五行局也變，所有星曜的位置隨之全部改變。這是<b id=\"freeLine\"></b>的12種可能——其中只有一張是您真正的命盤。",
+  "h": "ca364a84"
+ },
+ "giosinh.gio-sinh-kha-nang-cao-nhat": {
+  "t": "最有可能的出生時辰",
+  "h": "449a17e1"
+ },
+ "giosinh.gioi-tinh": {
+  "t": "性別",
+  "h": "80bbce55"
+ },
+ "giosinh.gui-doi-chieu": {
+  "t": "送出比對",
+  "h": "50ad4ad2"
+ },
+ "giosinh.khao-sat-thu-hep": {
+  "t": "縮小範圍<br>問卷",
+  "h": "c176396d"
+ },
+ "giosinh.khao-sat-thu-hep-ua1r": {
+  "t": "縮小範圍問卷",
+  "h": "0d669868"
+ },
+ "giosinh.khong-nho-chinh-xac-gio-sinh": {
+  "t": "記不清確切的出生時辰，整張紫微斗數命盤很容易從根源就偏掉。回答幾個問題，系統會在12個時辰中逐步縮小範圍，找出最接近的出生時辰。",
+  "h": "83b0cbd2"
+ },
+ "giosinh.khong-nho-gio-sinh-lap-ca": {
+  "t": "不記得出生時辰嗎？先排出全部12張候選命盤，再透過幾個關於健康與人生各階段的問題逐步縮小範圍。",
+  "h": "b7c6b615"
+ },
+ "giosinh.lam-lai": {
+  "t": "重新開始",
+  "h": "535fca0d"
+ },
+ "giosinh.loai-lich": {
+  "t": "曆法類型",
+  "h": "4f30f6b5"
+ },
+ "giosinh.luan-giai-la-so-nay": {
+  "t": "解讀這張命盤 →",
+  "h": "5fea8efd"
+ },
+ "giosinh.luu-vao-so-la-so": {
+  "t": "存入命盤簿",
+  "h": "b9785d51"
+ },
+ "giosinh.nam": {
+  "t": "年",
+  "h": "98926c7e"
+ },
+ "giosinh.nam-gioi": {
+  "t": "男",
+  "h": "b580ba1b"
+ },
+ "giosinh.neu-co-giay-khai-sinh-hoac": {
+  "t": "若您有出生證明或家人清楚記得，請告訴我們正確的時辰——與剛才的結果比對，能幫助我們校正方法。此項為選填，完全不影響您的解讀內容。",
+  "h": "31f387ef"
+ },
+ "giosinh.ngay": {
+  "t": "日",
+  "h": "368c4575"
+ },
+ "giosinh.nhap-ngay-thang-nam-sinh-gio": {
+  "t": "請輸入<b>出生年月日</b>——出生時辰正是要找的東西。系統會排出<b>12張候選命盤</b>，透過簡短問卷縮小範圍，再依吻合度排名。",
+  "h": "287c421e"
+ },
+ "giosinh.thang": {
+  "t": "月",
+  "h": "0e2b3099"
+ },
+ "giosinh.vi-sao-khong-phai-mot-con": {
+  "t": "為什麼不是一個斬釘截鐵的數字",
+  "h": "2bbd8eab"
+ },
+ "giosinh.xac-dinh-gio-sinh": {
+  "t": "確認出生時辰",
+  "h": "2b570401"
+ },
+ "giosinh.xac-dinh-gio-sinh-khong-nho": {
+  "t": "<b>確認出生時辰</b><span>不記得出生時辰，就從這裡開始</span>",
+  "h": "1407f5d3"
+ },
+ "giosinh.xac-dinh-gio-sinh-tu-vi": {
+  "t": "確認出生時辰——明寶紫微斗數",
+  "h": "c14e875f"
+ },
+ "giosinh.xem-12-gio-kha-nghi": {
+  "t": "查看12個候選時辰",
+  "h": "3cd9aabf"
+ },
+ "giosinh.xep-hang-do-khop": {
+  "t": "依吻合度<br>排名",
+  "h": "a6655e79"
+ },
+ "hoangdao.1-nhap-ngay": {
+  "t": "<span class=\"wss-n\">1</span><span class=\"wss-l\">輸入日期</span>",
+  "h": "a99fbfcf"
+ },
+ "hoangdao.6-gio-tot-nen-dung": {
+  "t": "適合使用的<br>6個吉時",
+  "h": "ca3f8fea"
+ },
+ "hoangdao.6-gio-xau-can-tranh": {
+  "t": "需要避開的<br>6個凶時",
+  "h": "4f1e6bfc"
+ },
+ "hoangdao.chon-ngay-thang-nam-duong-lich": {
+  "t": "選擇要查詢的國曆日、月、年。系統會推算黃道時辰，並比對當日的黃曆。",
+  "h": "b7dbabb0"
+ },
+ "hoangdao.cung-mot-viec-lam-gio-nay": {
+  "t": "同一件事，在這個時辰順利，換個時辰卻莫名受阻。選好要查的日期，即刻依黃曆取得吉時與該避開的時辰清單。",
+  "h": "173c7571"
+ },
+ "hoangdao.gio-hoang-dao": {
+  "t": "黃道吉時",
+  "h": "940fb21d"
+ },
+ "hoangdao.gio-hoang-dao-12-gio-tot": {
+  "t": "<b>黃道吉時</b><span>依干支推算一日12時辰的吉凶</span>",
+  "h": "23839283"
+ },
+ "hoangdao.gio-hoang-dao-tu-vi-minh": {
+  "t": "黃道吉時——明寶紫微斗數",
+  "h": "51a0db68"
+ },
+ "hoangdao.hac-dao-6-gio-can-tranh": {
+  "t": "✗ 黑道——需避開的6個時辰",
+  "h": "39601183"
+ },
+ "hoangdao.hoang-dao-6-gio-tot": {
+  "t": "✦ 黃道——6個吉時",
+  "h": "7263a1c8"
+ },
+ "hoangdao.hoang-lich-day-du": {
+  "t": "完整<br>黃曆",
+  "h": "f4d66b7c"
+ },
+ "hoangdao.hoi-thay-nen-lam-viec-vao": {
+  "t": "✦ 請問老師該在哪個時辰做事",
+  "h": "2a9b43ce"
+ },
+ "hoangdao.ngay-can-xem-duong-lich": {
+  "t": "要查詢的日期（國曆）",
+  "h": "a32fbe04"
+ },
+ "hoangdao.tra-12-gio-hoang-dao-hac": {
+  "t": "依干支查詢當日12時辰的黃道／黑道——適合開張、出行、簽約的吉時。也可請老師依您的事項論析。",
+  "h": "6f4fa691"
+ },
+ "hoangdao.xem-gio": {
+  "t": "查看時辰 →",
+  "h": "e1db5866"
  },
  "home.270-000-da-quoc-gia-da": {
   "t": "<span><span class=\"ic\" data-icon=\"file-text\"></span>270,000+</span> <span><span class=\"ic\" data-icon=\"globe\"></span>跨國資料</span> <span><span class=\"ic\" data-icon=\"check\"></span>已經查證</span>",
@@ -2027,6 +2363,98 @@
   "t": "簡單說幾句就好。明寶會從團隊 15 位老師中，請出最合適的一位為您解讀。",
   "h": "e43855cc"
  },
+ "js.chonngay.ban-mau-note": {
+  "t": "這是用於示範的<b>範例</b>（資料不同）——並非您的結果。",
+  "h": "4dc73cd0"
+ },
+ "js.chonngay.chip1": {
+  "t": "這個月哪一天最好？",
+  "h": "1d6514df"
+ },
+ "js.chonngay.chip2": {
+  "t": "這件事的黃道吉時？",
+  "h": "005ba6f0"
+ },
+ "js.chonngay.chip3": {
+  "t": "哪些日子一定要避開？",
+  "h": "36a0360f"
+ },
+ "js.chonngay.chip4": {
+  "t": "那天出行哪個方位好？",
+  "h": "0ef8b5dc"
+ },
+ "js.chonngay.chua-mo-duoc-ban-mau": {
+  "t": "無法開啟範例，請稍後再試。",
+  "h": "05a0f158"
+ },
+ "js.chonngay.dang-mo": {
+  "t": "開啟中…",
+  "h": "a3fdeaab"
+ },
+ "js.chonngay.dang-phan-tich": {
+  "t": "正在分析吉日⋯⋯通常需要15–25秒",
+  "h": "2413a48e"
+ },
+ "js.chonngay.greeting": {
+  "t": "已為**{viec}**建立基礎（主事者生肖：**{cc}**）。您想先聽什麼建議？",
+  "h": "37474974"
+ },
+ "js.chonngay.khong-nhan-duoc-ket-qua": {
+  "t": "未收到結果。",
+  "h": "46e8add0"
+ },
+ "js.chonngay.khong-the-ket-noi": {
+  "t": "無法連線，請再試一次。",
+  "h": "bf0b6e7b"
+ },
+ "js.chonngay.label": {
+  "t": "擇日：{viec}・{ten}・{n}年{t}月",
+  "h": "c350a6fa"
+ },
+ "js.chonngay.loi-colon": {
+  "t": "錯誤：",
+  "h": "471c0087"
+ },
+ "js.chonngay.loi-status": {
+  "t": "錯誤 {s}",
+  "h": "c406c72b"
+ },
+ "js.chonngay.nam-n": {
+  "t": "{n}年",
+  "h": "e2de29f4"
+ },
+ "js.chonngay.nhap-thong-tin-cua-toi": {
+  "t": "輸入我的資料 →",
+  "h": "61666cb3"
+ },
+ "js.chonngay.res-note": {
+  "t": "主事者生肖：<b>{cc}</b>（{hanh}）。預定月份為<b>{tcc}</b>，年份為<b>{ncc}</b>。吉日需與主事者生肖<b>相合</b>（六合／三合），並避開<b>相沖／相刑</b>。想知道<b>{viec}</b>的具體日期與黃道吉時，請問老師。",
+  "h": "e946d4da"
+ },
+ "js.chonngay.thang-n": {
+  "t": "{n}月",
+  "h": "4dd9659f"
+ },
+ "js.chonngay.thang-n-m": {
+  "t": "{n}年{t}月",
+  "h": "355a0dcf"
+ },
+ "js.chonngay.tuoi-chu-su": {
+  "t": "主事者生肖",
+  "h": "c6691aae"
+ },
+ "js.chonngay.vui-long-nhap-ho-ten": {
+  "t": "請輸入姓名、出生年，以及預定的月份與年份。",
+  "h": "d60f4f07"
+ },
+ "js.chonngay.vui-long-nhap-thong-tin": {
+  "t": "請先輸入資料。",
+  "h": "b73d7304"
+ },
+ "js.chonngay.xem-ban-mau": {
+  "t": "查看範例 →",
+  "h": "ba3671b1"
+ },
  "js.chutrinh.10-can-can-trong-dieu-gi": {
   "t": "/10) 需要留意什麼？",
   "h": "9fd4a120"
@@ -2146,6 +2574,198 @@
  "js.congcutr.xep-theo-mon-tu-vi-tu": {
   "t": "依術數分類：紫微斗數、八字、相學、風水…",
   "h": "cf4f8ecc"
+ },
+ "js.giosinh.am-lich": {
+  "t": "（農曆）",
+  "h": "ebf71daf"
+ },
+ "js.giosinh.anh-chi-chua-chot-duoc-gio": {
+  "t": "您還沒確定出生時辰——也可以問我如何分辨各個候選時辰。",
+  "h": "fe1408ea"
+ },
+ "js.giosinh.bat-dau-khao-sat": {
+  "t": "開始縮小範圍問卷 →",
+  "h": "89663d6e"
+ },
+ "js.giosinh.cam-on-dung": {
+  "t": "謝謝您——正確時辰在系統給出的名單內，已記錄。",
+  "h": "816391d2"
+ },
+ "js.giosinh.cam-on-truot": {
+  "t": "謝謝您——這次系統沒猜中，正是我們用來調整方法所需要的案例。",
+  "h": "850e32a7"
+ },
+ "js.giosinh.cau-n-toi-da": {
+  "t": "第 {n} 題／最多 {max} 題",
+  "h": "37d9a74f"
+ },
+ "js.giosinh.chip-cung-tat-ach": {
+  "t": "疾厄宮代表什麼？",
+  "h": "f6448214"
+ },
+ "js.giosinh.chip-khong-nho-gio": {
+  "t": "不知道出生時辰也能看紫微斗數嗎？",
+  "h": "36b87cba"
+ },
+ "js.giosinh.chip-vi-sao-doi-gio": {
+  "t": "為什麼出生時辰一改，整張命盤都會變？",
+  "h": "eb87751b"
+ },
+ "js.giosinh.chon-gio-dung-truoc": {
+  "t": "請先選擇正確的時辰。",
+  "h": "b1862011"
+ },
+ "js.giosinh.chua-biet": {
+  "t": "— 不清楚 —",
+  "h": "555657b4"
+ },
+ "js.giosinh.chua-co-ket-qua": {
+  "t": "目前還沒有可供比對的結果。",
+  "h": "49c0ec23"
+ },
+ "js.giosinh.chua-doc-duoc-bang-gia": {
+  "t": "無法讀取價目表——請重新載入頁面。",
+  "h": "247f0130"
+ },
+ "js.giosinh.chua-ghi-duoc-vao-so": {
+  "t": "無法寫入簿冊（網路或登入狀態問題）。剛確定的時辰仍會記在這台裝置上。",
+  "h": "d599ae15"
+ },
+ "js.giosinh.co-loi-xay-ra": {
+  "t": "發生錯誤。",
+  "h": "08eddac7"
+ },
+ "js.giosinh.cuc-n": {
+  "t": "{n}",
+  "h": "a0da4ad0"
+ },
+ "js.giosinh.da-luu-vao-so": {
+  "t": "已存入命盤簿，其他工具會自動帶入這個時辰。",
+  "h": "c43dc72d"
+ },
+ "js.giosinh.da-nho-tren-may-nay": {
+  "t": "已記在這台裝置上——開啟其他工具即可直接使用。登入後命盤會進入帳號的簿冊，換裝置也不會消失。",
+  "h": "10b9b2e9"
+ },
+ "js.giosinh.dang-lap-12-la-so": {
+  "t": "正在排12張命盤…",
+  "h": "1e2ebabc"
+ },
+ "js.giosinh.dang-luu": {
+  "t": "儲存中…",
+  "h": "b98712c0"
+ },
+ "js.giosinh.dang-tinh": {
+  "t": "計算中…",
+  "h": "76a9d5f0"
+ },
+ "js.giosinh.dua-tren": {
+  "t": "依據已回答的 {n} 題 · 吻合度 {p}%",
+  "h": "0fb2318b"
+ },
+ "js.giosinh.duong-lich": {
+  "t": "（國曆）",
+  "h": "4471b62b"
+ },
+ "js.giosinh.gio-chi": {
+  "t": "{chi}時",
+  "h": "87e9bdfa"
+ },
+ "js.giosinh.gio-chi-khung": {
+  "t": "{chi}時（{khung}）",
+  "h": "86326af7"
+ },
+ "js.giosinh.khong-gui-duoc": {
+  "t": "無法送出，但沒關係——您的解讀內容不會改變。",
+  "h": "5e875ab2"
+ },
+ "js.giosinh.khong-lap-duoc-la-so": {
+  "t": "無法排出命盤。",
+  "h": "16f828bd"
+ },
+ "js.giosinh.khong-ro-khong-nho-bo-qua": {
+  "t": "不確定／不記得——跳過此題",
+  "h": "538ab29a"
+ },
+ "js.giosinh.lock-cta": {
+  "t": "解鎖全部12張命盤＋問卷",
+  "h": "1b686643"
+ },
+ "js.giosinh.lock-i1": {
+  "t": "全部12張候選命盤（每個時辰的命宮＋疾厄宮）",
+  "h": "672803dc"
+ },
+ "js.giosinh.lock-i2": {
+  "t": "依您生日專屬編製的問題組",
+  "h": "229e75db"
+ },
+ "js.giosinh.lock-i3": {
+  "t": "12個時辰依可能性排名",
+  "h": "b08e68e7"
+ },
+ "js.giosinh.lock-i4": {
+  "t": "逐題列出吻合／不吻合的依據",
+  "h": "ed0e1963"
+ },
+ "js.giosinh.lock-i5": {
+  "t": "可信度與確定時辰的建議",
+  "h": "4c5e6f1b"
+ },
+ "js.giosinh.lock-title": {
+  "t": "⊙ 出生時辰檔案尚未解鎖",
+  "h": "75ef5f41"
+ },
+ "js.giosinh.luong": {
+  "t": "兩",
+  "h": "6614284e"
+ },
+ "js.giosinh.menh-colon": {
+  "t": "命宮：",
+  "h": "d24288f5"
+ },
+ "js.giosinh.nhap-nam-sinh-trong-khoang-1900": {
+  "t": "請輸入1900–2030年之間的出生年份。",
+  "h": "41815a93"
+ },
+ "js.giosinh.survey-pitch": {
+  "t": "系統會依這個生日編出專屬的<b>{n}道題</b>——選項是對<b>這一天</b>呈現不同徵兆的時辰分組，因此每個人的題組都不一樣。作答完畢後，會得到<b>2–3個最有可能的時辰，並附上每一題的依據</b>。",
+  "h": "383cb5d5"
+ },
+ "js.giosinh.tat-ach-colon": {
+  "t": "疾厄宮：",
+  "h": "80b98397"
+ },
+ "js.giosinh.tc-cao": {
+  "t": "高",
+  "h": "db10c479"
+ },
+ "js.giosinh.tc-thap": {
+  "t": "低",
+  "h": "ecd6f14a"
+ },
+ "js.giosinh.tc-vua": {
+  "t": "中",
+  "h": "0467562c"
+ },
+ "js.giosinh.tin-cay": {
+  "t": "可信度：{m}",
+  "h": "90b46fcf"
+ },
+ "js.giosinh.ton": {
+  "t": "需",
+  "h": "e603a0b9"
+ },
+ "js.giosinh.vo-chinh-dieu": {
+  "t": "無正曜",
+  "h": "bd07d7a9"
+ },
+ "js.giosinh.xac-dinh-gio-sinh": {
+  "t": "確認出生時辰",
+  "h": "c3aee594"
+ },
+ "js.giosinh.xem-12-gio-kha-nghi": {
+  "t": "查看12個候選時辰",
+  "h": "3cd9aabf"
  },
  "js.home.3-buoc-dau-tien": {
   "t": "最初的 3 步",
@@ -2646,6 +3266,34 @@
  "js.home.xung-tuoi-29rp": {
   "t": "沖生肖 ",
   "h": "e92ab4fa"
+ },
+ "js.kimlau.chip1": {
+  "t": "哪一年最適合蓋房？",
+  "h": "992ff775"
+ },
+ "js.kimlau.chip2": {
+  "t": "哪一年可以婚嫁？",
+  "h": "5de89c72"
+ },
+ "js.kimlau.chip3": {
+  "t": "犯金樓該如何化解？",
+  "h": "f9c9cb33"
+ },
+ "js.kimlau.chip4": {
+  "t": "三災期間要忌什麼？",
+  "h": "27ba3819"
+ },
+ "js.kimlau.dai-20-nam": {
+  "t": "未來20年——哪些年可行",
+  "h": "bd73ccbd"
+ },
+ "js.kimlau.greeting": {
+  "t": "已查詢**{cc}**的金樓・三災・荒屋（未來20年）。您想問什麼？",
+  "h": "cf9daca6"
+ },
+ "js.kimlau.label": {
+  "t": "金樓・{cc}",
+  "h": "2529b317"
  },
  "js.kinhdich.bam-de-bat-dau-gieo-que": {
   "t": "按下開始起卦——共擲 6 次，每次決定一個爻",
@@ -3334,6 +3982,30 @@
  "js.nav.xem-tuong-qua-anh": {
   "t": "照片看面相",
   "h": "24c4d64e"
+ },
+ "js.ngaytot.chip1": {
+  "t": "哪天適合辦婚禮？",
+  "h": "409c6fd4"
+ },
+ "js.ngaytot.chip2": {
+  "t": "哪天適合動土或入宅？",
+  "h": "26db2036"
+ },
+ "js.ngaytot.chip3": {
+  "t": "為什麼要避開忌日？",
+  "h": "2cc8c854"
+ },
+ "js.ngaytot.chip4": {
+  "t": "開張該選哪一天？",
+  "h": "b44fce94"
+ },
+ "js.ngaytot.greeting": {
+  "t": "已查看**{y}年{m}月**的曆。您打算做什麼事，好讓我挑選最好的日子？",
+  "h": "3a05f3ac"
+ },
+ "js.ngaytot.label": {
+  "t": "吉日・{y}年{m}月",
+  "h": "cbd777dc"
  },
  "js.nhtg.anh-mat-noi-len-dieu-gi": {
   "t": "眼神代表什麼？",
@@ -6747,9 +7419,25 @@
   "t": "**，還是建議新的名字？",
   "h": "d922a861"
  },
+ "js.shellui.hc-ban-o-day": {
+  "t": "您在這裡",
+  "h": "0ed02beb"
+ },
+ "js.shellui.hc-duoc": {
+  "t": "可",
+  "h": "4c144474"
+ },
+ "js.shellui.hd-al": {
+  "t": "（農曆{m}/{d}）",
+  "h": "3fd68961"
+ },
  "js.shellui.hd-can-hanh": {
   "t": "，天干五行 ",
   "h": "96563d79"
+ },
+ "js.shellui.hd-can-hanh-info": {
+  "t": "天干 <strong>{can}</strong>——五行 <strong>{hanh}</strong>",
+  "h": "4069d76b"
  },
  "js.shellui.hd-gio-can-tranh-hac-dao": {
   "t": "需避開的時辰（黑道）：",
@@ -6766,6 +7454,118 @@
  "js.shellui.hd-gio-tot-hoang-dao": {
   "t": "吉時（黃道）：",
   "h": "100b31dc"
+ },
+ "js.shellui.hd-ngay-cc": {
+  "t": "日 <strong>{cc}</strong>",
+  "h": "7f416c3a"
+ },
+ "js.shellui.hd-nhap-ngay-hop-le": {
+  "t": "請輸入有效的日期。",
+  "h": "11a91c34"
+ },
+ "js.shellui.hd-thang-khong-co-ngay": {
+  "t": "{y}年{m}月沒有{d}日——請重新選擇。",
+  "h": "da49ec5e"
+ },
+ "js.shellui.hd-title": {
+  "t": "{date}{al}——{cc}日",
+  "h": "593d5baf"
+ },
+ "js.shellui.hdd-bh": {
+  "t": "煞氣、災禍",
+  "h": "28e5f7d8"
+ },
+ "js.shellui.hdd-cht": {
+  "t": "糾纏、停滯",
+  "h": "4363abe5"
+ },
+ "js.shellui.hdd-ct": {
+  "t": "口舌、是非",
+  "h": "845d6380"
+ },
+ "js.shellui.hdd-hv": {
+  "t": "盜賊、損失",
+  "h": "cde5c999"
+ },
+ "js.shellui.hdd-kq": {
+  "t": "財務、進財",
+  "h": "15237468"
+ },
+ "js.shellui.hdd-md": {
+  "t": "貴人相助、順利",
+  "h": "a8e75ee4"
+ },
+ "js.shellui.hdd-nd": {
+  "t": "名望、成就",
+  "h": "b3890138"
+ },
+ "js.shellui.hdd-td": {
+  "t": "福德、化解凶險",
+  "h": "e3a72954"
+ },
+ "js.shellui.hdd-th": {
+  "t": "官訟、爭執、凶",
+  "h": "a6198a39"
+ },
+ "js.shellui.hdd-tl": {
+  "t": "財祿、諸事亨通",
+  "h": "1ae9748a"
+ },
+ "js.shellui.hdd-tlao": {
+  "t": "囚禁、阻礙",
+  "h": "5d6fac43"
+ },
+ "js.shellui.hdd-tm": {
+  "t": "護佑、祈福",
+  "h": "cdb38651"
+ },
+ "js.shellui.hdt-bh": {
+  "t": "白虎",
+  "h": "f6380016"
+ },
+ "js.shellui.hdt-cht": {
+  "t": "勾陳",
+  "h": "36fb04ef"
+ },
+ "js.shellui.hdt-ct": {
+  "t": "朱雀",
+  "h": "90214276"
+ },
+ "js.shellui.hdt-hv": {
+  "t": "玄武",
+  "h": "f27e517b"
+ },
+ "js.shellui.hdt-kq": {
+  "t": "金匱",
+  "h": "6b3e8125"
+ },
+ "js.shellui.hdt-md": {
+  "t": "明堂",
+  "h": "323a8d91"
+ },
+ "js.shellui.hdt-nd": {
+  "t": "玉堂",
+  "h": "2c94d958"
+ },
+ "js.shellui.hdt-td": {
+  "t": "天德",
+  "h": "3c86d12a"
+ },
+ "js.shellui.hdt-th": {
+  "t": "天刑",
+  "h": "51b356df"
+ },
+ "js.shellui.hdt-tl": {
+  "t": "青龍",
+  "h": "deccb086"
+ },
+ "js.shellui.hdt-tlao": {
+  "t": "天牢",
+  "h": "44ad7734"
+ },
+ "js.shellui.hdt-tm": {
+  "t": "司命",
+  "h": "fa69d852"
  },
  "js.shellui.het-phan-dung-thu": {
   "t": "試用內容已用完。",
@@ -7326,6 +8126,74 @@
  "js.shellui.kinh-mat-nao-hop-tuong-mat": {
   "t": "哪種眼鏡適合我的臉型？",
   "h": "e2a2a092"
+ },
+ "js.shellui.kl-binh-thuong": {
+  "t": "一般",
+  "h": "7a1fa869"
+ },
+ "js.shellui.kl-cau-hoang-oc": {
+  "t": "今年屬荒屋之年——忌買賣與蓋房。",
+  "h": "50677d38"
+ },
+ "js.shellui.kl-cau-kim-lau": {
+  "t": "今年屬金樓（{loai}）之年——{hai}。忌婚嫁、建築與大型動土。",
+  "h": "53df32eb"
+ },
+ "js.shellui.kl-cau-tam-tai": {
+  "t": "今年正值三災運——重大決定務必謹慎。",
+  "h": "72ae51c8"
+ },
+ "js.shellui.kl-con-tam-tai": {
+  "t": "今年又逢三災，須格外謹慎。",
+  "h": "6d4d5899"
+ },
+ "js.shellui.kl-hai-luc-suc": {
+  "t": "牲畜與財產受影響",
+  "h": "214ff98e"
+ },
+ "js.shellui.kl-hai-than": {
+  "t": "屋主本人受影響",
+  "h": "682a3213"
+ },
+ "js.shellui.kl-hai-the": {
+  "t": "妻子受影響",
+  "h": "09bcf309"
+ },
+ "js.shellui.kl-hai-tu": {
+  "t": "子女受影響",
+  "h": "f3ad84bb"
+ },
+ "js.shellui.kl-loai-luc-suc": {
+  "t": "六畜",
+  "h": "524f4cec"
+ },
+ "js.shellui.kl-loai-than": {
+  "t": "身",
+  "h": "77575b16"
+ },
+ "js.shellui.kl-loai-the": {
+  "t": "妻",
+  "h": "ccd000d4"
+ },
+ "js.shellui.kl-loai-tu": {
+  "t": "子",
+  "h": "bef3174e"
+ },
+ "js.shellui.kl-nam-nay-khong-co": {
+  "t": "今年沒有金樓、荒屋或三災。",
+  "h": "2d212f11"
+ },
+ "js.shellui.kl-nam-tuoi": {
+  "t": "{y}年（虛歲{t}歲）",
+  "h": "511d7f9e"
+ },
+ "js.shellui.kl-nhap-nam-hop-le": {
+  "t": "請輸入有效的出生年份（1900–2010）。",
+  "h": "8363c20b"
+ },
+ "js.shellui.kl-title": {
+  "t": "{cc}（{by}）——{na}・{cy}年虛歲：{t}歲",
+  "h": "f6b9127c"
  },
  "js.shellui.km-cuc": {
   "t": "{dun}{n}局",
@@ -8194,6 +9062,38 @@
  "js.shellui.nghe-them-mon-khac": {
   "t": "聽聽其他領域的意見</span>",
   "h": "abd835bb"
+ },
+ "js.shellui.ngt-al": {
+  "t": "農{m}/{d}",
+  "h": "a38795f8"
+ },
+ "js.shellui.ngt-chon-thang": {
+  "t": "請選擇1至12月。",
+  "h": "ad9727eb"
+ },
+ "js.shellui.ngt-duong-cong-ki": {
+  "t": "楊公忌",
+  "h": "a919874b"
+ },
+ "js.shellui.ngt-nguyet-ki": {
+  "t": "月忌",
+  "h": "53f1d21f"
+ },
+ "js.shellui.ngt-nhap-nam-hop-le": {
+  "t": "請輸入有效年份（2020–2030）。",
+  "h": "386683dc"
+ },
+ "js.shellui.ngt-tam-nuong": {
+  "t": "三娘",
+  "h": "a82168f4"
+ },
+ "js.shellui.ngt-title": {
+  "t": "{y}年{m}月——吉凶日曆",
+  "h": "abd229f8"
+ },
+ "js.shellui.ngt-tot": {
+  "t": "吉",
+  "h": "f716d517"
  },
  "js.shellui.ngu-hanh-net-lien-quan-gi": {
   "t": "筆畫的五行與用神有什麼關係？",
@@ -13227,6 +14127,78 @@
   "t": "只需出生年，快速判斷兩人的生肖是否相合——立即得到答案，不必深入解讀。",
   "h": "ee011392"
  },
+ "kimlau.bang-tra-20-nam-toi": {
+  "t": "未來20年<br>查詢表",
+  "h": "ded0c033"
+ },
+ "kimlau.bang-tra-20-nam-toi-9fqx": {
+  "t": "<span class=\"res-block-title\">未來20年查詢表</span>",
+  "h": "8e04bf8f"
+ },
+ "kimlau.can-chi": {
+  "t": "干支",
+  "h": "8b784611"
+ },
+ "kimlau.cuoi-hoi-lam-nha": {
+  "t": "婚嫁、<br>蓋房",
+  "h": "7e98e435"
+ },
+ "kimlau.hoi-thay-nam-dep-cach-hoa": {
+  "t": "✦ 請問老師吉年與化解之道",
+  "h": "5f76ab82"
+ },
+ "kimlau.ket-luan-ngay-tuc-thi": {
+  "t": "即時<br>結論",
+  "h": "b2797a93"
+ },
+ "kimlau.kim-lau-la-quan-niem-dan": {
+  "t": "金樓是依屋主虛歲（農曆）計算的民間觀念，認為某些年紀不利於蓋房或婚嫁。三災是相關概念，指十二生肖週期中被認為容易遇到阻礙的連續三年。",
+  "h": "625e5413"
+ },
+ "kimlau.kim-lau-tam-tai": {
+  "t": "金樓與三災",
+  "h": "cea3719a"
+ },
+ "kimlau.kim-lau-tam-tai-tu-vi": {
+  "t": "金樓與三災——明寶紫微斗數",
+  "h": "b2ec2af2"
+ },
+ "kimlau.kim-lau-tam-tai-tuoi-lam": {
+  "t": "<b>金樓與三災</b><span>蓋房、婚嫁的年紀是否犯忌</span>",
+  "h": "1fb12a82"
+ },
+ "kimlau.nam-dl": {
+  "t": "國曆年",
+  "h": "6c965b9e"
+ },
+ "kimlau.nam-sinh-duong-lich": {
+  "t": "出生年（國曆）",
+  "h": "9f8721e0"
+ },
+ "kimlau.nhap-nam-sinh-duong-lich-he": {
+  "t": "輸入國曆出生年。系統依金樓、三災、荒屋的古法比對，給出結論與未來20年查詢表。",
+  "h": "cca6f199"
+ },
+ "kimlau.pham-kim-lau-tam-tai-ma": {
+  "t": "許多人是在婚嫁、蓋房之後才發現自己犯了金樓或三災，為時已晚。輸入出生年，即刻取得結論與現成的未來20年查詢表。",
+  "h": "7e987b4a"
+ },
+ "kimlau.tinh-trang": {
+  "t": "狀態",
+  "h": "5a46503e"
+ },
+ "kimlau.tra-cuu": {
+  "t": "查詢 →",
+  "h": "fd5b08a7"
+ },
+ "kimlau.tuoi-ta": {
+  "t": "虛歲",
+  "h": "536f1746"
+ },
+ "kimlau.xem-tuoi-lam-nha-cuoi-hoi": {
+  "t": "依虛歲查看蓋房、婚嫁的年紀是否犯金樓、三災、荒屋，附未來20年查詢表。化解之道可請教老師。",
+  "h": "041eccbd"
+ },
  "kinhdich.1-gieo-que": {
   "t": "<span class=\"wss-n\">1</span><span class=\"wss-l\">起卦</span>",
   "h": "bf868703"
@@ -14250,6 +15222,70 @@
  "napam.tuoi-hop-ky": {
   "t": "<span class=\"hp-ic\" data-icon=\"users\"></span><span>相合、相剋<br>的生肖</span>",
   "h": "9a664cc3"
+ },
+ "ngaytot.2-nhan-ket-qua": {
+  "t": "<span class=\"wss-n\">2</span><span class=\"wss-l\">取得結果</span>",
+  "h": "b0b2f830"
+ },
+ "ngaytot.chon-thang-nam-duong-lich-he": {
+  "t": "選擇國曆月份與年份。系統會自動排曆並比對吉凶日，回傳整個月份，標示為吉、宜留意或宜避忌。",
+  "h": "0ad99575"
+ },
+ "ngaytot.hoi-thay-chon-ngay-dep-trong": {
+  "t": "✦ 請老師挑選本月吉日",
+  "h": "254611c0"
+ },
+ "ngaytot.lich-ngay-tot-xau-ca-thang": {
+  "t": "依農曆編製的整月吉凶日曆——三娘、月忌、楊公忌。可請老師為婚嫁、動土挑選好日子。",
+  "h": "39fc01f0"
+ },
+ "ngaytot.lich-tot-xau-ca-thang": {
+  "t": "整月<br>吉凶曆",
+  "h": "2da65fe3"
+ },
+ "ngaytot.luu-y-nho-duong-cong-ki": {
+  "t": "小提醒（楊公忌）",
+  "h": "72c4ae94"
+ },
+ "ngaytot.muon-len-lich-ca-thang-ma": {
+  "t": "想安排整個月的行程，卻不知道哪天該避開、哪天適合開始重要的事？選好月份，即刻取得逐日清楚標示的吉凶日名單。",
+  "h": "b18291cb"
+ },
+ "ngaytot.ngay-ki-tranh-viec-lon": {
+  "t": "忌日——避免辦大事",
+  "h": "c5145190"
+ },
+ "ngaytot.ngay-ky-can-tranh": {
+  "t": "需避開的<br>忌日",
+  "h": "22943f84"
+ },
+ "ngaytot.ngay-tot-an-toan": {
+  "t": "吉日——安穩",
+  "h": "3795683e"
+ },
+ "ngaytot.ngay-tot-trong-thang": {
+  "t": "本月吉日",
+  "h": "c2d7afad"
+ },
+ "ngaytot.ngay-tot-trong-thang-lich-van": {
+  "t": "<b>本月吉日</b><span>萬年曆・依農曆的吉凶日</span>",
+  "h": "a5097cc1"
+ },
+ "ngaytot.ngay-tot-trong-thang-tu-vi": {
+  "t": "本月吉日——明寶紫微斗數",
+  "h": "d7f28313"
+ },
+ "ngaytot.thang-can-xem-duong-lich": {
+  "t": "要查詢的月份（國曆）",
+  "h": "f67dc270"
+ },
+ "ngaytot.truc-nhi-thap-bat-tu": {
+  "t": "建除十二神、<br>二十八宿",
+  "h": "d2ad3351"
+ },
+ "ngaytot.xem-lich": {
+  "t": "查看日曆 →",
+  "h": "6fa85107"
  },
  "nhtg.anh-chi-gui-toi-may-chu": {
   "t": "圖片僅傳送至伺服器進行分析，不會儲存在伺服器上。請正面拍攝、光線充足——系統會自動放大眼部區域。",

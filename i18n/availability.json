@@ -41,6 +41,13 @@
   "zh-tw",
   "zh-cn"
  ],
+ "/app/chon-ngay": [
+  "en",
+  "ja",
+  "ko",
+  "zh-tw",
+  "zh-cn"
+ ],
  "/app/chu-trinh-cuoc-doi": [
   "en",
   "ja",
@@ -56,6 +63,27 @@
   "zh-cn"
  ],
  "/app/cua-hang-phong-thuy": [
+  "en",
+  "ja",
+  "ko",
+  "zh-tw",
+  "zh-cn"
+ ],
+ "/app/gio-sinh": [
+  "en",
+  "ja",
+  "ko",
+  "zh-tw",
+  "zh-cn"
+ ],
+ "/app/hoang-dao": [
+  "en",
+  "ja",
+  "ko",
+  "zh-tw",
+  "zh-cn"
+ ],
+ "/app/kim-lau": [
   "en",
   "ja",
   "ko",
@@ -98,6 +126,13 @@
   "zh-cn"
  ],
  "/app/nap-luong": [
+  "en",
+  "ja",
+  "ko",
+  "zh-tw",
+  "zh-cn"
+ ],
+ "/app/ngay-tot": [
   "en",
   "ja",
   "ko",
