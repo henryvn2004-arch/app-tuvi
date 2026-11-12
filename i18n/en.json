@@ -3283,6 +3283,282 @@
   "t": "Please choose an image file (JPG or PNG).",
   "h": "ad4caa5b"
  },
+ "js.kieut.anh-qua-lon": {
+  "t": "The image is too large (5MB max). Please choose another image.",
+  "h": "84a5fa2b"
+ },
+ "js.kieut.chip-kinh": {
+  "t": "Which glasses suit my face?",
+  "h": "e2a2a092"
+ },
+ "js.kieut.chip-tranh": {
+  "t": "Which hairstyles should I avoid?",
+  "h": "71021350"
+ },
+ "js.kieut.chip-vi-sao": {
+  "t": "Why does this style suit my face?",
+  "h": "e507a96f"
+ },
+ "js.kieut.do-truc-tiep": {
+  "t": "Measured directly from the image with MediaPipe. The list of hairstyles and eyeglasses ranked for your face is in the in-depth analysis.",
+  "h": "45879030"
+ },
+ "js.kieut.gl-aviator-sub": {
+  "t": "Classic teardrop — unisex, strong and confident",
+  "h": "c07019a3"
+ },
+ "js.kieut.gl-browline-name": {
+  "t": "Browline (Half-Rim)",
+  "h": "f7013797"
+ },
+ "js.kieut.gl-browline-sub": {
+  "t": "Bold upper half rim — intellectual and refined",
+  "h": "076a871f"
+ },
+ "js.kieut.gl-cat_eye-sub": {
+  "t": "Upswept outer corners — feminine and alluring (suits women more)",
+  "h": "49a590df"
+ },
+ "js.kieut.gl-oval-name": {
+  "t": "Oval Frame",
+  "h": "30d636c4"
+ },
+ "js.kieut.gl-oval-sub": {
+  "t": "Soft and refined — harmonizes with every face",
+  "h": "851997e8"
+ },
+ "js.kieut.gl-rectangle-name": {
+  "t": "Rectangle Frame",
+  "h": "a0b6dd72"
+ },
+ "js.kieut.gl-rectangle-sub": {
+  "t": "Slim modern frame — suits most face shapes",
+  "h": "0d7fb906"
+ },
+ "js.kieut.gl-round-name": {
+  "t": "Retro Round Frame",
+  "h": "3fddc6b6"
+ },
+ "js.kieut.gl-round-sub": {
+  "t": "Korean/vintage style — softens a square face",
+  "h": "801e4e9b"
+ },
+ "js.kieut.greeting": {
+  "t": "Your face shape is **{s}**. Would you like to ask more about hairstyles or eyeglasses that suit your features?",
+  "h": "05992171"
+ },
+ "js.kieut.hinh-dai": {
+  "t": "long",
+  "h": "67167578"
+ },
+ "js.kieut.hinh-oval": {
+  "t": "oval",
+  "h": "181b45bd"
+ },
+ "js.kieut.hinh-tron-vuong": {
+  "t": "round/square",
+  "h": "a30fca34"
+ },
+ "js.kieut.khong-nhan-duoc-anh": {
+  "t": "Didn't receive the result image.",
+  "h": "a16f02df"
+ },
+ "js.kieut.khong-the-mo-camera": {
+  "t": "Can't open the camera. Please upload an image instead.",
+  "h": "4f7396b7"
+ },
+ "js.kieut.kieu-toc-label": {
+  "t": "Hairstyle — {s}",
+  "h": "c1e88a18"
+ },
+ "js.kieut.loi-phan-tich": {
+  "t": "Analysis error: {e}",
+  "h": "1d8ed1a8"
+ },
+ "js.kieut.loi-s": {
+  "t": "Error {s}",
+  "h": "c406c72b"
+ },
+ "js.kieut.loi-tao-anh": {
+  "t": "Image generation error: {e}",
+  "h": "091a4baf"
+ },
+ "js.kieut.share-shape": {
+  "t": "Face shape: {s}",
+  "h": "e52e2cf1"
+ },
+ "js.kieut.share-title": {
+  "t": "The hairstyles that suit my face",
+  "h": "d1806e98"
+ },
+ "js.kieut.share-tryon-text": {
+  "t": "Trying a hairstyle: {n}",
+  "h": "0d923cba"
+ },
+ "js.kieut.share-tryon-title": {
+  "t": "My new hairstyle (virtual try-on)",
+  "h": "5887ab87"
+ },
+ "js.kieut.st-aline_bob-sub": {
+  "t": "Angled bob — shorter at the back, longer in front, sharp and modern",
+  "h": "9eb34b60"
+ },
+ "js.kieut.st-blunt_fringe-sub": {
+  "t": "Straight-across fringe + long hair — defined and distinctive",
+  "h": "18f3e1fe"
+ },
+ "js.kieut.st-bob-name": {
+  "t": "Short Bob",
+  "h": "c19d992e"
+ },
+ "js.kieut.st-bob-sub": {
+  "t": "A neat chin-length bob — solid and clean",
+  "h": "532a2aad"
+ },
+ "js.kieut.st-butterfly-sub": {
+  "t": "Face-framing layers with lifted volume — hot on TikTok 2025",
+  "h": "6460949f"
+ },
+ "js.kieut.st-buzz-sub": {
+  "t": "Cut evenly short — shows off the face’s contours",
+  "h": "3b06ae07"
+ },
+ "js.kieut.st-curtain-sub": {
+  "t": "Center-parted curtain bangs, natural",
+  "h": "ca32d507"
+ },
+ "js.kieut.st-curtain_nu-sub": {
+  "t": "Soft curtain bangs, center part — romantic and feminine",
+  "h": "d0dece43"
+ },
+ "js.kieut.st-cushion_perm-sub": {
+  "t": "Korean soft wave perm — gently full and natural, hot in 2026",
+  "h": "bdca143d"
+ },
+ "js.kieut.st-glass_hair-sub": {
+  "t": "Ultra-glossy straight hair — the peak of Korean trends",
+  "h": "db26a044"
+ },
+ "js.kieut.st-hime-sub": {
+  "t": "Straight bangs + layers, Japanese princess style — going viral",
+  "h": "af1c27e2"
+ },
+ "js.kieut.st-jellyfish-sub": {
+  "t": "Short upper tier + long lower tier — Gen Z, edgy",
+  "h": "f2002985"
+ },
+ "js.kieut.st-korean_perm-sub": {
+  "t": "Romantic Korean wave perm — Asia’s #1 trend of 2025",
+  "h": "22d3d20d"
+ },
+ "js.kieut.st-layered_curl-sub": {
+  "t": "Soft layered curls — youthful, age-defying",
+  "h": "49a65a0e"
+ },
+ "js.kieut.st-lob-sub": {
+  "t": "Long bob to the shoulders — refined and versatile",
+  "h": "e2b1a249"
+ },
+ "js.kieut.st-long_layers-sub": {
+  "t": "Soft, natural long layers — feminine and elegant",
+  "h": "500da152"
+ },
+ "js.kieut.st-money_piece-sub": {
+  "t": "Face-framing highlights on both sides — trendy, low effort",
+  "h": "c4d6fd9f"
+ },
+ "js.kieut.st-perm_wave-sub": {
+  "t": "Natural Korean wave perm — easy to style, modern",
+  "h": "30da2ec0"
+ },
+ "js.kieut.st-pixie-sub": {
+  "t": "Bold, very short hair — distinctive and confident",
+  "h": "f42299de"
+ },
+ "js.kieut.st-pompadour-sub": {
+  "t": "Hair swept high at the front — vintage-modern",
+  "h": "25e80198"
+ },
+ "js.kieut.st-pompadour_nu-name": {
+  "t": "Women’s Pompadour",
+  "h": "9d31fa58"
+ },
+ "js.kieut.st-pompadour_nu-sub": {
+  "t": "Soft, full volume at the front — elegant and luxurious",
+  "h": "336c3d80"
+ },
+ "js.kieut.st-shag-sub": {
+  "t": "Choppy layers + curtain bangs — retro-modern",
+  "h": "60b2f94f"
+ },
+ "js.kieut.st-side_part-sub": {
+  "t": "Side part, combed flat — professional and polished",
+  "h": "cb1f2ff5"
+ },
+ "js.kieut.st-side_waves-sub": {
+  "t": "Side part + soft waves — graceful and sultry",
+  "h": "5d4fd178"
+ },
+ "js.kieut.st-slick_back-sub": {
+  "t": "Slicked back and glossy — strong and luxurious",
+  "h": "405b36d5"
+ },
+ "js.kieut.st-textured-sub": {
+  "t": "Short and textured, full of character — easy to style",
+  "h": "4ca046ff"
+ },
+ "js.kieut.st-textured_wavy-sub": {
+  "t": "Natural textured waves — effortless and trendy",
+  "h": "c565798c"
+ },
+ "js.kieut.st-two_block-sub": {
+  "t": "Korean style — shaved sides, naturally long top",
+  "h": "b7230e49"
+ },
+ "js.kieut.st-undercut-sub": {
+  "t": "Tight fade on the sides, longer on top — classic and modern",
+  "h": "b16e15c9"
+ },
+ "js.kieut.st-wispy-sub": {
+  "t": "Soft, wispy bangs — youthful and light",
+  "h": "6c6c0591"
+ },
+ "js.kieut.st-wolf-sub": {
+  "t": "Tiered, wispy layers — Gen Z character",
+  "h": "1444c559"
+ },
+ "js.kieut.step-chuan-bi": {
+  "t": "Preparing the image & prompt",
+  "h": "02fe352b"
+ },
+ "js.kieut.step-do-mat": {
+  "t": "Measuring the face with MediaPipe",
+  "h": "4af85689"
+ },
+ "js.kieut.step-phan-tich": {
+  "t": "Analyzing the face shape",
+  "h": "5059a835"
+ },
+ "js.kieut.step-tao-anh": {
+  "t": "Generating the new hairstyle image",
+  "h": "80940ba2"
+ },
+ "js.kieut.thu": {
+  "t": "Try →",
+  "h": "c1480a0a"
+ },
+ "js.kieut.thu-n": {
+  "t": "Try: {n}",
+  "h": "a246266d"
+ },
+ "js.kieut.ty-le-rong-cao": {
+  "t": "Face width/height ratio: {r} — tends toward {s}",
+  "h": "2094599e"
+ },
+ "js.kieut.vui-long-thu-lai": {
+  "t": "Please try again.",
+  "h": "2f1d18ee"
+ },
  "js.kinhdich.bam-de-bat-dau-gieo-que": {
   "t": "Tap to start casting — 6 tosses, each one determines a line",
   "h": "5f61aa02"
@@ -14066,6 +14342,138 @@
  "khis.xem-khi-sac": {
   "t": "Read Complexion",
   "h": "7863a81d"
+ },
+ "kieut.anh-sang-tu-nhien-deu": {
+  "t": "✓ Natural, even light",
+  "h": "7f81d51a"
+ },
+ "kieut.chon-gioi-tinh-va-tai-len": {
+  "t": "Choose your gender and upload one photo with a clear face. The system analyzes your face shape and then tries styles on directly in the photo. You get hairstyle and eyeglass suggestions plus the try-on image.",
+  "h": "5c22b94e"
+ },
+ "kieut.chup-anh-khuon-mat-he-thong": {
+  "t": "Take a photo of your face — the system analyzes your face shape and suggests hairstyles that suit you by physiognomy. Try each hairstyle right on the photo.",
+  "h": "fd003738"
+ },
+ "kieut.doi-anh-khac": {
+  "t": "✕ Change Image",
+  "h": "d058264f"
+ },
+ "kieut.doi-mu-doi-khan-che-toc": {
+  "t": "✗ Hat or scarf covering the hair",
+  "h": "a40d8fd8"
+ },
+ "kieut.hinh-dang-khuon-mat": {
+  "t": "Face shape",
+  "h": "20dd1d13"
+ },
+ "kieut.huy": {
+  "t": "Cancel",
+  "h": "33639e92"
+ },
+ "kieut.ket-qua": {
+  "t": "Result",
+  "h": "c9f95514"
+ },
+ "kieut.kieu-kinh-phu-hop-theo-cau": {
+  "t": "<span class=\"ic\" data-icon=\"glasses\"></span> Eyeglasses that suit your face structure",
+  "h": "39d8292c"
+ },
+ "kieut.kieu-toc": {
+  "t": "<span class=\"ic\" data-icon=\"scissors\"></span> Hairstyle",
+  "h": "7d47a3d3"
+ },
+ "kieut.kieu-toc-kinh-mat-hop-tuong": {
+  "t": "Hairstyles & Eyeglasses for Your Face — Minh Bao Zi Wei Dou Shu",
+  "h": "704b6aa7"
+ },
+ "kieut.kieu-toc-kinh-mat-hop-tuong-v1r6": {
+  "t": "<b>Hairstyles &amp; Eyeglasses for Your Face</b><span>Analyzes your face shape, suggests hairstyles and lets you try them on the photo</span>",
+  "h": "745fe887"
+ },
+ "kieut.kieu-toc-kinh-mat-hop-tuong-x53w": {
+  "t": "Hairstyles &amp; Eyeglasses for Your Face",
+  "h": "a6dff7d5"
+ },
+ "kieut.kinh-mat": {
+  "t": "<span class=\"ic\" data-icon=\"glasses\"></span> Eyeglasses",
+  "h": "508d6f59"
+ },
+ "kieut.loi-khuyen": {
+  "t": "<strong><span class=\"ic\" data-icon=\"message-circle\"></span> Tip: </strong><span id=\"tipText\"></span>",
+  "h": "25976b6b"
+ },
+ "kieut.nghieng-mat-nhieu": {
+  "t": "✗ Face tilted a lot",
+  "h": "9d537acf"
+ },
+ "kieut.nguoc-sang-toi": {
+  "t": "✗ Backlit or dark",
+  "h": "97a94265"
+ },
+ "kieut.nhan-tuong-hoc-phuong-dong-khong": {
+  "t": "Eastern physiognomy does more than read destiny — it also classifies face shapes by the Five Elements (Metal, Wood, Water, Fire, Earth), each element matching a characteristic outline. This classification is used to suggest hairstyles and makeup that harmonize with the face.",
+  "h": "bff2f554"
+ },
+ "kieut.nhin-thang-vao-camera-dam-bao": {
+  "t": "Look straight into the camera, make sure the light is good and your face fills most of the frame.",
+  "h": "d5f2b4f9"
+ },
+ "kieut.phan-tich-5s-thu-kieu-25s": {
+  "t": "Analysis ~5s · Try-on ~25s",
+  "h": "d75a8d73"
+ },
+ "kieut.phan-tich-anh-khac": {
+  "t": "<span class=\"ic\" data-icon=\"rotate-cw\"></span> Analyze Another Image",
+  "h": "727c28a0"
+ },
+ "kieut.phan-tich-khuon-mat-goi-y": {
+  "t": "<span class=\"ic\" data-icon=\"sparkles\"></span> Face Shape Analysis &amp; Style Suggestions — <span data-tvp-price=\"kieu-toc-phan-tich\">…</span> credits",
+  "h": "7ce5c0fd"
+ },
+ "kieut.preview-anh": {
+  "t": "Image preview",
+  "h": "6bc7c7e2"
+ },
+ "kieut.quyen-rieng-tu-anh-chi-gui": {
+  "t": "<strong>Privacy:</strong> The photo is only sent to the server for analysis and isn’t stored on our servers. Replicate processes it and returns the result image without long-term storage.",
+  "h": "5d8fcc8b"
+ },
+ "kieut.sau-khi-thu": {
+  "t": "After trying",
+  "h": "c3de1d39"
+ },
+ "kieut.tai-anh-ket-qua": {
+  "t": "<span class=\"ic\" data-icon=\"chevron-down\"></span> Download Result Image",
+  "h": "5f15ca5b"
+ },
+ "kieut.tai-anh-len": {
+  "t": "<span class=\"ic\" data-icon=\"camera\"></span> Upload Photo",
+  "h": "633baad5"
+ },
+ "kieut.tat-ca-kieu-toc-la-phu": {
+  "t": "<span class=\"ic\" data-icon=\"sparkles\"></span> All hairstyles — <span class=\"ic\" data-icon=\"star\"></span> marks the best match for your face",
+  "h": "8a472eaa"
+ },
+ "kieut.thang-mat-chinh-dien": {
+  "t": "✓ Face straight on",
+  "h": "7a6bfbf8"
+ },
+ "kieut.thay-ro-tu-tran-den-cam": {
+  "t": "✓ Clearly visible from forehead to chin",
+  "h": "4ac86958"
+ },
+ "kieut.thu-kieu-khac": {
+  "t": "<span class=\"ic\" data-icon=\"rotate-cw\"></span> Try Another Style",
+  "h": "0054a608"
+ },
+ "kieut.thu-tren-anh": {
+  "t": "<span class=\"ic\" id=\"tryonTitleIcon\"></span> <span id=\"tryonTitleText\">Try It On the Photo</span>",
+  "h": "586df119"
+ },
+ "kieut.ton-tien-lam-toc-doi-kinh": {
+  "t": "You spend money on a haircut or new glasses and still feel it’s not quite right — sometimes the problem isn’t your taste but that you never tried it on before doing it for real. Upload a portrait and see right away which style suits your face.",
+  "h": "b6de26af"
  },
  "kinhdich.1-gieo-que": {
   "t": "<span class=\"wss-n\">1</span><span class=\"wss-l\">Cast the hexagram</span>",

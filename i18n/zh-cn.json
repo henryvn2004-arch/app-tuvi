@@ -3283,6 +3283,282 @@
   "t": "请选择图片档（JPG 或 PNG）。",
   "h": "ad4caa5b"
  },
+ "js.kieut.anh-qua-lon": {
+  "t": "图片过大（最大 5MB）。请选择其他图片。",
+  "h": "84a5fa2b"
+ },
+ "js.kieut.chip-kinh": {
+  "t": "哪种眼镜适合我的脸型？",
+  "h": "e2a2a092"
+ },
+ "js.kieut.chip-tranh": {
+  "t": "应避开哪种发型？",
+  "h": "71021350"
+ },
+ "js.kieut.chip-vi-sao": {
+  "t": "为什么这种发型适合我的脸？",
+  "h": "e507a96f"
+ },
+ "js.kieut.do-truc-tiep": {
+  "t": "以 MediaPipe 直接从图片测得。依您的脸型排序的发型与眼镜清单，收录于深度分析中。",
+  "h": "45879030"
+ },
+ "js.kieut.gl-aviator-sub": {
+  "t": "经典水滴形——男女皆宜，强势且自信",
+  "h": "c07019a3"
+ },
+ "js.kieut.gl-browline-name": {
+  "t": "半框眉线镜框",
+  "h": "f7013797"
+ },
+ "js.kieut.gl-browline-sub": {
+  "t": "上半部粗框——知性而端正",
+  "h": "076a871f"
+ },
+ "js.kieut.gl-cat_eye-sub": {
+  "t": "尾端上扬——女性化、迷人（较适合女性）",
+  "h": "49a590df"
+ },
+ "js.kieut.gl-oval-name": {
+  "t": "椭圆镜框",
+  "h": "30d636c4"
+ },
+ "js.kieut.gl-oval-sub": {
+  "t": "柔和精致——与各种脸型都协调",
+  "h": "851997e8"
+ },
+ "js.kieut.gl-rectangle-name": {
+  "t": "长方形镜框",
+  "h": "a0b6dd72"
+ },
+ "js.kieut.gl-rectangle-sub": {
+  "t": "纤细现代的镜框——适合大多数脸型",
+  "h": "0d7fb906"
+ },
+ "js.kieut.gl-round-name": {
+  "t": "复古圆框",
+  "h": "3fddc6b6"
+ },
+ "js.kieut.gl-round-sub": {
+  "t": "韩系／复古风——柔化方形脸",
+  "h": "801e4e9b"
+ },
+ "js.kieut.greeting": {
+  "t": "您的脸型属于 **{s}**。想进一步了解适合您面相的发型或眼镜吗？",
+  "h": "05992171"
+ },
+ "js.kieut.hinh-dai": {
+  "t": "长脸",
+  "h": "67167578"
+ },
+ "js.kieut.hinh-oval": {
+  "t": "鹅蛋脸",
+  "h": "181b45bd"
+ },
+ "js.kieut.hinh-tron-vuong": {
+  "t": "圆脸／方脸",
+  "h": "a30fca34"
+ },
+ "js.kieut.khong-nhan-duoc-anh": {
+  "t": "未收到结果图片。",
+  "h": "a16f02df"
+ },
+ "js.kieut.khong-the-mo-camera": {
+  "t": "无法打开相机，请改为上传图片。",
+  "h": "4f7396b7"
+ },
+ "js.kieut.kieu-toc-label": {
+  "t": "发型——{s}",
+  "h": "c1e88a18"
+ },
+ "js.kieut.loi-phan-tich": {
+  "t": "分析错误：{e}",
+  "h": "1d8ed1a8"
+ },
+ "js.kieut.loi-s": {
+  "t": "错误 {s}",
+  "h": "c406c72b"
+ },
+ "js.kieut.loi-tao-anh": {
+  "t": "图片生成错误：{e}",
+  "h": "091a4baf"
+ },
+ "js.kieut.share-shape": {
+  "t": "脸型：{s}",
+  "h": "e52e2cf1"
+ },
+ "js.kieut.share-title": {
+  "t": "适合我面相的发型",
+  "h": "d1806e98"
+ },
+ "js.kieut.share-tryon-text": {
+  "t": "试发型：{n}",
+  "h": "0d923cba"
+ },
+ "js.kieut.share-tryon-title": {
+  "t": "我的新发型（虚拟试戴）",
+  "h": "5887ab87"
+ },
+ "js.kieut.st-aline_bob-sub": {
+  "t": "斜切鲍伯头——后短前长，俐落现代",
+  "h": "9eb34b60"
+ },
+ "js.kieut.st-blunt_fringe-sub": {
+  "t": "齐额平浏海＋长发——轮廓分明、有个性",
+  "h": "18f3e1fe"
+ },
+ "js.kieut.st-bob-name": {
+  "t": "短鲍伯头",
+  "h": "c19d992e"
+ },
+ "js.kieut.st-bob-sub": {
+  "t": "齐下巴的俐落鲍伯——稳重干净",
+  "h": "532a2aad"
+ },
+ "js.kieut.st-butterfly-sub": {
+  "t": "修饰脸部的层次、蓬松量感——2025 年 TikTok 热门",
+  "h": "6460949f"
+ },
+ "js.kieut.st-buzz-sub": {
+  "t": "均匀剪短——凸显脸部轮廓",
+  "h": "3b06ae07"
+ },
+ "js.kieut.st-curtain-sub": {
+  "t": "中分帘式浏海，自然随性",
+  "h": "ca32d507"
+ },
+ "js.kieut.st-curtain_nu-sub": {
+  "t": "柔软帘式浏海、中分——浪漫女性化",
+  "h": "d0dece43"
+ },
+ "js.kieut.st-cushion_perm-sub": {
+  "t": "韩式柔软波浪烫——自然微蓬，2026 年热门",
+  "h": "bdca143d"
+ },
+ "js.kieut.st-glass_hair-sub": {
+  "t": "超亮泽直发——韩系潮流顶峰",
+  "h": "db26a044"
+ },
+ "js.kieut.st-hime-sub": {
+  "t": "齐浏海＋层次的日式公主风——正在爆红",
+  "h": "af1c27e2"
+ },
+ "js.kieut.st-jellyfish-sub": {
+  "t": "上层短、下层长——Z 世代、个性前卫",
+  "h": "f2002985"
+ },
+ "js.kieut.st-korean_perm-sub": {
+  "t": "浪漫韩式波浪烫——2025 年亚洲第一潮流",
+  "h": "22d3d20d"
+ },
+ "js.kieut.st-layered_curl-sub": {
+  "t": "柔和分层卷发——年轻有活力、显嫩",
+  "h": "49a65a0e"
+ },
+ "js.kieut.st-lob-sub": {
+  "t": "及肩长鲍伯——精致百搭",
+  "h": "e2b1a249"
+ },
+ "js.kieut.st-long_layers-sub": {
+  "t": "柔软自然的长层次——女性化且优雅",
+  "h": "500da152"
+ },
+ "js.kieut.st-money_piece-sub": {
+  "t": "脸部两侧挑染——时髦又省事",
+  "h": "c4d6fd9f"
+ },
+ "js.kieut.st-perm_wave-sub": {
+  "t": "自然韩式波浪烫——好整理、现代",
+  "h": "30da2ec0"
+ },
+ "js.kieut.st-pixie-sub": {
+  "t": "大胆的极短发——个性自信",
+  "h": "f42299de"
+ },
+ "js.kieut.st-pompadour-sub": {
+  "t": "前额发高高梳起——复古×现代",
+  "h": "25e80198"
+ },
+ "js.kieut.st-pompadour_nu-name": {
+  "t": "女款庞巴度",
+  "h": "9d31fa58"
+ },
+ "js.kieut.st-pompadour_nu-sub": {
+  "t": "前侧柔软蓬起——优雅高贵",
+  "h": "336c3d80"
+ },
+ "js.kieut.st-shag-sub": {
+  "t": "粗犷层次＋帘式浏海——复古×现代",
+  "h": "60b2f94f"
+ },
+ "js.kieut.st-side_part-sub": {
+  "t": "旁分、梳得平整——专业端正",
+  "h": "cb1f2ff5"
+ },
+ "js.kieut.st-side_waves-sub": {
+  "t": "旁分＋柔软波浪——高贵又性感",
+  "h": "5d4fd178"
+ },
+ "js.kieut.st-slick_back-sub": {
+  "t": "向后梳得油亮——强势高贵",
+  "h": "405b36d5"
+ },
+ "js.kieut.st-textured-sub": {
+  "t": "短而有层次质感的个性派——好造型",
+  "h": "4ca046ff"
+ },
+ "js.kieut.st-textured_wavy-sub": {
+  "t": "有质感的自然波浪——随性又时髦",
+  "h": "c565798c"
+ },
+ "js.kieut.st-two_block-sub": {
+  "t": "韩系风格——两侧剃短，顶部保留自然长度",
+  "h": "b7230e49"
+ },
+ "js.kieut.st-undercut-sub": {
+  "t": "两侧渐层剃短、顶部留长——经典现代",
+  "h": "b16e15c9"
+ },
+ "js.kieut.st-wispy-sub": {
+  "t": "轻柔空气浏海——年轻轻盈",
+  "h": "6c6c0591"
+ },
+ "js.kieut.st-wolf-sub": {
+  "t": "分层的轻盈层次——Z 世代个性",
+  "h": "1444c559"
+ },
+ "js.kieut.step-chuan-bi": {
+  "t": "准备图片与提示词",
+  "h": "02fe352b"
+ },
+ "js.kieut.step-do-mat": {
+  "t": "以 MediaPipe 测量脸部",
+  "h": "4af85689"
+ },
+ "js.kieut.step-phan-tich": {
+  "t": "分析脸型",
+  "h": "5059a835"
+ },
+ "js.kieut.step-tao-anh": {
+  "t": "正在生成新发型图片",
+  "h": "80940ba2"
+ },
+ "js.kieut.thu": {
+  "t": "试试 →",
+  "h": "c1480a0a"
+ },
+ "js.kieut.thu-n": {
+  "t": "试戴：{n}",
+  "h": "a246266d"
+ },
+ "js.kieut.ty-le-rong-cao": {
+  "t": "脸部宽／高比例：{r}——倾向：{s}",
+  "h": "2094599e"
+ },
+ "js.kieut.vui-long-thu-lai": {
+  "t": "请再试一次。",
+  "h": "2f1d18ee"
+ },
  "js.kinhdich.bam-de-bat-dau-gieo-que": {
   "t": "按下开始起卦——共掷 6 次，每次决定一个爻",
   "h": "5f61aa02"
@@ -14066,6 +14342,138 @@
  "khis.xem-khi-sac": {
   "t": "看气色",
   "h": "7863a81d"
+ },
+ "kieut.anh-sang-tu-nhien-deu": {
+  "t": "✓ 自然、均匀的光线",
+  "h": "7f81d51a"
+ },
+ "kieut.chon-gioi-tinh-va-tai-len": {
+  "t": "请选择性别并上传一张脸部清晰的图片。系统会分析脸型，并直接合成到图片上试戴。您会得到合适的发型、眼镜建议，以及试戴后的图片。",
+  "h": "5c22b94e"
+ },
+ "kieut.chup-anh-khuon-mat-he-thong": {
+  "t": "请拍摄脸部照片——系统会分析脸型，并依相学建议合适的发型。发型可直接在照片上试戴。",
+  "h": "fd003738"
+ },
+ "kieut.doi-anh-khac": {
+  "t": "✕ 更换图片",
+  "h": "d058264f"
+ },
+ "kieut.doi-mu-doi-khan-che-toc": {
+  "t": "✗ 戴帽子或围巾遮住头发",
+  "h": "a40d8fd8"
+ },
+ "kieut.hinh-dang-khuon-mat": {
+  "t": "脸型",
+  "h": "20dd1d13"
+ },
+ "kieut.huy": {
+  "t": "取消",
+  "h": "33639e92"
+ },
+ "kieut.ket-qua": {
+  "t": "结果",
+  "h": "c9f95514"
+ },
+ "kieut.kieu-kinh-phu-hop-theo-cau": {
+  "t": "<span class=\"ic\" data-icon=\"glasses\"></span> 适合脸部结构的眼镜",
+  "h": "39d8292c"
+ },
+ "kieut.kieu-toc": {
+  "t": "<span class=\"ic\" data-icon=\"scissors\"></span> 发型",
+  "h": "7d47a3d3"
+ },
+ "kieut.kieu-toc-kinh-mat-hop-tuong": {
+  "t": "适合面相的发型与眼镜——明宝紫微斗数",
+  "h": "704b6aa7"
+ },
+ "kieut.kieu-toc-kinh-mat-hop-tuong-v1r6": {
+  "t": "<b>适合面相的发型与眼镜</b><span>分析脸型、建议发型，并直接在照片上试戴</span>",
+  "h": "745fe887"
+ },
+ "kieut.kieu-toc-kinh-mat-hop-tuong-x53w": {
+  "t": "适合面相的发型与眼镜",
+  "h": "a6dff7d5"
+ },
+ "kieut.kinh-mat": {
+  "t": "<span class=\"ic\" data-icon=\"glasses\"></span> 眼镜",
+  "h": "508d6f59"
+ },
+ "kieut.loi-khuyen": {
+  "t": "<strong><span class=\"ic\" data-icon=\"message-circle\"></span> 建议：</strong><span id=\"tipText\"></span>",
+  "h": "25976b6b"
+ },
+ "kieut.nghieng-mat-nhieu": {
+  "t": "✗ 脸部明显倾斜",
+  "h": "9d537acf"
+ },
+ "kieut.nguoc-sang-toi": {
+  "t": "✗ 逆光、太暗",
+  "h": "97a94265"
+ },
+ "kieut.nhan-tuong-hoc-phuong-dong-khong": {
+  "t": "东方相学不只论命运，也依五行（金、木、水、火、土）区分脸型，每一行对应一种特有的轮廓。这套分类被用来建议与脸部协调的发型与妆容。",
+  "h": "bff2f554"
+ },
+ "kieut.nhin-thang-vao-camera-dam-bao": {
+  "t": "请直视镜头，确保光线充足，并让脸部占满大部分画面。",
+  "h": "d5f2b4f9"
+ },
+ "kieut.phan-tich-5s-thu-kieu-25s": {
+  "t": "分析约 5 秒 · 试戴约 25 秒",
+  "h": "d75a8d73"
+ },
+ "kieut.phan-tich-anh-khac": {
+  "t": "<span class=\"ic\" data-icon=\"rotate-cw\"></span> 分析其他图片",
+  "h": "727c28a0"
+ },
+ "kieut.phan-tich-khuon-mat-goi-y": {
+  "t": "<span class=\"ic\" data-icon=\"sparkles\"></span> 脸型分析与风格建议——<span data-tvp-price=\"kieu-toc-phan-tich\">…</span> 两",
+  "h": "7ce5c0fd"
+ },
+ "kieut.preview-anh": {
+  "t": "图片预览",
+  "h": "6bc7c7e2"
+ },
+ "kieut.quyen-rieng-tu-anh-chi-gui": {
+  "t": "<strong>隐私：</strong>图片仅发送至服务器进行分析，不会保存在我们的服务器上。Replicate 处理后传回结果图片，不会长期保存。",
+  "h": "5d8fcc8b"
+ },
+ "kieut.sau-khi-thu": {
+  "t": "试戴后",
+  "h": "c3de1d39"
+ },
+ "kieut.tai-anh-ket-qua": {
+  "t": "<span class=\"ic\" data-icon=\"chevron-down\"></span> 下载结果图片",
+  "h": "5f15ca5b"
+ },
+ "kieut.tai-anh-len": {
+  "t": "<span class=\"ic\" data-icon=\"camera\"></span> 上传图片",
+  "h": "633baad5"
+ },
+ "kieut.tat-ca-kieu-toc-la-phu": {
+  "t": "<span class=\"ic\" data-icon=\"sparkles\"></span> 所有发型——<span class=\"ic\" data-icon=\"star\"></span> 为最适合您面相的选择",
+  "h": "8a472eaa"
+ },
+ "kieut.thang-mat-chinh-dien": {
+  "t": "✓ 端正、正面朝前",
+  "h": "7a6bfbf8"
+ },
+ "kieut.thay-ro-tu-tran-den-cam": {
+  "t": "✓ 从额头到下巴都清晰可见",
+  "h": "4ac86958"
+ },
+ "kieut.thu-kieu-khac": {
+  "t": "<span class=\"ic\" data-icon=\"rotate-cw\"></span> 试其他风格",
+  "h": "0054a608"
+ },
+ "kieut.thu-tren-anh": {
+  "t": "<span class=\"ic\" id=\"tryonTitleIcon\"></span> <span id=\"tryonTitleText\">在照片上试戴</span>",
+  "h": "586df119"
+ },
+ "kieut.ton-tien-lam-toc-doi-kinh": {
+  "t": "花钱做了头发、换了眼镜，却还是觉得哪里不对——问题有时不在品味，而在于从没在真正去做之前先试戴过。上传人像照片，立即看看哪种风格适合您的面相。",
+  "h": "b6de26af"
  },
  "kinhdich.1-gieo-que": {
   "t": "<span class=\"wss-n\">1</span><span class=\"wss-l\">起卦</span>",

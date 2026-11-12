@@ -3283,6 +3283,282 @@
   "t": "画像ファイル（JPGまたはPNG）を選んでください。",
   "h": "ad4caa5b"
  },
+ "js.kieut.anh-qua-lon": {
+  "t": "画像が大きすぎます（最大5MB）。別の画像を選んでください。",
+  "h": "84a5fa2b"
+ },
+ "js.kieut.chip-kinh": {
+  "t": "どんなメガネが私の顔に合いますか？",
+  "h": "e2a2a092"
+ },
+ "js.kieut.chip-tranh": {
+  "t": "避けるべき髪型は？",
+  "h": "71021350"
+ },
+ "js.kieut.chip-vi-sao": {
+  "t": "なぜこのスタイルが私の顔に合うのですか？",
+  "h": "e507a96f"
+ },
+ "js.kieut.do-truc-tiep": {
+  "t": "MediaPipeで画像から直接測定しました。あなたの顔に合わせてランク付けした髪型とメガネのリストは、詳細分析に含まれています。",
+  "h": "45879030"
+ },
+ "js.kieut.gl-aviator-sub": {
+  "t": "クラシックなティアドロップ — ユニセックスで力強く自信に満ちた印象",
+  "h": "c07019a3"
+ },
+ "js.kieut.gl-browline-name": {
+  "t": "ブロウラインフレーム",
+  "h": "f7013797"
+ },
+ "js.kieut.gl-browline-sub": {
+  "t": "上半分に太いリム — 知的で端正",
+  "h": "076a871f"
+ },
+ "js.kieut.gl-cat_eye-sub": {
+  "t": "目尻が跳ね上がる形 — 女性らしく魅力的（女性向けが多い）",
+  "h": "49a590df"
+ },
+ "js.kieut.gl-oval-name": {
+  "t": "オーバルフレーム",
+  "h": "30d636c4"
+ },
+ "js.kieut.gl-oval-sub": {
+  "t": "やわらかく上品 — どんな顔型にもなじむ",
+  "h": "851997e8"
+ },
+ "js.kieut.gl-rectangle-name": {
+  "t": "長方形フレーム",
+  "h": "a0b6dd72"
+ },
+ "js.kieut.gl-rectangle-sub": {
+  "t": "細めでモダンなフレーム — ほとんどの顔型に合う",
+  "h": "0d7fb906"
+ },
+ "js.kieut.gl-round-name": {
+  "t": "レトロな丸フレーム",
+  "h": "3fddc6b6"
+ },
+ "js.kieut.gl-round-sub": {
+  "t": "韓国風・ヴィンテージ — 四角い顔をやわらげる",
+  "h": "801e4e9b"
+ },
+ "js.kieut.greeting": {
+  "t": "あなたの顔型は **{s}** です。あなたの相に合う髪型やメガネについて、さらに質問はありますか？",
+  "h": "05992171"
+ },
+ "js.kieut.hinh-dai": {
+  "t": "面長",
+  "h": "67167578"
+ },
+ "js.kieut.hinh-oval": {
+  "t": "卵型",
+  "h": "181b45bd"
+ },
+ "js.kieut.hinh-tron-vuong": {
+  "t": "丸・四角",
+  "h": "a30fca34"
+ },
+ "js.kieut.khong-nhan-duoc-anh": {
+  "t": "結果の画像を受け取れませんでした。",
+  "h": "a16f02df"
+ },
+ "js.kieut.khong-the-mo-camera": {
+  "t": "カメラを開けません。代わりに画像をアップロードしてください。",
+  "h": "4f7396b7"
+ },
+ "js.kieut.kieu-toc-label": {
+  "t": "髪型 — {s}",
+  "h": "c1e88a18"
+ },
+ "js.kieut.loi-phan-tich": {
+  "t": "分析エラー: {e}",
+  "h": "1d8ed1a8"
+ },
+ "js.kieut.loi-s": {
+  "t": "エラー {s}",
+  "h": "c406c72b"
+ },
+ "js.kieut.loi-tao-anh": {
+  "t": "画像の生成エラー: {e}",
+  "h": "091a4baf"
+ },
+ "js.kieut.share-shape": {
+  "t": "顔型: {s}",
+  "h": "e52e2cf1"
+ },
+ "js.kieut.share-title": {
+  "t": "顔相に合う私の髪型",
+  "h": "d1806e98"
+ },
+ "js.kieut.share-tryon-text": {
+  "t": "髪型を試着: {n}",
+  "h": "0d923cba"
+ },
+ "js.kieut.share-tryon-title": {
+  "t": "新しい髪型（バーチャル試着）",
+  "h": "5887ab87"
+ },
+ "js.kieut.st-aline_bob-sub": {
+  "t": "斜めにカットしたボブ — 後ろが短く前が長い、シャープでモダン",
+  "h": "9eb34b60"
+ },
+ "js.kieut.st-blunt_fringe-sub": {
+  "t": "額で真っすぐ切りそろえた前髪＋ロング — くっきりと個性的",
+  "h": "18f3e1fe"
+ },
+ "js.kieut.st-bob-name": {
+  "t": "ショートボブ",
+  "h": "c19d992e"
+ },
+ "js.kieut.st-bob-sub": {
+  "t": "あご下のすっきりしたボブ — しっかりとして清潔感がある",
+  "h": "532a2aad"
+ },
+ "js.kieut.st-butterfly-sub": {
+  "t": "顔まわりのレイヤー、ふんわりボリューム — 2025年のTikTokで人気",
+  "h": "6460949f"
+ },
+ "js.kieut.st-buzz-sub": {
+  "t": "均一に短く刈る — 顔の輪郭を引き立てる",
+  "h": "3b06ae07"
+ },
+ "js.kieut.st-curtain-sub": {
+  "t": "センター分けのカーテンバング、自然な雰囲気",
+  "h": "ca32d507"
+ },
+ "js.kieut.st-curtain_nu-sub": {
+  "t": "やわらかいカーテンバングのセンター分け — ロマンチックで女性らしい",
+  "h": "d0dece43"
+ },
+ "js.kieut.st-cushion_perm-sub": {
+  "t": "韓国風のやわらかい波状パーマ — 自然なふんわり感、2026年の人気",
+  "h": "bdca143d"
+ },
+ "js.kieut.st-glass_hair-sub": {
+  "t": "極上のつや髪ストレート — 韓国トレンドの頂点",
+  "h": "db26a044"
+ },
+ "js.kieut.st-hime-sub": {
+  "t": "ぱっつん前髪＋レイヤーの日本のお姫様風 — SNSで話題",
+  "h": "af1c27e2"
+ },
+ "js.kieut.st-jellyfish-sub": {
+  "t": "上段は短く下段は長く — Z世代、エッジの効いた印象",
+  "h": "f2002985"
+ },
+ "js.kieut.st-korean_perm-sub": {
+  "t": "ロマンチックな韓国風ウェーブパーマ — 2025年のアジアNo.1トレンド",
+  "h": "22d3d20d"
+ },
+ "js.kieut.st-layered_curl-sub": {
+  "t": "ふんわり段差のカール — 若々しく、若見え効果",
+  "h": "49a65a0e"
+ },
+ "js.kieut.st-lob-sub": {
+  "t": "肩に届くロングボブ — 上品でどんな場面にも合う",
+  "h": "e2b1a249"
+ },
+ "js.kieut.st-long_layers-sub": {
+  "t": "やわらかく自然なロングレイヤー — 女性らしく上品",
+  "h": "500da152"
+ },
+ "js.kieut.st-money_piece-sub": {
+  "t": "顔の両側のハイライト — トレンド感があり、手間が少ない",
+  "h": "c4d6fd9f"
+ },
+ "js.kieut.st-perm_wave-sub": {
+  "t": "自然な韓国風ウェーブパーマ — スタイリングしやすくモダン",
+  "h": "30da2ec0"
+ },
+ "js.kieut.st-pixie-sub": {
+  "t": "大胆なごく短い髪 — 個性的で自信にあふれる",
+  "h": "f42299de"
+ },
+ "js.kieut.st-pompadour-sub": {
+  "t": "前髪を高く持ち上げる — ヴィンテージ×モダン",
+  "h": "25e80198"
+ },
+ "js.kieut.st-pompadour_nu-name": {
+  "t": "ポンパドール（女性向け）",
+  "h": "9d31fa58"
+ },
+ "js.kieut.st-pompadour_nu-sub": {
+  "t": "前側をやわらかくふくらませる — 上品でゴージャス",
+  "h": "336c3d80"
+ },
+ "js.kieut.st-shag-sub": {
+  "t": "ざっくりレイヤー＋カーテンバング — レトロ×モダン",
+  "h": "60b2f94f"
+ },
+ "js.kieut.st-side_part-sub": {
+  "t": "サイド分けで平らに整える — プロフェッショナルで端正",
+  "h": "cb1f2ff5"
+ },
+ "js.kieut.st-side_waves-sub": {
+  "t": "サイド分け＋やわらかいウェーブ — 気品があり色気も",
+  "h": "5d4fd178"
+ },
+ "js.kieut.st-slick_back-sub": {
+  "t": "つややかに後ろへなでつける — 力強くて高級感がある",
+  "h": "405b36d5"
+ },
+ "js.kieut.st-textured-sub": {
+  "t": "ざっくり短く、質感のある個性派 — スタイリングしやすい",
+  "h": "4ca046ff"
+ },
+ "js.kieut.st-textured_wavy-sub": {
+  "t": "質感のある自然なウェーブ — 抜け感があってトレンディ",
+  "h": "c565798c"
+ },
+ "js.kieut.st-two_block-sub": {
+  "t": "韓国スタイル — 両サイドを刈り上げ、トップは自然な長さ",
+  "h": "b7230e49"
+ },
+ "js.kieut.st-undercut-sub": {
+  "t": "サイドをきわどくフェード、トップは長め — クラシックでモダン",
+  "h": "b16e15c9"
+ },
+ "js.kieut.st-wispy-sub": {
+  "t": "やわらかいシースルーバング — 若々しく軽やか",
+  "h": "6c6c0591"
+ },
+ "js.kieut.st-wolf-sub": {
+  "t": "段差のあるウィスピーなレイヤー — Z世代らしい個性",
+  "h": "1444c559"
+ },
+ "js.kieut.step-chuan-bi": {
+  "t": "画像とプロンプトを準備",
+  "h": "02fe352b"
+ },
+ "js.kieut.step-do-mat": {
+  "t": "MediaPipeで顔を測定",
+  "h": "4af85689"
+ },
+ "js.kieut.step-phan-tich": {
+  "t": "顔型を分析",
+  "h": "5059a835"
+ },
+ "js.kieut.step-tao-anh": {
+  "t": "新しい髪型の画像を生成中",
+  "h": "80940ba2"
+ },
+ "js.kieut.thu": {
+  "t": "試す →",
+  "h": "c1480a0a"
+ },
+ "js.kieut.thu-n": {
+  "t": "試着: {n}",
+  "h": "a246266d"
+ },
+ "js.kieut.ty-le-rong-cao": {
+  "t": "顔の幅÷高さの比: {r} — 傾向: {s}",
+  "h": "2094599e"
+ },
+ "js.kieut.vui-long-thu-lai": {
+  "t": "もう一度お試しください。",
+  "h": "2f1d18ee"
+ },
  "js.kinhdich.bam-de-bat-dau-gieo-que": {
   "t": "押すと卦立てを開始します——6回投げ、1回につき1つの爻が決まります",
   "h": "5f61aa02"
@@ -14066,6 +14342,138 @@
  "khis.xem-khi-sac": {
   "t": "気色を見る",
   "h": "7863a81d"
+ },
+ "kieut.anh-sang-tu-nhien-deu": {
+  "t": "✓ 自然で均一な光",
+  "h": "7f81d51a"
+ },
+ "kieut.chon-gioi-tinh-va-tai-len": {
+  "t": "性別を選び、顔がはっきり写った画像を1枚アップロードしてください。システムが顔型を分析し、そのまま画像に合成して試着します。似合う髪型・メガネの提案と、試着画像が届きます。",
+  "h": "5c22b94e"
+ },
+ "kieut.chup-anh-khuon-mat-he-thong": {
+  "t": "顔写真を撮影してください — システムが顔型を分析し、人相学にもとづいて似合う髪型を提案します。髪型はそのまま画像で試せます。",
+  "h": "fd003738"
+ },
+ "kieut.doi-anh-khac": {
+  "t": "✕ 別の画像に変更",
+  "h": "d058264f"
+ },
+ "kieut.doi-mu-doi-khan-che-toc": {
+  "t": "✗ 帽子やスカーフで髪を隠している",
+  "h": "a40d8fd8"
+ },
+ "kieut.hinh-dang-khuon-mat": {
+  "t": "顔型",
+  "h": "20dd1d13"
+ },
+ "kieut.huy": {
+  "t": "キャンセル",
+  "h": "33639e92"
+ },
+ "kieut.ket-qua": {
+  "t": "結果",
+  "h": "c9f95514"
+ },
+ "kieut.kieu-kinh-phu-hop-theo-cau": {
+  "t": "<span class=\"ic\" data-icon=\"glasses\"></span> 顔の骨格に合うメガネ",
+  "h": "39d8292c"
+ },
+ "kieut.kieu-toc": {
+  "t": "<span class=\"ic\" data-icon=\"scissors\"></span> 髪型",
+  "h": "7d47a3d3"
+ },
+ "kieut.kieu-toc-kinh-mat-hop-tuong": {
+  "t": "顔相に合う髪型とメガネ — 明宝紫微斗数",
+  "h": "704b6aa7"
+ },
+ "kieut.kieu-toc-kinh-mat-hop-tuong-v1r6": {
+  "t": "<b>顔相に合う髪型とメガネ</b><span>顔型を分析し、髪型を提案して、そのまま画像で試着</span>",
+  "h": "745fe887"
+ },
+ "kieut.kieu-toc-kinh-mat-hop-tuong-x53w": {
+  "t": "顔相に合う髪型とメガネ",
+  "h": "a6dff7d5"
+ },
+ "kieut.kinh-mat": {
+  "t": "<span class=\"ic\" data-icon=\"glasses\"></span> メガネ",
+  "h": "508d6f59"
+ },
+ "kieut.loi-khuyen": {
+  "t": "<strong><span class=\"ic\" data-icon=\"message-circle\"></span> アドバイス: </strong><span id=\"tipText\"></span>",
+  "h": "25976b6b"
+ },
+ "kieut.nghieng-mat-nhieu": {
+  "t": "✗ 顔が大きく傾いている",
+  "h": "9d537acf"
+ },
+ "kieut.nguoc-sang-toi": {
+  "t": "✗ 逆光・暗い",
+  "h": "97a94265"
+ },
+ "kieut.nhan-tuong-hoc-phuong-dong-khong": {
+  "t": "東洋の人相学は運命を論じるだけでなく、顔の形を五行（金・木・水・火・土）で分類し、それぞれの行が特徴的な輪郭に対応すると考えます。この分類は、顔に調和する髪型やメイクの提案に応用されています。",
+  "h": "bff2f554"
+ },
+ "kieut.nhin-thang-vao-camera-dam-bao": {
+  "t": "カメラをまっすぐ見て、十分な明るさで、顔がフレームの大部分を占めるようにしてください。",
+  "h": "d5f2b4f9"
+ },
+ "kieut.phan-tich-5s-thu-kieu-25s": {
+  "t": "分析 約5秒 · 試着 約25秒",
+  "h": "d75a8d73"
+ },
+ "kieut.phan-tich-anh-khac": {
+  "t": "<span class=\"ic\" data-icon=\"rotate-cw\"></span> 別の画像を分析",
+  "h": "727c28a0"
+ },
+ "kieut.phan-tich-khuon-mat-goi-y": {
+  "t": "<span class=\"ic\" data-icon=\"sparkles\"></span> 顔型の分析とスタイル提案 — <span data-tvp-price=\"kieu-toc-phan-tich\">…</span> 両",
+  "h": "7ce5c0fd"
+ },
+ "kieut.preview-anh": {
+  "t": "画像プレビュー",
+  "h": "6bc7c7e2"
+ },
+ "kieut.quyen-rieng-tu-anh-chi-gui": {
+  "t": "<strong>プライバシー:</strong> 画像は分析のためにサーバーへ送るだけで、当社のサーバーには保存しません。Replicateが処理して結果の画像を返し、長期保存はしません。",
+  "h": "5d8fcc8b"
+ },
+ "kieut.sau-khi-thu": {
+  "t": "試着後",
+  "h": "c3de1d39"
+ },
+ "kieut.tai-anh-ket-qua": {
+  "t": "<span class=\"ic\" data-icon=\"chevron-down\"></span> 結果の画像をダウンロード",
+  "h": "5f15ca5b"
+ },
+ "kieut.tai-anh-len": {
+  "t": "<span class=\"ic\" data-icon=\"camera\"></span> 画像をアップロード",
+  "h": "633baad5"
+ },
+ "kieut.tat-ca-kieu-toc-la-phu": {
+  "t": "<span class=\"ic\" data-icon=\"sparkles\"></span> すべての髪型 — <span class=\"ic\" data-icon=\"star\"></span> はあなたの顔相に最も合うもの",
+  "h": "8a472eaa"
+ },
+ "kieut.thang-mat-chinh-dien": {
+  "t": "✓ まっすぐ正面向き",
+  "h": "7a6bfbf8"
+ },
+ "kieut.thay-ro-tu-tran-den-cam": {
+  "t": "✓ 額からあごまではっきり見える",
+  "h": "4ac86958"
+ },
+ "kieut.thu-kieu-khac": {
+  "t": "<span class=\"ic\" data-icon=\"rotate-cw\"></span> 別のスタイルを試す",
+  "h": "0054a608"
+ },
+ "kieut.thu-tren-anh": {
+  "t": "<span class=\"ic\" id=\"tryonTitleIcon\"></span> <span id=\"tryonTitleText\">画像で試着</span>",
+  "h": "586df119"
+ },
+ "kieut.ton-tien-lam-toc-doi-kinh": {
+  "t": "髪型を変えてもメガネを替えても、なんだかしっくりこない — 問題はセンスではなく、実際に変える前に試着してみなかったことかもしれません。ポートレート画像をアップロードして、あなたの顔相に似合うスタイルを今すぐ確認しましょう。",
+  "h": "b6de26af"
  },
  "kinhdich.1-gieo-que": {
   "t": "<span class=\"wss-n\">1</span><span class=\"wss-l\">卦を立てる</span>",

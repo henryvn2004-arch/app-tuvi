@@ -614,7 +614,7 @@ async function _replicateRun(replKey, modelUrl, input, extraBody = {}) {
   throw new Error('Hết thời gian chờ. Vui lòng thử lại.');
 }
 
-async function handleKieuTocPhanTich(body) {
+async function handleKieuTocPhanTich(body, locale = 'vi') {
   const { image, mediaType = 'image/jpeg', gender = 'nam', faceMeasurements } = body;
   if (!image) return Response.json({ error: 'Thiếu dữ liệu ảnh.' }, { status: 400 });
   if (image.length > 7 * 1024 * 1024) return Response.json({ error: 'Ảnh quá lớn.' }, { status: 400 });
@@ -645,7 +645,8 @@ Dùng các số đo này để xác định hình dạng khuôn mặt CHÍNH XÁ
     text = await llmText({
       luanGiai: true,
       system: SP_NGOAI_HINH + measurementContext,
-      prompt: `Giới tính: ${genderLabel}. IDs kiểu tóc hợp lệ: ${validHairIds}. Phân tích và trả về JSON. Chọn TẤT CẢ ${gender === 'nu' ? '5-7' : '5'} kiểu phù hợp nhất trong danh sách.`,
+      // Ngôn ngữ ở USER (json:true giữ nguyên khoá/enum — id kiểu tóc/kính, faceShape); vi → chuỗi cũ.
+      prompt: withLang(`Giới tính: ${genderLabel}. IDs kiểu tóc hợp lệ: ${validHairIds}. Phân tích và trả về JSON. Chọn TẤT CẢ ${gender === 'nu' ? '5-7' : '5'} kiểu phù hợp nhất trong danh sách.`, locale, [], { json: true }),
       images: [{ data: image, mediaType }],
       maxTokens: 1500,
     });
@@ -1486,7 +1487,7 @@ async function runPost(request) {
     if (action === 'kieu-toc-tryon') return await handleKieuTocTryon(body);
 
     // ── Non-streaming Vision JSON actions (LLM qua llmText) ────────────────
-    if (action === 'kieu-toc-phan-tich') return await handleKieuTocPhanTich(body);
+    if (action === 'kieu-toc-phan-tich') return await handleKieuTocPhanTich(body, requestLocale(request));
     if (action === 'wardrobe-add')    return await handleWardrobeAdd(request, body);
     if (action === 'wardrobe-mix')    return await handleWardrobeMix(request, body);
     if (action === 'wardrobe-delete') return await handleWardrobeDelete(request, body);

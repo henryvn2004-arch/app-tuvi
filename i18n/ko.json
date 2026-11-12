@@ -3283,6 +3283,282 @@
   "t": "이미지 파일(JPG 또는 PNG)을 선택해 주세요.",
   "h": "ad4caa5b"
  },
+ "js.kieut.anh-qua-lon": {
+  "t": "이미지가 너무 커요(최대 5MB). 다른 이미지를 선택해 주세요.",
+  "h": "84a5fa2b"
+ },
+ "js.kieut.chip-kinh": {
+  "t": "내 얼굴형에는 어떤 안경이 어울려요?",
+  "h": "e2a2a092"
+ },
+ "js.kieut.chip-tranh": {
+  "t": "어떤 헤어스타일은 피해야 하나요?",
+  "h": "71021350"
+ },
+ "js.kieut.chip-vi-sao": {
+  "t": "왜 이 스타일이 내 얼굴에 어울려요?",
+  "h": "e507a96f"
+ },
+ "js.kieut.do-truc-tiep": {
+  "t": "MediaPipe로 이미지에서 직접 측정했어요. 얼굴에 맞춰 순위를 매긴 헤어스타일과 안경 목록은 심층 분석에 들어 있어요.",
+  "h": "45879030"
+ },
+ "js.kieut.gl-aviator-sub": {
+  "t": "클래식한 물방울형 — 남녀공용, 강인하고 자신감 있는 인상",
+  "h": "c07019a3"
+ },
+ "js.kieut.gl-browline-name": {
+  "t": "브로라인 프레임",
+  "h": "f7013797"
+ },
+ "js.kieut.gl-browline-sub": {
+  "t": "위쪽 반만 굵은 테 — 지적이고 단정한 인상",
+  "h": "076a871f"
+ },
+ "js.kieut.gl-cat_eye-sub": {
+  "t": "끝이 올라간 모양 — 여성스럽고 매력적(여성에게 더 많이 어울려요)",
+  "h": "49a590df"
+ },
+ "js.kieut.gl-oval-name": {
+  "t": "오벌 프레임",
+  "h": "30d636c4"
+ },
+ "js.kieut.gl-oval-sub": {
+  "t": "부드럽고 세련됨 — 어떤 얼굴형과도 잘 어울려요",
+  "h": "851997e8"
+ },
+ "js.kieut.gl-rectangle-name": {
+  "t": "직사각 프레임",
+  "h": "a0b6dd72"
+ },
+ "js.kieut.gl-rectangle-sub": {
+  "t": "얇고 현대적인 프레임 — 대부분의 얼굴형에 잘 맞아요",
+  "h": "0d7fb906"
+ },
+ "js.kieut.gl-round-name": {
+  "t": "레트로 원형 프레임",
+  "h": "3fddc6b6"
+ },
+ "js.kieut.gl-round-sub": {
+  "t": "한국풍·빈티지 — 각진 얼굴을 부드럽게 해 줘요",
+  "h": "801e4e9b"
+ },
+ "js.kieut.greeting": {
+  "t": "당신의 얼굴형은 **{s}**이에요. 관상에 맞는 헤어스타일이나 안경에 대해 더 궁금한 점이 있나요?",
+  "h": "05992171"
+ },
+ "js.kieut.hinh-dai": {
+  "t": "긴 얼굴",
+  "h": "67167578"
+ },
+ "js.kieut.hinh-oval": {
+  "t": "계란형",
+  "h": "181b45bd"
+ },
+ "js.kieut.hinh-tron-vuong": {
+  "t": "둥글거나 각진 얼굴",
+  "h": "a30fca34"
+ },
+ "js.kieut.khong-nhan-duoc-anh": {
+  "t": "결과 이미지를 받지 못했어요.",
+  "h": "a16f02df"
+ },
+ "js.kieut.khong-the-mo-camera": {
+  "t": "카메라를 열 수 없어요. 대신 이미지를 올려 주세요.",
+  "h": "4f7396b7"
+ },
+ "js.kieut.kieu-toc-label": {
+  "t": "헤어스타일 — {s}",
+  "h": "c1e88a18"
+ },
+ "js.kieut.loi-phan-tich": {
+  "t": "분석 오류: {e}",
+  "h": "1d8ed1a8"
+ },
+ "js.kieut.loi-s": {
+  "t": "오류 {s}",
+  "h": "c406c72b"
+ },
+ "js.kieut.loi-tao-anh": {
+  "t": "이미지 생성 오류: {e}",
+  "h": "091a4baf"
+ },
+ "js.kieut.share-shape": {
+  "t": "얼굴형: {s}",
+  "h": "e52e2cf1"
+ },
+ "js.kieut.share-title": {
+  "t": "내 관상에 맞는 헤어스타일",
+  "h": "d1806e98"
+ },
+ "js.kieut.share-tryon-text": {
+  "t": "헤어스타일 체험: {n}",
+  "h": "0d923cba"
+ },
+ "js.kieut.share-tryon-title": {
+  "t": "나의 새 헤어스타일(가상 체험)",
+  "h": "5887ab87"
+ },
+ "js.kieut.st-aline_bob-sub": {
+  "t": "사선으로 자른 보브 — 뒤는 짧고 앞은 길게, 날렵하고 모던",
+  "h": "9eb34b60"
+ },
+ "js.kieut.st-blunt_fringe-sub": {
+  "t": "이마 위에서 일자로 자른 앞머리＋긴 머리 — 또렷하고 개성 있는",
+  "h": "18f3e1fe"
+ },
+ "js.kieut.st-bob-name": {
+  "t": "단발 보브",
+  "h": "c19d992e"
+ },
+ "js.kieut.st-bob-sub": {
+  "t": "턱선 길이의 단정한 보브 — 단단하고 깔끔한 인상",
+  "h": "532a2aad"
+ },
+ "js.kieut.st-butterfly-sub": {
+  "t": "얼굴을 감싸는 레이어, 풍성한 볼륨 — 2025 틱톡에서 인기",
+  "h": "6460949f"
+ },
+ "js.kieut.st-buzz-sub": {
+  "t": "고르게 짧게 깎기 — 얼굴 윤곽을 돋보이게",
+  "h": "3b06ae07"
+ },
+ "js.kieut.st-curtain-sub": {
+  "t": "가운데 가르마 커튼뱅, 자연스러운 느낌",
+  "h": "ca32d507"
+ },
+ "js.kieut.st-curtain_nu-sub": {
+  "t": "부드러운 커튼뱅, 가운데 가르마 — 로맨틱하고 여성스러운",
+  "h": "d0dece43"
+ },
+ "js.kieut.st-cushion_perm-sub": {
+  "t": "한국식 부드러운 웨이브 펌 — 자연스럽게 살짝 볼륨, 2026년 인기",
+  "h": "bdca143d"
+ },
+ "js.kieut.st-glass_hair-sub": {
+  "t": "윤기 넘치는 스트레이트 — 한국 트렌드의 정점",
+  "h": "db26a044"
+ },
+ "js.kieut.st-hime-sub": {
+  "t": "일자 앞머리＋레이어로 만드는 일본 공주풍 — 화제의 스타일",
+  "h": "af1c27e2"
+ },
+ "js.kieut.st-jellyfish-sub": {
+  "t": "위층은 짧게 아래층은 길게 — Z세대, 개성 강한 스타일",
+  "h": "f2002985"
+ },
+ "js.kieut.st-korean_perm-sub": {
+  "t": "로맨틱한 한국식 웨이브 펌 — 2025년 아시아 1위 트렌드",
+  "h": "22d3d20d"
+ },
+ "js.kieut.st-layered_curl-sub": {
+  "t": "부드럽게 층을 낸 컬 — 어려 보이고 동안 효과",
+  "h": "49a65a0e"
+ },
+ "js.kieut.st-lob-sub": {
+  "t": "어깨에 닿는 롱 보브 — 세련되고 활용도 높음",
+  "h": "e2b1a249"
+ },
+ "js.kieut.st-long_layers-sub": {
+  "t": "부드럽고 자연스러운 롱 레이어 — 여성스럽고 우아함",
+  "h": "500da152"
+ },
+ "js.kieut.st-money_piece-sub": {
+  "t": "얼굴 양옆 하이라이트 — 트렌디하고 손이 덜 가요",
+  "h": "c4d6fd9f"
+ },
+ "js.kieut.st-perm_wave-sub": {
+  "t": "자연스러운 한국식 웨이브 펌 — 스타일링이 쉽고 모던",
+  "h": "30da2ec0"
+ },
+ "js.kieut.st-pixie-sub": {
+  "t": "과감하게 아주 짧은 머리 — 개성 있고 자신감 넘치는",
+  "h": "f42299de"
+ },
+ "js.kieut.st-pompadour-sub": {
+  "t": "앞머리를 높이 올려 넘김 — 빈티지×모던",
+  "h": "25e80198"
+ },
+ "js.kieut.st-pompadour_nu-name": {
+  "t": "포마드(여성용)",
+  "h": "9d31fa58"
+ },
+ "js.kieut.st-pompadour_nu-sub": {
+  "t": "앞쪽을 부드럽게 부풀림 — 우아하고 고급스러운",
+  "h": "336c3d80"
+ },
+ "js.kieut.st-shag-sub": {
+  "t": "거친 레이어＋커튼뱅 — 레트로×모던",
+  "h": "60b2f94f"
+ },
+ "js.kieut.st-side_part-sub": {
+  "t": "옆 가르마를 평평하게 빗어 넘김 — 프로페셔널하고 단정한",
+  "h": "cb1f2ff5"
+ },
+ "js.kieut.st-side_waves-sub": {
+  "t": "옆 가르마＋부드러운 웨이브 — 기품 있고 매혹적인",
+  "h": "5d4fd178"
+ },
+ "js.kieut.st-slick_back-sub": {
+  "t": "윤기 나게 뒤로 빗어 넘김 — 강인하고 고급스러운",
+  "h": "405b36d5"
+ },
+ "js.kieut.st-textured-sub": {
+  "t": "짧고 결이 살아 있는 개성파 — 스타일링이 쉬워요",
+  "h": "4ca046ff"
+ },
+ "js.kieut.st-textured_wavy-sub": {
+  "t": "결이 살아 있는 자연스러운 웨이브 — 꾸안꾸에 트렌디",
+  "h": "c565798c"
+ },
+ "js.kieut.st-two_block-sub": {
+  "t": "한국 스타일 — 양옆을 밀고 윗머리는 자연스러운 길이",
+  "h": "b7230e49"
+ },
+ "js.kieut.st-undercut-sub": {
+  "t": "옆을 바짝 페이드, 윗머리는 길게 — 클래식하고 모던",
+  "h": "b16e15c9"
+ },
+ "js.kieut.st-wispy-sub": {
+  "t": "부드러운 시스루뱅 — 젊고 산뜻한",
+  "h": "6c6c0591"
+ },
+ "js.kieut.st-wolf-sub": {
+  "t": "층이 진 위스피 레이어 — Z세대다운 개성",
+  "h": "1444c559"
+ },
+ "js.kieut.step-chuan-bi": {
+  "t": "이미지와 프롬프트 준비",
+  "h": "02fe352b"
+ },
+ "js.kieut.step-do-mat": {
+  "t": "MediaPipe로 얼굴 측정",
+  "h": "4af85689"
+ },
+ "js.kieut.step-phan-tich": {
+  "t": "얼굴형 분석",
+  "h": "5059a835"
+ },
+ "js.kieut.step-tao-anh": {
+  "t": "새 헤어스타일 이미지 생성 중",
+  "h": "80940ba2"
+ },
+ "js.kieut.thu": {
+  "t": "체험 →",
+  "h": "c1480a0a"
+ },
+ "js.kieut.thu-n": {
+  "t": "체험: {n}",
+  "h": "a246266d"
+ },
+ "js.kieut.ty-le-rong-cao": {
+  "t": "얼굴 너비÷높이 비율: {r} — 경향: {s}",
+  "h": "2094599e"
+ },
+ "js.kieut.vui-long-thu-lai": {
+  "t": "다시 시도해 주세요.",
+  "h": "2f1d18ee"
+ },
  "js.kinhdich.bam-de-bat-dau-gieo-que": {
   "t": "눌러서 괘 뽑기를 시작하세요 — 6번 던지며, 한 번에 효 하나가 정해집니다",
   "h": "5f61aa02"
@@ -14066,6 +14342,138 @@
  "khis.xem-khi-sac": {
   "t": "기색 보기",
   "h": "7863a81d"
+ },
+ "kieut.anh-sang-tu-nhien-deu": {
+  "t": "✓ 자연스럽고 고른 조명",
+  "h": "7f81d51a"
+ },
+ "kieut.chon-gioi-tinh-va-tai-len": {
+  "t": "성별을 고르고 얼굴이 또렷한 사진을 한 장 올려 주세요. 시스템이 얼굴형을 분석한 뒤 사진에 바로 합성해 체험해 볼 수 있어요. 어울리는 헤어스타일·안경 추천과 체험 이미지를 받아 보세요.",
+  "h": "5c22b94e"
+ },
+ "kieut.chup-anh-khuon-mat-he-thong": {
+  "t": "얼굴 사진을 찍어 주세요 — 시스템이 얼굴형을 분석하고 관상학에 따라 어울리는 헤어스타일을 추천해요. 헤어스타일은 사진에서 바로 체험할 수 있어요.",
+  "h": "fd003738"
+ },
+ "kieut.doi-anh-khac": {
+  "t": "✕ 다른 이미지로 바꾸기",
+  "h": "d058264f"
+ },
+ "kieut.doi-mu-doi-khan-che-toc": {
+  "t": "✗ 모자나 스카프로 머리를 가림",
+  "h": "a40d8fd8"
+ },
+ "kieut.hinh-dang-khuon-mat": {
+  "t": "얼굴형",
+  "h": "20dd1d13"
+ },
+ "kieut.huy": {
+  "t": "취소",
+  "h": "33639e92"
+ },
+ "kieut.ket-qua": {
+  "t": "결과",
+  "h": "c9f95514"
+ },
+ "kieut.kieu-kinh-phu-hop-theo-cau": {
+  "t": "<span class=\"ic\" data-icon=\"glasses\"></span> 얼굴 구조에 맞는 안경",
+  "h": "39d8292c"
+ },
+ "kieut.kieu-toc": {
+  "t": "<span class=\"ic\" data-icon=\"scissors\"></span> 헤어스타일",
+  "h": "7d47a3d3"
+ },
+ "kieut.kieu-toc-kinh-mat-hop-tuong": {
+  "t": "관상에 맞는 헤어스타일과 안경 — 명보 자미두수",
+  "h": "704b6aa7"
+ },
+ "kieut.kieu-toc-kinh-mat-hop-tuong-v1r6": {
+  "t": "<b>관상에 맞는 헤어스타일과 안경</b><span>얼굴형을 분석해 헤어스타일을 추천하고 사진에서 바로 체험</span>",
+  "h": "745fe887"
+ },
+ "kieut.kieu-toc-kinh-mat-hop-tuong-x53w": {
+  "t": "관상에 맞는 헤어스타일과 안경",
+  "h": "a6dff7d5"
+ },
+ "kieut.kinh-mat": {
+  "t": "<span class=\"ic\" data-icon=\"glasses\"></span> 안경",
+  "h": "508d6f59"
+ },
+ "kieut.loi-khuyen": {
+  "t": "<strong><span class=\"ic\" data-icon=\"message-circle\"></span> 조언: </strong><span id=\"tipText\"></span>",
+  "h": "25976b6b"
+ },
+ "kieut.nghieng-mat-nhieu": {
+  "t": "✗ 얼굴이 많이 기울어짐",
+  "h": "9d537acf"
+ },
+ "kieut.nguoc-sang-toi": {
+  "t": "✗ 역광이거나 어두움",
+  "h": "97a94265"
+ },
+ "kieut.nhan-tuong-hoc-phuong-dong-khong": {
+  "t": "동양 관상학은 운명을 논할 뿐 아니라 얼굴 모양을 오행(금·목·수·화·토)으로 분류하며, 각 행이 특징적인 윤곽에 대응한다고 봐요. 이 분류는 얼굴과 조화로운 헤어스타일과 메이크업을 추천하는 데 쓰여요.",
+  "h": "bff2f554"
+ },
+ "kieut.nhin-thang-vao-camera-dam-bao": {
+  "t": "카메라를 똑바로 보고, 조명이 충분하며 얼굴이 화면 대부분을 차지하도록 해 주세요.",
+  "h": "d5f2b4f9"
+ },
+ "kieut.phan-tich-5s-thu-kieu-25s": {
+  "t": "분석 약 5초 · 체험 약 25초",
+  "h": "d75a8d73"
+ },
+ "kieut.phan-tich-anh-khac": {
+  "t": "<span class=\"ic\" data-icon=\"rotate-cw\"></span> 다른 이미지 분석",
+  "h": "727c28a0"
+ },
+ "kieut.phan-tich-khuon-mat-goi-y": {
+  "t": "<span class=\"ic\" data-icon=\"sparkles\"></span> 얼굴형 분석 및 스타일 추천 — <span data-tvp-price=\"kieu-toc-phan-tich\">…</span> 냥",
+  "h": "7ce5c0fd"
+ },
+ "kieut.preview-anh": {
+  "t": "이미지 미리보기",
+  "h": "6bc7c7e2"
+ },
+ "kieut.quyen-rieng-tu-anh-chi-gui": {
+  "t": "<strong>개인정보 보호:</strong> 이미지는 분석을 위해 서버로만 보내고, 저희 서버에는 저장하지 않아요. Replicate가 처리해 결과 이미지를 돌려주며, 장기 보관하지 않아요.",
+  "h": "5d8fcc8b"
+ },
+ "kieut.sau-khi-thu": {
+  "t": "체험 후",
+  "h": "c3de1d39"
+ },
+ "kieut.tai-anh-ket-qua": {
+  "t": "<span class=\"ic\" data-icon=\"chevron-down\"></span> 결과 이미지 다운로드",
+  "h": "5f15ca5b"
+ },
+ "kieut.tai-anh-len": {
+  "t": "<span class=\"ic\" data-icon=\"camera\"></span> 이미지 올리기",
+  "h": "633baad5"
+ },
+ "kieut.tat-ca-kieu-toc-la-phu": {
+  "t": "<span class=\"ic\" data-icon=\"sparkles\"></span> 모든 헤어스타일 — <span class=\"ic\" data-icon=\"star\"></span> 는 관상에 가장 잘 어울리는 스타일",
+  "h": "8a472eaa"
+ },
+ "kieut.thang-mat-chinh-dien": {
+  "t": "✓ 똑바로 정면",
+  "h": "7a6bfbf8"
+ },
+ "kieut.thay-ro-tu-tran-den-cam": {
+  "t": "✓ 이마부터 턱까지 또렷이 보임",
+  "h": "4ac86958"
+ },
+ "kieut.thu-kieu-khac": {
+  "t": "<span class=\"ic\" data-icon=\"rotate-cw\"></span> 다른 스타일 체험",
+  "h": "0054a608"
+ },
+ "kieut.thu-tren-anh": {
+  "t": "<span class=\"ic\" id=\"tryonTitleIcon\"></span> <span id=\"tryonTitleText\">사진으로 체험</span>",
+  "h": "586df119"
+ },
+ "kieut.ton-tien-lam-toc-doi-kinh": {
+  "t": "머리를 하고 안경을 바꿔도 어딘가 아쉬운 느낌 — 문제는 취향이 아니라, 실제로 하기 전에 미리 합성해 본 적이 없다는 것일 수 있어요. 인물 사진을 올리고 관상에 어울리는 스타일을 바로 확인해 보세요.",
+  "h": "b6de26af"
  },
  "kinhdich.1-gieo-que": {
   "t": "<span class=\"wss-n\">1</span><span class=\"wss-l\">괘 뽑기</span>",
