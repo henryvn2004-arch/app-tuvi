@@ -4119,6 +4119,10 @@
   "t": "… 兩",
   "h": "cbf99bc6"
  },
+ "js.auth.luong-sau": {
+  "t": " 兩",
+  "h": "74224e60"
+ },
  "js.auth.luong-xu": {
   "t": "兩 · 金幣",
   "h": "e4e551dd"
@@ -4166,6 +4170,10 @@
  "js.auth.slogan": {
   "t": "知命理，順勢而行",
   "h": "ca64e3dc"
+ },
+ "js.auth.tai-khoan": {
+  "t": "帳號",
+  "h": "4a60abe5"
  },
  "js.auth.tang-luong": {
   "t": "贈送兩",

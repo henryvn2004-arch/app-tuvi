@@ -4119,6 +4119,10 @@
   "t": "… 両",
   "h": "cbf99bc6"
  },
+ "js.auth.luong-sau": {
+  "t": " 両",
+  "h": "74224e60"
+ },
  "js.auth.luong-xu": {
   "t": "両 · コイン",
   "h": "e4e551dd"
@@ -4166,6 +4170,10 @@
  "js.auth.slogan": {
   "t": "命理を知り、時勢に順って歩む",
   "h": "ca64e3dc"
+ },
+ "js.auth.tai-khoan": {
+  "t": "アカウント",
+  "h": "4a60abe5"
  },
  "js.auth.tang-luong": {
   "t": "両プレゼント",

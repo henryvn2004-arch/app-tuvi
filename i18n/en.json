@@ -4119,6 +4119,10 @@
   "t": "… credits",
   "h": "cbf99bc6"
  },
+ "js.auth.luong-sau": {
+  "t": " credits",
+  "h": "74224e60"
+ },
  "js.auth.luong-xu": {
   "t": "Credits",
   "h": "e4e551dd"
@@ -4166,6 +4170,10 @@
  "js.auth.slogan": {
   "t": "Know your destiny, follow the flow",
   "h": "ca64e3dc"
+ },
+ "js.auth.tai-khoan": {
+  "t": "Account",
+  "h": "4a60abe5"
  },
  "js.auth.tang-luong": {
   "t": "free credits",
