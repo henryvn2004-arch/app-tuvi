@@ -147,6 +147,7 @@ for (let i = 0; i < 1200; i++) {
     o: { star: o.star, tier: o.tier, tierLabel: o.tierLabel, desc: o.desc, source: o.source },
     name: p.characterName, nameMa: p.characterMa, title: o.title, titleMa: o.titleMa, gender: p.gender,
     srv, blockJa: PLTen.khoiTenTheoNgonNgu('ja', [p]), blockVi: PLTen.khoiTenTheoNgonNgu('vi', [p]),
+    meta: (function () { const m = PL.pastLifeMeta(p); return { c: m.characterMa, d: m.danhXungMa, n: m.characterName, t: m.danhXung }; })(),
   });
 }
 // Câu ý nghĩa từng cung (W30f-5): MỌI chuỗi trong ls.cachCucTungCung trên lưới lá số rộng (đủ tuổi để Tuần/Triệt bật + tắt).
@@ -519,6 +520,17 @@ console.log('__KQ__' + JSON.stringify(out));
         sai.push('client name ' + g.name);
       if (!t.includes('\u0001') || t.replace(/\u0001/g, '') !== g.title)
         sai.push('client title ' + g.title);
+    }
+    // Payload THẬT của route Chân Dung (`pastLifeMeta`) phải mang mã — check:cacheshape chỉ vân tay hoá hồ sơ engine, KHÔNG thấy
+    // việc bỏ mã khỏi `pastLifeMeta` (client lặng lẽ lùi về chữ Việt ở /ja…).
+    for (const g of kq.tk) {
+      if (
+        JSON.stringify(g.meta.c) !== JSON.stringify(g.nameMa) ||
+        JSON.stringify(g.meta.d) !== JSON.stringify(g.titleMa)
+      )
+        sai.push('pastLifeMeta thiếu/lệch mã ' + g.name);
+      if (g.meta.n !== g.name || g.meta.t !== g.title)
+        sai.push('pastLifeMeta đổi chữ Việt ' + g.name);
     }
     // thiếu mã (payload cũ/mẫu tĩnh) ⇒ nguyên chữ Việt
     if (H.name('A B', undefined) !== 'A B' || H.title('X', null) !== 'X')
