@@ -1,6 +1,6 @@
 # Nhật ký phát triển — mục lục
 
-594 mục ghi chép từng PR, tách khỏi `CLAUDE.md` để nó thôi ngốn ~350k token mỗi lượt.
+595 mục ghi chép từng PR, tách khỏi `CLAUDE.md` để nó thôi ngốn ~350k token mỗi lượt.
 
 **Sáu file dưới đây KHÔNG được nạp tự động.** Cần thì tra:
 
@@ -28,6 +28,7 @@ Luật rút ra từ các mục này đã được cô đọng lên `CLAUDE.md`. 
 
 | # | tháng | file | mục |
 |---:|---|---|---|
+| 1 | 2026-11 | `2026-11.md` | 🧿 W30f-7 — Chân Dung Tiền Kiếp: era · bậc · chức phận · trích dẫn theo ngôn ngữ, KHÔNG đổi `portrait_cache` (khoá suy từ `era.id`/`star`/`tier`; helper `past-life-t.js`; ns `past-life` +10); danh xưng nghề không hiện, tên nhân vật cần bump `SHAPE` — chờ quyết định |
 | 1 | 2026-11 | `2026-11.md` | 🀄 W30f-6 — `ls.cachCuc[]` (cách cục có tên: 217 mục, 3 mẫu có biến) cùng ns `cach-cuc` (1.471 mục) · gắn `TuviCachCuc` vào Chân Dung Vợ Chồng · Luận Giải lõi · khoản chấm Công Sở · `check:enginema` +752 câu thật; past-life danh xưng/tên/era chờ quyết định bump `SHAPE` |
 | 1 | 2026-11 | `2026-11.md` | 🀄 W30f-5 — `cachCucTungCung` (engine lõi, KHÔNG sửa) 5 ngôn ngữ: ns `cach-cuc` 1.254 mục (383 câu `out.push` + bảng `CACH_CUC_DATA` 725 câu + 138 tên sao tắt + 8 mẫu Tuần/Triệt) · khoá = fnv của câu Việt · `cach-cuc.js` dùng chung 4 trang · `check:enginema` chạy engine thật 23.512 lượt |
 | 1 | 2026-11 | `2026-11.md` | 💼 W30f-3/4 — Công Sở: chức phận cổ (`past-life.ts` ns `past-life` 342 mục · mã `ma` additive · khuôn `dungMau`) · tầng nhánh nghề (`nghe-nghiep.ts` ns `nghe-nghiep` 292 mục) · `check:enginema` +golden 107 lá số dựng từ engine cũ |

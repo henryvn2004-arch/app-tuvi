@@ -261,6 +261,7 @@
 window.SHELL_CHATFIRST=true;
 window.SHELL_INTRO={key:'chan-dung-tien-kiep'};</script>
 <script src="/tools-shared/glossary.js?v=5"></script>
+<script src="/tools-shared/past-life-t.js?v=1"></script>
 <script src="/tools-shared/i18n.js?v=7"></script>
 <script src="/laso-chart.js?v=12"></script>
 <script src="/tools-shared/vn-timezone.js?v=1"></script>
@@ -693,7 +694,7 @@ function renderEraLine(data) {
   var el = document.getElementById('eraLine');
   var e = data.era || {};
   if (!e.label) { el.style.display = 'none'; return; }
-  el.textContent = e.label + (e.ageLabel ? ' · ' + e.ageLabel : '');
+  el.textContent = TuviPastLife.eraLine(e);
   el.style.display = 'inline-block';
 }
 
@@ -768,10 +769,10 @@ function renderBasis(data) {
   var rows = [];
   if (o.star) {
     rows.push([_tvmbT('js.ctk.chinh-tinh-tai-cung-quan-loc', 'Chính tinh tại cung Quan Lộc'),
-      _tvmbG(['chinh', 'sao'], o.star) + (o.brightness ? ' (' + o.brightness + ')' : '') +
+      _tvmbG(['chinh', 'sao'], o.star) + (o.brightness ? ' (' + _tvmbG('sang', o.brightness) + ')' : '') +
       (o.borrowed ? _tvmbT('js.ctk.vo-chinh-dieu-muon-cung-xung', ' — vô chính diệu, mượn cung xung chiếu') : '')]);
   }
-  if (o.tierLabel) rows.push([_tvmbT('js.ctk.bac-chuc-phan-engine-cham', 'Bậc chức phận engine chấm'), o.tierLabel]);
+  if (o.tierLabel) rows.push([_tvmbT('js.ctk.bac-chuc-phan-engine-cham', 'Bậc chức phận engine chấm'), TuviPastLife.tier(o)]);
   if (data.thanCungName) rows.push([_tvmbT('js.ctk.cung-an-than', 'Cung an Thân'), _tvmbG('cung', data.thanCungName)]);
   var menh = data.menh || {};
   if ((menh.chinhTinh || []).length) rows.push([_tvmbT('js.ctk.chinh-tinh-tai-cung-menh', 'Chính tinh tại cung Mệnh'), menh.chinhTinh.map(function (x) { return _tvmbG(['chinh', 'sao'], x); }).join(', ')]);
@@ -782,8 +783,8 @@ function renderBasis(data) {
   var html = rows.map(function (r) {
     return '<div class="row"><span class="k">' + esc(r[0]) + '</span>' + esc(r[1]) + '</div>';
   }).join('');
-  if (o.desc) html += ('<div class="row"><span class="k">' + _tvmbT('js.ctk.chuc-phan-suy-ra', 'Chức phận suy ra') + '</span>') + esc(o.desc) + '</div>';
-  if (o.source) html += '<div class="src">' + esc(o.source) + '</div>';
+  if (o.desc) html += ('<div class="row"><span class="k">' + _tvmbT('js.ctk.chuc-phan-suy-ra', 'Chức phận suy ra') + '</span>') + esc(TuviPastLife.desc(o)) + '</div>';
+  if (o.source) html += '<div class="src">' + esc(TuviPastLife.source(o)) + '</div>';
   document.getElementById('basisBody').innerHTML = html;
   document.getElementById('basisBlock').style.display = 'block';
 }
@@ -863,7 +864,7 @@ function _posterOpts() {
   return {
     imageUrl: _resultImgUrl,
     title: d.characterName || d.danhXung || _tvmbT('js.ctk.chan-dung-tien-kiep-gxr5', 'Chân dung tiền kiếp'),
-    subtitle: [d.danhXung, (d.era || {}).label].filter(Boolean).join(' · '),
+    subtitle: [d.danhXung, TuviPastLife.eraLabel(d.era)].filter(Boolean).join(' · '),
     // Lời Kết trước: đó là câu chốt của cả truyện, tách ra đứng một mình vẫn
     // có nghĩa. Mô tả nhân vật là lớp đỡ, cuối cùng mới bới trong 5 hồi.
     quote: Poster.pickQuote([d.ketLuan, d.moTaNhanVat, ((d.acts || []).map(function (a) { return a.text || ''; }).join(' '))]),

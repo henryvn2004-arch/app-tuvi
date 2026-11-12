@@ -129,6 +129,14 @@ for (let i = 0; i < 150; i++) {
     out.nn.push({ dom, goiY: r.goiY.map((g) => ({ id: g.id, ten: g.ten, chat: g.chat, viec: g.viec, vi: g.vi, viMa: g.viMa })), chatNguoi: r.chatNguoi, neTranh: r.neTranh });
   }
 }
+// Chân Dung Tiền Kiếp (W30f-7): payload THẬT của computePastLife (era + occupation) — khoá suy từ trường sẵn có.
+out.tk = [];
+for (let i = 0; i < 400; i++) {
+  const b = mk();
+  const p = PL.computePastLife(ls(b), b.gender);
+  const o = p.occupation;
+  out.tk.push({ era: { id: p.era.id, label: p.era.label, ageLabel: p.era.ageLabel }, o: { star: o.star, tier: o.tier, tierLabel: o.tierLabel, desc: o.desc, source: o.source } });
+}
 // Câu ý nghĩa từng cung (W30f-5): MỌI chuỗi trong ls.cachCucTungCung trên lưới lá số rộng (đủ tuổi để Tuần/Triệt bật + tắt).
 out.cc = [];
 for (let i = 0; i < 700; i++) {
@@ -403,6 +411,53 @@ console.log('__KQ__' + JSON.stringify(out));
     );
     const nNhanh = [...dung].filter((k) => k.endsWith('.ten') && k.startsWith('nhanh.')).length;
     bao(nNhanh >= 25, `nghe-nghiep — mẫu chạm ${nNhanh}/34 nhánh (cần ≥25)`);
+  }
+
+  // ── Chân Dung Tiền Kiếp (W30f-7): chạy CHÍNH public/tools-shared/past-life-t.js trên payload thật, I18n giả trả câu nguồn kèm \u0001.
+  {
+    const vm = await import('node:vm');
+    const S = nguon('past-life');
+    const I18n = {
+      locale: 'xx',
+      loadLong() {},
+      long: (ns, k, vi) => (ns === 'past-life' && S.has(k) ? '\u0001' + S.get(k) : vi),
+    };
+    const ctx = vm.createContext({ window: { I18n } });
+    ctx.I18n = I18n;
+    vm.runInContext(readFileSync(join(ROOT, 'public/tools-shared/past-life-t.js'), 'utf8'), ctx);
+    const T = ctx.window.TuviPastLife;
+    const sai = [];
+    const era = new Set();
+    for (const g of kq.tk) {
+      era.add(g.era.id);
+      const dat = T.eraLine(g.era);
+      if (dat !== '\u0001' + g.era.label + ' · \u0001' + g.era.ageLabel)
+        sai.push('era ' + g.era.id);
+      if (T.eraLabel(g.era) !== '\u0001' + g.era.label) sai.push('eraLabel ' + g.era.id);
+      for (const [f, hs] of [
+        ['tier', 'tierLabel'],
+        ['desc', 'desc'],
+        ['source', 'source'],
+      ]) {
+        const r = T[f](g.o);
+        if (r !== '\u0001' + g.o[hs]) sai.push(`${f} ${g.o.star}/${g.o.tier}`);
+      }
+    }
+    bao(
+      sai.length === 0,
+      `past-life-t — ${kq.tk.length} payload tiền kiếp thật, mọi era/bậc/chức phận/trích dẫn tra trúng khoá VÀ chữ Việt payload == nguồn dịch (so cả dấu marker): ${[...new Set(sai)].slice(0, 4).join(', ') || 'không hụt'}`
+    );
+    bao(era.size === 5, `past-life-t — mẫu chạm đủ ${era.size}/5 bối cảnh`);
+    // vi byte-giống: helper không đổi chữ khi locale vi
+    const cv = vm.createContext({
+      window: { I18n: { locale: 'vi', long: (n, k, vi) => vi + '!' } },
+    });
+    vm.runInContext(readFileSync(join(ROOT, 'public/tools-shared/past-life-t.js'), 'utf8'), cv);
+    const g0 = kq.tk[0];
+    bao(
+      cv.window.TuviPastLife.desc(g0.o) === g0.o.desc + '!',
+      'past-life-t — đường tra đi qua I18n.long (vi dùng I18n gốc trả nguyên)'
+    );
   }
 
   // ── Câu ý nghĩa cung (W30f-5): chạy CHÍNH hàm tra của trang (public/tools-shared/cach-cuc.js) với I18n giả trả câu Việt
