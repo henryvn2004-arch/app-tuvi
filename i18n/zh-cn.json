@@ -8067,6 +8067,246 @@
   "t": "例如：这次换工作好吗？",
   "h": "ec1b3e52"
  },
+ "menhkho.cc-at-dau": {
+  "t": "乙酉",
+  "h": "9842b7e9"
+ },
+ "menhkho.cc-at-hoi": {
+  "t": "乙亥",
+  "h": "5f156282"
+ },
+ "menhkho.cc-at-mao": {
+  "t": "乙卯",
+  "h": "fe60ff8d"
+ },
+ "menhkho.cc-at-mui": {
+  "t": "乙未",
+  "h": "3906728d"
+ },
+ "menhkho.cc-at-suu": {
+  "t": "乙丑",
+  "h": "1c28856d"
+ },
+ "menhkho.cc-at-ty": {
+  "t": "乙巳",
+  "h": "0f9da740"
+ },
+ "menhkho.cc-binh-dan": {
+  "t": "丙寅",
+  "h": "bb3f9222"
+ },
+ "menhkho.cc-binh-ngo": {
+  "t": "丙午",
+  "h": "3ec6e2f9"
+ },
+ "menhkho.cc-binh-than": {
+  "t": "丙申",
+  "h": "fcaad7a6"
+ },
+ "menhkho.cc-binh-thin": {
+  "t": "丙辰",
+  "h": "a40c3c50"
+ },
+ "menhkho.cc-binh-tuat": {
+  "t": "丙戌",
+  "h": "6f234952"
+ },
+ "menhkho.cc-binh-ty": {
+  "t": "丙子",
+  "h": "d0de6cd1"
+ },
+ "menhkho.cc-canh-dan": {
+  "t": "庚寅",
+  "h": "71041a51"
+ },
+ "menhkho.cc-canh-ngo": {
+  "t": "庚午",
+  "h": "d6703e8a"
+ },
+ "menhkho.cc-canh-than": {
+  "t": "庚申",
+  "h": "5f080d41"
+ },
+ "menhkho.cc-canh-thin": {
+  "t": "庚辰",
+  "h": "e61f8119"
+ },
+ "menhkho.cc-canh-tuat": {
+  "t": "庚戌",
+  "h": "223966c3"
+ },
+ "menhkho.cc-canh-ty": {
+  "t": "庚子",
+  "h": "6f3acf8f"
+ },
+ "menhkho.cc-dinh-dau": {
+  "t": "丁酉",
+  "h": "74b51915"
+ },
+ "menhkho.cc-dinh-hoi": {
+  "t": "丁亥",
+  "h": "062cc6af"
+ },
+ "menhkho.cc-dinh-mao": {
+  "t": "丁卯",
+  "h": "48fa829a"
+ },
+ "menhkho.cc-dinh-mui": {
+  "t": "丁未",
+  "h": "817c95a8"
+ },
+ "menhkho.cc-dinh-suu": {
+  "t": "丁丑",
+  "h": "05319c07"
+ },
+ "menhkho.cc-dinh-ty": {
+  "t": "丁巳",
+  "h": "ab0362c5"
+ },
+ "menhkho.cc-giap-dan": {
+  "t": "甲寅",
+  "h": "c61ed450"
+ },
+ "menhkho.cc-giap-ngo": {
+  "t": "甲午",
+  "h": "8fe62c84"
+ },
+ "menhkho.cc-giap-than": {
+  "t": "甲申",
+  "h": "c1ac08ba"
+ },
+ "menhkho.cc-giap-thin": {
+  "t": "甲辰",
+  "h": "2df357cf"
+ },
+ "menhkho.cc-giap-tuat": {
+  "t": "甲戌",
+  "h": "2962b2ce"
+ },
+ "menhkho.cc-giap-ty": {
+  "t": "甲子",
+  "h": "9978a63b"
+ },
+ "menhkho.cc-ky-dau": {
+  "t": "己酉",
+  "h": "38d58f6e"
+ },
+ "menhkho.cc-ky-hoi": {
+  "t": "己亥",
+  "h": "3f690e0c"
+ },
+ "menhkho.cc-ky-mao": {
+  "t": "己卯",
+  "h": "be766a5d"
+ },
+ "menhkho.cc-ky-mui": {
+  "t": "己未",
+  "h": "e0297da0"
+ },
+ "menhkho.cc-ky-suu": {
+  "t": "己丑",
+  "h": "d22fd87c"
+ },
+ "menhkho.cc-ky-ty": {
+  "t": "己巳",
+  "h": "372279bd"
+ },
+ "menhkho.cc-mau-dan": {
+  "t": "戊寅",
+  "h": "df81e0af"
+ },
+ "menhkho.cc-mau-ngo": {
+  "t": "戊午",
+  "h": "f9755851"
+ },
+ "menhkho.cc-mau-than": {
+  "t": "戊申",
+  "h": "4db26cc2"
+ },
+ "menhkho.cc-mau-thin": {
+  "t": "戊辰",
+  "h": "8ce701d1"
+ },
+ "menhkho.cc-mau-tuat": {
+  "t": "戊戌",
+  "h": "79712764"
+ },
+ "menhkho.cc-mau-ty": {
+  "t": "戊子",
+  "h": "1355db8c"
+ },
+ "menhkho.cc-nham-dan": {
+  "t": "壬寅",
+  "h": "d2c9aec3"
+ },
+ "menhkho.cc-nham-ngo": {
+  "t": "壬午",
+  "h": "7e6947bf"
+ },
+ "menhkho.cc-nham-than": {
+  "t": "壬申",
+  "h": "d94b15cc"
+ },
+ "menhkho.cc-nham-thin": {
+  "t": "壬辰",
+  "h": "5aec0635"
+ },
+ "menhkho.cc-nham-tuat": {
+  "t": "壬戌",
+  "h": "433e7e10"
+ },
+ "menhkho.cc-nham-ty": {
+  "t": "壬子",
+  "h": "a5792187"
+ },
+ "menhkho.cc-quy-dau": {
+  "t": "癸酉",
+  "h": "6b177e82"
+ },
+ "menhkho.cc-quy-hoi": {
+  "t": "癸亥",
+  "h": "ded499bb"
+ },
+ "menhkho.cc-quy-mao": {
+  "t": "癸卯",
+  "h": "87edaf91"
+ },
+ "menhkho.cc-quy-mui": {
+  "t": "癸未",
+  "h": "79ee2cfa"
+ },
+ "menhkho.cc-quy-suu": {
+  "t": "癸丑",
+  "h": "4c142bee"
+ },
+ "menhkho.cc-quy-ty": {
+  "t": "癸巳",
+  "h": "91c81644"
+ },
+ "menhkho.cc-tan-dau": {
+  "t": "辛酉",
+  "h": "e50c8461"
+ },
+ "menhkho.cc-tan-hoi": {
+  "t": "辛亥",
+  "h": "7fc784ac"
+ },
+ "menhkho.cc-tan-mao": {
+  "t": "辛卯",
+  "h": "914e1516"
+ },
+ "menhkho.cc-tan-mui": {
+  "t": "辛未",
+  "h": "1ef1fe2e"
+ },
+ "menhkho.cc-tan-suu": {
+  "t": "辛丑",
+  "h": "c94fd2bf"
+ },
+ "menhkho.cc-tan-ty": {
+  "t": "辛巳",
+  "h": "46b9d5af"
+ },
  "napam.1-nhap-nam-sinh": {
   "t": "<span class=\"wss-n\">1</span><span class=\"wss-l\">输入出生年</span>",
   "h": "ecce406c"

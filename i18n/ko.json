@@ -8067,6 +8067,246 @@
   "t": "예: 이번 이직을 해도 될까요?",
   "h": "ec1b3e52"
  },
+ "menhkho.cc-at-dau": {
+  "t": "을유",
+  "h": "9842b7e9"
+ },
+ "menhkho.cc-at-hoi": {
+  "t": "을해",
+  "h": "5f156282"
+ },
+ "menhkho.cc-at-mao": {
+  "t": "을묘",
+  "h": "fe60ff8d"
+ },
+ "menhkho.cc-at-mui": {
+  "t": "을미",
+  "h": "3906728d"
+ },
+ "menhkho.cc-at-suu": {
+  "t": "을축",
+  "h": "1c28856d"
+ },
+ "menhkho.cc-at-ty": {
+  "t": "을사",
+  "h": "0f9da740"
+ },
+ "menhkho.cc-binh-dan": {
+  "t": "병인",
+  "h": "bb3f9222"
+ },
+ "menhkho.cc-binh-ngo": {
+  "t": "병오",
+  "h": "3ec6e2f9"
+ },
+ "menhkho.cc-binh-than": {
+  "t": "병신",
+  "h": "fcaad7a6"
+ },
+ "menhkho.cc-binh-thin": {
+  "t": "병진",
+  "h": "a40c3c50"
+ },
+ "menhkho.cc-binh-tuat": {
+  "t": "병술",
+  "h": "6f234952"
+ },
+ "menhkho.cc-binh-ty": {
+  "t": "병자",
+  "h": "d0de6cd1"
+ },
+ "menhkho.cc-canh-dan": {
+  "t": "경인",
+  "h": "71041a51"
+ },
+ "menhkho.cc-canh-ngo": {
+  "t": "경오",
+  "h": "d6703e8a"
+ },
+ "menhkho.cc-canh-than": {
+  "t": "경신",
+  "h": "5f080d41"
+ },
+ "menhkho.cc-canh-thin": {
+  "t": "경진",
+  "h": "e61f8119"
+ },
+ "menhkho.cc-canh-tuat": {
+  "t": "경술",
+  "h": "223966c3"
+ },
+ "menhkho.cc-canh-ty": {
+  "t": "경자",
+  "h": "6f3acf8f"
+ },
+ "menhkho.cc-dinh-dau": {
+  "t": "정유",
+  "h": "74b51915"
+ },
+ "menhkho.cc-dinh-hoi": {
+  "t": "정해",
+  "h": "062cc6af"
+ },
+ "menhkho.cc-dinh-mao": {
+  "t": "정묘",
+  "h": "48fa829a"
+ },
+ "menhkho.cc-dinh-mui": {
+  "t": "정미",
+  "h": "817c95a8"
+ },
+ "menhkho.cc-dinh-suu": {
+  "t": "정축",
+  "h": "05319c07"
+ },
+ "menhkho.cc-dinh-ty": {
+  "t": "정사",
+  "h": "ab0362c5"
+ },
+ "menhkho.cc-giap-dan": {
+  "t": "갑인",
+  "h": "c61ed450"
+ },
+ "menhkho.cc-giap-ngo": {
+  "t": "갑오",
+  "h": "8fe62c84"
+ },
+ "menhkho.cc-giap-than": {
+  "t": "갑신",
+  "h": "c1ac08ba"
+ },
+ "menhkho.cc-giap-thin": {
+  "t": "갑진",
+  "h": "2df357cf"
+ },
+ "menhkho.cc-giap-tuat": {
+  "t": "갑술",
+  "h": "2962b2ce"
+ },
+ "menhkho.cc-giap-ty": {
+  "t": "갑자",
+  "h": "9978a63b"
+ },
+ "menhkho.cc-ky-dau": {
+  "t": "기유",
+  "h": "38d58f6e"
+ },
+ "menhkho.cc-ky-hoi": {
+  "t": "기해",
+  "h": "3f690e0c"
+ },
+ "menhkho.cc-ky-mao": {
+  "t": "기묘",
+  "h": "be766a5d"
+ },
+ "menhkho.cc-ky-mui": {
+  "t": "기미",
+  "h": "e0297da0"
+ },
+ "menhkho.cc-ky-suu": {
+  "t": "기축",
+  "h": "d22fd87c"
+ },
+ "menhkho.cc-ky-ty": {
+  "t": "기사",
+  "h": "372279bd"
+ },
+ "menhkho.cc-mau-dan": {
+  "t": "무인",
+  "h": "df81e0af"
+ },
+ "menhkho.cc-mau-ngo": {
+  "t": "무오",
+  "h": "f9755851"
+ },
+ "menhkho.cc-mau-than": {
+  "t": "무신",
+  "h": "4db26cc2"
+ },
+ "menhkho.cc-mau-thin": {
+  "t": "무진",
+  "h": "8ce701d1"
+ },
+ "menhkho.cc-mau-tuat": {
+  "t": "무술",
+  "h": "79712764"
+ },
+ "menhkho.cc-mau-ty": {
+  "t": "무자",
+  "h": "1355db8c"
+ },
+ "menhkho.cc-nham-dan": {
+  "t": "임인",
+  "h": "d2c9aec3"
+ },
+ "menhkho.cc-nham-ngo": {
+  "t": "임오",
+  "h": "7e6947bf"
+ },
+ "menhkho.cc-nham-than": {
+  "t": "임신",
+  "h": "d94b15cc"
+ },
+ "menhkho.cc-nham-thin": {
+  "t": "임진",
+  "h": "5aec0635"
+ },
+ "menhkho.cc-nham-tuat": {
+  "t": "임술",
+  "h": "433e7e10"
+ },
+ "menhkho.cc-nham-ty": {
+  "t": "임자",
+  "h": "a5792187"
+ },
+ "menhkho.cc-quy-dau": {
+  "t": "계유",
+  "h": "6b177e82"
+ },
+ "menhkho.cc-quy-hoi": {
+  "t": "계해",
+  "h": "ded499bb"
+ },
+ "menhkho.cc-quy-mao": {
+  "t": "계묘",
+  "h": "87edaf91"
+ },
+ "menhkho.cc-quy-mui": {
+  "t": "계미",
+  "h": "79ee2cfa"
+ },
+ "menhkho.cc-quy-suu": {
+  "t": "계축",
+  "h": "4c142bee"
+ },
+ "menhkho.cc-quy-ty": {
+  "t": "계사",
+  "h": "91c81644"
+ },
+ "menhkho.cc-tan-dau": {
+  "t": "신유",
+  "h": "e50c8461"
+ },
+ "menhkho.cc-tan-hoi": {
+  "t": "신해",
+  "h": "7fc784ac"
+ },
+ "menhkho.cc-tan-mao": {
+  "t": "신묘",
+  "h": "914e1516"
+ },
+ "menhkho.cc-tan-mui": {
+  "t": "신미",
+  "h": "1ef1fe2e"
+ },
+ "menhkho.cc-tan-suu": {
+  "t": "신축",
+  "h": "c94fd2bf"
+ },
+ "menhkho.cc-tan-ty": {
+  "t": "신사",
+  "h": "46b9d5af"
+ },
  "napam.1-nhap-nam-sinh": {
   "t": "<span class=\"wss-n\">1</span><span class=\"wss-l\">출생 연도 입력</span>",
   "h": "ecce406c"
