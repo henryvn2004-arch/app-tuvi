@@ -258,7 +258,7 @@ function pageShell(opts: {
   <div class="rel-block"><div class="rel-title">Xem thêm</div><div class="rel-grid">${relLinks.join('')}</div></div>
 </div>
 ${ask.tail}
-<script src="/track.js?v=4" defer></script><script src="/nav.js?v=49" defer></script>
+<script src="/track.js?v=8" defer></script><script src="/nav.js?v=49" defer></script>
 </body></html>`;
 }
 

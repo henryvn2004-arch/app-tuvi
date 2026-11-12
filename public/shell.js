@@ -3955,7 +3955,7 @@
 
   // ── kind:'fields' — nhập tay vài trường rồi tính, KHÔNG cần ngày sinh ──
   function runKimLau(chat, toolId) {
-    ensureScripts(['/tools-shared/kim-lau.js?v=2'], function (err) {
+    ensureScripts(['/tools-shared/kim-lau.js?v=3'], function (err) {
       if (err || typeof KimLauTool === 'undefined') { inlineErrorBubble(chat, T('js.shellui.khong-nap-duoc-cong-cu-kim', 'không nạp được công cụ Kim Lâu.')); return; }
       inlStep(chat,
         T('js.shellui.cho-thay-xin-nam-sinh-duong', '<p>Cho thầy xin năm sinh dương lịch của con nhé.</p>') +
@@ -4061,7 +4061,7 @@
     });
   }
   function runSinhCon(chat, toolId) {
-    ensureScripts(['/tools-shared/xem-tuoi-sinh-con.js?v=1'], function (err) {
+    ensureScripts(['/tools-shared/xem-tuoi-sinh-con.js?v=2'], function (err) {
       if (err || typeof XemTuoiSinhConTool === 'undefined') { inlineErrorBubble(chat, T('js.shellui.khong-nap-duoc-cong-cu-xem', 'không nạp được công cụ Xem Tuổi Sinh Con.')); return; }
       inlStep(chat,
         T('js.shellui.cho-thay-xin-nam-sinh-duong-453j', '<p>Cho thầy xin năm sinh dương lịch của bố và mẹ nhé.</p>') +
@@ -4087,7 +4087,7 @@
     });
   }
   function runHoangDao(chat, toolId) {
-    ensureScripts(['/tools-shared/hoang-dao.js?v=3', '/tools-shared/hoang-lich.js?v=1'], function (err) {
+    ensureScripts(['/tools-shared/hoang-dao.js?v=4', '/tools-shared/hoang-lich.js?v=1'], function (err) {
       if (err || typeof HoangDaoTool === 'undefined') { inlineErrorBubble(chat, T('js.shellui.khong-nap-duoc-cong-cu-gio', 'không nạp được công cụ Giờ Hoàng Đạo.')); return; }
       var t = new Date();
       inlStep(chat,
@@ -4125,7 +4125,7 @@
     });
   }
   function runNgayTot(chat, toolId) {
-    ensureScripts(['/tools-shared/ngay-tot.js?v=3'], function (err) {
+    ensureScripts(['/tools-shared/ngay-tot.js?v=4'], function (err) {
       if (err || typeof NgayTotTool === 'undefined') { inlineErrorBubble(chat, T('js.shellui.khong-nap-duoc-cong-cu-ngay', 'không nạp được công cụ Ngày Tốt.')); return; }
       var t = new Date();
       inlStep(chat,

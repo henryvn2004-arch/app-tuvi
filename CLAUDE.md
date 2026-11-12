@@ -268,7 +268,7 @@ Mỗi luật dưới đây sinh ra từ một lần cắn thật. Cột cuối l
   gọi file đó** (bump `CACHE_KEY` sessionStorage KHÔNG thay được việc này — hai
   cơ chế cache khác nhau) — quên là browser cũ dính bản JS thiếu hàm mới, lỗi
   kiểu `X.hamMoi is not a function`. Đã cắn 2 lần: `tuvi-ansao-engine.js`
-  (nhật ký Đợt 8) · `tool-prices.js::masterForTool` (2026-09-25).
+  (nhật ký Đợt 8) · `tool-prices.js::masterForTool` (2026-09-25). `npm run check:assetv`.
 - **`public/` JS/CSS bị bỏ chú thích lúc build Vercel** (`scripts/minify-public.mjs`) ⇒ số dòng lỗi
   prod ≠ nguồn; mã chạy thật cấm dựa vào chú thích/`fn.toString()`.
 

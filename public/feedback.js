@@ -17,7 +17,7 @@
    `npm run check:share` canh cho trang shell mới khỏi quên khai.
 
    Tuỳ chọn, khi cần đặt vào chỗ khác:
-     <script src="/feedback.js?v=1" data-tvfb-watch="lgBody"></script>
+     <script src="/feedback.js?v=2" data-tvfb-watch="lgBody"></script>
      <div data-tvfb data-tvfb-watch="lgBody"></div>
    `data-tvfb`  (tuỳ chọn) tool_id. Bỏ trống ⇒ lấy TuviPaywall.getProduct() —
                 CÙNG nguồn mà paywall vừa trừ Lượng, nên không thể lệch giữa
