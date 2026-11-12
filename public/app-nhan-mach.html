@@ -322,21 +322,21 @@ var _chon = {};      // id → vai đang chọn
 var _lastSelf = null;
 var _lastPayload = null;
 var NM_STEPS = [
-  { label: 'Lập lá số từng người', ms: 1400 },
-  { label: 'Phân kiểu & dò chỗ trống của nhóm', ms: 2000 },
-  { label: 'Viết bản đọc cả sổ', ms: 0 },
+  { label: _tvmbT('js.nm.lap-la-so-tung-nguoi', 'Lập lá số từng người'), ms: 1400 },
+  { label: _tvmbT('js.nm.phan-kieu-do-cho-trong-cua', 'Phân kiểu & dò chỗ trống của nhóm'), ms: 2000 },
+  { label: _tvmbT('js.nm.viet-ban-doc-ca-so', 'Viết bản đọc cả sổ'), ms: 0 },
 ];
 var _loadingCtl = null;
 
 var VAI = [
-  ['sep', 'Sếp / cấp trên'],
-  ['dong-nghiep', 'Đồng nghiệp'],
-  ['cap-duoi', 'Cấp dưới'],
-  ['doi-tac', 'Đối tác / khách'],
-  ['ban-be', 'Bạn bè'],
-  ['cha-me', 'Cha mẹ'],
-  ['con-cai', 'Con cái'],
-  ['ban-doi', 'Bạn đời'],
+  ['sep', _tvmbT('js.nm.sep-cap-tren', 'Sếp / cấp trên')],
+  ['dong-nghiep', _tvmbT('js.nm.dong-nghiep', 'Đồng nghiệp')],
+  ['cap-duoi', _tvmbT('js.nm.cap-duoi', 'Cấp dưới')],
+  ['doi-tac', _tvmbT('js.nm.doi-tac-khach', 'Đối tác / khách')],
+  ['ban-be', _tvmbT('js.nm.ban-be', 'Bạn bè')],
+  ['cha-me', _tvmbT('js.nm.cha-me', 'Cha mẹ')],
+  ['con-cai', _tvmbT('js.nm.con-cai', 'Con cái')],
+  ['ban-doi', _tvmbT('js.nm.ban-doi', 'Bạn đời')],
 ];
 var KIEU_MAU = {
   'khai-sang': '#A8342A', 'lanh-dao': '#7A5F26', 'ho-tro': '#1455A4', 'hop-tac': '#1E6B3C',
@@ -354,7 +354,7 @@ try {
   if (_remembered) {
     TuviForm.setData(_remembered, 'self');
     var s = (window.Shell && Shell.birthSummary) ? Shell.birthSummary(_remembered) : '';
-    if (s) document.getElementById('selfSummary').textContent = 'Lá số của bạn: ' + s;
+    if (s) document.getElementById('selfSummary').textContent = _tvmbT('js.nm.la-so-cua-ban', 'Lá số của bạn: ') + s;
   }
 } catch (e) { /* không có shell / chưa nhớ gì — phần này không bắt buộc */ }
 
@@ -391,7 +391,7 @@ function _birthOf(prefix) {
 
 function _shortOf(b) {
   if (!b) return '';
-  return (b.gioitinh === 'nu' ? 'Nữ' : 'Nam') + ' · ' + (b.ngay || '?') + '/' + (b.thang || '?') + '/' + (b.nam || '?');
+  return (b.gioitinh === 'nu' ? _tvmbT('js.nm.nu', 'Nữ') : _tvmbT('js.nm.nam', 'Nam')) + ' · ' + (b.ngay || '?') + '/' + (b.thang || '?') + '/' + (b.nam || '?');
 }
 
 // ── Sổ ─────────────────────────────────────────────────────────────────────
@@ -402,7 +402,7 @@ async function loadSo() {
     _so = await UserCharts.list();
   } catch (e) { _so = []; }
   if (!_so.length) {
-    host.innerHTML = '<div class="nm-empty">Sổ đang trống. Bấm <b>＋ Thêm người vào sổ</b> bên dưới để thêm ít nhất 2 người — sếp, đồng nghiệp, cấp dưới hay khách hàng. Cần đăng nhập để sổ lưu theo tài khoản.</div>';
+    host.innerHTML = ('<div class="nm-empty">' + _tvmbT('js.nm.so-dang-trong-bam-them-nguoi', 'Sổ đang trống. Bấm <b>＋ Thêm người vào sổ</b> bên dưới để thêm ít nhất 2 người — sếp, đồng nghiệp, cấp dưới hay khách hàng. Cần đăng nhập để sổ lưu theo tài khoản.') + '</div>');
     renderCount();
     return;
   }
@@ -418,7 +418,7 @@ async function loadSo() {
       VAI.map(function (v) {
         return '<option value="' + v[0] + '"' + (sel === v[0] ? ' selected' : '') + '>' + v[1] + '</option>';
       }).join('') + '</select>' +
-      '<button class="del" title="Xoá khỏi sổ" onclick="delNguoi(\'' + esc(id) + '\')">✕</button>' +
+      ('<button class="del" title="' + _tvmbT('js.nm.xoa-khoi-so', 'Xoá khỏi sổ') + '" onclick="delNguoi(\'') + esc(id) + '\')">✕</button>' +
       '</div>';
   }).join('');
   renderCount();
@@ -427,13 +427,13 @@ async function loadSo() {
 function renderCount() {
   var n = Object.keys(_chon).length;
   document.getElementById('soCount').textContent =
-    n === 0 ? 'Chưa chọn ai.' : 'Đang chọn ' + n + ' người' + (n < 2 ? ' — cần ít nhất 2.' : (n > 8 ? ' — tối đa 8.' : '.'));
+    n === 0 ? _tvmbT('js.nm.chua-chon-ai', 'Chưa chọn ai.') : _tvmbT('js.nm.dang-chon', 'Đang chọn ') + n + _tvmbT('js.nm.nguoi', ' người') + (n < 2 ? _tvmbT('js.nm.can-it-nhat-2', ' — cần ít nhất 2.') : (n > 8 ? _tvmbT('js.nm.toi-da-8', ' — tối đa 8.') : '.'));
 }
 
 function toggleNguoi(id, on) {
   if (on) {
     if (Object.keys(_chon).length >= 8) {
-      showError('Mỗi lượt đọc tối đa 8 người — nhiều hơn thì bản đọc thành danh bạ.');
+      showError(_tvmbT('js.nm.moi-luot-doc-toi-da-8', 'Mỗi lượt đọc tối đa 8 người — nhiều hơn thì bản đọc thành danh bạ.'));
       loadSo();
       return;
     }
@@ -455,7 +455,7 @@ function setVai(id, v) {
 }
 
 async function delNguoi(id) {
-  if (!window.confirm('Xoá lá số này khỏi sổ?')) return;
+  if (!window.confirm(_tvmbT('js.nm.xoa-la-so-nay-khoi-so', 'Xoá lá số này khỏi sổ?'))) return;
   delete _chon[id];
   await UserCharts.remove(id);
   await loadSo();
@@ -465,10 +465,10 @@ async function addPerson() {
   var e = document.getElementById('add-err');
   e.classList.remove('active');
   var b = _birthOf('add');
-  if (!b) { e.textContent = 'Nhập đủ ngày tháng năm sinh.'; e.classList.add('active'); return; }
+  if (!b) { e.textContent = _tvmbT('js.nm.nhap-du-ngay-thang-nam-sinh', 'Nhập đủ ngày tháng năm sinh.'); e.classList.add('active'); return; }
   var ten = (document.getElementById('addTen').value || '').trim();
-  if (!ten) { e.textContent = 'Đặt tên gọi để còn phân biệt trong sổ.'; e.classList.add('active'); return; }
-  if (!window.UserCharts) { e.textContent = 'Cần đăng nhập để lưu vào sổ.'; e.classList.add('active'); return; }
+  if (!ten) { e.textContent = _tvmbT('js.nm.dat-ten-goi-de-con-phan', 'Đặt tên gọi để còn phân biệt trong sổ.'); e.classList.add('active'); return; }
+  if (!window.UserCharts) { e.textContent = _tvmbT('js.nm.can-dang-nhap-de-luu-vao', 'Cần đăng nhập để lưu vào sổ.'); e.classList.add('active'); return; }
   var btn = document.getElementById('btnAdd');
   btn.disabled = true;
   try {
@@ -477,11 +477,11 @@ async function addPerson() {
     var raw = TuviForm.getData('add');
     raw.hoten = ten;
     var saved = await UserCharts.save(raw, ten);
-    if (!saved) throw new Error('Chưa lưu được — kiểm tra đăng nhập.');
+    if (!saved) throw new Error(_tvmbT('js.nm.chua-luu-duoc-kiem-tra-dang', 'Chưa lưu được — kiểm tra đăng nhập.'));
     document.getElementById('addTen').value = '';
     await loadSo();
   } catch (err) {
-    e.textContent = err.message || 'Chưa lưu được.';
+    e.textContent = err.message || _tvmbT('js.nm.chua-luu-duoc', 'Chưa lưu được.');
     e.classList.add('active');
   } finally {
     btn.disabled = false;
@@ -504,8 +504,8 @@ function _toBirth(b) {
 async function analyze() {
   showError('');
   var ids = Object.keys(_chon);
-  if (ids.length < 2) { showError('Chọn ít nhất 2 người trong sổ để đọc được cả nhóm.'); return; }
-  if (ids.length > 8) { showError('Mỗi lượt đọc tối đa 8 người.'); return; }
+  if (ids.length < 2) { showError(_tvmbT('js.nm.chon-it-nhat-2-nguoi-trong', 'Chọn ít nhất 2 người trong sổ để đọc được cả nhóm.')); return; }
+  if (ids.length > 8) { showError(_tvmbT('js.nm.moi-luot-doc-toi-da-8-l7vo', 'Mỗi lượt đọc tối đa 8 người.')); return; }
 
   var byId = {};
   _so.forEach(function (it) { byId[String(it.id)] = it; });
@@ -519,7 +519,7 @@ async function analyze() {
       birth: _toBirth(it.birth),
     });
   }
-  if (nguoi.length < 2) { showError('Có người trong sổ thiếu ngày sinh — chọn lại giúp.'); return; }
+  if (nguoi.length < 2) { showError(_tvmbT('js.nm.co-nguoi-trong-so-thieu-ngay', 'Có người trong sổ thiếu ngày sinh — chọn lại giúp.')); return; }
 
   _lastSelf = _birthOf('self');
   _lastPayload = { nguoi: nguoi, birthSelf: _lastSelf || undefined };
@@ -565,7 +565,7 @@ async function _doGenerate() {
       body: JSON.stringify(Object.assign({}, _lastPayload, { slug: _currentSlug })),
     });
     var data = await res.json();
-    if (!res.ok || !data.success) throw new Error(data.error || 'Lỗi ' + res.status);
+    if (!res.ok || !data.success) throw new Error(data.error || _tvmbT('js.nm.loi', 'Lỗi ') + res.status);
     renderMeta(data);
     renderProse(data);
     _loadingCtl && _loadingCtl.finish();
@@ -589,12 +589,12 @@ async function _doGenerate() {
     Shell.setContext({
       scenario: { type: 'nhan-mach', data: data.rail || {} },
       label: 'Sổ nhân mạch',
-      greeting: 'Đây là bản đọc **' + data.soNguoi + ' người** trong sổ của bạn. Muốn hỏi sâu về ai?',
+      greeting: _tvmbT('js.nm.day-la-ban-doc-n-nguoi', 'Đây là bản đọc **{n} người** trong sổ của bạn. Muốn hỏi sâu về ai?', {n: data.soNguoi}),
       chips: [
-        'Việc sắp tới nên giao cho ai trong nhóm này?',
-        'Vì sao hai người đó dễ giẫm chân nhau?',
-        'Nhóm đang thiếu chất gì, ai đang phải gánh?',
-        'Tuần này nên gặp ai trước và mở lời thế nào?',
+        _tvmbT('js.nm.viec-sap-toi-nen-giao-cho-ai', 'Việc sắp tới nên giao cho ai trong nhóm này?'),
+        _tvmbT('js.nm.vi-sao-hai-nguoi-do-de-giam', 'Vì sao hai người đó dễ giẫm chân nhau?'),
+        _tvmbT('js.nm.nhom-dang-thieu-chat-gi-ai', 'Nhóm đang thiếu chất gì, ai đang phải gánh?'),
+        _tvmbT('js.nm.tuan-nay-nen-gap-ai-truoc', 'Tuần này nên gặp ai trước và mở lời thế nào?'),
       ],
     });
 
@@ -606,22 +606,22 @@ async function _doGenerate() {
     Shell.setShareable({
       kind: 'text',
       toolId: 'nhan-mach',
-      title: 'Sổ nhân mạch — đọc nhóm ' + data.soNguoi + ' người',
+      title: _tvmbT('js.nm.so-nhan-mach-doc-nhom-n', 'Sổ nhân mạch — đọc nhóm {n} người', {n: data.soNguoi}),
       text: [
-        'Nhóm ' + data.soNguoi + ' người.',
+        _tvmbT('js.nm.nhom-n-nguoi', 'Nhóm {n} người.', {n: data.soNguoi}),
         (data.phanBo || []).filter(function (b) { return b.soNguoi; })
           .map(function (b) { return b.ten + ': ' + b.soNguoi; }).join(' · '),
         (data.thieuKieu || []).length
-          ? 'Đội đang thiếu kiểu: ' + data.thieuKieu.map(function (k) { return k.ten; }).join(', ')
-          : 'Đội có đủ bốn kiểu.',
-        data.nenTimThem ? 'Nên tìm thêm kiểu: ' + data.nenTimThem.ten : '',
+          ? _tvmbT('js.nm.doi-dang-thieu-kieu-ds', 'Đội đang thiếu kiểu: {ds}', {ds: data.thieuKieu.map(function (k) { return k.ten; }).join(', ')})
+          : _tvmbT('js.nm.doi-co-du-bon-kieu', 'Đội có đủ bốn kiểu.'),
+        data.nenTimThem ? _tvmbT('js.nm.nen-tim-them-kieu-ten', 'Nên tìm thêm kiểu: {ten}', {ten: data.nenTimThem.ten}) : '',
       ].filter(Boolean).join('\n'),
     });
   } catch (e) {
     if (window.TuviPaywall && TuviPaywall.showRefundNotice) TuviPaywall.showRefundNotice(data);
     _loadingCtl && _loadingCtl.stop();
     _closePanel();
-    showError('Lỗi: ' + (e.message || 'Không thể kết nối. Vui lòng thử lại.'));
+    showError(_tvmbT('js.nm.loi-8d72', 'Lỗi: ') + (e.message || _tvmbT('js.nm.khong-the-ket-noi-vui-long', 'Không thể kết nối. Vui lòng thử lại.')));
   }
 }
 
@@ -646,10 +646,7 @@ function renderMeta(data) {
   // KHÔNG có câu cổ thư — không có "cung Mệnh của ai" để trích.
   var cs = data.coSo, csEl = document.getElementById('coSoDoc');
   if (cs && cs.tong > 0) {
-    csEl.innerHTML = 'Bản này đọc từ <b>' + cs.tong + ' dữ kiện</b> lập ra từ ' + cs.soNguoi +
-      ' lá số bạn nhập — ' + cs.soSao + ' sao an trên các cung, ' + cs.soCachCuc + ' cách cục, ' +
-      cs.soDaiVan + ' chặng đại vận. Không có bước nào đoán mò: đổi một chi tiết trong ngày sinh ' +
-      'của bất kỳ ai là cả bảng trên đổi theo.';
+    csEl.innerHTML = _tvmbT('js.nm.ban-nay-doc-tu-full', 'Bản này đọc từ <b>{tong} dữ kiện</b> lập ra từ {n} lá số bạn nhập — {sao} sao an trên các cung, {cc} cách cục, {dv} chặng đại vận. Không có bước nào đoán mò: đổi một chi tiết trong ngày sinh của bất kỳ ai là cả bảng trên đổi theo.', {tong: cs.tong, n: cs.soNguoi, sao: cs.soSao, cc: cs.soCachCuc, dv: cs.soDaiVan});
     csEl.style.display = 'block';
   } else {
     csEl.style.display = 'none';
@@ -657,10 +654,10 @@ function renderMeta(data) {
 
   if ((data.thieuKieu || []).length || data.duaKieu || data.nenTimThem) {
     var chips = (data.thieuKieu || []).map(function (k) {
-      return '<span class="nm-chip">Không ai kiểu ' + esc(k.ten) + '</span>';
+      return ('<span class="nm-chip">' + _tvmbT('js.nm.khong-ai-kieu', 'Không ai kiểu') + ' ') + esc(k.ten) + '</span>';
     });
-    if (data.duaKieu) chips.push('<span class="nm-chip">Quá nửa nhóm là kiểu ' + esc(data.duaKieu.ten) + '</span>');
-    if (data.nenTimThem) chips.push('<span class="nm-chip">Nên tìm thêm: ' + esc(data.nenTimThem.ten) + '</span>');
+    if (data.duaKieu) chips.push(('<span class="nm-chip">' + _tvmbT('js.nm.qua-nua-nhom-la-kieu', 'Quá nửa nhóm là kiểu') + ' ') + esc(data.duaKieu.ten) + '</span>');
+    if (data.nenTimThem) chips.push(('<span class="nm-chip">' + _tvmbT('js.nm.nen-tim-them', 'Nên tìm thêm:') + ' ') + esc(data.nenTimThem.ten) + '</span>');
     document.getElementById('gapChips').innerHTML = chips.join('');
     document.getElementById('gapBlock').style.display = 'block';
   }
@@ -670,13 +667,13 @@ function renderMeta(data) {
   var ppl = (data.thanhVien || []).map(function (t) {
     return '<div class="nm-person" data-ten="' + esc(t.ten) + '"><div class="h">' + esc(t.ten) + '</div>' +
       '<div class="r">' + esc((t.vai || {}).label || '') +
-      ((t.kieu || {}).ten ? ' · kiểu ' + esc(t.kieu.ten) : '') +
+      ((t.kieu || {}).ten ? _tvmbT('js.nm.kieu', ' · kiểu ') + esc(t.kieu.ten) : '') +
       (t.lai && t.kieuPhu ? ' (pha ' + esc(t.kieuPhu.ten) + ')' : '') +
       // ⚠️ Payload CŨ trong cache mang `diem` (điểm nội suy); bản mới mang
       // `khung` = điểm ĐẠI VẬN thật. Nêu rõ là khung, đừng để đọc thành điểm năm.
       (t.vanNam && t.vanNam.khung && t.vanNam.khung.diem != null
-        ? ' · khung đại vận ' + t.vanNam.khung.diem + '/10'
-        : (t.vanNam && t.vanNam.diem != null ? ' · vận năm ' + t.vanNam.diem + '/10' : '')) + '</div>' +
+        ? _tvmbT('js.nm.khung-dai-van', ' · khung đại vận ') + t.vanNam.khung.diem + '/10'
+        : (t.vanNam && t.vanNam.diem != null ? _tvmbT('js.nm.van-nam', ' · vận năm ') + t.vanNam.diem + '/10' : '')) + '</div>' +
       '<div class="w"></div><div class="q"></div></div>';
   }).join('');
   if (ppl) {
@@ -689,7 +686,7 @@ function renderMeta(data) {
   var coSo = (data.cap || []).map(function (c) {
     var va = c.loai === 'giam-chan';
     return '<div class="nm-cap"><b>' + esc(c.a) + ' ↔ ' + esc(c.b) + '</b>' +
-      '<span class="tag ' + (va ? 'va' : 'bu') + '">' + (va ? 'dễ giẫm chân' : 'bù nhau') + '</span>' +
+      '<span class="tag ' + (va ? 'va' : 'bu') + '">' + (va ? _tvmbT('js.nm.de-giam-chan', 'dễ giẫm chân') : _tvmbT('js.nm.bu-nhau', 'bù nhau')) + '</span>' +
       '<p>' + esc(c.vi) + '</p></div>';
   }).join('');
   if (coSo) {
@@ -704,12 +701,12 @@ function renderMeta(data) {
       // Bản CŨ trong cache: `diem`/`huong` — vẫn phải đọc được.
       if (t.khungDiem != null || t.canCan != null) {
         var d = [];
-        if (t.khungDiem != null) d.push('khung đại vận ' + t.khungDiem + '/10');
-        if (t.canCan != null) d.push('cát−sát ' + (t.canCan > 0 ? '+' : '') + t.canCan);
+        if (t.khungDiem != null) d.push(_tvmbT('js.nm.khung-dai-van-dlx0', 'khung đại vận ') + t.khungDiem + '/10');
+        if (t.canCan != null) d.push(_tvmbT('js.nm.cat-sat', 'cát−sát ') + (t.canCan > 0 ? '+' : '') + t.canCan);
         return (i + 1) + '. <b>' + esc(t.ten) + '</b> — ' + d.join(' · ');
       }
       return (i + 1) + '. <b>' + esc(t.ten) + '</b>' +
-        (t.diem == null ? ' — chưa chấm vận năm' : ' — vận năm ' + t.diem + '/10' + (t.huong ? ' (' + esc(t.huong) + ')' : ''));
+        (t.diem == null ? _tvmbT('js.nm.chua-cham-van-nam', ' — chưa chấm vận năm') : _tvmbT('js.nm.van-nam-1z56', ' — vận năm ') + t.diem + '/10' + (t.huong ? ' (' + esc(t.huong) + ')' : ''));
     }).join('<br>');
     document.getElementById('orderBlock').style.display = 'block';
   }
@@ -721,7 +718,7 @@ function _mountInviteCta() {
   var host = document.getElementById('resPanel');
   if (!host) return;
   var go = function () {
-    if (window.InviteCta) window.InviteCta.mount(host, { toolId: 'nhan-mach', toolLabel: 'bản đọc nhóm' });
+    if (window.InviteCta) window.InviteCta.mount(host, { toolId: 'nhan-mach', toolLabel: _tvmbT('js.nm.ban-doc-nhom', 'bản đọc nhóm') });
   };
   if (window.InviteCta) return go();
   if (document.getElementById('_ivc_js')) return;
@@ -794,7 +791,7 @@ async function _loadHistory() {
     var d = await r.json();
     if (!d.success || !(d.items || []).length) return;
     document.getElementById('histList').innerHTML = d.items.map(function (it) {
-      return '<div>· ' + (it.so_nguoi || 0) + ' người — ' + esc(it.ten_nguoi || '') + '</div>';
+      return '<div>· ' + (it.so_nguoi || 0) + _tvmbT('js.nm.nguoi-kgnv', ' người — ') + esc(it.ten_nguoi || '') + '</div>';
     }).join('');
     document.getElementById('histBlock').style.display = 'block';
   } catch (e) { /* lịch sử hỏng không phải lý do làm hỏng kết quả vừa đọc */ }

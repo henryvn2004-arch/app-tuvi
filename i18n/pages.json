@@ -799,6 +799,55 @@
    "shell"
   ]
  },
+ "/app/nhan-mach": {
+  "file": "app-nhan-mach.html",
+  "keys": [
+   "battu.1-nhap-thong-tin",
+   "battu.chi-phi-su-dung",
+   "battu.gioi-thieu",
+   "battu.hoi",
+   "daycon.neu-chi-nho-mot-cau",
+   "duyenno.2-thanh-toan",
+   "duyenno.3-nhan-ket-qua",
+   "luangiai.chuyen-khoan-qua-qr-ngan-hang",
+   "luangiai.mua-goi-de-nhan-nhieu-uu",
+   "luangiai.tu-vi-dau-so-la-mot",
+   "nm.ban-do-ca-nhom",
+   "nm.ban-doc-nay-phac-hoa-tu",
+   "nm.ban-dung-o-dau-trong-nhom",
+   "nm.ban-luan-giai-mau-tai-pdf",
+   "nm.cac-cap-trong-nhom",
+   "nm.cap-can-de-y",
+   "nm.cap-de-giam-chan",
+   "nm.cho-trong-cua-nhom",
+   "nm.chon-lai",
+   "nm.chon-nguoi-trong-so",
+   "nm.co-la-so-cua-ban-thi",
+   "nm.da-doc-truoc-do",
+   "nm.doc-ca-so-ton-luong",
+   "nm.dua-ca-doi-hoac-danh-sach",
+   "nm.goi-la",
+   "nm.lam-gi-tuan-nay",
+   "nm.luu-vao-so",
+   "nm.moi-luot-luong",
+   "nm.nhom-nay-hinh-gi",
+   "nm.sep-hung-chi-lan-khach-a",
+   "nm.so-nhan-mach",
+   "nm.so-nhan-mach-doc-ca-nhom",
+   "nm.so-nhan-mach-tu-vi-minh",
+   "nm.them-la-so-cua-chinh-ban",
+   "nm.them-nguoi-vao-so",
+   "nm.them-ten-ngay-sinh-va-gioi",
+   "nm.thu-tu-goi-y-tiep-can",
+   "nm.trong-mot-doi-nhom-ai-hop",
+   "nm.tung-nguoi",
+   "nm.viec-nen-lam-tuan-nay",
+   "nm.xep-theo-van-nam-cua-tung"
+  ],
+  "js": [
+   "shell"
+  ]
+ },
  "/app/van-han-nam": {
   "file": "app-van-han-nam.html",
   "keys": [
