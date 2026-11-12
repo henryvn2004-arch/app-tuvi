@@ -2107,6 +2107,10 @@
   "t": "書き出しに失敗しました：",
   "h": "b105cd2a"
  },
+ "js.lienhe.gui-email": {
+  "t": "メールを送る",
+  "h": "5901b176"
+ },
  "js.luangiai.10-8-dai-van-con-lai": {
   "t": "/10。残り8つの大運と各年の小運は、「人生のサイクル」でご覧いただけます。",
   "h": "d4c7373d"
@@ -8294,6 +8298,86 @@
  "laso.tu-vi-minh-bao": {
   "t": "明宝紫微斗数",
   "h": "33336b26"
+ },
+ "lienhe.24-48-gio": {
+  "t": "24〜48時間",
+  "h": "dbc9b8ce"
+ },
+ "lienhe.an-sao-va-luan-giai-truc": {
+  "t": "トップページでそのまま命盤作成と鑑定ができます",
+  "h": "df0989a0"
+ },
+ "lienhe.cau-hoi-ve-luan-giai-la": {
+  "t": "<b>命盤鑑定についてのご質問</b> — 結果のどの部分を詳しく知りたいのか、何がわかりにくかったか・納得できなかったかを具体的にお書きください。",
+  "h": "814a0c60"
+ },
+ "lienhe.chung-toi-tran-trong-moi-phan": {
+  "t": "いただいたご意見はすべて大切に拝読し、できる限りお返事いたします",
+  "h": "2f5ea451"
+ },
+ "lienhe.de-chung-toi-co-the-ho": {
+  "t": "よりよいサポートのために",
+  "h": "6a75128e"
+ },
+ "lienhe.gop-y-ve-phuong-phap-neu": {
+  "t": "<b>方法についてのご意見</b> — 星の配置や判断の仕方で改善できそうな点にお気づきでしたら、ぜひ具体的に、可能であれば根拠を添えてお聞かせください。",
+  "h": "429de005"
+ },
+ "lienhe.hop-tac-nghien-cuu-chung-toi": {
+  "t": "<b>研究協力</b> — 学術的な姿勢で紫微斗数を研究・検証することに関心をお持ちの方を、いつでも歓迎します。",
+  "h": "2f2bc8e0"
+ },
+ "lienhe.huong-dan-lien-he": {
+  "t": "お問い合わせのご案内",
+  "h": "dfd0a511"
+ },
+ "lienhe.kenh-lien-he-chinh-phan-hoi": {
+  "t": "主な連絡窓口 — 営業日24〜48時間以内にご返信します",
+  "h": "cb8ce6fa"
+ },
+ "lienhe.lien-he-tu-vi-minh-bao": {
+  "t": "お問い合わせ — 明宝紫微斗数",
+  "h": "6036fce9"
+ },
+ "lienhe.lien-he-voi-tu-vi-minh": {
+  "t": "明宝紫微斗数へのお問い合わせ — 命理を知り、時勢に順って歩む。",
+  "h": "1a5c4e42"
+ },
+ "lienhe.moi-y-kien-trao-doi-gop": {
+  "t": "鑑定の内容、研究の方法、システムの使い方に関するご意見・ご提案・ご質問は、どれも喜んでお受けします。",
+  "h": "0a0f0110"
+ },
+ "lienhe.nhung-y-kien-dong-gop-xac": {
+  "t": "的確なご意見は、システムの改善に役立つだけでなく、紫微斗数の研究の中でまだ疑問の残る点を明らかにする助けにもなります。",
+  "h": "9d745b63"
+ },
+ "lienhe.thoi-gian-phan-hoi": {
+  "t": "返信までの目安",
+  "h": "b2537f52"
+ },
+ "lienhe.thu-dien-tu": {
+  "t": "メール",
+  "h": "472b2949"
+ },
+ "lienhe.trao-doi-gop-y-cau-hoi": {
+  "t": "ご相談 · ご意見 · ご質問",
+  "h": "2e532773"
+ },
+ "lienhe.tri-menh-ly-thuan-the-hanh": {
+  "t": "命理を知り、時勢に順って歩む。古法にもとづく紫微斗数と鑑定。",
+  "h": "677cab94"
+ },
+ "lienhe.trong-cac-ngay-lam-viec-nhung": {
+  "t": "営業日内。的確なご意見はシステム改善の過程に反映させていただきます。",
+  "h": "2458c959"
+ },
+ "lienhe.tu-vi-minh-bao-la-so": {
+  "t": "明宝紫微斗数 – 正確な紫微斗数の命盤",
+  "h": "6f4cabbc"
+ },
+ "lienhe.van-de-ky-thuat-neu-gap": {
+  "t": "<b>技術的な問題</b> — システムの利用中に不具合が起きた場合は、行っていた操作、表示されたエラーメッセージ（あれば）、使用中の端末を簡潔にお書きください。",
+  "h": "bd4a69d1"
  },
  "luangiai.an-la-so": {
   "t": "▾ 命盤を隠す",

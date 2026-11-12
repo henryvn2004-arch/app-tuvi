@@ -2107,6 +2107,10 @@
   "t": "Export failed: ",
   "h": "b105cd2a"
  },
+ "js.lienhe.gui-email": {
+  "t": "Send email",
+  "h": "5901b176"
+ },
  "js.luangiai.10-8-dai-van-con-lai": {
   "t": "/10. The other 8 luck cycles plus the yearly cycles are in Life Cycles.",
   "h": "d4c7373d"
@@ -8294,6 +8298,86 @@
  "laso.tu-vi-minh-bao": {
   "t": "Minh Bao Zi Wei Dou Shu",
   "h": "33336b26"
+ },
+ "lienhe.24-48-gio": {
+  "t": "24 – 48 hours",
+  "h": "dbc9b8ce"
+ },
+ "lienhe.an-sao-va-luan-giai-truc": {
+  "t": "Build your chart and get a reading right on the home page",
+  "h": "df0989a0"
+ },
+ "lienhe.cau-hoi-ve-luan-giai-la": {
+  "t": "<b>Questions about a chart reading</b> — please say which part of the result needs clarifying, and be specific about what you didn't understand or found unconvincing.",
+  "h": "814a0c60"
+ },
+ "lienhe.chung-toi-tran-trong-moi-phan": {
+  "t": "We value every message and will do our best to reply",
+  "h": "2f5ea451"
+ },
+ "lienhe.de-chung-toi-co-the-ho": {
+  "t": "To help us help you",
+  "h": "6a75128e"
+ },
+ "lienhe.gop-y-ve-phuong-phap-neu": {
+  "t": "<b>Feedback on method</b> — if you see something in how stars are placed or how readings are judged that could be improved, we'd love to hear your specific view, with evidence if you have it.",
+  "h": "429de005"
+ },
+ "lienhe.hop-tac-nghien-cuu-chung-toi": {
+  "t": "<b>Research collaboration</b> — we're always open to anyone who shares an interest in studying and testing Zi Wei Dou Shu in a scholarly spirit.",
+  "h": "2f2bc8e0"
+ },
+ "lienhe.huong-dan-lien-he": {
+  "t": "How to reach us",
+  "h": "dfd0a511"
+ },
+ "lienhe.kenh-lien-he-chinh-phan-hoi": {
+  "t": "Main contact channel — we reply within 24–48 business hours",
+  "h": "cb8ce6fa"
+ },
+ "lienhe.lien-he-tu-vi-minh-bao": {
+  "t": "Contact — Minh Bao Zi Wei Dou Shu",
+  "h": "6036fce9"
+ },
+ "lienhe.lien-he-voi-tu-vi-minh": {
+  "t": "Contact Minh Bao Zi Wei Dou Shu — Know your destiny, follow the flow.",
+  "h": "1a5c4e42"
+ },
+ "lienhe.moi-y-kien-trao-doi-gop": {
+  "t": "Every comment, suggestion or question about our readings, our research methods or using the system is warmly welcome.",
+  "h": "0a0f0110"
+ },
+ "lienhe.nhung-y-kien-dong-gop-xac": {
+  "t": "Well-founded feedback not only helps refine the system, it also helps shed light on questions that remain open in the study of Zi Wei Dou Shu.",
+  "h": "9d745b63"
+ },
+ "lienhe.thoi-gian-phan-hoi": {
+  "t": "Response time",
+  "h": "b2537f52"
+ },
+ "lienhe.thu-dien-tu": {
+  "t": "Email",
+  "h": "472b2949"
+ },
+ "lienhe.trao-doi-gop-y-cau-hoi": {
+  "t": "Questions · Feedback · Discussion",
+  "h": "2e532773"
+ },
+ "lienhe.tri-menh-ly-thuan-the-hanh": {
+  "t": "Know your destiny, follow the flow. Zi Wei Dou Shu by classical methods, with readings.",
+  "h": "677cab94"
+ },
+ "lienhe.trong-cac-ngay-lam-viec-nhung": {
+  "t": "On business days. Well-founded suggestions are fed into how we improve the system.",
+  "h": "2458c959"
+ },
+ "lienhe.tu-vi-minh-bao-la-so": {
+  "t": "Minh Bao Zi Wei Dou Shu – Accurate Zi Wei charts",
+  "h": "6f4cabbc"
+ },
+ "lienhe.van-de-ky-thuat-neu-gap": {
+  "t": "<b>Technical issues</b> — if something goes wrong while using the system, briefly describe what you were doing, any error message shown, and the device you're using.",
+  "h": "bd4a69d1"
  },
  "luangiai.an-la-so": {
   "t": "▾ Hide chart",

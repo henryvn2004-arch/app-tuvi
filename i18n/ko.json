@@ -2107,6 +2107,10 @@
   "t": "내보내기 실패: ",
   "h": "b105cd2a"
  },
+ "js.lienhe.gui-email": {
+  "t": "이메일 보내기",
+  "h": "5901b176"
+ },
  "js.luangiai.10-8-dai-van-con-lai": {
   "t": "/10. 나머지 대운 8개와 매년의 소한은 인생 사이클에서 볼 수 있어요.",
   "h": "d4c7373d"
@@ -8294,6 +8298,86 @@
  "laso.tu-vi-minh-bao": {
   "t": "명보 자미두수",
   "h": "33336b26"
+ },
+ "lienhe.24-48-gio": {
+  "t": "24~48시간",
+  "h": "dbc9b8ce"
+ },
+ "lienhe.an-sao-va-luan-giai-truc": {
+  "t": "홈페이지에서 바로 명반을 세우고 풀이를 볼 수 있습니다",
+  "h": "df0989a0"
+ },
+ "lienhe.cau-hoi-ve-luan-giai-la": {
+  "t": "<b>명반 풀이에 관한 질문</b> — 결과의 어느 부분을 더 알고 싶은지, 무엇이 이해되지 않거나 납득되지 않았는지 구체적으로 적어 주세요.",
+  "h": "814a0c60"
+ },
+ "lienhe.chung-toi-tran-trong-moi-phan": {
+  "t": "모든 의견을 소중히 여기며, 가능한 한 답변드리겠습니다",
+  "h": "2f5ea451"
+ },
+ "lienhe.de-chung-toi-co-the-ho": {
+  "t": "더 나은 도움을 드리기 위해",
+  "h": "6a75128e"
+ },
+ "lienhe.gop-y-ve-phuong-phap-neu": {
+  "t": "<b>방법에 대한 의견</b> — 별 배치나 판단 방식에서 개선할 점을 발견하셨다면, 가능하면 근거와 함께 구체적인 의견을 꼭 들려주세요.",
+  "h": "429de005"
+ },
+ "lienhe.hop-tac-nghien-cuu-chung-toi": {
+  "t": "<b>연구 협력</b> — 학문적인 자세로 자미두수를 연구하고 검증하는 데 관심 있는 분들께 언제나 열려 있습니다.",
+  "h": "2f2bc8e0"
+ },
+ "lienhe.huong-dan-lien-he": {
+  "t": "문의 안내",
+  "h": "dfd0a511"
+ },
+ "lienhe.kenh-lien-he-chinh-phan-hoi": {
+  "t": "주요 연락 창구 — 영업일 기준 24~48시간 내 답변",
+  "h": "cb8ce6fa"
+ },
+ "lienhe.lien-he-tu-vi-minh-bao": {
+  "t": "문의 — 명보 자미두수",
+  "h": "6036fce9"
+ },
+ "lienhe.lien-he-voi-tu-vi-minh": {
+  "t": "명보 자미두수에 문의하기 — 명리를 알고 때에 순응하며 나아가다.",
+  "h": "1a5c4e42"
+ },
+ "lienhe.moi-y-kien-trao-doi-gop": {
+  "t": "풀이 내용, 연구 방법, 시스템 이용에 관한 모든 의견과 제안, 질문을 기쁘게 받습니다.",
+  "h": "0a0f0110"
+ },
+ "lienhe.nhung-y-kien-dong-gop-xac": {
+  "t": "타당한 의견은 시스템을 다듬는 데 도움이 될 뿐 아니라, 자미두수 연구에서 아직 의문으로 남은 문제들을 밝히는 데에도 보탬이 됩니다.",
+  "h": "9d745b63"
+ },
+ "lienhe.thoi-gian-phan-hoi": {
+  "t": "답변 시간",
+  "h": "b2537f52"
+ },
+ "lienhe.thu-dien-tu": {
+  "t": "이메일",
+  "h": "472b2949"
+ },
+ "lienhe.trao-doi-gop-y-cau-hoi": {
+  "t": "상담 · 의견 · 질문",
+  "h": "2e532773"
+ },
+ "lienhe.tri-menh-ly-thuan-the-hanh": {
+  "t": "명리를 알고 때에 순응하며 나아가다. 고법에 따른 자미두수와 풀이.",
+  "h": "677cab94"
+ },
+ "lienhe.trong-cac-ngay-lam-viec-nhung": {
+  "t": "영업일 기준. 타당한 의견은 시스템 개선 과정에 반영됩니다.",
+  "h": "2458c959"
+ },
+ "lienhe.tu-vi-minh-bao-la-so": {
+  "t": "명보 자미두수 – 정확한 자미두수 명반",
+  "h": "6f4cabbc"
+ },
+ "lienhe.van-de-ky-thuat-neu-gap": {
+  "t": "<b>기술 문제</b> — 시스템 사용 중 문제가 생기면 하던 작업, 나타난 오류 메시지(있다면), 사용 중인 기기를 간단히 적어 주세요.",
+  "h": "bd4a69d1"
  },
  "luangiai.an-la-so": {
   "t": "▾ 명반 숨기기",

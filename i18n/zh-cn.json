@@ -2107,6 +2107,10 @@
   "t": "导出失败：",
   "h": "b105cd2a"
  },
+ "js.lienhe.gui-email": {
+  "t": "寄送电子邮件",
+  "h": "5901b176"
+ },
  "js.luangiai.10-8-dai-van-con-lai": {
   "t": "/10。其余 8 个大运与逐年小运，都收录在「人生周期」中。",
   "h": "d4c7373d"
@@ -8294,6 +8298,86 @@
  "laso.tu-vi-minh-bao": {
   "t": "明宝紫微斗数",
   "h": "33336b26"
+ },
+ "lienhe.24-48-gio": {
+  "t": "24 – 48 小时",
+  "h": "dbc9b8ce"
+ },
+ "lienhe.an-sao-va-luan-giai-truc": {
+  "t": "在首页即可直接排盘与解读",
+  "h": "df0989a0"
+ },
+ "lienhe.cau-hoi-ve-luan-giai-la": {
+  "t": "<b>关于命盘解读的问题</b>——请写明结果中哪个部分需要厘清，并具体说明哪里不明白或觉得不够妥当。",
+  "h": "814a0c60"
+ },
+ "lienhe.chung-toi-tran-trong-moi-phan": {
+  "t": "我们珍视每一则回馈，并会尽力回复",
+  "h": "2f5ea451"
+ },
+ "lienhe.de-chung-toi-co-the-ho": {
+  "t": "为了让我们更好地协助您",
+  "h": "6a75128e"
+ },
+ "lienhe.gop-y-ve-phuong-phap-neu": {
+  "t": "<b>对方法的建议</b>——若您认为安星或论断的方式有可改进之处，我们很希望听到具体的意见，若能附上佐证更好。",
+  "h": "429de005"
+ },
+ "lienhe.hop-tac-nghien-cuu-chung-toi": {
+  "t": "<b>研究合作</b>——我们始终欢迎同样有志以学术精神研究与验证紫微斗数的朋友。",
+  "h": "2f2bc8e0"
+ },
+ "lienhe.huong-dan-lien-he": {
+  "t": "联系说明",
+  "h": "dfd0a511"
+ },
+ "lienhe.kenh-lien-he-chinh-phan-hoi": {
+  "t": "主要联系管道——工作日 24–48 小时内回复",
+  "h": "cb8ce6fa"
+ },
+ "lienhe.lien-he-tu-vi-minh-bao": {
+  "t": "联系我们 — 明宝紫微斗数",
+  "h": "6036fce9"
+ },
+ "lienhe.lien-he-voi-tu-vi-minh": {
+  "t": "联系明宝紫微斗数——知命理，顺势而行。",
+  "h": "1a5c4e42"
+ },
+ "lienhe.moi-y-kien-trao-doi-gop": {
+  "t": "凡是关于解读内容、研究方法或系统使用的意见、建议与问题，我们都诚挚欢迎。",
+  "h": "0a0f0110"
+ },
+ "lienhe.nhung-y-kien-dong-gop-xac": {
+  "t": "中肯的意见不仅有助于完善系统，也有助于厘清紫微斗数研究中仍存疑的问题。",
+  "h": "9d745b63"
+ },
+ "lienhe.thoi-gian-phan-hoi": {
+  "t": "回复时间",
+  "h": "b2537f52"
+ },
+ "lienhe.thu-dien-tu": {
+  "t": "电子邮件",
+  "h": "472b2949"
+ },
+ "lienhe.trao-doi-gop-y-cau-hoi": {
+  "t": "交流 · 建议 · 提问",
+  "h": "2e532773"
+ },
+ "lienhe.tri-menh-ly-thuan-the-hanh": {
+  "t": "知命理，顺势而行。依古法的紫微斗数与解读。",
+  "h": "677cab94"
+ },
+ "lienhe.trong-cac-ngay-lam-viec-nhung": {
+  "t": "以工作日计。中肯的建议将纳入系统改进的过程。",
+  "h": "2458c959"
+ },
+ "lienhe.tu-vi-minh-bao-la-so": {
+  "t": "明宝紫微斗数 – 精准的紫微斗数命盘",
+  "h": "6f4cabbc"
+ },
+ "lienhe.van-de-ky-thuat-neu-gap": {
+  "t": "<b>技术问题</b>——使用系统时若遇到问题，请简要描述：当时的操作、出现的错误消息（如有）以及使用的设备。",
+  "h": "bd4a69d1"
  },
  "luangiai.an-la-so": {
   "t": "▾ 收起命盘",

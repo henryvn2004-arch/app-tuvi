@@ -636,6 +636,35 @@
    "nav"
   ]
  },
+ "/contact": {
+  "file": "contact.html",
+  "keys": [
+   "laso.lien-he",
+   "lienhe.24-48-gio",
+   "lienhe.an-sao-va-luan-giai-truc",
+   "lienhe.cau-hoi-ve-luan-giai-la",
+   "lienhe.chung-toi-tran-trong-moi-phan",
+   "lienhe.de-chung-toi-co-the-ho",
+   "lienhe.gop-y-ve-phuong-phap-neu",
+   "lienhe.hop-tac-nghien-cuu-chung-toi",
+   "lienhe.huong-dan-lien-he",
+   "lienhe.kenh-lien-he-chinh-phan-hoi",
+   "lienhe.lien-he-tu-vi-minh-bao",
+   "lienhe.lien-he-voi-tu-vi-minh",
+   "lienhe.moi-y-kien-trao-doi-gop",
+   "lienhe.nhung-y-kien-dong-gop-xac",
+   "lienhe.thoi-gian-phan-hoi",
+   "lienhe.thu-dien-tu",
+   "lienhe.trao-doi-gop-y-cau-hoi",
+   "lienhe.tri-menh-ly-thuan-the-hanh",
+   "lienhe.trong-cac-ngay-lam-viec-nhung",
+   "lienhe.tu-vi-minh-bao-la-so",
+   "lienhe.van-de-ky-thuat-neu-gap"
+  ],
+  "js": [
+   "nav"
+  ]
+ },
  "/dieu-khoan-dich-vu.html": {
   "file": "dieu-khoan-dich-vu.html",
   "keys": [
