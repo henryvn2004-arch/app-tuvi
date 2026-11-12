@@ -3,8 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Xem số đẹp — Tử Vi Minh Bảo</title>
-<meta name="description" content="Chấm điểm số điện thoại, số nhà, biển số theo 5 trường phái tách bạch: Bát Tinh Bát Trạch, Quẻ Dịch, Ngũ Hành, Âm Dương và dân gian.">
+<title data-i18n="sodep.xem-so-dep-tu-vi-minh">Xem số đẹp — Tử Vi Minh Bảo</title>
+<meta data-i18n-attr="content:sodep.cham-diem-so-dien-thoai-so" name="description" content="Chấm điểm số điện thoại, số nhà, biển số theo 5 trường phái tách bạch: Bát Tinh Bát Trạch, Quẻ Dịch, Ngũ Hành, Âm Dương và dân gian.">
 <link rel="icon" type="image/webp" href="/seal.webp">
 <link rel="preload" href="/fonts/noto-serif-latin-400.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="/fonts/noto-serif-vietnamese-400.woff2" as="font" type="font/woff2" crossorigin>
@@ -72,10 +72,10 @@
   <main class="ws" id="ws">
     <div class="ws-top">
       <button class="btn mobile-only" onclick="document.getElementById('shell-sidebar').classList.toggle('open');window.shellSyncBackdrop&&shellSyncBackdrop()" aria-label="Menu">☰</button>
-      <div class="ws-title"><b>Xem số đẹp</b><span>SĐT, số nhà, biển số theo 5 trường phái</span></div>
+      <div class="ws-title"><b data-i18n="sodep.xem-so-dep">Xem số đẹp</b><span data-i18n="sodep.sdt-so-nha-bien-so">SĐT, số nhà, biển số theo 5 trường phái</span></div>
       <div class="ws-actions">
-        <button class="btn" id="btnEdit" onclick="showForm()" style="display:none">Sửa</button>
-        <button class="btn mobile-only" onclick="Shell.openRail()">✦ Hỏi</button>
+        <button data-i18n="napam.sua" class="btn" id="btnEdit" onclick="showForm()" style="display:none">Sửa</button>
+        <button data-i18n="battu.hoi" class="btn mobile-only" onclick="Shell.openRail()">✦ Hỏi</button>
       </div>
     </div>
     <div class="ws-body">
@@ -89,15 +89,15 @@
         <img class="intro-avatar" src="/tool-avatars/so-dep.webp" alt="" onerror="this.remove()">
         <div class="intro-body">
           <div class="intro-text">
-            <div class="intro-t">Xem số đẹp</div>
-            <div class="intro-d">Một số điện thoại, biển số hợp phong thủy được nhiều trường phái tính khác nhau — và không phải trường phái nào cũng cho cùng một đáp án. Nhập dãy số, nhận điểm riêng từng trường phái, không gộp mơ hồ.</div>
+            <div data-i18n="sodep.xem-so-dep" class="intro-t">Xem số đẹp</div>
+            <div data-i18n="sodep.mot-so-dien-thoai-bien-so" class="intro-d">Một số điện thoại, biển số hợp phong thủy được nhiều trường phái tính khác nhau — và không phải trường phái nào cũng cho cùng một đáp án. Nhập dãy số, nhận điểm riêng từng trường phái, không gộp mơ hồ.</div>
             <div id="introSrc"></div>
           </div>
         </div>
         <div class="hero-pills">
-          <div class="hero-pill"><span class="hp-ic" data-icon="hash"></span><span>5 trường phái<br>tách bạch</span></div>
-          <div class="hero-pill"><span class="hp-ic" data-icon="scale"></span><span>Đồng thuận<br>tốt – xấu</span></div>
-          <div class="hero-pill"><span class="hp-ic" data-icon="lightbulb"></span><span>Gợi ý số<br>theo mục tiêu</span></div>
+          <div class="hero-pill"><span class="hp-ic" data-icon="hash"></span><span data-i18n="sodep.hp-5-truong-phai">5 trường phái<br>tách bạch</span></div>
+          <div class="hero-pill"><span class="hp-ic" data-icon="scale"></span><span data-i18n="sodep.hp-dong-thuan">Đồng thuận<br>tốt – xấu</span></div>
+          <div class="hero-pill"><span class="hp-ic" data-icon="lightbulb"></span><span data-i18n="sodep.hp-goi-y-so">Gợi ý số<br>theo mục tiêu</span></div>
         </div>
       </div></div>
       <div class="ws-main-col">
@@ -105,35 +105,35 @@
            tại đúng chỗ trạng thái đã đổi trong flow cũ (showResult/showForm).
            Tool này MIỄN PHÍ, không có bước Thanh toán — chỉ 2 bước. -->
       <div class="ws-steps" id="wsSteps">
-        <div class="wss-step active"><span class="wss-n">1</span><span class="wss-l">Nhập thông tin</span></div>
-        <div class="wss-step"><span class="wss-n">2</span><span class="wss-l">Nhận kết quả</span></div>
+        <div class="wss-step active"><span class="wss-n">1</span><span class="wss-l" data-i18n="sodep.nhap-thong-tin">Nhập thông tin</span></div>
+        <div class="wss-step"><span class="wss-n">2</span><span class="wss-l" data-i18n="sodep.nhan-ket-qua">Nhận kết quả</span></div>
       </div>
       <div id="formPanel">
         <div class="cost-box" style="margin:0 0 14px">
           <div class="cb-l">
             <span class="cb-ic" data-icon="wallet"></span>
             <div>
-              <div class="cb-title">Chi phí sử dụng</div>
+              <div data-i18n="battu.chi-phi-su-dung" class="cb-title">Chi phí sử dụng</div>
               <div class="cb-amt" data-tvp-price-label="so-dep">…</div>
             </div>
           </div>
         </div>
         <div class="sd-box">
           <div class="form-card">
-            <div class="fc-head"><span class="fc-ic" data-icon="hash"></span><h2>Chấm điểm một dãy số</h2></div>
-            <p class="sub">Nhập số điện thoại, số nhà hoặc biển số. Nhận về điểm riêng từng trường phái và mức đồng thuận tốt – xấu.</p>
+            <div class="fc-head"><span class="fc-ic" data-icon="hash"></span><h2 data-i18n="sodep.cham-diem-mot-day-so">Chấm điểm một dãy số</h2></div>
+            <p data-i18n="sodep.nhap-so-dien-thoai-so-nha" class="sub">Nhập số điện thoại, số nhà hoặc biển số. Nhận về điểm riêng từng trường phái và mức đồng thuận tốt – xấu.</p>
             <div class="frow">
-              <div class="fg" style="width:220px"><label>Dãy số</label><input type="text" id="dg-so" placeholder="0987661234" inputmode="numeric" maxlength="24"></div>
+              <div class="fg" style="width:220px"><label data-i18n="sodep.day-so">Dãy số</label><input type="text" id="dg-so" placeholder="0987661234" inputmode="numeric" maxlength="24"></div>
               <button class="btn-go" id="btnDg" onclick="chamDiem()">
-                <span class="bg-label"><span class="ic" data-icon="hash"></span><b>Chấm điểm →</b></span>
-                <small>Miễn phí</small>
+                <span class="bg-label"><span class="ic" data-icon="hash"></span><b data-i18n="sodep.cham-diem">Chấm điểm →</b></span>
+                <small data-i18n="sodep.mien-phi">Miễn phí</small>
               </button>
             </div>
             <details class="sd-tuychon">
-              <summary>Cá nhân hoá theo năm sinh (tuỳ chọn)</summary>
+              <summary data-i18n="sodep.ca-nhan-hoa-theo-nam-sinh">Cá nhân hoá theo năm sinh (tuỳ chọn)</summary>
               <div class="sd-tuychon-body">
-                <div class="fg" style="width:130px"><label>Năm sinh</label><input type="number" id="dg-namsinh" placeholder="1990" min="1900" max="2100"></div>
-                <div class="fg" style="width:110px"><label>Giới tính</label><select id="dg-gioitinh"><option value="nam">Nam</option><option value="nu">Nữ</option></select></div>
+                <div class="fg" style="width:130px"><label data-i18n="napam.nam-sinh">Năm sinh</label><input type="number" id="dg-namsinh" placeholder="1990" min="1900" max="2100"></div>
+                <div class="fg" style="width:110px"><label data-i18n="xlg.gioi-tinh">Giới tính</label><select id="dg-gioitinh"><option value="nam">Nam</option><option data-i18n="laso.nu" value="nu">Nữ</option></select></div>
               </div>
             </details>
             <div class="err" id="dg-err"></div>
@@ -142,32 +142,32 @@
 
         <div class="sd-box">
           <div class="form-card">
-            <div class="fc-head"><span class="fc-ic" data-icon="lightbulb"></span><h2>Gợi ý số theo mục tiêu</h2></div>
-            <p class="sub">Chọn độ dài, đầu số và mục tiêu bạn cần. Nhận về danh sách số xếp hạng theo điểm, không dùng danh sách có sẵn.</p>
+            <div class="fc-head"><span class="fc-ic" data-icon="lightbulb"></span><h2 data-i18n="sodep.goi-y-so-theo-muc-tieu-j94s">Gợi ý số theo mục tiêu</h2></div>
+            <p data-i18n="sodep.chon-do-dai-dau-so-va" class="sub">Chọn độ dài, đầu số và mục tiêu bạn cần. Nhận về danh sách số xếp hạng theo điểm, không dùng danh sách có sẵn.</p>
             <div class="frow">
-              <div class="fg" style="width:100px"><label>Độ dài</label><input type="number" id="gy-dodai" value="10" min="4" max="20"></div>
-              <div class="fg" style="width:140px"><label>Đầu số (tuỳ chọn)</label><input type="text" id="gy-tienTo" placeholder="090" inputmode="numeric" maxlength="10"></div>
-              <div class="fg" style="width:170px"><label>Mục tiêu</label>
+              <div class="fg" style="width:100px"><label data-i18n="sodep.do-dai">Độ dài</label><input type="number" id="gy-dodai" value="10" min="4" max="20"></div>
+              <div class="fg" style="width:140px"><label data-i18n="sodep.dau-so-tuy-chon">Đầu số (tuỳ chọn)</label><input type="text" id="gy-tienTo" placeholder="090" inputmode="numeric" maxlength="10"></div>
+              <div class="fg" style="width:170px"><label data-i18n="sodep.muc-tieu">Mục tiêu</label>
                 <select id="gy-mucTieu">
-                  <option value="tu-do">Tự do (mọi sao cát)</option>
-                  <option value="tai-loc">Tài lộc (Sinh Khí)</option>
-                  <option value="suc-khoe">Sức khoẻ (Thiên Y)</option>
-                  <option value="ben-vung">Bền vững (Diên Niên)</option>
-                  <option value="on-dinh">Ổn định (Phục Vị)</option>
+                  <option data-i18n="sodep.tu-do-moi-sao-cat" value="tu-do">Tự do (mọi sao cát)</option>
+                  <option data-i18n="sodep.tai-loc-sinh-khi" value="tai-loc">Tài lộc (Sinh Khí)</option>
+                  <option data-i18n="sodep.suc-khoe-thien-y" value="suc-khoe">Sức khoẻ (Thiên Y)</option>
+                  <option data-i18n="sodep.ben-vung-dien-nien" value="ben-vung">Bền vững (Diên Niên)</option>
+                  <option data-i18n="sodep.on-dinh-phuc-vi" value="on-dinh">Ổn định (Phục Vị)</option>
                 </select>
               </div>
             </div>
             <details class="sd-tuychon">
-              <summary>Cá nhân hoá theo năm sinh (tuỳ chọn)</summary>
+              <summary data-i18n="sodep.ca-nhan-hoa-theo-nam-sinh">Cá nhân hoá theo năm sinh (tuỳ chọn)</summary>
               <div class="sd-tuychon-body">
-                <div class="fg" style="width:130px"><label>Năm sinh</label><input type="number" id="gy-namsinh" placeholder="1990" min="1900" max="2100"></div>
-                <div class="fg" style="width:110px"><label>Giới tính</label><select id="gy-gioitinh"><option value="nam">Nam</option><option value="nu">Nữ</option></select></div>
+                <div class="fg" style="width:130px"><label data-i18n="napam.nam-sinh">Năm sinh</label><input type="number" id="gy-namsinh" placeholder="1990" min="1900" max="2100"></div>
+                <div class="fg" style="width:110px"><label data-i18n="xlg.gioi-tinh">Giới tính</label><select id="gy-gioitinh"><option value="nam">Nam</option><option data-i18n="laso.nu" value="nu">Nữ</option></select></div>
               </div>
             </details>
             <div class="frow" style="margin-top:10px">
               <button class="btn-go" id="btnGy" onclick="goiYSo()">
-                <span class="bg-label"><span class="ic" data-icon="lightbulb"></span><b>Gợi ý 5 số →</b></span>
-                <small>Miễn phí</small>
+                <span class="bg-label"><span class="ic" data-icon="lightbulb"></span><b data-i18n="sodep.goi-y-5-so">Gợi ý 5 số →</b></span>
+                <small data-i18n="sodep.mien-phi">Miễn phí</small>
               </button>
             </div>
             <div class="err" id="gy-err"></div>
@@ -177,9 +177,9 @@
       </div>
       <div class="ws-side-col">
       <div class="ws-promo">
-        <div class="wsp-eyebrow"><span class="wsp-ic" data-icon="book-open"></span><span>Giới thiệu</span></div>
-        <div class="wsp-title">Xem số đẹp</div>
-        <p class="wsp-desc">Xem số đẹp phong thủy là lĩnh vực ứng dụng nhiều trường phái khác nhau — Bát Tinh Bát Trạch, Quẻ Dịch, Ngũ Hành, Âm Dương và quan niệm dân gian — để đánh giá một dãy số theo cát hung. Vì xuất phát điểm khác nhau, các trường phái này không phải lúc nào cũng cho cùng một kết luận.</p>
+        <div class="wsp-eyebrow"><span class="wsp-ic" data-icon="book-open"></span><span data-i18n="sodep.gioi-thieu">Giới thiệu</span></div>
+        <div data-i18n="sodep.xem-so-dep" class="wsp-title">Xem số đẹp</div>
+        <p data-i18n="sodep.xem-so-dep-phong-thuy-la" class="wsp-desc">Xem số đẹp phong thủy là lĩnh vực ứng dụng nhiều trường phái khác nhau — Bát Tinh Bát Trạch, Quẻ Dịch, Ngũ Hành, Âm Dương và quan niệm dân gian — để đánh giá một dãy số theo cát hung. Vì xuất phát điểm khác nhau, các trường phái này không phải lúc nào cũng cho cùng một kết luận.</p>
       </div>
       <div id="shellRecent"></div>
       </div>
@@ -187,8 +187,8 @@
 
       <div id="resWrap" data-ws-result>
         <div id="sdResult"></div>
-        <div class="sd-cta">Số đẹp chỉ là một góc nhìn nhanh — <a href="/app/luan-giai">xem trọn đời qua lá số Tử Vi →</a></div>
-        <div class="ask" data-ask="Dãy số này của tôi theo Bát Trạch/Quẻ Dịch/Ngũ Hành thế nào, có nên dùng không? Luận giúp tôi.">✦ Hỏi Thầy luận sâu hơn</div>
+        <div data-i18n="sodep.so-dep-chi-la-mot-goc" class="sd-cta">Số đẹp chỉ là một góc nhìn nhanh — <a href="/app/luan-giai">xem trọn đời qua lá số Tử Vi →</a></div>
+        <div data-i18n="sodep.hoi-thay-luan-sau-hon" class="ask" data-ask="Dãy số này của tôi theo Bát Trạch/Quẻ Dịch/Ngũ Hành thế nào, có nên dùng không? Luận giúp tôi.">✦ Hỏi Thầy luận sâu hơn</div>
       </div>
     </div>
   </main>
@@ -207,11 +207,11 @@ window.SHELL_INTRO={key:'so-dep'};</script>
 <script src="/tools-shared/kinh-dich-hao.js?v=2"></script>
 <script src="/tools-shared/kinh-dich-doc.js?v=2"></script>
 <script src="/tools-shared/nap-am.js?v=3"></script>
-<script src="/tools-shared/so-dep.js?v=2"></script>
+<script src="/tools-shared/so-dep.js?v=3"></script>
 <script src="/tools-shared/hook-charts.js?v=4"></script>
-<script src="/auth.js?v=9"></script>
+<script src="/auth.js?v=10"></script>
   <script src="/nav.js?v=49" data-icons-only></script>
-<script src="/shell.js?v=153"></script>
+<script src="/shell.js?v=154"></script>
 <script src="/tools-shared/shell-soft-nav.js?v=49"></script>
 <script>
 // Ô giữa dùng CHUNG module /tools-shared/so-dep.js với trang standalone
@@ -239,15 +239,16 @@ function chamDiem(){
   };
   Shell.setContext({
     scenario:{type:'so-dep',data:_ctx},
-    label:'Số đẹp '+d.soSach,
-    greeting:'Dãy số **'+d.soSach+'** — '+(dt.tongPhieu?dt.tot+'/'+dt.tongPhieu+' trường phái nói tốt':'quá ngắn để tính đồng thuận')+'. Bạn muốn tôi luận điều gì?',
-    chips:['Dãy số này có nên dùng không?','Sao Bát Tinh nổi bật nghĩa là gì?','Quẻ Dịch lập được nói lên điều gì?','Nên đổi số nào để tốt hơn?']
+    label:_tvmbT('js.sodep.label','Số đẹp {s}',{s:d.soSach}),
+    greeting:_tvmbT('js.sodep.greeting','Dãy số **{s}** — {kq}. Bạn muốn tôi luận điều gì?',{s:d.soSach,kq:(dt.tongPhieu?_tvmbT('js.sodep.kq-tot','{t}/{n} trường phái nói tốt',{t:dt.tot,n:dt.tongPhieu}):_tvmbT('js.sodep.kq-ngan','quá ngắn để tính đồng thuận'))}),
+    chips:[_tvmbT('js.sodep.chip1','Dãy số này có nên dùng không?'),_tvmbT('js.sodep.chip2','Sao Bát Tinh nổi bật nghĩa là gì?'),_tvmbT('js.sodep.chip3','Quẻ Dịch lập được nói lên điều gì?'),_tvmbT('js.sodep.chip4','Nên đổi số nào để tốt hơn?')]
   });
-  var _lines=['Xem số đẹp — dãy '+d.soSach];
-  _lines.push('Đồng thuận: '+(dt.tongPhieu?dt.tot+'/'+dt.tongPhieu+' trường phái nói tốt':'dãy quá ngắn'));
-  if(d.t1.diem100!=null) _lines.push('Bát Tinh: '+d.t1.diem100+'/100'+(d.t1.noiBat.length?' — '+d.t1.noiBat.join(', '):''));
-  if(d.t2.ok) _lines.push('Quẻ Dịch: '+d.t2.que.ten);
-  Shell.setShareable({kind:'text',toolId:'so-dep',title:'Xem số đẹp '+d.soSach,text:_lines.join('\n')});
+  // Văn bản CHIA SẺ (người xem đọc) theo ngôn ngữ trang; `_ctx` ở trên (gửi rail) giữ chữ Việt.
+  var _lines=[_tvmbT('js.sodep.sh-dong','Xem số đẹp — dãy {s}',{s:d.soSach})];
+  _lines.push(_tvmbT('js.sodep.sh-dongthuan','Đồng thuận: {kq}',{kq:(dt.tongPhieu?_tvmbT('js.sodep.kq-tot','{t}/{n} trường phái nói tốt',{t:dt.tot,n:dt.tongPhieu}):_tvmbT('js.sodep.kq-ngan-sh','dãy quá ngắn'))}));
+  if(d.t1.diem100!=null) _lines.push(_tvmbT('js.sodep.sh-bat-tinh','Bát Tinh: {d}/100',{d:d.t1.diem100})+(d.t1.noiBat.length?' — '+d.t1.noiBat.map(function(x){return _tvmbG('battrach',x);}).join(', '):''));
+  if(d.t2.ok) _lines.push(_tvmbT('js.sodep.sh-que','Quẻ Dịch: {q}',{q:_tvmbG('que',d.t2.que.ten)}));
+  Shell.setShareable({kind:'text',toolId:'so-dep',title:_tvmbT('js.sodep.sh-title','Xem số đẹp {s}',{s:d.soSach}),text:_lines.join('\n')});
   document.querySelectorAll('#resWrap [data-ask]').forEach(function(el){ el.addEventListener('click',function(){ Shell.ask(el.getAttribute('data-ask')); }); });
 }
 function goiYSo(){
@@ -268,13 +269,14 @@ function goiYSo(){
     danhSach:d.danhSach.map(function(x){return x.soSach;}).join(', ')};
   Shell.setContext({
     scenario:{type:'so-dep-goi-y',data:_ctx},
-    label:'Gợi ý số — '+d.doDai+' chữ số',
-    greeting:'Đã gợi ý **'+d.danhSach.length+'** dãy '+d.doDai+' chữ số theo mục tiêu đã chọn. Bạn muốn tôi luận sâu số nào?',
-    chips:d.danhSach.slice(0,4).map(function(x){return 'Luận số '+x.soSach;})
+    label:_tvmbT('js.sodep.gy-label','Gợi ý số — {d} chữ số',{d:d.doDai}),
+    greeting:_tvmbT('js.sodep.gy-greeting','Đã gợi ý **{n}** dãy {d} chữ số theo mục tiêu đã chọn. Bạn muốn tôi luận sâu số nào?',{n:d.danhSach.length,d:d.doDai}),
+    chips:d.danhSach.slice(0,4).map(function(x){return _tvmbT('js.sodep.gy-chip','Luận số {s}',{s:x.soSach});})
   });
-  var _lines=['Gợi ý số đẹp — '+d.doDai+' chữ số, mục tiêu '+d.mucTieu];
-  d.danhSach.forEach(function(x){ _lines.push(x.soSach+' — '+(x.dongThuan.tongPhieu?x.dongThuan.tot+'/'+x.dongThuan.tongPhieu+' tốt':'—')); });
-  Shell.setShareable({kind:'text',toolId:'so-dep',title:'Gợi ý số đẹp '+d.doDai+' chữ số',text:_lines.join('\n')});
+  var _mtEl=document.querySelector('#gy-mucTieu option:checked');
+  var _lines=[_tvmbT('js.sodep.gy-sh-dong','Gợi ý số đẹp — {d} chữ số, mục tiêu {m}',{d:d.doDai,m:_mtEl?_mtEl.textContent:d.mucTieu})];
+  d.danhSach.forEach(function(x){ _lines.push(x.soSach+' — '+(x.dongThuan.tongPhieu?_tvmbT('js.sodep.gy-tot','{t}/{n} tốt',{t:x.dongThuan.tot,n:x.dongThuan.tongPhieu}):'—')); });
+  Shell.setShareable({kind:'text',toolId:'so-dep',title:_tvmbT('js.sodep.gy-sh-title','Gợi ý số đẹp {d} chữ số',{d:d.doDai}),text:_lines.join('\n')});
 }
 function showResult(){
   document.getElementById('formPanel').style.display='none';
