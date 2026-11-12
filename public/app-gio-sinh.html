@@ -385,7 +385,7 @@ async function start(){
     document.getElementById('birthPanel').style.display='none';
     document.getElementById('resPanel').style.display='';
     document.getElementById('btnEdit').style.display='';
-    Shell.setContext&&Shell.setContext({birth:b,label:'Xác định giờ sinh',
+    Shell.setContext&&Shell.setContext({birth:b,label:_tvmbT('js.giosinh.xac-dinh-gio-sinh','Xác định giờ sinh'),
       greeting:_tvmbT('js.giosinh.anh-chi-chua-chot-duoc-gio','Anh/chị chưa chốt được giờ sinh — hỏi tôi về cách phân biệt các giờ khả nghi cũng được.'),
       chips:[_tvmbT('js.giosinh.chip-vi-sao-doi-gio','Vì sao đổi giờ sinh lại đổi cả lá số?'),_tvmbT('js.giosinh.chip-cung-tat-ach','Cung Tật Ách nói lên điều gì?'),_tvmbT('js.giosinh.chip-khong-nho-gio','Không nhớ giờ sinh thì xem tử vi được không?')]});
   }catch(e){showErr(e.message||_tvmbT('js.giosinh.co-loi-xay-ra','Có lỗi xảy ra.'));}

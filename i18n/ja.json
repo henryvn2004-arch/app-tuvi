@@ -1599,6 +1599,10 @@
   "t": "主星なし",
   "h": "bd07d7a9"
  },
+ "js.giosinh.xac-dinh-gio-sinh": {
+  "t": "出生時刻の特定",
+  "h": "c3aee594"
+ },
  "js.giosinh.xem-12-gio-kha-nghi": {
   "t": "候補の12時刻を見る",
   "h": "3cd9aabf"

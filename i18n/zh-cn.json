@@ -1599,6 +1599,10 @@
   "t": "无正曜",
   "h": "bd07d7a9"
  },
+ "js.giosinh.xac-dinh-gio-sinh": {
+  "t": "确认出生时辰",
+  "h": "c3aee594"
+ },
  "js.giosinh.xem-12-gio-kha-nghi": {
   "t": "查看12个候选时辰",
   "h": "3cd9aabf"
