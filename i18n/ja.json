@@ -615,6 +615,118 @@
   "t": "<span class=\"bg-label\"><span class=\"ic\" data-icon=\"sparkles\"></span><b id=\"btnGoLabel\">縁を見る →</b></span> <small>料金 <span class=\"vnd\" data-tvp-price-vnd=\"duyen-no-tien-kiep\"></span> <span class=\"cb-sub\">(<span data-tvp-price=\"duyen-no-tien-kiep\">…</span> 両)</span></small>",
   "h": "990649b6"
  },
+ "hnt.2-xem-truoc": {
+  "t": "<span class=\"wss-n\">2</span><span class=\"wss-l\">先読み</span>",
+  "h": "93d60bc7"
+ },
+ "hnt.3-huong-dang-thu": {
+  "t": "<span class=\"hp-ic\" data-icon=\"star\"></span><span>試す価値のある<br>3つの方向</span>",
+  "h": "cf93e32b"
+ },
+ "hnt.ba-huong-dang-cho-con-thu": {
+  "t": "<span class=\"res-block-title\">お子さんに試させたい3つの方向</span>",
+  "h": "116b88f2"
+ },
+ "hnt.ban-luan-giai-mau-tai-pdf": {
+  "t": "<span class=\"sc-ic\" data-icon=\"file-text\"></span> <span class=\"sc-txt\"><b>サンプル鑑定書</b><span>サンプル命盤の「子どもの早期進路鑑定」フル版PDFをダウンロードして、実際の内容を先にご確認いただけます。</span></span> <a class=\"sc-btn\" href=\"/tai-mau/mau-huong-nghiep-tre.pdf\" target=\"_blank\" rel=\"noopener\">PDFをダウンロード →</a>",
+  "h": "13902c17"
+ },
+ "hnt.ban-nay-phac-hoa-tu-cac": {
+  "t": "<span class=\"ic\" data-icon=\"lightbulb\"></span> この鑑定は、紫微斗数の命盤のデータを、<i>『紫微斗数新編』</i>（Vân Đằng Thái Thứ Lang）に従って立て、先人が残した研究の経験を組み合わせて描いたものです。<b>適性の傾向と活動</b>の部分は<b>明宝紫微斗数の専門家チーム</b>が独自に構築した手法であり、古典の原文ではありません。<a href=\"/nguon-du-lieu.html\">データの出典</a>をご覧ください。<br><br> <span class=\"ic\" data-icon=\"scale\"></span> これは<b>参考のための方向づけ</b>であり、お子さんの進む道を決めるものではありません。お子さんはまだ成長の途中で、ここにはいません。そのため本鑑定は、<b>合否の予想、成功の約束、健康や恋愛の読み取りはあえて行いません</b>。適性の傾向が示すのは、お子さんに<i>何を試させるとよいか</i>であって、お子さんが<i>どんな職業に就くべきか</i>ではありません。",
+  "h": "6a1cfd57"
+ },
+ "hnt.bat-dau-tu-dau": {
+  "t": "<span class=\"res-block-title\" id=\"doTitle\">どこから始めるか</span>",
+  "h": "2bb617bb"
+ },
+ "hnt.chat-nguoi-doc-ra-tu-la": {
+  "t": "<span class=\"res-block-title\">命盤から読み取れる素質</span>",
+  "h": "d983261f"
+ },
+ "hnt.ep-con-hoc-dieu-con-khong": {
+  "t": "縁のないことを子どもに無理強いしても、親子ともに疲れるだけです。お子さんの命盤から、年齢の段階ごとにどんな活動に触れさせるとよいかを読み取りましょう。",
+  "h": "aa788dd7"
+ },
+ "hnt.huong-nghiep-som-cho-con": {
+  "t": "子どもの早期進路鑑定",
+  "h": "2735212c"
+ },
+ "hnt.huong-nghiep-som-cho-con-nen": {
+  "t": "<b>子どもの早期進路鑑定</b><span>今から何に触れさせるとよいか</span>",
+  "h": "14295eac"
+ },
+ "hnt.huong-nghiep-som-cho-con-tu": {
+  "t": "子どもの早期進路鑑定 — 明宝紫微斗数",
+  "h": "9c8cd322"
+ },
+ "hnt.lam-trong-thang-nay": {
+  "t": "今月やること",
+  "h": "a8ab8a7b"
+ },
+ "hnt.may-mat-nay-khong-phai-cho": {
+  "t": "<span class=\"ic\" data-icon=\"alert-triangle\"></span> これらの面は<b>お子さんに欠けているところではありません</b>。お子さんに合う仕事は、その面を評価の基準にしない、というだけのことです。",
+  "h": "c58a74dd"
+ },
+ "hnt.mo-loi-voi-con-the-nao": {
+  "t": "<span class=\"res-block-title\">お子さんへの切り出し方</span>",
+  "h": "b216c079"
+ },
+ "hnt.moi-luot-luong": {
+  "t": "<span class=\"vnd\" data-tvp-price-vnd=\"huong-nghiep-tre\"></span> / 回 <span class=\"cb-sub\">(<span data-tvp-price=\"huong-nghiep-tre\">…</span> 両)</span>",
+  "h": "bdeef95d"
+ },
+ "hnt.nhap-la-so-cua-con-nhan": {
+  "t": "お子さんの命盤を入力すると、命盤から読み取れる適性の傾向、年齢に合った触れさせたい活動、そして大人がすべきこと・やめるべきことが分かります。",
+  "h": "d1c6abd2"
+ },
+ "hnt.nhap-ngay-gio-sinh-cua-con": {
+  "t": "お子さんの生年月日と時刻、そして気がかりなことを入力してください。最も際立った適性の傾向、試すとよい活動、そしてどこから始めるかが分かります。",
+  "h": "3d914a45"
+ },
+ "hnt.nhin-ra-con": {
+  "t": "<span class=\"res-block-title\">お子さんを知る</span>",
+  "h": "a6d52b8a"
+ },
+ "hnt.noi-nhat": {
+  "t": "最も際立つ",
+  "h": "b4fa86fd"
+ },
+ "hnt.phan-dinh-huong-chua-mo": {
+  "t": "<span class=\"res-block-title\">未開封の方向づけ部分</span>",
+  "h": "a76cca13"
+ },
+ "hnt.sang-lua-sau-thi-doi-gi": {
+  "t": "<span class=\"res-block-title\">次の年齢層で何が変わるか</span>",
+  "h": "b5257805"
+ },
+ "hnt.thien-huong-la-xu-huong-de": {
+  "t": "適性の傾向は<b>触れさせてみるための傾向</b>であり、決まった職業ではありません。この表は当ページ独自の読み替えであり、古典の原文ではありません。<br> このツールは、<a href=\"/app/day-con\">命盤で育てる子育て</a>と<b>同じ物差し</b>（同じ5つの気質軸と8つの才能の素質）でお子さんを読みますが、答える問いは別です。あちらは<i>何が得意か</i>、こちらは<i>どんな働き方が合うか</i>を問います。物差しが同じなので両者が食い違うことはなく、問いが違うので順位が完全には一致しないこともあります。",
+  "h": "fc1b1e95"
+ },
+ "hnt.thien-huong-noi-nhat": {
+  "t": "<span class=\"hp-ic\" data-icon=\"compass\"></span><span>最も際立つ<br>傾向</span>",
+  "h": "b3d9e48c"
+ },
+ "hnt.thien-huong-noi-nhat-91zz": {
+  "t": "<span class=\"res-block-title\">最も際立つ適性の傾向</span>",
+  "h": "2954ceff"
+ },
+ "hnt.thoi-lam": {
+  "t": "やめること",
+  "h": "ef8d27c0"
+ },
+ "hnt.viec-hop-voi-con-thuong-khong": {
+  "t": "お子さんに合う仕事が、たいてい求めないこと",
+  "h": "513e2289"
+ },
+ "hnt.viec-lam-theo-lua-tuoi": {
+  "t": "<span class=\"hp-ic\" data-icon=\"hourglass\"></span><span>年齢層ごとの<br>取り組み</span>",
+  "h": "56da2915"
+ },
+ "hnt.xem-thien-huong-cua-con-ton": {
+  "t": "<span class=\"bg-label\"><span class=\"ic\" data-icon=\"compass\"></span><b>お子さんの傾向を見る →</b></span> <small>料金 <span class=\"vnd\" data-tvp-price-vnd=\"huong-nghiep-tre\"></span> <span class=\"cb-sub\">(<span data-tvp-price=\"huong-nghiep-tre\">…</span> 両)</span></small>",
+  "h": "ebca1bd6"
+ },
  "home.270-000-da-quoc-gia-da": {
   "t": "<span><span class=\"ic\" data-icon=\"file-text\"></span>270,000+</span> <span><span class=\"ic\" data-icon=\"globe\"></span>多国籍</span> <span><span class=\"ic\" data-icon=\"check\"></span>検証済み</span>",
   "h": "4d77621e"
@@ -2326,6 +2438,274 @@
  "js.duyenno.vui-long-nhap-day-du-ngay-who": {
   "t": "{who}の生年月日を、年・月・日まですべてご入力ください。",
   "h": "5698e85d"
+ },
+ "js.hnt.ba-huong-dang-cho-con-thu": {
+  "t": "試す価値のある3つの方向と、年齢に応じた具体的な活動",
+  "h": "b8c61ec7"
+ },
+ "js.hnt.ban-da-xem-ban-nay-roi": {
+  "t": "✓ この鑑定はすでにご覧になっています — 再度開いても両は差し引かれません",
+  "h": "7d2c6a5b"
+ },
+ "js.hnt.ban-dinh-huong-day-du-chua": {
+  "t": "⊙ フル版の方向づけはまだ開かれていません",
+  "h": "0cc8ad2a"
+ },
+ "js.hnt.ban-se-nhan-cai-con-me": {
+  "t": "受け取れる内容：お子さんが夢中になっているものが本当に強みなのか、バランスのためにほかにどんな方向を開くとよいか。",
+  "h": "3adee970"
+ },
+ "js.hnt.ban-se-nhan-chat-viec-hop": {
+  "t": "受け取れる内容：お子さんに合う「仕事の質」と、本人が自分で話し出せるような問いかけ方 — あらかじめ決められた学部名ではありません。",
+  "h": "51f3fd6d"
+ },
+ "js.hnt.ban-se-nhan-cho-nen-bay": {
+  "t": "受け取れる内容：まず何を並べて見せればお子さんが合うものに触れられるか、そしてどの時点で心配をやめてよいか。",
+  "h": "120130d2"
+ },
+ "js.hnt.ban-se-nhan-mot-ban-mo": {
+  "t": "受け取れる内容：日常の中でお子さんだと気づけるほど明確な適性の傾向の描写と、触れさせたいこと。",
+  "h": "e48e5660"
+ },
+ "js.hnt.ban-se-nhan-phan-nao-trong": {
+  "t": "受け取れる内容：お子さんの意見のうち本当に強みと言えるのはどこか、そして子どもを遠ざけない話し方。",
+  "h": "24a0fdb2"
+ },
+ "js.hnt.be-gai": {
+  "t": "女の子",
+  "h": "af93dba0"
+ },
+ "js.hnt.be-trai": {
+  "t": "男の子",
+  "h": "274225bc"
+ },
+ "js.hnt.cham-21-truc-tinh-khi-chon": {
+  "t": "21の気質軸を採点し、適性の傾向を選ぶ",
+  "h": "f27b81b0"
+ },
+ "js.hnt.chang-dang-o-full": {
+  "t": "<li><b>現在の区間</b>：{a}–{b}歳（{y1}–{y2}年）、{cung}</li>",
+  "h": "894bc892"
+ },
+ "js.hnt.chat-nguoi-noi-nhat": {
+  "t": "最も際立つ素質：",
+  "h": "5bb97cff"
+ },
+ "js.hnt.chat-nguoi-noi-thu-nhi": {
+  "t": "2番目に際立つ素質：",
+  "h": "cd07e9dc"
+ },
+ "js.hnt.chat-viec-ve-sau": {
+  "t": "後の仕事の質",
+  "h": "614a78bb"
+ },
+ "js.hnt.cho-hay-bi-hieu-nham": {
+  "t": "よく誤解されること",
+  "h": "9d96dce2"
+ },
+ "js.hnt.con-chi-me-dung-mot-thu": {
+  "t": "一つのことにしか夢中にならず、偏らないか心配",
+  "h": "37b2feb7"
+ },
+ "js.hnt.con-chua-thich-gi-ro-ret": {
+  "t": "これといって好きなことがなく、何にも淡白",
+  "h": "3c4412e1"
+ },
+ "js.hnt.con-thich-huong-ma-minh-khong": {
+  "t": "親の望まない方向を好む",
+  "h": "b2e58212"
+ },
+ "js.hnt.cung-name": {
+  "t": "{name}",
+  "h": "3cb49303"
+ },
+ "js.hnt.cuoi-tuan-nay-toi-nen-cho-ten": {
+  "t": "今週末は{ten}さんに何を最初に試させるとよいでしょうか？",
+  "h": "f2a056eb"
+ },
+ "js.hnt.dau-hieu-o-nha": {
+  "t": "家庭でのサイン",
+  "h": "df425a5c"
+ },
+ "js.hnt.day-la-ban-dinh-huong-som-ten": {
+  "t": "**{ten}**さんの早期の方向づけです。ほかに聞きたいことはありますか？",
+  "h": "fa23b364"
+ },
+ "js.hnt.do-nghieng": {
+  "t": "傾斜の度合い",
+  "h": "f640298c"
+ },
+ "js.hnt.do-nghieng-pct-phan-tram": {
+  "t": "最上位の傾向に対して{pct}パーセントの傾き",
+  "h": "c8321ffe"
+ },
+ "js.hnt.huong-nghiep-som": {
+  "t": "早期の進路 — ",
+  "h": "9779b5fc"
+ },
+ "js.hnt.huong-nghiep-som-cho-con": {
+  "t": "子どもの早期進路鑑定",
+  "h": "2735212c"
+ },
+ "js.hnt.khoa": {
+  "t": "ロック",
+  "h": "393cb36a"
+ },
+ "js.hnt.khong-co-chinh-tinh": {
+  "t": "主星なし",
+  "h": "753ded73"
+ },
+ "js.hnt.khong-co-gi-gap-chi-muon": {
+  "t": "急ぎではなく、ただ子どもをもっと理解したい",
+  "h": "cf2efa39"
+ },
+ "js.hnt.khong-ten": {
+  "t": "名前なし",
+  "h": "7c5b38ee"
+ },
+ "js.hnt.khong-the-ket-noi-vui-long": {
+  "t": "接続できませんでした。もう一度お試しください。",
+  "h": "bf0b6e7b"
+ },
+ "js.hnt.kieu": {
+  "t": "タイプ",
+  "h": "17afe1d6"
+ },
+ "js.hnt.la-so": {
+  "t": "命盤：",
+  "h": "2644d5f2"
+ },
+ "js.hnt.la-so-con-chua-nghieng-han-full": {
+  "t": "⚠️ <b>お子さんの命盤は、まだどの方向にもはっきりとは傾いていません。</b>この年齢ではごく普通のことです — 今ふさわしい助言は、早く決めずに<b>幅広く試させる</b>ことです。以下は最も傾いている方向ですが、結論ではなく、試してみるためのヒントとして読んでください。",
+  "h": "f97c9830"
+ },
+ "js.hnt.la-so-nay": {
+  "t": "この命盤",
+  "h": "9d459fb1"
+ },
+ "js.hnt.la-so-nay-da-tuoi-link": {
+  "t": "<b>この命盤は{tuoi}</b> — これは<i>子どもの早期の方向づけ</i>という問いではなくなっているため、親がお子さんについて読む方向づけの部分は<b>ここでは開かれず</b>、<b>両も差し引かれません</b>。<br><br>上の適性の傾向の部分は引き続きご覧いただけて、無料のままです — 命盤から読み取るため、どの年齢でも成り立ちます。成人の進路（分野、役割、規模、職種の分かれ道）を読みたい場合は{link}をご利用ください。",
+  "h": "32842316"
+ },
+ "js.hnt.lap-la-so-phan-kieu-nguoi": {
+  "t": "命盤を立て、タイプを分類",
+  "h": "61f07874"
+ },
+ "js.hnt.loi": {
+  "t": "エラー ",
+  "h": "1b80116b"
+ },
+ "js.hnt.loi-8d72": {
+  "t": "エラー：",
+  "h": "471c0087"
+ },
+ "js.hnt.luong": {
+  "t": "両 →",
+  "h": "36d6704d"
+ },
+ "js.hnt.mo-ban-dinh-huong-day-du": {
+  "t": "フル版の方向づけを開く",
+  "h": "88ead889"
+ },
+ "js.hnt.muon-xung-chieu": {
+  "t": " <i>— 対宮を借りる</i>",
+  "h": "77b3f2b2"
+ },
+ "js.hnt.nen-cho-lam-quen-hd": {
+  "t": "触れさせたいこと：{hd}",
+  "h": "699e4a26"
+ },
+ "js.hnt.nen-cho-lam-quen-o-lua": {
+  "t": "この年齢層で触れさせたいこと",
+  "h": "cd2440b6"
+ },
+ "js.hnt.nghe-co-chat-do-chi-de": {
+  "t": "そうした質を持つ仕事 — イメージのためだけに",
+  "h": "1377df2f"
+ },
+ "js.hnt.nguoi-lon-nen": {
+  "t": "大人がすべきこと",
+  "h": "f397c75d"
+ },
+ "js.hnt.nguoi-lon-nen-nen": {
+  "t": "大人がすべきこと：{nen}",
+  "h": "8198bc18"
+ },
+ "js.hnt.nguoi-lon-tranh": {
+  "t": "大人が避けること",
+  "h": "5dd28891"
+ },
+ "js.hnt.nu": {
+  "t": "女性",
+  "h": "feb92ccd"
+ },
+ "js.hnt.sap-phai-chon-mon-to-hop": {
+  "t": "これから科目／コース／学校を選ばなければならない",
+  "h": "8e562a93"
+ },
+ "js.hnt.so-thua-kem-hint": {
+  "t": "受け取れる内容：お子さんが他の子の物差しで測られているのはどこか、そしてどの物差しがお子さんの物差しなのか。",
+  "h": "94d7dbae"
+ },
+ "js.hnt.so-thua-kem-lbl": {
+  "t": "子どもが友達についていけないのではと心配",
+  "h": "2c7bbfec"
+ },
+ "js.hnt.ten-dang-me-mot-thu-khac": {
+  "t": "{ten}さんがまったく別のものに夢中です — やらせてもよいでしょうか？",
+  "h": "b40a573a"
+ },
+ "js.hnt.thien-huong-noi-nhat-ten-chat": {
+  "t": "最も際立つ傾向：{ten} — {chat}",
+  "h": "208d9982"
+ },
+ "js.hnt.thien-huong-noi-nhat-va-cach": {
+  "t": " — 最も際立つ傾向と、お子さんに触れさせ始める方法はフル版の方向づけに入っています。",
+  "h": "a193a19d"
+ },
+ "js.hnt.toi-nen-hoi-ten-cau-gi": {
+  "t": "お子さんが自分から話し出すには、{ten}さんにどんな質問をすればよいでしょうか？",
+  "h": "01a73584"
+ },
+ "js.hnt.truong-thanh": {
+  "t": "成人",
+  "h": "8971ff40"
+ },
+ "js.hnt.tu-vi-cong-so-huong-nghiep": {
+  "t": "紫微斗数 職場・進路",
+  "h": "45d9ae37"
+ },
+ "js.hnt.tuoi": {
+  "t": " 歳",
+  "h": "2e261bf5"
+ },
+ "js.hnt.tuoi-tuoi-mu": {
+  "t": " 歳（数え年）",
+  "h": "f62485fd"
+ },
+ "js.hnt.vi": {
+  "t": "<b>理由：</b>",
+  "h": "58409548"
+ },
+ "js.hnt.vi-sao-la-so-lai-nghieng": {
+  "t": "なぜ命盤はこの方向に傾いているのですか？",
+  "h": "11faf439"
+ },
+ "js.hnt.viec-nen-lam-trong-thang-nay": {
+  "t": "今月すること・やめること、そしてお子さんへの切り出し方",
+  "h": "6f97a853"
+ },
+ "js.hnt.viet-ban-dinh-huong-theo-lua": {
+  "t": "年齢に応じた方向づけを作成",
+  "h": "6ca12949"
+ },
+ "js.hnt.vui-long-nhap-day-du-ngay": {
+  "t": "お子さんの生年月日を、年・月・日まですべてご入力ください。",
+  "h": "784233ac"
+ },
+ "js.hnt.xem-ban-dinh-huong-day-du": {
+  "t": "✦ フル版の方向づけを見る —",
+  "h": "efa29b24"
  },
  "js.home.3-buoc-dau-tien": {
   "t": "最初の3ステップ",

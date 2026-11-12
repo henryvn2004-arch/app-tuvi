@@ -615,6 +615,118 @@
   "t": "<span class=\"bg-label\"><span class=\"ic\" data-icon=\"sparkles\"></span><b id=\"btnGoLabel\">查看緣分 →</b></span> <small>費用 <span class=\"vnd\" data-tvp-price-vnd=\"duyen-no-tien-kiep\"></span> <span class=\"cb-sub\">(<span data-tvp-price=\"duyen-no-tien-kiep\">…</span> 兩)</span></small>",
   "h": "990649b6"
  },
+ "hnt.2-xem-truoc": {
+  "t": "<span class=\"wss-n\">2</span><span class=\"wss-l\">預覽</span>",
+  "h": "93d60bc7"
+ },
+ "hnt.3-huong-dang-thu": {
+  "t": "<span class=\"hp-ic\" data-icon=\"star\"></span><span>3 個<br>值得嘗試的方向</span>",
+  "h": "cf93e32b"
+ },
+ "hnt.ba-huong-dang-cho-con-thu": {
+  "t": "<span class=\"res-block-title\">值得讓孩子嘗試的三個方向</span>",
+  "h": "116b88f2"
+ },
+ "hnt.ban-luan-giai-mau-tai-pdf": {
+  "t": "<span class=\"sc-ic\" data-icon=\"file-text\"></span> <span class=\"sc-txt\"><b>範例解讀報告</b><span>下載範例命盤的「孩子的早期職涯方向」完整 PDF，先預覽真實內容。</span></span> <a class=\"sc-btn\" href=\"/tai-mau/mau-huong-nghiep-tre.pdf\" target=\"_blank\" rel=\"noopener\">下載 PDF →</a>",
+  "h": "13902c17"
+ },
+ "hnt.ban-nay-phac-hoa-tu-cac": {
+  "t": "<span class=\"ic\" data-icon=\"lightbulb\"></span> 本解讀依據紫微斗數命盤中的資料，依<i>《紫微斗數新編》</i>（Vân Đằng Thái Thứ Lang）排定，並結合前人留下的研究經驗描繪而成。<b>傾向與活動</b>的部分是<b>明寶紫微斗數專家團隊</b>自行建立的方法，並非古籍原文。請參閱<a href=\"/nguon-du-lieu.html\">資料出處</a>。<br><br> <span class=\"ic\" data-icon=\"scale\"></span> 這是<b>供參考的方向建議</b>，並不是替孩子決定人生道路。孩子尚未成年，也不在這裡，因此本解讀刻意<b>不預測考試成敗、不保證成功、不談健康或感情</b>。傾向所說的是孩子<i>適合嘗試什麼</i>，而不是孩子<i>必須從事什麼職業</i>。",
+  "h": "6a1cfd57"
+ },
+ "hnt.bat-dau-tu-dau": {
+  "t": "<span class=\"res-block-title\" id=\"doTitle\">從哪裡開始</span>",
+  "h": "2bb617bb"
+ },
+ "hnt.chat-nguoi-doc-ra-tu-la": {
+  "t": "<span class=\"res-block-title\">從命盤讀出的特質</span>",
+  "h": "d983261f"
+ },
+ "hnt.ep-con-hoc-dieu-con-khong": {
+  "t": "硬逼孩子學他沒有緣分的事，只會讓雙方更疲累。從孩子的命盤，看出每個年齡階段適合讓孩子接觸哪些活動。",
+  "h": "aa788dd7"
+ },
+ "hnt.huong-nghiep-som-cho-con": {
+  "t": "孩子的早期職涯方向",
+  "h": "2735212c"
+ },
+ "hnt.huong-nghiep-som-cho-con-nen": {
+  "t": "<b>孩子的早期職涯方向</b><span>從現在起該讓孩子接觸什麼</span>",
+  "h": "14295eac"
+ },
+ "hnt.huong-nghiep-som-cho-con-tu": {
+  "t": "孩子的早期職涯方向——明寶紫微斗數",
+  "h": "9c8cd322"
+ },
+ "hnt.lam-trong-thang-nay": {
+  "t": "這個月該做",
+  "h": "a8ab8a7b"
+ },
+ "hnt.may-mat-nay-khong-phai-cho": {
+  "t": "<span class=\"ic\" data-icon=\"alert-triangle\"></span> 這幾個面向<b>並不是孩子欠缺的地方</b>，只是代表適合孩子的事不以這些面向來評分。",
+  "h": "c58a74dd"
+ },
+ "hnt.mo-loi-voi-con-the-nao": {
+  "t": "<span class=\"res-block-title\">怎麼對孩子開口</span>",
+  "h": "b216c079"
+ },
+ "hnt.moi-luot-luong": {
+  "t": "<span class=\"vnd\" data-tvp-price-vnd=\"huong-nghiep-tre\"></span> 每次 <span class=\"cb-sub\">(<span data-tvp-price=\"huong-nghiep-tre\">…</span> 兩)</span>",
+  "h": "bdeef95d"
+ },
+ "hnt.nhap-la-so-cua-con-nhan": {
+  "t": "輸入孩子的命盤，即可得到從命盤讀出的傾向、適合孩子年齡的接觸活動，以及大人該做與該停止的事。",
+  "h": "d1c6abd2"
+ },
+ "hnt.nhap-ngay-gio-sinh-cua-con": {
+  "t": "輸入孩子的出生日期與時辰，以及您擔心的事，即可得到最突出的傾向、值得嘗試的活動，以及從哪裡開始。",
+  "h": "3d914a45"
+ },
+ "hnt.nhin-ra-con": {
+  "t": "<span class=\"res-block-title\">看見孩子</span>",
+  "h": "a6d52b8a"
+ },
+ "hnt.noi-nhat": {
+  "t": "最突出",
+  "h": "b4fa86fd"
+ },
+ "hnt.phan-dinh-huong-chua-mo": {
+  "t": "<span class=\"res-block-title\">尚未開啟的方向建議</span>",
+  "h": "a76cca13"
+ },
+ "hnt.sang-lua-sau-thi-doi-gi": {
+  "t": "<span class=\"res-block-title\">下一個年齡層會有什麼不同</span>",
+  "h": "b5257805"
+ },
+ "hnt.thien-huong-la-xu-huong-de": {
+  "t": "傾向是<b>讓孩子嘗試接觸的方向</b>，並不是已定下的職業。這張表是本頁自行的對應與詮釋，並非古籍原文。<br> 這個工具以與<a href=\"/app/day-con\">依命盤教養孩子</a>相<b>同的尺度</b>（同樣的 5 條氣質軸與 8 種天賦特質）來看孩子，但回答的是不同的問題：那邊問的是<i>孩子擅長什麼科目</i>，這裡問的是<i>孩子適合哪種做事方式</i>。因為尺度相同，兩邊不會說出相反的話；因為問題不同，排序可能不會完全一致。",
+  "h": "fc1b1e95"
+ },
+ "hnt.thien-huong-noi-nhat": {
+  "t": "<span class=\"hp-ic\" data-icon=\"compass\"></span><span>最突出的<br>傾向</span>",
+  "h": "b3d9e48c"
+ },
+ "hnt.thien-huong-noi-nhat-91zz": {
+  "t": "<span class=\"res-block-title\">最突出的傾向</span>",
+  "h": "2954ceff"
+ },
+ "hnt.thoi-lam": {
+  "t": "該停止",
+  "h": "ef8d27c0"
+ },
+ "hnt.viec-hop-voi-con-thuong-khong": {
+  "t": "適合孩子的事通常不要求的",
+  "h": "513e2289"
+ },
+ "hnt.viec-lam-theo-lua-tuoi": {
+  "t": "<span class=\"hp-ic\" data-icon=\"hourglass\"></span><span>依年齡層<br>安排的事</span>",
+  "h": "56da2915"
+ },
+ "hnt.xem-thien-huong-cua-con-ton": {
+  "t": "<span class=\"bg-label\"><span class=\"ic\" data-icon=\"compass\"></span><b>查看孩子的傾向 →</b></span> <small>費用 <span class=\"vnd\" data-tvp-price-vnd=\"huong-nghiep-tre\"></span> <span class=\"cb-sub\">(<span data-tvp-price=\"huong-nghiep-tre\">…</span> 兩)</span></small>",
+  "h": "ebca1bd6"
+ },
  "home.270-000-da-quoc-gia-da": {
   "t": "<span><span class=\"ic\" data-icon=\"file-text\"></span>270,000+</span> <span><span class=\"ic\" data-icon=\"globe\"></span>跨國資料</span> <span><span class=\"ic\" data-icon=\"check\"></span>已經查證</span>",
   "h": "4d77621e"
@@ -2326,6 +2438,274 @@
  "js.duyenno.vui-long-nhap-day-du-ngay-who": {
   "t": "請完整輸入{who}的出生年、月、日。",
   "h": "5698e85d"
+ },
+ "js.hnt.ba-huong-dang-cho-con-thu": {
+  "t": "三個值得孩子嘗試的方向，附依年齡安排的具體活動",
+  "h": "b8c61ec7"
+ },
+ "js.hnt.ban-da-xem-ban-nay-roi": {
+  "t": "✓ 您已看過這份解讀——再次開啟不會扣除兩",
+  "h": "7d2c6a5b"
+ },
+ "js.hnt.ban-dinh-huong-day-du-chua": {
+  "t": "⊙ 完整方向建議尚未開啟",
+  "h": "0cc8ad2a"
+ },
+ "js.hnt.ban-se-nhan-cai-con-me": {
+  "t": "您將得到：孩子著迷的事是不是真正的強項，以及為了平衡還該再開啟哪些方向。",
+  "h": "3adee970"
+ },
+ "js.hnt.ban-se-nhan-chat-viec-hop": {
+  "t": "您將得到：適合孩子的工作特質，以及讓孩子自己開口說的提問方式——而不是預先決定的科系名稱。",
+  "h": "51f3fd6d"
+ },
+ "js.hnt.ban-se-nhan-cho-nen-bay": {
+  "t": "您將得到：先擺出什麼，孩子才有機會碰到適合的東西，以及到什麼時點就不必再擔心。",
+  "h": "120130d2"
+ },
+ "js.hnt.ban-se-nhan-mot-ban-mo": {
+  "t": "您將得到：一份清楚到足以在日常中認出孩子的傾向描述，以及適合讓孩子接觸的事。",
+  "h": "e48e5660"
+ },
+ "js.hnt.ban-se-nhan-phan-nao-trong": {
+  "t": "您將得到：孩子的想法中哪些是真正的強項，以及不把孩子推得更遠的說話方式。",
+  "h": "24a0fdb2"
+ },
+ "js.hnt.be-gai": {
+  "t": "女孩",
+  "h": "af93dba0"
+ },
+ "js.hnt.be-trai": {
+  "t": "男孩",
+  "h": "274225bc"
+ },
+ "js.hnt.cham-21-truc-tinh-khi-chon": {
+  "t": "為 21 條氣質軸評分並選出傾向",
+  "h": "f27b81b0"
+ },
+ "js.hnt.chang-dang-o-full": {
+  "t": "<li><b>目前所處階段</b>：{a}–{b} 歲（{y1}–{y2} 年），{cung}</li>",
+  "h": "894bc892"
+ },
+ "js.hnt.chat-nguoi-noi-nhat": {
+  "t": "最突出的特質：",
+  "h": "5bb97cff"
+ },
+ "js.hnt.chat-nguoi-noi-thu-nhi": {
+  "t": "第二突出的特質：",
+  "h": "cd07e9dc"
+ },
+ "js.hnt.chat-viec-ve-sau": {
+  "t": "日後的工作特質",
+  "h": "614a78bb"
+ },
+ "js.hnt.cho-hay-bi-hieu-nham": {
+  "t": "常被誤解之處",
+  "h": "9d96dce2"
+ },
+ "js.hnt.con-chi-me-dung-mot-thu": {
+  "t": "孩子只迷一件事，擔心會偏頗",
+  "h": "37b2feb7"
+ },
+ "js.hnt.con-chua-thich-gi-ro-ret": {
+  "t": "孩子沒有明顯喜歡的事，對什麼都淡淡的",
+  "h": "3c4412e1"
+ },
+ "js.hnt.con-thich-huong-ma-minh-khong": {
+  "t": "孩子喜歡的是我不想要的方向",
+  "h": "b2e58212"
+ },
+ "js.hnt.cung-name": {
+  "t": "{name}",
+  "h": "3cb49303"
+ },
+ "js.hnt.cuoi-tuan-nay-toi-nen-cho-ten": {
+  "t": "這個週末我該先讓{ten}試什麼？",
+  "h": "f2a056eb"
+ },
+ "js.hnt.dau-hieu-o-nha": {
+  "t": "在家中的跡象",
+  "h": "df425a5c"
+ },
+ "js.hnt.day-la-ban-dinh-huong-som-ten": {
+  "t": "這是給**{ten}**的早期方向建議。還想多問些什麼嗎？",
+  "h": "fa23b364"
+ },
+ "js.hnt.do-nghieng": {
+  "t": "傾斜程度",
+  "h": "f640298c"
+ },
+ "js.hnt.do-nghieng-pct-phan-tram": {
+  "t": "相對於最高傾向，傾斜程度為百分之 {pct}",
+  "h": "c8321ffe"
+ },
+ "js.hnt.huong-nghiep-som": {
+  "t": "早期職涯方向—— ",
+  "h": "9779b5fc"
+ },
+ "js.hnt.huong-nghiep-som-cho-con": {
+  "t": "孩子的早期職涯方向",
+  "h": "2735212c"
+ },
+ "js.hnt.khoa": {
+  "t": "鎖定",
+  "h": "393cb36a"
+ },
+ "js.hnt.khong-co-chinh-tinh": {
+  "t": "無主星",
+  "h": "753ded73"
+ },
+ "js.hnt.khong-co-gi-gap-chi-muon": {
+  "t": "沒有什麼急事，只是想更了解孩子",
+  "h": "cf2efa39"
+ },
+ "js.hnt.khong-ten": {
+  "t": "未命名",
+  "h": "7c5b38ee"
+ },
+ "js.hnt.khong-the-ket-noi-vui-long": {
+  "t": "無法連線，請再試一次。",
+  "h": "bf0b6e7b"
+ },
+ "js.hnt.kieu": {
+  "t": "類型",
+  "h": "17afe1d6"
+ },
+ "js.hnt.la-so": {
+  "t": "命盤：",
+  "h": "2644d5f2"
+ },
+ "js.hnt.la-so-con-chua-nghieng-han-full": {
+  "t": "⚠️ <b>孩子的命盤目前還沒有明顯偏向任何方向。</b>在這個年紀，這是很正常的事——現在最適合的建議是<b>讓孩子廣泛嘗試</b>，不要太早定案。下面是最偏向的方向，但請當作可以嘗試的提示來讀，而不是結論。",
+  "h": "f97c9830"
+ },
+ "js.hnt.la-so-nay": {
+  "t": "這份命盤",
+  "h": "9d459fb1"
+ },
+ "js.hnt.la-so-nay-da-tuoi-link": {
+  "t": "<b>這份命盤已是{tuoi}</b>——這已不是<i>孩子的早期方向</i>這個問題，因此家長讀孩子的方向建議<b>不在這裡開啟</b>，也<b>不扣除兩</b>。<br><br>上方的傾向部分仍可閱讀，且依舊免費——它是從命盤讀出的，所以在任何年齡都成立。若想讀成年人的職涯方向（領域、角色、規模、職業分支），請使用{link}。",
+  "h": "32842316"
+ },
+ "js.hnt.lap-la-so-phan-kieu-nguoi": {
+  "t": "排出命盤並判定類型",
+  "h": "61f07874"
+ },
+ "js.hnt.loi": {
+  "t": "錯誤 ",
+  "h": "1b80116b"
+ },
+ "js.hnt.loi-8d72": {
+  "t": "錯誤：",
+  "h": "471c0087"
+ },
+ "js.hnt.luong": {
+  "t": "兩 →",
+  "h": "36d6704d"
+ },
+ "js.hnt.mo-ban-dinh-huong-day-du": {
+  "t": "開啟完整方向建議",
+  "h": "88ead889"
+ },
+ "js.hnt.muon-xung-chieu": {
+  "t": " <i>——借對宮</i>",
+  "h": "77b3f2b2"
+ },
+ "js.hnt.nen-cho-lam-quen-hd": {
+  "t": "適合讓孩子接觸：{hd}",
+  "h": "699e4a26"
+ },
+ "js.hnt.nen-cho-lam-quen-o-lua": {
+  "t": "這個年齡層適合接觸的事",
+  "h": "cd2440b6"
+ },
+ "js.hnt.nghe-co-chat-do-chi-de": {
+  "t": "具備該特質的職業——僅供想像",
+  "h": "1377df2f"
+ },
+ "js.hnt.nguoi-lon-nen": {
+  "t": "大人該做的",
+  "h": "f397c75d"
+ },
+ "js.hnt.nguoi-lon-nen-nen": {
+  "t": "大人該做：{nen}",
+  "h": "8198bc18"
+ },
+ "js.hnt.nguoi-lon-tranh": {
+  "t": "大人該避免的",
+  "h": "5dd28891"
+ },
+ "js.hnt.nu": {
+  "t": "女",
+  "h": "feb92ccd"
+ },
+ "js.hnt.sap-phai-chon-mon-to-hop": {
+  "t": "即將要選科目／組合／學校",
+  "h": "8e562a93"
+ },
+ "js.hnt.so-thua-kem-hint": {
+  "t": "您將得到：孩子在哪些地方被用別人的尺來衡量，以及哪一把尺才是屬於孩子的。",
+  "h": "94d7dbae"
+ },
+ "js.hnt.so-thua-kem-lbl": {
+  "t": "擔心孩子跟不上朋友",
+  "h": "2c7bbfec"
+ },
+ "js.hnt.ten-dang-me-mot-thu-khac": {
+  "t": "{ten}迷上了完全不同的東西——該讓他／她去嗎？",
+  "h": "b40a573a"
+ },
+ "js.hnt.thien-huong-noi-nhat-ten-chat": {
+  "t": "最突出的傾向：{ten}——{chat}",
+  "h": "208d9982"
+ },
+ "js.hnt.thien-huong-noi-nhat-va-cach": {
+  "t": " ——最突出的傾向，以及如何讓孩子開始接觸，都在完整方向建議中。",
+  "h": "a193a19d"
+ },
+ "js.hnt.toi-nen-hoi-ten-cau-gi": {
+  "t": "我該問{ten}什麼問題，孩子才會自己說出來？",
+  "h": "01a73584"
+ },
+ "js.hnt.truong-thanh": {
+  "t": "成年",
+  "h": "8971ff40"
+ },
+ "js.hnt.tu-vi-cong-so-huong-nghiep": {
+  "t": "紫微斗數 職場與職涯",
+  "h": "45d9ae37"
+ },
+ "js.hnt.tuoi": {
+  "t": " 歲",
+  "h": "2e261bf5"
+ },
+ "js.hnt.tuoi-tuoi-mu": {
+  "t": " 歲（虛歲）",
+  "h": "f62485fd"
+ },
+ "js.hnt.vi": {
+  "t": "<b>原因：</b>",
+  "h": "58409548"
+ },
+ "js.hnt.vi-sao-la-so-lai-nghieng": {
+  "t": "為什麼命盤會偏向這個方向？",
+  "h": "11faf439"
+ },
+ "js.hnt.viec-nen-lam-trong-thang-nay": {
+  "t": "這個月該做與該停止的事，以及怎麼對孩子開口",
+  "h": "6f97a853"
+ },
+ "js.hnt.viet-ban-dinh-huong-theo-lua": {
+  "t": "撰寫依年齡安排的方向建議",
+  "h": "6ca12949"
+ },
+ "js.hnt.vui-long-nhap-day-du-ngay": {
+  "t": "請完整輸入孩子的出生年、月、日。",
+  "h": "784233ac"
+ },
+ "js.hnt.xem-ban-dinh-huong-day-du": {
+  "t": "✦ 查看完整方向建議 —",
+  "h": "efa29b24"
  },
  "js.home.3-buoc-dau-tien": {
   "t": "最初的 3 步",

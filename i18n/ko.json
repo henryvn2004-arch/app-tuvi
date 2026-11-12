@@ -615,6 +615,118 @@
   "t": "<span class=\"bg-label\"><span class=\"ic\" data-icon=\"sparkles\"></span><b id=\"btnGoLabel\">인연 보기 →</b></span> <small>비용 <span class=\"vnd\" data-tvp-price-vnd=\"duyen-no-tien-kiep\"></span> <span class=\"cb-sub\">(<span data-tvp-price=\"duyen-no-tien-kiep\">…</span> 냥)</span></small>",
   "h": "990649b6"
  },
+ "hnt.2-xem-truoc": {
+  "t": "<span class=\"wss-n\">2</span><span class=\"wss-l\">미리보기</span>",
+  "h": "93d60bc7"
+ },
+ "hnt.3-huong-dang-thu": {
+  "t": "<span class=\"hp-ic\" data-icon=\"star\"></span><span>해 볼 만한<br>세 가지 방향</span>",
+  "h": "cf93e32b"
+ },
+ "hnt.ba-huong-dang-cho-con-thu": {
+  "t": "<span class=\"res-block-title\">아이에게 해 보게 할 세 가지 방향</span>",
+  "h": "116b88f2"
+ },
+ "hnt.ban-luan-giai-mau-tai-pdf": {
+  "t": "<span class=\"sc-ic\" data-icon=\"file-text\"></span> <span class=\"sc-txt\"><b>샘플 풀이서</b><span>샘플 명반으로 만든 「자녀 조기 진로」 전체 PDF를 내려받아 실제 내용을 미리 확인해 보세요.</span></span> <a class=\"sc-btn\" href=\"/tai-mau/mau-huong-nghiep-tre.pdf\" target=\"_blank\" rel=\"noopener\">PDF 받기 →</a>",
+  "h": "13902c17"
+ },
+ "hnt.ban-nay-phac-hoa-tu-cac": {
+  "t": "<span class=\"ic\" data-icon=\"lightbulb\"></span> 이 풀이는 자미두수 명반의 데이터를 <i>『자미두수 신편』</i>(Vân Đằng Thái Thứ Lang)에 따라 세우고 선인들이 남긴 연구 경험을 더해 그려낸 것이에요. <b>성향과 활동</b> 부분은 <b>명보 자미두수 전문가 팀</b>이 직접 만든 방법이며 고전에 적힌 글귀가 아니에요. <a href=\"/nguon-du-lieu.html\">데이터 출처</a>를 확인해 보세요.<br><br> <span class=\"ic\" data-icon=\"scale\"></span> 이것은 <b>참고를 위한 방향 제시</b>이지 아이의 길을 정해 주기 위한 것이 아니에요. 아이는 아직 자라는 중이고 이 자리에 없기 때문에, 이 풀이는 <b>합격·불합격 예측, 성공 약속, 건강이나 연애 풀이를 일부러 하지 않아요</b>. 성향이 알려 주는 것은 아이에게 <i>무엇을 해 보게 하면 좋은지</i>이지, 아이가 <i>어떤 직업을 가져야 하는지</i>가 아니에요.",
+  "h": "6a1cfd57"
+ },
+ "hnt.bat-dau-tu-dau": {
+  "t": "<span class=\"res-block-title\" id=\"doTitle\">어디서부터 시작할까</span>",
+  "h": "2bb617bb"
+ },
+ "hnt.chat-nguoi-doc-ra-tu-la": {
+  "t": "<span class=\"res-block-title\">명반에서 읽어 낸 기질</span>",
+  "h": "d983261f"
+ },
+ "hnt.ep-con-hoc-dieu-con-khong": {
+  "t": "아이에게 인연이 없는 것을 억지로 시키면 서로 더 지칠 뿐이에요. 아이의 명반으로 나이 단계마다 어떤 활동을 접하게 하면 좋을지 읽어 보세요.",
+  "h": "aa788dd7"
+ },
+ "hnt.huong-nghiep-som-cho-con": {
+  "t": "자녀 조기 진로",
+  "h": "2735212c"
+ },
+ "hnt.huong-nghiep-som-cho-con-nen": {
+  "t": "<b>자녀 조기 진로</b><span>지금부터 무엇을 접하게 하면 좋을까</span>",
+  "h": "14295eac"
+ },
+ "hnt.huong-nghiep-som-cho-con-tu": {
+  "t": "자녀 조기 진로 — 명보 자미두수",
+  "h": "9c8cd322"
+ },
+ "hnt.lam-trong-thang-nay": {
+  "t": "이번 달에 할 일",
+  "h": "a8ab8a7b"
+ },
+ "hnt.may-mat-nay-khong-phai-cho": {
+  "t": "<span class=\"ic\" data-icon=\"alert-triangle\"></span> 이 영역들은 <b>아이에게 부족한 부분이 아니에요</b>. 아이에게 맞는 일은 그 영역을 평가 기준으로 삼지 않는다는 뜻일 뿐이에요.",
+  "h": "c58a74dd"
+ },
+ "hnt.mo-loi-voi-con-the-nao": {
+  "t": "<span class=\"res-block-title\">아이에게 어떻게 말을 꺼낼까</span>",
+  "h": "b216c079"
+ },
+ "hnt.moi-luot-luong": {
+  "t": "<span class=\"vnd\" data-tvp-price-vnd=\"huong-nghiep-tre\"></span> / 회 <span class=\"cb-sub\">(<span data-tvp-price=\"huong-nghiep-tre\">…</span> 냥)</span>",
+  "h": "bdeef95d"
+ },
+ "hnt.nhap-la-so-cua-con-nhan": {
+  "t": "아이의 명반을 입력하면 명반에서 읽어 낸 성향, 연령에 맞는 접해 볼 활동, 어른이 하면 좋은 일과 그만둘 일을 알 수 있어요.",
+  "h": "d1c6abd2"
+ },
+ "hnt.nhap-ngay-gio-sinh-cua-con": {
+  "t": "아이의 생년월일과 시간, 걱정되는 점을 입력하세요. 가장 두드러진 성향, 해 볼 만한 활동, 어디서부터 시작할지를 알려 드려요.",
+  "h": "3d914a45"
+ },
+ "hnt.nhin-ra-con": {
+  "t": "<span class=\"res-block-title\">아이를 알아보기</span>",
+  "h": "a6d52b8a"
+ },
+ "hnt.noi-nhat": {
+  "t": "가장 두드러진 것",
+  "h": "b4fa86fd"
+ },
+ "hnt.phan-dinh-huong-chua-mo": {
+  "t": "<span class=\"res-block-title\">아직 열리지 않은 방향 풀이</span>",
+  "h": "a76cca13"
+ },
+ "hnt.sang-lua-sau-thi-doi-gi": {
+  "t": "<span class=\"res-block-title\">다음 연령대에서는 무엇이 달라지나</span>",
+  "h": "b5257805"
+ },
+ "hnt.thien-huong-la-xu-huong-de": {
+  "t": "성향은 <b>접해 보게 하는 경향</b>일 뿐 정해진 직업이 아니에요. 이 표는 이 페이지가 해석을 덧붙인 것이며 고전에 적힌 글귀가 아니에요.<br> 이 도구는 <a href=\"/app/day-con\">명반 맞춤 자녀 교육</a>과 <b>같은 잣대</b>(같은 5가지 기질 축과 8가지 재능 기질)로 아이를 읽지만, 답하는 질문은 달라요. 그쪽은 <i>아이가 어떤 과목을 잘하는지</i>를, 이쪽은 <i>아이에게 어떤 일하는 방식이 맞는지</i>를 물어요. 잣대가 같기 때문에 두 결과는 서로 어긋나지 않고, 질문이 다르기 때문에 순서가 딱 맞지 않을 수 있어요.",
+  "h": "fc1b1e95"
+ },
+ "hnt.thien-huong-noi-nhat": {
+  "t": "<span class=\"hp-ic\" data-icon=\"compass\"></span><span>가장 두드러진<br>성향</span>",
+  "h": "b3d9e48c"
+ },
+ "hnt.thien-huong-noi-nhat-91zz": {
+  "t": "<span class=\"res-block-title\">가장 두드러진 성향</span>",
+  "h": "2954ceff"
+ },
+ "hnt.thoi-lam": {
+  "t": "그만할 일",
+  "h": "ef8d27c0"
+ },
+ "hnt.viec-hop-voi-con-thuong-khong": {
+  "t": "아이에게 맞는 일이 보통 요구하지 않는 것",
+  "h": "513e2289"
+ },
+ "hnt.viec-lam-theo-lua-tuoi": {
+  "t": "<span class=\"hp-ic\" data-icon=\"hourglass\"></span><span>연령대별<br>활동</span>",
+  "h": "56da2915"
+ },
+ "hnt.xem-thien-huong-cua-con-ton": {
+  "t": "<span class=\"bg-label\"><span class=\"ic\" data-icon=\"compass\"></span><b>아이의 성향 보기 →</b></span> <small>비용 <span class=\"vnd\" data-tvp-price-vnd=\"huong-nghiep-tre\"></span> <span class=\"cb-sub\">(<span data-tvp-price=\"huong-nghiep-tre\">…</span> 냥)</span></small>",
+  "h": "ebca1bd6"
+ },
  "home.270-000-da-quoc-gia-da": {
   "t": "<span><span class=\"ic\" data-icon=\"file-text\"></span>270,000+</span> <span><span class=\"ic\" data-icon=\"globe\"></span>다국적</span> <span><span class=\"ic\" data-icon=\"check\"></span>검증 완료</span>",
   "h": "4d77621e"
@@ -2326,6 +2438,274 @@
  "js.duyenno.vui-long-nhap-day-du-ngay-who": {
   "t": "{who}의 생년월일을 연·월·일까지 모두 입력해 주세요.",
   "h": "5698e85d"
+ },
+ "js.hnt.ba-huong-dang-cho-con-thu": {
+  "t": "해 볼 만한 세 가지 방향과 연령에 맞는 구체적인 활동",
+  "h": "b8c61ec7"
+ },
+ "js.hnt.ban-da-xem-ban-nay-roi": {
+  "t": "✓ 이미 본 풀이예요 — 다시 열어도 냥이 차감되지 않아요",
+  "h": "7d2c6a5b"
+ },
+ "js.hnt.ban-dinh-huong-day-du-chua": {
+  "t": "⊙ 전체 방향 풀이가 아직 열리지 않았어요",
+  "h": "0cc8ad2a"
+ },
+ "js.hnt.ban-se-nhan-cai-con-me": {
+  "t": "받을 수 있는 내용: 아이가 빠져 있는 것이 정말 강점인지, 균형을 위해 어떤 방향을 더 열어 주면 좋은지.",
+  "h": "3adee970"
+ },
+ "js.hnt.ban-se-nhan-chat-viec-hop": {
+  "t": "받을 수 있는 내용: 아이에게 맞는 일의 결과, 아이가 스스로 말하게 만드는 질문법 — 미리 정해진 전공 이름이 아니에요.",
+  "h": "51f3fd6d"
+ },
+ "js.hnt.ban-se-nhan-cho-nen-bay": {
+  "t": "받을 수 있는 내용: 아이가 맞는 것을 만날 수 있도록 무엇부터 펼쳐 보여 줄지, 그리고 어느 시점부터 걱정을 내려놓아도 되는지.",
+  "h": "120130d2"
+ },
+ "js.hnt.ban-se-nhan-mot-ban-mo": {
+  "t": "받을 수 있는 내용: 일상에서 아이를 알아볼 수 있을 만큼 분명한 성향 설명과 접해 보게 할 일.",
+  "h": "e48e5660"
+ },
+ "js.hnt.ban-se-nhan-phan-nao-trong": {
+  "t": "받을 수 있는 내용: 아이의 생각 중 진짜 강점인 부분은 어디인지, 아이를 더 멀어지게 하지 않는 대화법.",
+  "h": "24a0fdb2"
+ },
+ "js.hnt.be-gai": {
+  "t": "여자아이",
+  "h": "af93dba0"
+ },
+ "js.hnt.be-trai": {
+  "t": "남자아이",
+  "h": "274225bc"
+ },
+ "js.hnt.cham-21-truc-tinh-khi-chon": {
+  "t": "21가지 기질 축을 채점하고 성향을 고르는 중",
+  "h": "f27b81b0"
+ },
+ "js.hnt.chang-dang-o-full": {
+  "t": "<li><b>현재 구간</b>: {a}–{b}세({y1}–{y2}년), {cung}</li>",
+  "h": "894bc892"
+ },
+ "js.hnt.chat-nguoi-noi-nhat": {
+  "t": "가장 두드러진 기질: ",
+  "h": "5bb97cff"
+ },
+ "js.hnt.chat-nguoi-noi-thu-nhi": {
+  "t": "두 번째로 두드러진 기질: ",
+  "h": "cd07e9dc"
+ },
+ "js.hnt.chat-viec-ve-sau": {
+  "t": "나중 단계의 일의 결과",
+  "h": "614a78bb"
+ },
+ "js.hnt.cho-hay-bi-hieu-nham": {
+  "t": "자주 오해받는 점",
+  "h": "9d96dce2"
+ },
+ "js.hnt.con-chi-me-dung-mot-thu": {
+  "t": "한 가지에만 빠져 있어서 치우칠까 걱정돼요",
+  "h": "37b2feb7"
+ },
+ "js.hnt.con-chua-thich-gi-ro-ret": {
+  "t": "뚜렷하게 좋아하는 것이 없고 뭐든 시큰둥해요",
+  "h": "3c4412e1"
+ },
+ "js.hnt.con-thich-huong-ma-minh-khong": {
+  "t": "아이가 부모가 원하지 않는 방향을 좋아해요",
+  "h": "b2e58212"
+ },
+ "js.hnt.cung-name": {
+  "t": "{name}",
+  "h": "3cb49303"
+ },
+ "js.hnt.cuoi-tuan-nay-toi-nen-cho-ten": {
+  "t": "이번 주말에 {ten}에게 먼저 무엇을 해 보게 하면 좋을까요?",
+  "h": "f2a056eb"
+ },
+ "js.hnt.dau-hieu-o-nha": {
+  "t": "집에서의 신호",
+  "h": "df425a5c"
+ },
+ "js.hnt.day-la-ban-dinh-huong-som-ten": {
+  "t": "**{ten}**의 조기 진로 방향이에요. 더 묻고 싶은 게 있나요?",
+  "h": "fa23b364"
+ },
+ "js.hnt.do-nghieng": {
+  "t": "기울기 정도",
+  "h": "f640298c"
+ },
+ "js.hnt.do-nghieng-pct-phan-tram": {
+  "t": "가장 높은 성향 대비 {pct}퍼센트 기울어 있어요",
+  "h": "c8321ffe"
+ },
+ "js.hnt.huong-nghiep-som": {
+  "t": "조기 진로 — ",
+  "h": "9779b5fc"
+ },
+ "js.hnt.huong-nghiep-som-cho-con": {
+  "t": "자녀 조기 진로",
+  "h": "2735212c"
+ },
+ "js.hnt.khoa": {
+  "t": "잠김",
+  "h": "393cb36a"
+ },
+ "js.hnt.khong-co-chinh-tinh": {
+  "t": "주성 없음",
+  "h": "753ded73"
+ },
+ "js.hnt.khong-co-gi-gap-chi-muon": {
+  "t": "급한 건 없고, 그저 아이를 더 이해하고 싶어요",
+  "h": "cf2efa39"
+ },
+ "js.hnt.khong-ten": {
+  "t": "이름 없음",
+  "h": "7c5b38ee"
+ },
+ "js.hnt.khong-the-ket-noi-vui-long": {
+  "t": "연결할 수 없어요. 다시 시도해 주세요.",
+  "h": "bf0b6e7b"
+ },
+ "js.hnt.kieu": {
+  "t": "유형",
+  "h": "17afe1d6"
+ },
+ "js.hnt.la-so": {
+  "t": "명반: ",
+  "h": "2644d5f2"
+ },
+ "js.hnt.la-so-con-chua-nghieng-han-full": {
+  "t": "⚠️ <b>아이의 명반은 아직 어느 방향으로도 뚜렷하게 기울지 않았어요.</b> 이 나이에는 지극히 자연스러운 일이에요 — 지금 어울리는 조언은 서둘러 정하지 말고 <b>폭넓게 해 보게 하는 것</b>이에요. 아래는 가장 기울어 있는 방향이지만, 결론이 아니라 해 볼 만한 힌트로 읽어 주세요.",
+  "h": "f97c9830"
+ },
+ "js.hnt.la-so-nay": {
+  "t": "이 명반",
+  "h": "9d459fb1"
+ },
+ "js.hnt.la-so-nay-da-tuoi-link": {
+  "t": "<b>이 명반은 {tuoi}</b> — 더는 <i>자녀의 조기 진로</i>를 묻는 것이 아니므로 부모가 아이에 대해 읽는 방향 풀이는 <b>여기서 열리지 않고</b> <b>냥도 차감되지 않아요</b>.<br><br>위의 성향 부분은 계속 볼 수 있고 무료예요 — 명반에서 읽어 내기 때문에 어느 나이에서나 맞아요. 성인의 진로(분야, 역할, 규모, 직업 갈래)를 읽고 싶다면 {link}을(를) 이용하세요.",
+  "h": "32842316"
+ },
+ "js.hnt.lap-la-so-phan-kieu-nguoi": {
+  "t": "명반을 세우고 유형 분류",
+  "h": "61f07874"
+ },
+ "js.hnt.loi": {
+  "t": "오류 ",
+  "h": "1b80116b"
+ },
+ "js.hnt.loi-8d72": {
+  "t": "오류: ",
+  "h": "471c0087"
+ },
+ "js.hnt.luong": {
+  "t": "냥 →",
+  "h": "36d6704d"
+ },
+ "js.hnt.mo-ban-dinh-huong-day-du": {
+  "t": "전체 방향 풀이 열기",
+  "h": "88ead889"
+ },
+ "js.hnt.muon-xung-chieu": {
+  "t": " <i>— 맞은편 궁을 빌림</i>",
+  "h": "77b3f2b2"
+ },
+ "js.hnt.nen-cho-lam-quen-hd": {
+  "t": "접해 보게 할 일: {hd}",
+  "h": "699e4a26"
+ },
+ "js.hnt.nen-cho-lam-quen-o-lua": {
+  "t": "이 연령대에서 접해 보게 할 일",
+  "h": "cd2440b6"
+ },
+ "js.hnt.nghe-co-chat-do-chi-de": {
+  "t": "그런 결과를 지닌 직업 — 그려 보기 위한 것일 뿐",
+  "h": "1377df2f"
+ },
+ "js.hnt.nguoi-lon-nen": {
+  "t": "어른이 하면 좋은 일",
+  "h": "f397c75d"
+ },
+ "js.hnt.nguoi-lon-nen-nen": {
+  "t": "어른이 하면 좋은 일: {nen}",
+  "h": "8198bc18"
+ },
+ "js.hnt.nguoi-lon-tranh": {
+  "t": "어른이 피할 것",
+  "h": "5dd28891"
+ },
+ "js.hnt.nu": {
+  "t": "여",
+  "h": "feb92ccd"
+ },
+ "js.hnt.sap-phai-chon-mon-to-hop": {
+  "t": "곧 과목 / 계열 / 학교를 골라야 해요",
+  "h": "8e562a93"
+ },
+ "js.hnt.so-thua-kem-hint": {
+  "t": "받을 수 있는 내용: 아이가 다른 아이의 잣대로 재어지고 있는 곳은 어디이고, 어떤 잣대가 아이의 잣대인지.",
+  "h": "94d7dbae"
+ },
+ "js.hnt.so-thua-kem-lbl": {
+  "t": "아이가 친구들을 따라가지 못할까 봐 걱정돼요",
+  "h": "2c7bbfec"
+ },
+ "js.hnt.ten-dang-me-mot-thu-khac": {
+  "t": "{ten}이(가) 전혀 다른 것에 빠져 있어요 — 하게 해도 될까요?",
+  "h": "b40a573a"
+ },
+ "js.hnt.thien-huong-noi-nhat-ten-chat": {
+  "t": "가장 두드러진 성향: {ten} — {chat}",
+  "h": "208d9982"
+ },
+ "js.hnt.thien-huong-noi-nhat-va-cach": {
+  "t": " — 가장 두드러진 성향과 아이가 접해 보기 시작하는 방법은 전체 방향 풀이에 들어 있어요.",
+  "h": "a193a19d"
+ },
+ "js.hnt.toi-nen-hoi-ten-cau-gi": {
+  "t": "아이가 스스로 말하게 하려면 {ten}에게 어떤 질문을 해야 할까요?",
+  "h": "01a73584"
+ },
+ "js.hnt.truong-thanh": {
+  "t": "성인",
+  "h": "8971ff40"
+ },
+ "js.hnt.tu-vi-cong-so-huong-nghiep": {
+  "t": "자미두수 직장·진로",
+  "h": "45d9ae37"
+ },
+ "js.hnt.tuoi": {
+  "t": " 세",
+  "h": "2e261bf5"
+ },
+ "js.hnt.tuoi-tuoi-mu": {
+  "t": " 세 (세는나이)",
+  "h": "f62485fd"
+ },
+ "js.hnt.vi": {
+  "t": "<b>이유:</b>",
+  "h": "58409548"
+ },
+ "js.hnt.vi-sao-la-so-lai-nghieng": {
+  "t": "왜 명반은 이 방향으로 기울어 있나요?",
+  "h": "11faf439"
+ },
+ "js.hnt.viec-nen-lam-trong-thang-nay": {
+  "t": "이번 달에 할 일과 그만할 일, 그리고 아이에게 말을 꺼내는 방법",
+  "h": "6f97a853"
+ },
+ "js.hnt.viet-ban-dinh-huong-theo-lua": {
+  "t": "연령에 맞는 방향 풀이 작성",
+  "h": "6ca12949"
+ },
+ "js.hnt.vui-long-nhap-day-du-ngay": {
+  "t": "아이의 생년월일을 연·월·일까지 모두 입력해 주세요.",
+  "h": "784233ac"
+ },
+ "js.hnt.xem-ban-dinh-huong-day-du": {
+  "t": "✦ 전체 방향 풀이 보기 —",
+  "h": "efa29b24"
  },
  "js.home.3-buoc-dau-tien": {
   "t": "처음 3단계",

@@ -615,6 +615,118 @@
   "t": "<span class=\"bg-label\"><span class=\"ic\" data-icon=\"sparkles\"></span><b id=\"btnGoLabel\">See the bond →</b></span> <small>Costs <span class=\"vnd\" data-tvp-price-vnd=\"duyen-no-tien-kiep\"></span> <span class=\"cb-sub\">(<span data-tvp-price=\"duyen-no-tien-kiep\">…</span> credits)</span></small>",
   "h": "990649b6"
  },
+ "hnt.2-xem-truoc": {
+  "t": "<span class=\"wss-n\">2</span><span class=\"wss-l\">Preview</span>",
+  "h": "93d60bc7"
+ },
+ "hnt.3-huong-dang-thu": {
+  "t": "<span class=\"hp-ic\" data-icon=\"star\"></span><span>3 directions<br>worth trying</span>",
+  "h": "cf93e32b"
+ },
+ "hnt.ba-huong-dang-cho-con-thu": {
+  "t": "<span class=\"res-block-title\">Three Directions Worth Trying</span>",
+  "h": "116b88f2"
+ },
+ "hnt.ban-luan-giai-mau-tai-pdf": {
+  "t": "<span class=\"sc-ic\" data-icon=\"file-text\"></span> <span class=\"sc-txt\"><b>Sample reading</b><span>Download the full “Early Career Guidance for Your Child” PDF for a sample chart to preview the real content.</span></span> <a class=\"sc-btn\" href=\"/tai-mau/mau-huong-nghiep-tre.pdf\" target=\"_blank\" rel=\"noopener\">Download PDF →</a>",
+  "h": "13902c17"
+ },
+ "hnt.ban-nay-phac-hoa-tu-cac": {
+  "t": "<span class=\"ic\" data-icon=\"lightbulb\"></span> This reading is drawn from the data in the Zi Wei Dou Shu chart, set up following <i>Zi Wei Dou Shu Xin Bian</i> (Tử Vi Đẩu Số Tân Biên) by Vân Đằng Thái Thứ Lang, combined with the research experience handed down by earlier masters. The <b>leanings and activities</b> part is a method built by the <b>Minh Bao Zi Wei Dou Shu expert team</b>, not text from the classics. See the <a href=\"/nguon-du-lieu.html\">data sources</a>.<br><br> <span class=\"ic\" data-icon=\"scale\"></span> This is <b>a direction for reference</b>, not a way to settle your child's path. A child is still growing and is not here, so this reading deliberately <b>does not predict exam results, promise success, or read health or romance</b>. A leaning says <i>what to let your child try</i>, not <i>what career your child must have</i>.",
+  "h": "6a1cfd57"
+ },
+ "hnt.bat-dau-tu-dau": {
+  "t": "<span class=\"res-block-title\" id=\"doTitle\">Where to Start</span>",
+  "h": "2bb617bb"
+ },
+ "hnt.chat-nguoi-doc-ra-tu-la": {
+  "t": "<span class=\"res-block-title\">Strengths Read from the Chart</span>",
+  "h": "d983261f"
+ },
+ "hnt.ep-con-hoc-dieu-con-khong": {
+  "t": "Forcing a child to learn what they have no affinity for only wears you both out. Read your child's chart to see which activities to introduce at each age stage.",
+  "h": "aa788dd7"
+ },
+ "hnt.huong-nghiep-som-cho-con": {
+  "t": "Early Career Guidance for Your Child",
+  "h": "2735212c"
+ },
+ "hnt.huong-nghiep-som-cho-con-nen": {
+  "t": "<b>Early Career Guidance for Your Child</b><span>What to introduce your child to from now</span>",
+  "h": "14295eac"
+ },
+ "hnt.huong-nghiep-som-cho-con-tu": {
+  "t": "Early Career Guidance for Your Child — Minh Bao Zi Wei Dou Shu",
+  "h": "9c8cd322"
+ },
+ "hnt.lam-trong-thang-nay": {
+  "t": "Do this month",
+  "h": "a8ab8a7b"
+ },
+ "hnt.may-mat-nay-khong-phai-cho": {
+  "t": "<span class=\"ic\" data-icon=\"alert-triangle\"></span> These areas are <b>not where your child is lacking</b>. They only mean that the work that suits your child doesn't judge on them.",
+  "h": "c58a74dd"
+ },
+ "hnt.mo-loi-voi-con-the-nao": {
+  "t": "<span class=\"res-block-title\">How to Talk to Your Child</span>",
+  "h": "b216c079"
+ },
+ "hnt.moi-luot-luong": {
+  "t": "<span class=\"vnd\" data-tvp-price-vnd=\"huong-nghiep-tre\"></span> per reading <span class=\"cb-sub\">(<span data-tvp-price=\"huong-nghiep-tre\">…</span> credits)</span>",
+  "h": "bdeef95d"
+ },
+ "hnt.nhap-la-so-cua-con-nhan": {
+  "t": "Enter your child's chart to get the leanings read from the chart, the activities to introduce at the right age, and what adults should do or stop doing.",
+  "h": "d1c6abd2"
+ },
+ "hnt.nhap-ngay-gio-sinh-cua-con": {
+  "t": "Enter your child's birth date and time and what worries you. You'll get the most prominent leaning, the activities worth trying and where to start.",
+  "h": "3d914a45"
+ },
+ "hnt.nhin-ra-con": {
+  "t": "<span class=\"res-block-title\">Getting to Know Your Child</span>",
+  "h": "a6d52b8a"
+ },
+ "hnt.noi-nhat": {
+  "t": "Most prominent",
+  "h": "b4fa86fd"
+ },
+ "hnt.phan-dinh-huong-chua-mo": {
+  "t": "<span class=\"res-block-title\">Locked Direction Section</span>",
+  "h": "a76cca13"
+ },
+ "hnt.sang-lua-sau-thi-doi-gi": {
+  "t": "<span class=\"res-block-title\">What Changes in the Next Age Group</span>",
+  "h": "b5257805"
+ },
+ "hnt.thien-huong-la-xu-huong-de": {
+  "t": "A leaning is <b>a tendency to let your child try</b>, not a settled career. This table is this page's own interpretation, not text from the classics.<br> This tool reads your child on the <b>same yardstick</b> as <a href=\"/app/day-con\">Parenting by Chart</a> — the same 5 temperament axes and 8 talent strengths — but it answers a different question: that one asks <i>what your child is good at</i>, this one asks <i>which way of working suits your child</i>. Because the yardstick is the same, the two never contradict each other; because the question differs, the ordering may not match exactly.",
+  "h": "fc1b1e95"
+ },
+ "hnt.thien-huong-noi-nhat": {
+  "t": "<span class=\"hp-ic\" data-icon=\"compass\"></span><span>Most prominent<br>leaning</span>",
+  "h": "b3d9e48c"
+ },
+ "hnt.thien-huong-noi-nhat-91zz": {
+  "t": "<span class=\"res-block-title\">Most Prominent Leaning</span>",
+  "h": "2954ceff"
+ },
+ "hnt.thoi-lam": {
+  "t": "Stop doing",
+  "h": "ef8d27c0"
+ },
+ "hnt.viec-hop-voi-con-thuong-khong": {
+  "t": "What work that suits your child usually doesn't demand",
+  "h": "513e2289"
+ },
+ "hnt.viec-lam-theo-lua-tuoi": {
+  "t": "<span class=\"hp-ic\" data-icon=\"hourglass\"></span><span>Activities<br>by age group</span>",
+  "h": "56da2915"
+ },
+ "hnt.xem-thien-huong-cua-con-ton": {
+  "t": "<span class=\"bg-label\"><span class=\"ic\" data-icon=\"compass\"></span><b>See your child's leaning →</b></span> <small>Costs <span class=\"vnd\" data-tvp-price-vnd=\"huong-nghiep-tre\"></span> <span class=\"cb-sub\">(<span data-tvp-price=\"huong-nghiep-tre\">…</span> credits)</span></small>",
+  "h": "ebca1bd6"
+ },
  "home.270-000-da-quoc-gia-da": {
   "t": "<span><span class=\"ic\" data-icon=\"file-text\"></span>270,000+</span> <span><span class=\"ic\" data-icon=\"globe\"></span>Worldwide</span> <span><span class=\"ic\" data-icon=\"check\"></span>Verified</span>",
   "h": "4d77621e"
@@ -2326,6 +2438,274 @@
  "js.duyenno.vui-long-nhap-day-du-ngay-who": {
   "t": "Please enter the full birth date (day, month and year) of {who}.",
   "h": "5698e85d"
+ },
+ "js.hnt.ba-huong-dang-cho-con-thu": {
+  "t": "Three directions worth trying, with specific activities for your child's age",
+  "h": "b8c61ec7"
+ },
+ "js.hnt.ban-da-xem-ban-nay-roi": {
+  "t": "✓ You've already viewed this reading — reopening it costs no credits",
+  "h": "7d2c6a5b"
+ },
+ "js.hnt.ban-dinh-huong-day-du-chua": {
+  "t": "⊙ The full direction guide is not unlocked yet",
+  "h": "0cc8ad2a"
+ },
+ "js.hnt.ban-se-nhan-cai-con-me": {
+  "t": "You'll get: whether what your child is hooked on is a real strength, and which other directions to open up for balance.",
+  "h": "3adee970"
+ },
+ "js.hnt.ban-se-nhan-chat-viec-hop": {
+  "t": "You'll get: the kind of work that suits your child and how to ask so your child opens up on their own — not a predetermined field of study.",
+  "h": "51f3fd6d"
+ },
+ "js.hnt.ban-se-nhan-cho-nen-bay": {
+  "t": "You'll get: what to lay out first so your child has a chance to meet what fits, and from which point you can stop worrying.",
+  "h": "120130d2"
+ },
+ "js.hnt.ban-se-nhan-mot-ban-mo": {
+  "t": "You'll get: a description of your child's leaning clear enough to recognise them in everyday life, plus what to introduce.",
+  "h": "e48e5660"
+ },
+ "js.hnt.ban-se-nhan-phan-nao-trong": {
+  "t": "You'll get: which parts of your child's wishes are genuine strengths, and how to talk without pushing your child further away.",
+  "h": "24a0fdb2"
+ },
+ "js.hnt.be-gai": {
+  "t": "Girl",
+  "h": "af93dba0"
+ },
+ "js.hnt.be-trai": {
+  "t": "Boy",
+  "h": "274225bc"
+ },
+ "js.hnt.cham-21-truc-tinh-khi-chon": {
+  "t": "Scoring 21 temperament axes and choosing the leaning",
+  "h": "f27b81b0"
+ },
+ "js.hnt.chang-dang-o-full": {
+  "t": "<li><b>Current stretch</b>: ages {a}–{b} ({y1}–{y2}), {cung}</li>",
+  "h": "894bc892"
+ },
+ "js.hnt.chat-nguoi-noi-nhat": {
+  "t": "Most prominent strength: ",
+  "h": "5bb97cff"
+ },
+ "js.hnt.chat-nguoi-noi-thu-nhi": {
+  "t": "Second most prominent strength: ",
+  "h": "cd07e9dc"
+ },
+ "js.hnt.chat-viec-ve-sau": {
+  "t": "Later work qualities",
+  "h": "614a78bb"
+ },
+ "js.hnt.cho-hay-bi-hieu-nham": {
+  "t": "Often misunderstood",
+  "h": "9d96dce2"
+ },
+ "js.hnt.con-chi-me-dung-mot-thu": {
+  "t": "My child is hooked on just one thing and I worry it's lopsided",
+  "h": "37b2feb7"
+ },
+ "js.hnt.con-chua-thich-gi-ro-ret": {
+  "t": "My child has no clear likes and is lukewarm about everything",
+  "h": "3c4412e1"
+ },
+ "js.hnt.con-thich-huong-ma-minh-khong": {
+  "t": "My child likes a direction I don't want",
+  "h": "b2e58212"
+ },
+ "js.hnt.cung-name": {
+  "t": "{name}",
+  "h": "3cb49303"
+ },
+ "js.hnt.cuoi-tuan-nay-toi-nen-cho-ten": {
+  "t": "What should I let {ten} try first this weekend?",
+  "h": "f2a056eb"
+ },
+ "js.hnt.dau-hieu-o-nha": {
+  "t": "Signs at home",
+  "h": "df425a5c"
+ },
+ "js.hnt.day-la-ban-dinh-huong-som-ten": {
+  "t": "This is the early direction guide for **{ten}**. Anything else you'd like to ask?",
+  "h": "fa23b364"
+ },
+ "js.hnt.do-nghieng": {
+  "t": "degree of lean",
+  "h": "f640298c"
+ },
+ "js.hnt.do-nghieng-pct-phan-tram": {
+  "t": "Lean of {pct} percent relative to the top leaning",
+  "h": "c8321ffe"
+ },
+ "js.hnt.huong-nghiep-som": {
+  "t": "Early career direction — ",
+  "h": "9779b5fc"
+ },
+ "js.hnt.huong-nghiep-som-cho-con": {
+  "t": "Early Career Guidance for Your Child",
+  "h": "2735212c"
+ },
+ "js.hnt.khoa": {
+  "t": "Locked",
+  "h": "393cb36a"
+ },
+ "js.hnt.khong-co-chinh-tinh": {
+  "t": "no major star",
+  "h": "753ded73"
+ },
+ "js.hnt.khong-co-gi-gap-chi-muon": {
+  "t": "Nothing urgent — I just want to understand my child better",
+  "h": "cf2efa39"
+ },
+ "js.hnt.khong-ten": {
+  "t": "Unnamed",
+  "h": "7c5b38ee"
+ },
+ "js.hnt.khong-the-ket-noi-vui-long": {
+  "t": "Couldn't connect. Please try again.",
+  "h": "bf0b6e7b"
+ },
+ "js.hnt.kieu": {
+  "t": "Type",
+  "h": "17afe1d6"
+ },
+ "js.hnt.la-so": {
+  "t": "Chart: ",
+  "h": "2644d5f2"
+ },
+ "js.hnt.la-so-con-chua-nghieng-han-full": {
+  "t": "⚠️ <b>Your child's chart doesn't lean clearly in any direction yet.</b> At this age that is perfectly normal — the right advice now is to <b>let your child try broadly</b> rather than decide early. The direction below is the one it leans toward most, but read it as a hint to try, not a conclusion.",
+  "h": "f97c9830"
+ },
+ "js.hnt.la-so-nay": {
+  "t": "This chart",
+  "h": "9d459fb1"
+ },
+ "js.hnt.la-so-nay-da-tuoi-link": {
+  "t": "<b>This chart is already {tuoi}</b> — this is no longer a question of <i>early direction for a child</i>, so the direction section that parents read about their child is <b>not unlocked here</b> and <b>costs no credits</b>.<br><br>The leaning section above can still be read and stays free — it is read from the chart, so it holds at any age. To read career direction for an adult (field, role, scale, career branch), use {link}.",
+  "h": "32842316"
+ },
+ "js.hnt.lap-la-so-phan-kieu-nguoi": {
+  "t": "Casting the chart and classifying the type",
+  "h": "61f07874"
+ },
+ "js.hnt.loi": {
+  "t": "Error ",
+  "h": "1b80116b"
+ },
+ "js.hnt.loi-8d72": {
+  "t": "Error: ",
+  "h": "471c0087"
+ },
+ "js.hnt.luong": {
+  "t": "credits →",
+  "h": "36d6704d"
+ },
+ "js.hnt.mo-ban-dinh-huong-day-du": {
+  "t": "Open the full direction guide",
+  "h": "88ead889"
+ },
+ "js.hnt.muon-xung-chieu": {
+  "t": " <i>— borrowed from the opposite palace</i>",
+  "h": "77b3f2b2"
+ },
+ "js.hnt.nen-cho-lam-quen-hd": {
+  "t": "To introduce: {hd}",
+  "h": "699e4a26"
+ },
+ "js.hnt.nen-cho-lam-quen-o-lua": {
+  "t": "What to introduce at this age",
+  "h": "cd2440b6"
+ },
+ "js.hnt.nghe-co-chat-do-chi-de": {
+  "t": "Careers with that quality — just to picture it",
+  "h": "1377df2f"
+ },
+ "js.hnt.nguoi-lon-nen": {
+  "t": "What adults should do",
+  "h": "f397c75d"
+ },
+ "js.hnt.nguoi-lon-nen-nen": {
+  "t": "Adults should: {nen}",
+  "h": "8198bc18"
+ },
+ "js.hnt.nguoi-lon-tranh": {
+  "t": "What adults should avoid",
+  "h": "5dd28891"
+ },
+ "js.hnt.nu": {
+  "t": "Female",
+  "h": "feb92ccd"
+ },
+ "js.hnt.sap-phai-chon-mon-to-hop": {
+  "t": "About to choose subjects / tracks / a school",
+  "h": "8e562a93"
+ },
+ "js.hnt.so-thua-kem-hint": {
+  "t": "You'll get: where your child is being measured by another child's yardstick, and which yardstick is your child's own.",
+  "h": "94d7dbae"
+ },
+ "js.hnt.so-thua-kem-lbl": {
+  "t": "I worry my child can't keep up with friends",
+  "h": "2c7bbfec"
+ },
+ "js.hnt.ten-dang-me-mot-thu-khac": {
+  "t": "{ten} is hooked on something completely different — should I let them?",
+  "h": "b40a573a"
+ },
+ "js.hnt.thien-huong-noi-nhat-ten-chat": {
+  "t": "Most prominent leaning: {ten} — {chat}",
+  "h": "208d9982"
+ },
+ "js.hnt.thien-huong-noi-nhat-va-cach": {
+  "t": " — the most prominent leaning and how to start introducing it are in the full direction guide.",
+  "h": "a193a19d"
+ },
+ "js.hnt.toi-nen-hoi-ten-cau-gi": {
+  "t": "What should I ask {ten} so my child speaks up on their own?",
+  "h": "01a73584"
+ },
+ "js.hnt.truong-thanh": {
+  "t": "adult",
+  "h": "8971ff40"
+ },
+ "js.hnt.tu-vi-cong-so-huong-nghiep": {
+  "t": "Zi Wei Dou Shu Workplace &amp; Career",
+  "h": "45d9ae37"
+ },
+ "js.hnt.tuoi": {
+  "t": " years old",
+  "h": "2e261bf5"
+ },
+ "js.hnt.tuoi-tuoi-mu": {
+  "t": " years old (traditional age count)",
+  "h": "f62485fd"
+ },
+ "js.hnt.vi": {
+  "t": "<b>Because:</b>",
+  "h": "58409548"
+ },
+ "js.hnt.vi-sao-la-so-lai-nghieng": {
+  "t": "Why does the chart lean this way?",
+  "h": "11faf439"
+ },
+ "js.hnt.viec-nen-lam-trong-thang-nay": {
+  "t": "What to do and stop doing this month, and how to talk to your child",
+  "h": "6f97a853"
+ },
+ "js.hnt.viet-ban-dinh-huong-theo-lua": {
+  "t": "Writing the age-based direction guide",
+  "h": "6ca12949"
+ },
+ "js.hnt.vui-long-nhap-day-du-ngay": {
+  "t": "Please enter your child's full birth date (day, month and year).",
+  "h": "784233ac"
+ },
+ "js.hnt.xem-ban-dinh-huong-day-du": {
+  "t": "✦ See the full direction guide —",
+  "h": "efa29b24"
  },
  "js.home.3-buoc-dau-tien": {
   "t": "First 3 steps",
