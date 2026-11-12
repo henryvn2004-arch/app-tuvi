@@ -285,6 +285,34 @@ function _fillVndSlots(host,product){
   els.forEach(function(el){ el.textContent = lbl || ''; });
 }
 
+// ── Nhãn ĐÁP ÁN câu CUNG (W30f) — engine trả chữ Việt (lib/engine/data/gio-sinh-dauhieu.ts); dịch ở chỗ VẼ theo
+// `value` = chính tinh nối '+' (hoặc 'VCD') + `treEm` (cờ additive của câu). Thiếu một phần ⇒ null ⇒ giữ NGUYÊN chữ Việt.
+if(window.I18n&&I18n.loadLong) I18n.loadLong('gio-sinh');
+function _gsLong(k){ return window.I18n&&I18n.long?I18n.long('gio-sinh',k,null):null; }
+function _gsCungLabel(cung,value,tre){
+  if(!window.I18n||I18n.locale==='vi') return null;
+  var st=value==='VCD'?[]:String(value).split('+');
+  if(!st.length){ // cung không có chính tinh: Tật Ách có câu riêng (tat.vcd), còn lại theo bảng `trong.*`
+    if(cung==='Tật Ách') return _gsLong('tat.vcd');
+    return _gsLong('trong.'+(cung==='Mệnh'?(tre?'menhTre':'menh'):(tre&&cung==='Phúc Đức')?'pdTre':'khac'));
+  }
+  var pre=cung==='Tật Ách'?'tat':cung==='Mệnh'?(tre?'mtre':null):(tre&&cung==='Phúc Đức')?'pdtre':(tre&&cung==='Phụ Mẫu')?'pmtre':'net.'+cung;
+  if(!pre) return null; // Mệnh người lớn đọc MENH_ROLE (past-life) — chưa có bản dịch ⇒ chữ Việt
+  var out=[];
+  for(var i=0;i<st.length;i++){ var t=_gsLong(pre+'.'+st[i]); if(t==null) return null; out.push(t); }
+  return out.join(' · ');
+}
+function _gsOptLabel(q,o){
+  var t=q&&q.kind==='cung'&&q.cung?_gsCungLabel(q.cung,o.value,!!q.treEm):null;
+  return t==null?o.label:t;
+}
+// Dòng bằng chứng "Cung: nhãn" — `ma` = {id:'c:<cung>',value,t?} song song `khop`/`lech` (null ở câu không phải cung).
+function _gsEvid(x,ma){
+  if(!ma) return x;
+  var t=_gsCungLabel(String(ma.id).slice(2),ma.value,ma.t===1);
+  return t==null?x:_tvmbG('cung',String(ma.id).slice(2))+': '+t;
+}
+
 // Tên sao của engine ở chỗ VẼ → glossary (khoá tính toán giữ chữ Việt); rỗng = "vô chính diệu".
 function _gsStars(a){
   return (a&&a.length)?a.map(function(s){return _tvmbG(['chinh','sao'],s);}).join(' + '):_tvmbT('js.giosinh.vo-chinh-dieu','vô chính diệu');
@@ -509,7 +537,7 @@ function step(j){
   const h=document.getElementById('qhint'); h.textContent=j.question.hint||''; h.style.display=j.question.hint?'':'none';
   const box=document.getElementById('qopts'); box.innerHTML='';
   j.question.options.forEach(o=>{
-    const b=document.createElement('button'); b.className='opt'; b.textContent=o.label;
+    const b=document.createElement('button'); b.className='opt'; b.textContent=_gsOptLabel(j.question,o);
     b.onclick=()=>answer(o.value); box.appendChild(b);
   });
   // "Không rõ" LUÔN có: ép người ta chọn bừa là bơm nhiễu vào chính phép suy.
@@ -552,8 +580,8 @@ function renderResult(j){
 
   document.getElementById('rankHost').innerHTML = k.shortlist.map((r,i)=>{
     const ev=[].concat(
-      r.khop.slice(0,4).map(x=>'<div class="ev y">✓ '+esc(x)+'</div>'),
-      r.lech.slice(0,3).map(x=>'<div class="ev n">✕ '+esc(x)+'</div>'));
+      r.khop.slice(0,4).map((x,i)=>'<div class="ev y">✓ '+esc(_gsEvid(x,r.khopMa&&r.khopMa[i]))+'</div>'),
+      r.lech.slice(0,3).map((x,i)=>'<div class="ev n">✕ '+esc(_gsEvid(x,r.lechMa&&r.lechMa[i]))+'</div>'));
     return '<div class="rank'+(i===0?' top':'')+'">'+
       '<div class="rank-h"><b>'+_tvmbT('js.giosinh.gio-chi','Giờ {chi}',{chi:esc(_tvmbG('chi',r.chi))})+'</b><span class="note">'+esc(r.khung)+' · '+_tvmbT('js.giosinh.cuc-n','cục {n}',{n:esc(_tvmbG('cuc',r.cuc))})+'</span>'+
       '<span class="rank-pct">'+esc(r.pct)+'%</span></div>'+

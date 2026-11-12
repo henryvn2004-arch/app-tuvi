@@ -62,6 +62,7 @@ import {
   TAT_ACH_DAU_HIEU,
   TAT_ACH_VCD,
   netCua,
+  NHAN_TRONG,
   MENH_TRE_EM,
   PHUC_DUC_TRE_EM,
   PHU_MAU_TRE_EM,
@@ -205,6 +206,11 @@ export interface SurveyQuestion {
   cung?: string;
   title: string;
   hint?: string;
+  /**
+   * Câu của lá số TRẺ EM (< `TUOI_TRE_EM`) — chọn bảng nhãn `*_TRE_EM`. Mã tra ADDITIVE cho client dịch nhãn
+   * đáp án (ns `gio-sinh`): chữ Việt `label` không đổi một byte; chỉ có ở câu cung, vắng = người lớn.
+   */
+  treEm?: boolean;
   options: SurveyOption[];
 }
 
@@ -224,6 +230,19 @@ export interface RankedHour {
   /** Câu hỏi nào ủng hộ / phản đối giờ này — thứ người đọc soát lại được. */
   khop: string[];
   lech: string[];
+  /**
+   * Mã tra ADDITIVE song song `khop`/`lech` (cùng chỉ số): câu CUNG ⇒ `{id, value, t?}` để client dựng lại dòng
+   * bằng chứng theo ngôn ngữ trang; câu khác ⇒ `null` (client giữ chữ Việt ở dòng đó). `khop`/`lech` KHÔNG đổi.
+   */
+  khopMa: (EvidenceMa | null)[];
+  lechMa: (EvidenceMa | null)[];
+}
+
+export interface EvidenceMa {
+  id: string;
+  value: string;
+  /** 1 = lá số trẻ em. */
+  t?: 1;
 }
 
 export interface GioSinhResult {
@@ -457,6 +476,7 @@ export function buildQuestionBank(set: HypothesisSet): SurveyQuestion[] {
       cung,
       title: tieuDeCung(cung, treEm),
       hint: hintCung(cung, treEm),
+      ...(treEm ? { treEm: true } : {}),
       options: opts,
     });
   }
@@ -473,9 +493,7 @@ function nhanCung(cung: string, stars: string[], treEm = false): string {
   }
   if (cung === 'Mệnh') {
     if (!stars.length)
-      return treEm
-        ? 'Chưa thấy nét nào nổi trội rõ — tuỳ lúc, tuỳ chỗ mà khác'
-        : 'Khó tự nhận ra một nét nổi trội — tuỳ hoàn cảnh mà đổi';
+      return treEm ? NHAN_TRONG.menhTre : NHAN_TRONG.menh;
     const bang = treEm ? MENH_TRE_EM : null;
     return stars
       .map((s) => (bang ? bang[s] : MENH_ROLE[s]?.role))
@@ -484,10 +502,10 @@ function nhanCung(cung: string, stars: string[], treEm = false): string {
   }
   if (treEm && (cung === 'Phúc Đức' || cung === 'Phụ Mẫu')) {
     const bang = cung === 'Phúc Đức' ? PHUC_DUC_TRE_EM : PHU_MAU_TRE_EM;
-    if (!stars.length) return cung === 'Phúc Đức' ? 'Không có nếp nào nổi trội rõ' : 'Không có nét nào nổi trội rõ';
+    if (!stars.length) return cung === 'Phúc Đức' ? NHAN_TRONG.pdTre : NHAN_TRONG.khac;
     return stars.map((s) => bang[s]).filter(Boolean).join(' · ');
   }
-  return netCua(cung, stars) || (stars.length ? '' : 'Không có nét nào nổi trội rõ');
+  return netCua(cung, stars) || (stars.length ? '' : NHAN_TRONG.khac);
 }
 
 function tieuDeCung(cung: string, treEm = false): string {
@@ -703,6 +721,8 @@ export function scoreHours(
   const ranked: RankedHour[] = set.hyps.map((h) => {
     const khopQ: string[] = [];
     const lechQ: string[] = [];
+    const khopMa: (EvidenceMa | null)[] = [];
+    const lechMa: (EvidenceMa | null)[] = [];
     for (const a of answers) {
       if (a.value === '?') continue;
       const q = bank.find((x) => x.id === a.id);
@@ -710,7 +730,11 @@ export function scoreHours(
       const o = q.options.find((x) => x.value === a.value);
       if (!o) continue;
       const nhan = shortLabel(q, o);
-      (o.hours.includes(h.gioIdx) ? khopQ : lechQ).push(nhan);
+      const ma: EvidenceMa | null =
+        q.kind === 'cung' ? { id: q.id, value: o.value, ...(q.treEm ? { t: 1 as const } : {}) } : null;
+      const hit = o.hours.includes(h.gioIdx);
+      (hit ? khopQ : lechQ).push(nhan);
+      (hit ? khopMa : lechMa).push(ma);
     }
     return {
       gioIdx: h.gioIdx,
@@ -722,6 +746,8 @@ export function scoreHours(
       tatStars: h.tatStars,
       khop: khopQ,
       lech: lechQ,
+      khopMa,
+      lechMa,
     };
   }).sort((a, b) => b.pct - a.pct);
 
@@ -790,7 +816,7 @@ export function publicQuestion(q: SurveyQuestion): Omit<SurveyQuestion, 'options
   options: { value: string; label: string }[];
 } {
   return {
-    id: q.id, kind: q.kind, cung: q.cung, title: q.title, hint: q.hint,
+    id: q.id, kind: q.kind, cung: q.cung, title: q.title, hint: q.hint, treEm: q.treEm,
     options: q.options.map((o) => ({ value: o.value, label: o.label })),
   };
 }

@@ -277,6 +277,17 @@ export const PHU_MAU_TRE_EM: Record<string, string> = {
   'Phá Quân': 'quan hệ trong nhà có đoạn đứt gãy rõ — ly tán hoặc xa cách hẳn một thời gian',
 };
 
+/**
+ * Nhãn đáp án khi cung KHÔNG có chính tinh thủ (hoặc bảng không có dòng) — trước nằm rải trong `nhanCung`
+ * (`gio-sinh.ts`); đưa về đây để bản dịch (ns `gio-sinh`) có một nguồn đọc được bằng AST. Chữ giữ NGUYÊN.
+ */
+export const NHAN_TRONG = {
+  menhTre: 'Chưa thấy nét nào nổi trội rõ — tuỳ lúc, tuỳ chỗ mà khác',
+  menh: 'Khó tự nhận ra một nét nổi trội — tuỳ hoàn cảnh mà đổi',
+  pdTre: 'Không có nếp nào nổi trội rõ',
+  khac: 'Không có nét nào nổi trội rõ',
+};
+
 /** Nhãn cực ngắn khi một cung có 2 chính tinh — ghép hai vế bằng " · ". */
 export function netCua(cung: string, sao: string[]): string {
   const bang = CUNG_NET[cung];

@@ -1,3 +1,4 @@
+/* global _tvmbG */
 // public/tools-shared/star-label.js — MỘT nơi dịch NHÃN SAO do engine dựng (W30f).
 //
 // Engine (`starLabel` ở lib/engine/cong-so.ts) viết nhãn sao thành chuỗi Việt:  `Tên (độ sáng) [Hóa X]`
