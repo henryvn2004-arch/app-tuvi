@@ -3,8 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Tử Vi Công Sở — Tử Vi Minh Bảo</title>
-<meta name="description" content="Đọc lá số Tử Vi bằng ngôn ngữ công việc: bạn thuộc kiểu người nào ở chỗ làm, mạnh yếu ở mười hai mặt, bốn chặng bốn mươi năm đi làm, và nên ghép đội với ai.">
+<title data-i18n="cs.tu-vi-cong-so-tu-vi">Tử Vi Công Sở — Tử Vi Minh Bảo</title>
+<meta data-i18n-attr="content:cs.doc-la-so-tu-vi-bang" name="description" content="Đọc lá số Tử Vi bằng ngôn ngữ công việc: bạn thuộc kiểu người nào ở chỗ làm, mạnh yếu ở mười hai mặt, bốn chặng bốn mươi năm đi làm, và nên ghép đội với ai.">
 <link rel="icon" type="image/webp" href="/seal.webp">
 <link rel="preload" href="/fonts/noto-serif-latin-400.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="/fonts/noto-serif-vietnamese-400.woff2" as="font" type="font/woff2" crossorigin>
@@ -111,10 +111,10 @@
   <main class="ws" id="ws">
     <div class="ws-top">
       <button class="btn mobile-only" onclick="document.getElementById('shell-sidebar').classList.toggle('open');window.shellSyncBackdrop&&shellSyncBackdrop()" aria-label="Menu">☰</button>
-      <div class="ws-title"><b>Tử Vi Công Sở</b><span>Lá số đọc bằng ngôn ngữ công việc</span></div>
+      <div data-i18n="cs.tu-vi-cong-so-la-so" class="ws-title"><b>Tử Vi Công Sở</b><span>Lá số đọc bằng ngôn ngữ công việc</span></div>
       <div class="ws-actions">
-        <button class="btn" id="btnEdit" onclick="showForm()" style="display:none">Sửa</button>
-        <button class="btn mobile-only" onclick="Shell.openRail()">✦ Hỏi</button>
+        <button data-i18n="napam.sua" class="btn" id="btnEdit" onclick="showForm()" style="display:none">Sửa</button>
+        <button data-i18n="battu.hoi" class="btn mobile-only" onclick="Shell.openRail()">✦ Hỏi</button>
       </div>
     </div>
     <div class="ws-body">
@@ -128,15 +128,15 @@
         <img class="intro-avatar" src="/tool-avatars/cong-so.webp" alt="" onerror="this.remove()">
         <div class="intro-body">
           <div class="intro-text">
-            <div class="intro-t">Tử Vi Công Sở</div>
-            <div class="intro-d">Cùng một năng lực, có người thăng tiến êm xuôi, có người mãi giậm chân — phần lớn nằm ở việc chọn đúng môi trường và cách thể hiện mình. Đọc kiểu người của bạn ở chỗ làm để định hướng rõ ràng hơn.</div>
+            <div data-i18n="cs.tu-vi-cong-so" class="intro-t">Tử Vi Công Sở</div>
+            <div data-i18n="cs.cung-mot-nang-luc-co-nguoi" class="intro-d">Cùng một năng lực, có người thăng tiến êm xuôi, có người mãi giậm chân — phần lớn nằm ở việc chọn đúng môi trường và cách thể hiện mình. Đọc kiểu người của bạn ở chỗ làm để định hướng rõ ràng hơn.</div>
             <div id="introSrc"></div>
           </div>
         </div>
         <div class="hero-pills">
-          <div class="hero-pill"><span class="hp-ic" data-icon="briefcase"></span><span>Kiểu người<br>nơi công sở</span></div>
-          <div class="hero-pill"><span class="hp-ic" data-icon="trending-up"></span><span>40 năm,<br>4 chặng</span></div>
-          <div class="hero-pill"><span class="hp-ic" data-icon="users"></span><span>Nhánh nghề,<br>ghép đội</span></div>
+          <div data-i18n="cs.kieu-nguoi-noi-cong-so" class="hero-pill"><span class="hp-ic" data-icon="briefcase"></span><span>Kiểu người<br>nơi công sở</span></div>
+          <div data-i18n="cs.40-nam-4-chang" class="hero-pill"><span class="hp-ic" data-icon="trending-up"></span><span>40 năm,<br>4 chặng</span></div>
+          <div data-i18n="cs.nhanh-nghe-ghep-doi" class="hero-pill"><span class="hp-ic" data-icon="users"></span><span>Nhánh nghề,<br>ghép đội</span></div>
         </div>
       </div></div>
       <div class="ws-main-col">
@@ -144,23 +144,23 @@
            chuyển bước ở `wsStepsSet` (cuối file), gọi tại đúng chỗ trạng thái
            đã đổi trong code cũ (doCongSo/showForm/dungTuong/moNhanh). -->
       <div class="ws-steps" id="wsSteps">
-        <div class="wss-step active"><span class="wss-n">1</span><span class="wss-l">Nhập thông tin</span></div>
-        <div class="wss-step"><span class="wss-n">2</span><span class="wss-l">Xem trước hồ sơ</span></div>
-        <div class="wss-step"><span class="wss-n">3</span><span class="wss-l">Thanh toán</span></div>
-        <div class="wss-step"><span class="wss-n">4</span><span class="wss-l">Nhận kết quả</span></div>
+        <div data-i18n="battu.1-nhap-thong-tin" class="wss-step active"><span class="wss-n">1</span><span class="wss-l">Nhập thông tin</span></div>
+        <div data-i18n="cs.2-xem-truoc-ho-so" class="wss-step"><span class="wss-n">2</span><span class="wss-l">Xem trước hồ sơ</span></div>
+        <div data-i18n="battu.3-thanh-toan" class="wss-step"><span class="wss-n">3</span><span class="wss-l">Thanh toán</span></div>
+        <div data-i18n="battu.4-nhan-ket-qua" class="wss-step"><span class="wss-n">4</span><span class="wss-l">Nhận kết quả</span></div>
       </div>
       <div class="form-card" id="birthPanel">
-        <div class="fc-head"><span class="fc-ic" data-icon="briefcase"></span><h2>Ngày giờ sinh và chỗ đứng hiện tại</h2></div>
-        <p class="sub">Nhập ngày giờ sinh và vị trí hiện tại. Hệ thống đối chiếu cổ pháp — kiểu người nơi công sở, nhánh nghề hợp và 40 năm sự nghiệp chia 4 chặng.</p>
+        <div class="fc-head"><span class="fc-ic" data-icon="briefcase"></span><h2 data-i18n="cs.ngay-gio-sinh-va-cho-dung">Ngày giờ sinh và chỗ đứng hiện tại</h2></div>
+        <p data-i18n="cs.nhap-ngay-gio-sinh-va-vi" class="sub">Nhập ngày giờ sinh và vị trí hiện tại. Hệ thống đối chiếu cổ pháp — kiểu người nơi công sở, nhánh nghề hợp và 40 năm sự nghiệp chia 4 chặng.</p>
         <div id="tuviFormHost"></div>
         <div class="frow">
-          <div class="fg"><label>Bạn đang ở vị trí nào</label>
+          <div class="fg"><label data-i18n="cs.ban-dang-o-vi-tri-nao">Bạn đang ở vị trí nào</label>
             <select id="trangThai">
-              <option value="nhan-vien">Nhân viên làm thuê</option>
-              <option value="quan-ly">Quản lý làm thuê</option>
-              <option value="chu">Chủ doanh nghiệp</option>
-              <option value="tu-do">Làm tự do / nghề riêng</option>
-              <option value="dang-tim">Đang tìm việc / chuyển hướng</option>
+              <option data-i18n="cs.nhan-vien-lam-thue" value="nhan-vien">Nhân viên làm thuê</option>
+              <option data-i18n="cs.quan-ly-lam-thue" value="quan-ly">Quản lý làm thuê</option>
+              <option data-i18n="cs.chu-doanh-nghiep" value="chu">Chủ doanh nghiệp</option>
+              <option data-i18n="cs.lam-tu-do-nghe-rieng" value="tu-do">Làm tự do / nghề riêng</option>
+              <option data-i18n="cs.dang-tim-viec-chuyen-huong" value="dang-tim">Đang tìm việc / chuyển hướng</option>
             </select>
           </div>
         </div>
@@ -168,26 +168,26 @@
           <div class="cb-l">
             <span class="cb-ic" data-icon="wallet"></span>
             <div>
-              <div class="cb-title">Chi phí sử dụng</div>
-              <div class="cb-amt">Miễn phí</div>
+              <div data-i18n="battu.chi-phi-su-dung" class="cb-title">Chi phí sử dụng</div>
+              <div data-i18n="battu.mien-phi" class="cb-amt">Miễn phí</div>
             </div>
           </div>
         </div>
-        <button class="btn-go" id="btnGo" onclick="doCongSo()">
+        <button data-i18n="cs.dung-ho-so-mien-phi" class="btn-go" id="btnGo" onclick="doCongSo()">
           <span class="bg-label"><span class="ic" data-icon="briefcase"></span><b id="btnGoLabel">Dựng hồ sơ →</b></span>
           <small>Miễn phí</small>
         </button>
-        <p class="sub" style="margin:10px 0 0">Dựng hồ sơ kiểu người + 12 mặt là <b>miễn phí</b>. Mở phần nhánh nghề cụ thể mới tính Lượng.</p>
+        <p data-i18n="cs.dung-ho-so-kieu-nguoi-12" class="sub" style="margin:10px 0 0">Dựng hồ sơ kiểu người + 12 mặt là <b>miễn phí</b>. Mở phần nhánh nghề cụ thể mới tính Lượng.</p>
         <div class="err" id="error-msg"></div>
       </div>
       </div>
       <div class="ws-side-col">
       <div class="ws-promo">
-        <div class="wsp-eyebrow"><span class="wsp-ic" data-icon="book-open"></span><span>Giới thiệu</span></div>
-        <div class="wsp-title">Tử Vi Công Sở</div>
-        <p class="wsp-desc">Tử Vi Đẩu Số là một môn mệnh lý cổ truyền Trung Hoa, lập lá số theo giờ sinh âm lịch với 12 cung và hệ thống chính tinh, phụ tinh chiếu mệnh. Môn học được hệ thống hoá qua nhiều đời, phổ biến tại Việt Nam qua bản dịch <i>Tử Vi Đẩu Số Tân Biên</i> của Vân Đằng Thái Thứ Lang.</p>
+        <div data-i18n="battu.gioi-thieu" class="wsp-eyebrow"><span class="wsp-ic" data-icon="book-open"></span><span>Giới thiệu</span></div>
+        <div data-i18n="cs.tu-vi-cong-so" class="wsp-title">Tử Vi Công Sở</div>
+        <p data-i18n="luangiai.tu-vi-dau-so-la-mot" class="wsp-desc">Tử Vi Đẩu Số là một môn mệnh lý cổ truyền Trung Hoa, lập lá số theo giờ sinh âm lịch với 12 cung và hệ thống chính tinh, phụ tinh chiếu mệnh. Môn học được hệ thống hoá qua nhiều đời, phổ biến tại Việt Nam qua bản dịch <i>Tử Vi Đẩu Số Tân Biên</i> của Vân Đằng Thái Thứ Lang.</p>
       </div>
-      <div class="samp-cta">
+      <div data-i18n="cs.ban-luan-giai-mau-tai-pdf" class="samp-cta">
         <span class="sc-ic" data-icon="file-text"></span>
         <span class="sc-txt"><b>Bản luận giải mẫu</b><span>Tải PDF Tử Vi Công Sở đầy đủ của một lá số mẫu để xem trước nội dung thật.</span></span>
         <a class="sc-btn" href="/tai-mau/mau-cong-so.pdf" target="_blank" rel="noopener">Tải PDF →</a>
@@ -200,7 +200,7 @@
         <div class="res-block">
           <div class="res-block-header">
             <span class="res-block-title" id="resTitle">—</span>
-            <button class="btn-tai" id="taiBtn" onclick="taiAnh()">⬇ Tải ảnh</button>
+            <button data-i18n="cs.tai-anh" class="btn-tai" id="taiBtn" onclick="taiAnh()">⬇ Tải ảnh</button>
           </div>
           <div class="res-block-body">
             <div class="cs-canvas-wrap"><canvas id="csToaDo"></canvas></div>
@@ -219,11 +219,11 @@
                  nguyên — đúng khuôn W1. -->
             <div id="nhanhHost"></div>
             <div id="lockHost"></div>
-            <div class="disc">
+            <div data-i18n="cs.bon-ten-goi-khai-sang-lanh" class="disc">
               Bốn tên gọi <b>Khai sáng · Lãnh đạo · Hỗ trợ · Hợp tác</b> là nhãn hiện đại do trang đặt cho dễ đọc — cổ thư không gọi thế. Cách chia thì có nền cổ pháp: nó là <b>tứ tượng</b> (lão dương · thiếu âm · thiếu dương · lão âm) áp lên 14 chính tinh, rơi đúng vào các bộ sao kinh điển.<br>
               Đây là <b>một khung đọc lá số</b>, không phải trắc nghiệm tâm lý đã qua kiểm định. Không có nghiên cứu đối chứng nào đứng sau nó. Dùng để hiểu mình và gợi chuyện, đừng dùng để tuyển người hay xếp việc cho người khác.
             </div>
-            <div class="ask" data-ask="Đọc kỹ giúp tôi hồ sơ công sở này: tôi hợp môi trường nào, đang vướng gì, và ba việc nên làm trong mười hai tháng tới?">✦ Hỏi Thầy đọc kỹ hồ sơ này</div>
+            <div data-i18n="cs.hoi-thay-doc-ky-ho-so" class="ask" data-ask="Đọc kỹ giúp tôi hồ sơ công sở này: tôi hợp môi trường nào, đang vướng gì, và ba việc nên làm trong mười hai tháng tới?">✦ Hỏi Thầy đọc kỹ hồ sơ này</div>
           </div>
         </div>
         <!-- "Ai Sinh Cùng Ngày Với Bạn" — miễn phí, 0 token LLM. Hỏng mạng/API
