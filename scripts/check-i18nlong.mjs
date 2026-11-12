@@ -135,11 +135,17 @@ for (const ns of LONG_NS) {
     fail(`${f}: không có chỗ tra bản dịch (I18n.long/_long) cho '${ns}'`);
 }
 // Văn engine server: mỗi bảng (đoạn đầu khoá) phải được module tra tới.
+// past-life (W30f-3): khoá KHÔNG viết trong module — engine trả sẵn khoá đầy đủ trong mã `ma` (xem khối riêng dưới).
+const KHOA_TRONG_MA = { 'past-life': ['nghe', 'pair', 'note', 'tier', 'menh'] };
 for (const ns of Object.keys(ENGINE_NS)) {
   const f = LONG_MODULE[ns];
   const code = fs.readFileSync(path.join(ROOT, f), 'utf8');
   for (const bang of new Set(sources[ns].map((e) => e.k.split('.')[0])))
-    if (!code.includes(`'${bang}.'`) && !code.includes(`'${bang}'`))
+    if (
+      !(KHOA_TRONG_MA[ns] || []).includes(bang) &&
+      !code.includes(`'${bang}.'`) &&
+      !code.includes(`'${bang}'`)
+    )
       fail(
         `${f}: bảng '${bang}' của ns ${ns} có bản dịch nhưng module không tra tới (chỗ vẽ bị gỡ/đổi tên?)`
       );
@@ -157,6 +163,26 @@ for (const ns of Object.keys(ENGINE_NS)) {
   const page = fs.readFileSync(path.join(ROOT, LONG_MODULE.hntre), 'utf8');
   for (const t of ["'kdh.' + c.ma", "'matdoc.' + m.ma", "'huong.' + h.id", "'lop.' + lopId"])
     if (!page.includes(t)) fail(`${LONG_MODULE.hntre}: trang không tra ${t}`);
+}
+// past-life (W30f-3): mã `ma` do `resolveCareerBase`/`cong-so.ts` gắn thêm + trang tra đúng cửa. Gỡ mã khỏi engine ⇒ /ja lặng
+// lẽ lùi về chữ Việt ở khối "Cơ sở trong lá số" — không bộ dò nào khác thấy, nên canh ở đây.
+{
+  const eng = fs.readFileSync(path.join(ROOT, ENGINE_NS['past-life']), 'utf8');
+  for (const snip of [
+    '`pair.${pk}.${tierInfo.tier}`',
+    '`nghe.${lead.ten}.${tierInfo.tier}`',
+    "'nghe.default'",
+    '`tier.${tierInfo.tier}`',
+    '`note.mod.${i}`',
+    '`note.hoa.${s.hoa}`',
+  ])
+    if (!eng.includes(snip)) fail(`${ENGINE_NS['past-life']}: thiếu mã tra — ${snip}`);
+  const cs = fs.readFileSync(path.join(ROOT, 'lib/engine/cong-so.ts'), 'utf8');
+  for (const snip of ['ma: cb.ma,', '`menh.${vaiTroSao}.role`'])
+    if (!cs.includes(snip)) fail(`lib/engine/cong-so.ts: thiếu mã tra — ${snip}`);
+  const page = fs.readFileSync(path.join(ROOT, LONG_MODULE['past-life']), 'utf8');
+  for (const t of ['ma.desc', 'ma.src', 'ma.tier', 'vaiTroMa', 'ma.bd', 'ma.notes', "'bd.'"])
+    if (!page.includes(t)) fail(`${LONG_MODULE['past-life']}: trang không tra ${t}`);
 }
 for (const f of new Set(Object.values(LONG_MODULE))) {
   const code = fs.readFileSync(path.join(ROOT, f), 'utf8');

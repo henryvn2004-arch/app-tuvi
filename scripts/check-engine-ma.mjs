@@ -86,6 +86,7 @@ const { computeLaso } = await import('./lib/engine/laso.js');
 const bond = await import('./lib/engine/past-life-bond.js');
 const nm = await import('./lib/engine/nhan-mach.js');
 const dc = await import('./lib/engine/day-con-assess.js');
+const PL = await import('./lib/engine/past-life.js');
 let seed = 20261112;
 const rnd = (n) => { seed = (seed * 1103515245 + 12345) & 0x7fffffff; return seed % n; };
 const mk = () => ({ day: 1 + rnd(28), month: 1 + rnd(12), year: 1940 + rnd(80), hourBranch: rnd(12), gender: rnd(2) ? 'nam' : 'nu', isLunar: false });
@@ -111,11 +112,18 @@ for (let i = 0; i < 400; i++) {
   out.truc.push(a.truc.map((t) => ({ id: t.id, ten: t.ten, cauHoi: t.cauHoi, nghieng: t.nghieng, nhanThap: t.nhanThap, nhanCao: t.nhanCao, cuc: t.cuc, canND: t.canND })));
   out.khieu.push(a.khieu.map((k) => ({ id: k.id, ten: k.ten, motCau: k.motCau, dauHieu: k.dauHieu, chuY: k.chuY, oLop: k.oLop })));
 }
+// Past-life (W30f-3): chức phận lối cổ qua resolveCareerBase — lưới rộng để chạm hầu hết khoá bảng nghề.
+out.pl = [];
+for (let i = 0; i < 700; i++) {
+  const c = PL.resolveCareerBase(ls(mk()));
+  out.pl.push({ desc: c.desc, source: c.source, tierLabel: c.tierLabel, tierBreakdown: c.tierBreakdown, notes: c.notes, ma: c.ma });
+}
 // GOLDEN: chữ Việt do engine TRƯỚC lô D dựng bằng chuỗi viết tay (scripts/fixtures/engine-ma-golden.json) — engine nay
 // dựng từ bảng khuôn và phải giữ từng byte (chữ còn vào prompt LLM + portrait_cache).
 const { readFileSync } = await import('node:fs');
 const gold = JSON.parse(readFileSync(process.env.GOLDEN, 'utf8'));
 out.golden = {
+  pl: gold.pl.map((g) => { const c = PL.resolveCareerBase(ls(g.b)); return { desc: c.desc, source: c.source, tierLabel: c.tierLabel, tierBreakdown: c.tierBreakdown, notes: c.notes }; }),
   bond: gold.bond.map((g) => { const b = bond.computePastLifeBond(ls(g.A), g.A.gender, ls(g.B), g.B.gender); return { A: g.A, B: g.B, type: b.type, signals: b.signals.map((s) => [s.label, s.detail]) }; }),
   nm: (() => { const vai = ['sep', 'dong-nghiep', 'cap-duoi', 'doi-tac']; const p = nm.computeNhanMach(gold.nm.people.map((b, j) => ({ ten: 'P' + j, vai: vai[j], ls: ls(b), gioiTinh: b.gender })), null, 2026); return p.cap.map((c) => [c.a, c.b, c.loai, c.vi]); })(),
 };
@@ -274,6 +282,62 @@ console.log('__KQ__' + JSON.stringify(out));
     );
   }
 
+  // ── Past-life (W30f-3): nghe.*/pair.* desc|src · tier.* · bd (khoản chấm) · note.* — khoá DỰNG Y NHƯ cong-so.js
+  {
+    const S = nguon('past-life');
+    const sai = [];
+    const lech = [];
+    const dung = new Set();
+    const chk = (k, vi) => {
+      dung.add(k);
+      if (!S.has(k)) sai.push(k);
+      else if (S.get(k) !== vi) lech.push(k);
+    };
+    const tpl = (k, v) =>
+      (S.get(k) || '').replace(/\{(\w+)\}/g, (m, n) => (v[n] !== undefined ? v[n] : m));
+    for (const c of kq.pl) {
+      chk(c.ma.desc, c.desc);
+      chk(c.ma.src, c.source);
+      chk(c.ma.tier, c.tierLabel);
+      if (c.ma.bd.length !== c.tierBreakdown.length) sai.push('bd không song song tierBreakdown');
+      c.ma.bd.forEach((m, i) => {
+        const dau = (m.n > 0 ? '+' : '') + m.n + ' ';
+        let vi;
+        if (m.k === 'chinh') {
+          vi = dau + (m.ten || S.get('bd.chinhtinh')) + (m.sang ? ' ' + m.sang : '');
+          dung.add('bd.chinhtinh');
+        } else if (m.k === 'hoa')
+          (dung.add('bd.hoa'), (vi = dau + tpl('bd.hoa', { ten: m.ten, hoa: m.hoa })));
+        else if (m.k === 'cach') (dung.add('bd.cach'), (vi = dau + tpl('bd.cach', { ten: m.ten })));
+        else if (m.k === 'tuan-giai' || m.k === 'tuan-pha')
+          (dung.add('bd.' + m.k), (vi = dau + S.get('bd.' + m.k)));
+        else if (m.k === 'cat' || m.k === 'sat') vi = dau + m.ds.join('/');
+        else sai.push('khoản chấm lạ ' + m.k);
+        if (vi !== c.tierBreakdown[i]) lech.push(`bd[${m.k}] "${vi}" ≠ "${c.tierBreakdown[i]}"`);
+      });
+      if (c.ma.notes.length !== c.notes.length) sai.push('notes không song song');
+      c.ma.notes.forEach((m, i) => {
+        dung.add(m.k);
+        if (!S.has(m.k)) return sai.push(m.k);
+        const dau = m.ds ? m.ds.join('/') : tpl('bd.hoa', { ten: m.ten, hoa: m.k.split('.')[2] });
+        if (dau + ' → ' + S.get(m.k) !== c.notes[i]) lech.push(`note ${m.k}`);
+      });
+    }
+    bao(
+      sai.length === 0,
+      `past-life — ${dung.size} khoá chạm bởi ${kq.pl.length} lá số mẫu, không trỏ trượt: ${[...new Set(sai)].slice(0, 5).join(', ') || 'không'}`
+    );
+    bao(
+      lech.length === 0,
+      `past-life — chữ Việt trong payload == nguồn dịch: ${[...new Set(lech)].slice(0, 3).join(' | ') || 'khớp'}`
+    );
+    const nDesc = [...dung].filter((k) => k.endsWith('.desc')).length;
+    bao(
+      nDesc >= 90,
+      `past-life — mẫu chạm ${nDesc}/153 câu chức phận (cần ≥90) + ${dung.size} khoá tổng`
+    );
+  }
+
   // ── GOLDEN: chữ Việt byte-giống engine cũ (nguồn độc lập với bảng khuôn)
   {
     const gold = JSON.parse(
@@ -290,6 +354,18 @@ console.log('__KQ__' + JSON.stringify(out));
       gold.bond.length >= 10 && lechB.length === 0,
       `golden duyen-no — ${gold.bond.length} cặp (22 dạng câu) byte-giống engine cũ: ${lechB.join(', ') || 'khớp'}`
     );
+    {
+      const lechP = [];
+      gold.pl.forEach((g, i) => {
+        const n = kq.golden.pl[i];
+        for (const f of ['desc', 'source', 'tierLabel', 'tierBreakdown', 'notes'])
+          if (JSON.stringify(g[f]) !== JSON.stringify(n[f])) lechP.push(`#${i}.${f}`);
+      });
+      bao(
+        gold.pl.length >= 50 && lechP.length === 0,
+        `golden past-life — ${gold.pl.length} lá số (mọi sao × bậc + mọi dạng khoản chấm/sắc thái) byte-giống engine cũ: ${lechP.slice(0, 5).join(', ') || 'khớp'}`
+      );
+    }
     bao(
       JSON.stringify(gold.nm.cap) === JSON.stringify(kq.golden.nm),
       `golden nhan-mach — ${gold.nm.cap.length} câu cặp byte-giống engine cũ`
