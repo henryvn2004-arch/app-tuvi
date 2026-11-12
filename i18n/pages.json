@@ -316,6 +316,52 @@
    "shell"
   ]
  },
+ "/app/dien-tuong": {
+  "file": "app-dien-tuong.html",
+  "keys": [
+   "battu.1-nhap-thong-tin",
+   "battu.chi-phi-su-dung",
+   "battu.gioi-thieu",
+   "battu.hoi",
+   "dient.anh-chi-gui-toi-may-chu",
+   "dient.dien-tuong",
+   "dient.dien-tuong-tu-vi-minh-bao",
+   "dient.dien-tuong-xem-tuong-khuon-mat",
+   "dient.do-tam-dinh-ngu-quan",
+   "dient.jpg-png-webp-toi-da-5mb",
+   "dient.luan-theo-ma-y-than-tuong",
+   "dient.ma-y-than-tuong-co-phap",
+   "dient.moi-luot-luong",
+   "dient.phan-tich-nhan-tuong-hoc",
+   "dient.phan-tich-tuong-mat-ton-luong",
+   "dient.tai-hoac-chup-anh-khuon-mat",
+   "dient.tai-mot-tam-anh-chan-dung",
+   "dient.tam-dinh-da-xac-dinh",
+   "dient.tam-dinh-ngu-quan-tren-guong",
+   "luangiai.chuyen-khoan-qua-qr-ngan-hang",
+   "luangiai.mua-goi-de-nhan-nhieu-uu",
+   "nhtg.anh-da-chon",
+   "nhtg.anh-da-chon-oxp5",
+   "nhtg.chua-muon-chup-anh-ban-co",
+   "nhtg.chup",
+   "nhtg.chup-anh",
+   "nhtg.huy",
+   "nhtg.keo-tha-anh-vao-day-hoac",
+   "nhtg.ma-y-than-tuong-la-mot",
+   "nhtg.mo-camera",
+   "nhtg.phan-tich-anh-khac",
+   "nhtg.tai-anh-hoac-chup-truc-tiep",
+   "nhtg.tai-anh-khuon-mat",
+   "nhtg.tai-anh-len",
+   "nhtg.xoa-anh",
+   "thtg.2-thanh-toan",
+   "thtg.3-nhan-ket-qua",
+   "thtp.xem-ban-mau"
+  ],
+  "js": [
+   "shell"
+  ]
+ },
  "/app/kinh-dich": {
   "file": "app-kinh-dich.html",
   "keys": [

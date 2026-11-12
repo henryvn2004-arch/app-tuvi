@@ -407,6 +407,66 @@
   "t": "← Back to today",
   "h": "24faf89e"
  },
+ "dient.anh-chi-gui-toi-may-chu": {
+  "t": "The photo is only sent to the server for analysis and isn't stored there. Shoot straight on, in good light, with nothing covering your face for the most accurate result.",
+  "h": "b68f127c"
+ },
+ "dient.dien-tuong": {
+  "t": "Face Reading",
+  "h": "1e5e41e3"
+ },
+ "dient.dien-tuong-tu-vi-minh-bao": {
+  "t": "Face Reading — Minh Bao Zi Wei Dou Shu",
+  "h": "1279c8b1"
+ },
+ "dient.dien-tuong-xem-tuong-khuon-mat": {
+  "t": "<b>Face Reading</b><span>Read the face by the classical method — <span data-tvp-price=\"dien-tuong\">…</span> credits</span>",
+  "h": "4af70f75"
+ },
+ "dient.do-tam-dinh-ngu-quan": {
+  "t": "<span class=\"hp-ic\" data-icon=\"layout-grid\"></span><span>Measure the Three<br>Divisions, Five Features</span>",
+  "h": "fb2a8a23"
+ },
+ "dient.jpg-png-webp-toi-da-5mb": {
+  "t": "JPG, PNG, WebP — 5MB max",
+  "h": "e7e468cd"
+ },
+ "dient.luan-theo-ma-y-than-tuong": {
+  "t": "<span class=\"hp-ic\" data-icon=\"scroll-text\"></span><span>A reading by<br>Ma Yi Shen Xiang</span>",
+  "h": "eecee1d3"
+ },
+ "dient.ma-y-than-tuong-co-phap": {
+  "t": "Classical Ma Yi Shen Xiang",
+  "h": "c9dac5c1"
+ },
+ "dient.moi-luot-luong": {
+  "t": "<span class=\"vnd\" data-tvp-price-vnd=\"dien-tuong\"></span> per reading <span class=\"cb-sub\">(<span data-tvp-price=\"dien-tuong\">…</span> credits)</span>",
+  "h": "2e7a2c43"
+ },
+ "dient.phan-tich-nhan-tuong-hoc": {
+  "t": "Physiognomy Analysis",
+  "h": "9b4da9c2"
+ },
+ "dient.phan-tich-tuong-mat-ton-luong": {
+  "t": "<span class=\"bg-label\"><span class=\"ic\" data-icon=\"sparkles\"></span><b id=\"analyzeBtnLabel\">Analyze My Face →</b></span> <small>Costs <span class=\"vnd\" data-tvp-price-vnd=\"dien-tuong\"></span> <span class=\"cb-sub\">(<span data-tvp-price=\"dien-tuong\">…</span> credits)</span></small>",
+  "h": "3a64a361"
+ },
+ "dient.tai-hoac-chup-anh-khuon-mat": {
+  "t": "Upload or take a photo of your face — the system analyzes classical physiognomy by Ma Yi Shen Xiang: the Three Divisions, the Five Features and other key areas.",
+  "h": "f24ad8af"
+ },
+ "dient.tai-mot-tam-anh-chan-dung": {
+  "t": "Upload one portrait taken straight on, in good light, with your face clearly visible. The system analyzes the Three Divisions, the Five Features and each area, and reads your character and fortune.",
+  "h": "453bd1c6"
+ },
+ "dient.tam-dinh-da-xac-dinh": {
+  "t": "✦ Three Divisions detected",
+  "h": "ab4a740f"
+ },
+ "dient.tam-dinh-ngu-quan-tren-guong": {
+  "t": "The Three Divisions and Five Features of the face are not mystery — the ancients turned them into a concrete method for reading character and fortune. Upload one portrait and receive a reading by Ma Yi Shen Xiang.",
+  "h": "3c70322e"
+ },
  "disclaimer.1-tinh-chat-tham-khao": {
   "t": "1. For reference only",
   "h": "99856a52"
@@ -1638,6 +1698,142 @@
  "js.chutrinh.tieu-van-nam": {
   "t": "Annual cycle for ",
   "h": "1979c56a"
+ },
+ "js.dient.anh-qua-lon-toi-da-5mb": {
+  "t": "The image is too large (5MB max).",
+  "h": "874f95b2"
+ },
+ "js.dient.canh-bao-chup": {
+  "t": "⚠ {w} — the result will be more accurate with a straight-on photo.",
+  "h": "231fb68c"
+ },
+ "js.dient.chip-ngu-quan": {
+  "t": "What do the Five Features include?",
+  "h": "e8847ad0"
+ },
+ "js.dient.chip-tam-dinh": {
+  "t": "What are the Three Divisions of the face?",
+  "h": "25930850"
+ },
+ "js.dient.chip-thay-doi": {
+  "t": "Can a face reading change?",
+  "h": "602a11f2"
+ },
+ "js.dient.da-doc-xong": {
+  "t": "I have finished reading your face by Ma Yi Shen Xiang. Is there anything more you would like to ask?",
+  "h": "8cee9c62"
+ },
+ "js.dient.dang-phan-tich": {
+  "t": "Analyzing your face…",
+  "h": "b2f15cf4"
+ },
+ "js.dient.dau-nghieng": {
+  "t": "Head tilted ~{n}° — please shoot straighter",
+  "h": "ad34a7cb"
+ },
+ "js.dient.dien-tuong": {
+  "t": "Face Reading",
+  "h": "1e5e41e3"
+ },
+ "js.dient.dien-tuong-cua-toi": {
+  "t": "My face reading",
+  "h": "d5784500"
+ },
+ "js.dient.do-truc-tiep-bo-vi": {
+  "t": "Measured directly from the image with MediaPipe. The meaning by Ma Yi Shen Xiang and the remaining areas (eyes, nose, mouth, forehead, chin) are in the in-depth analysis.",
+  "h": "6d9235fd"
+ },
+ "js.dient.do-truc-tiep-tam-dinh": {
+  "t": "Measured directly from the image with MediaPipe — the Upper/Middle/Lower Divisions follow your own facial landmarks. The full reading by Ma Yi Shen Xiang is in the in-depth analysis.",
+  "h": "3ded4f7e"
+ },
+ "js.dient.ha-dinh": {
+  "t": "LOWER",
+  "h": "11254397"
+ },
+ "js.dient.khong-doc-duoc-anh-nay-vui": {
+  "t": "Can't read this image — please choose a JPG or PNG image.",
+  "h": "32a1faf4"
+ },
+ "js.dient.khong-nhan-dien-duoc-mat": {
+  "t": "⚠ Couldn't clearly detect a face. You can still run the analysis, but the result may be less accurate.",
+  "h": "b3bd7a6e"
+ },
+ "js.dient.khong-the-ket-noi": {
+  "t": "Can't connect. Please try again.",
+  "h": "bf0b6e7b"
+ },
+ "js.dient.khong-the-mo-camera": {
+  "t": "Can't open the camera. Please upload an image instead.",
+  "h": "a57244b6"
+ },
+ "js.dient.loi-e": {
+  "t": "Error: {e}",
+  "h": "a7267203"
+ },
+ "js.dient.loi-s": {
+  "t": "Error {s}",
+  "h": "c406c72b"
+ },
+ "js.dient.mat-bau-duc": {
+  "t": "oval face",
+  "h": "d9034e8f"
+ },
+ "js.dient.mat-dai-hep": {
+  "t": "long/narrow face",
+  "h": "ea8512c9"
+ },
+ "js.dient.mat-quay": {
+  "t": "Your face is turned slightly to one side — please shoot straight on",
+  "h": "589f7ce3"
+ },
+ "js.dient.mat-tron-vuong": {
+  "t": "round/square face",
+  "h": "64bb08c2"
+ },
+ "js.dient.may-chu-khong-tra-ve": {
+  "t": "The server returned no result.",
+  "h": "d1312308"
+ },
+ "js.dient.tam-bach-ha": {
+  "t": "Lower Sanpaku eyes — white shows below the iris",
+  "h": "1d45c786"
+ },
+ "js.dient.tam-bach-thuong": {
+  "t": "Upper Sanpaku eyes — white shows above the iris",
+  "h": "2f061c22"
+ },
+ "js.dient.tam-dinh-da-xac-dinh": {
+  "t": "✦ Three Divisions detected",
+  "h": "ab4a740f"
+ },
+ "js.dient.tam-dinh-t": {
+  "t": "Three Divisions: Upper {t}% · Middle {tr}% · Lower {h}%",
+  "h": "47b2936f"
+ },
+ "js.dient.thuong-dinh": {
+  "t": "UPPER",
+  "h": "eb4f7b4f"
+ },
+ "js.dient.thuong-mat-15-25-giay": {
+  "t": "Usually takes 15–25 seconds",
+  "h": "f0dba195"
+ },
+ "js.dient.trung-dinh": {
+  "t": "MIDDLE",
+  "h": "bfbaff8b"
+ },
+ "js.dient.tu-bach": {
+  "t": "Four-white eyes (Si Bai Yan) — white shows on several sides of the iris",
+  "h": "1ded61cb"
+ },
+ "js.dient.ty-le-rong-dai-mat": {
+  "t": "Face width/length ratio: {r} ({s})",
+  "h": "59af24fc"
+ },
+ "js.dient.vui-long-chon-file-anh": {
+  "t": "Please choose an image file.",
+  "h": "71a61127"
  },
  "js.home.3-buoc-dau-tien": {
   "t": "First 3 steps",

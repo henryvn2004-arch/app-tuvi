@@ -407,6 +407,66 @@
   "t": "← 今日に戻る",
   "h": "24faf89e"
  },
+ "dient.anh-chi-gui-toi-may-chu": {
+  "t": "画像は分析のためにサーバーへ送るだけで、サーバーには保存しません。正面から、十分な明るさで、顔を隠さずに撮影すると最も正確な結果が得られます。",
+  "h": "b68f127c"
+ },
+ "dient.dien-tuong": {
+  "t": "面相",
+  "h": "1e5e41e3"
+ },
+ "dient.dien-tuong-tu-vi-minh-bao": {
+  "t": "面相 — 明宝紫微斗数",
+  "h": "1279c8b1"
+ },
+ "dient.dien-tuong-xem-tuong-khuon-mat": {
+  "t": "<b>面相</b><span>古法で顔の相を読む — <span data-tvp-price=\"dien-tuong\">…</span> 両</span>",
+  "h": "4af70f75"
+ },
+ "dient.do-tam-dinh-ngu-quan": {
+  "t": "<span class=\"hp-ic\" data-icon=\"layout-grid\"></span><span>三停・五官を<br>測定</span>",
+  "h": "fb2a8a23"
+ },
+ "dient.jpg-png-webp-toi-da-5mb": {
+  "t": "JPG、PNG、WebP — 最大5MB",
+  "h": "e7e468cd"
+ },
+ "dient.luan-theo-ma-y-than-tuong": {
+  "t": "<span class=\"hp-ic\" data-icon=\"scroll-text\"></span><span>『麻衣神相』に<br>よる鑑定</span>",
+  "h": "eecee1d3"
+ },
+ "dient.ma-y-than-tuong-co-phap": {
+  "t": "『麻衣神相』の古法",
+  "h": "c9dac5c1"
+ },
+ "dient.moi-luot-luong": {
+  "t": "1回 <span class=\"vnd\" data-tvp-price-vnd=\"dien-tuong\"></span> <span class=\"cb-sub\">(<span data-tvp-price=\"dien-tuong\">…</span> 両)</span>",
+  "h": "2e7a2c43"
+ },
+ "dient.phan-tich-nhan-tuong-hoc": {
+  "t": "人相学の分析",
+  "h": "9b4da9c2"
+ },
+ "dient.phan-tich-tuong-mat-ton-luong": {
+  "t": "<span class=\"bg-label\"><span class=\"ic\" data-icon=\"sparkles\"></span><b id=\"analyzeBtnLabel\">顔相を分析する →</b></span> <small><span class=\"vnd\" data-tvp-price-vnd=\"dien-tuong\"></span> <span class=\"cb-sub\">(<span data-tvp-price=\"dien-tuong\">…</span> 両)</span> 必要</small>",
+  "h": "3a64a361"
+ },
+ "dient.tai-hoac-chup-anh-khuon-mat": {
+  "t": "顔写真をアップロードまたは撮影してください — 古法の人相学『麻衣神相』にもとづき、三停・五官など重要な部位を分析します。",
+  "h": "f24ad8af"
+ },
+ "dient.tai-mot-tam-anh-chan-dung": {
+  "t": "正面から十分な明るさで、顔がはっきり写ったポートレート画像を1枚アップロードしてください。三停・五官と各部位を分析し、性格と運勢を読み解きます。",
+  "h": "453bd1c6"
+ },
+ "dient.tam-dinh-da-xac-dinh": {
+  "t": "✦ 三停を特定しました",
+  "h": "ab4a740f"
+ },
+ "dient.tam-dinh-ngu-quan-tren-guong": {
+  "t": "顔の三停・五官は神秘的な話ではありません — 古人が性格と運勢を具体的に読む方法として体系化したものです。ポートレート画像を1枚アップロードして、『麻衣神相』にもとづく鑑定を受け取りましょう。",
+  "h": "3c70322e"
+ },
  "disclaimer.1-tinh-chat-tham-khao": {
   "t": "1. 参考情報としての性質",
   "h": "99856a52"
@@ -1638,6 +1698,142 @@
  "js.chutrinh.tieu-van-nam": {
   "t": "小運の年：",
   "h": "1979c56a"
+ },
+ "js.dient.anh-qua-lon-toi-da-5mb": {
+  "t": "画像が大きすぎます（最大5MB）。",
+  "h": "874f95b2"
+ },
+ "js.dient.canh-bao-chup": {
+  "t": "⚠ {w} — 正面から撮影した画像のほうが、より正確な結果になります。",
+  "h": "231fb68c"
+ },
+ "js.dient.chip-ngu-quan": {
+  "t": "五官とは何ですか？",
+  "h": "e8847ad0"
+ },
+ "js.dient.chip-tam-dinh": {
+  "t": "三停とは何ですか？",
+  "h": "25930850"
+ },
+ "js.dient.chip-thay-doi": {
+  "t": "顔相は変えられますか？",
+  "h": "602a11f2"
+ },
+ "js.dient.da-doc-xong": {
+  "t": "『麻衣神相』にもとづき、あなたの顔相を読み終えました。ほかに知りたいことはありますか？",
+  "h": "8cee9c62"
+ },
+ "js.dient.dang-phan-tich": {
+  "t": "顔相を分析しています…",
+  "h": "b2f15cf4"
+ },
+ "js.dient.dau-nghieng": {
+  "t": "頭が約{n}°傾いています — もっとまっすぐ撮影してください",
+  "h": "ad34a7cb"
+ },
+ "js.dient.dien-tuong": {
+  "t": "面相",
+  "h": "1e5e41e3"
+ },
+ "js.dient.dien-tuong-cua-toi": {
+  "t": "私の面相",
+  "h": "d5784500"
+ },
+ "js.dient.do-truc-tiep-bo-vi": {
+  "t": "MediaPipeで画像から直接測定しました。『麻衣神相』にもとづく意味と、そのほかの部位（目・鼻・口・額・あご）は、詳細分析に含まれています。",
+  "h": "6d9235fd"
+ },
+ "js.dient.do-truc-tiep-tam-dinh": {
+  "t": "MediaPipeで画像から直接測定しました — 上停・中停・下停は、あなたの顔の実際のランドマークに沿って区切っています。『麻衣神相』にもとづく詳しい鑑定は、詳細分析に含まれています。",
+  "h": "3ded4f7e"
+ },
+ "js.dient.ha-dinh": {
+  "t": "下停",
+  "h": "11254397"
+ },
+ "js.dient.khong-doc-duoc-anh-nay-vui": {
+  "t": "この画像を読み込めません — JPGまたはPNGの画像を選んでください。",
+  "h": "32a1faf4"
+ },
+ "js.dient.khong-nhan-dien-duoc-mat": {
+  "t": "⚠ 顔をはっきり検出できませんでした。分析は可能ですが、結果の精度が下がる場合があります。",
+  "h": "b3bd7a6e"
+ },
+ "js.dient.khong-the-ket-noi": {
+  "t": "接続できません。もう一度お試しください。",
+  "h": "bf0b6e7b"
+ },
+ "js.dient.khong-the-mo-camera": {
+  "t": "カメラを開けません。画像をアップロードしてください。",
+  "h": "a57244b6"
+ },
+ "js.dient.loi-e": {
+  "t": "エラー: {e}",
+  "h": "a7267203"
+ },
+ "js.dient.loi-s": {
+  "t": "エラー {s}",
+  "h": "c406c72b"
+ },
+ "js.dient.mat-bau-duc": {
+  "t": "卵型の顔",
+  "h": "d9034e8f"
+ },
+ "js.dient.mat-dai-hep": {
+  "t": "面長・細面",
+  "h": "ea8512c9"
+ },
+ "js.dient.mat-quay": {
+  "t": "顔が少し横を向いています — 正面から撮影してください",
+  "h": "589f7ce3"
+ },
+ "js.dient.mat-tron-vuong": {
+  "t": "丸顔・四角顔",
+  "h": "64bb08c2"
+ },
+ "js.dient.may-chu-khong-tra-ve": {
+  "t": "サーバーから結果が返ってきませんでした。",
+  "h": "d1312308"
+ },
+ "js.dient.tam-bach-ha": {
+  "t": "下三白眼 — 黒目の下に白目が見えます",
+  "h": "1d45c786"
+ },
+ "js.dient.tam-bach-thuong": {
+  "t": "上三白眼 — 黒目の上に白目が見えます",
+  "h": "2f061c22"
+ },
+ "js.dient.tam-dinh-da-xac-dinh": {
+  "t": "✦ 三停を特定しました",
+  "h": "ab4a740f"
+ },
+ "js.dient.tam-dinh-t": {
+  "t": "三停: 上停 {t}% · 中停 {tr}% · 下停 {h}%",
+  "h": "47b2936f"
+ },
+ "js.dient.thuong-dinh": {
+  "t": "上停",
+  "h": "eb4f7b4f"
+ },
+ "js.dient.thuong-mat-15-25-giay": {
+  "t": "通常15〜25秒かかります",
+  "h": "f0dba195"
+ },
+ "js.dient.trung-dinh": {
+  "t": "中停",
+  "h": "bfbaff8b"
+ },
+ "js.dient.tu-bach": {
+  "t": "四白眼 — 黒目の周り何方向にも白目が見えます",
+  "h": "1ded61cb"
+ },
+ "js.dient.ty-le-rong-dai-mat": {
+  "t": "顔の幅÷長さの比: {r}（{s}）",
+  "h": "59af24fc"
+ },
+ "js.dient.vui-long-chon-file-anh": {
+  "t": "画像ファイルを選んでください。",
+  "h": "71a61127"
  },
  "js.home.3-buoc-dau-tien": {
   "t": "最初の3ステップ",

@@ -407,6 +407,66 @@
   "t": "← 回到今天",
   "h": "24faf89e"
  },
+ "dient.anh-chi-gui-toi-may-chu": {
+  "t": "圖片僅傳送至伺服器進行分析，不會儲存在伺服器上。請正面拍攝、光線充足、不要遮住臉，結果最準確。",
+  "h": "b68f127c"
+ },
+ "dient.dien-tuong": {
+  "t": "面相",
+  "h": "1e5e41e3"
+ },
+ "dient.dien-tuong-tu-vi-minh-bao": {
+  "t": "面相——明寶紫微斗數",
+  "h": "1279c8b1"
+ },
+ "dient.dien-tuong-xem-tuong-khuon-mat": {
+  "t": "<b>面相</b><span>依古法看臉部之相 — <span data-tvp-price=\"dien-tuong\">…</span> 兩</span>",
+  "h": "4af70f75"
+ },
+ "dient.do-tam-dinh-ngu-quan": {
+  "t": "<span class=\"hp-ic\" data-icon=\"layout-grid\"></span><span>測量三停、<br>五官</span>",
+  "h": "fb2a8a23"
+ },
+ "dient.jpg-png-webp-toi-da-5mb": {
+  "t": "JPG、PNG、WebP——最大 5MB",
+  "h": "e7e468cd"
+ },
+ "dient.luan-theo-ma-y-than-tuong": {
+  "t": "<span class=\"hp-ic\" data-icon=\"scroll-text\"></span><span>依《麻衣神相》<br>解讀</span>",
+  "h": "eecee1d3"
+ },
+ "dient.ma-y-than-tuong-co-phap": {
+  "t": "《麻衣神相》古法",
+  "h": "c9dac5c1"
+ },
+ "dient.moi-luot-luong": {
+  "t": "每次 <span class=\"vnd\" data-tvp-price-vnd=\"dien-tuong\"></span> <span class=\"cb-sub\">(<span data-tvp-price=\"dien-tuong\">…</span> 兩)</span>",
+  "h": "2e7a2c43"
+ },
+ "dient.phan-tich-nhan-tuong-hoc": {
+  "t": "相學分析",
+  "h": "9b4da9c2"
+ },
+ "dient.phan-tich-tuong-mat-ton-luong": {
+  "t": "<span class=\"bg-label\"><span class=\"ic\" data-icon=\"sparkles\"></span><b id=\"analyzeBtnLabel\">分析面相 →</b></span> <small>需 <span class=\"vnd\" data-tvp-price-vnd=\"dien-tuong\"></span> <span class=\"cb-sub\">(<span data-tvp-price=\"dien-tuong\">…</span> 兩)</span></small>",
+  "h": "3a64a361"
+ },
+ "dient.tai-hoac-chup-anh-khuon-mat": {
+  "t": "上傳或拍攝臉部照片——系統依古法相學《麻衣神相》分析三停、五官等重要部位。",
+  "h": "f24ad8af"
+ },
+ "dient.tai-mot-tam-anh-chan-dung": {
+  "t": "請上傳一張正面、光線充足、臉部清晰的人像照片。系統會分析三停、五官與各部位，解讀性格與運勢。",
+  "h": "453bd1c6"
+ },
+ "dient.tam-dinh-da-xac-dinh": {
+  "t": "✦ 已辨識三停",
+  "h": "ab4a740f"
+ },
+ "dient.tam-dinh-ngu-quan-tren-guong": {
+  "t": "臉上的三停、五官並非玄虛之談——古人已將它們系統化，成為解讀性格與運勢的具體方法。上傳一張人像照片，即可獲得依《麻衣神相》的解讀。",
+  "h": "3c70322e"
+ },
  "disclaimer.1-tinh-chat-tham-khao": {
   "t": "1. 僅供參考",
   "h": "99856a52"
@@ -1638,6 +1698,142 @@
  "js.chutrinh.tieu-van-nam": {
   "t": "流年小運 ",
   "h": "1979c56a"
+ },
+ "js.dient.anh-qua-lon-toi-da-5mb": {
+  "t": "圖片過大（最大 5MB）。",
+  "h": "874f95b2"
+ },
+ "js.dient.canh-bao-chup": {
+  "t": "⚠ {w}——正面拍攝的照片，結果會更準確。",
+  "h": "231fb68c"
+ },
+ "js.dient.chip-ngu-quan": {
+  "t": "五官包括哪些？",
+  "h": "e8847ad0"
+ },
+ "js.dient.chip-tam-dinh": {
+  "t": "三停是什麼？",
+  "h": "25930850"
+ },
+ "js.dient.chip-thay-doi": {
+  "t": "面相可以改變嗎？",
+  "h": "602a11f2"
+ },
+ "js.dient.da-doc-xong": {
+  "t": "已依《麻衣神相》讀完您的面相。還想進一步了解什麼嗎？",
+  "h": "8cee9c62"
+ },
+ "js.dient.dang-phan-tich": {
+  "t": "正在分析面相…",
+  "h": "b2f15cf4"
+ },
+ "js.dient.dau-nghieng": {
+  "t": "頭部傾斜約 {n}°——請拍得更端正一些",
+  "h": "ad34a7cb"
+ },
+ "js.dient.dien-tuong": {
+  "t": "面相",
+  "h": "1e5e41e3"
+ },
+ "js.dient.dien-tuong-cua-toi": {
+  "t": "我的面相",
+  "h": "d5784500"
+ },
+ "js.dient.do-truc-tiep-bo-vi": {
+  "t": "以 MediaPipe 直接從圖片測得。依《麻衣神相》的意涵與其餘部位（眼、鼻、口、額、下巴），收錄於深度分析中。",
+  "h": "6d9235fd"
+ },
+ "js.dient.do-truc-tiep-tam-dinh": {
+  "t": "以 MediaPipe 直接從圖片測得——上停、中停、下停依您臉部的真實地標點劃分。依《麻衣神相》的完整解讀，收錄於深度分析中。",
+  "h": "3ded4f7e"
+ },
+ "js.dient.ha-dinh": {
+  "t": "下停",
+  "h": "11254397"
+ },
+ "js.dient.khong-doc-duoc-anh-nay-vui": {
+  "t": "無法讀取此圖片——請選擇 JPG 或 PNG 圖片。",
+  "h": "32a1faf4"
+ },
+ "js.dient.khong-nhan-dien-duoc-mat": {
+  "t": "⚠ 未能清楚偵測到臉部。仍可進行分析，但結果的準確度可能較低。",
+  "h": "b3bd7a6e"
+ },
+ "js.dient.khong-the-ket-noi": {
+  "t": "無法連線，請再試一次。",
+  "h": "bf0b6e7b"
+ },
+ "js.dient.khong-the-mo-camera": {
+  "t": "無法開啟相機，請改為上傳圖片。",
+  "h": "a57244b6"
+ },
+ "js.dient.loi-e": {
+  "t": "錯誤：{e}",
+  "h": "a7267203"
+ },
+ "js.dient.loi-s": {
+  "t": "錯誤 {s}",
+  "h": "c406c72b"
+ },
+ "js.dient.mat-bau-duc": {
+  "t": "鵝蛋臉",
+  "h": "d9034e8f"
+ },
+ "js.dient.mat-dai-hep": {
+  "t": "長臉／窄臉",
+  "h": "ea8512c9"
+ },
+ "js.dient.mat-quay": {
+  "t": "臉部略微轉向一側——請正面拍攝",
+  "h": "589f7ce3"
+ },
+ "js.dient.mat-tron-vuong": {
+  "t": "圓臉／方臉",
+  "h": "64bb08c2"
+ },
+ "js.dient.may-chu-khong-tra-ve": {
+  "t": "伺服器未傳回結果。",
+  "h": "d1312308"
+ },
+ "js.dient.tam-bach-ha": {
+  "t": "下三白眼——瞳孔下方露出眼白",
+  "h": "1d45c786"
+ },
+ "js.dient.tam-bach-thuong": {
+  "t": "上三白眼——瞳孔上方露出眼白",
+  "h": "2f061c22"
+ },
+ "js.dient.tam-dinh-da-xac-dinh": {
+  "t": "✦ 已辨識三停",
+  "h": "ab4a740f"
+ },
+ "js.dient.tam-dinh-t": {
+  "t": "三停：上停 {t}% · 中停 {tr}% · 下停 {h}%",
+  "h": "47b2936f"
+ },
+ "js.dient.thuong-dinh": {
+  "t": "上停",
+  "h": "eb4f7b4f"
+ },
+ "js.dient.thuong-mat-15-25-giay": {
+  "t": "通常需要 15–25 秒",
+  "h": "f0dba195"
+ },
+ "js.dient.trung-dinh": {
+  "t": "中停",
+  "h": "bfbaff8b"
+ },
+ "js.dient.tu-bach": {
+  "t": "四白眼——瞳孔四周都露出眼白",
+  "h": "1ded61cb"
+ },
+ "js.dient.ty-le-rong-dai-mat": {
+  "t": "臉部寬／長比例：{r}（{s}）",
+  "h": "59af24fc"
+ },
+ "js.dient.vui-long-chon-file-anh": {
+  "t": "請選擇圖片檔。",
+  "h": "71a61127"
  },
  "js.home.3-buoc-dau-tien": {
   "t": "最初的 3 步",
