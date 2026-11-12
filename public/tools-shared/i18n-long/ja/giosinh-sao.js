@@ -1,5 +1,5 @@
-// SINH bởi npm run i18n:long (docs/i18n/QUY-UOC.md "Văn dài") — KHÔNG sửa tay. ns=gio-sinh locale=ja
-window.I18n&&window.I18n.defineLong("gio-sinh",{
+// SINH bởi npm run i18n:long (docs/i18n/QUY-UOC.md "Văn dài") — KHÔNG sửa tay. ns=giosinh-sao locale=ja
+window.I18n&&window.I18n.defineLong("giosinh-sao",{
 "tat.Tử Vi":{"t":"大病はめったにせず、具合を崩しても良い医師と良い薬に巡り合って早く治ることが多い","h":"eb669023"},
 "tat.Thiên Phủ":{"t":"基礎体力がしっかりしていて、だらだら続く小さな不調が少ない","h":"b2008aa8"},
 "tat.Thiên Cơ":{"t":"皮膚のトラブルやしびれ・関節のだるさが出やすく、手足の筋が弱い","h":"e875b004"},
@@ -126,9 +126,5 @@ window.I18n&&window.I18n.defineLong("gio-sinh",{
 "pmtre.Thiên Tướng":{"t":"親が行き届いていて、子の細かいことまで世話を焼く","h":"6e8cba9f"},
 "pmtre.Thiên Lương":{"t":"祖父母や親戚の年長者が子を守ってくれる","h":"1c012e4b"},
 "pmtre.Thất Sát":{"t":"子は早くから自立するか、親と離れる時期がある","h":"8bd1cacc"},
-"pmtre.Phá Quân":{"t":"家族関係にはっきりした断絶がある——離散、または一時期完全に疎遠になる","h":"08fcb273"},
-"trong.menhTre":{"t":"はっきり目立つ特徴はまだ見えない——時と場所によって違う","h":"0d7cbc51"},
-"trong.menh":{"t":"自分では目立つ特徴に気づきにくい——状況によって変わる","h":"010e17b0"},
-"trong.pdTre":{"t":"はっきり目立つ習慣はない","h":"fc2edbff"},
-"trong.khac":{"t":"はっきり目立つ特徴はない","h":"fc51d91a"}
+"pmtre.Phá Quân":{"t":"家族関係にはっきりした断絶がある——離散、または一時期完全に疎遠になる","h":"08fcb273"}
 });

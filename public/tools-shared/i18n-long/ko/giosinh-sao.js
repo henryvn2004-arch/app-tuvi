@@ -1,5 +1,5 @@
-// SINH bởi npm run i18n:long (docs/i18n/QUY-UOC.md "Văn dài") — KHÔNG sửa tay. ns=gio-sinh locale=ko
-window.I18n&&window.I18n.defineLong("gio-sinh",{
+// SINH bởi npm run i18n:long (docs/i18n/QUY-UOC.md "Văn dài") — KHÔNG sửa tay. ns=giosinh-sao locale=ko
+window.I18n&&window.I18n.defineLong("giosinh-sao",{
 "tat.Tử Vi":{"t":"크게 앓는 일이 드물고, 아플 때도 맞는 의사와 약을 만나 금방 지나가는 편","h":"eb669023"},
 "tat.Thiên Phủ":{"t":"기본 체력이 탄탄하고 오래 끄는 잔병이 적음","h":"b2008aa8"},
 "tat.Thiên Cơ":{"t":"피부 질환이나 저림·관절 뻐근함이 잦고, 팔다리 힘줄이 약함","h":"e875b004"},
@@ -126,9 +126,5 @@ window.I18n&&window.I18n.defineLong("gio-sinh",{
 "pmtre.Thiên Tướng":{"t":"부모가 세심해서 아이의 사소한 일까지 챙김","h":"6e8cba9f"},
 "pmtre.Thiên Lương":{"t":"조부모나 친척 어른이 아이를 보호해 줌","h":"1c012e4b"},
 "pmtre.Thất Sát":{"t":"아이가 일찍 독립해야 하거나 부모와 떨어지는 시기가 있음","h":"8bd1cacc"},
-"pmtre.Phá Quân":{"t":"집안 관계에 뚜렷한 단절이 있음 — 흩어지거나 한동안 완전히 멀어짐","h":"08fcb273"},
-"trong.menhTre":{"t":"뚜렷하게 두드러지는 면이 아직 보이지 않음 — 때와 장소에 따라 다름","h":"0d7cbc51"},
-"trong.menh":{"t":"스스로 두드러지는 면을 알아차리기 어려움 — 상황에 따라 바뀜","h":"010e17b0"},
-"trong.pdTre":{"t":"뚜렷하게 두드러지는 생활 습관이 없음","h":"fc2edbff"},
-"trong.khac":{"t":"뚜렷하게 두드러지는 면이 없음","h":"fc51d91a"}
+"pmtre.Phá Quân":{"t":"집안 관계에 뚜렷한 단절이 있음 — 흩어지거나 한동안 완전히 멀어짐","h":"08fcb273"}
 });

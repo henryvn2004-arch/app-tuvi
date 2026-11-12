@@ -497,7 +497,7 @@ window.SHELL_INTRO={key:'day-con'};</script>
 <script src="/auth.js?v=10"></script>
   <script src="/nav.js?v=49" data-icons-only></script>
 <script src="/tools-shared/sample-hint.js?v=2"></script>
-<script src="/shell.js?v=154"></script>
+<script src="/shell.js?v=155"></script>
 <script src="/tools-shared/shell-soft-nav.js?v=49"></script>
 <script src="/tools-shared/ai-loading-steps.js?v=11"></script>
 <script>
@@ -516,6 +516,19 @@ var DC_STEPS = [
   { label: _tvmbT('js.daycon.viet-dinh-huong-va-huong-dan', 'Viết định hướng và hướng dẫn nuôi dạy'), ms: 0 },
 ];
 var _loadingCtl = null;
+
+// ── i18n (W30d) — VĂN ENGINE SERVER, phần ĐÁNH GIÁ (lib/engine/day-con-assess.ts: 5 trục tính khí + 8 chất năng khiếu).
+// Route trả chữ Việt KÈM `id` (trục/chất) nên không cần thêm mã: bản dịch tra theo `truc.<id>.<trường>` /
+// `khieu.<id>.<trường>` ở /tools-shared/i18n-long/<locale>/day-con-assess.js (docs/i18n/QUY-UOC.md "Văn engine server").
+// Chỉ đổi ở chỗ VẼ + chia sẻ; `railData`/prompt/`coSo` giữ chữ Việt (luật SERVER_BOUND). vi ⇒ nguyên chữ Việt.
+if (window.I18n && window.I18n.loadLong) window.I18n.loadLong('day-con-assess');
+function _dcaLong(key, vi) {
+  return window.I18n && window.I18n.long ? window.I18n.long('day-con-assess', key, vi) : vi;
+}
+/** Chữ của một TRỤC: `f` = ten | cauHoi | <thap|cao|can>.<trường>. Thiếu id (payload lạ) ⇒ chữ engine. */
+function _trucT(t, f, vi) { return t && t.id ? _dcaLong('truc.' + t.id + '.' + f, vi) : vi; }
+/** Chữ của một CHẤT: `f` = ten | motCau | chuY | oLop | dau.<i>. */
+function _khieuT(k, f, vi) { return k && k.id ? _dcaLong('khieu.' + k.id + '.' + f, vi) : vi; }
 
 var LO_HINT = {
   'hoc-hanh': _tvmbT('js.daycon.ban-se-nhan-cach-ra-bai', 'Bạn sẽ nhận: cách ra bài và cách bày bàn học hợp với kiểu tiếp thu của con, thay vì ép thêm giờ.'),
@@ -878,16 +891,16 @@ function mountHook(data) {
   if (!top) return;
   var facts = [{
     tone: top.noiBat ? 'good' : 'neutral',
-    title: _tvmbT('js.daycon.chat-nang-khieu-cao-nhat', 'Chất năng khiếu cao nhất: ') + top.ten,
+    title: _tvmbT('js.daycon.chat-nang-khieu-cao-nhat', 'Chất năng khiếu cao nhất: ') + _khieuT(top, 'ten', top.ten),
     value: top.diem,
     body: (top.noiBat ? _tvmbT('js.daycon.vuot-nguong-dang-cho-thu', 'Vượt ngưỡng “đáng cho thử”. ') : _tvmbT('js.daycon.chua-vuot-nguong-nhung-cao-nhat', 'Chưa vượt ngưỡng, nhưng cao nhất trong 8 chất. ')) +
       _tvmbT('js.daycon.7-chat-con-lai-5-truc', '7 chất còn lại, 5 trục tính khí, và định hướng cách dạy nằm trong bản đầy đủ.'),
     source: 'engine · khieuTop',
   }];
-  if (data.khieuBottom && data.khieuBottom.ten !== top.ten) {
+  if (data.khieuBottom && data.khieuBottom.id !== top.id) {
     facts.push({
       tone: 'bad',
-      title: _tvmbT('js.daycon.chat-can-boi-them-nhat', 'Chất cần bồi thêm nhất: ') + data.khieuBottom.ten,
+      title: _tvmbT('js.daycon.chat-can-boi-them-nhat', 'Chất cần bồi thêm nhất: ') + _khieuT(data.khieuBottom, 'ten', data.khieuBottom.ten),
       value: data.khieuBottom.diem,
       body: _tvmbT('js.daycon.thap-nhat-trong-8-chat-cach', 'Thấp nhất trong 8 chất — cách bồi thêm và định hướng cụ thể nằm trong bản đầy đủ.'),
       source: 'engine · khieuBottom',
@@ -1047,7 +1060,7 @@ async function _doGenerate(freeRerun, lo) {
       blocks.push({
         header: _tvmbT('js.daycon.nam-truc-tinh-khi', 'Năm trục tính khí'),
         text: data.truc.map(function (t) {
-          return t.ten + ' — ' + n1(t.diem) + '/10 · ' + (t.nghieng ? t.cuc.nhan : _tvmbT('js.daycon.nam-giua-dung-duoc-ca-hai', 'nằm giữa, dùng được cả hai'));
+          return _trucT(t, 'ten', t.ten) + ' — ' + n1(t.diem) + '/10 · ' + (t.nghieng ? _trucT(t, t.nghieng + '.nhan', t.cuc.nhan) : _tvmbT('js.daycon.nam-giua-dung-duoc-ca-hai', 'nằm giữa, dùng được cả hai'));
         }).join('\n') + _tvmbT('js.daycon.5-la-muc-giua-cua-hang', '\n\n5 là mức giữa của hàng nghìn lá số trẻ em, không phải “được 5 trên 10”. Hai đầu trục đều có giá trị.'),
       });
     }
@@ -1056,7 +1069,7 @@ async function _doGenerate(freeRerun, lo) {
       blocks.push({
         header: _tvmbT('js.daycon.tam-chat-nang-khieu', 'Tám chất năng khiếu'),
         text: data.khieu.map(function (k) {
-          return (k.noiBat ? '★ ' : '· ') + k.ten + ' — ' + n1(k.diem) + '/10';
+          return (k.noiBat ? '★ ' : '· ') + _khieuT(k, 'ten', k.ten) + ' — ' + n1(k.diem) + '/10';
         }).join('\n') + '\n\n' + (noiBat.length
           ? _tvmbT('js.daycon.vuot-nguong-dang-cho-thu-khong', '★ = vượt ngưỡng “đáng cho thử”, không phải năng khiếu đã xác nhận.')
           : _tvmbT('js.daycon.chua-chat-nao-vuot-nguong-nen', 'Chưa chất nào vượt ngưỡng — nên cho thử rộng rồi nhìn phản ứng thật.')),
@@ -1110,25 +1123,25 @@ function renderTruc(list) {
     var pct = Math.max(0, Math.min(100, (t.diem / 10) * 100));
     var body = '';
     if (t.cuc) {
-      body = _tvmbT('js.daycon.o-nha', '<p><b>Ở nhà:</b> ') + esc(t.cuc.bieuHien) + '</p>' +
-             _tvmbT('js.daycon.nen', '<p><b>Nên:</b> ') + esc(t.cuc.dayThe) + '</p>' +
-             _tvmbT('js.daycon.hay-bi-doc-nham', '<p><b>Hay bị đọc nhầm:</b> ') + esc(t.cuc.docNham) + '</p>';
+      body = _tvmbT('js.daycon.o-nha', '<p><b>Ở nhà:</b> ') + esc(_trucT(t, t.nghieng + '.bieuHien', t.cuc.bieuHien)) + '</p>' +
+             _tvmbT('js.daycon.nen', '<p><b>Nên:</b> ') + esc(_trucT(t, t.nghieng + '.dayThe', t.cuc.dayThe)) + '</p>' +
+             _tvmbT('js.daycon.hay-bi-doc-nham', '<p><b>Hay bị đọc nhầm:</b> ') + esc(_trucT(t, t.nghieng + '.docNham', t.cuc.docNham)) + '</p>';
     } else if (t.canND) {
-      body = _tvmbT('js.daycon.o-nha', '<p><b>Ở nhà:</b> ') + esc(t.canND.bieuHien) + '</p>' +
-             _tvmbT('js.daycon.nen', '<p><b>Nên:</b> ') + esc(t.canND.dayThe) + '</p>';
+      body = _tvmbT('js.daycon.o-nha', '<p><b>Ở nhà:</b> ') + esc(_trucT(t, 'can.bieuHien', t.canND.bieuHien)) + '</p>' +
+             _tvmbT('js.daycon.nen', '<p><b>Nên:</b> ') + esc(_trucT(t, 'can.dayThe', t.canND.dayThe)) + '</p>';
     }
     return '<div class="tr-row">' +
       '<div class="tr-head">' +
-        '<span class="tr-headmain"><b>' + esc(t.ten) + '</b>' +
-        '<span class="tr-q">' + esc(t.cauHoi) + '</span></span>' +
+        '<span class="tr-headmain"><b>' + esc(_trucT(t, 'ten', t.ten)) + '</b>' +
+        '<span class="tr-q">' + esc(_trucT(t, 'cauHoi', t.cauHoi)) + '</span></span>' +
         '<span class="tr-val' + (can ? ' can' : '') + '">' + n1(t.diem) + '/10</span></div>' +
       '<div class="tr-bar">' +
         '<div class="tr-track"></div><div class="tr-band"></div><div class="tr-mid"></div>' +
         '<div class="tr-dot' + (can ? ' can' : '') + '" style="left:' + pct.toFixed(1) + '%"></div>' +
       '</div>' +
       '<div class="tr-poles">' +
-        '<span class="' + (t.nghieng === 'thap' ? 'on' : '') + '">' + esc(t.nhanThap) + '</span>' +
-        '<span class="' + (t.nghieng === 'cao' ? 'on' : '') + '">' + esc(t.nhanCao) + '</span>' +
+        '<span class="' + (t.nghieng === 'thap' ? 'on' : '') + '">' + esc(_trucT(t, 'thap.nhan', t.nhanThap)) + '</span>' +
+        '<span class="' + (t.nghieng === 'cao' ? 'on' : '') + '">' + esc(_trucT(t, 'cao.nhan', t.nhanCao)) + '</span>' +
       '</div>' +
       (body ? '<div class="tr-body">' + body + '</div>' : '') +
       '</div>';
@@ -1149,7 +1162,7 @@ function renderKhieu(data) {
   document.getElementById('khieuChart').innerHTML =
     ks.map(function (k) {
       return '<div class="kh-row' + (k.noiBat ? ' on' : '') + '">' +
-        '<div class="kh-name">' + esc(k.ten) + (k.noiBat ? ' ★' : '') + '</div>' +
+        '<div class="kh-name">' + esc(_khieuT(k, 'ten', k.ten)) + (k.noiBat ? ' ★' : '') + '</div>' +
         '<div class="kh-track"><div class="kh-fill" style="width:' +
           Math.max(2, Math.min(100, (k.diem / 10) * 100)).toFixed(1) + '%"></div>' +
           '<div class="kh-cut" style="left:' + (KH_CUT * 10) + '%"></div></div>' +
@@ -1167,19 +1180,19 @@ function renderKhieu(data) {
     // nhất, còn lại chỉ nêu tên — đọc xong vẫn còn lý do bấm Mở khóa.
     var KH_VISIBLE = 2;
     host.innerHTML = noi.slice(0, KH_VISIBLE).map(function (k) {
-      return '<div class="kh-card"><h5>' + esc(k.ten) + '<span class="s">' + n1(k.diem) + '/10</span></h5>' +
-        '<p>' + esc(k.motCau) + '</p>' +
-        '<div class="dc-chips">' + (k.dauHieu || []).map(function (d) {
-          return '<span class="dc-chip">' + esc(d) + '</span>';
+      return '<div class="kh-card"><h5>' + esc(_khieuT(k, 'ten', k.ten)) + '<span class="s">' + n1(k.diem) + '/10</span></h5>' +
+        '<p>' + esc(_khieuT(k, 'motCau', k.motCau)) + '</p>' +
+        '<div class="dc-chips">' + (k.dauHieu || []).map(function (d, i) {
+          return '<span class="dc-chip">' + esc(_khieuT(k, 'dau.' + i, d)) + '</span>';
         }).join('') + '</div>' +
-        ('<p class="warn" style="margin-top:9px">' + _tvmbT('js.daycon.bay-cua-chat-nay', '<b>Bẫy của chất này:</b>') + ' ') + esc(k.chuY) + '</p>' +
-        ('<p style="margin-bottom:0">' + _tvmbT('js.daycon.hoi-nha-truong', '<b>Hỏi nhà trường:</b>') + ' ') + esc(k.oLop) + '</p>' +
+        ('<p class="warn" style="margin-top:9px">' + _tvmbT('js.daycon.bay-cua-chat-nay', '<b>Bẫy của chất này:</b>') + ' ') + esc(_khieuT(k, 'chuY', k.chuY)) + '</p>' +
+        ('<p style="margin-bottom:0">' + _tvmbT('js.daycon.hoi-nha-truong', '<b>Hỏi nhà trường:</b>') + ' ') + esc(_khieuT(k, 'oLop', k.oLop)) + '</p>' +
         '</div>';
     }).join('');
     var khRest = noi.length - KH_VISIBLE;
     if (khRest > 0) {
       host.innerHTML += '<p class="fw-note">+ <b>' + khRest + _tvmbT('js.daycon.chat-nua-cung-noi', ' chất nữa</b> cũng nổi (') +
-        esc(noi.slice(KH_VISIBLE).map(function (k) { return k.ten; }).join(', ')) +
+        esc(noi.slice(KH_VISIBLE).map(function (k) { return _khieuT(k, 'ten', k.ten); }).join(', ')) +
         (_tvmbT('js.daycon.xem-diem-o-bieu-do-tren', ') — xem điểm ở biểu đồ trên, mở bản đầy đủ để đọc chi tiết từng chất.') + '</p>');
     }
   } else {
@@ -1208,10 +1221,10 @@ function renderHoatDong(h, kieuId) {
   // mới thấy tên hoạt động thật.
   document.getElementById('hdList').innerHTML = ds.map(function (c) {
     var nClb = (c.clb || []).length, nNha = (c.nha || []).length;
-    return '<div class="kh-card"><h5>' + esc(c.ten) + '<span class="s">' + n1(c.diem) + '/10</span></h5>' +
+    return '<div class="kh-card"><h5>' + esc(_khieuT(c, 'ten', c.ten)) + '<span class="s">' + n1(c.diem) + '/10</span></h5>' +
       _tvmbT('js.daycon.da-chon-san', '<p>Đã chọn sẵn <b>') + nClb + _tvmbT('js.daycon.hoat-dong-de-dang-ky-ra', ' hoạt động để đăng ký/ra khỏi nhà</b> và <b>') + nNha +
       _tvmbT('js.daycon.cach-choi-ngay-o-nha-hop', ' cách chơi ngay ở nhà</b> hợp chất này — mở bản đầy đủ để xem tên cụ thể.</p>') +
-      ('<div class="hd-ask">' + _tvmbT('js.daycon.hoi-nha-truong', '<b>Hỏi nhà trường:</b>') + ' ') + esc(c.oLop) + '</div>' +
+      ('<div class="hd-ask">' + _tvmbT('js.daycon.hoi-nha-truong', '<b>Hỏi nhà trường:</b>') + ' ') + esc(_khieuT(c, 'oLop', c.oLop)) + '</div>' +
       '</div>';
   }).join('');
 
@@ -1378,7 +1391,7 @@ function renderMetaRest(data) {
   // như từ trên trời rơi xuống — mà đó chính là chỗ người ta muốn soi nhất.
   (data.khieu || []).filter(function (k) { return k.noiBat && (k.saoDay || []).length; })
     .forEach(function (k) {
-      rows.push('<li><b>' + esc(k.ten) + _tvmbT('js.daycon.suy-tu', '</b> — suy từ: ') + esc(TuviStarLabel.list(k.saoDay)) + '</li>');
+      rows.push('<li><b>' + esc(_khieuT(k, 'ten', k.ten)) + _tvmbT('js.daycon.suy-tu', '</b> — suy từ: ') + esc(TuviStarLabel.list(k.saoDay)) + '</li>');
     });
   if (data.vanNam) {
     // ⚠️ Đọc CẢ hai dạng payload: bản đã nằm trong `portrait_cache` từ trước

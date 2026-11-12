@@ -1,0 +1,27 @@
+// SINH bởi npm run i18n:long (docs/i18n/QUY-UOC.md "Văn dài") — KHÔNG sửa tay. ns=nguoikhac locale=ko
+window.I18n&&window.I18n.defineLong("nguoikhac",{
+"mat.Mệnh":{"t":"본바탕","h":"a78d9caa"},
+"mat.Phúc Đức":{"t":"마음의 바탕","h":"71767ef7"},
+"mat.Thiên Di":{"t":"밖에서의 모습","h":"a8d58a6c"},
+"mat.Quan Lộc":{"t":"일하는 방식","h":"5659fe96"},
+"mat.Nô Bộc":{"t":"주변 사람과의 관계","h":"fa79c45d"},
+"viec.nho-viec":{"t":"이 사람에게 부탁하기 / 제안 올리기","h":"46620574"},
+"viec.thuong-luong":{"t":"처우 협상하기 (급여, 몫 나누기)","h":"65e7fbab"},
+"viec.bao-tin-xau":{"t":"상대가 듣고 싶지 않은 소식을 전해야 할 때","h":"f0e4bb42"},
+"viec.tu-choi":{"t":"관계를 잃지 않고 거절하기","h":"32ca6115"},
+"viec.bat-dong":{"t":"아직 풀지 못한 의견 충돌이 있을 때","h":"f32b8bb1"},
+"viec.giao-viec":{"t":"일을 맡기기 / 일을 챙기도록 말하기","h":"29e0c846"},
+"viec.ru-hop-tac":{"t":"큰일을 함께 하자고 권하기","h":"8559b571"},
+"viec.gan-lai":{"t":"한동안 멀어졌다가 다시 가까워지기","h":"323cd9df"},
+"viec.lan-dau":{"t":"처음 만나거나 함께 일하는데 상대를 전혀 모를 때","h":"f859922e"},
+"khoa.keHoach":{"t":"이 일을 풀어 가는 방법: {viec}","h":"e1ae3139"},
+"khoa.matDoc.sao":{"t":"이 사람의 나머지 {n}가지 면 — {ten} ({sao}에서 읽음)","h":"9229ac05"},
+"khoa.matDoc":{"t":"이 사람의 나머지 {n}가지 면 — {ten}","h":"ddb7991b"},
+"khoa.coiTrong":{"t":"무엇을 중요하게 여기고, 무엇을 잃을까 두려워하는지","h":"cb1b27aa"},
+"khoa.nenNoi":{"t":"해야 할 말 세 가지와 바로 쓸 수 있는 실제 문장","h":"4ff94510"},
+"khoa.tranhNoi":{"t":"이 사람에게 절대 하지 말아야 할 말 세 마디","h":"aa53c77d"},
+"khoa.thoiDiem.dv":{"t":"큰일을 언제 꺼내야 할지 — 지금 지나고 있는 {a}~{b}세 대운에 따라","h":"3c44fa5a"},
+"khoa.thoiDiem":{"t":"큰일을 언제 꺼내야 할지","h":"94a8e09a"},
+"khoa.voiBan":{"t":"당신과 이 사람이 부딪히는 지점 — 당신의 {cung}에서 읽음","h":"35a04e5f"},
+"khoa.motCau":{"t":"이 사람을 기억할 한마디","h":"e7d726c6"}
+});

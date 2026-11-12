@@ -1,0 +1,27 @@
+// SINH bởi npm run i18n:long (docs/i18n/QUY-UOC.md "Văn dài") — KHÔNG sửa tay. ns=nguoikhac locale=ja
+window.I18n&&window.I18n.defineLong("nguoikhac",{
+"mat.Mệnh":{"t":"本質","h":"a78d9caa"},
+"mat.Phúc Đức":{"t":"心の土台","h":"71767ef7"},
+"mat.Thiên Di":{"t":"外での顔","h":"a8d58a6c"},
+"mat.Quan Lộc":{"t":"仕事の進め方","h":"5659fe96"},
+"mat.Nô Bộc":{"t":"周りの人との関わり","h":"fa79c45d"},
+"viec.nho-viec":{"t":"この人に頼みごとをする／提案を出す","h":"46620574"},
+"viec.thuong-luong":{"t":"待遇を交渉する（給与、取り分）","h":"65e7fbab"},
+"viec.bao-tin-xau":{"t":"相手が聞きたくない知らせを伝える","h":"f0e4bb42"},
+"viec.tu-choi":{"t":"関係を壊さずに断る","h":"32ca6115"},
+"viec.bat-dong":{"t":"まだ解けていない意見の対立がある","h":"f32b8bb1"},
+"viec.giao-viec":{"t":"仕事を任せる／催促する","h":"29e0c846"},
+"viec.ru-hop-tac":{"t":"大きな仕事に一緒に誘う","h":"8559b571"},
+"viec.gan-lai":{"t":"しばらく疎遠だった後に距離を縮める","h":"323cd9df"},
+"viec.lan-dau":{"t":"初めて会う／一緒に働く、相手のことはまだ何も知らない","h":"f859922e"},
+"khoa.keHoach":{"t":"この件への進め方：{viec}","h":"e1ae3139"},
+"khoa.matDoc.sao":{"t":"この人の残り{n}つの面 — {ten}（{sao}から読む）","h":"9229ac05"},
+"khoa.matDoc":{"t":"この人の残り{n}つの面 — {ten}","h":"ddb7991b"},
+"khoa.coiTrong":{"t":"何を大切にし、何を失うのを恐れているか","h":"cb1b27aa"},
+"khoa.nenNoi":{"t":"言うべき3つのこと、すぐ使える実際の言い回し付き","h":"4ff94510"},
+"khoa.tranhNoi":{"t":"この人には絶対に言ってはいけない3つの言葉","h":"aa53c77d"},
+"khoa.thoiDiem.dv":{"t":"大きな話を持ちかけるべき時期 — いま巡っている{a}〜{b}歳の大運から","h":"3c44fa5a"},
+"khoa.thoiDiem":{"t":"大きな話を持ちかけるべき時期","h":"94a8e09a"},
+"khoa.voiBan":{"t":"あなたとこの人がぶつかる所 — あなたの{cung}から読む","h":"35a04e5f"},
+"khoa.motCau":{"t":"この人を覚えておくための一言","h":"e7d726c6"}
+});

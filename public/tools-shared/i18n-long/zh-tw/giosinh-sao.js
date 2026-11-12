@@ -1,5 +1,5 @@
-// SINH bởi npm run i18n:long (docs/i18n/QUY-UOC.md "Văn dài") — KHÔNG sửa tay. ns=gio-sinh locale=zh-tw
-window.I18n&&window.I18n.defineLong("gio-sinh",{
+// SINH bởi npm run i18n:long (docs/i18n/QUY-UOC.md "Văn dài") — KHÔNG sửa tay. ns=giosinh-sao locale=zh-tw
+window.I18n&&window.I18n.defineLong("giosinh-sao",{
 "tat.Tử Vi":{"t":"很少大病；每次不舒服多半能遇到對的醫生、對的藥，很快就過去","h":"eb669023"},
 "tat.Thiên Phủ":{"t":"體質底子穩，少有拖很久的小毛病","h":"b2008aa8"},
 "tat.Thiên Cơ":{"t":"常有皮膚問題或痠麻痠痛、關節疲勞；手腳筋力偏弱","h":"e875b004"},
@@ -126,9 +126,5 @@ window.I18n&&window.I18n.defineLong("gio-sinh",{
 "pmtre.Thiên Tướng":{"t":"父母周到，孩子的每件小事都照顧到","h":"6e8cba9f"},
 "pmtre.Thiên Lương":{"t":"有祖父母或親族長輩庇護孩子","h":"1c012e4b"},
 "pmtre.Thất Sát":{"t":"孩子得早早自立，或有一段時間遠離父母","h":"8bd1cacc"},
-"pmtre.Phá Quân":{"t":"家中關係有明顯斷裂——離散，或有一段時間完全疏遠","h":"08fcb273"},
-"trong.menhTre":{"t":"還看不出明顯突出的特質——因時因地而異","h":"0d7cbc51"},
-"trong.menh":{"t":"自己很難察覺有哪項突出特質——隨處境而變","h":"010e17b0"},
-"trong.pdTre":{"t":"沒有明顯突出的作息習慣","h":"fc2edbff"},
-"trong.khac":{"t":"沒有明顯突出的特質","h":"fc51d91a"}
+"pmtre.Phá Quân":{"t":"家中關係有明顯斷裂——離散，或有一段時間完全疏遠","h":"08fcb273"}
 });

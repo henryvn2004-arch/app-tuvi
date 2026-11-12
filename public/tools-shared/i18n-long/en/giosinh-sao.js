@@ -1,5 +1,5 @@
-// SINH bởi npm run i18n:long (docs/i18n/QUY-UOC.md "Văn dài") — KHÔNG sửa tay. ns=gio-sinh locale=en
-window.I18n&&window.I18n.defineLong("gio-sinh",{
+// SINH bởi npm run i18n:long (docs/i18n/QUY-UOC.md "Văn dài") — KHÔNG sửa tay. ns=giosinh-sao locale=en
+window.I18n&&window.I18n.defineLong("giosinh-sao",{
 "tat.Tử Vi":{"t":"Rarely seriously ill; when unwell, usually finds the right doctor and remedy and recovers quickly","h":"eb669023"},
 "tat.Thiên Phủ":{"t":"Solid constitution, few lingering minor ailments","h":"b2008aa8"},
 "tat.Thiên Cơ":{"t":"Prone to skin problems or numbness and aching joints; weak tendons in the hands and feet","h":"e875b004"},
@@ -126,9 +126,5 @@ window.I18n&&window.I18n.defineLong("gio-sinh",{
 "pmtre.Thiên Tướng":{"t":"attentive parents who see to every small matter for the child","h":"6e8cba9f"},
 "pmtre.Thiên Lương":{"t":"grandparents or older relatives shelter the child","h":"1c012e4b"},
 "pmtre.Thất Sát":{"t":"the child has to be independent early, or spends a stretch apart from their parents","h":"8bd1cacc"},
-"pmtre.Phá Quân":{"t":"a clear break in family relationships — separation, or a period of complete distance","h":"08fcb273"},
-"trong.menhTre":{"t":"no clear standout trait yet — varies with the moment and the place","h":"0d7cbc51"},
-"trong.menh":{"t":"hard to recognize any standout trait in oneself — changes with the situation","h":"010e17b0"},
-"trong.pdTre":{"t":"no clearly standout habit","h":"fc2edbff"},
-"trong.khac":{"t":"no clearly standout trait","h":"fc51d91a"}
+"pmtre.Phá Quân":{"t":"a clear break in family relationships — separation, or a period of complete distance","h":"08fcb273"}
 });

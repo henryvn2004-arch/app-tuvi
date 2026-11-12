@@ -617,13 +617,49 @@ export function coSoDoc(ls: Laso, p: { matDoc: { cung: string; sao: string[] }[]
 // (xem `PREVIEW_KEEP_PROSE` trong route.ts) — hai mục đó KHÔNG còn được liệt
 // vào danh sách "đang khoá" nữa, nếu không tường sẽ mời mở khoá một thứ người
 // đọc đã thấy rồi ở phía trên nó.
-export function khoiKhoa(p: NguoiKhacProfile): { id: string; tieuDe: string }[] {
-  const k: { id: string; tieuDe: string }[] = [];
+/**
+ * 🌐 KHUÔN tiêu đề các khối đang khoá (W28 "văn engine server", i18n lô E). `khoiKhoa` dựng chữ Việt BẰNG bảng
+ * này rồi trả kèm MÃ `ma: { k, v }`; trang dịch ở chỗ vẽ (ns `nguoikhac`, `lib/i18n/long.mjs`). Biến: `viec`
+ * (mã việc — `viec.<id>` = nhãn việc đã bỏ "Sắp/Phải/Cần/Muốn"), `ten` (danh sách CUNG — trang dịch nhãn mặt
+ * đọc `mat.<cung>` rồi viết thường), `sao` (nhãn sao — glossary), `cung` (glossary), số.
+ */
+export const NK_VAN: Record<string, string> = {
+  'khoa.keHoach': 'Cách đi cho việc: {viec}',
+  'khoa.matDoc.sao': '{n} mặt còn lại của người này — {ten} (đọc ở {sao})',
+  'khoa.matDoc': '{n} mặt còn lại của người này — {ten}',
+  'khoa.coiTrong': 'Họ coi trọng cái gì — và sợ mất cái gì',
+  'khoa.nenNoi': 'Ba việc nên nói, kèm câu nói thật để dùng luôn',
+  'khoa.tranhNoi': 'Ba câu tuyệt đối đừng nói với người này',
+  'khoa.thoiDiem.dv': 'Lúc nào nên đưa việc lớn tới — theo đại vận {a}–{b} tuổi họ đang chạy',
+  'khoa.thoiDiem': 'Lúc nào nên đưa việc lớn tới',
+  'khoa.voiBan': 'Chỗ bạn và người này va nhau — đọc ở cung {cung} của bạn',
+  'khoa.motCau': 'Một câu chốt để nhớ về người này',
+};
+/** Mã dịch một tiêu đề khối khoá (additive — `tieuDe` Việt giữ nguyên cho mọi đường khác). */
+export interface NkMa {
+  k: string;
+  v?: Record<string, string | number | string[] | { k: string }>;
+}
+function nkVan(k: string, v: Record<string, string | number> = {}): string {
+  const s = NK_VAN[k];
+  if (s === undefined) throw new Error(`nguoi-khac: thiếu khuôn ${k}`);
+  return s.replace(/\{(\w+)\}/g, (m, n: string) => (v[n] !== undefined ? String(v[n]) : m));
+}
+
+export function khoiKhoa(p: NguoiKhacProfile): { id: string; tieuDe: string; ma: NkMa }[] {
+  const k: { id: string; tieuDe: string; ma: NkMa }[] = [];
+  const them = (id: string, mk: string, v: Record<string, string | number> = {}, vMa: NkMa['v'] = v) =>
+    k.push({ id, tieuDe: nkVan(mk, v), ma: { k: mk, ...(Object.keys(vMa || {}).length ? { v: vMa } : {}) } });
 
   // Khối của A3 đứng ĐẦU: nó là thứ DUY NHẤT đổi theo việc người hỏi đang cần
   // làm, tức thứ bản tính thử không thể có kể cả về nguyên tắc.
   if (p.viec.id !== 'hieu-them') {
-    k.push({ id: 'keHoach', tieuDe: `Cách đi cho việc: ${p.viec.label.replace(/^Sắp |^Phải |^Cần |^Muốn /, '')}` });
+    them(
+      'keHoach',
+      'khoa.keHoach',
+      { viec: p.viec.label.replace(/^Sắp |^Phải |^Cần |^Muốn /, '') },
+      { viec: { k: `viec.${p.viec.id}` } },
+    );
   }
 
   // A1 — ba mặt đọc bị giữ lại. `id` là `matDoc`, một trường CÓ THẬT trong
@@ -633,27 +669,19 @@ export function khoiKhoa(p: NguoiKhacProfile): { id: string; tieuDe: string }[] 
   const giu = p.matDoc.filter((m) => !(MAT_DOC_PREVIEW as readonly string[]).includes(m.cung));
   if (giu.length) {
     const ten = giu.map((m) => m.nhan.toLowerCase()).join(' · ');
-    const sao = giu.flatMap((m) => m.sao).slice(0, 3).join(', ');
-    k.push({
-      id: 'matDoc',
-      tieuDe: sao
-        ? `${giu.length} mặt còn lại của người này — ${ten} (đọc ở ${sao})`
-        : `${giu.length} mặt còn lại của người này — ${ten}`,
-    });
+    const saoDs = giu.flatMap((m) => m.sao).slice(0, 3);
+    const sao = saoDs.join(', ');
+    const vMa = { n: giu.length, ten: giu.map((m) => m.cung), ...(sao ? { sao: saoDs } : {}) };
+    if (sao) them('matDoc', 'khoa.matDoc.sao', { n: giu.length, ten, sao }, vMa);
+    else them('matDoc', 'khoa.matDoc', { n: giu.length, ten }, vMa);
   }
-  k.push({ id: 'coiTrong', tieuDe: 'Họ coi trọng cái gì — và sợ mất cái gì' });
-  k.push({ id: 'nenNoi', tieuDe: 'Ba việc nên nói, kèm câu nói thật để dùng luôn' });
-  k.push({ id: 'tranhNoi', tieuDe: 'Ba câu tuyệt đối đừng nói với người này' });
-  k.push({
-    id: 'thoiDiem',
-    tieuDe: p.daiVan
-      ? `Lúc nào nên đưa việc lớn tới — theo đại vận ${p.daiVan.tuoiStart}–${p.daiVan.tuoiEnd} tuổi họ đang chạy`
-      : 'Lúc nào nên đưa việc lớn tới',
-  });
-  if (p.voiBan) {
-    k.push({ id: 'voiBan', tieuDe: `Chỗ bạn và người này va nhau — đọc ở cung ${p.voiBan.cung} của bạn` });
-  }
-  k.push({ id: 'motCau', tieuDe: 'Một câu chốt để nhớ về người này' });
+  them('coiTrong', 'khoa.coiTrong');
+  them('nenNoi', 'khoa.nenNoi');
+  them('tranhNoi', 'khoa.tranhNoi');
+  if (p.daiVan) them('thoiDiem', 'khoa.thoiDiem.dv', { a: p.daiVan.tuoiStart, b: p.daiVan.tuoiEnd });
+  else them('thoiDiem', 'khoa.thoiDiem');
+  if (p.voiBan) them('voiBan', 'khoa.voiBan', { cung: p.voiBan.cung });
+  them('motCau', 'khoa.motCau');
   return k;
 }
 

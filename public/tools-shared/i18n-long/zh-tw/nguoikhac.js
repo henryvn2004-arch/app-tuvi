@@ -1,0 +1,27 @@
+// SINH bởi npm run i18n:long (docs/i18n/QUY-UOC.md "Văn dài") — KHÔNG sửa tay. ns=nguoikhac locale=zh-tw
+window.I18n&&window.I18n.defineLong("nguoikhac",{
+"mat.Mệnh":{"t":"本色","h":"a78d9caa"},
+"mat.Phúc Đức":{"t":"心性根基","h":"71767ef7"},
+"mat.Thiên Di":{"t":"對外表現","h":"a8d58a6c"},
+"mat.Quan Lộc":{"t":"做事方式","h":"5659fe96"},
+"mat.Nô Bộc":{"t":"與周遭的人","h":"fa79c45d"},
+"viec.nho-viec":{"t":"請對方幫忙一件事／提出一個提案","h":"46620574"},
+"viec.thuong-luong":{"t":"談判權益（薪水、分成）","h":"65e7fbab"},
+"viec.bao-tin-xau":{"t":"得告訴對方一個他不想聽的消息","h":"f0e4bb42"},
+"viec.tu-choi":{"t":"拒絕對方又不想傷了關係","h":"32ca6115"},
+"viec.bat-dong":{"t":"有尚未化解的分歧","h":"f32b8bb1"},
+"viec.giao-viec":{"t":"交辦工作／提醒進度","h":"29e0c846"},
+"viec.ru-hop-tac":{"t":"邀對方一起做一件大事","h":"8559b571"},
+"viec.gan-lai":{"t":"疏遠一段時間後重新拉近關係","h":"323cd9df"},
+"viec.lan-dau":{"t":"第一次見面／共事，對對方還一無所知","h":"f859922e"},
+"khoa.keHoach":{"t":"這件事的做法：{viec}","h":"e1ae3139"},
+"khoa.matDoc.sao":{"t":"這個人其餘的{n}個面向 — {ten}（從{sao}解讀）","h":"9229ac05"},
+"khoa.matDoc":{"t":"這個人其餘的{n}個面向 — {ten}","h":"ddb7991b"},
+"khoa.coiTrong":{"t":"他們看重什麼，又怕失去什麼","h":"cb1b27aa"},
+"khoa.nenNoi":{"t":"該說的三件事，附上可直接用的原話","h":"4ff94510"},
+"khoa.tranhNoi":{"t":"絕對不要對這個人說的三句話","h":"aa53c77d"},
+"khoa.thoiDiem.dv":{"t":"什麼時候該把大事交給對方 — 依他們正在走的{a}–{b}歲大運","h":"3c44fa5a"},
+"khoa.thoiDiem":{"t":"什麼時候該把大事交給對方","h":"94a8e09a"},
+"khoa.voiBan":{"t":"你和這個人起衝突的地方 — 從你的{cung}解讀","h":"35a04e5f"},
+"khoa.motCau":{"t":"記住這個人的一句話","h":"e7d726c6"}
+});
