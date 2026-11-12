@@ -625,6 +625,54 @@
    "shell"
   ]
  },
+ "/app/thu-tuong": {
+  "file": "app-thu-tuong.html",
+  "keys": [
+   "battu.chi-phi-su-dung",
+   "battu.gioi-thieu",
+   "battu.hoi",
+   "luangiai.chuyen-khoan-qua-qr-ngan-hang",
+   "luangiai.mua-goi-de-nhan-nhieu-uu",
+   "nhtg.anh-da-chon",
+   "nhtg.anh-da-chon-oxp5",
+   "nhtg.chua-muon-chup-anh-ban-co",
+   "nhtg.chup",
+   "nhtg.chup-anh",
+   "nhtg.huy",
+   "nhtg.mo-camera",
+   "nhtg.phan-tich-anh-khac",
+   "nhtg.tai-anh-hoac-chup-truc-tiep",
+   "nhtg.tai-anh-len",
+   "nhtg.xoa-anh",
+   "thtg.2-thanh-toan",
+   "thtg.3-nhan-ket-qua",
+   "thtp.xem-ban-mau",
+   "thtu.1-tai-anh-ban-tay",
+   "thtu.anh-chi-gui-toi-may-chu",
+   "thtu.ban-tay-da-xac-dinh",
+   "thtu.chi-tuong-hoc-phuong-dong-la",
+   "thtu.chup-va-tai-mot-tam-anh",
+   "thtu.do-luong-mediapipe",
+   "thtu.do-tam-dai-chi-duong-van",
+   "thtu.dung-tay-thuan-de-xem-van",
+   "thtu.jpg-png-webp-toi-da-5mb",
+   "thtu.keo-tha-anh-long-ban-tay",
+   "thtu.long-ban-tay-luu-lai-dau",
+   "thtu.luan-theo-ngu-hanh-hinh-tuong",
+   "thtu.moi-luot-luong",
+   "thtu.phan-tich-thu-tuong-hoc",
+   "thtu.phan-tich-thu-tuong-ton-luong",
+   "thtu.tai-anh-long-ban-tay",
+   "thtu.tai-hoac-chup-anh-long-ban",
+   "thtu.thu-tuong",
+   "thtu.thu-tuong-co-phap-dong-tay",
+   "thtu.thu-tuong-tu-vi-minh-bao",
+   "thtu.thu-tuong-xem-chi-tay-theo"
+  ],
+  "js": [
+   "shell"
+  ]
+ },
  "/app/van-han-nam": {
   "file": "app-van-han-nam.html",
   "keys": [
