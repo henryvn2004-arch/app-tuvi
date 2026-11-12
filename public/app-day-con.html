@@ -485,6 +485,7 @@ window.SHELL_INTRO={key:'day-con'};</script>
 <script src="/tools-shared/illus-nguong.js?v=1"></script>
 <script src="/tools-shared/illus-match.js?v=2"></script>
 <script src="/tools-shared/glossary.js?v=5"></script>
+<script src="/tools-shared/star-label.js?v=1"></script>
 <script src="/tools-shared/i18n.js?v=7"></script>
 <script src="/laso-chart.js?v=12"></script>
 <script src="/tools-shared/vn-timezone.js?v=1"></script>
@@ -1307,7 +1308,7 @@ function renderCoSo(data) {
   // không nội suy vào HTML thô.
   if (cs.trichDan) {
     h += '<div class="dc-quote">' + esc(cs.trichDan.cau) +
-      ('<span class="src">' + _tvmbT('js.daycon.sach-dan-ve-sao', '— sách dẫn về sao') + ' ') + esc(_tvmbG(['chinh', 'sao'], cs.trichDan.sao)) + _tvmbT('js.daycon.tai-cung-menh', ' tại cung Mệnh</span></div>');
+      ('<span class="src">' + _tvmbT('js.daycon.sach-dan-ve-sao', '— sách dẫn về sao') + ' ') + esc(TuviStarLabel.t(cs.trichDan.sao)) + _tvmbT('js.daycon.tai-cung-menh', ' tại cung Mệnh</span></div>');
   }
   csEl.innerHTML = h;
   csEl.style.display = 'block';
@@ -1357,7 +1358,7 @@ function renderMetaRest(data) {
   if (vc) {
     var chips = [_tvmbT('js.daycon.kieu-cua-ban-kieu', 'Kiểu của bạn: {kieu}', {kieu: vc.kieuChaMe})];
     chips.push(_tvmbT('js.daycon.cung-tu-tuc-cua-ban', 'Cung Tử Tức của bạn') + (vc.muon ? _tvmbT('js.daycon.muon-xung-chieu', ' (mượn xung chiếu)') : '') +
-      ((vc.sao || []).length ? ': ' + vc.sao.join(', ') : ''));
+      ((vc.sao || []).length ? ': ' + TuviStarLabel.list(vc.sao) : ''));
     chips.push(vc.cungTinh ? _tvmbT('js.daycon.cung-tinh-am-duong-de-va', 'Cùng tính âm/dương — dễ va') : _tvmbT('js.daycon.khac-tinh-am-duong-de-bu', 'Khác tính âm/dương — dễ bù'));
     document.getElementById('voiChips').innerHTML = chips.map(function (c) {
       return '<span class="dc-chip">' + esc(c) + '</span>';
@@ -1369,7 +1370,7 @@ function renderMetaRest(data) {
   (data.matDoc || []).forEach(function (m) {
     rows.push('<li><b>' + esc(_dcLong('mat.' + m.cung + '.nhan', m.nhan)) + '</b> — ' + _tvmbT('js.daycon.cung-name', 'cung {name}', {name: _tvmbG('cung', m.cung)}) +
       (m.muon ? _tvmbT('js.daycon.muon-xung-chieu', ' (mượn xung chiếu)') : '') + ': ' +
-      esc((m.sao || []).map(function (x) { return _tvmbG(['chinh', 'sao'], x); }).join(', ') || _tvmbT('js.daycon.khong-co-chinh-tinh', 'không có chính tinh')) +
+      esc(TuviStarLabel.list(m.sao) || _tvmbT('js.daycon.khong-co-chinh-tinh', 'không có chính tinh')) +
       ((m.cachCuc || []).length ? ' · ' + esc(m.cachCuc.join('; ')) : '') + '</li>');
   });
   if (data.than && data.than.cung) rows.push(_tvmbT('js.daycon.cung-an-than', '<li><b>Cung an Thân</b> — ') + esc(_tvmbG('cung', data.than.cung)) + '</li>');
@@ -1377,7 +1378,7 @@ function renderMetaRest(data) {
   // như từ trên trời rơi xuống — mà đó chính là chỗ người ta muốn soi nhất.
   (data.khieu || []).filter(function (k) { return k.noiBat && (k.saoDay || []).length; })
     .forEach(function (k) {
-      rows.push('<li><b>' + esc(k.ten) + _tvmbT('js.daycon.suy-tu', '</b> — suy từ: ') + esc(k.saoDay.map(function (x) { return _tvmbG(['chinh', 'sao'], x); }).join(', ')) + '</li>');
+      rows.push('<li><b>' + esc(k.ten) + _tvmbT('js.daycon.suy-tu', '</b> — suy từ: ') + esc(TuviStarLabel.list(k.saoDay)) + '</li>');
     });
   if (data.vanNam) {
     // ⚠️ Đọc CẢ hai dạng payload: bản đã nằm trong `portrait_cache` từ trước

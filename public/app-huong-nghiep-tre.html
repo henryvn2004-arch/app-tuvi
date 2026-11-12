@@ -351,6 +351,7 @@ window.SHELL_INTRO={key:'huong-nghiep-tre'};</script>
 <script src="/tools-shared/illus-nguong.js?v=1"></script>
 <script src="/tools-shared/illus-match.js?v=2"></script>
 <script src="/tools-shared/glossary.js?v=5"></script>
+<script src="/tools-shared/star-label.js?v=1"></script>
 <script src="/tools-shared/i18n.js?v=7"></script>
 <script src="/laso-chart.js?v=12"></script>
 <script src="/tools-shared/vn-timezone.js?v=1"></script>
@@ -964,7 +965,7 @@ function renderMetaRest(data) {
   var md = data.matDoc || [];
   var li = md.map(function (m) {
     return '<li><b>' + esc(m.nhan) + '</b> (' + _tvmbT('js.hnt.cung-name', 'cung {name}', {name: _tvmbG('cung', m.cung)}) + '): ' +
-      esc(m.sao.map(function (x) { return _tvmbG(['chinh', 'sao'], x); }).join(', ') || _tvmbT('js.hnt.khong-co-chinh-tinh', 'không có chính tinh')) +
+      esc(TuviStarLabel.list(m.sao) || _tvmbT('js.hnt.khong-co-chinh-tinh', 'không có chính tinh')) +
       (m.muon ? _tvmbT('js.hnt.muon-xung-chieu', ' <i>— mượn xung chiếu</i>') : '') +
       (m.cachCuc && m.cachCuc.length ? ' — ' + esc(m.cachCuc.join('; ')) : '') + '</li>';
   });
