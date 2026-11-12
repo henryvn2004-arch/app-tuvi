@@ -1,6 +1,6 @@
 # Nhật ký phát triển — mục lục
 
-593 mục ghi chép từng PR, tách khỏi `CLAUDE.md` để nó thôi ngốn ~350k token mỗi lượt.
+594 mục ghi chép từng PR, tách khỏi `CLAUDE.md` để nó thôi ngốn ~350k token mỗi lượt.
 
 **Sáu file dưới đây KHÔNG được nạp tự động.** Cần thì tra:
 
@@ -28,6 +28,7 @@ Luật rút ra từ các mục này đã được cô đọng lên `CLAUDE.md`. 
 
 | # | tháng | file | mục |
 |---:|---|---|---|
+| 1 | 2026-11 | `2026-11.md` | 🀄 W30f-6 — `ls.cachCuc[]` (cách cục có tên: 217 mục, 3 mẫu có biến) cùng ns `cach-cuc` (1.471 mục) · gắn `TuviCachCuc` vào Chân Dung Vợ Chồng · Luận Giải lõi · khoản chấm Công Sở · `check:enginema` +752 câu thật; past-life danh xưng/tên/era chờ quyết định bump `SHAPE` |
 | 1 | 2026-11 | `2026-11.md` | 🀄 W30f-5 — `cachCucTungCung` (engine lõi, KHÔNG sửa) 5 ngôn ngữ: ns `cach-cuc` 1.254 mục (383 câu `out.push` + bảng `CACH_CUC_DATA` 725 câu + 138 tên sao tắt + 8 mẫu Tuần/Triệt) · khoá = fnv của câu Việt · `cach-cuc.js` dùng chung 4 trang · `check:enginema` chạy engine thật 23.512 lượt |
 | 1 | 2026-11 | `2026-11.md` | 💼 W30f-3/4 — Công Sở: chức phận cổ (`past-life.ts` ns `past-life` 342 mục · mã `ma` additive · khuôn `dungMau`) · tầng nhánh nghề (`nghe-nghiep.ts` ns `nghe-nghiep` 292 mục) · `check:enginema` +golden 107 lá số dựng từ engine cũ |
 | 1 | 2026-11 | `2026-11.md` | 🌠 W30f-1/2 — `starT()` dùng chung → `tools-shared/star-label.js` (cong-so · day-con · hntre · nguoi-khac) · Giờ Sinh: nhãn đáp án theo sao 5 ngôn ngữ (ns `giosinh-sao` 127 mục · mã `o.sao` gộp vào cơ chế `{k,v}` của lô E · `check-gio-sinh-tuoi` so nhãn dựng ở client với engine thật 485 mục) |
