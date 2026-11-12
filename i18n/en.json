@@ -4063,6 +4063,334 @@
   "t": "), i.e. **",
   "h": "52e6128d"
  },
+ "js.mshm.anh-qua-lon": {
+  "t": "The image is too large (5MB max)",
+  "h": "5113c5f3"
+ },
+ "js.mshm.bang-du": {
+  "t": "The full palette (secondary colors, colors to avoid) and outfit guidance by occasion/role are in the in-depth analysis.",
+  "h": "06901dd7"
+ },
+ "js.mshm.cat-ao": {
+  "t": "Tops / Jackets",
+  "h": "84c67299"
+ },
+ "js.mshm.cat-ao-khoac": {
+  "t": "Outerwear",
+  "h": "7878fdb1"
+ },
+ "js.mshm.cat-giay": {
+  "t": "Shoes / Sandals",
+  "h": "d1f9572f"
+ },
+ "js.mshm.cat-phu-kien": {
+  "t": "Accessories",
+  "h": "f1f0fba9"
+ },
+ "js.mshm.cat-quan": {
+  "t": "Pants / Skirts",
+  "h": "84562745"
+ },
+ "js.mshm.cat-tui": {
+  "t": "Bags / Backpacks",
+  "h": "1979c758"
+ },
+ "js.mshm.chip-phoi-do": {
+  "t": "How do I coordinate outfits by my element colors?",
+  "h": "3d2ef763"
+ },
+ "js.mshm.chip-phong-van": {
+  "t": "Which colors should I avoid for an interview?",
+  "h": "61460b1c"
+ },
+ "js.mshm.chip-vi-sao": {
+  "t": "Why does my element suit this color?",
+  "h": "7ef6e8bc"
+ },
+ "js.mshm.combo-n": {
+  "t": "Combo {n}",
+  "h": "9769d38a"
+ },
+ "js.mshm.dau-phay": {
+  "t": ", ",
+  "h": "d3bc9a37"
+ },
+ "js.mshm.greeting": {
+  "t": "Your birth element is **{h}**. Main colors: {m}. Would you like to ask more about colors or outfits?",
+  "h": "e8cef7c1"
+ },
+ "js.mshm.khong-nhan-duoc-anh": {
+  "t": "Didn't receive the result image.",
+  "h": "a16f02df"
+ },
+ "js.mshm.label": {
+  "t": "Colors for Your Birth Element — {h}",
+  "h": "71fc87a5"
+ },
+ "js.mshm.loi-e": {
+  "t": "Error: {e}",
+  "h": "a7267203"
+ },
+ "js.mshm.mau-bac": {
+  "t": "Silver",
+  "h": "7386c9c6"
+ },
+ "js.mshm.mau-be": {
+  "t": "Beige",
+  "h": "11d1bf27"
+ },
+ "js.mshm.mau-be-dam": {
+  "t": "Deep beige",
+  "h": "c660f0a6"
+ },
+ "js.mshm.mau-cam": {
+  "t": "Orange",
+  "h": "5e09769d"
+ },
+ "js.mshm.mau-cam-dat": {
+  "t": "Terracotta",
+  "h": "aaa37477"
+ },
+ "js.mshm.mau-chu": {
+  "t": "Main colors: {m}",
+  "h": "7813be48"
+ },
+ "js.mshm.mau-den": {
+  "t": "Black",
+  "h": "4d0c0faf"
+ },
+ "js.mshm.mau-do": {
+  "t": "Red",
+  "h": "2eb7503e"
+ },
+ "js.mshm.mau-hong-phan": {
+  "t": "Pastel pink",
+  "h": "0ec650f1"
+ },
+ "js.mshm.mau-hong-tuoi": {
+  "t": "Bright pink",
+  "h": "74592632"
+ },
+ "js.mshm.mau-kem": {
+  "t": "Cream",
+  "h": "e52e6c26"
+ },
+ "js.mshm.mau-kem-dam": {
+  "t": "Deep cream",
+  "h": "e42e248c"
+ },
+ "js.mshm.mau-nau-am": {
+  "t": "Warm brown",
+  "h": "e0f4fd1e"
+ },
+ "js.mshm.mau-nau-do": {
+  "t": "Reddish brown",
+  "h": "9222313d"
+ },
+ "js.mshm.mau-nau-go": {
+  "t": "Wood brown",
+  "h": "24e064f8"
+ },
+ "js.mshm.mau-nau-vang": {
+  "t": "Golden brown",
+  "h": "48377d46"
+ },
+ "js.mshm.mau-navy": {
+  "t": "Navy",
+  "h": "0229e960"
+ },
+ "js.mshm.mau-tim": {
+  "t": "Purple",
+  "h": "684e5966"
+ },
+ "js.mshm.mau-tim-do": {
+  "t": "Magenta purple",
+  "h": "0b78db8f"
+ },
+ "js.mshm.mau-tim-than": {
+  "t": "Indigo",
+  "h": "7ca4120f"
+ },
+ "js.mshm.mau-trang": {
+  "t": "White",
+  "h": "9cf5e0eb"
+ },
+ "js.mshm.mau-vang-dat": {
+  "t": "Earthy yellow",
+  "h": "1552080b"
+ },
+ "js.mshm.mau-vang-kim": {
+  "t": "Gold",
+  "h": "b441fe1f"
+ },
+ "js.mshm.mau-vang-nhat": {
+  "t": "Pale yellow",
+  "h": "14fd960f"
+ },
+ "js.mshm.mau-vang-tuoi": {
+  "t": "Bright yellow",
+  "h": "f58c4a57"
+ },
+ "js.mshm.mau-xam-dam": {
+  "t": "Dark gray",
+  "h": "01959534"
+ },
+ "js.mshm.mau-xam-kim-loai": {
+  "t": "Metallic gray",
+  "h": "6e7d3e23"
+ },
+ "js.mshm.mau-xam-nhat": {
+  "t": "Light gray",
+  "h": "d8017939"
+ },
+ "js.mshm.mau-xanh-bien": {
+  "t": "Ocean blue",
+  "h": "9a3a3414"
+ },
+ "js.mshm.mau-xanh-duong-dam": {
+  "t": "Deep blue",
+  "h": "8d89093c"
+ },
+ "js.mshm.mau-xanh-la": {
+  "t": "Green",
+  "h": "d0e8c4b1"
+ },
+ "js.mshm.mau-xanh-lam-nhat": {
+  "t": "Light blue",
+  "h": "a72ef9cf"
+ },
+ "js.mshm.mau-xanh-mint": {
+  "t": "Mint green",
+  "h": "3607442e"
+ },
+ "js.mshm.mau-xanh-ngoc": {
+  "t": "Turquoise",
+  "h": "b8cbaa2e"
+ },
+ "js.mshm.mau-xanh-olive": {
+  "t": "Olive",
+  "h": "2dd139ab"
+ },
+ "js.mshm.mau-xanh-reu": {
+  "t": "Moss green",
+  "h": "836bccc5"
+ },
+ "js.mshm.mau-xanh-reu-dam": {
+  "t": "Deep moss green",
+  "h": "b49975fe"
+ },
+ "js.mshm.mau-xanh-tim": {
+  "t": "Blue-violet",
+  "h": "08e76f57"
+ },
+ "js.mshm.menh-mau-chinh": {
+  "t": "Birth element {h} — main colors to wear: {m}",
+  "h": "9a1a497e"
+ },
+ "js.mshm.menh-quai": {
+  "t": "Birth element {h} · Gua {n} {g}",
+  "h": "da1abf25"
+ },
+ "js.mshm.nam-sinh-khong-hop-le": {
+  "t": "Please enter a valid birth year (1900–2025)",
+  "h": "c628d3be"
+ },
+ "js.mshm.nap-am-line": {
+  "t": "Na Yin: {h} · Main colors by the {h} element",
+  "h": "6e1df23d"
+ },
+ "js.mshm.occ-doi-tac": {
+  "t": "Meeting Partners",
+  "h": "241559f4"
+ },
+ "js.mshm.occ-hang-ngay": {
+  "t": "Everyday",
+  "h": "c19adb2a"
+ },
+ "js.mshm.occ-hen-ho": {
+  "t": "Date",
+  "h": "c601615d"
+ },
+ "js.mshm.occ-phong-van": {
+  "t": "Interview",
+  "h": "0bfbac35"
+ },
+ "js.mshm.phan-tich-that-bai": {
+  "t": "The analysis failed",
+  "h": "44b68aa6"
+ },
+ "js.mshm.phan-tich-truoc": {
+  "t": "Please analyze your colors first.",
+  "h": "10049eff"
+ },
+ "js.mshm.phoi-mau-dua-tren": {
+  "t": "Color combinations are based on the suitable palette above.",
+  "h": "c4d3c4d3"
+ },
+ "js.mshm.quai-line": {
+  "t": "Gua {n} — {name} · {elem} element",
+  "h": "c5a1c901"
+ },
+ "js.mshm.share-text": {
+  "t": "Birth element {h} · Main colors: {m}",
+  "h": "d05a5128"
+ },
+ "js.mshm.share-title": {
+  "t": "The colors that suit my birth element",
+  "h": "2ba34c9a"
+ },
+ "js.mshm.share-tryon-title": {
+  "t": "The outfit for my birth element (virtual try-on)",
+  "h": "cd9fdc43"
+ },
+ "js.mshm.step-chuan-bi": {
+  "t": "Preparing an outfit for your element",
+  "h": "6ae0380a"
+ },
+ "js.mshm.step-tao-anh": {
+  "t": "Generating the outfit image",
+  "h": "ba6faaec"
+ },
+ "js.mshm.step-tinh-quai": {
+  "t": "Working out your gua number & Na Yin element",
+  "h": "39571eee"
+ },
+ "js.mshm.step-tu-van": {
+  "t": "Advising on colors & outfits",
+  "h": "58244246"
+ },
+ "js.mshm.style-cong-so": {
+  "t": "Work",
+  "h": "ff273e47"
+ },
+ "js.mshm.style-dao-pho": {
+  "t": "Street Stroll",
+  "h": "115c50ac"
+ },
+ "js.mshm.style-sang-trong": {
+  "t": "Luxe",
+  "h": "17db9fb4"
+ },
+ "js.mshm.tai-anh-truoc": {
+  "t": "Please upload an image first.",
+  "h": "733c1fec"
+ },
+ "js.mshm.tranh": {
+  "t": "Avoid:",
+  "h": "89f38636"
+ },
+ "js.mshm.tryon-label": {
+  "t": "{s} · Birth element {h}",
+  "h": "e69e839c"
+ },
+ "js.mshm.vui-long-thu-lai": {
+  "t": "Please try again.",
+  "h": "2f1d18ee"
+ },
+ "js.mshm.xem-mau-chinh": {
+  "t": "See the main colors above to apply.",
+  "h": "95e8229c"
+ },
  "js.nav.brand": {
   "t": "Minh Bao Zi Wei Dou Shu",
   "h": "33336b26"
@@ -15618,6 +15946,110 @@
  "menhkho.xem-la-so-luan-giai": {
   "t": "View Chart &amp; Reading →",
   "h": "95889730"
+ },
+ "mshm.anh-chup-thang-nguoi-du-sang": {
+  "t": "Straight-on full-body photo, good light · JPG/PNG",
+  "h": "fe4086d9"
+ },
+ "mshm.bang-mau-theo-menh": {
+  "t": "<span class=\"ic\" data-icon=\"palette\"></span> Palette for Your Birth Element",
+  "h": "75158994"
+ },
+ "mshm.chi-phi-luong": {
+  "t": "<span>Cost: <strong><span data-tvp-price=\"mau-sac-hop-menh\">…</span> credits</strong></span>",
+  "h": "72c219ac"
+ },
+ "mshm.chon-phong-cach-trang-phuc": {
+  "t": "Choose an outfit style:",
+  "h": "b115ee23"
+ },
+ "mshm.dao-pho": {
+  "t": "<span class=\"ic\" data-icon=\"compass\"></span> Street Stroll",
+  "h": "5a035e78"
+ },
+ "mshm.goi-y-phoi-do-hoan-chinh": {
+  "t": "<span class=\"ic\" data-icon=\"sparkles\"></span> Complete Outfit Suggestions",
+  "h": "233b565f"
+ },
+ "mshm.huong-dan-trang-phuc-chi-tiet": {
+  "t": "<span class=\"ic\" data-icon=\"shirt\"></span> Detailed Outfit Guide",
+  "h": "68e382ef"
+ },
+ "mshm.lam-an-e-am-tai-loc": {
+  "t": "Business is slow and wealth doesn’t gather — yet you may never have wondered whether the colors you wear and use every day clash with your birth element. Enter your birth year and get the list of colors to use and colors to avoid right away.",
+  "h": "fe0800d1"
+ },
+ "mshm.mau-chinh-tot-nhat": {
+  "t": "✓ Main Colors — Best",
+  "h": "d169b014"
+ },
+ "mshm.mau-nen-tranh": {
+  "t": "✗ Colors to Avoid",
+  "h": "adc4005c"
+ },
+ "mshm.mau-phu-chap-nhan-duoc": {
+  "t": "◎ Secondary Colors — Acceptable",
+  "h": "5679d14e"
+ },
+ "mshm.mau-sac-hop-menh": {
+  "t": "Colors That Suit Your Chart",
+  "h": "64b3b887"
+ },
+ "mshm.mau-sac-hop-menh-tu-van": {
+  "t": "<b>Colors for Your Birth Element</b><span>Outfit color advice by the Na Yin Five Elements + Eight Mansions, and try it on the photo</span>",
+  "h": "764edb0c"
+ },
+ "mshm.mau-sac-hop-menh-tu-vi": {
+  "t": "Colors for Your Birth Element — Minh Bao Zi Wei Dou Shu",
+  "h": "d1cab1d9"
+ },
+ "mshm.mau-theo-dip": {
+  "t": "<span class=\"ic\" data-icon=\"calendar\"></span> Colors by Occasion",
+  "h": "193da2e8"
+ },
+ "mshm.meo-dac-biet-theo-ban-menh": {
+  "t": "<span class=\"ic\" data-icon=\"lightbulb\"></span> Special Tips for Your Birth Element",
+  "h": "ec862b7f"
+ },
+ "mshm.ngu-hanh-nap-am-gan-moi": {
+  "t": "The Na Yin Five Elements assign each birth year its own element within the Sixty Jiazi cycle, while the Eight Mansions (Ba Zhai) also weigh direction and space. Combining the two systems, the ancients worked out the colors and objects that generate or clash with a person’s birth element.",
+  "h": "245a2b78"
+ },
+ "mshm.nhap-nam-sinh-va-gioi-tinh": {
+  "t": "Enter your birth year and gender. The system works out your gua number and checks it against the Five Elements color table. You get a palette for your birth element, colors by occasion and outfit suggestions.",
+  "h": "9b015181"
+ },
+ "mshm.sang-trong": {
+  "t": "<span class=\"ic\" data-icon=\"sparkles\"></span> Luxe",
+  "h": "e0db35aa"
+ },
+ "mshm.tai-anh-cua-ban-len": {
+  "t": "Upload your photo",
+  "h": "1444e1ba"
+ },
+ "mshm.tai-sao-nen-tranh-nhung-mau": {
+  "t": "⚠ Why Avoid These Colors?",
+  "h": "d3b71bb0"
+ },
+ "mshm.thong-tin-ban-menh": {
+  "t": "<span class=\"ic\" data-icon=\"sparkles\"></span> Birth Element Info",
+  "h": "0a614b1f"
+ },
+ "mshm.thu-trang-phuc-theo-menh-luong": {
+  "t": "<span class=\"ic\" data-icon=\"shirt\"></span> Try On Clothes for Your Element <span style=\"font-size:10px;background:var(--gold-lt);color:var(--tx-blue);padding:2px 8px;border-radius:10px;font-weight:600\"><span data-tvp-price=\"trang-phuc-tryon\">…</span> credits/try</span>",
+  "h": "f74ca71d"
+ },
+ "mshm.tu-van-mau-sac-trang-phuc": {
+  "t": "Outfit color advice for your birth element by the Na Yin Five Elements — tops, pants, shoes, bags, accessories. Complete outfit suggestions for each occasion.",
+  "h": "d55c587d"
+ },
+ "mshm.xem-lai": {
+  "t": "← Review",
+  "h": "e2aaadb4"
+ },
+ "mshm.xem-mau-sac-hop-menh-luong": {
+  "t": "<span class=\"ic\" data-icon=\"palette\"></span> See Your Element Colors — <span data-tvp-price=\"mau-sac-hop-menh\">…</span> credits",
+  "h": "85a1dcbd"
  },
  "napam.1-nhap-nam-sinh": {
   "t": "<span class=\"wss-n\">1</span><span class=\"wss-l\">Enter birth year</span>",

@@ -3,8 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Màu Sắc Hợp Mệnh — Tử Vi Minh Bảo</title>
-<meta name="description" content="Tư vấn màu sắc trang phục hợp bản mệnh theo Ngũ Hành Nạp Âm — màu áo, quần, giày, túi, phụ kiện. Gợi ý phối đồ hoàn chỉnh cho từng dịp.">
+<title data-i18n="mshm.mau-sac-hop-menh-tu-vi">Màu Sắc Hợp Mệnh — Tử Vi Minh Bảo</title>
+<meta data-i18n-attr="content:mshm.tu-van-mau-sac-trang-phuc" name="description" content="Tư vấn màu sắc trang phục hợp bản mệnh theo Ngũ Hành Nạp Âm — màu áo, quần, giày, túi, phụ kiện. Gợi ý phối đồ hoàn chỉnh cho từng dịp.">
 <link rel="icon" type="image/webp" href="/seal.webp">
 <link rel="preload" href="/fonts/noto-serif-latin-400.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="/fonts/noto-serif-vietnamese-400.woff2" as="font" type="font/woff2" crossorigin>
@@ -99,9 +99,9 @@ body.chat-first-live .pt-row{grid-template-columns:1fr}
   <main class="ws" id="ws">
     <div class="ws-top">
       <button class="btn mobile-only" onclick="document.getElementById('shell-sidebar').classList.toggle('open');window.shellSyncBackdrop&&shellSyncBackdrop()" aria-label="Menu">☰</button>
-      <div class="ws-title"><b>Màu Sắc Hợp Mệnh</b><span>Tư vấn màu trang phục theo Ngũ Hành Nạp Âm + Bát Trạch, thử ngay trên ảnh</span></div>
+      <div data-i18n="mshm.mau-sac-hop-menh-tu-van" class="ws-title"><b>Màu Sắc Hợp Mệnh</b><span>Tư vấn màu trang phục theo Ngũ Hành Nạp Âm + Bát Trạch, thử ngay trên ảnh</span></div>
       <div class="ws-actions">
-        <button class="btn mobile-only" onclick="Shell.openRail()">✦ Hỏi</button>
+        <button data-i18n="battu.hoi" class="btn mobile-only" onclick="Shell.openRail()">✦ Hỏi</button>
       </div>
     </div>
     <div class="ws-body">
@@ -115,8 +115,8 @@ body.chat-first-live .pt-row{grid-template-columns:1fr}
         <img class="intro-avatar" src="/tool-avatars/mau-sac-hop-menh.webp" alt="" onerror="this.remove()">
         <div class="intro-body">
           <div class="intro-text">
-            <div class="intro-t">Màu Sắc Hợp Mệnh</div>
-            <div class="intro-d">Làm ăn ế ẩm, tài lộc không tụ mà chưa từng nghĩ tới việc màu sắc mình mặc, mình dùng hằng ngày có đang khắc mệnh. Nhập ngày sinh, nhận ngay danh sách màu nên dùng và màu nên tránh.</div>
+            <div data-i18n="mshm.mau-sac-hop-menh" class="intro-t">Màu Sắc Hợp Mệnh</div>
+            <div data-i18n="mshm.lam-an-e-am-tai-loc" class="intro-d">Làm ăn ế ẩm, tài lộc không tụ mà chưa từng nghĩ tới việc màu sắc mình mặc, mình dùng hằng ngày có đang khắc mệnh. Nhập ngày sinh, nhận ngay danh sách màu nên dùng và màu nên tránh.</div>
             <div id="introSrc"></div>
           </div>
         </div>
@@ -127,21 +127,21 @@ body.chat-first-live .pt-row{grid-template-columns:1fr}
            `TuviPaywall.requireCredits` trong doAnalyze) → nhận kết quả đầy đủ
            (renderResults). JS chuyển bước ở `wsStepsSet`. -->
       <div class="ws-steps" id="wsSteps">
-        <div class="wss-step active"><span class="wss-n">1</span><span class="wss-l">Nhập thông tin</span></div>
-        <div class="wss-step"><span class="wss-n">2</span><span class="wss-l">Thanh toán</span></div>
-        <div class="wss-step"><span class="wss-n">3</span><span class="wss-l">Nhận kết quả</span></div>
+        <div data-i18n="battu.1-nhap-thong-tin" class="wss-step active"><span class="wss-n">1</span><span class="wss-l">Nhập thông tin</span></div>
+        <div data-i18n="thtg.2-thanh-toan" class="wss-step"><span class="wss-n">2</span><span class="wss-l">Thanh toán</span></div>
+        <div data-i18n="thtg.3-nhan-ket-qua" class="wss-step"><span class="wss-n">3</span><span class="wss-l">Nhận kết quả</span></div>
       </div>
 
       <div class="ms-card">
-        <h2><span class="ic" data-icon="sparkles"></span> Thông Tin Bản Mệnh</h2>
-        <p class="sub">Nhập năm sinh và giới tính của bạn. Hệ thống tính quái số rồi đối chiếu với bảng màu ngũ hành. Nhận về bảng màu hợp mệnh, màu theo từng dịp và gợi ý phối đồ.</p>
+        <h2 data-i18n="mshm.thong-tin-ban-menh"><span class="ic" data-icon="sparkles"></span> Thông Tin Bản Mệnh</h2>
+        <p data-i18n="mshm.nhap-nam-sinh-va-gioi-tinh" class="sub">Nhập năm sinh và giới tính của bạn. Hệ thống tính quái số rồi đối chiếu với bảng màu ngũ hành. Nhận về bảng màu hợp mệnh, màu theo từng dịp và gợi ý phối đồ.</p>
         <p class="price-note" data-tvp-price-label="mau-sac-hop-menh">…</p>
         <div class="pt-row">
-          <div class="pt-fg"><label>Năm sinh dương lịch</label><input type="number" id="namSinh" placeholder="VD: 1990" min="1900" max="2025" oninput="onYearChange()"></div>
-          <div class="pt-fg"><label>Giới tính</label>
+          <div class="pt-fg"><label data-i18n="phongthuy.nam-sinh-duong-lich">Năm sinh dương lịch</label><input data-i18n-attr="placeholder:phongthuy.vd-1990" type="number" id="namSinh" placeholder="VD: 1990" min="1900" max="2025" oninput="onYearChange()"></div>
+          <div class="pt-fg"><label data-i18n="phongthuy.gioi-tinh">Giới tính</label>
             <select id="gioiTinh" onchange="onYearChange()">
               <option value="male">Nam</option>
-              <option value="female">Nữ</option>
+              <option data-i18n="laso.nu" value="female">Nữ</option>
             </select>
           </div>
         </div>
@@ -156,9 +156,9 @@ body.chat-first-live .pt-row{grid-template-columns:1fr}
       </div>
 
       <div class="ms-card">
-        <div class="cost-row"><span>Chi phí: <strong><span data-tvp-price="mau-sac-hop-menh">…</span> Lượng</strong></span></div>
+        <div data-i18n="mshm.chi-phi-luong" class="cost-row"><span>Chi phí: <strong><span data-tvp-price="mau-sac-hop-menh">…</span> Lượng</strong></span></div>
         <div class="error-box" id="errorBox"></div>
-        <button class="btn-analyze" id="btnAnalyze" onclick="doAnalyze()"><span class="ic" data-icon="palette"></span> Xem Màu Sắc Hợp Mệnh — <span data-tvp-price="mau-sac-hop-menh">…</span> Lượng</button>
+        <button data-i18n="mshm.xem-mau-sac-hop-menh-luong" class="btn-analyze" id="btnAnalyze" onclick="doAnalyze()"><span class="ic" data-icon="palette"></span> Xem Màu Sắc Hợp Mệnh — <span data-tvp-price="mau-sac-hop-menh">…</span> Lượng</button>
       </div>
 
       <div class="ms-card loading-overlay" id="loadingOverlay">
@@ -167,9 +167,9 @@ body.chat-first-live .pt-row{grid-template-columns:1fr}
       </div>
       <div class="ws-side-col">
       <div class="ws-promo">
-        <div class="wsp-eyebrow"><span class="wsp-ic" data-icon="book-open"></span><span>Giới thiệu</span></div>
-        <div class="wsp-title">Màu Sắc Hợp Mệnh</div>
-        <p class="wsp-desc">Ngũ Hành Nạp Âm gán mỗi năm sinh một mệnh riêng trong Lục Thập Hoa Giáp, còn Bát Trạch xét thêm yếu tố hướng và không gian. Kết hợp hai hệ thống này, người xưa suy ra những màu sắc, vật phẩm tương sinh hoặc tương khắc với bản mệnh của một người.</p>
+        <div data-i18n="battu.gioi-thieu" class="wsp-eyebrow"><span class="wsp-ic" data-icon="book-open"></span><span>Giới thiệu</span></div>
+        <div data-i18n="mshm.mau-sac-hop-menh" class="wsp-title">Màu Sắc Hợp Mệnh</div>
+        <p data-i18n="mshm.ngu-hanh-nap-am-gan-moi" class="wsp-desc">Ngũ Hành Nạp Âm gán mỗi năm sinh một mệnh riêng trong Lục Thập Hoa Giáp, còn Bát Trạch xét thêm yếu tố hướng và không gian. Kết hợp hai hệ thống này, người xưa suy ra những màu sắc, vật phẩm tương sinh hoặc tương khắc với bản mệnh của một người.</p>
       </div>
       <div id="shellRecent"></div>
       </div>
@@ -189,42 +189,42 @@ body.chat-first-live .pt-row{grid-template-columns:1fr}
         </div>
 
         <div class="ms-card">
-          <h2><span class="ic" data-icon="palette"></span> Bảng Màu Theo Mệnh</h2>
-          <div class="palette-label">✓ Màu Chính — Tốt Nhất</div>
+          <h2 data-i18n="mshm.bang-mau-theo-menh"><span class="ic" data-icon="palette"></span> Bảng Màu Theo Mệnh</h2>
+          <div data-i18n="mshm.mau-chinh-tot-nhat" class="palette-label">✓ Màu Chính — Tốt Nhất</div>
           <div class="palette-row" id="primaryPalette"></div>
-          <div class="palette-label">◎ Màu Phụ — Chấp Nhận Được</div>
+          <div data-i18n="mshm.mau-phu-chap-nhan-duoc" class="palette-label">◎ Màu Phụ — Chấp Nhận Được</div>
           <div class="palette-row" id="secondaryPalette"></div>
-          <div class="palette-label">✗ Màu Nên Tránh</div>
+          <div data-i18n="mshm.mau-nen-tranh" class="palette-label">✗ Màu Nên Tránh</div>
           <div class="palette-row" id="avoidPalette"></div>
         </div>
 
         <div class="ms-card">
-          <h2><span class="ic" data-icon="shirt"></span> Hướng Dẫn Trang Phục Chi Tiết</h2>
+          <h2 data-i18n="mshm.huong-dan-trang-phuc-chi-tiet"><span class="ic" data-icon="shirt"></span> Hướng Dẫn Trang Phục Chi Tiết</h2>
           <div class="clothing-grid" id="clothingGrid"></div>
         </div>
 
         <div class="ms-card">
-          <h2><span class="ic" data-icon="calendar"></span> Màu Theo Dịp</h2>
+          <h2 data-i18n="mshm.mau-theo-dip"><span class="ic" data-icon="calendar"></span> Màu Theo Dịp</h2>
           <div class="occasion-grid" id="occasionGrid"></div>
         </div>
 
         <div class="ms-card">
-          <h2><span class="ic" data-icon="sparkles"></span> Gợi Ý Phối Đồ Hoàn Chỉnh</h2>
+          <h2 data-i18n="mshm.goi-y-phoi-do-hoan-chinh"><span class="ic" data-icon="sparkles"></span> Gợi Ý Phối Đồ Hoàn Chỉnh</h2>
           <div class="combo-list" id="comboList"></div>
         </div>
 
         <div class="ms-card">
-          <h2>⚠ Tại Sao Nên Tránh Những Màu Này?</h2>
+          <h2 data-i18n="mshm.tai-sao-nen-tranh-nhung-mau">⚠ Tại Sao Nên Tránh Những Màu Này?</h2>
           <div class="avoid-explain" id="avoidExplain"></div>
         </div>
 
         <div class="ms-card" id="bonusCard" style="display:none">
-          <h2><span class="ic" data-icon="lightbulb"></span> Mẹo Đặc Biệt Theo Bản Mệnh</h2>
+          <h2 data-i18n="mshm.meo-dac-biet-theo-ban-menh"><span class="ic" data-icon="lightbulb"></span> Mẹo Đặc Biệt Theo Bản Mệnh</h2>
           <div class="bonus-tip" id="bonusTip"></div>
         </div>
 
         <div class="ms-card" id="tryonCard">
-          <h2><span class="ic" data-icon="shirt"></span> Thử Trang Phục Theo Mệnh
+          <h2 data-i18n="mshm.thu-trang-phuc-theo-menh-luong"><span class="ic" data-icon="shirt"></span> Thử Trang Phục Theo Mệnh
             <span style="font-size:10px;background:var(--gold-lt);color:var(--tx-blue);padding:2px 8px;border-radius:10px;font-weight:600"><span data-tvp-price="trang-phuc-tryon">…</span> Lượng/lần</span>
           </h2>
 
@@ -236,25 +236,25 @@ body.chat-first-live .pt-row{grid-template-columns:1fr}
               <input type="file" accept="image/*" onchange="onTryonFile(event)" id="tryonFileInput">
               <div id="tryonUploadPrompt">
                 <div class="ic" data-icon="user" style="font-size:36px;margin-bottom:8px;display:block"></div>
-                <div style="font-size:14px;font-weight:600;color:var(--heading);margin-bottom:4px">Tải ảnh của bạn lên</div>
-                <div style="font-size:12px;color:var(--text-lt)">Ảnh chụp thẳng người, đủ sáng · JPG/PNG</div>
+                <div data-i18n="mshm.tai-anh-cua-ban-len" style="font-size:14px;font-weight:600;color:var(--heading);margin-bottom:4px">Tải ảnh của bạn lên</div>
+                <div data-i18n="mshm.anh-chup-thang-nguoi-du-sang" style="font-size:12px;color:var(--text-lt)">Ảnh chụp thẳng người, đủ sáng · JPG/PNG</div>
               </div>
               <img id="tryonPreviewImg" class="tryon-preview" src="" alt="" style="display:none;max-height:220px;width:auto">
             </div>
             <div style="display:flex;justify-content:center;margin-top:8px">
-              <button id="tryonChangeBtn" onclick="clearTryonPhoto()" style="display:none;background:none;border:1px solid var(--line-2);border-radius:4px;padding:5px 14px;font-size:11px;color:var(--text-mid);cursor:pointer;font-family:inherit">✕ Đổi ảnh</button>
+              <button data-i18n="phongthuy.doi-anh" id="tryonChangeBtn" onclick="clearTryonPhoto()" style="display:none;background:none;border:1px solid var(--line-2);border-radius:4px;padding:5px 14px;font-size:11px;color:var(--text-mid);cursor:pointer;font-family:inherit">✕ Đổi ảnh</button>
             </div>
           </div>
 
           <div id="tryonStep2" style="display:none;margin-top:14px">
-            <div style="font-size:12px;font-weight:600;color:var(--text-mid);margin-bottom:8px">Chọn phong cách trang phục:</div>
+            <div data-i18n="mshm.chon-phong-cach-trang-phuc" style="font-size:12px;font-weight:600;color:var(--text-mid);margin-bottom:8px">Chọn phong cách trang phục:</div>
             <div class="style-btns">
-              <button class="style-btn active" id="sbCongSo" onclick="setStyle('cong-so',this)"><span class="ic" data-icon="briefcase"></span> Công Sở</button>
+              <button data-i18n="pcol.cong-so" class="style-btn active" id="sbCongSo" onclick="setStyle('cong-so',this)"><span class="ic" data-icon="briefcase"></span> Công Sở</button>
               <button class="style-btn" id="sbCasual"  onclick="setStyle('casual',this)"><span class="ic" data-icon="shirt"></span> Casual</button>
-              <button class="style-btn" id="sbSangTrong" onclick="setStyle('sang-trong',this)"><span class="ic" data-icon="sparkles"></span> Sang Trọng</button>
-              <button class="style-btn" id="sbDaoPho" onclick="setStyle('dao-pho',this)"><span class="ic" data-icon="compass"></span> Dạo Phố</button>
+              <button data-i18n="mshm.sang-trong" class="style-btn" id="sbSangTrong" onclick="setStyle('sang-trong',this)"><span class="ic" data-icon="sparkles"></span> Sang Trọng</button>
+              <button data-i18n="mshm.dao-pho" class="style-btn" id="sbDaoPho" onclick="setStyle('dao-pho',this)"><span class="ic" data-icon="compass"></span> Dạo Phố</button>
             </div>
-            <button class="btn-tryon" id="btnTryon" onclick="doTryon()"><span class="ic" data-icon="sparkles"></span> Thử Trang Phục Ngay</button>
+            <button data-i18n="pcol.thu-trang-phuc-ngay" class="btn-tryon" id="btnTryon" onclick="doTryon()"><span class="ic" data-icon="sparkles"></span> Thử Trang Phục Ngay</button>
           </div>
 
           <div id="tryonLoading" style="display:none;text-align:center;padding:24px 0">
@@ -263,12 +263,12 @@ body.chat-first-live .pt-row{grid-template-columns:1fr}
 
           <div id="tryonResult" style="display:none;margin-top:14px">
             <div class="ba-grid">
-              <div class="ba-col"><div class="ba-label">Ảnh gốc</div><img id="tryonBefore" class="ba-img" src="" alt="Trước"></div>
-              <div class="ba-col"><div class="ba-label" id="tryonAfterLabel">Sau khi thử</div><img id="tryonAfter" class="ba-img" src="" alt="Sau"></div>
+              <div class="ba-col"><div data-i18n="phongthuy.anh-goc" class="ba-label">Ảnh gốc</div><img data-i18n-attr="alt:phongthuy.truoc" id="tryonBefore" class="ba-img" src="" alt="Trước"></div>
+              <div class="ba-col"><div data-i18n="kieut.sau-khi-thu" class="ba-label" id="tryonAfterLabel">Sau khi thử</div><img id="tryonAfter" class="ba-img" src="" alt="Sau"></div>
             </div>
             <div style="display:flex;gap:8px">
-              <button onclick="downloadTryonResult()" style="flex:1;padding:10px;background:var(--green);color:#fff;border:none;border-radius:8px;font-size:12px;font-weight:700;cursor:pointer;font-family:inherit"><span class="ic" data-icon="chevron-down"></span> Tải Ảnh</button>
-              <button onclick="resetTryon()" class="btn-cancel" style="flex:1"><span class="ic" data-icon="rotate-cw"></span> Thử Lại</button>
+              <button data-i18n="banlamviec.tai-anh" onclick="downloadTryonResult()" style="flex:1;padding:10px;background:var(--green);color:#fff;border:none;border-radius:8px;font-size:12px;font-weight:700;cursor:pointer;font-family:inherit"><span class="ic" data-icon="chevron-down"></span> Tải Ảnh</button>
+              <button data-i18n="pcol.thu-lai" onclick="resetTryon()" class="btn-cancel" style="flex:1"><span class="ic" data-icon="rotate-cw"></span> Thử Lại</button>
             </div>
           </div>
 
@@ -276,7 +276,7 @@ body.chat-first-live .pt-row{grid-template-columns:1fr}
         </div>
 
         <div style="text-align:center;padding:14px 0 6px">
-          <button onclick="resetAll()" class="btn-cancel">← Xem Lại</button>
+          <button data-i18n="mshm.xem-lai" onclick="resetAll()" class="btn-cancel">← Xem Lại</button>
         </div>
       </div>
     </div>
@@ -317,6 +317,47 @@ var COLOR_HEX={
   'Nâu ấm':'#8B6914','Cam đất':'#CC7722','Vàng nhạt':'#F5DEB3','Nâu vàng':'#DAA520',
   'Kem đậm':'#FAEBD7','Xám kim loại':'#A8A9AD','Tím':'#800080','Xanh tím':'#6A0DAD',
 };
+// Tên màu HIỂN THỊ — COLOR_HEX/PRIMARY_BY_HANH tra theo tên Việt (cũng là tên server trả) nên GIỮ nguyên, chỉ chữ hiện ra qua map này.
+var COLOR_NAME_SHOWN={
+  'Trắng':_tvmbT('js.mshm.mau-trang','Trắng'),
+  'Bạc':_tvmbT('js.mshm.mau-bac','Bạc'),
+  'Xám nhạt':_tvmbT('js.mshm.mau-xam-nhat','Xám nhạt'),
+  'Vàng kim':_tvmbT('js.mshm.mau-vang-kim','Vàng kim'),
+  'Vàng đất':_tvmbT('js.mshm.mau-vang-dat','Vàng đất'),
+  'Be':_tvmbT('js.mshm.mau-be','Be'),
+  'Kem':_tvmbT('js.mshm.mau-kem','Kem'),
+  'Be đậm':_tvmbT('js.mshm.mau-be-dam','Be đậm'),
+  'Xanh lá':_tvmbT('js.mshm.mau-xanh-la','Xanh lá'),
+  'Xanh ngọc':_tvmbT('js.mshm.mau-xanh-ngoc','Xanh ngọc'),
+  'Xanh lam nhạt':_tvmbT('js.mshm.mau-xanh-lam-nhat','Xanh lam nhạt'),
+  'Nâu gỗ':_tvmbT('js.mshm.mau-nau-go','Nâu gỗ'),
+  'Xanh mint':_tvmbT('js.mshm.mau-xanh-mint','Xanh mint'),
+  'Xanh rêu':_tvmbT('js.mshm.mau-xanh-reu','Xanh rêu'),
+  'Xanh olive':_tvmbT('js.mshm.mau-xanh-olive','Xanh olive'),
+  'Đen':_tvmbT('js.mshm.mau-den','Đen'),
+  'Navy':_tvmbT('js.mshm.mau-navy','Navy'),
+  'Xanh dương đậm':_tvmbT('js.mshm.mau-xanh-duong-dam','Xanh dương đậm'),
+  'Xanh biển':_tvmbT('js.mshm.mau-xanh-bien','Xanh biển'),
+  'Xám đậm':_tvmbT('js.mshm.mau-xam-dam','Xám đậm'),
+  'Tím than':_tvmbT('js.mshm.mau-tim-than','Tím than'),
+  'Xanh rêu đậm':_tvmbT('js.mshm.mau-xanh-reu-dam','Xanh rêu đậm'),
+  'Đỏ':_tvmbT('js.mshm.mau-do','Đỏ'),
+  'Cam':_tvmbT('js.mshm.mau-cam','Cam'),
+  'Hồng tươi':_tvmbT('js.mshm.mau-hong-tuoi','Hồng tươi'),
+  'Tím đỏ':_tvmbT('js.mshm.mau-tim-do','Tím đỏ'),
+  'Vàng tươi':_tvmbT('js.mshm.mau-vang-tuoi','Vàng tươi'),
+  'Hồng phấn':_tvmbT('js.mshm.mau-hong-phan','Hồng phấn'),
+  'Nâu đỏ':_tvmbT('js.mshm.mau-nau-do','Nâu đỏ'),
+  'Nâu ấm':_tvmbT('js.mshm.mau-nau-am','Nâu ấm'),
+  'Cam đất':_tvmbT('js.mshm.mau-cam-dat','Cam đất'),
+  'Vàng nhạt':_tvmbT('js.mshm.mau-vang-nhat','Vàng nhạt'),
+  'Nâu vàng':_tvmbT('js.mshm.mau-nau-vang','Nâu vàng'),
+  'Kem đậm':_tvmbT('js.mshm.mau-kem-dam','Kem đậm'),
+  'Xám kim loại':_tvmbT('js.mshm.mau-xam-kim-loai','Xám kim loại'),
+  'Tím':_tvmbT('js.mshm.mau-tim','Tím'),
+  'Xanh tím':_tvmbT('js.mshm.mau-xanh-tim','Xanh tím'),
+};
+function _msColor(n){return COLOR_NAME_SHOWN[n]||n;}
 var NH_BG={Kim:'linear-gradient(135deg,#C0C0C0,#D4AF37)',Mộc:'linear-gradient(135deg,#2E8B57,#40E0D0)',Thủy:'linear-gradient(135deg,#000080,#1E90FF)',Hỏa:'linear-gradient(135deg,#CC0000,#FF6600)',Thổ:'linear-gradient(135deg,#C8973A,#8B6914)'};
 var NH_ICON={Kim:'settings',Mộc:'leaf',Thủy:'droplet',Hỏa:'flame',Thổ:'globe'};
 
@@ -340,12 +381,12 @@ function wsStepsSet(n){
 }
 var _gua=null;
 var ANALYSIS_STEPS=[
-  {label:'Tính quái số & nạp âm bản mệnh',ms:900},
-  {label:'Tư vấn màu sắc & phối đồ',ms:0},
+  {label:_tvmbT('js.mshm.step-tinh-quai','Tính quái số & nạp âm bản mệnh'),ms:900},
+  {label:_tvmbT('js.mshm.step-tu-van','Tư vấn màu sắc & phối đồ'),ms:0},
 ];
 var TRYON_STEPS=[
-  {label:'Chuẩn bị trang phục theo mệnh',ms:1200},
-  {label:'Đang tạo ảnh trang phục',ms:0},
+  {label:_tvmbT('js.mshm.step-chuan-bi','Chuẩn bị trang phục theo mệnh'),ms:1200},
+  {label:_tvmbT('js.mshm.step-tao-anh','Đang tạo ảnh trang phục'),ms:0},
 ];
 var _analysisLoadingCtl=null;
 var _tryonLoadingCtl=null;
@@ -364,14 +405,14 @@ var PRIMARY_BY_HANH={
 function mountHook(na){
   const host=document.getElementById('hookHost');
   if(!host||!window.HookLayer)return;
-  const mau=(PRIMARY_BY_HANH[na]||[]).slice(0,3).join(', ');
+  const mau=(PRIMARY_BY_HANH[na]||[]).slice(0,3).map(_msColor).join(_tvmbT('js.mshm.dau-phay',', '));
   window.HookLayer.mount(host,{
     tool:'mau-sac-hop-menh',
     charts:[],
     facts:[{
       tone:'good',
-      title:'Mệnh '+na+' — màu chính nên mặc: '+mau,
-      body:'Bảng đủ (màu phụ, màu nên tránh) và hướng dẫn phối đồ theo dịp/vai trò nằm trong bản phân tích chuyên sâu.',
+      title:_tvmbT('js.mshm.menh-mau-chinh','Mệnh {h} — màu chính nên mặc: {m}',{h:_tvmbG('hanh',na),m:mau}),
+      body:_tvmbT('js.mshm.bang-du','Bảng đủ (màu phụ, màu nên tránh) và hướng dẫn phối đồ theo dịp/vai trò nằm trong bản phân tích chuyên sâu.'),
       source:'engine · NH_COLORS['+na+']',
     }],
   });
@@ -385,8 +426,8 @@ function onYearChange(){
   const d=GUA_DATA[_gua];const na=NAP_AM_MAP[y]||'Hỏa';
   if(!d)return;
   document.getElementById('guaIcon').textContent=d.icon;
-  document.getElementById('guaLine').textContent=`Quái ${_gua} — ${d.name} (${d.elem})`;
-  document.getElementById('napAmLine').textContent=`Nạp Âm: ${na} · Màu chủ đạo theo hành ${na}`;
+  document.getElementById('guaLine').textContent=_tvmbT('js.mshm.quai-line','Quái {n} — {name} ({elem})',{n:_gua,name:_tvmbG('quai',d.name),elem:_tvmbG('hanh',d.elem)});
+  document.getElementById('napAmLine').textContent=_tvmbT('js.mshm.nap-am-line','Nạp Âm: {h} · Màu chủ đạo theo hành {h}',{h:_tvmbG('hanh',na)});
   document.getElementById('guaRow').classList.add('show');
   mountHook(na);
 }
@@ -397,7 +438,7 @@ async function doAnalyze(){
   document.getElementById('errorBox').classList.remove('show');
   const y=parseInt(document.getElementById('namSinh').value);
   const g=document.getElementById('gioiTinh').value;
-  if(!y||y<1900||y>2025){showErr('Vui lòng nhập năm sinh hợp lệ (1900–2025)');return;}
+  if(!y||y<1900||y>2025){showErr(_tvmbT('js.mshm.nam-sinh-khong-hop-le','Vui lòng nhập năm sinh hợp lệ (1900–2025)'));return;}
   if(!window.Auth?.isLoggedIn()){window.Auth?.require?.(()=>doAnalyze());return;}
   _gua=calcGua(y,g);
   const token=window.Auth.getSession()?.access_token;
@@ -421,7 +462,7 @@ async function doAnalyze(){
             body:JSON.stringify({namSinh:y,gioiTinh:g,guaNumber:_gua}),
           });
           const data=await res.json();
-          if(!data.success)throw new Error(data.error||'Phân tích thất bại');
+          if(!data.success)throw new Error(data.error||_tvmbT('js.mshm.phan-tich-that-bai','Phân tích thất bại'));
           window.refreshNavCredits&&window.refreshNavCredits();
           _analysisLoadingCtl&&_analysisLoadingCtl.finish();
           renderResults(data);
@@ -429,7 +470,7 @@ async function doAnalyze(){
         }catch(e){reject(e);}
       });
     });
-  }catch(e){_analysisLoadingCtl&&_analysisLoadingCtl.stop();showErr('Lỗi: '+e.message);}
+  }catch(e){_analysisLoadingCtl&&_analysisLoadingCtl.stop();showErr(_tvmbT('js.mshm.loi-e','Lỗi: {e}',{e:e.message}));}
   finally{document.getElementById('loadingOverlay').classList.remove('show');document.getElementById('btnAnalyze').disabled=false;}
 }
 
@@ -439,14 +480,14 @@ function colorChip(name,avoid=false){
   const hex=COLOR_HEX[name]||'#888888';
   return `<div class="color-chip${avoid?' avoid-chip':''}">
     <div class="color-swatch" style="background:${hex};"></div>
-    <div class="color-name">${name}</div>
+    <div class="color-name">${_msColor(name)}</div>
   </div>`;
 }
 
 function clothingTag(color){
   const hex=COLOR_HEX[color]||'#888';
   const isDark=['#000080','#111111','#00008B','#4B0082','#8B2500','#355E3B'].includes(hex);
-  return `<span class="clothing-color-tag" style="background:${hex};color:${isDark?'#fff':'#1a1a1a'};border-color:${hex};">${color}</span>`;
+  return `<span class="clothing-color-tag" style="background:${hex};color:${isDark?'#fff':'#1a1a1a'};border-color:${hex};">${_msColor(color)}</span>`;
 }
 
 function renderResults(data){
@@ -457,8 +498,8 @@ function renderResults(data){
   const banner=document.getElementById('menhBanner');
   banner.style.background=bg;banner.style.color='#fff';
   document.getElementById('menhIcon').innerHTML=window.iconHtml?window.iconHtml(NH_ICON[napAmHanh]||'star'):'';
-  document.getElementById('menhTitle').textContent=`Mệnh ${napAmHanh} · Quái ${s.guaNum} ${s.guaName}`;
-  document.getElementById('menhSub').textContent=`Màu chủ: ${(colorData.primary||[]).slice(0,3).join(', ')}`;
+  document.getElementById('menhTitle').textContent=_tvmbT('js.mshm.menh-quai','Mệnh {h} · Quái {n} {g}',{h:_tvmbG('hanh',napAmHanh),n:s.guaNum,g:_tvmbG('quai',(GUA_DATA[s.guaNum]&&GUA_DATA[s.guaNum].name)||s.guaName)});
+  document.getElementById('menhSub').textContent=_tvmbT('js.mshm.mau-chu','Màu chủ: {m}',{m:(colorData.primary||[]).slice(0,3).map(_msColor).join(_tvmbT('js.mshm.dau-phay',', '))});
   document.getElementById('menhSummary').textContent=s.summary||'';
 
   const pp=document.getElementById('primaryPalette');
@@ -468,12 +509,12 @@ function renderResults(data){
 
   const cl=s.clothing||{};
   const cats=[
-    {id:'topColors',icon:'shirt',name:'Áo / Áo Khoác'},
-    {id:'bottomColors',icon:'shirt',name:'Quần / Chân Váy'},
-    {id:'outerColors',icon:'shirt',name:'Áo Khoác Ngoài'},
-    {id:'shoeColors',icon:'package',name:'Giày / Dép'},
-    {id:'bagColors',icon:'wallet',name:'Túi / Ba Lô'},
-    {id:'accessoryColors',icon:'gem',name:'Phụ Kiện'},
+    {id:'topColors',icon:'shirt',name:_tvmbT('js.mshm.cat-ao','Áo / Áo Khoác')},
+    {id:'bottomColors',icon:'shirt',name:_tvmbT('js.mshm.cat-quan','Quần / Chân Váy')},
+    {id:'outerColors',icon:'shirt',name:_tvmbT('js.mshm.cat-ao-khoac','Áo Khoác Ngoài')},
+    {id:'shoeColors',icon:'package',name:_tvmbT('js.mshm.cat-giay','Giày / Dép')},
+    {id:'bagColors',icon:'wallet',name:_tvmbT('js.mshm.cat-tui','Túi / Ba Lô')},
+    {id:'accessoryColors',icon:'gem',name:_tvmbT('js.mshm.cat-phu-kien','Phụ Kiện')},
   ];
   const cg=document.getElementById('clothingGrid');cg.innerHTML='';
   cats.forEach(cat=>{
@@ -482,12 +523,12 @@ function renderResults(data){
     cg.innerHTML+=`<div class="clothing-item">
       <div class="clothing-header"><span class="clothing-icon ic" data-icon="${cat.icon}"></span><span class="clothing-cat">${cat.name}</span></div>
       <div class="clothing-colors">${colors.map(c=>clothingTag(c)).join('')}</div>
-      ${(cl.avoidColors||[]).length?`<div class="clothing-avoid">✗ Tránh: ${(cl.avoidColors||[]).slice(0,3).join(', ')}</div>`:''}
+      ${(cl.avoidColors||[]).length?`<div class="clothing-avoid">✗ ${_tvmbT('js.mshm.tranh','Tránh:')} ${(cl.avoidColors||[]).slice(0,3).map(_msColor).join(_tvmbT('js.mshm.dau-phay',', '))}</div>`:''}
     </div>`;
   });
   window.mountIcons && window.mountIcons(cg);
 
-  const occs={interview:{icon:'briefcase',name:'Phỏng Vấn'},date:{icon:'heart',name:'Hẹn Hò'},business:{icon:'handshake',name:'Gặp Đối Tác'},daily:{icon:'sun',name:'Hàng Ngày'}};
+  const occs={interview:{icon:'briefcase',name:_tvmbT('js.mshm.occ-phong-van','Phỏng Vấn')},date:{icon:'heart',name:_tvmbT('js.mshm.occ-hen-ho','Hẹn Hò')},business:{icon:'handshake',name:_tvmbT('js.mshm.occ-doi-tac','Gặp Đối Tác')},daily:{icon:'sun',name:_tvmbT('js.mshm.occ-hang-ngay','Hàng Ngày')}};
   const og=document.getElementById('occasionGrid');og.innerHTML='';
   Object.entries(s.occasions||{}).forEach(([k,v])=>{
     const oc=occs[k]||{icon:'calendar',name:k};
@@ -498,7 +539,7 @@ function renderResults(data){
     </div>`;
   });
   window.mountIcons && window.mountIcons(og);
-  if(!Object.keys(s.occasions||{}).length)og.innerHTML='<p style="color:var(--text-lt);font-size:12px;">Xem màu chính bên trên để áp dụng.</p>';
+  if(!Object.keys(s.occasions||{}).length)og.innerHTML='<p style="color:var(--text-lt);font-size:12px;">'+_tvmbT('js.mshm.xem-mau-chinh','Xem màu chính bên trên để áp dụng.')+'</p>';
 
   const cl2=document.getElementById('comboList');cl2.innerHTML='';
   (s.colorCombos||[]).forEach(combo=>{
@@ -507,14 +548,14 @@ function renderResults(data){
     cl2.innerHTML+=`<div class="combo-item">
       <div class="combo-score-circle" style="background:${bg2};">${sc}</div>
       <div class="combo-body">
-        <div class="combo-name">${combo.name||'Combo '+sc}</div>
+        <div class="combo-name">${combo.name||_tvmbT('js.mshm.combo-n','Combo {n}',{n:sc})}</div>
         <div class="combo-items"><span class="ic" data-icon="shirt"></span> ${(combo.items||[]).join(' · ')}</div>
         <div class="combo-vibe">${combo.vibe||''}</div>
       </div>
     </div>`;
   });
   window.mountIcons && window.mountIcons(cl2);
-  if(!(s.colorCombos||[]).length)cl2.innerHTML='<p style="color:var(--text-lt);font-size:12px;">Phối màu dựa trên bảng màu phù hợp bên trên.</p>';
+  if(!(s.colorCombos||[]).length)cl2.innerHTML='<p style="color:var(--text-lt);font-size:12px;">'+_tvmbT('js.mshm.phoi-mau-dua-tren','Phối màu dựa trên bảng màu phù hợp bên trên.')+'</p>';
 
   document.getElementById('avoidExplain').textContent=s.avoidExplanation||'';
   if(s.bonusTip){document.getElementById('bonusCard').style.display='block';document.getElementById('bonusTip').textContent=s.bonusTip;}
@@ -528,13 +569,13 @@ function renderResults(data){
 
   if(window.SHELL_INTRO)Shell.dismissIntro(window.SHELL_INTRO.key);
   Shell.setContext({
-    label:'Màu Sắc Hợp Mệnh — Mệnh '+napAmHanh,
-    greeting:'Bạn thuộc **mệnh '+napAmHanh+'**. Màu chủ đạo: '+(colorData.primary||[]).slice(0,3).join(', ')+'. Bạn muốn hỏi thêm về màu sắc hay phối đồ?',
-    chips:['Vì sao mệnh tôi hợp màu này?','Màu nào nên tránh khi phỏng vấn?','Cách phối đồ theo màu mệnh?']
+    label:_tvmbT('js.mshm.label','Màu Sắc Hợp Mệnh — Mệnh {h}',{h:_tvmbG('hanh',napAmHanh)}),
+    greeting:_tvmbT('js.mshm.greeting','Bạn thuộc **mệnh {h}**. Màu chủ đạo: {m}. Bạn muốn hỏi thêm về màu sắc hay phối đồ?',{h:_tvmbG('hanh',napAmHanh),m:(colorData.primary||[]).slice(0,3).map(_msColor).join(_tvmbT('js.mshm.dau-phay',', '))}),
+    chips:[_tvmbT('js.mshm.chip-vi-sao','Vì sao mệnh tôi hợp màu này?'),_tvmbT('js.mshm.chip-phong-van','Màu nào nên tránh khi phỏng vấn?'),_tvmbT('js.mshm.chip-phoi-do','Cách phối đồ theo màu mệnh?')]
   });
   Shell.setShareable({
-    kind:'text', toolId:'mau-sac-hop-menh', title:'Màu sắc hợp mệnh của tôi',
-    text:'Mệnh '+napAmHanh+' · Màu chủ: '+(colorData.primary||[]).slice(0,3).join(', ')+(s.summary?'\n\n'+s.summary:'')
+    kind:'text', toolId:'mau-sac-hop-menh', title:_tvmbT('js.mshm.share-title','Màu sắc hợp mệnh của tôi'),
+    text:_tvmbT('js.mshm.share-text','Mệnh {h} · Màu chủ: {m}',{h:_tvmbG('hanh',napAmHanh),m:(colorData.primary||[]).slice(0,3).map(_msColor).join(_tvmbT('js.mshm.dau-phay',', '))})+(s.summary?'\n\n'+s.summary:'')
   });
 }
 
@@ -551,7 +592,7 @@ function handleTryonDrop(e) { const f = e.dataTransfer.files[0]; if (f) loadTryo
 
 function loadTryonFile(file) {
   if (!file.type.startsWith('image/')) return;
-  if (file.size > 5 * 1024 * 1024) { showTryonErr('Ảnh quá lớn (tối đa 5MB)'); return; }
+  if (file.size > 5 * 1024 * 1024) { showTryonErr(_tvmbT('js.mshm.anh-qua-lon','Ảnh quá lớn (tối đa 5MB)')); return; }
   const reader = new FileReader();
   reader.onload = e => {
     _tryonMediaType = file.type || 'image/jpeg';
@@ -597,8 +638,8 @@ function resetTryon() {
 }
 
 async function doTryon() {
-  if (!_tryonImageData) { showTryonErr('Vui lòng tải ảnh lên trước.'); return; }
-  if (!_napAmHanh) { showTryonErr('Vui lòng phân tích màu sắc trước.'); return; }
+  if (!_tryonImageData) { showTryonErr(_tvmbT('js.mshm.tai-anh-truoc','Vui lòng tải ảnh lên trước.')); return; }
+  if (!_napAmHanh) { showTryonErr(_tvmbT('js.mshm.phan-tich-truoc','Vui lòng phân tích màu sắc trước.')); return; }
 
   TuviPaywall.init({ product: 'trang-phuc-tryon', slug: () => _tryonCurrentSlug, onUnlock: () => {} });
   _tryonCurrentSlug = TuviPaywall.generateToolSlug('trang-phuc-tryon');
@@ -618,7 +659,7 @@ async function _doTryonCall() {
   _tryonLoadingCtl.start();
 
   const token = window.Auth?.getSession()?.access_token;
-  const styleLabels = { 'cong-so':'Công Sở', 'casual':'Casual', 'sang-trong':'Sang Trọng', 'dao-pho':'Dạo Phố' };
+  const styleLabels = { 'cong-so':_tvmbT('js.mshm.style-cong-so','Công Sở'), 'casual':'Casual', 'sang-trong':_tvmbT('js.mshm.style-sang-trong','Sang Trọng'), 'dao-pho':_tvmbT('js.mshm.style-dao-pho','Dạo Phố') };
 
   try {
     const res = await fetch('/api/phong-thuy?action=trang-phuc-tryon', {
@@ -633,25 +674,25 @@ async function _doTryonCall() {
       }),
     });
     const data = await res.json();
-    if (!data.imageUrl) throw new Error(data.error || 'Không nhận được ảnh kết quả.');
+    if (!data.imageUrl) throw new Error(data.error || _tvmbT('js.mshm.khong-nhan-duoc-anh','Không nhận được ảnh kết quả.'));
 
     _tryonResultUrl = data.imageUrl;
     document.getElementById('tryonBefore').src = 'data:' + _tryonMediaType + ';base64,' + _tryonImageData;
     document.getElementById('tryonAfter').src = data.imageUrl;
-    document.getElementById('tryonAfterLabel').textContent = (styleLabels[_tryonStyle] || _tryonStyle) + ' · Mệnh ' + _napAmHanh;
+    document.getElementById('tryonAfterLabel').textContent = _tvmbT('js.mshm.tryon-label','{s} · Mệnh {h}',{ s: styleLabels[_tryonStyle] || _tryonStyle, h: _tvmbG('hanh', _napAmHanh) });
     _tryonLoadingCtl && _tryonLoadingCtl.finish();
     document.getElementById('tryonLoading').style.display = 'none';
     document.getElementById('tryonResult').style.display = 'block';
     document.getElementById('tryonStep2').style.display = 'block';
     Shell.setShareable({
-      kind:'image', title:'Trang phục hợp mệnh của tôi (thử ảo)',
-      imageUrl:data.imageUrl, text:(styleLabels[_tryonStyle]||_tryonStyle)+' · Mệnh '+_napAmHanh
+      kind:'image', title:_tvmbT('js.mshm.share-tryon-title','Trang phục hợp mệnh của tôi (thử ảo)'),
+      imageUrl:data.imageUrl, text:_tvmbT('js.mshm.tryon-label','{s} · Mệnh {h}',{ s: styleLabels[_tryonStyle]||_tryonStyle, h: _tvmbG('hanh', _napAmHanh) })
     });
   } catch(e) {
     _tryonLoadingCtl && _tryonLoadingCtl.stop();
     document.getElementById('tryonLoading').style.display = 'none';
     document.getElementById('tryonStep2').style.display = 'block';
-    showTryonErr('Lỗi: ' + (e.message || 'Vui lòng thử lại.'));
+    showTryonErr(_tvmbT('js.mshm.loi-e','Lỗi: {e}',{ e: e.message || _tvmbT('js.mshm.vui-long-thu-lai','Vui lòng thử lại.') }));
   } finally {
     document.getElementById('btnTryon').disabled = false;
   }

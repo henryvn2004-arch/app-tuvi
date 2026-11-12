@@ -4063,6 +4063,334 @@
   "t": "）、すなわち **",
   "h": "52e6128d"
  },
+ "js.mshm.anh-qua-lon": {
+  "t": "画像が大きすぎます（最大5MB）",
+  "h": "5113c5f3"
+ },
+ "js.mshm.bang-du": {
+  "t": "完全な一覧（サブカラー、避けたい色）と、シーン・役割別のコーディネートの案内は、詳細分析に含まれています。",
+  "h": "06901dd7"
+ },
+ "js.mshm.cat-ao": {
+  "t": "トップス / ジャケット",
+  "h": "84c67299"
+ },
+ "js.mshm.cat-ao-khoac": {
+  "t": "アウター",
+  "h": "7878fdb1"
+ },
+ "js.mshm.cat-giay": {
+  "t": "靴 / サンダル",
+  "h": "d1f9572f"
+ },
+ "js.mshm.cat-phu-kien": {
+  "t": "アクセサリー",
+  "h": "f1f0fba9"
+ },
+ "js.mshm.cat-quan": {
+  "t": "パンツ / スカート",
+  "h": "84562745"
+ },
+ "js.mshm.cat-tui": {
+  "t": "バッグ / リュック",
+  "h": "1979c758"
+ },
+ "js.mshm.chip-phoi-do": {
+  "t": "本命の色に合わせた服の合わせ方は？",
+  "h": "3d2ef763"
+ },
+ "js.mshm.chip-phong-van": {
+  "t": "面接で避けるべき色は？",
+  "h": "61460b1c"
+ },
+ "js.mshm.chip-vi-sao": {
+  "t": "なぜ私の本命はこの色に合うのですか？",
+  "h": "7ef6e8bc"
+ },
+ "js.mshm.combo-n": {
+  "t": "コーデ {n}",
+  "h": "9769d38a"
+ },
+ "js.mshm.dau-phay": {
+  "t": "、",
+  "h": "d3bc9a37"
+ },
+ "js.mshm.greeting": {
+  "t": "あなたの本命は **{h}** です。メインカラー: {m}。色やコーディネートについて、さらに質問はありますか？",
+  "h": "e8cef7c1"
+ },
+ "js.mshm.khong-nhan-duoc-anh": {
+  "t": "結果の画像を受け取れませんでした。",
+  "h": "a16f02df"
+ },
+ "js.mshm.label": {
+  "t": "本命に合う色 — 本命 {h}",
+  "h": "71fc87a5"
+ },
+ "js.mshm.loi-e": {
+  "t": "エラー: {e}",
+  "h": "a7267203"
+ },
+ "js.mshm.mau-bac": {
+  "t": "銀",
+  "h": "7386c9c6"
+ },
+ "js.mshm.mau-be": {
+  "t": "ベージュ",
+  "h": "11d1bf27"
+ },
+ "js.mshm.mau-be-dam": {
+  "t": "濃いベージュ",
+  "h": "c660f0a6"
+ },
+ "js.mshm.mau-cam": {
+  "t": "オレンジ",
+  "h": "5e09769d"
+ },
+ "js.mshm.mau-cam-dat": {
+  "t": "テラコッタ",
+  "h": "aaa37477"
+ },
+ "js.mshm.mau-chu": {
+  "t": "メインカラー: {m}",
+  "h": "7813be48"
+ },
+ "js.mshm.mau-den": {
+  "t": "黒",
+  "h": "4d0c0faf"
+ },
+ "js.mshm.mau-do": {
+  "t": "赤",
+  "h": "2eb7503e"
+ },
+ "js.mshm.mau-hong-phan": {
+  "t": "淡いピンク",
+  "h": "0ec650f1"
+ },
+ "js.mshm.mau-hong-tuoi": {
+  "t": "ビビッドピンク",
+  "h": "74592632"
+ },
+ "js.mshm.mau-kem": {
+  "t": "クリーム",
+  "h": "e52e6c26"
+ },
+ "js.mshm.mau-kem-dam": {
+  "t": "濃いクリーム",
+  "h": "e42e248c"
+ },
+ "js.mshm.mau-nau-am": {
+  "t": "暖かい茶色",
+  "h": "e0f4fd1e"
+ },
+ "js.mshm.mau-nau-do": {
+  "t": "赤茶",
+  "h": "9222313d"
+ },
+ "js.mshm.mau-nau-go": {
+  "t": "ウッドブラウン",
+  "h": "24e064f8"
+ },
+ "js.mshm.mau-nau-vang": {
+  "t": "ゴールデンブラウン",
+  "h": "48377d46"
+ },
+ "js.mshm.mau-navy": {
+  "t": "ネイビー",
+  "h": "0229e960"
+ },
+ "js.mshm.mau-tim": {
+  "t": "紫",
+  "h": "684e5966"
+ },
+ "js.mshm.mau-tim-do": {
+  "t": "赤紫",
+  "h": "0b78db8f"
+ },
+ "js.mshm.mau-tim-than": {
+  "t": "インディゴ",
+  "h": "7ca4120f"
+ },
+ "js.mshm.mau-trang": {
+  "t": "白",
+  "h": "9cf5e0eb"
+ },
+ "js.mshm.mau-vang-dat": {
+  "t": "黄土色",
+  "h": "1552080b"
+ },
+ "js.mshm.mau-vang-kim": {
+  "t": "金色",
+  "h": "b441fe1f"
+ },
+ "js.mshm.mau-vang-nhat": {
+  "t": "淡い黄色",
+  "h": "14fd960f"
+ },
+ "js.mshm.mau-vang-tuoi": {
+  "t": "鮮やかな黄色",
+  "h": "f58c4a57"
+ },
+ "js.mshm.mau-xam-dam": {
+  "t": "濃いグレー",
+  "h": "01959534"
+ },
+ "js.mshm.mau-xam-kim-loai": {
+  "t": "メタリックグレー",
+  "h": "6e7d3e23"
+ },
+ "js.mshm.mau-xam-nhat": {
+  "t": "薄いグレー",
+  "h": "d8017939"
+ },
+ "js.mshm.mau-xanh-bien": {
+  "t": "オーシャンブルー",
+  "h": "9a3a3414"
+ },
+ "js.mshm.mau-xanh-duong-dam": {
+  "t": "濃い青",
+  "h": "8d89093c"
+ },
+ "js.mshm.mau-xanh-la": {
+  "t": "緑",
+  "h": "d0e8c4b1"
+ },
+ "js.mshm.mau-xanh-lam-nhat": {
+  "t": "水色",
+  "h": "a72ef9cf"
+ },
+ "js.mshm.mau-xanh-mint": {
+  "t": "ミントグリーン",
+  "h": "3607442e"
+ },
+ "js.mshm.mau-xanh-ngoc": {
+  "t": "ターコイズ",
+  "h": "b8cbaa2e"
+ },
+ "js.mshm.mau-xanh-olive": {
+  "t": "オリーブ",
+  "h": "2dd139ab"
+ },
+ "js.mshm.mau-xanh-reu": {
+  "t": "モスグリーン",
+  "h": "836bccc5"
+ },
+ "js.mshm.mau-xanh-reu-dam": {
+  "t": "濃いモスグリーン",
+  "h": "b49975fe"
+ },
+ "js.mshm.mau-xanh-tim": {
+  "t": "青紫",
+  "h": "08e76f57"
+ },
+ "js.mshm.menh-mau-chinh": {
+  "t": "本命 {h} — 着るべきメインカラー: {m}",
+  "h": "9a1a497e"
+ },
+ "js.mshm.menh-quai": {
+  "t": "本命 {h} · 卦 {n} {g}",
+  "h": "da1abf25"
+ },
+ "js.mshm.nam-sinh-khong-hop-le": {
+  "t": "有効な生まれ年（1900〜2025）を入力してください",
+  "h": "c628d3be"
+ },
+ "js.mshm.nap-am-line": {
+  "t": "納音: {h} · {h}の行に合わせたメインカラー",
+  "h": "6e1df23d"
+ },
+ "js.mshm.occ-doi-tac": {
+  "t": "取引先との面会",
+  "h": "241559f4"
+ },
+ "js.mshm.occ-hang-ngay": {
+  "t": "日常",
+  "h": "c19adb2a"
+ },
+ "js.mshm.occ-hen-ho": {
+  "t": "デート",
+  "h": "c601615d"
+ },
+ "js.mshm.occ-phong-van": {
+  "t": "面接",
+  "h": "0bfbac35"
+ },
+ "js.mshm.phan-tich-that-bai": {
+  "t": "分析に失敗しました",
+  "h": "44b68aa6"
+ },
+ "js.mshm.phan-tich-truoc": {
+  "t": "先に色の分析を行ってください。",
+  "h": "10049eff"
+ },
+ "js.mshm.phoi-mau-dua-tren": {
+  "t": "配色は、上のカラーパレットをもとにします。",
+  "h": "c4d3c4d3"
+ },
+ "js.mshm.quai-line": {
+  "t": "卦 {n} — {name}（{elem}）",
+  "h": "c5a1c901"
+ },
+ "js.mshm.share-text": {
+  "t": "本命 {h} · メインカラー: {m}",
+  "h": "d05a5128"
+ },
+ "js.mshm.share-title": {
+  "t": "私の本命に合う色",
+  "h": "2ba34c9a"
+ },
+ "js.mshm.share-tryon-title": {
+  "t": "私の本命に合う服装（バーチャル試着）",
+  "h": "cd9fdc43"
+ },
+ "js.mshm.step-chuan-bi": {
+  "t": "本命に合う服装を準備",
+  "h": "6ae0380a"
+ },
+ "js.mshm.step-tao-anh": {
+  "t": "服装の画像を生成中",
+  "h": "ba6faaec"
+ },
+ "js.mshm.step-tinh-quai": {
+  "t": "卦数と本命の納音を算出",
+  "h": "39571eee"
+ },
+ "js.mshm.step-tu-van": {
+  "t": "色とコーディネートを提案",
+  "h": "58244246"
+ },
+ "js.mshm.style-cong-so": {
+  "t": "オフィス",
+  "h": "ff273e47"
+ },
+ "js.mshm.style-dao-pho": {
+  "t": "街歩き",
+  "h": "115c50ac"
+ },
+ "js.mshm.style-sang-trong": {
+  "t": "ラグジュアリー",
+  "h": "17db9fb4"
+ },
+ "js.mshm.tai-anh-truoc": {
+  "t": "先に画像をアップロードしてください。",
+  "h": "733c1fec"
+ },
+ "js.mshm.tranh": {
+  "t": "避ける色:",
+  "h": "89f38636"
+ },
+ "js.mshm.tryon-label": {
+  "t": "{s} · 本命 {h}",
+  "h": "e69e839c"
+ },
+ "js.mshm.vui-long-thu-lai": {
+  "t": "もう一度お試しください。",
+  "h": "2f1d18ee"
+ },
+ "js.mshm.xem-mau-chinh": {
+  "t": "上のメインカラーを参考にしてください。",
+  "h": "95e8229c"
+ },
  "js.nav.brand": {
   "t": "明宝紫微斗数",
   "h": "33336b26"
@@ -15618,6 +15946,110 @@
  "menhkho.xem-la-so-luan-giai": {
   "t": "命盤と鑑定を見る →",
   "h": "95889730"
+ },
+ "mshm.anh-chup-thang-nguoi-du-sang": {
+  "t": "全身をまっすぐ撮影、十分な明るさ · JPG/PNG",
+  "h": "fe4086d9"
+ },
+ "mshm.bang-mau-theo-menh": {
+  "t": "<span class=\"ic\" data-icon=\"palette\"></span> 本命別カラーパレット",
+  "h": "75158994"
+ },
+ "mshm.chi-phi-luong": {
+  "t": "<span>料金: <strong><span data-tvp-price=\"mau-sac-hop-menh\">…</span> 両</strong></span>",
+  "h": "72c219ac"
+ },
+ "mshm.chon-phong-cach-trang-phuc": {
+  "t": "服のスタイルを選ぶ:",
+  "h": "b115ee23"
+ },
+ "mshm.dao-pho": {
+  "t": "<span class=\"ic\" data-icon=\"compass\"></span> 街歩き",
+  "h": "5a035e78"
+ },
+ "mshm.goi-y-phoi-do-hoan-chinh": {
+  "t": "<span class=\"ic\" data-icon=\"sparkles\"></span> 完成コーディネートの提案",
+  "h": "233b565f"
+ },
+ "mshm.huong-dan-trang-phuc-chi-tiet": {
+  "t": "<span class=\"ic\" data-icon=\"shirt\"></span> 服装の詳しい案内",
+  "h": "68e382ef"
+ },
+ "mshm.lam-an-e-am-tai-loc": {
+  "t": "商売が振るわず、金運も集まらない — 毎日身につけ、使っている色が本命と相剋していないか、考えたことはありますか。生年を入力すれば、使うべき色と避けるべき色の一覧がすぐに届きます。",
+  "h": "fe0800d1"
+ },
+ "mshm.mau-chinh-tot-nhat": {
+  "t": "✓ メインカラー — 最良",
+  "h": "d169b014"
+ },
+ "mshm.mau-nen-tranh": {
+  "t": "✗ 避けたい色",
+  "h": "adc4005c"
+ },
+ "mshm.mau-phu-chap-nhan-duoc": {
+  "t": "◎ サブカラー — 許容範囲",
+  "h": "5679d14e"
+ },
+ "mshm.mau-sac-hop-menh": {
+  "t": "命に合う色",
+  "h": "64b3b887"
+ },
+ "mshm.mau-sac-hop-menh-tu-van": {
+  "t": "<b>本命に合う色</b><span>五行納音と八宅にもとづく服の色の提案、そのまま画像で試着</span>",
+  "h": "764edb0c"
+ },
+ "mshm.mau-sac-hop-menh-tu-vi": {
+  "t": "本命に合う色 — 明宝紫微斗数",
+  "h": "d1cab1d9"
+ },
+ "mshm.mau-theo-dip": {
+  "t": "<span class=\"ic\" data-icon=\"calendar\"></span> シーン別の色",
+  "h": "193da2e8"
+ },
+ "mshm.meo-dac-biet-theo-ban-menh": {
+  "t": "<span class=\"ic\" data-icon=\"lightbulb\"></span> 本命別のとっておきのコツ",
+  "h": "ec862b7f"
+ },
+ "mshm.ngu-hanh-nap-am-gan-moi": {
+  "t": "納音五行は、六十花甲子のなかで生まれ年ごとに固有の本命を割り当て、八宅は方位と空間の要素を加えて見ます。この二つの体系を組み合わせて、古人はその人の本命と相生または相剋する色や品物を導き出しました。",
+  "h": "245a2b78"
+ },
+ "mshm.nhap-nam-sinh-va-gioi-tinh": {
+  "t": "生まれ年と性別を入力してください。システムが卦数を算出し、五行のカラーパレットと照らし合わせます。本命に合うカラーパレット、シーン別の色、コーディネートの提案が届きます。",
+  "h": "9b015181"
+ },
+ "mshm.sang-trong": {
+  "t": "<span class=\"ic\" data-icon=\"sparkles\"></span> ラグジュアリー",
+  "h": "e0db35aa"
+ },
+ "mshm.tai-anh-cua-ban-len": {
+  "t": "画像をアップロード",
+  "h": "1444e1ba"
+ },
+ "mshm.tai-sao-nen-tranh-nhung-mau": {
+  "t": "⚠ なぜこれらの色を避けるのか？",
+  "h": "d3b71bb0"
+ },
+ "mshm.thong-tin-ban-menh": {
+  "t": "<span class=\"ic\" data-icon=\"sparkles\"></span> 本命の情報",
+  "h": "0a614b1f"
+ },
+ "mshm.thu-trang-phuc-theo-menh-luong": {
+  "t": "<span class=\"ic\" data-icon=\"shirt\"></span> 本命に合う服を試着 <span style=\"font-size:10px;background:var(--gold-lt);color:var(--tx-blue);padding:2px 8px;border-radius:10px;font-weight:600\"><span data-tvp-price=\"trang-phuc-tryon\">…</span> 両/回</span>",
+  "h": "f74ca71d"
+ },
+ "mshm.tu-van-mau-sac-trang-phuc": {
+  "t": "五行納音にもとづき、本命に合う服の色を提案します — トップス、パンツ、靴、バッグ、アクセサリー。シーンごとの完成コーディネートも。",
+  "h": "d55c587d"
+ },
+ "mshm.xem-lai": {
+  "t": "← 見直す",
+  "h": "e2aaadb4"
+ },
+ "mshm.xem-mau-sac-hop-menh-luong": {
+  "t": "<span class=\"ic\" data-icon=\"palette\"></span> 本命に合う色を見る — <span data-tvp-price=\"mau-sac-hop-menh\">…</span> 両",
+  "h": "85a1dcbd"
  },
  "napam.1-nhap-nam-sinh": {
   "t": "<span class=\"wss-n\">1</span><span class=\"wss-l\">生まれ年を入力</span>",

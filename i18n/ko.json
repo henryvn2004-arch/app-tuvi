@@ -4063,6 +4063,334 @@
   "t": "), 곧 **",
   "h": "52e6128d"
  },
+ "js.mshm.anh-qua-lon": {
+  "t": "이미지가 너무 커요(최대 5MB)",
+  "h": "5113c5f3"
+ },
+ "js.mshm.bang-du": {
+  "t": "전체 목록(보조색, 피해야 할 색)과 상황·역할별 코디 안내는 심층 분석에 들어 있어요.",
+  "h": "06901dd7"
+ },
+ "js.mshm.cat-ao": {
+  "t": "상의 / 재킷",
+  "h": "84c67299"
+ },
+ "js.mshm.cat-ao-khoac": {
+  "t": "아우터",
+  "h": "7878fdb1"
+ },
+ "js.mshm.cat-giay": {
+  "t": "신발 / 샌들",
+  "h": "d1f9572f"
+ },
+ "js.mshm.cat-phu-kien": {
+  "t": "액세서리",
+  "h": "f1f0fba9"
+ },
+ "js.mshm.cat-quan": {
+  "t": "바지 / 치마",
+  "h": "84562745"
+ },
+ "js.mshm.cat-tui": {
+  "t": "가방 / 백팩",
+  "h": "1979c758"
+ },
+ "js.mshm.chip-phoi-do": {
+  "t": "본명 색상에 맞춰 코디하는 방법은요?",
+  "h": "3d2ef763"
+ },
+ "js.mshm.chip-phong-van": {
+  "t": "면접 볼 때 피해야 할 색은요?",
+  "h": "61460b1c"
+ },
+ "js.mshm.chip-vi-sao": {
+  "t": "왜 내 본명에 이 색이 어울려요?",
+  "h": "7ef6e8bc"
+ },
+ "js.mshm.combo-n": {
+  "t": "코디 {n}",
+  "h": "9769d38a"
+ },
+ "js.mshm.dau-phay": {
+  "t": ", ",
+  "h": "d3bc9a37"
+ },
+ "js.mshm.greeting": {
+  "t": "당신의 본명은 **{h}**이에요. 메인 컬러: {m}. 색상이나 코디에 대해 더 궁금한 점이 있나요?",
+  "h": "e8cef7c1"
+ },
+ "js.mshm.khong-nhan-duoc-anh": {
+  "t": "결과 이미지를 받지 못했어요.",
+  "h": "a16f02df"
+ },
+ "js.mshm.label": {
+  "t": "본명에 맞는 색상 — 본명 {h}",
+  "h": "71fc87a5"
+ },
+ "js.mshm.loi-e": {
+  "t": "오류: {e}",
+  "h": "a7267203"
+ },
+ "js.mshm.mau-bac": {
+  "t": "은색",
+  "h": "7386c9c6"
+ },
+ "js.mshm.mau-be": {
+  "t": "베이지",
+  "h": "11d1bf27"
+ },
+ "js.mshm.mau-be-dam": {
+  "t": "진한 베이지",
+  "h": "c660f0a6"
+ },
+ "js.mshm.mau-cam": {
+  "t": "주황",
+  "h": "5e09769d"
+ },
+ "js.mshm.mau-cam-dat": {
+  "t": "테라코타",
+  "h": "aaa37477"
+ },
+ "js.mshm.mau-chu": {
+  "t": "메인 컬러: {m}",
+  "h": "7813be48"
+ },
+ "js.mshm.mau-den": {
+  "t": "검정",
+  "h": "4d0c0faf"
+ },
+ "js.mshm.mau-do": {
+  "t": "빨강",
+  "h": "2eb7503e"
+ },
+ "js.mshm.mau-hong-phan": {
+  "t": "연분홍",
+  "h": "0ec650f1"
+ },
+ "js.mshm.mau-hong-tuoi": {
+  "t": "비비드 핑크",
+  "h": "74592632"
+ },
+ "js.mshm.mau-kem": {
+  "t": "크림",
+  "h": "e52e6c26"
+ },
+ "js.mshm.mau-kem-dam": {
+  "t": "진한 크림",
+  "h": "e42e248c"
+ },
+ "js.mshm.mau-nau-am": {
+  "t": "따뜻한 갈색",
+  "h": "e0f4fd1e"
+ },
+ "js.mshm.mau-nau-do": {
+  "t": "적갈색",
+  "h": "9222313d"
+ },
+ "js.mshm.mau-nau-go": {
+  "t": "우드 브라운",
+  "h": "24e064f8"
+ },
+ "js.mshm.mau-nau-vang": {
+  "t": "골든 브라운",
+  "h": "48377d46"
+ },
+ "js.mshm.mau-navy": {
+  "t": "네이비",
+  "h": "0229e960"
+ },
+ "js.mshm.mau-tim": {
+  "t": "보라",
+  "h": "684e5966"
+ },
+ "js.mshm.mau-tim-do": {
+  "t": "자주",
+  "h": "0b78db8f"
+ },
+ "js.mshm.mau-tim-than": {
+  "t": "인디고",
+  "h": "7ca4120f"
+ },
+ "js.mshm.mau-trang": {
+  "t": "흰색",
+  "h": "9cf5e0eb"
+ },
+ "js.mshm.mau-vang-dat": {
+  "t": "황토색",
+  "h": "1552080b"
+ },
+ "js.mshm.mau-vang-kim": {
+  "t": "골드",
+  "h": "b441fe1f"
+ },
+ "js.mshm.mau-vang-nhat": {
+  "t": "연노랑",
+  "h": "14fd960f"
+ },
+ "js.mshm.mau-vang-tuoi": {
+  "t": "선명한 노랑",
+  "h": "f58c4a57"
+ },
+ "js.mshm.mau-xam-dam": {
+  "t": "짙은 회색",
+  "h": "01959534"
+ },
+ "js.mshm.mau-xam-kim-loai": {
+  "t": "메탈릭 그레이",
+  "h": "6e7d3e23"
+ },
+ "js.mshm.mau-xam-nhat": {
+  "t": "연회색",
+  "h": "d8017939"
+ },
+ "js.mshm.mau-xanh-bien": {
+  "t": "오션 블루",
+  "h": "9a3a3414"
+ },
+ "js.mshm.mau-xanh-duong-dam": {
+  "t": "짙은 파랑",
+  "h": "8d89093c"
+ },
+ "js.mshm.mau-xanh-la": {
+  "t": "초록",
+  "h": "d0e8c4b1"
+ },
+ "js.mshm.mau-xanh-lam-nhat": {
+  "t": "하늘색",
+  "h": "a72ef9cf"
+ },
+ "js.mshm.mau-xanh-mint": {
+  "t": "민트",
+  "h": "3607442e"
+ },
+ "js.mshm.mau-xanh-ngoc": {
+  "t": "터콰이즈",
+  "h": "b8cbaa2e"
+ },
+ "js.mshm.mau-xanh-olive": {
+  "t": "올리브",
+  "h": "2dd139ab"
+ },
+ "js.mshm.mau-xanh-reu": {
+  "t": "모스 그린",
+  "h": "836bccc5"
+ },
+ "js.mshm.mau-xanh-reu-dam": {
+  "t": "짙은 모스 그린",
+  "h": "b49975fe"
+ },
+ "js.mshm.mau-xanh-tim": {
+  "t": "청보라",
+  "h": "08e76f57"
+ },
+ "js.mshm.menh-mau-chinh": {
+  "t": "본명 {h} — 입으면 좋은 메인 컬러: {m}",
+  "h": "9a1a497e"
+ },
+ "js.mshm.menh-quai": {
+  "t": "본명 {h} · 괘 {n} {g}",
+  "h": "da1abf25"
+ },
+ "js.mshm.nam-sinh-khong-hop-le": {
+  "t": "올바른 출생 연도(1900~2025)를 입력해 주세요",
+  "h": "c628d3be"
+ },
+ "js.mshm.nap-am-line": {
+  "t": "납음: {h} · {h} 행에 맞춘 메인 컬러",
+  "h": "6e1df23d"
+ },
+ "js.mshm.occ-doi-tac": {
+  "t": "거래처 미팅",
+  "h": "241559f4"
+ },
+ "js.mshm.occ-hang-ngay": {
+  "t": "데일리",
+  "h": "c19adb2a"
+ },
+ "js.mshm.occ-hen-ho": {
+  "t": "데이트",
+  "h": "c601615d"
+ },
+ "js.mshm.occ-phong-van": {
+  "t": "면접",
+  "h": "0bfbac35"
+ },
+ "js.mshm.phan-tich-that-bai": {
+  "t": "분석에 실패했어요",
+  "h": "44b68aa6"
+ },
+ "js.mshm.phan-tich-truoc": {
+  "t": "먼저 색상 분석을 해 주세요.",
+  "h": "10049eff"
+ },
+ "js.mshm.phoi-mau-dua-tren": {
+  "t": "배색은 위의 컬러 팔레트를 바탕으로 해요.",
+  "h": "c4d3c4d3"
+ },
+ "js.mshm.quai-line": {
+  "t": "괘 {n} — {name}({elem})",
+  "h": "c5a1c901"
+ },
+ "js.mshm.share-text": {
+  "t": "본명 {h} · 메인 컬러: {m}",
+  "h": "d05a5128"
+ },
+ "js.mshm.share-title": {
+  "t": "나의 본명에 맞는 색상",
+  "h": "2ba34c9a"
+ },
+ "js.mshm.share-tryon-title": {
+  "t": "나의 본명에 맞는 의상(가상 체험)",
+  "h": "cd9fdc43"
+ },
+ "js.mshm.step-chuan-bi": {
+  "t": "본명에 맞는 의상 준비",
+  "h": "6ae0380a"
+ },
+ "js.mshm.step-tao-anh": {
+  "t": "의상 이미지 생성 중",
+  "h": "ba6faaec"
+ },
+ "js.mshm.step-tinh-quai": {
+  "t": "괘수와 본명 납음 계산",
+  "h": "39571eee"
+ },
+ "js.mshm.step-tu-van": {
+  "t": "색상과 코디 추천",
+  "h": "58244246"
+ },
+ "js.mshm.style-cong-so": {
+  "t": "출근룩",
+  "h": "ff273e47"
+ },
+ "js.mshm.style-dao-pho": {
+  "t": "거리 산책룩",
+  "h": "115c50ac"
+ },
+ "js.mshm.style-sang-trong": {
+  "t": "럭셔리",
+  "h": "17db9fb4"
+ },
+ "js.mshm.tai-anh-truoc": {
+  "t": "먼저 이미지를 올려 주세요.",
+  "h": "733c1fec"
+ },
+ "js.mshm.tranh": {
+  "t": "피할 색:",
+  "h": "89f38636"
+ },
+ "js.mshm.tryon-label": {
+  "t": "{s} · 본명 {h}",
+  "h": "e69e839c"
+ },
+ "js.mshm.vui-long-thu-lai": {
+  "t": "다시 시도해 주세요.",
+  "h": "2f1d18ee"
+ },
+ "js.mshm.xem-mau-chinh": {
+  "t": "위의 메인 컬러를 참고하세요.",
+  "h": "95e8229c"
+ },
  "js.nav.brand": {
   "t": "명보 자미두수",
   "h": "33336b26"
@@ -15618,6 +15946,110 @@
  "menhkho.xem-la-so-luan-giai": {
   "t": "명반 &amp; 풀이 보기 →",
   "h": "95889730"
+ },
+ "mshm.anh-chup-thang-nguoi-du-sang": {
+  "t": "전신을 똑바로, 밝게 촬영 · JPG/PNG",
+  "h": "fe4086d9"
+ },
+ "mshm.bang-mau-theo-menh": {
+  "t": "<span class=\"ic\" data-icon=\"palette\"></span> 본명별 컬러 팔레트",
+  "h": "75158994"
+ },
+ "mshm.chi-phi-luong": {
+  "t": "<span>비용: <strong><span data-tvp-price=\"mau-sac-hop-menh\">…</span> 냥</strong></span>",
+  "h": "72c219ac"
+ },
+ "mshm.chon-phong-cach-trang-phuc": {
+  "t": "의상 스타일 선택:",
+  "h": "b115ee23"
+ },
+ "mshm.dao-pho": {
+  "t": "<span class=\"ic\" data-icon=\"compass\"></span> 거리 산책룩",
+  "h": "5a035e78"
+ },
+ "mshm.goi-y-phoi-do-hoan-chinh": {
+  "t": "<span class=\"ic\" data-icon=\"sparkles\"></span> 완성형 코디 추천",
+  "h": "233b565f"
+ },
+ "mshm.huong-dan-trang-phuc-chi-tiet": {
+  "t": "<span class=\"ic\" data-icon=\"shirt\"></span> 의상 상세 안내",
+  "h": "68e382ef"
+ },
+ "mshm.lam-an-e-am-tai-loc": {
+  "t": "장사가 안 되고 재물이 모이지 않는데, 매일 입고 쓰는 색이 본명과 충돌하는 건 아닌지 생각해 본 적 있나요. 출생 연도를 입력하면 써야 할 색과 피해야 할 색 목록을 바로 받을 수 있어요.",
+  "h": "fe0800d1"
+ },
+ "mshm.mau-chinh-tot-nhat": {
+  "t": "✓ 메인 컬러 — 최상",
+  "h": "d169b014"
+ },
+ "mshm.mau-nen-tranh": {
+  "t": "✗ 피해야 할 색",
+  "h": "adc4005c"
+ },
+ "mshm.mau-phu-chap-nhan-duoc": {
+  "t": "◎ 보조 컬러 — 괜찮은 편",
+  "h": "5679d14e"
+ },
+ "mshm.mau-sac-hop-menh": {
+  "t": "명에 맞는 색상",
+  "h": "64b3b887"
+ },
+ "mshm.mau-sac-hop-menh-tu-van": {
+  "t": "<b>본명에 맞는 색상</b><span>오행 납음과 팔택에 따른 의상 색상 추천, 사진에서 바로 체험</span>",
+  "h": "764edb0c"
+ },
+ "mshm.mau-sac-hop-menh-tu-vi": {
+  "t": "본명에 맞는 색상 — 명보 자미두수",
+  "h": "d1cab1d9"
+ },
+ "mshm.mau-theo-dip": {
+  "t": "<span class=\"ic\" data-icon=\"calendar\"></span> 상황별 색상",
+  "h": "193da2e8"
+ },
+ "mshm.meo-dac-biet-theo-ban-menh": {
+  "t": "<span class=\"ic\" data-icon=\"lightbulb\"></span> 본명별 특별 팁",
+  "h": "ec862b7f"
+ },
+ "mshm.ngu-hanh-nap-am-gan-moi": {
+  "t": "납음오행은 육십갑자 안에서 출생 연도마다 고유한 본명을 정해 주고, 팔택은 방위와 공간 요소를 더해서 봐요. 이 두 체계를 결합해 옛사람들은 그 사람의 본명과 상생하거나 상극하는 색과 물건을 추론했어요.",
+  "h": "245a2b78"
+ },
+ "mshm.nhap-nam-sinh-va-gioi-tinh": {
+  "t": "출생 연도와 성별을 입력해 주세요. 시스템이 괘수를 계산해 오행 컬러 표와 대조해요. 본명에 맞는 컬러 팔레트, 상황별 색상, 코디 추천을 받아 보세요.",
+  "h": "9b015181"
+ },
+ "mshm.sang-trong": {
+  "t": "<span class=\"ic\" data-icon=\"sparkles\"></span> 럭셔리",
+  "h": "e0db35aa"
+ },
+ "mshm.tai-anh-cua-ban-len": {
+  "t": "이미지 올리기",
+  "h": "1444e1ba"
+ },
+ "mshm.tai-sao-nen-tranh-nhung-mau": {
+  "t": "⚠ 왜 이 색들을 피해야 할까요?",
+  "h": "d3b71bb0"
+ },
+ "mshm.thong-tin-ban-menh": {
+  "t": "<span class=\"ic\" data-icon=\"sparkles\"></span> 본명 정보",
+  "h": "0a614b1f"
+ },
+ "mshm.thu-trang-phuc-theo-menh-luong": {
+  "t": "<span class=\"ic\" data-icon=\"shirt\"></span> 본명에 맞는 옷 체험 <span style=\"font-size:10px;background:var(--gold-lt);color:var(--tx-blue);padding:2px 8px;border-radius:10px;font-weight:600\"><span data-tvp-price=\"trang-phuc-tryon\">…</span> 냥/회</span>",
+  "h": "f74ca71d"
+ },
+ "mshm.tu-van-mau-sac-trang-phuc": {
+  "t": "오행 납음에 따라 본명에 맞는 의상 색상을 추천해요 — 상의, 바지, 신발, 가방, 액세서리. 상황별 완성형 코디도 알려 드려요.",
+  "h": "d55c587d"
+ },
+ "mshm.xem-lai": {
+  "t": "← 다시 보기",
+  "h": "e2aaadb4"
+ },
+ "mshm.xem-mau-sac-hop-menh-luong": {
+  "t": "<span class=\"ic\" data-icon=\"palette\"></span> 본명에 맞는 색상 보기 — <span data-tvp-price=\"mau-sac-hop-menh\">…</span> 냥",
+  "h": "85a1dcbd"
  },
  "napam.1-nhap-nam-sinh": {
   "t": "<span class=\"wss-n\">1</span><span class=\"wss-l\">출생 연도 입력</span>",

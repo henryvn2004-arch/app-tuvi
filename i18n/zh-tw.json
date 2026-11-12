@@ -4063,6 +4063,334 @@
   "t": "），即 **",
   "h": "52e6128d"
  },
+ "js.mshm.anh-qua-lon": {
+  "t": "圖片過大（最大 5MB）",
+  "h": "5113c5f3"
+ },
+ "js.mshm.bang-du": {
+  "t": "完整清單（輔助色、建議避開的顏色）與依場合／角色的穿搭指引，收錄於深度分析中。",
+  "h": "06901dd7"
+ },
+ "js.mshm.cat-ao": {
+  "t": "上衣／外套",
+  "h": "84c67299"
+ },
+ "js.mshm.cat-ao-khoac": {
+  "t": "外層外套",
+  "h": "7878fdb1"
+ },
+ "js.mshm.cat-giay": {
+  "t": "鞋子／涼鞋",
+  "h": "d1f9572f"
+ },
+ "js.mshm.cat-phu-kien": {
+  "t": "配件",
+  "h": "f1f0fba9"
+ },
+ "js.mshm.cat-quan": {
+  "t": "褲子／裙子",
+  "h": "84562745"
+ },
+ "js.mshm.cat-tui": {
+  "t": "包包／後背包",
+  "h": "1979c758"
+ },
+ "js.mshm.chip-phoi-do": {
+  "t": "如何依命格色彩搭配服裝？",
+  "h": "3d2ef763"
+ },
+ "js.mshm.chip-phong-van": {
+  "t": "面試時該避開什麼顏色？",
+  "h": "61460b1c"
+ },
+ "js.mshm.chip-vi-sao": {
+  "t": "為什麼我的命格適合這個顏色？",
+  "h": "7ef6e8bc"
+ },
+ "js.mshm.combo-n": {
+  "t": "搭配 {n}",
+  "h": "9769d38a"
+ },
+ "js.mshm.dau-phay": {
+  "t": "，",
+  "h": "d3bc9a37"
+ },
+ "js.mshm.greeting": {
+  "t": "您的本命是 **{h}**。主色：{m}。想進一步了解色彩或穿搭嗎？",
+  "h": "e8cef7c1"
+ },
+ "js.mshm.khong-nhan-duoc-anh": {
+  "t": "未收到結果圖片。",
+  "h": "a16f02df"
+ },
+ "js.mshm.label": {
+  "t": "合命色彩——本命 {h}",
+  "h": "71fc87a5"
+ },
+ "js.mshm.loi-e": {
+  "t": "錯誤：{e}",
+  "h": "a7267203"
+ },
+ "js.mshm.mau-bac": {
+  "t": "銀色",
+  "h": "7386c9c6"
+ },
+ "js.mshm.mau-be": {
+  "t": "米色",
+  "h": "11d1bf27"
+ },
+ "js.mshm.mau-be-dam": {
+  "t": "深米色",
+  "h": "c660f0a6"
+ },
+ "js.mshm.mau-cam": {
+  "t": "橙色",
+  "h": "5e09769d"
+ },
+ "js.mshm.mau-cam-dat": {
+  "t": "陶土橙",
+  "h": "aaa37477"
+ },
+ "js.mshm.mau-chu": {
+  "t": "主色：{m}",
+  "h": "7813be48"
+ },
+ "js.mshm.mau-den": {
+  "t": "黑色",
+  "h": "4d0c0faf"
+ },
+ "js.mshm.mau-do": {
+  "t": "紅色",
+  "h": "2eb7503e"
+ },
+ "js.mshm.mau-hong-phan": {
+  "t": "淡粉色",
+  "h": "0ec650f1"
+ },
+ "js.mshm.mau-hong-tuoi": {
+  "t": "亮粉紅",
+  "h": "74592632"
+ },
+ "js.mshm.mau-kem": {
+  "t": "奶油色",
+  "h": "e52e6c26"
+ },
+ "js.mshm.mau-kem-dam": {
+  "t": "深奶油色",
+  "h": "e42e248c"
+ },
+ "js.mshm.mau-nau-am": {
+  "t": "暖棕色",
+  "h": "e0f4fd1e"
+ },
+ "js.mshm.mau-nau-do": {
+  "t": "紅棕色",
+  "h": "9222313d"
+ },
+ "js.mshm.mau-nau-go": {
+  "t": "木棕色",
+  "h": "24e064f8"
+ },
+ "js.mshm.mau-nau-vang": {
+  "t": "金棕色",
+  "h": "48377d46"
+ },
+ "js.mshm.mau-navy": {
+  "t": "海軍藍",
+  "h": "0229e960"
+ },
+ "js.mshm.mau-tim": {
+  "t": "紫色",
+  "h": "684e5966"
+ },
+ "js.mshm.mau-tim-do": {
+  "t": "紫紅色",
+  "h": "0b78db8f"
+ },
+ "js.mshm.mau-tim-than": {
+  "t": "靛紫色",
+  "h": "7ca4120f"
+ },
+ "js.mshm.mau-trang": {
+  "t": "白色",
+  "h": "9cf5e0eb"
+ },
+ "js.mshm.mau-vang-dat": {
+  "t": "土黃色",
+  "h": "1552080b"
+ },
+ "js.mshm.mau-vang-kim": {
+  "t": "金色",
+  "h": "b441fe1f"
+ },
+ "js.mshm.mau-vang-nhat": {
+  "t": "淺黃色",
+  "h": "14fd960f"
+ },
+ "js.mshm.mau-vang-tuoi": {
+  "t": "亮黃色",
+  "h": "f58c4a57"
+ },
+ "js.mshm.mau-xam-dam": {
+  "t": "深灰色",
+  "h": "01959534"
+ },
+ "js.mshm.mau-xam-kim-loai": {
+  "t": "金屬灰",
+  "h": "6e7d3e23"
+ },
+ "js.mshm.mau-xam-nhat": {
+  "t": "淺灰色",
+  "h": "d8017939"
+ },
+ "js.mshm.mau-xanh-bien": {
+  "t": "海洋藍",
+  "h": "9a3a3414"
+ },
+ "js.mshm.mau-xanh-duong-dam": {
+  "t": "深藍色",
+  "h": "8d89093c"
+ },
+ "js.mshm.mau-xanh-la": {
+  "t": "綠色",
+  "h": "d0e8c4b1"
+ },
+ "js.mshm.mau-xanh-lam-nhat": {
+  "t": "淺藍色",
+  "h": "a72ef9cf"
+ },
+ "js.mshm.mau-xanh-mint": {
+  "t": "薄荷綠",
+  "h": "3607442e"
+ },
+ "js.mshm.mau-xanh-ngoc": {
+  "t": "青綠色",
+  "h": "b8cbaa2e"
+ },
+ "js.mshm.mau-xanh-olive": {
+  "t": "橄欖綠",
+  "h": "2dd139ab"
+ },
+ "js.mshm.mau-xanh-reu": {
+  "t": "苔綠色",
+  "h": "836bccc5"
+ },
+ "js.mshm.mau-xanh-reu-dam": {
+  "t": "深苔綠色",
+  "h": "b49975fe"
+ },
+ "js.mshm.mau-xanh-tim": {
+  "t": "藍紫色",
+  "h": "08e76f57"
+ },
+ "js.mshm.menh-mau-chinh": {
+  "t": "本命 {h}——適合穿的主色：{m}",
+  "h": "9a1a497e"
+ },
+ "js.mshm.menh-quai": {
+  "t": "本命 {h} · 卦 {n} {g}",
+  "h": "da1abf25"
+ },
+ "js.mshm.nam-sinh-khong-hop-le": {
+  "t": "請輸入有效的出生年（1900–2025）",
+  "h": "c628d3be"
+ },
+ "js.mshm.nap-am-line": {
+  "t": "納音：{h} · 依{h}行的主色",
+  "h": "6e1df23d"
+ },
+ "js.mshm.occ-doi-tac": {
+  "t": "會見合作夥伴",
+  "h": "241559f4"
+ },
+ "js.mshm.occ-hang-ngay": {
+  "t": "日常",
+  "h": "c19adb2a"
+ },
+ "js.mshm.occ-hen-ho": {
+  "t": "約會",
+  "h": "c601615d"
+ },
+ "js.mshm.occ-phong-van": {
+  "t": "面試",
+  "h": "0bfbac35"
+ },
+ "js.mshm.phan-tich-that-bai": {
+  "t": "分析失敗",
+  "h": "44b68aa6"
+ },
+ "js.mshm.phan-tich-truoc": {
+  "t": "請先分析色彩。",
+  "h": "10049eff"
+ },
+ "js.mshm.phoi-mau-dua-tren": {
+  "t": "配色依據上方合適的調色盤。",
+  "h": "c4d3c4d3"
+ },
+ "js.mshm.quai-line": {
+  "t": "卦 {n}——{name}（{elem}）",
+  "h": "c5a1c901"
+ },
+ "js.mshm.share-text": {
+  "t": "本命 {h} · 主色：{m}",
+  "h": "d05a5128"
+ },
+ "js.mshm.share-title": {
+  "t": "適合我本命的色彩",
+  "h": "2ba34c9a"
+ },
+ "js.mshm.share-tryon-title": {
+  "t": "適合我本命的穿搭（虛擬試穿）",
+  "h": "cd9fdc43"
+ },
+ "js.mshm.step-chuan-bi": {
+  "t": "依本命準備服裝",
+  "h": "6ae0380a"
+ },
+ "js.mshm.step-tao-anh": {
+  "t": "正在生成服裝圖片",
+  "h": "ba6faaec"
+ },
+ "js.mshm.step-tinh-quai": {
+  "t": "計算卦數與本命納音",
+  "h": "39571eee"
+ },
+ "js.mshm.step-tu-van": {
+  "t": "建議色彩與穿搭",
+  "h": "58244246"
+ },
+ "js.mshm.style-cong-so": {
+  "t": "職場",
+  "h": "ff273e47"
+ },
+ "js.mshm.style-dao-pho": {
+  "t": "逛街",
+  "h": "115c50ac"
+ },
+ "js.mshm.style-sang-trong": {
+  "t": "高雅",
+  "h": "17db9fb4"
+ },
+ "js.mshm.tai-anh-truoc": {
+  "t": "請先上傳圖片。",
+  "h": "733c1fec"
+ },
+ "js.mshm.tranh": {
+  "t": "避開：",
+  "h": "89f38636"
+ },
+ "js.mshm.tryon-label": {
+  "t": "{s} · 本命 {h}",
+  "h": "e69e839c"
+ },
+ "js.mshm.vui-long-thu-lai": {
+  "t": "請再試一次。",
+  "h": "2f1d18ee"
+ },
+ "js.mshm.xem-mau-chinh": {
+  "t": "請參考上方的主色。",
+  "h": "95e8229c"
+ },
  "js.nav.brand": {
   "t": "明寶紫微斗數",
   "h": "33336b26"
@@ -15618,6 +15946,110 @@
  "menhkho.xem-la-so-luan-giai": {
   "t": "查看命盤與解讀 →",
   "h": "95889730"
+ },
+ "mshm.anh-chup-thang-nguoi-du-sang": {
+  "t": "正面全身、光線充足 · JPG/PNG",
+  "h": "fe4086d9"
+ },
+ "mshm.bang-mau-theo-menh": {
+  "t": "<span class=\"ic\" data-icon=\"palette\"></span> 依本命的調色盤",
+  "h": "75158994"
+ },
+ "mshm.chi-phi-luong": {
+  "t": "<span>費用：<strong><span data-tvp-price=\"mau-sac-hop-menh\">…</span> 兩</strong></span>",
+  "h": "72c219ac"
+ },
+ "mshm.chon-phong-cach-trang-phuc": {
+  "t": "選擇服裝風格：",
+  "h": "b115ee23"
+ },
+ "mshm.dao-pho": {
+  "t": "<span class=\"ic\" data-icon=\"compass\"></span> 逛街",
+  "h": "5a035e78"
+ },
+ "mshm.goi-y-phoi-do-hoan-chinh": {
+  "t": "<span class=\"ic\" data-icon=\"sparkles\"></span> 完整穿搭建議",
+  "h": "233b565f"
+ },
+ "mshm.huong-dan-trang-phuc-chi-tiet": {
+  "t": "<span class=\"ic\" data-icon=\"shirt\"></span> 服裝詳細指引",
+  "h": "68e382ef"
+ },
+ "mshm.lam-an-e-am-tai-loc": {
+  "t": "生意清淡、財運不聚，卻從沒想過每天穿的、用的顏色，是否正與本命相剋。輸入出生年，立即獲得應該使用與應該避開的顏色清單。",
+  "h": "fe0800d1"
+ },
+ "mshm.mau-chinh-tot-nhat": {
+  "t": "✓ 主色——最佳",
+  "h": "d169b014"
+ },
+ "mshm.mau-nen-tranh": {
+  "t": "✗ 建議避開的顏色",
+  "h": "adc4005c"
+ },
+ "mshm.mau-phu-chap-nhan-duoc": {
+  "t": "◎ 輔助色——可接受",
+  "h": "5679d14e"
+ },
+ "mshm.mau-sac-hop-menh": {
+  "t": "合命色彩",
+  "h": "64b3b887"
+ },
+ "mshm.mau-sac-hop-menh-tu-van": {
+  "t": "<b>合命色彩</b><span>依五行納音與八宅建議服裝顏色，並直接在照片上試穿</span>",
+  "h": "764edb0c"
+ },
+ "mshm.mau-sac-hop-menh-tu-vi": {
+  "t": "合命色彩——明寶紫微斗數",
+  "h": "d1cab1d9"
+ },
+ "mshm.mau-theo-dip": {
+  "t": "<span class=\"ic\" data-icon=\"calendar\"></span> 依場合的色彩",
+  "h": "193da2e8"
+ },
+ "mshm.meo-dac-biet-theo-ban-menh": {
+  "t": "<span class=\"ic\" data-icon=\"lightbulb\"></span> 依本命的特別小訣竅",
+  "h": "ec862b7f"
+ },
+ "mshm.ngu-hanh-nap-am-gan-moi": {
+  "t": "納音五行在六十甲子中為每個出生年指定一個專屬的本命，八宅則再考量方位與空間因素。結合這兩套體系，古人推導出與一個人本命相生或相剋的顏色與物品。",
+  "h": "245a2b78"
+ },
+ "mshm.nhap-nam-sinh-va-gioi-tinh": {
+  "t": "請輸入出生年與性別。系統會計算卦數，再與五行色彩對照表比對。您會得到合命的調色盤、各場合的色彩，以及穿搭建議。",
+  "h": "9b015181"
+ },
+ "mshm.sang-trong": {
+  "t": "<span class=\"ic\" data-icon=\"sparkles\"></span> 高雅",
+  "h": "e0db35aa"
+ },
+ "mshm.tai-anh-cua-ban-len": {
+  "t": "上傳您的照片",
+  "h": "1444e1ba"
+ },
+ "mshm.tai-sao-nen-tranh-nhung-mau": {
+  "t": "⚠ 為什麼要避開這些顏色？",
+  "h": "d3b71bb0"
+ },
+ "mshm.thong-tin-ban-menh": {
+  "t": "<span class=\"ic\" data-icon=\"sparkles\"></span> 本命資訊",
+  "h": "0a614b1f"
+ },
+ "mshm.thu-trang-phuc-theo-menh-luong": {
+  "t": "<span class=\"ic\" data-icon=\"shirt\"></span> 試穿合命服裝 <span style=\"font-size:10px;background:var(--gold-lt);color:var(--tx-blue);padding:2px 8px;border-radius:10px;font-weight:600\"><span data-tvp-price=\"trang-phuc-tryon\">…</span> 兩／次</span>",
+  "h": "f74ca71d"
+ },
+ "mshm.tu-van-mau-sac-trang-phuc": {
+  "t": "依五行納音，建議合本命的服裝顏色——上衣、褲子、鞋子、包包、配件。並提供各場合的完整穿搭建議。",
+  "h": "d55c587d"
+ },
+ "mshm.xem-lai": {
+  "t": "← 重看",
+  "h": "e2aaadb4"
+ },
+ "mshm.xem-mau-sac-hop-menh-luong": {
+  "t": "<span class=\"ic\" data-icon=\"palette\"></span> 查看合命色彩——<span data-tvp-price=\"mau-sac-hop-menh\">…</span> 兩",
+  "h": "85a1dcbd"
  },
  "napam.1-nhap-nam-sinh": {
   "t": "<span class=\"wss-n\">1</span><span class=\"wss-l\">輸入出生年</span>",

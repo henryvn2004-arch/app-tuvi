@@ -13,6 +13,7 @@ import { ok, err, options, parseBody } from '@/lib/cors';
 import { llmText, type LlmImage } from '@/lib/llm/complete';
 import { authUserFromRequest, parseLlmJson } from '@/lib/api/tool-helpers';
 import { withToolOutcome } from '@/lib/ops/tool-outcome';
+import { requestLocale, withLang } from '@/lib/llm/locale';
 import { guaOf } from '@/lib/engine/bat-trach';
 
 // ── LLM helper (Gemini-primary + Anthropic-backup qua lib/llm/complete) ──────
@@ -282,10 +283,14 @@ async function handleMauSac(request: NextRequest, body: Record<string, unknown>)
   const canChi = yearToCanChi(year);
   const colorData = NH_COLORS[napAmHanh] || NH_COLORS['Hỏa'];
 
+  // Ngôn ngữ đầu ra ở USER (json:true giữ nguyên khoá/enum). Trang tra hex theo TÊN MÀU Việt (COLOR_HEX) ⇒ ép giữ nguyên
+  // tên màu trong các mảng, chỉ phần chữ tự do viết bằng ngôn ngữ đích. vi → chuỗi cũ từng byte.
+  const locale = requestLocale(request);
+  const colorNote = locale === 'vi' ? '' : '\n\n[Các mảng màu (topColors, bottomColors, outerColors, shoeColors, bagColors, accessoryColors, avoidColors, colors) PHẢI chép NGUYÊN VĂN tên màu tiếng Việt từ danh sách màu ở trên — trang tra màu theo đúng tên đó, KHÔNG dịch. Các giá trị chữ còn lại (summary, tip, name, items, vibe, avoidExplanation, bonusTip) viết bằng ngôn ngữ đã chỉ định.]';
   // Claude generate detailed style guide
   const styleText = await claude([{
     role: 'user',
-    content: `Tạo hướng dẫn màu sắc trang phục hợp mệnh cho người:
+    content: withLang(`Tạo hướng dẫn màu sắc trang phục hợp mệnh cho người:
 - Năm sinh: ${year}
 - Giới tính: ${gioiTinh === 'male' ? 'Nam' : 'Nữ'}
 - Nạp Âm: ${napAmFull} (hành ${napAmHanh}) — ${canChi}
@@ -325,7 +330,7 @@ Trả về JSON:
   ],
   "avoidExplanation": "giải thích tại sao tránh màu xấu theo Ngũ Hành",
   "bonusTip": "1 mẹo đặc biệt theo bản mệnh"
-}`,
+}`, locale, [], { json: true }) + colorNote,
   }], 'Bạn là chuyên gia phong thủy và thời trang. Tư vấn màu sắc dựa trên Ngũ Hành Nạp Âm và Bát Trạch. Chỉ trả về JSON hợp lệ.', 1600);
 
   const styleGuide = parseLlmJson(styleText) || {

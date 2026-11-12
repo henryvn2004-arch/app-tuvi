@@ -815,6 +815,57 @@
    "shell"
   ]
  },
+ "/app/mau-sac-hop-menh": {
+  "file": "app-mau-sac-hop-menh.html",
+  "keys": [
+   "banlamviec.tai-anh",
+   "battu.1-nhap-thong-tin",
+   "battu.gioi-thieu",
+   "battu.hoi",
+   "kieut.sau-khi-thu",
+   "laso.nu",
+   "mshm.anh-chup-thang-nguoi-du-sang",
+   "mshm.bang-mau-theo-menh",
+   "mshm.chi-phi-luong",
+   "mshm.chon-phong-cach-trang-phuc",
+   "mshm.dao-pho",
+   "mshm.goi-y-phoi-do-hoan-chinh",
+   "mshm.huong-dan-trang-phuc-chi-tiet",
+   "mshm.lam-an-e-am-tai-loc",
+   "mshm.mau-chinh-tot-nhat",
+   "mshm.mau-nen-tranh",
+   "mshm.mau-phu-chap-nhan-duoc",
+   "mshm.mau-sac-hop-menh",
+   "mshm.mau-sac-hop-menh-tu-van",
+   "mshm.mau-sac-hop-menh-tu-vi",
+   "mshm.mau-theo-dip",
+   "mshm.meo-dac-biet-theo-ban-menh",
+   "mshm.ngu-hanh-nap-am-gan-moi",
+   "mshm.nhap-nam-sinh-va-gioi-tinh",
+   "mshm.sang-trong",
+   "mshm.tai-anh-cua-ban-len",
+   "mshm.tai-sao-nen-tranh-nhung-mau",
+   "mshm.thong-tin-ban-menh",
+   "mshm.thu-trang-phuc-theo-menh-luong",
+   "mshm.tu-van-mau-sac-trang-phuc",
+   "mshm.xem-lai",
+   "mshm.xem-mau-sac-hop-menh-luong",
+   "pcol.cong-so",
+   "pcol.thu-lai",
+   "pcol.thu-trang-phuc-ngay",
+   "phongthuy.anh-goc",
+   "phongthuy.doi-anh",
+   "phongthuy.gioi-tinh",
+   "phongthuy.nam-sinh-duong-lich",
+   "phongthuy.truoc",
+   "phongthuy.vd-1990",
+   "thtg.2-thanh-toan",
+   "thtg.3-nhan-ket-qua"
+  ],
+  "js": [
+   "shell"
+  ]
+ },
  "/app/nap-am": {
   "file": "app-nap-am.html",
   "keys": [
