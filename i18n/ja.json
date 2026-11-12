@@ -2447,6 +2447,118 @@
   "t": "写真で相を見る",
   "h": "24c4d64e"
  },
+ "js.nhtg.anh-mat-noi-len-dieu-gi": {
+  "t": "まなざしは何を表しますか？",
+  "h": "dca0ccee"
+ },
+ "js.nhtg.anh-qua-lon-toi-da-5mb": {
+  "t": "画像が大きすぎます（最大5MB）。",
+  "h": "874f95b2"
+ },
+ "js.nhtg.da-phan-tich-xong-nhan-tuong": {
+  "t": "柳莊神相にもとづく眼相の分析が完了しました。ほかに知りたいことはありますか？",
+  "h": "040562fa"
+ },
+ "js.nhtg.dang-phan-tich-nhan-tuong": {
+  "t": "眼相を分析しています…",
+  "h": "7c6f7d8c"
+ },
+ "js.nhtg.do-truc-tiep-tu-anh-bang": {
+  "t": "MediaPipeで画像から直接測定しました（黒目の位置を上まぶた・下まぶたと比較）。『麻衣神相』にもとづく詳しい意味は、詳細分析に含まれています。",
+  "h": "09bcb88b"
+ },
+ "js.nhtg.do-truc-tiep-tu-anh-bang-si1j": {
+  "t": "MediaPipeで画像から直接測定しました。目の形、神気、そのほかの詳細は、詳細分析に含まれています。",
+  "h": "c13331fd"
+ },
+ "js.nhtg.do-truc-tiep-tu-anh-bang-ymai": {
+  "t": "MediaPipeで画像から直接測定しました。『麻衣神相』にもとづく詳しい意味は、詳細分析に含まれています。",
+  "h": "91c76fe7"
+ },
+ "js.nhtg.duoi-mat-cong-len": {
+  "t": "目尻が上がっている",
+  "h": "eddf4211"
+ },
+ "js.nhtg.duoi-mat-xuoi": {
+  "t": "目尻が下がっている",
+  "h": "8e2e1aeb"
+ },
+ "js.nhtg.goc-duoi-mat-a-d": {
+  "t": "目尻の角度: {a}°（{d}）",
+  "h": "f80c29d1"
+ },
+ "js.nhtg.khong-co-ket-qua": {
+  "t": "結果がありません。",
+  "h": "97fa6f91"
+ },
+ "js.nhtg.khong-doc-duoc-anh-nay-vui": {
+  "t": "この画像を読み込めません — JPGまたはPNGの画像を選んでください。",
+  "h": "32a1faf4"
+ },
+ "js.nhtg.khong-nhan-dien-duoc-mat-ro": {
+  "t": "⚠ 顔をはっきり検出できませんでした。分析は可能ですが、正面から撮った画像をおすすめします。",
+  "h": "8aef3360"
+ },
+ "js.nhtg.khong-the-ket-noi": {
+  "t": "接続できません。",
+  "h": "3dc4d8cb"
+ },
+ "js.nhtg.khong-the-mo-camera": {
+  "t": "カメラを開けません。",
+  "h": "39a33224"
+ },
+ "js.nhtg.loi-e": {
+  "t": "エラー: {e}",
+  "h": "a7267203"
+ },
+ "js.nhtg.loi-s": {
+  "t": "エラー {s}",
+  "h": "c406c72b"
+ },
+ "js.nhtg.ngang": {
+  "t": "水平",
+  "h": "a704525f"
+ },
+ "js.nhtg.nhan-tuong": {
+  "t": "眼相",
+  "h": "1826b211"
+ },
+ "js.nhtg.nhan-tuong-cua-toi": {
+  "t": "私の目相",
+  "h": "1943cfc5"
+ },
+ "js.nhtg.nhan-tuong-d6ph": {
+  "t": "目相",
+  "h": "1bc89b2e"
+ },
+ "js.nhtg.phuong-nhan-la-gi": {
+  "t": "鳳眼とは？",
+  "h": "9ea5dc8a"
+ },
+ "js.nhtg.tam-bach-nhan-co-y-nghia": {
+  "t": "三白眼にはどんな意味がありますか？",
+  "h": "913d8ad7"
+ },
+ "js.nhtg.thuong-mat-15-20-giay": {
+  "t": "通常15〜20秒かかります",
+  "h": "087173ee"
+ },
+ "js.nhtg.trong-mat-hoi-lech-len-co": {
+  "t": "黒目がやや上寄り — 下三白眼の可能性",
+  "h": "2815a4af"
+ },
+ "js.nhtg.trong-mat-hoi-lech-xuong-co": {
+  "t": "黒目がやや下寄り — 上三白眼の可能性",
+  "h": "165636af"
+ },
+ "js.nhtg.vi-tri-trong-mat-can-doi": {
+  "t": "黒目の位置: バランスが取れている",
+  "h": "e253adf3"
+ },
+ "js.nhtg.vui-long-chon-file-anh": {
+  "t": "画像ファイルを選んでください。",
+  "h": "71a61127"
+ },
  "js.noisinh.noi-khac": {
   "t": "その他（タイムゾーンを選択）",
   "h": "dee91293"
@@ -6947,6 +7059,686 @@
   "t": "Zalo",
   "h": "53b71aec"
  },
+ "js.thtg.am-luong": {
+  "t": "音量",
+  "h": "71662f1b"
+ },
+ "js.thtg.am-sac-brightness": {
+  "t": "音色（明るさ）",
+  "h": "b3cd8066"
+ },
+ "js.thtg.bat-dau-thu-am": {
+  "t": "録音を始める",
+  "h": "61e33202"
+ },
+ "js.thtg.cao-do-pitch": {
+  "t": "音の高さ（ピッチ）",
+  "h": "d81eb36d"
+ },
+ "js.thtg.chuan-bi-giong-noi": {
+  "t": "声の準備をしてください…",
+  "h": "f2647a9c"
+ },
+ "js.thtg.dang-luan-giai-thanh-tuong": {
+  "t": "声相を鑑定しています…",
+  "h": "69e05b82"
+ },
+ "js.thtg.dang-phan-tich-am-thanh": {
+  "t": "音声を分析しています…",
+  "h": "f92bf29f"
+ },
+ "js.thtg.dang-thu-am-hay-doc-doan": {
+  "t": "録音中 — 上の詩を読んでください…",
+  "h": "9798c154"
+ },
+ "js.thtg.dang-xu-ly": {
+  "t": "処理中…",
+  "h": "e8c1faab"
+ },
+ "js.thtg.do-on-dinh": {
+  "t": "安定度",
+  "h": "86509ba8"
+ },
+ "js.thtg.dung-lai": {
+  "t": "停止",
+  "h": "d313e7b3"
+ },
+ "js.thtg.giong-cua-ban-thuoc-n": {
+  "t": "あなたの声は **{n}** に属します。声相学について、さらに質問はありますか？",
+  "h": "7f3afd32"
+ },
+ "js.thtg.giong-tram-noi-len-dieu-gi": {
+  "t": "低い声は何を表しますか？",
+  "h": "93f12462"
+ },
+ "js.thtg.kha-to": {
+  "t": "やや大きい",
+  "h": "089b5f63"
+ },
+ "js.thtg.khong-co-ket-qua": {
+  "t": "結果がありません。",
+  "h": "97fa6f91"
+ },
+ "js.thtg.khong-ro": {
+  "t": "不明",
+  "h": "988a61b5"
+ },
+ "js.thtg.khong-the-ket-noi": {
+  "t": "接続できません。",
+  "h": "3dc4d8cb"
+ },
+ "js.thtg.khong-the-truy-cap-microphone-vui": {
+  "t": "マイクにアクセスできません。ブラウザで許可してください。",
+  "h": "f9d607c1"
+ },
+ "js.thtg.khong-the-xu-ly-am-thanh-e": {
+  "t": "音声を処理できません: {e}。もう一度お試しください。",
+  "h": "96163473"
+ },
+ "js.thtg.loi-e": {
+  "t": "エラー: {e}",
+  "h": "a7267203"
+ },
+ "js.thtg.loi-s": {
+  "t": "エラー {s}",
+  "h": "c406c72b"
+ },
+ "js.thtg.ngu-am": {
+  "t": "五音",
+  "h": "bc7a6d13"
+ },
+ "js.thtg.ngu-am-la-gi": {
+  "t": "五音とは？",
+  "h": "ed2678e3"
+ },
+ "js.thtg.nguam-hoa": {
+  "t": "火の声（徴）— 高く、力強く響く",
+  "h": "52199252"
+ },
+ "js.thtg.nguam-hoa-short": {
+  "t": "火の声（徴）",
+  "h": "eec6e5c6"
+ },
+ "js.thtg.nguam-kim": {
+  "t": "金の声（商）— 澄んでよく通る",
+  "h": "83770d13"
+ },
+ "js.thtg.nguam-kim-short": {
+  "t": "金の声（商）",
+  "h": "1e2fe8d9"
+ },
+ "js.thtg.nguam-moc": {
+  "t": "木の声（角）— まるく、温厚",
+  "h": "1e8e07c1"
+ },
+ "js.thtg.nguam-moc-short": {
+  "t": "木の声（角）",
+  "h": "7835647e"
+ },
+ "js.thtg.nguam-tho": {
+  "t": "土の声（宮）— 低く温かく、余韻がある",
+  "h": "dbbc4796"
+ },
+ "js.thtg.nguam-tho-short": {
+  "t": "土の声（宮）",
+  "h": "66f33677"
+ },
+ "js.thtg.nguam-thuy": {
+  "t": "水の声（羽）— ひんやりして深い",
+  "h": "48b02063"
+ },
+ "js.thtg.nguam-thuy-short": {
+  "t": "水の声（羽）",
+  "h": "51405ff5"
+ },
+ "js.thtg.nhan-de-bat-dau-thu-am": {
+  "t": "タップして録音を開始 · ブラウザから求められたらマイクの使用を許可してください",
+  "h": "74465b56"
+ },
+ "js.thtg.nho-yeu": {
+  "t": "小さく弱い",
+  "h": "906c7657"
+ },
+ "js.thtg.pitch-cao": {
+  "t": "{p}Hz — 高い",
+  "h": "526966ef"
+ },
+ "js.thtg.pitch-rat-tram": {
+  "t": "{p}Hz — とても低い",
+  "h": "1b80b5d2"
+ },
+ "js.thtg.pitch-tram": {
+  "t": "{p}Hz — 低い",
+  "h": "110698bc"
+ },
+ "js.thtg.pitch-trung-binh": {
+  "t": "{p}Hz — 中程度",
+  "h": "8577f320"
+ },
+ "js.thtg.pitch-trung-cao": {
+  "t": "{p}Hz — やや高い",
+  "h": "163ebf39"
+ },
+ "js.thtg.pitch-trung-thap": {
+  "t": "{p}Hz — やや低い",
+  "h": "d249a0d1"
+ },
+ "js.thtg.rat-sang": {
+  "t": "とても明るい",
+  "h": "17b19c93"
+ },
+ "js.thtg.rate-cham": {
+  "t": "{r} 音節/秒 — 遅い",
+  "h": "7a1bd431"
+ },
+ "js.thtg.rate-nhanh": {
+  "t": "{r} 音節/秒 — 速い",
+  "h": "3a26518c"
+ },
+ "js.thtg.rate-rat-cham": {
+  "t": "{r} 音節/秒 — とても遅い",
+  "h": "73a0a454"
+ },
+ "js.thtg.rate-rat-nhanh": {
+  "t": "{r} 音節/秒 — とても速い",
+  "h": "40972e00"
+ },
+ "js.thtg.rate-vua": {
+  "t": "{r} 音節/秒 — 普通",
+  "h": "39d27349"
+ },
+ "js.thtg.sang-trong": {
+  "t": "明るく澄んでいる",
+  "h": "754176c3"
+ },
+ "js.thtg.thanh-tuong": {
+  "t": "声相",
+  "h": "d47f6d49"
+ },
+ "js.thtg.thanh-tuong-co-doi-duoc-khong": {
+  "t": "声相は変えられますか？",
+  "h": "0bac268d"
+ },
+ "js.thtg.thanh-tuong-cua-toi": {
+  "t": "私の声相",
+  "h": "f28a25a6"
+ },
+ "js.thtg.thoi-luong": {
+  "t": "所要時間",
+  "h": "83dc4d39"
+ },
+ "js.thtg.thu-am-hoan-tat-nhan-phan": {
+  "t": "録音が完了しました — 「分析」を押して結果を見てください。",
+  "h": "016efee8"
+ },
+ "js.thtg.thu-am-lai": {
+  "t": "録り直す",
+  "h": "e7849d1e"
+ },
+ "js.thtg.thuong-mat-10-15-giay": {
+  "t": "通常10〜15秒かかります",
+  "h": "56670e66"
+ },
+ "js.thtg.to-co-luc": {
+  "t": "大きく力強い",
+  "h": "7514dffb"
+ },
+ "js.thtg.toc-do-noi": {
+  "t": "話す速さ",
+  "h": "3e47bcf8"
+ },
+ "js.thtg.toi-am": {
+  "t": "暗く温かい",
+  "h": "4fb70bda"
+ },
+ "js.thtg.trung-binh-am": {
+  "t": "中程度で温かい",
+  "h": "94def005"
+ },
+ "js.thtg.uoc-tinh-n": {
+  "t": "推定: {n}",
+  "h": "9c0f8c8c"
+ },
+ "js.thtg.vua-phai": {
+  "t": "ほどよい",
+  "h": "e3fa9054"
+ },
+ "js.thtp.am-s": {
+  "t": " 音節/秒",
+  "h": "49ed1880"
+ },
+ "js.thtp.am-sac-am-toi-tho-kim": {
+  "t": "音色は温かく暗め — 土・金の低音。",
+  "h": "12665913"
+ },
+ "js.thtp.am-sac-sang": {
+  "t": "音色は明るい。",
+  "h": "8c1437e2"
+ },
+ "js.thtp.am-sac-trung-binh": {
+  "t": "音色は中程度。",
+  "h": "ed7134e9"
+ },
+ "js.thtp.amplitude-rat-on-dinh": {
+  "t": "振幅はとても安定しています。",
+  "h": "5f11e83b"
+ },
+ "js.thtp.bai-n": {
+  "t": "課題{n}",
+  "h": "9227ba34"
+ },
+ "js.thtp.bai-tiep-theo": {
+  "t": "次の課題へ →",
+  "h": "aad8808b"
+ },
+ "js.thtp.bat-dau-thu-am": {
+  "t": "録音を始める",
+  "h": "61e33202"
+ },
+ "js.thtp.bien-dong-lon": {
+  "t": "変動が大きい。",
+  "h": "56e49443"
+ },
+ "js.thtp.binh-thuong": {
+  "t": "普通。",
+  "h": "4711eaec"
+ },
+ "js.thtp.cao-vung-moc": {
+  "t": "高め — 木の領域。",
+  "h": "1f708e1f"
+ },
+ "js.thtp.cham-diem-dam": {
+  "t": "ゆっくり — 落ち着いた印象。",
+  "h": "1761f7f1"
+ },
+ "js.thtp.co-bien-dong": {
+  "t": "多少の変動あり。",
+  "h": "bb657503"
+ },
+ "js.thtp.co-tap-am-vung-giua-thanh": {
+  "t": "雑音あり — 清と濁の中間。",
+  "h": "72479b12"
+ },
+ "js.thtp.cong-cha-nhu-nui-thai-son": {
+  "t": "父の恩は山より高く、\n母の恩は海より深い。",
+  "h": "5e8b8ca0"
+ },
+ "js.thtp.da-ghi-xong": {
+  "t": "録音完了",
+  "h": "8d555bc2"
+ },
+ "js.thtp.dang-ghi-am": {
+  "t": "録音中…",
+  "h": "e8185717"
+ },
+ "js.thtp.dang-luan-giai": {
+  "t": "鑑定中…",
+  "h": "aa035f2b"
+ },
+ "js.thtp.dang-phan-tich": {
+  "t": "分析中…",
+  "h": "6c1c499b"
+ },
+ "js.thtp.dang-phan-tich-theo-co-phap": {
+  "t": "古法で分析しています",
+  "h": "18ad9517"
+ },
+ "js.thtp.dang-tinh-toan-dac-trung-am": {
+  "t": "音響特徴を計算しています…",
+  "h": "7e4c7703"
+ },
+ "js.thtp.dao-dong-manh-ky-cach-pha": {
+  "t": "揺れが大きい — 「破鑼」の相を忌む。",
+  "h": "af8f73b4"
+ },
+ "js.thtp.dem-deu-toc-do-khong-gap": {
+  "t": "一定のペースで、急がずゆっくりにもせず数えてください。数字の間隔は約0.5秒です。",
+  "h": "3c773947"
+ },
+ "js.thtp.dem-so-1-15": {
+  "t": "1 → 15 を数える",
+  "h": "f6278207"
+ },
+ "js.thtp.do-on-dinh-f0": {
+  "t": "F0の安定度",
+  "h": "f0626dcb"
+ },
+ "js.thtp.do-truc-tiep-tu-giong-noi": {
+  "t": " 声をマイクで直接測定した結果です。残る11の音響指標と詳しい鑑定は、詳細分析に含まれています。",
+  "h": "1514c6cc"
+ },
+ "js.thtp.do-uyen-chuyen-tong-giong": {
+  "t": "声の高さの滑らかさ。",
+  "h": "c42d8f86"
+ },
+ "js.thtp.doc-binh-thuong-ro-rang-khong": {
+  "t": "普通に、はっきり、急がず、無理に低くも高くもせずに読んでください。あなたの基本の声です。",
+  "h": "ace9a97f"
+ },
+ "js.thtp.doc-co-ngu-dieu-len-xuong": {
+  "t": "抑揚をつけて、自然に上げ下げして読んでください。これはベトナムの古典『キエウ伝』の冒頭です — 詩を詠むように読みましょう。",
+  "h": "deebf884"
+ },
+ "js.thtp.doc-doan-van": {
+  "t": "一節を読む",
+  "h": "1d0b2c72"
+ },
+ "js.thtp.doc-ngan-theo-huong-dan": {
+  "t": "案内に合わせて読む／声を伸ばしてください。",
+  "h": "3c680985"
+ },
+ "js.thtp.doc-tho-bai-do-pitch-range": {
+  "t": "詩を読む — 音域の測定",
+  "h": "73c2b60b"
+ },
+ "js.thtp.don-dieu-it-bieu-cam": {
+  "t": "単調 — 表情が少ない。",
+  "h": "3e48c9db"
+ },
+ "js.thtp.f0-trung-binh": {
+  "t": "F0平均",
+  "h": "36f5bf55"
+ },
+ "js.thtp.giong-cao-bat-thuong-cho-nam": {
+  "t": "ℹ 男性にしては異常に高い声です。裏声で話しているか、データが不安定な可能性があります。",
+  "h": "a3164510"
+ },
+ "js.thtp.giong-cua-ban-thuoc-n": {
+  "t": "あなたの声は **{n}** に属します（4つの課題、12の音響指標で測定）。声相学について、さらに質問はありますか？",
+  "h": "890b1b1b"
+ },
+ "js.thtp.giong-nen-f0": {
+  "t": "基本の声: F0平均 <strong>{f0}Hz</strong>、話す速さ {rate} 音節/秒。",
+  "h": "a9e1812d"
+ },
+ "js.thtp.giong-thanh-trong-vang": {
+  "t": "「清」の声 — 澄んでよく響く。",
+  "h": "b5424c0c"
+ },
+ "js.thtp.giong-tram-bat-thuong-cho-nu": {
+  "t": "ℹ 女性にしては異常に低い声です。作った声で話しているか、データが不安定な可能性があります。",
+  "h": "b7ed0210"
+ },
+ "js.thtp.giong-troc-duc": {
+  "t": "「濁」の声 — にごっている。",
+  "h": "b504dd91"
+ },
+ "js.thtp.giong-vua-thanh-vua-co-luc": {
+  "t": "澄んでいて、力もある声。",
+  "h": "a7a812ab"
+ },
+ "js.thtp.giu-deu-khi-day-tot": {
+  "t": "保てている — 気の底力は良好。",
+  "h": "ee4f48e1"
+ },
+ "js.thtp.hit-mot-hoi-sau-sau-do": {
+  "t": "深く息を吸い、「アー」と同じ高さで途切れなく声を伸ばしてください。上下させず、できるだけ均一に保つほど良好です。これが最も重要な課題 — 気力の測定です。",
+  "h": "a85ada27"
+ },
+ "js.thtp.hnr-do-trong": {
+  "t": "HNR（澄み度）",
+  "h": "372da110"
+ },
+ "js.thtp.hnr-thap-8db-nhieu-tap-am": {
+  "t": "⚠ HNRが低い（<8dB） — 雑音が多めです。より静かな環境を確かめてください。",
+  "h": "4f448bef"
+ },
+ "js.thtp.hnr-thap-noi-len-dieu-gi": {
+  "t": "HNRが低いと何がわかりますか？",
+  "h": "c0db1713"
+ },
+ "js.thtp.hoi-lech-dau-hieu-khi-khong": {
+  "t": "やや乱れ — 気が不均一な兆し。",
+  "h": "7392dcf4"
+ },
+ "js.thtp.hoi-rung-co-the-cang-thang": {
+  "t": "やや震え — 緊張の可能性。",
+  "h": "a544df6f"
+ },
+ "js.thtp.jitter-ngan": {
+  "t": "ジッター（持続音）",
+  "h": "6ca69280"
+ },
+ "js.thtp.jitter-va-shimmer-la-gi": {
+  "t": "ジッターとシマーとは？",
+  "h": "0fc478fd"
+ },
+ "js.thtp.khac-gi-ban-thanh-tuong-thuong": {
+  "t": "通常の声相とどう違いますか？",
+  "h": "37afdd5e"
+ },
+ "js.thtp.khi-bat-tuc": {
+  "t": "気が不足",
+  "h": "26098327"
+ },
+ "js.thtp.khi-bat-tuc-can-luyen-duong": {
+  "t": "気が不足 — 養気の鍛錬が必要。",
+  "h": "a17003c2"
+ },
+ "js.thtp.khi-du-vung-quy-tuong": {
+  "t": "気は十分 — 貴相の領域。",
+  "h": "ba173e75"
+ },
+ "js.thtp.khi-luc-rat-tot-khi-tuc": {
+  "t": "気力は非常に良好 — 「氣足聲圓」。",
+  "h": "271ac112"
+ },
+ "js.thtp.khi-luc-tot": {
+  "t": "気力は良好",
+  "h": "191dd52d"
+ },
+ "js.thtp.khi-sustain": {
+  "t": "気（持続時間）",
+  "h": "64bc1d84"
+ },
+ "js.thtp.khi-trung-binh": {
+  "t": "気は中程度",
+  "h": "7f2a227e"
+ },
+ "js.thtp.khi-trung-binh-dogb": {
+  "t": "気は中程度。",
+  "h": "29600da0"
+ },
+ "js.thtp.khong-nhan-duoc-noi-dung-tra": {
+  "t": "結果を受け取れませんでした。もう一度お試しください。",
+  "h": "a80badc4"
+ },
+ "js.thtp.khong-truy-cap-duoc-microphone": {
+  "t": "マイクにアクセスできません",
+  "h": "a07b8893"
+ },
+ "js.thtp.loi": {
+  "t": "エラー: ",
+  "h": "471c0087"
+ },
+ "js.thtp.loi-e": {
+  "t": "エラー: {e}",
+  "h": "a7267203"
+ },
+ "js.thtp.loi-stream-e": {
+  "t": "ストリームエラー: {e}",
+  "h": "62596680"
+ },
+ "js.thtp.luan-giai-lai": {
+  "t": "もう一度鑑定する",
+  "h": "11d43587"
+ },
+ "js.thtp.mot-hai-ba-bon-nam-sau": {
+  "t": "いち、に、さん、し、ご、ろく、\nしち、はち、く、じゅう、じゅういち、\nじゅうに、じゅうさん、じゅうし、じゅうご。",
+  "h": "6b26e8a7"
+ },
+ "js.thtp.n-giay": {
+  "t": "{n}秒",
+  "h": "4b5fecbd"
+ },
+ "js.thtp.ngan-am-a-bai-do-khi": {
+  "t": "「アー」を伸ばす — 気の測定",
+  "h": "df9c2325"
+ },
+ "js.thtp.ngan-am-qua-ngan-2-5s": {
+  "t": "⚠ 声の持続が短すぎます（<2.5s） — 気の不足か、マイクが十分に拾えていない可能性があります。意図的でなければ、課題2を録り直すことをおすすめします。",
+  "h": "608e2941"
+ },
+ "js.thtp.ngan-dai-shimmer": {
+  "t": "持続 <strong>{d}s</strong>、シマー {sh}dB — <em>{q}</em>。",
+  "h": "e8a19bff"
+ },
+ "js.thtp.ngu-am-uoc-tinh-n": {
+  "t": "推定される五音: {n}",
+  "h": "21219146"
+ },
+ "js.thtp.nguam-chen": {
+  "t": "{a}（{b}交じり）",
+  "h": "8891cc34"
+ },
+ "js.thtp.nguam-thanh": {
+  "t": "{x}（清）",
+  "h": "796dcf40"
+ },
+ "js.thtp.nguam-troc": {
+  "t": "{x}（濁）",
+  "h": "8f9cb8cf"
+ },
+ "js.thtp.nhanh-linh-hoat": {
+  "t": "速い — 機敏。",
+  "h": "f8f7c567"
+ },
+ "js.thtp.on-dinh": {
+  "t": "安定。",
+  "h": "44fce326"
+ },
+ "js.thtp.on-dinh-binh-thuong": {
+  "t": "安定 — 普通。",
+  "h": "2d859433"
+ },
+ "js.thtp.pitch-range-uyen-chuyen": {
+  "t": "音域: <strong>{r}Hz</strong>、滑らかさ {a}Hz/ステップ。",
+  "h": "b98dd351"
+ },
+ "js.thtp.rat-bien-ao-co-the-kich": {
+  "t": "非常に変化に富む — ドラマチックな可能性。",
+  "h": "fc2e0818"
+ },
+ "js.thtp.rat-cao-bat-thuong-cho-nam": {
+  "t": "非常に高い — 男性としては異常。",
+  "h": "6e3d8f7a"
+ },
+ "js.thtp.rat-cao-kiem-tra-lai": {
+  "t": "非常に高い — 再確認してください。",
+  "h": "2fd84911"
+ },
+ "js.thtp.rat-duc-co-the-mic-kem": {
+  "t": "非常ににごっている — マイクの品質か、声のかすれの可能性。",
+  "h": "532d0a63"
+ },
+ "js.thtp.rat-nhanh-co-the-gap-gap": {
+  "t": "非常に速い — せっかちな可能性。",
+  "h": "468f53f6"
+ },
+ "js.thtp.rat-on-dinh": {
+  "t": "非常に安定。",
+  "h": "01b80ed2"
+ },
+ "js.thtp.rat-on-dinh-giong-vien-man": {
+  "t": "非常に安定 — 「圓滿」の声。",
+  "h": "3d4e7673"
+ },
+ "js.thtp.rat-sang-co-the-choi": {
+  "t": "非常に明るい — 刺さる可能性。",
+  "h": "b82be1c7"
+ },
+ "js.thtp.rat-tram-vung-tho-ho-hong": {
+  "t": "非常に低い — 土・虎吼の領域。",
+  "h": "25ff5eb4"
+ },
+ "js.thtp.rung-ro-ret-chu-y-suc": {
+  "t": "はっきり震えています — 声の健康に注意。",
+  "h": "624dbc77"
+ },
+ "js.thtp.sang-vung-moc-oanh-minh": {
+  "t": "明るい — 木・鶯鳴の領域。",
+  "h": "4c2e15f1"
+ },
+ "js.thtp.shimmer-cao-1-2db-giong-khong": {
+  "t": "⚠ シマーが高い（>1.2dB） — 声を伸ばすときに不安定です。声の震えか、マイクの品質が低いことが原因かもしれません。",
+  "h": "3f02b1f2"
+ },
+ "js.thtp.shimmer-ngan": {
+  "t": "シマー（持続音）",
+  "h": "4f46f5b3"
+ },
+ "js.thtp.suy-nhanh-huu-dau-vo-vi": {
+  "t": "急に弱まる — 「有頭無尾」、後半で気が弱い。",
+  "h": "70b554fb"
+ },
+ "js.thtp.suy-nhe-binh-thuong": {
+  "t": "わずかに減衰 — 普通。",
+  "h": "e192d8a5"
+ },
+ "js.thtp.thanh-tuong-pro": {
+  "t": "声相 Pro",
+  "h": "b2e5a151"
+ },
+ "js.thtp.thanh-tuong-pro-cua-toi": {
+  "t": "私の声相 Pro",
+  "h": "9cca3092"
+ },
+ "js.thtp.thanh-tuong-pro-n": {
+  "t": "声相 Pro — {n}",
+  "h": "677bf701"
+ },
+ "js.thtp.thu-lai": {
+  "t": "やり直す",
+  "h": "761e1380"
+ },
+ "js.thtp.toc-do-dem-am-tiet": {
+  "t": "数える速さ: <strong>{rate}</strong> 音節/秒。",
+  "h": "76b9cb6a"
+ },
+ "js.thtp.toc-do-noi": {
+  "t": "話す速さ",
+  "h": "3e47bcf8"
+ },
+ "js.thtp.tram-nam-trong-coi-nguoi-ta": {
+  "t": "人の一生百年のうち、\n才と命とは、とかく反発し合うもの。",
+  "h": "820f3996"
+ },
+ "js.thtp.tram-vung-kim-tho": {
+  "t": "低め — 金・土の領域。",
+  "h": "38ae56f0"
+ },
+ "js.thtp.tram-vung-tho": {
+  "t": "低め — 土の領域。",
+  "h": "16b2fd85"
+ },
+ "js.thtp.trung-binh": {
+  "t": "中程度。",
+  "h": "9942b5ce"
+ },
+ "js.thtp.trung-binh-vung-kim": {
+  "t": "中程度 — 金の領域。",
+  "h": "7f4bb46d"
+ },
+ "js.thtp.uyen-chuyen-vung-thuy": {
+  "t": "滑らか — 水の領域。",
+  "h": "d127ffa4"
+ },
+ "js.thtp.vua-phai": {
+  "t": "ほどよい。",
+  "h": "080fe879"
+ },
+ "js.thtp.vung-cong-huong-giong": {
+  "t": "声の共鳴領域。",
+  "h": "bb5e88f1"
+ },
+ "js.thtp.xem-ket-qua": {
+  "t": "結果を見る →",
+  "h": "73c02132"
+ },
+ "js.thtp.xep-theo-12-chi-so-am": {
+  "t": "測定した12の音響指標（HNR、持続時間、ジッター、スペクトル重心…）にもとづく分類です。五音の古法による詳しい意味は、詳細分析に含まれています。",
+  "h": "0c3c0a37"
+ },
  "js.topup.aria-label-thanh-toan": {
   "t": " aria-label=\"お支払い：",
   "h": "3d7d89ae"
@@ -8591,6 +9383,130 @@
   "t": "<span class=\"hp-ic\" data-icon=\"users\"></span><span>相性の良い年<br>悪い年</span>",
   "h": "9a664cc3"
  },
+ "nhtg.anh-chi-gui-toi-may-chu": {
+  "t": "画像は分析のためにサーバーへ送るだけで、サーバーには保存しません。正面から、十分な明るさで撮影してください — システムが自動で目の部分にズームします。",
+  "h": "65e7d1ba"
+ },
+ "nhtg.anh-da-chon": {
+  "t": "✓ 画像を選択済み",
+  "h": "c435e239"
+ },
+ "nhtg.anh-da-chon-oxp5": {
+  "t": "画像を選択済み",
+  "h": "d1e5382e"
+ },
+ "nhtg.chua-muon-chup-anh-ban-co": {
+  "t": "<b>まだ撮影したくありませんか？</b><span>先にサンプルを見て、雰囲気を確かめられます。</span>",
+  "h": "70fdc9d9"
+ },
+ "nhtg.chup": {
+  "t": "<span class=\"ic\" data-icon=\"camera\"></span> 撮影",
+  "h": "71b3b3cf"
+ },
+ "nhtg.chup-anh": {
+  "t": "<span class=\"ic\" data-icon=\"camera\"></span> 撮影する",
+  "h": "f78326e0"
+ },
+ "nhtg.doi-mat-duoc-xem-la-noi": {
+  "t": "伝統的な相学では、目はその人の心のあり方が最もはっきり表れる場所とされます。顔写真をアップロードすると、柳莊神相にもとづき、目の形・まなざし・眉を詳しく鑑定します。",
+  "h": "f0bba1fa"
+ },
+ "nhtg.huy": {
+  "t": "✕ キャンセル",
+  "h": "a46abff1"
+ },
+ "nhtg.jpg-png-webp-toi-da-5mb": {
+  "t": "JPG、PNG、WebP — 最大5MB · 正面から撮影し、両目がはっきり写るように",
+  "h": "79a1629f"
+ },
+ "nhtg.keo-tha-anh-vao-day-hoac": {
+  "t": "ここに画像をドラッグ＆ドロップ、またはクリックして選択",
+  "h": "2ce7b073"
+ },
+ "nhtg.luan-theo-lieu-trang-than-tuong": {
+  "t": "<span class=\"hp-ic\" data-icon=\"scroll-text\"></span><span>柳莊神相に<br>もとづく鑑定</span>",
+  "h": "6ad548df"
+ },
+ "nhtg.ma-y-than-tuong-la-mot": {
+  "t": "『麻衣神相』は、中国で最も有名な人相学の古典のひとつで、三停・五官など顔の各部位から性格と運命を読む方法を体系化しています。『柳莊神相』や『水鏡集』も、あわせて参照されることの多い相学の古典です。",
+  "h": "f21522a3"
+ },
+ "nhtg.ma-y-than-tuong-nhan-phap": {
+  "t": "麻衣神相 · 眼相の古法",
+  "h": "38e14ae2"
+ },
+ "nhtg.mat-da-xac-dinh": {
+  "t": "<span class=\"ic\" data-icon=\"eye\"></span> 目を検出しました",
+  "h": "b00eb630"
+ },
+ "nhtg.mat-phai": {
+  "t": "右目",
+  "h": "a88c59ed"
+ },
+ "nhtg.mat-trai": {
+  "t": "左目",
+  "h": "34e4f87a"
+ },
+ "nhtg.mo-camera": {
+  "t": "<span class=\"ic\" data-icon=\"camera\"></span> カメラを開く",
+  "h": "dda0b3af"
+ },
+ "nhtg.moi-luot-luong": {
+  "t": "1回 <span class=\"vnd\" data-tvp-price-vnd=\"nhan-tuong\"></span> <span class=\"cb-sub\">(<span data-tvp-price=\"nhan-tuong\">…</span> 両)</span>",
+  "h": "3c4bc428"
+ },
+ "nhtg.nhan-tuong": {
+  "t": "目相",
+  "h": "1bc89b2e"
+ },
+ "nhtg.nhan-tuong-tu-vi-minh-bao": {
+  "t": "眼相 — 明宝紫微斗数",
+  "h": "beddeaa1"
+ },
+ "nhtg.nhan-tuong-xem-tuong-mat-theo": {
+  "t": "<b>眼相</b><span>古法で目の相を読む — <span data-tvp-price=\"nhan-tuong\">…</span> 両</span>",
+  "h": "f3a91f07"
+ },
+ "nhtg.phan-tich-anh-khac": {
+  "t": "別の画像を分析",
+  "h": "eceede8c"
+ },
+ "nhtg.phan-tich-nhan-tuong-hoc": {
+  "t": "眼相学の分析",
+  "h": "1ed9443b"
+ },
+ "nhtg.phan-tich-nhan-tuong-ton-luong": {
+  "t": "<span class=\"bg-label\"><span class=\"ic\" data-icon=\"eye\"></span><b id=\"analyzeBtnLabel\">眼相を分析する →</b></span> <small><span class=\"vnd\" data-tvp-price-vnd=\"nhan-tuong\"></span> <span class=\"cb-sub\">(<span data-tvp-price=\"nhan-tuong\">…</span> 両)</span> 必要</small>",
+  "h": "1e319aa8"
+ },
+ "nhtg.tai-anh-hoac-chup-truc-tiep": {
+  "t": "<span class=\"hp-ic\" data-icon=\"camera\"></span><span>画像を選ぶか<br>その場で撮影</span>",
+  "h": "45a94ade"
+ },
+ "nhtg.tai-anh-khuon-mat": {
+  "t": "顔写真をアップロード",
+  "h": "0ce655e6"
+ },
+ "nhtg.tai-anh-len": {
+  "t": "<span class=\"ic\" data-icon=\"folder\"></span> 画像をアップロード",
+  "h": "c3712e70"
+ },
+ "nhtg.tai-hoac-chup-anh-mat-he": {
+  "t": "顔写真をアップロードまたは撮影 — 『麻衣神相』『柳莊神相』にもとづき、眼相（目）を分析します。",
+  "h": "6b1bb466"
+ },
+ "nhtg.tai-mot-tam-anh-ro-khuon": {
+  "t": "顔がはっきり写った写真、特に目元が見える写真をアップロードしてください。柳莊神相の古法にもとづき、目の形・まなざし・眉・性格を鑑定します。",
+  "h": "030abd5a"
+ },
+ "nhtg.tu-zoom-vao-doi-mat": {
+  "t": "<span class=\"hp-ic\" data-icon=\"eye\"></span><span>目元に<br>自動ズーム</span>",
+  "h": "214dd5e2"
+ },
+ "nhtg.xoa-anh": {
+  "t": "✕ 画像を削除",
+  "h": "36e95d9f"
+ },
  "privacy.1-thong-tin-chung-toi-thu": {
   "t": "1. 収集する情報",
   "h": "5354d2ca"
@@ -8958,6 +9874,230 @@
  "terms.voi-luong-da-nap-nhung-chua": {
   "t": "チャージ済みで未使用の両数については、ご請求をいただければ、個別に検討いたします",
   "h": "f410ec3e"
+ },
+ "thtg.1-ghi-am-giong-noi": {
+  "t": "<span class=\"wss-n\">1</span><span class=\"wss-l\">声を録音</span>",
+  "h": "8a655678"
+ },
+ "thtg.2-thanh-toan": {
+  "t": "<span class=\"wss-n\">2</span><span class=\"wss-l\">お支払い</span>",
+  "h": "67c0b759"
+ },
+ "thtg.3-nhan-ket-qua": {
+  "t": "<span class=\"wss-n\">3</span><span class=\"wss-l\">結果を受け取る</span>",
+  "h": "5b1e84a0"
+ },
+ "thtg.am-thanh-xu-ly-hoan-toan": {
+  "t": "音声はブラウザ内だけで処理されます。測定した指標のみ（音声ファイルは送らずに）サーバーへ送信し、分析します。",
+  "h": "cc7cd8bb"
+ },
+ "thtg.bat-dau-thu-am": {
+  "t": "<span id=\"recordIcon\" class=\"ic\" data-icon=\"mic\"></span> <span id=\"recordLabel\">録音を始める</span>",
+  "h": "2de7804f"
+ },
+ "thtg.cong-cha-nhu-nui-thai-son": {
+  "t": "父の恩は<em>泰山</em>のように高く、<br> 母の恩は源から<em>湧き出る水</em>のよう。<br> 心を尽くして母に仕え、父を敬い、<br> 孝の道を全うしてこそ<em>子の道</em>。",
+  "h": "64ec2a8d"
+ },
+ "thtg.do-cao-do-toc-do-am": {
+  "t": "<span class=\"hp-ic\" data-icon=\"bar-chart-3\"></span><span>高さ・速さ・<br>音色を測定</span>",
+  "h": "0098d11d"
+ },
+ "thtg.doc-cham-rai-tu-nhien-khoang": {
+  "t": "ゆっくり自然に読んでください — 約10〜15秒 · 静かな場所で、雑音のない環境がおすすめです",
+  "h": "d43c4d70"
+ },
+ "thtg.doc-doan-tho-nay-tu-nhien": {
+  "t": "<span class=\"ic\" data-icon=\"book-open\"></span> この詩を読んでください（自然に、はっきりと）",
+  "h": "b1041484"
+ },
+ "thtg.doc-thanh-tieng-doan-mau-ben": {
+  "t": "下の見本を声に出して読むと、システムが録音して音響指標を測定し、五音の古法と照らし合わせます。",
+  "h": "c7a7cc92"
+ },
+ "thtg.ghi-am-doan-tho-ngan": {
+  "t": "<span class=\"hp-ic\" data-icon=\"mic\"></span><span>短い詩を<br>録音</span>",
+  "h": "a159c35f"
+ },
+ "thtg.ghi-am-doc-mot-doan-tho": {
+  "t": "短い詩を読んで録音するだけ — 五音の古法（金・木・水・火・土）で声相を分析します。",
+  "h": "93f54a82"
+ },
+ "thtg.ghi-am-giong-noi": {
+  "t": "声を録音",
+  "h": "c4c81682"
+ },
+ "thtg.giong-noi-khong-chi-de-giao": {
+  "t": "声は会話のためだけのものではありません — 古法の音声学では、声質そのものから、向いている仕事と避けるべき仕事まで読み取れます。短く録音すれば、すぐに五音の鑑定が届きます。",
+  "h": "0b8e2c03"
+ },
+ "thtg.ket-qua-do-luong-giong-noi": {
+  "t": "<span class=\"ic\" data-icon=\"bar-chart-3\"></span> 声の測定結果",
+  "h": "ccbc07c1"
+ },
+ "thtg.luan-theo-ngu-am-co-phap": {
+  "t": "<span class=\"hp-ic\" data-icon=\"scroll-text\"></span><span>五音の古法で<br>鑑定</span>",
+  "h": "fb865a03"
+ },
+ "thtg.moi-luot-luong": {
+  "t": "1回 <span class=\"vnd\" data-tvp-price-vnd=\"thanh-tuong\"></span> <span class=\"cb-sub\">(<span data-tvp-price=\"thanh-tuong\">…</span> 両)</span>",
+  "h": "c4336d95"
+ },
+ "thtg.ngu-am-co-phap-ma-moi": {
+  "t": "五音の古法 · 馬楣 · 達磨",
+  "h": "a036cb20"
+ },
+ "thtg.nhan-de-bat-dau-thu-am": {
+  "t": "タップして録音を開始 · ブラウザから求められたらマイクの使用を許可してください",
+  "h": "74465b56"
+ },
+ "thtg.phan-tich-thanh-tuong-hoc": {
+  "t": "声相学の分析",
+  "h": "2c14b754"
+ },
+ "thtg.phan-tich-thanh-tuong-ton-luong": {
+  "t": "<span class=\"bg-label\"><span class=\"ic\" data-icon=\"music\"></span><b id=\"analyzeBtnLabel\">声相を分析する →</b></span> <small><span class=\"vnd\" data-tvp-price-vnd=\"thanh-tuong\"></span> <span class=\"cb-sub\">(<span data-tvp-price=\"thanh-tuong\">…</span> 両)</span> 必要</small>",
+  "h": "04250412"
+ },
+ "thtg.thanh-tuong": {
+  "t": "声相",
+  "h": "d47f6d49"
+ },
+ "thtg.thanh-tuong-tu-vi-minh-bao": {
+  "t": "声相 — 明宝紫微斗数",
+  "h": "edcb4bcf"
+ },
+ "thtg.thanh-tuong-xem-tuong-giong-noi": {
+  "t": "<b>声相</b><span>五音の古法で声の相を読む — <span data-tvp-price=\"thanh-tuong\">…</span> 両</span>",
+  "h": "247ec01f"
+ },
+ "thtg.thu-am-lai": {
+  "t": "録り直す",
+  "h": "e7849d1e"
+ },
+ "thtp.12-chi-so-am-hoc": {
+  "t": "<span class=\"hp-ic\" data-icon=\"bar-chart-3\"></span><span>12の<br>音響指標</span>",
+  "h": "cf4e2866"
+ },
+ "thtp.2-xem-ket-qua-do": {
+  "t": "<span class=\"wss-n\">2</span><span class=\"wss-l\">測定結果を見る</span>",
+  "h": "93f0142c"
+ },
+ "thtp.4-bai-do-giong-chuyen-sau": {
+  "t": "<span class=\"hp-ic\" data-icon=\"mic\"></span><span>4つの課題で<br>声を詳細測定</span>",
+  "h": "f5f91cc8"
+ },
+ "thtp.bai-1-4-10-giay": {
+  "t": "<span class=\"task-num\" id=\"taskNum\">課題 1/4</span> <span class=\"task-time\" id=\"taskTime\">10秒</span>",
+  "h": "72a8ecea"
+ },
+ "thtp.bai-tiep-theo": {
+  "t": "次の課題へ →",
+  "h": "aad8808b"
+ },
+ "thtp.bat-dau-bai-do": {
+  "t": "測定を始める",
+  "h": "76374e88"
+ },
+ "thtp.bat-dau-thu-am": {
+  "t": "録音を始める",
+  "h": "61e33202"
+ },
+ "thtp.bon-bai-do-giong-noi-chuyen": {
+  "t": "4つの課題で声を詳しく測定 — 『麻衣神相』『神相全編』『水鏡集』にもとづく五音の分析システム。",
+  "h": "1eef1ee9"
+ },
+ "thtp.buoc-1-thong-tin-co-ban": {
+  "t": "ステップ1 · 基本情報",
+  "h": "9c5356b8"
+ },
+ "thtp.buoc-2-bon-bai-do-giong": {
+  "t": "ステップ2 · 声の4つの課題",
+  "h": "5b99459f"
+ },
+ "thtp.buoc-3-ket-qua-do": {
+  "t": "ステップ3 · 測定結果",
+  "h": "3541b2e4"
+ },
+ "thtp.chua-muon-ghi-am-ban-co": {
+  "t": "<b>録音はまだ気が進みませんか？</b><span>先にサンプルを見て、雰囲気を確かめられます。</span>",
+  "h": "468bb930"
+ },
+ "thtp.da-ghi-xong": {
+  "t": "✓ 録音しました。",
+  "h": "53247aed"
+ },
+ "thtp.doc-binh-thuong-ro-rang-khong": {
+  "t": "普通に、はっきり、急がずに読んでください。",
+  "h": "2998c866"
+ },
+ "thtp.doc-doan-van": {
+  "t": "一節を読む",
+  "h": "1d0b2c72"
+ },
+ "thtp.ghi-am-du-4-bai-do": {
+  "t": "あなたの性別と年齢に合わせて、4つの課題をすべて録音してください。システムが詳細に分析し、気・性格・運命・養声養気の方法を鑑定します。",
+  "h": "0e8aaf05"
+ },
+ "thtp.giong-noi-mang-nhieu-thong-tin": {
+  "t": "声には思っている以上の情報があります — 4つの詳細な課題から得た12の音響指標が、五音と気力の最も完全な姿を描き出します。通常の声相より深く知りたい方向けです。",
+  "h": "f907ddc6"
+ },
+ "thtp.luan-giai-thanh-tuong-ton-luong": {
+  "t": "<span class=\"bg-label\"><span class=\"ic\" data-icon=\"music\"></span><b id=\"analyzeBtnLabel\">声相を鑑定する →</b></span> <small><span class=\"vnd\" data-tvp-price-vnd=\"thanh-tuong-pro\"></span> <span class=\"cb-sub\">(<span data-tvp-price=\"thanh-tuong-pro\">…</span> 両)</span> 必要</small>",
+  "h": "39fe65f9"
+ },
+ "thtp.luan-ngu-am-va-khi-luc": {
+  "t": "<span class=\"hp-ic\" data-icon=\"scroll-text\"></span><span>五音と気力の<br>鑑定</span>",
+  "h": "c9962dad"
+ },
+ "thtp.moi-luot-luong": {
+  "t": "1回 <span class=\"vnd\" data-tvp-price-vnd=\"thanh-tuong-pro\"></span> <span class=\"cb-sub\">(<span data-tvp-price=\"thanh-tuong-pro\">…</span> 両)</span>",
+  "h": "a06b62cc"
+ },
+ "thtp.ngu-am": {
+  "t": "五音: —",
+  "h": "6ab7c5b6"
+ },
+ "thtp.ngu-am-co-phap-ma-y": {
+  "t": "五音の古法 · 麻衣神相 · 神相全編 · 水鏡集",
+  "h": "a2f34068"
+ },
+ "thtp.ngu-am-tuong-phap-la-mot": {
+  "t": "五音の相法は、人相学の一分野で、声から運勢を読み解くものです。音を宮・商・角・徴・羽に分け、五行に対応させます。この方法は『麻衣神相』などの古典的な相学書に記されています。",
+  "h": "8f425df6"
+ },
+ "thtp.phan-tich-thanh-tuong-chuyen-sau": {
+  "t": "声相の詳細分析",
+  "h": "1e2230b3"
+ },
+ "thtp.thanh-tuong-pro": {
+  "t": "声相 Pro",
+  "h": "b2e5a151"
+ },
+ "thtp.thanh-tuong-pro-4-bai-do": {
+  "t": "<b>声相 Pro</b><span>4つの課題で声を詳細測定 — <span data-tvp-price=\"thanh-tuong-pro\">…</span> 両</span>",
+  "h": "a4477440"
+ },
+ "thtp.thanh-tuong-pro-tu-vi-minh": {
+  "t": "声相 Pro — 明宝紫微斗数",
+  "h": "b4ae7c2a"
+ },
+ "thtp.thu-lai": {
+  "t": "録り直す",
+  "h": "0e099100"
+ },
+ "thtp.tuoi": {
+  "t": "年齢",
+  "h": "3a6fc33f"
+ },
+ "thtp.vi-du-32": {
+  "t": "例: 32",
+  "h": "dc9bd965"
+ },
+ "thtp.xem-ban-mau": {
+  "t": "サンプルを見る →",
+  "h": "ba3671b1"
  },
  "topup.ban-dang-mo-khoa": {
   "t": "ロック解除中…",
