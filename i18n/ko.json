@@ -107,6 +107,126 @@
   "t": "이야기를 들려주세요. 명보가 15분의 선생님 중 알맞은 분을 안내해 드려요: 자미두수 명반, 사주, 궁합, 작명, 길일 택일.",
   "h": "0f564294"
  },
+ "chonngay.2-xem-nen-can-chi": {
+  "t": "<span class=\"wss-n\">2</span><span class=\"wss-l\">간지 기반 보기</span>",
+  "h": "c95e6f79"
+ },
+ "chonngay.an-hoi-dam-ngo": {
+  "t": "약혼 / 상견례",
+  "h": "4b11a176"
+ },
+ "chonngay.chon-ngay-chuyen-sau": {
+  "t": "심층 택일 →",
+  "h": "9bd6a5ed"
+ },
+ "chonngay.chon-ngay-gio-tot": {
+  "t": "길일·길시 고르기",
+  "h": "28b27ec4"
+ },
+ "chonngay.chon-ngay-gio-tot-hop-tuoi": {
+  "t": "간지에 따라 결혼식·개업·입주·지신제 등에 맞는 띠별 길일·길시를 고르세요. 선생님께 좋은 날과 피해야 할 날을 풀이받을 수 있어요.",
+  "h": "a3dfe7f0"
+ },
+ "chonngay.chon-ngay-tot-ngay-gio-hop": {
+  "t": "<b>길일 고르기</b><span>중요한 일을 위한 띠별 날짜와 시각</span>",
+  "h": "ec08df6d"
+ },
+ "chonngay.chon-ngay-tot-tu-vi-minh": {
+  "t": "길일 고르기 — 명보 자미두수",
+  "h": "bad6e5eb"
+ },
+ "chonngay.chon-viec-can-xem-ngay-nhap": {
+  "t": "날짜를 보려는 일을 고르고, 당사자의 이름과 태어난 해, 보려는 달을 입력하세요. 시스템이 간지를 계산해 띠와의 합·충을 대조해 드려요.",
+  "h": "a51a3cec"
+ },
+ "chonngay.chua-muon-khai-thong-tin-ban": {
+  "t": "<b>아직 정보를 입력하고 싶지 않나요?</b><span>먼저 샘플을 보며 체험해 볼 수 있어요.</span>",
+  "h": "0a975603"
+ },
+ "chonngay.cuoi-hoi": {
+  "t": "결혼식",
+  "h": "04a2caa4"
+ },
+ "chonngay.cuoi-hoi-lam-nha-khai-truong": {
+  "t": "결혼식, 집짓기, 개업 — 날짜를 잘못 고르면 평생 아쉬워도 되돌릴 수 없는 일이 많아요. 일의 종류와 기간을 고르면 당사자의 띠에 맞는 날짜·시각 목록을 바로 받아 보실 수 있어요.",
+  "h": "0b16cd85"
+ },
+ "chonngay.danh-sach-ngay-tot": {
+  "t": "길일<br>목록",
+  "h": "b1bf5886"
+ },
+ "chonngay.doi-chieu-hop-xung": {
+  "t": "합·충<br>대조",
+  "h": "c461160d"
+ },
+ "chonngay.dong-tho-khoi-cong": {
+  "t": "지신제 / 착공",
+  "h": "10468f91"
+ },
+ "chonngay.gio-hoang-dao-tung-ngay": {
+  "t": "날짜별<br>황도 시진",
+  "h": "54c78af6"
+ },
+ "chonngay.he-thong-phan-tich-can-chi": {
+  "t": "시스템이 당사자의 간지와 예정한 연월을 분석해, 구체적인 이유와 함께 좋은 날짜 구간을 제안해요.",
+  "h": "ec5043f6"
+ },
+ "chonngay.ho-ten-nguoi-chu-su": {
+  "t": "당사자 성명",
+  "h": "7d21772a"
+ },
+ "chonngay.hoang-lich-lich-van-nien-la": {
+  "t": "황력(만년력)은 간지, 이십팔숙, 길흉의 별을 결합해 일의 종류마다 알맞은 시각과 황도 길일을 정하는 중국 고대의 달력 체계예요. 결혼식·개업·지신제의 날짜와 시각을 고르는 전통적인 근거예요.",
+  "h": "0240b883"
+ },
+ "chonngay.hoi-thay-chon-ngay-dep": {
+  "t": "✦ 선생님께 좋은 날 골라 달라고 묻기",
+  "h": "7d368a1b"
+ },
+ "chonngay.khai-truong": {
+  "t": "개업",
+  "h": "c86ca256"
+ },
+ "chonngay.ky-ket-hop-dong": {
+  "t": "계약 체결",
+  "h": "90e0fb9b"
+ },
+ "chonngay.lap-nen": {
+  "t": "기반 만들기 →",
+  "h": "81b6e6d8"
+ },
+ "chonngay.moi-luot": {
+  "t": "1회당",
+  "h": "2a5c5972"
+ },
+ "chonngay.mua-xe": {
+  "t": "차량 구매",
+  "h": "52d4aa77"
+ },
+ "chonngay.nhap-trach-ve-nha-moi": {
+  "t": "입주 (새집으로 이사)",
+  "h": "fcda52e1"
+ },
+ "chonngay.thong-tin-chon-ngay": {
+  "t": "택일 정보",
+  "h": "9d3045db"
+ },
+ "chonngay.ton": {
+  "t": "소요",
+  "h": "e603a0b9"
+ },
+ "chonngay.viec-can-chon-ngay": {
+  "t": "날짜를 고르려는 일",
+  "h": "e84816a6"
+ },
+ "chonngay.xem-ban-mau": {
+  "t": "샘플 보기 →",
+  "h": "ba3671b1"
+ },
+ "chonngay.xuat-hanh": {
+  "t": "출행 (길 떠나기)",
+  "h": "424fcbb2"
+ },
  "chutrinh.9-dai-van-tron-doi": {
   "t": "<span class=\"hp-ic\" data-icon=\"hourglass\"></span><span>평생<br>9개 대운</span>",
   "h": "5ab04ae7"
@@ -1354,6 +1474,98 @@
  "js.chat.ke-vai-dong-thoi-minh-bao": {
   "t": "몇 줄만 적어 주세요. 명보가 15명의 선생님 팀에서 알맞은 분을 모셔 와 봐 드려요.",
   "h": "e43855cc"
+ },
+ "js.chonngay.ban-mau-note": {
+  "t": "이것은 설명용 <b>샘플</b>(다른 데이터)이며 회원님의 결과가 아니에요.",
+  "h": "4dc73cd0"
+ },
+ "js.chonngay.chip1": {
+  "t": "이번 달에서 가장 좋은 날은 언제인가요?",
+  "h": "1d6514df"
+ },
+ "js.chonngay.chip2": {
+  "t": "이 일에 맞는 황도 시진은요?",
+  "h": "005ba6f0"
+ },
+ "js.chonngay.chip3": {
+  "t": "절대 피해야 할 날은 언제인가요?",
+  "h": "36a0360f"
+ },
+ "js.chonngay.chip4": {
+  "t": "그날 출행하기 좋은 방향은요?",
+  "h": "0ef8b5dc"
+ },
+ "js.chonngay.chua-mo-duoc-ban-mau": {
+  "t": "샘플을 열지 못했어요. 잠시 후 다시 시도해 주세요.",
+  "h": "05a0f158"
+ },
+ "js.chonngay.dang-mo": {
+  "t": "여는 중…",
+  "h": "a3fdeaab"
+ },
+ "js.chonngay.dang-phan-tich": {
+  "t": "길일을 분석하는 중… 보통 15~25초 걸려요",
+  "h": "2413a48e"
+ },
+ "js.chonngay.greeting": {
+  "t": "**{viec}**을(를) 위한 기반을 만들었어요 (당사자 띠 **{cc}**). 먼저 어떤 조언이 필요하세요?",
+  "h": "37474974"
+ },
+ "js.chonngay.khong-nhan-duoc-ket-qua": {
+  "t": "결과를 받지 못했어요.",
+  "h": "46e8add0"
+ },
+ "js.chonngay.khong-the-ket-noi": {
+  "t": "연결할 수 없어요. 다시 시도해 주세요.",
+  "h": "bf0b6e7b"
+ },
+ "js.chonngay.label": {
+  "t": "택일: {viec} · {ten} · {n}년 {t}월",
+  "h": "c350a6fa"
+ },
+ "js.chonngay.loi-colon": {
+  "t": "오류: ",
+  "h": "471c0087"
+ },
+ "js.chonngay.loi-status": {
+  "t": "오류 {s}",
+  "h": "c406c72b"
+ },
+ "js.chonngay.nam-n": {
+  "t": "{n}년",
+  "h": "e2de29f4"
+ },
+ "js.chonngay.nhap-thong-tin-cua-toi": {
+  "t": "내 정보 입력하기 →",
+  "h": "61666cb3"
+ },
+ "js.chonngay.res-note": {
+  "t": "당사자의 띠는 <b>{cc}</b> ({hanh}). 예정한 달은 <b>{tcc}</b>, 해는 <b>{ncc}</b>. 좋은 날은 당사자의 띠와 <b>합</b>(육합 / 삼합)이 되고 <b>충 / 형</b>을 피해야 해요. <b>{viec}</b>에 맞는 구체적인 날짜와 황도 시진은 선생님께 물어보세요.",
+  "h": "e946d4da"
+ },
+ "js.chonngay.thang-n": {
+  "t": "{n}월",
+  "h": "4dd9659f"
+ },
+ "js.chonngay.thang-n-m": {
+  "t": "{n}년 {t}월",
+  "h": "355a0dcf"
+ },
+ "js.chonngay.tuoi-chu-su": {
+  "t": "당사자 띠",
+  "h": "c6691aae"
+ },
+ "js.chonngay.vui-long-nhap-ho-ten": {
+  "t": "성함, 태어난 해, 예정 월과 연도를 입력해 주세요.",
+  "h": "d60f4f07"
+ },
+ "js.chonngay.vui-long-nhap-thong-tin": {
+  "t": "먼저 정보를 입력해 주세요.",
+  "h": "b73d7304"
+ },
+ "js.chonngay.xem-ban-mau": {
+  "t": "샘플 보기 →",
+  "h": "ba3671b1"
  },
  "js.chutrinh.10-can-can-trong-dieu-gi": {
   "t": "/10) 어떤 점을 조심해야 하나요?",

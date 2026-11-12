@@ -107,6 +107,126 @@
   "t": "Tell your story and Minh Bao will bring in the right Master from our team of 15: Zi Wei Dou Shu chart, BaZi (Four Pillars of Destiny), marriage compatibility, naming, date selection.",
   "h": "0f564294"
  },
+ "chonngay.2-xem-nen-can-chi": {
+  "t": "<span class=\"wss-n\">2</span><span class=\"wss-l\">View the Stems &amp; Branches foundation</span>",
+  "h": "c95e6f79"
+ },
+ "chonngay.an-hoi-dam-ngo": {
+  "t": "Engagement / betrothal visit",
+  "h": "4b11a176"
+ },
+ "chonngay.chon-ngay-chuyen-sau": {
+  "t": "In-depth date selection →",
+  "h": "9bd6a5ed"
+ },
+ "chonngay.chon-ngay-gio-tot": {
+  "t": "Choose auspicious dates and hours",
+  "h": "28b27ec4"
+ },
+ "chonngay.chon-ngay-gio-tot-hop-tuoi": {
+  "t": "Choose auspicious dates and hours matched to your zodiac year by Stems & Branches — for weddings, business openings, moving in, groundbreaking. Ask the Master to read the best days and the days to avoid.",
+  "h": "a3dfe7f0"
+ },
+ "chonngay.chon-ngay-tot-ngay-gio-hop": {
+  "t": "<b>Choose Auspicious Dates</b><span>Dates and hours matched to your zodiac year for life's big events</span>",
+  "h": "ec08df6d"
+ },
+ "chonngay.chon-ngay-tot-tu-vi-minh": {
+  "t": "Choose Auspicious Dates — Minh Bao Zi Wei Dou Shu",
+  "h": "bad6e5eb"
+ },
+ "chonngay.chon-viec-can-xem-ngay-nhap": {
+  "t": "Choose the occasion, enter the principal's name and birth year, and the month you want to check. The system works out the Stems & Branches and compares clashes and harmonies with your zodiac year.",
+  "h": "a51a3cec"
+ },
+ "chonngay.chua-muon-khai-thong-tin-ban": {
+  "t": "<b>Don't want to enter your details yet?</b><span>You can view a sample first to try it out.</span>",
+  "h": "0a975603"
+ },
+ "chonngay.cuoi-hoi": {
+  "t": "Wedding",
+  "h": "04a2caa4"
+ },
+ "chonngay.cuoi-hoi-lam-nha-khai-truong": {
+  "t": "Weddings, building a home, opening a business — picking the wrong date is a regret many carry for life and can never undo. Choose the occasion and time range, and get a list of dates and hours matched to the principal's zodiac year right away.",
+  "h": "0b16cd85"
+ },
+ "chonngay.danh-sach-ngay-tot": {
+  "t": "Auspicious<br>days list",
+  "h": "b1bf5886"
+ },
+ "chonngay.doi-chieu-hop-xung": {
+  "t": "Harmony vs.<br>clash check",
+  "h": "c461160d"
+ },
+ "chonngay.dong-tho-khoi-cong": {
+  "t": "Groundbreaking / start of construction",
+  "h": "10468f91"
+ },
+ "chonngay.gio-hoang-dao-tung-ngay": {
+  "t": "Auspicious hours<br>for each day",
+  "h": "54c78af6"
+ },
+ "chonngay.he-thong-phan-tich-can-chi": {
+  "t": "The system analyzes the principal's Stems & Branches plus the planned month and year, and suggests good date ranges with specific reasons.",
+  "h": "ec5043f6"
+ },
+ "chonngay.ho-ten-nguoi-chu-su": {
+  "t": "Principal's full name",
+  "h": "7d21772a"
+ },
+ "chonngay.hoang-lich-lich-van-nien-la": {
+  "t": "The Huang Li (perpetual calendar) is the traditional Chinese calendar system that combines the Stems & Branches, the 28 Lunar Mansions and auspicious and inauspicious stars to determine the right hours and auspicious (Huang Dao) days for each type of undertaking. It is the traditional basis for choosing dates and hours for weddings, business openings and groundbreaking.",
+  "h": "0240b883"
+ },
+ "chonngay.hoi-thay-chon-ngay-dep": {
+  "t": "✦ Ask the Master to pick good dates",
+  "h": "7d368a1b"
+ },
+ "chonngay.khai-truong": {
+  "t": "Business opening",
+  "h": "c86ca256"
+ },
+ "chonngay.ky-ket-hop-dong": {
+  "t": "Contract signing",
+  "h": "90e0fb9b"
+ },
+ "chonngay.lap-nen": {
+  "t": "Build the foundation →",
+  "h": "81b6e6d8"
+ },
+ "chonngay.moi-luot": {
+  "t": "per use",
+  "h": "2a5c5972"
+ },
+ "chonngay.mua-xe": {
+  "t": "Buying a vehicle",
+  "h": "52d4aa77"
+ },
+ "chonngay.nhap-trach-ve-nha-moi": {
+  "t": "Moving in (new home)",
+  "h": "fcda52e1"
+ },
+ "chonngay.thong-tin-chon-ngay": {
+  "t": "Date-selection details",
+  "h": "9d3045db"
+ },
+ "chonngay.ton": {
+  "t": "Costs",
+  "h": "e603a0b9"
+ },
+ "chonngay.viec-can-chon-ngay": {
+  "t": "Occasion to choose a date for",
+  "h": "e84816a6"
+ },
+ "chonngay.xem-ban-mau": {
+  "t": "View a sample →",
+  "h": "ba3671b1"
+ },
+ "chonngay.xuat-hanh": {
+  "t": "Setting out on a trip",
+  "h": "424fcbb2"
+ },
  "chutrinh.9-dai-van-tron-doi": {
   "t": "<span class=\"hp-ic\" data-icon=\"hourglass\"></span><span>9 major luck cycles<br>of a lifetime</span>",
   "h": "5ab04ae7"
@@ -1354,6 +1474,98 @@
  "js.chat.ke-vai-dong-thoi-minh-bao": {
   "t": "Just a few lines is enough. Minh Bao will bring in the right Master from our team of 15 to look at it for you.",
   "h": "e43855cc"
+ },
+ "js.chonngay.ban-mau-note": {
+  "t": "This is a <b>SAMPLE</b> for illustration (different data) — not your result.",
+  "h": "4dc73cd0"
+ },
+ "js.chonngay.chip1": {
+  "t": "Which day is the best this month?",
+  "h": "1d6514df"
+ },
+ "js.chonngay.chip2": {
+  "t": "What are the auspicious hours for this?",
+  "h": "005ba6f0"
+ },
+ "js.chonngay.chip3": {
+  "t": "Which days must be absolutely avoided?",
+  "h": "36a0360f"
+ },
+ "js.chonngay.chip4": {
+  "t": "Which direction is good to set out in on that day?",
+  "h": "0ef8b5dc"
+ },
+ "js.chonngay.chua-mo-duoc-ban-mau": {
+  "t": "Couldn't open the sample. Please try again later.",
+  "h": "05a0f158"
+ },
+ "js.chonngay.dang-mo": {
+  "t": "Opening…",
+  "h": "a3fdeaab"
+ },
+ "js.chonngay.dang-phan-tich": {
+  "t": "Analyzing auspicious dates… usually takes 15–25 seconds",
+  "h": "2413a48e"
+ },
+ "js.chonngay.greeting": {
+  "t": "The foundation for **{viec}** is ready (principal's zodiac year **{cc}**). What would you like advice on first?",
+  "h": "37474974"
+ },
+ "js.chonngay.khong-nhan-duoc-ket-qua": {
+  "t": "No result was received.",
+  "h": "46e8add0"
+ },
+ "js.chonngay.khong-the-ket-noi": {
+  "t": "Couldn't connect. Please try again.",
+  "h": "bf0b6e7b"
+ },
+ "js.chonngay.label": {
+  "t": "Date pick: {viec} · {ten} · {t}/{n}",
+  "h": "c350a6fa"
+ },
+ "js.chonngay.loi-colon": {
+  "t": "Error: ",
+  "h": "471c0087"
+ },
+ "js.chonngay.loi-status": {
+  "t": "Error {s}",
+  "h": "c406c72b"
+ },
+ "js.chonngay.nam-n": {
+  "t": "Year {n}",
+  "h": "e2de29f4"
+ },
+ "js.chonngay.nhap-thong-tin-cua-toi": {
+  "t": "Enter my details →",
+  "h": "61666cb3"
+ },
+ "js.chonngay.res-note": {
+  "t": "Principal's zodiac year: <b>{cc}</b> ({hanh}). Planned month <b>{tcc}</b>, year <b>{ncc}</b>. A good date should <b>harmonize</b> (six harmonies / three harmonies) with the principal's zodiac year and avoid <b>clashes / penalties</b>. Ask the Master for specific dates &amp; auspicious hours for <b>{viec}</b>.",
+  "h": "e946d4da"
+ },
+ "js.chonngay.thang-n": {
+  "t": "Month {n}",
+  "h": "4dd9659f"
+ },
+ "js.chonngay.thang-n-m": {
+  "t": "Month {t}/{n}",
+  "h": "355a0dcf"
+ },
+ "js.chonngay.tuoi-chu-su": {
+  "t": "Principal's zodiac year",
+  "h": "c6691aae"
+ },
+ "js.chonngay.vui-long-nhap-ho-ten": {
+  "t": "Please enter the full name, birth year, and the planned month and year.",
+  "h": "d60f4f07"
+ },
+ "js.chonngay.vui-long-nhap-thong-tin": {
+  "t": "Please enter your details first.",
+  "h": "b73d7304"
+ },
+ "js.chonngay.xem-ban-mau": {
+  "t": "View a sample →",
+  "h": "ba3671b1"
  },
  "js.chutrinh.10-can-can-trong-dieu-gi": {
   "t": "/10) what should I watch out for?",

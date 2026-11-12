@@ -107,6 +107,126 @@
   "t": "说说您的故事，明宝团队会从 15 位老师中请出最合适的一位为您解读：紫微斗数命盘、八字、合婚、取名、择日。",
   "h": "0f564294"
  },
+ "chonngay.2-xem-nen-can-chi": {
+  "t": "<span class=\"wss-n\">2</span><span class=\"wss-l\">查看干支基础</span>",
+  "h": "c95e6f79"
+ },
+ "chonngay.an-hoi-dam-ngo": {
+  "t": "订婚／提亲",
+  "h": "4b11a176"
+ },
+ "chonngay.chon-ngay-chuyen-sau": {
+  "t": "深度择日 →",
+  "h": "9bd6a5ed"
+ },
+ "chonngay.chon-ngay-gio-tot": {
+  "t": "择吉日吉时",
+  "h": "28b27ec4"
+ },
+ "chonngay.chon-ngay-gio-tot-hop-tuoi": {
+  "t": "依天干地支，为婚嫁、开张、入宅、动土等大事择出合生肖的吉日吉时，并请老师论析好日子与该避开的日子。",
+  "h": "a3dfe7f0"
+ },
+ "chonngay.chon-ngay-tot-ngay-gio-hop": {
+  "t": "<b>择吉日</b><span>为人生大事择出合生肖的日子与时辰</span>",
+  "h": "ec08df6d"
+ },
+ "chonngay.chon-ngay-tot-tu-vi-minh": {
+  "t": "择吉日——明宝紫微斗数",
+  "h": "bad6e5eb"
+ },
+ "chonngay.chon-viec-can-xem-ngay-nhap": {
+  "t": "选择要择日的事项，输入主事者的姓名、出生年与想查的月份。系统会推算干支，再比对与您生肖的相合与相冲。",
+  "h": "a51a3cec"
+ },
+ "chonngay.chua-muon-khai-thong-tin-ban": {
+  "t": "<b>还不想填写数据吗？</b><span>您可以先看范例体验一下。</span>",
+  "h": "0a975603"
+ },
+ "chonngay.cuoi-hoi": {
+  "t": "婚嫁",
+  "h": "04a2caa4"
+ },
+ "chonngay.cuoi-hoi-lam-nha-khai-truong": {
+  "t": "婚嫁、盖房、开张——择错日子，往往是许多人一辈子无法弥补的遗憾。选好事项与时间范围，即刻获得合主事者生肖的日期与时辰名单。",
+  "h": "0b16cd85"
+ },
+ "chonngay.danh-sach-ngay-tot": {
+  "t": "吉日<br>清单",
+  "h": "b1bf5886"
+ },
+ "chonngay.doi-chieu-hop-xung": {
+  "t": "相合相冲<br>比对",
+  "h": "c461160d"
+ },
+ "chonngay.dong-tho-khoi-cong": {
+  "t": "动土／开工",
+  "h": "10468f91"
+ },
+ "chonngay.gio-hoang-dao-tung-ngay": {
+  "t": "每日的<br>黄道吉时",
+  "h": "54c78af6"
+ },
+ "chonngay.he-thong-phan-tich-can-chi": {
+  "t": "系统会分析主事者的干支与预定年月，并附上具体理由，建议合适的吉日区间。",
+  "h": "ec5043f6"
+ },
+ "chonngay.ho-ten-nguoi-chu-su": {
+  "t": "主事者姓名",
+  "h": "7d21772a"
+ },
+ "chonngay.hoang-lich-lich-van-nien-la": {
+  "t": "黄历（万年历）是结合干支、二十八宿与吉凶星曜的中国古历体系，用来为各类事项决定适宜的时辰与黄道吉日，是婚嫁、开张、动土择日择时的传统依据。",
+  "h": "0240b883"
+ },
+ "chonngay.hoi-thay-chon-ngay-dep": {
+  "t": "✦ 请老师择吉日",
+  "h": "7d368a1b"
+ },
+ "chonngay.khai-truong": {
+  "t": "开张",
+  "h": "c86ca256"
+ },
+ "chonngay.ky-ket-hop-dong": {
+  "t": "签订合约",
+  "h": "90e0fb9b"
+ },
+ "chonngay.lap-nen": {
+  "t": "创建基础 →",
+  "h": "81b6e6d8"
+ },
+ "chonngay.moi-luot": {
+  "t": "每次",
+  "h": "2a5c5972"
+ },
+ "chonngay.mua-xe": {
+  "t": "购车",
+  "h": "52d4aa77"
+ },
+ "chonngay.nhap-trach-ve-nha-moi": {
+  "t": "入宅（迁入新居）",
+  "h": "fcda52e1"
+ },
+ "chonngay.thong-tin-chon-ngay": {
+  "t": "择日数据",
+  "h": "9d3045db"
+ },
+ "chonngay.ton": {
+  "t": "需",
+  "h": "e603a0b9"
+ },
+ "chonngay.viec-can-chon-ngay": {
+  "t": "要择日的事项",
+  "h": "e84816a6"
+ },
+ "chonngay.xem-ban-mau": {
+  "t": "查看范例 →",
+  "h": "ba3671b1"
+ },
+ "chonngay.xuat-hanh": {
+  "t": "出行",
+  "h": "424fcbb2"
+ },
  "chutrinh.9-dai-van-tron-doi": {
   "t": "<span class=\"hp-ic\" data-icon=\"hourglass\"></span><span>一生<br>九大运</span>",
   "h": "5ab04ae7"
@@ -1354,6 +1474,98 @@
  "js.chat.ke-vai-dong-thoi-minh-bao": {
   "t": "简单说几句就好。明宝会从团队 15 位老师中，请出最合适的一位为您解读。",
   "h": "e43855cc"
+ },
+ "js.chonngay.ban-mau-note": {
+  "t": "这是用于示范的<b>范例</b>（数据不同）——并非您的结果。",
+  "h": "4dc73cd0"
+ },
+ "js.chonngay.chip1": {
+  "t": "这个月哪一天最好？",
+  "h": "1d6514df"
+ },
+ "js.chonngay.chip2": {
+  "t": "这件事的黄道吉时？",
+  "h": "005ba6f0"
+ },
+ "js.chonngay.chip3": {
+  "t": "哪些日子一定要避开？",
+  "h": "36a0360f"
+ },
+ "js.chonngay.chip4": {
+  "t": "那天出行哪个方位好？",
+  "h": "0ef8b5dc"
+ },
+ "js.chonngay.chua-mo-duoc-ban-mau": {
+  "t": "无法打开范例，请稍后再试。",
+  "h": "05a0f158"
+ },
+ "js.chonngay.dang-mo": {
+  "t": "打开中…",
+  "h": "a3fdeaab"
+ },
+ "js.chonngay.dang-phan-tich": {
+  "t": "正在分析吉日⋯⋯通常需要15–25秒",
+  "h": "2413a48e"
+ },
+ "js.chonngay.greeting": {
+  "t": "已为**{viec}**创建基础（主事者生肖：**{cc}**）。您想先听什么建议？",
+  "h": "37474974"
+ },
+ "js.chonngay.khong-nhan-duoc-ket-qua": {
+  "t": "未收到结果。",
+  "h": "46e8add0"
+ },
+ "js.chonngay.khong-the-ket-noi": {
+  "t": "无法连接，请再试一次。",
+  "h": "bf0b6e7b"
+ },
+ "js.chonngay.label": {
+  "t": "择日：{viec}・{ten}・{n}年{t}月",
+  "h": "c350a6fa"
+ },
+ "js.chonngay.loi-colon": {
+  "t": "错误：",
+  "h": "471c0087"
+ },
+ "js.chonngay.loi-status": {
+  "t": "错误 {s}",
+  "h": "c406c72b"
+ },
+ "js.chonngay.nam-n": {
+  "t": "{n}年",
+  "h": "e2de29f4"
+ },
+ "js.chonngay.nhap-thong-tin-cua-toi": {
+  "t": "输入我的数据 →",
+  "h": "61666cb3"
+ },
+ "js.chonngay.res-note": {
+  "t": "主事者生肖：<b>{cc}</b>（{hanh}）。预定月份为<b>{tcc}</b>，年份为<b>{ncc}</b>。吉日需与主事者生肖<b>相合</b>（六合／三合），并避开<b>相冲／相刑</b>。想知道<b>{viec}</b>的具体日期与黄道吉时，请问老师。",
+  "h": "e946d4da"
+ },
+ "js.chonngay.thang-n": {
+  "t": "{n}月",
+  "h": "4dd9659f"
+ },
+ "js.chonngay.thang-n-m": {
+  "t": "{n}年{t}月",
+  "h": "355a0dcf"
+ },
+ "js.chonngay.tuoi-chu-su": {
+  "t": "主事者生肖",
+  "h": "c6691aae"
+ },
+ "js.chonngay.vui-long-nhap-ho-ten": {
+  "t": "请输入姓名、出生年，以及预定的月份与年份。",
+  "h": "d60f4f07"
+ },
+ "js.chonngay.vui-long-nhap-thong-tin": {
+  "t": "请先输入数据。",
+  "h": "b73d7304"
+ },
+ "js.chonngay.xem-ban-mau": {
+  "t": "查看范例 →",
+  "h": "ba3671b1"
  },
  "js.chutrinh.10-can-can-trong-dieu-gi": {
   "t": "/10) 需要留意什么？",

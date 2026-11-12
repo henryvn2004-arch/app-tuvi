@@ -107,6 +107,126 @@
   "t": "お話を聞かせてください。明宝が15人の先生の中から最適な先生をご案内します：紫微斗数の命盤、四柱推命、相性、命名、吉日選び。",
   "h": "0f564294"
  },
+ "chonngay.2-xem-nen-can-chi": {
+  "t": "<span class=\"wss-n\">2</span><span class=\"wss-l\">干支の土台を見る</span>",
+  "h": "c95e6f79"
+ },
+ "chonngay.an-hoi-dam-ngo": {
+  "t": "結納・顔合わせ",
+  "h": "4b11a176"
+ },
+ "chonngay.chon-ngay-chuyen-sau": {
+  "t": "詳しく日取りを選ぶ →",
+  "h": "9bd6a5ed"
+ },
+ "chonngay.chon-ngay-gio-tot": {
+  "t": "吉日・吉時の選定",
+  "h": "28b27ec4"
+ },
+ "chonngay.chon-ngay-gio-tot-hop-tuoi": {
+  "t": "天干地支にもとづき、結婚式・開業・入居・地鎮祭などに合った吉日・吉時を干支で選びます。先生に、良い日と避けるべき日を読み解いてもらえます。",
+  "h": "a3dfe7f0"
+ },
+ "chonngay.chon-ngay-tot-ngay-gio-hop": {
+  "t": "<b>吉日の選定</b><span>人生の大事に、干支に合う日と時刻を</span>",
+  "h": "ec08df6d"
+ },
+ "chonngay.chon-ngay-tot-tu-vi-minh": {
+  "t": "吉日の選定 — 明宝紫微斗数",
+  "h": "bad6e5eb"
+ },
+ "chonngay.chon-viec-can-xem-ngay-nhap": {
+  "t": "日取りを見たい用件を選び、事主のお名前と生まれ年、見たい月を入力してください。システムが干支を算出し、あなたの干支との相性（合・冲）を照らし合わせます。",
+  "h": "a51a3cec"
+ },
+ "chonngay.chua-muon-khai-thong-tin-ban": {
+  "t": "<b>まだ情報を入力したくありませんか？</b><span>先にサンプルを見て試すこともできます。</span>",
+  "h": "0a975603"
+ },
+ "chonngay.cuoi-hoi": {
+  "t": "結婚式",
+  "h": "04a2caa4"
+ },
+ "chonngay.cuoi-hoi-lam-nha-khai-truong": {
+  "t": "結婚式、家の建築、開業——日取りを誤ると、一生悔やんでも取り返しがつかないこともあります。用件と期間を選べば、事主の干支に合う日と時刻の一覧がすぐに届きます。",
+  "h": "0b16cd85"
+ },
+ "chonngay.danh-sach-ngay-tot": {
+  "t": "吉日の<br>一覧",
+  "h": "b1bf5886"
+ },
+ "chonngay.doi-chieu-hop-xung": {
+  "t": "相性（合・冲）<br>の照合",
+  "h": "c461160d"
+ },
+ "chonngay.dong-tho-khoi-cong": {
+  "t": "地鎮祭・着工",
+  "h": "10468f91"
+ },
+ "chonngay.gio-hoang-dao-tung-ngay": {
+  "t": "日ごとの<br>黄道吉時",
+  "h": "54c78af6"
+ },
+ "chonngay.he-thong-phan-tich-can-chi": {
+  "t": "システムが事主の干支と予定の年月を分析し、具体的な理由を添えて、吉日の期間を提案します。",
+  "h": "ec5043f6"
+ },
+ "chonngay.ho-ten-nguoi-chu-su": {
+  "t": "事主の氏名",
+  "h": "7d21772a"
+ },
+ "chonngay.hoang-lich-lich-van-nien-la": {
+  "t": "黄暦（万年暦）は、干支・二十八宿・吉凶の星を組み合わせ、用件ごとにふさわしい時刻や黄道吉日を定める、中国古来の暦の体系です。結婚式・開業・地鎮祭などの日時選びの伝統的な拠り所となっています。",
+  "h": "0240b883"
+ },
+ "chonngay.hoi-thay-chon-ngay-dep": {
+  "t": "✦ 先生に吉日を選んでもらう",
+  "h": "7d368a1b"
+ },
+ "chonngay.khai-truong": {
+  "t": "開業",
+  "h": "c86ca256"
+ },
+ "chonngay.ky-ket-hop-dong": {
+  "t": "契約の締結",
+  "h": "90e0fb9b"
+ },
+ "chonngay.lap-nen": {
+  "t": "土台を作る →",
+  "h": "81b6e6d8"
+ },
+ "chonngay.moi-luot": {
+  "t": "1回あたり",
+  "h": "2a5c5972"
+ },
+ "chonngay.mua-xe": {
+  "t": "車の購入",
+  "h": "52d4aa77"
+ },
+ "chonngay.nhap-trach-ve-nha-moi": {
+  "t": "入居（新居への引っ越し）",
+  "h": "fcda52e1"
+ },
+ "chonngay.thong-tin-chon-ngay": {
+  "t": "日取りの情報",
+  "h": "9d3045db"
+ },
+ "chonngay.ton": {
+  "t": "費用",
+  "h": "e603a0b9"
+ },
+ "chonngay.viec-can-chon-ngay": {
+  "t": "日取りを選ぶ用件",
+  "h": "e84816a6"
+ },
+ "chonngay.xem-ban-mau": {
+  "t": "サンプルを見る →",
+  "h": "ba3671b1"
+ },
+ "chonngay.xuat-hanh": {
+  "t": "出立（旅立ち）",
+  "h": "424fcbb2"
+ },
  "chutrinh.9-dai-van-tron-doi": {
   "t": "<span class=\"hp-ic\" data-icon=\"hourglass\"></span><span>生涯の<br>9つの大運</span>",
   "h": "5ab04ae7"
@@ -1354,6 +1474,98 @@
  "js.chat.ke-vai-dong-thoi-minh-bao": {
   "t": "数行で大丈夫です。明宝が、15人の先生のチームからぴったりの先生をご案内します。",
   "h": "e43855cc"
+ },
+ "js.chonngay.ban-mau-note": {
+  "t": "これは説明用の<b>サンプル</b>（別のデータ）で、あなたの結果ではありません。",
+  "h": "4dc73cd0"
+ },
+ "js.chonngay.chip1": {
+  "t": "今月で一番良い日はいつですか？",
+  "h": "1d6514df"
+ },
+ "js.chonngay.chip2": {
+  "t": "この件に向く黄道吉時は？",
+  "h": "005ba6f0"
+ },
+ "js.chonngay.chip3": {
+  "t": "絶対に避けるべき日はいつですか？",
+  "h": "36a0360f"
+ },
+ "js.chonngay.chip4": {
+  "t": "その日、出立に良い方角は？",
+  "h": "0ef8b5dc"
+ },
+ "js.chonngay.chua-mo-duoc-ban-mau": {
+  "t": "サンプルを開けませんでした。しばらくしてからもう一度お試しください。",
+  "h": "05a0f158"
+ },
+ "js.chonngay.dang-mo": {
+  "t": "開いています…",
+  "h": "a3fdeaab"
+ },
+ "js.chonngay.dang-phan-tich": {
+  "t": "吉日を分析中…通常15〜25秒かかります",
+  "h": "2413a48e"
+ },
+ "js.chonngay.greeting": {
+  "t": "**{viec}** の土台ができました（事主の干支：**{cc}**）。まず何についてアドバイスしましょうか？",
+  "h": "37474974"
+ },
+ "js.chonngay.khong-nhan-duoc-ket-qua": {
+  "t": "結果を受け取れませんでした。",
+  "h": "46e8add0"
+ },
+ "js.chonngay.khong-the-ket-noi": {
+  "t": "接続できませんでした。もう一度お試しください。",
+  "h": "bf0b6e7b"
+ },
+ "js.chonngay.label": {
+  "t": "日取り：{viec}・{ten}・{n}年{t}月",
+  "h": "c350a6fa"
+ },
+ "js.chonngay.loi-colon": {
+  "t": "エラー：",
+  "h": "471c0087"
+ },
+ "js.chonngay.loi-status": {
+  "t": "エラー {s}",
+  "h": "c406c72b"
+ },
+ "js.chonngay.nam-n": {
+  "t": "{n}年",
+  "h": "e2de29f4"
+ },
+ "js.chonngay.nhap-thong-tin-cua-toi": {
+  "t": "自分の情報を入力する →",
+  "h": "61666cb3"
+ },
+ "js.chonngay.res-note": {
+  "t": "事主の干支は<b>{cc}</b>（{hanh}）。予定の月は<b>{tcc}</b>、年は<b>{ncc}</b>。吉日は、事主の干支と<b>合</b>（六合・三合）であり、<b>冲・刑</b>を避けるものです。<b>{viec}</b>に向く具体的な日付と黄道吉時は、先生にお尋ねください。",
+  "h": "e946d4da"
+ },
+ "js.chonngay.thang-n": {
+  "t": "{n}月",
+  "h": "4dd9659f"
+ },
+ "js.chonngay.thang-n-m": {
+  "t": "{n}年{t}月",
+  "h": "355a0dcf"
+ },
+ "js.chonngay.tuoi-chu-su": {
+  "t": "事主の干支",
+  "h": "c6691aae"
+ },
+ "js.chonngay.vui-long-nhap-ho-ten": {
+  "t": "氏名、生まれ年、予定の月と年を入力してください。",
+  "h": "d60f4f07"
+ },
+ "js.chonngay.vui-long-nhap-thong-tin": {
+  "t": "先に情報を入力してください。",
+  "h": "b73d7304"
+ },
+ "js.chonngay.xem-ban-mau": {
+  "t": "サンプルを見る →",
+  "h": "ba3671b1"
  },
  "js.chutrinh.10-can-can-trong-dieu-gi": {
   "t": "/10) 注意すべき点は何ですか？",
