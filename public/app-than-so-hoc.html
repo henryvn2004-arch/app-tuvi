@@ -169,16 +169,16 @@ function calculate(){
   if(window.SHELL_INTRO)Shell.dismissIntro(window.SHELL_INTRO.key);
   Shell.setContext({
     scenario:{type:'than-so-hoc',data:r.data},
-    label:'Thần số học · '+r.data.ten,
-    greeting:'Đã lập bản đồ thần số cho **'+r.data.ten+'** (Đường Đời **'+r.data.soDuongDoi+'**, Định Mệnh '+r.data.soDinhMenh+', Linh Hồn '+r.data.soLinhHon+', Sứ Mệnh '+r.data.soSuMenh+') — kèm biểu đồ ngày sinh, nợ nghiệp quật và đỉnh cao/thử thách theo giai đoạn. Bạn muốn tôi luận gì trước?',
-    chips:['Số Đường Đời nói gì về tôi?','Năm '+r.data.namXemThanSo+' của tôi nên làm gì?','Tôi đang ở chặng nào, thử thách gì?','Biểu đồ ngày sinh tôi thiếu gì?','Nghề nghiệp nào hợp?']
+    label:_tvmbT('js.thansohoc.than-so-hoc', 'Thần số học · ')+r.data.ten,
+    greeting:_tvmbT('js.thansohoc.da-lap-ban-do-than-so', 'Đã lập bản đồ thần số cho **')+r.data.ten+_tvmbT('js.thansohoc.duong-doi', '** (Đường Đời **')+r.data.soDuongDoi+_tvmbT('js.thansohoc.dinh-menh', '**, Định Mệnh ')+r.data.soDinhMenh+_tvmbT('js.thansohoc.linh-hon', ', Linh Hồn ')+r.data.soLinhHon+_tvmbT('js.thansohoc.su-menh', ', Sứ Mệnh ')+r.data.soSuMenh+_tvmbT('js.thansohoc.kem-bieu-do-ngay-sinh-no', ') — kèm biểu đồ ngày sinh, nợ nghiệp quật và đỉnh cao/thử thách theo giai đoạn. Bạn muốn tôi luận gì trước?'),
+    chips:[_tvmbT('js.thansohoc.so-duong-doi-noi-gi-ve', 'Số Đường Đời nói gì về tôi?'),_tvmbT('js.thansohoc.nam', 'Năm ')+r.data.namXemThanSo+_tvmbT('js.thansohoc.cua-toi-nen-lam-gi', ' của tôi nên làm gì?'),_tvmbT('js.thansohoc.toi-dang-o-chang-nao-thu', 'Tôi đang ở chặng nào, thử thách gì?'),_tvmbT('js.thansohoc.bieu-do-ngay-sinh-toi-thieu', 'Biểu đồ ngày sinh tôi thiếu gì?'),_tvmbT('js.thansohoc.nghe-nghiep-nao-hop', 'Nghề nghiệp nào hợp?')]
   });
-  var _tsLines=['Thần số học — '+r.data.ten+' ('+r.data.dob+')'];
-  _tsLines.push('Đường Đời: '+r.data.soDuongDoi+' · Định Mệnh: '+r.data.soDinhMenh+' · Linh Hồn: '+r.data.soLinhHon+' · Sứ Mệnh: '+r.data.soSuMenh);
-  _tsLines.push('Ngày Sinh: '+r.data.soNgaySinh+' · Thái Độ: '+r.data.soThaiDo+(r.data.soTruongThanh?' · Trưởng Thành: '+r.data.soTruongThanh:''));
-  _tsLines.push('Năm cá nhân '+r.data.namXemThanSo+': '+r.data.namCaNhan+'/9 · Biểu đồ thiếu: '+r.data.bieuDoThieu);
-  if(r.data.noNghiepQuat!=='(không có)')_tsLines.push('Nợ nghiệp quật: '+r.data.noNghiepQuat);
-  Shell.setShareable({kind:'text',toolId:'than-so-hoc',title:'Thần số học của '+r.data.ten,text:_tsLines.join('\n')});
+  var _tsLines=[_tvmbT('js.thansohoc.than-so-hoc-r6ky', 'Thần số học — ')+r.data.ten+' ('+r.data.dob+')'];
+  _tsLines.push(_tvmbT('js.thansohoc.duong-doi-6p15', 'Đường Đời: ')+r.data.soDuongDoi+_tvmbT('js.thansohoc.dinh-menh-sba7', ' · Định Mệnh: ')+r.data.soDinhMenh+_tvmbT('js.thansohoc.linh-hon-avwt', ' · Linh Hồn: ')+r.data.soLinhHon+_tvmbT('js.thansohoc.su-menh-jyge', ' · Sứ Mệnh: ')+r.data.soSuMenh);
+  _tsLines.push(_tvmbT('js.thansohoc.ngay-sinh', 'Ngày Sinh: ')+r.data.soNgaySinh+_tvmbT('js.thansohoc.thai-do', ' · Thái Độ: ')+r.data.soThaiDo+(r.data.soTruongThanh?_tvmbT('js.thansohoc.truong-thanh', ' · Trưởng Thành: ')+r.data.soTruongThanh:''));
+  _tsLines.push(_tvmbT('js.thansohoc.nam-ca-nhan', 'Năm cá nhân ')+r.data.namXemThanSo+': '+r.data.namCaNhan+_tvmbT('js.thansohoc.9-bieu-do-thieu', '/9 · Biểu đồ thiếu: ')+r.data.bieuDoThieu);
+  if(r.data.noNghiepQuat!=='(không có)')_tsLines.push(_tvmbT('js.thansohoc.no-nghiep-quat', 'Nợ nghiệp quật: ')+r.data.noNghiepQuat);
+  Shell.setShareable({kind:'text',toolId:'than-so-hoc',title:_tvmbT('js.thansohoc.than-so-hoc-cua', 'Thần số học của ')+r.data.ten,text:_tsLines.join('\n')});
   document.querySelectorAll('#resPanel [data-ask]').forEach(function(el){ el.addEventListener('click',function(){ Shell.ask(el.getAttribute('data-ask')); }); });
   appendHighlightCard(r);
 }
@@ -194,15 +194,15 @@ function appendHighlightCard(r){
   var chat=document.getElementById('chat');
   if(!chat) return;
   var av=(function(){ var a=document.querySelector('.rail-ava'); return a?a.src:'/authors/thai-hu.jpg'; })();
-  var nums=[['Đường Đời',r.data.soDuongDoi],['Định Mệnh',r.data.soDinhMenh],['Linh Hồn',r.data.soLinhHon],['Sứ Mệnh',r.data.soSuMenh]];
+  var nums=[[_tvmbT('js.thansohoc.duong-doi-653r', 'Đường Đời'),r.data.soDuongDoi],[_tvmbT('js.thansohoc.dinh-menh-sxmj', 'Định Mệnh'),r.data.soDinhMenh],[_tvmbT('js.thansohoc.linh-hon-oll4', 'Linh Hồn'),r.data.soLinhHon],[_tvmbT('js.thansohoc.su-menh-hzws', 'Sứ Mệnh'),r.data.soSuMenh]];
   var rowHtml=nums.map(function(n){ return '<div class="chat-hl-n"><b>'+esc(n[1])+'</b><span>'+esc(n[0])+'</span></div>'; }).join('');
   var el=document.createElement('div'); el.className='msg a';
   el.innerHTML='<img class="msg-ava" src="'+av+'" alt="">'+
     '<div class="msg-body"><div class="chat-hl"><div class="chat-hl-row">'+rowHtml+'</div>'+
-    '<button type="button" class="chat-hl-cta" id="tshOpenSheet">Xem đầy đủ 13 chỉ số →</button></div></div>';
+    _tvmbT('js.thansohoc.xem-day-du-13-chi-so', '<button type="button" class="chat-hl-cta" id="tshOpenSheet">Xem đầy đủ 13 chỉ số →</button></div></div>');
   chat.appendChild(el); chat.scrollTop=chat.scrollHeight;
   document.getElementById('tshOpenSheet').addEventListener('click',function(){
-    Shell.openSheet(document.getElementById('numResults').innerHTML, {title:'Thần số học · '+r.data.ten});
+    Shell.openSheet(document.getElementById('numResults').innerHTML, {title:_tvmbT('js.thansohoc.than-so-hoc', 'Thần số học · ')+r.data.ten});
   });
 }
 function showForm(){
@@ -240,8 +240,8 @@ function startIntake(){
     showGender: false,
     skipHour: true,
     requireName: true,
-    q1: 'Cho thầy xin họ tên đầy đủ khai sinh nhé — có dấu hay không đều được.',
-    submitLabel: 'Tính thần số →',
+    q1: _tvmbT('js.thansohoc.cho-thay-xin-ho-ten-day', 'Cho thầy xin họ tên đầy đủ khai sinh nhé — có dấu hay không đều được.'),
+    submitLabel: _tvmbT('js.thansohoc.tinh-than-so', 'Tính thần số →'),
     onDone: calculate
   });
 }
