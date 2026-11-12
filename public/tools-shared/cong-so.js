@@ -84,6 +84,13 @@
       return dau + ' → ' + cau;
     });
   }
+  // ── i18n (W30f-4) — tầng nhánh nghề (nghe-nghiep.ts): nhánh tra theo `lĩnh vực.id` (id chỉ duy nhất TRONG lĩnh vực),
+  // trục theo id (`viMa` · `chatNguoi[].id` · `neTranh[].id`). Thiếu mã/bản dịch ⇒ NGUYÊN câu Việt (vi byte-giống).
+  if (window.I18n && window.I18n.loadLong) window.I18n.loadLong('nghe-nghiep');
+  function NN(key, vi) {
+    return window.I18n && window.I18n.long ? window.I18n.long('nghe-nghiep', key, vi) : vi;
+  }
+  function trucTen(id, vi, cach) { return id ? NN('truc.' + id + '.' + cach, vi) : vi; }
   function LM(prefix, ma, vi, suffix) { return ma ? L(prefix + ma + (suffix || ''), vi) : vi; }
   /** Chữ của KIỂU người theo id (kieu.<id>.<trường>). */
   function KF(k, f, vi) { return k && k.id ? L('kieu.' + k.id + '.' + f, vi) : vi; }
@@ -617,6 +624,7 @@
   function nhanhHTML(ho) {
     var nh = ho && ho.nhanh;
     if (!nh || !nh.goiY || !nh.goiY.length) return '';
+    var dom = ho.nganh && ho.nganh.domainMa; // khoá nhánh = <lĩnh vực>.<id>
     var h = [];
 
     h.push(('<div class="cs-sec"><h3>' + _tvmbT('js.cs.nhanh-nghe-hop-voi-ban', 'Nhánh nghề hợp với bạn') + '</h3>'));
@@ -645,16 +653,21 @@
       h.push(
         '<div class="cs-nhanh' + (g.phoThong ? ' cs-nhanh-pt' : '') + '">' +
           '<div class="cs-nhanh-top">' +
-            '<span class="cs-nhanh-ten">' + (i + 1) + '. ' + esc(g.ten) + '</span>' +
+            '<span class="cs-nhanh-ten">' + (i + 1) + '. ' + esc(NN('nhanh.' + dom + '.' + g.id + '.ten', g.ten)) + '</span>' +
             // Nhánh phổ thông KHÔNG hiện % — con số ở đó vô nghĩa vì nghề không
             // đòi một chất người đặc thù nào, bày ra là giả vờ có kết luận.
             (g.phoThong ? '' : ('<span class="cs-nhanh-diem">' + _tvmbT('js.cs.khop', 'khớp') + ' ') + esc(String(g.diem)) + '%</span>') +
           '</div>' +
-          '<div class="cs-nhanh-chat">' + esc(g.chat) + '</div>' +
+          '<div class="cs-nhanh-chat">' + esc(NN('nhanh.' + dom + '.' + g.id + '.chat', g.chat)) + '</div>' +
           (g.vi && g.vi.length
-            ? ('<div class="cs-nhanh-vi">' + _tvmbT('js.cs.vi-sao-hop', '<b>Vì sao hợp:</b>') + ' ') + g.vi.map(esc).join(' · ') + '</div>'
+            ? ('<div class="cs-nhanh-vi">' + _tvmbT('js.cs.vi-sao-hop', '<b>Vì sao hợp:</b>') + ' ') + g.vi.map(function (v, k) {
+                var id = g.viMa && g.viMa[k];
+                var tt = id && NN('truc.' + id + '.ten', null);
+                var tc = id && NN('truc.' + id + '.cao', null);
+                return esc(tt != null && tc != null ? tt + ' — ' + tc : v);
+              }).join(' · ') + '</div>'
             : '') +
-          '<ul class="cs-nganh">' + g.viec.map(function (v) { return '<li>' + esc(v) + '</li>'; }).join('') + '</ul>' +
+          '<ul class="cs-nganh">' + g.viec.map(function (v, k) { return '<li>' + esc(NN('nhanh.' + dom + '.' + g.id + '.viec.' + k, v)) + '</li>'; }).join('') + '</ul>' +
           (g.hopBac ? '' : ('<div class="cs-nhanh-bac">' + _tvmbT('js.cs.nhanh-nay-thuong-o-bac-khac', 'Nhánh này thường ở bậc khác với bậc chức phận lá số đang chỉ ra.') + '</div>')) +
         '</div>'
       );
@@ -663,12 +676,12 @@
     if (nh.chatNguoi && nh.chatNguoi.length) {
       h.push(
         '<div class="cs-grid">' +
-          row(_tvmbT('js.cs.chat-nguoi-noi-bat', 'Chất người nổi bật'), nh.chatNguoi.map(function (t) { return t.ten + ' — ' + t.cao; }).join(' · ')) +
+          row(_tvmbT('js.cs.chat-nguoi-noi-bat', 'Chất người nổi bật'), nh.chatNguoi.map(function (t) { return trucTen(t.id, t.ten, 'ten') + ' — ' + trucTen(t.id, t.cao, 'cao'); }).join(' · ')) +
           // ⚠️ Nhãn PHẢI là "nghề không đòi hỏi", KHÔNG được viết thành "bạn
           // thiếu". Đây là chỗ duy nhất trong tool có thể xúc phạm người dùng
           // bằng một dòng nhãn, và không test nào bắt được.
           (nh.neTranh && nh.neTranh.length
-            ? row(_tvmbT('js.cs.nghe-hop-voi-ban-thuong-khong', 'Nghề hợp với bạn thường KHÔNG đòi hỏi'), nh.neTranh.map(function (t) { return t.ten + ' — ' + t.thap; }).join(' · '))
+            ? row(_tvmbT('js.cs.nghe-hop-voi-ban-thuong-khong', 'Nghề hợp với bạn thường KHÔNG đòi hỏi'), nh.neTranh.map(function (t) { return trucTen(t.id, t.ten, 'ten') + ' — ' + trucTen(t.id, t.thap, 'thap'); }).join(' · '))
             : '') +
         '</div>'
       );

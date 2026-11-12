@@ -87,6 +87,7 @@ const bond = await import('./lib/engine/past-life-bond.js');
 const nm = await import('./lib/engine/nhan-mach.js');
 const dc = await import('./lib/engine/day-con-assess.js');
 const PL = await import('./lib/engine/past-life.js');
+const NN = await import('./lib/engine/nghe-nghiep.js');
 let seed = 20261112;
 const rnd = (n) => { seed = (seed * 1103515245 + 12345) & 0x7fffffff; return seed % n; };
 const mk = () => ({ day: 1 + rnd(28), month: 1 + rnd(12), year: 1940 + rnd(80), hourBranch: rnd(12), gender: rnd(2) ? 'nam' : 'nu', isLunar: false });
@@ -117,6 +118,16 @@ out.pl = [];
 for (let i = 0; i < 700; i++) {
   const c = PL.resolveCareerBase(ls(mk()));
   out.pl.push({ desc: c.desc, source: c.source, tierLabel: c.tierLabel, tierBreakdown: c.tierBreakdown, notes: c.notes, ma: c.ma });
+}
+// Tầng nhánh nghề (W30f-4): chonNhanh theo từng lĩnh vực × bậc trên lá số mẫu.
+out.nn = [];
+for (let i = 0; i < 150; i++) {
+  const l = ls(mk());
+  for (const dom of ['vo', 'van', 'quyen', 'thuong', 'y', 'nghe', 'tu']) {
+    const tier = ['thap', 'giua', 'kha', 'cao'][rnd(4)];
+    const r = NN.chonNhanh(l, dom, tier, 3);
+    out.nn.push({ dom, goiY: r.goiY.map((g) => ({ id: g.id, ten: g.ten, chat: g.chat, viec: g.viec, vi: g.vi, viMa: g.viMa })), chatNguoi: r.chatNguoi, neTranh: r.neTranh });
+  }
 }
 // GOLDEN: chữ Việt do engine TRƯỚC lô D dựng bằng chuỗi viết tay (scripts/fixtures/engine-ma-golden.json) — engine nay
 // dựng từ bảng khuôn và phải giữ từng byte (chữ còn vào prompt LLM + portrait_cache).
@@ -336,6 +347,54 @@ console.log('__KQ__' + JSON.stringify(out));
       nDesc >= 90,
       `past-life — mẫu chạm ${nDesc}/153 câu chức phận (cần ≥90) + ${dung.size} khoá tổng`
     );
+  }
+
+  // ── Tầng nhánh nghề (W30f-4): nhanh.<lĩnh vực>.<id>.* · truc.<id>.* — khoá DỰNG Y NHƯ cong-so.js
+  {
+    const S = nguon('nghe-nghiep');
+    const sai = [];
+    const lech = [];
+    const dung = new Set();
+    const chk = (k, vi) => {
+      dung.add(k);
+      if (!S.has(k)) sai.push(k);
+      else if (S.get(k) !== vi) lech.push(k);
+    };
+    for (const g of kq.nn)
+      for (const n of g.goiY) {
+        const p = `nhanh.${g.dom}.${n.id}`;
+        chk(p + '.ten', n.ten);
+        chk(p + '.chat', n.chat);
+        n.viec.forEach((v, i) => chk(`${p}.viec.${i}`, v));
+        if (!n.viMa || n.viMa.length !== n.vi.length) sai.push(p + ': viMa không song song vi');
+        else
+          n.viMa.forEach((id, i) => {
+            chk(`truc.${id}.ten`, S.get(`truc.${id}.ten`));
+            chk(`truc.${id}.cao`, S.get(`truc.${id}.cao`));
+            if (`${S.get(`truc.${id}.ten`)} — ${S.get(`truc.${id}.cao`)}` !== n.vi[i])
+              lech.push(`vi[${id}]`);
+          });
+      }
+    for (const g of kq.nn) {
+      for (const t of g.chatNguoi) {
+        chk(`truc.${t.id}.ten`, t.ten);
+        chk(`truc.${t.id}.cao`, t.cao);
+      }
+      for (const t of g.neTranh) {
+        chk(`truc.${t.id}.ten`, t.ten);
+        chk(`truc.${t.id}.thap`, t.thap);
+      }
+    }
+    bao(
+      sai.length === 0,
+      `nghe-nghiep — ${dung.size} khoá chạm bởi ${kq.nn.length} lượt chọn nhánh, không trỏ trượt: ${[...new Set(sai)].slice(0, 5).join(', ') || 'không'}`
+    );
+    bao(
+      lech.length === 0,
+      `nghe-nghiep — chữ Việt trong payload == nguồn dịch: ${[...new Set(lech)].slice(0, 5).join(', ') || 'khớp'}`
+    );
+    const nNhanh = [...dung].filter((k) => k.endsWith('.ten') && k.startsWith('nhanh.')).length;
+    bao(nNhanh >= 25, `nghe-nghiep — mẫu chạm ${nNhanh}/34 nhánh (cần ≥25)`);
   }
 
   // ── GOLDEN: chữ Việt byte-giống engine cũ (nguồn độc lập với bảng khuôn)

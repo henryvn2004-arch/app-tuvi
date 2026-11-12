@@ -473,6 +473,8 @@ export interface NhanhGoiY {
   diem: number;
   /** Trục kéo nhánh này lên, đọc theo mặt CAO. */
   vi: string[];
+  /** Id trục song song `vi` (cùng chỉ số) — mã tra ADDITIVE để client dịch (ns `nghe-nghiep`, `truc.<id>.ten|cao`). */
+  viMa: TrucId[];
   /** Nhánh phổ thông: lá số không nói gì đặc thù về nó. */
   phoThong: boolean;
   /** Bậc chức phận có khớp không — dùng để nêu cảnh báo, không để loại. */
@@ -482,9 +484,9 @@ export interface NhanhGoiY {
 export interface NhanhKetQua {
   goiY: NhanhGoiY[];
   /** Ba trục nổi nhất của chính lá số — phần "chất người" đọc ra được. */
-  chatNguoi: { ten: string; cao: string; diem: number }[];
+  chatNguoi: { id: TrucId; ten: string; cao: string; diem: number }[];
   /** Trục thấp nhất — đọc theo mặt "không đòi hỏi", KHÔNG đọc là thiếu sót. */
-  neTranh: { ten: string; thap: string }[];
+  neTranh: { id: TrucId; ten: string; thap: string }[];
   /** Không nhánh nào khớp đủ mạnh → chỉ còn nhánh phổ thông. */
   moNhat: boolean;
   /**
@@ -530,16 +532,16 @@ export function chonNhanh(
     // ra DƯƠNG khi cả hai vế cùng ÂM, nên thiếu chốt này thì một trục người
     // YẾU vẫn được nêu làm lý do — và bản đọc tự mâu thuẫn ngay trong một màn
     // hình ("không đòi: Thận trọng" nằm ngay trên "vì: Thận trọng").
-    const vi = TRUC_IDS
+    const viTruc = TRUC_IDS
       .map((t, i) => ({ t, gop: v[i] * ((n.hinh[t] ?? 0) - nen[i]), manh: v[i] }))
       .filter((x) => x.gop > 0.15 && x.manh > 0.2 && (n.hinh[x.t] ?? 0) > 0)
       .sort((a, b) => b.gop - a.gop)
-      .slice(0, 3)
-      .map((x) => `${TRUC[x.t].ten} — ${TRUC[x.t].cao}`);
+      .slice(0, 3);
+    const vi = viTruc.map((x) => `${TRUC[x.t].ten} — ${TRUC[x.t].cao}`);
     return {
       id: n.id, ten: n.ten, chat: n.chat, viec: n.viec,
       diem: Math.round(Math.max(0, Math.min(1, (s + 1) / 2)) * 100),
-      vi, phoThong: !!n.phoThong, hopBac: n.bac.includes(tier),
+      vi, viMa: viTruc.map((x) => x.t), phoThong: !!n.phoThong, hopBac: n.bac.includes(tier),
     };
   };
 
@@ -566,9 +568,9 @@ export function chonNhanh(
   return {
     goiY,
     chatNguoi: xepTruc.filter((x) => x.val > 0.3).slice(0, 3)
-      .map((x) => ({ ten: TRUC[x.t].ten, cao: TRUC[x.t].cao, diem: Math.round(x.val * 10) / 10 })),
+      .map((x) => ({ id: x.t, ten: TRUC[x.t].ten, cao: TRUC[x.t].cao, diem: Math.round(x.val * 10) / 10 })),
     neTranh: xepTruc.filter((x) => x.val < -0.3).slice(-2)
-      .map((x) => ({ ten: TRUC[x.t].ten, thap: TRUC[x.t].thap })),
+      .map((x) => ({ id: x.t, ten: TRUC[x.t].ten, thap: TRUC[x.t].thap })),
     moNhat,
     lechBac: goiY.length > 0 && goiY.every((x) => !x.hopBac),
   };
