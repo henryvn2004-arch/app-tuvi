@@ -1,4 +1,76 @@
 {
+ "battrach2.4-huong-dai-cat": {
+  "t": "4 highly<br>auspicious directions",
+  "h": "0b0b6a6a"
+ },
+ "battrach2.4-huong-dai-hung": {
+  "t": "4 highly<br>inauspicious directions",
+  "h": "45c6e01a"
+ },
+ "battrach2.bang-8-huong-chi-tiet": {
+  "t": "<span class=\"res-block-title\">Detailed Table of the 8 Directions</span>",
+  "h": "0ef24790"
+ },
+ "battrach2.bat-trach-la-mot-truong-phai": {
+  "t": "Ba Zhai (Eight Mansions) is a traditional school of feng shui that divides a dwelling into 8 directions matching the Eight Trigrams, then compares them with the owner's life trigram to determine good and bad directions and positions. <i>Ba Zhai Ming Jing</i> is one of the classics that systematized this method.",
+  "h": "daa2d3d2"
+ },
+ "battrach2.goi-y-dung": {
+  "t": "Suggested use",
+  "h": "1e297636"
+ },
+ "battrach2.hoi-thay-huong-hop-cach-hoa": {
+  "t": "✦ Ask the Master about suitable directions & remedies",
+  "h": "d656b02e"
+ },
+ "battrach2.huong": {
+  "t": "Direction",
+  "h": "05c861c1"
+ },
+ "battrach2.huong-bat-trach": {
+  "t": "Ba Zhai Directions",
+  "h": "a9176f82"
+ },
+ "battrach2.huong-bat-trach-cung-menh-8": {
+  "t": "<b>Ba Zhai Directions</b><span>Your life trigram &amp; the 8 good and bad directions</span>",
+  "h": "7f6f63a9"
+ },
+ "battrach2.huong-bat-trach-tu-vi-minh": {
+  "t": "Ba Zhai Directions — Minh Bao Zi Wei Dou Shu",
+  "h": "1dd7c74f"
+ },
+ "battrach2.menh-quai-cung-menh": {
+  "t": "Life trigram,<br>life palace",
+  "h": "a7cd9aa8"
+ },
+ "battrach2.mua-nha-thue-van-phong-roi": {
+  "t": "Buying a house or renting an office only to realize later that the door direction doesn't suit your life trigram is too late. Enter your birth year and gender to know right away which direction to choose before paying a deposit.",
+  "h": "22a1a2e8"
+ },
+ "battrach2.nam-sinh-gioi-tinh": {
+  "t": "Birth year & gender",
+  "h": "2fe866aa"
+ },
+ "battrach2.nhap-nam-sinh-va-gioi-tinh": {
+  "t": "Enter your birth year and gender. The system works out your life trigram from the exact birth year and returns the trigram, palace and a detailed table of the 8 good and bad directions.",
+  "h": "5374993f"
+ },
+ "battrach2.ten-huong": {
+  "t": "Direction name",
+  "h": "a2de1255"
+ },
+ "battrach2.tra-4-huong-dai-cat-va": {
+  "t": "Look up the 4 highly auspicious and 4 highly inauspicious directions for your Ba Zhai life trigram — directions for the house, door, kitchen and bed that suit you. Ask the Master for a deeper reading.",
+  "h": "4bcadf9b"
+ },
+ "battrach2.tra-huong-bat-trach": {
+  "t": "Look up Ba Zhai directions →",
+  "h": "e3808961"
+ },
+ "battrach2.y-nghia": {
+  "t": "Meaning",
+  "h": "b1973c6d"
+ },
  "battu.1-nhap-thong-tin": {
   "t": "<span class=\"wss-n\">1</span><span class=\"wss-l\">Enter details</span>",
   "h": "487c9507"
@@ -1362,6 +1434,38 @@
  "js.auth.vui-long-dien-email-va-mat": {
   "t": "Please enter your email and password.",
   "h": "d84b9abd"
+ },
+ "js.battrach.chip1": {
+  "t": "Which house direction suits me best?",
+  "h": "cc262fd1"
+ },
+ "js.battrach.chip2": {
+  "t": "Which direction should the kitchen face?",
+  "h": "3eafdc4a"
+ },
+ "js.battrach.chip3": {
+  "t": "Which way should the bed face?",
+  "h": "08ee9028"
+ },
+ "js.battrach.chip4": {
+  "t": "What if I'm stuck with a bad direction — how do I remedy it?",
+  "h": "8900960b"
+ },
+ "js.battrach.dong-tu-menh": {
+  "t": "East Group",
+  "h": "860976af"
+ },
+ "js.battrach.greeting": {
+  "t": "Your life trigram is **{q}** ({n}). What would you like to ask about directions for?",
+  "h": "9701f4f7"
+ },
+ "js.battrach.label": {
+  "t": "Ba Zhai · {q} · {n}",
+  "h": "38326507"
+ },
+ "js.battrach.tay-tu-menh": {
+  "t": "West Group",
+  "h": "e606c821"
  },
  "js.battu.10-luan-ky-giup-toi": {
   "t": "/10) — please read this in detail for me",
@@ -4278,6 +4382,118 @@
  "js.shellui.brand": {
   "t": "Minh Bao Zi Wei Dou Shu",
   "h": "33336b26"
+ },
+ "js.shellui.bt-cd-0": {
+  "t": "Wealth, health, the best growth",
+  "h": "ba2fcc5f"
+ },
+ "js.shellui.bt-cd-1": {
+  "t": "Health, longevity, good medical luck",
+  "h": "f2b6c53a"
+ },
+ "js.shellui.bt-cd-2": {
+  "t": "Lasting marriage and career",
+  "h": "eaa1aa66"
+ },
+ "js.shellui.bt-cd-3": {
+  "t": "Stability, a settled home, holding steady",
+  "h": "9d377762"
+ },
+ "js.shellui.bt-cu-0": {
+  "t": "Main door, bedroom, work desk",
+  "h": "9598844f"
+ },
+ "js.shellui.bt-cu-1": {
+  "t": "Bedroom, direction of the bed head",
+  "h": "ff2bdd07"
+ },
+ "js.shellui.bt-cu-2": {
+  "t": "Altar, living room, dining table",
+  "h": "18d25898"
+ },
+ "js.shellui.bt-cu-3": {
+  "t": "Storeroom, toilet, secondary rooms",
+  "h": "b7d8011a"
+ },
+ "js.shellui.bt-cung-menh": {
+  "t": "Life Trigram",
+  "h": "3dc5da1d"
+ },
+ "js.shellui.bt-cung-n": {
+  "t": "PALACE {c}",
+  "h": "b2bf68e0"
+ },
+ "js.shellui.bt-dong-hop": {
+  "t": "East Group — suits the East, Southeast, South and North directions",
+  "h": "37481bde"
+ },
+ "js.shellui.bt-dong-tu-menh": {
+  "t": "East Group",
+  "h": "860976af"
+ },
+ "js.shellui.bt-hd-0": {
+  "t": "Loss of wealth, gossip, unpleasant affairs",
+  "h": "224b7b52"
+ },
+ "js.shellui.bt-hd-1": {
+  "t": "Relationship trouble, declining health",
+  "h": "234cd72a"
+ },
+ "js.shellui.bt-hd-2": {
+  "t": "Petty people, hidden sabotage",
+  "h": "e6644f6c"
+ },
+ "js.shellui.bt-hd-3": {
+  "t": "Utter bad luck, serious illness, major disaster",
+  "h": "72905f33"
+ },
+ "js.shellui.bt-hu-0": {
+  "t": "Avoid for the main door and bedroom",
+  "h": "460c1435"
+ },
+ "js.shellui.bt-hu-1": {
+  "t": "Avoid placing the altar or bedroom here",
+  "h": "f713260a"
+ },
+ "js.shellui.bt-hu-2": {
+  "t": "Avoid the kitchen and the master room",
+  "h": "8fd85d89"
+ },
+ "js.shellui.bt-hu-3": {
+  "t": "Do not put a door or a bed here",
+  "h": "fde05a0d"
+ },
+ "js.shellui.bt-khong-tinh-duoc-cung": {
+  "t": "Couldn't work out the life trigram.",
+  "h": "ce9bd2a4"
+ },
+ "js.shellui.bt-ngu-hanh": {
+  "t": "Five Elements",
+  "h": "68ac2473"
+ },
+ "js.shellui.bt-nhap-nam-hop-le": {
+  "t": "Please enter a valid birth year (1900–2010).",
+  "h": "8363c20b"
+ },
+ "js.shellui.bt-nhom": {
+  "t": "Group",
+  "h": "ce7eab0a"
+ },
+ "js.shellui.bt-tay-hop": {
+  "t": "West Group — suits the West, Northwest, Northeast and Southwest directions",
+  "h": "6f187842"
+ },
+ "js.shellui.bt-tay-tu-menh": {
+  "t": "West Group",
+  "h": "e606c821"
+ },
+ "js.shellui.bt-title": {
+  "t": "Year {y} — Trigram {c} {q} — {n}",
+  "h": "44ed4978"
+ },
+ "js.shellui.bt-vi-tri-cung": {
+  "t": "Palace position",
+  "h": "5a046cd0"
  },
  "js.shellui.buoc-o-huong-xau-thi-hoa": {
   "t": "If it is tied in an unfavorable direction, how can that be remedied?",

@@ -122,7 +122,7 @@
     return g && v ? g.t(kind, v) : v;
   }
   var HUONG_KEY = { 'Bắc': 'Chính Bắc', 'Nam': 'Chính Nam', 'Đông': 'Chính Đông', 'Tây': 'Chính Tây', 'Trung tâm': 'Trung cung' };
-  function _dir(vi) { return _g('huong', HUONG_KEY[vi] || vi); }
+  function _dir(vi) { var k = HUONG_KEY[vi] || vi, r = _g('huong', k); return r === k ? vi : r; } // vi: glossary trả nguyên khoá tra ⇒ giữ chữ gốc ('Bắc', không phải 'Chính Bắc')
   var CAT_DESC = ['Tài lộc, sức khỏe, phát triển tốt nhất', 'Sức khỏe, trường thọ, y duyên', 'Hôn nhân, sự nghiệp bền vững', 'Bình ổn, an cư, giữ vững'];
   var HUNG_DESC = ['Hao tài, thị phi, chuyện không hay', 'Tình cảm trục trặc, sức khỏe suy', 'Tiểu nhân, phá hoại ngầm', 'Tuyệt vận, bệnh nặng, tai họa lớn'];
   var CAT_USE = ['Cửa chính, phòng ngủ, bàn làm việc', 'Phòng ngủ, hướng đầu giường', 'Bàn thờ, phòng khách, bàn ăn', 'Kho, nhà vệ sinh, phòng phụ'];

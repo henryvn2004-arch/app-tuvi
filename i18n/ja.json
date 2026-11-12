@@ -1,4 +1,76 @@
 {
+ "battrach2.4-huong-dai-cat": {
+  "t": "大吉の<br>方位4つ",
+  "h": "0b0b6a6a"
+ },
+ "battrach2.4-huong-dai-hung": {
+  "t": "大凶の<br>方位4つ",
+  "h": "45c6e01a"
+ },
+ "battrach2.bang-8-huong-chi-tiet": {
+  "t": "<span class=\"res-block-title\">8方位の詳細表</span>",
+  "h": "0ef24790"
+ },
+ "battrach2.bat-trach-la-mot-truong-phai": {
+  "t": "八宅は風水の伝統的な流派で、住まいを八卦に対応する8つの方位に分け、家主の本命卦と照らし合わせて、良い方位・悪い方位や位置を判断します。<i>八宅明鏡</i>は、この方法を体系化した古典のひとつです。",
+  "h": "daa2d3d2"
+ },
+ "battrach2.goi-y-dung": {
+  "t": "使い方の目安",
+  "h": "1e297636"
+ },
+ "battrach2.hoi-thay-huong-hop-cach-hoa": {
+  "t": "✦ 先生に、合う方位と対処法を聞く",
+  "h": "d656b02e"
+ },
+ "battrach2.huong": {
+  "t": "方位",
+  "h": "05c861c1"
+ },
+ "battrach2.huong-bat-trach": {
+  "t": "八宅の方位",
+  "h": "a9176f82"
+ },
+ "battrach2.huong-bat-trach-cung-menh-8": {
+  "t": "<b>八宅の方位</b><span>本命宮と、吉凶8つの方位</span>",
+  "h": "7f6f63a9"
+ },
+ "battrach2.huong-bat-trach-tu-vi-minh": {
+  "t": "八宅の方位 — 明宝紫微斗数",
+  "h": "1dd7c74f"
+ },
+ "battrach2.menh-quai-cung-menh": {
+  "t": "本命卦、<br>本命宮",
+  "h": "a7cd9aa8"
+ },
+ "battrach2.mua-nha-thue-van-phong-roi": {
+  "t": "家を買う、オフィスを借りたあとで、玄関の向きが本命卦に合わないと気づくのでは手遅れです。生まれ年と性別を入力すれば、手付金を払う前に選ぶべき方位がすぐにわかります。",
+  "h": "22a1a2e8"
+ },
+ "battrach2.nam-sinh-gioi-tinh": {
+  "t": "生まれ年と性別",
+  "h": "2fe866aa"
+ },
+ "battrach2.nhap-nam-sinh-va-gioi-tinh": {
+  "t": "生まれ年と性別を入力してください。システムが生まれ年から本命卦を正確に算出し、本命卦・宮、そして吉凶8方位の詳細表を返します。",
+  "h": "5374993f"
+ },
+ "battrach2.ten-huong": {
+  "t": "方位名",
+  "h": "a2de1255"
+ },
+ "battrach2.tra-4-huong-dai-cat-va": {
+  "t": "八宅の本命宮から、大吉の方位4つと大凶の方位4つを調べます。住まい・玄関・キッチン・ベッドに合う方位がわかります。さらに詳しい鑑定は先生に。",
+  "h": "4bcadf9b"
+ },
+ "battrach2.tra-huong-bat-trach": {
+  "t": "八宅の方位を調べる →",
+  "h": "e3808961"
+ },
+ "battrach2.y-nghia": {
+  "t": "意味",
+  "h": "b1973c6d"
+ },
  "battu.1-nhap-thong-tin": {
   "t": "<span class=\"wss-n\">1</span><span class=\"wss-l\">情報を入力</span>",
   "h": "487c9507"
@@ -1362,6 +1434,38 @@
  "js.auth.vui-long-dien-email-va-mat": {
   "t": "メールアドレスとパスワードを入力してください。",
   "h": "d84b9abd"
+ },
+ "js.battrach.chip1": {
+  "t": "住まいはどの方位が一番合いますか？",
+  "h": "cc262fd1"
+ },
+ "js.battrach.chip2": {
+  "t": "キッチンはどの方位に置くべきですか？",
+  "h": "3eafdc4a"
+ },
+ "js.battrach.chip3": {
+  "t": "ベッドはどちらを向けるべきですか？",
+  "h": "08ee9028"
+ },
+ "js.battrach.chip4": {
+  "t": "悪い方位から動かせない場合、どう対処すればよいですか？",
+  "h": "8900960b"
+ },
+ "js.battrach.dong-tu-menh": {
+  "t": "東四命",
+  "h": "860976af"
+ },
+ "js.battrach.greeting": {
+  "t": "あなたの本命卦は**{q}**（{n}）です。どんなことの方位について聞きたいですか？",
+  "h": "9701f4f7"
+ },
+ "js.battrach.label": {
+  "t": "八宅・{q}・{n}",
+  "h": "38326507"
+ },
+ "js.battrach.tay-tu-menh": {
+  "t": "西四命",
+  "h": "e606c821"
  },
  "js.battu.10-luan-ky-giup-toi": {
   "t": "/10) — 詳しく鑑定してください",
@@ -4278,6 +4382,118 @@
  "js.shellui.brand": {
   "t": "明宝紫微斗数",
   "h": "33336b26"
+ },
+ "js.shellui.bt-cd-0": {
+  "t": "金運・健康・最も良い発展",
+  "h": "ba2fcc5f"
+ },
+ "js.shellui.bt-cd-1": {
+  "t": "健康・長寿・医療との縁",
+  "h": "f2b6c53a"
+ },
+ "js.shellui.bt-cd-2": {
+  "t": "結婚・仕事の安定",
+  "h": "eaa1aa66"
+ },
+ "js.shellui.bt-cd-3": {
+  "t": "安定・安心して暮らす・守りを固める",
+  "h": "9d377762"
+ },
+ "js.shellui.bt-cu-0": {
+  "t": "玄関、寝室、仕事机",
+  "h": "9598844f"
+ },
+ "js.shellui.bt-cu-1": {
+  "t": "寝室、ベッドの頭の向き",
+  "h": "ff2bdd07"
+ },
+ "js.shellui.bt-cu-2": {
+  "t": "祭壇、リビング、食卓",
+  "h": "18d25898"
+ },
+ "js.shellui.bt-cu-3": {
+  "t": "物置、トイレ、副次的な部屋",
+  "h": "b7d8011a"
+ },
+ "js.shellui.bt-cung-menh": {
+  "t": "本命宮",
+  "h": "3dc5da1d"
+ },
+ "js.shellui.bt-cung-n": {
+  "t": "第{c}宮",
+  "h": "b2bf68e0"
+ },
+ "js.shellui.bt-dong-hop": {
+  "t": "東四命 — 東・東南・南・北の方位に合う",
+  "h": "37481bde"
+ },
+ "js.shellui.bt-dong-tu-menh": {
+  "t": "東四命",
+  "h": "860976af"
+ },
+ "js.shellui.bt-hd-0": {
+  "t": "散財、いざこざ、よくない出来事",
+  "h": "224b7b52"
+ },
+ "js.shellui.bt-hd-1": {
+  "t": "人間関係のもつれ、健康の衰え",
+  "h": "234cd72a"
+ },
+ "js.shellui.bt-hd-2": {
+  "t": "小人、陰での妨害",
+  "h": "e6644f6c"
+ },
+ "js.shellui.bt-hd-3": {
+  "t": "運の途絶え、重い病、大きな災い",
+  "h": "72905f33"
+ },
+ "js.shellui.bt-hu-0": {
+  "t": "玄関と寝室は避ける",
+  "h": "460c1435"
+ },
+ "js.shellui.bt-hu-1": {
+  "t": "祭壇や寝室を置くのは避ける",
+  "h": "f713260a"
+ },
+ "js.shellui.bt-hu-2": {
+  "t": "キッチンと主寝室は避ける",
+  "h": "8fd85d89"
+ },
+ "js.shellui.bt-hu-3": {
+  "t": "ドアやベッドを置かない",
+  "h": "fde05a0d"
+ },
+ "js.shellui.bt-khong-tinh-duoc-cung": {
+  "t": "本命宮を算出できませんでした。",
+  "h": "ce9bd2a4"
+ },
+ "js.shellui.bt-ngu-hanh": {
+  "t": "五行",
+  "h": "68ac2473"
+ },
+ "js.shellui.bt-nhap-nam-hop-le": {
+  "t": "有効な生まれ年（1900〜2010）を入力してください。",
+  "h": "8363c20b"
+ },
+ "js.shellui.bt-nhom": {
+  "t": "グループ",
+  "h": "ce7eab0a"
+ },
+ "js.shellui.bt-tay-hop": {
+  "t": "西四命 — 西・西北・東北・西南の方位に合う",
+  "h": "6f187842"
+ },
+ "js.shellui.bt-tay-tu-menh": {
+  "t": "西四命",
+  "h": "e606c821"
+ },
+ "js.shellui.bt-title": {
+  "t": "{y}年 — 第{c}宮 {q} — {n}",
+  "h": "44ed4978"
+ },
+ "js.shellui.bt-vi-tri-cung": {
+  "t": "宮の位置",
+  "h": "5a046cd0"
  },
  "js.shellui.buoc-o-huong-xau-thi-hoa": {
   "t": "凶方位に結んでしまった場合、どう化解すればよいですか？",

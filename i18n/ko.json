@@ -1,4 +1,76 @@
 {
+ "battrach2.4-huong-dai-cat": {
+  "t": "대길<br>방위 4개",
+  "h": "0b0b6a6a"
+ },
+ "battrach2.4-huong-dai-hung": {
+  "t": "대흉<br>방위 4개",
+  "h": "45c6e01a"
+ },
+ "battrach2.bang-8-huong-chi-tiet": {
+  "t": "<span class=\"res-block-title\">8방위 상세표</span>",
+  "h": "0ef24790"
+ },
+ "battrach2.bat-trach-la-mot-truong-phai": {
+  "t": "팔택은 전통 풍수의 한 갈래로, 집을 팔괘에 대응하는 8개 방위로 나눈 뒤 집주인의 본명괘와 대조해 좋고 나쁜 방위와 자리를 정해요. <i>팔택명경</i>은 이 방법을 체계화한 고전 중 하나예요.",
+  "h": "daa2d3d2"
+ },
+ "battrach2.goi-y-dung": {
+  "t": "쓰임새 추천",
+  "h": "1e297636"
+ },
+ "battrach2.hoi-thay-huong-hop-cach-hoa": {
+  "t": "✦ 선생님께 맞는 방위와 액막이 방법 묻기",
+  "h": "d656b02e"
+ },
+ "battrach2.huong": {
+  "t": "방위",
+  "h": "05c861c1"
+ },
+ "battrach2.huong-bat-trach": {
+  "t": "팔택 방위",
+  "h": "a9176f82"
+ },
+ "battrach2.huong-bat-trach-cung-menh-8": {
+  "t": "<b>팔택 방위</b><span>본명궁과 길흉 8방위</span>",
+  "h": "7f6f63a9"
+ },
+ "battrach2.huong-bat-trach-tu-vi-minh": {
+  "t": "팔택 방위 — 명보 자미두수",
+  "h": "1dd7c74f"
+ },
+ "battrach2.menh-quai-cung-menh": {
+  "t": "본명괘,<br>본명궁",
+  "h": "a7cd9aa8"
+ },
+ "battrach2.mua-nha-thue-van-phong-roi": {
+  "t": "집을 사거나 사무실을 빌린 뒤에야 문 방향이 본명괘와 맞지 않는다는 걸 알면 늦어요. 출생 연도와 성별을 입력하면 계약금을 내기 전에 어느 방위를 골라야 하는지 바로 알 수 있어요.",
+  "h": "22a1a2e8"
+ },
+ "battrach2.nam-sinh-gioi-tinh": {
+  "t": "출생 연도와 성별",
+  "h": "2fe866aa"
+ },
+ "battrach2.nhap-nam-sinh-va-gioi-tinh": {
+  "t": "출생 연도와 성별을 입력하세요. 시스템이 출생 연도로 본명괘를 정확히 계산해 본명괘·궁과 길흉 8방위 상세표를 돌려줘요.",
+  "h": "5374993f"
+ },
+ "battrach2.ten-huong": {
+  "t": "방위 이름",
+  "h": "a2de1255"
+ },
+ "battrach2.tra-4-huong-dai-cat-va": {
+  "t": "팔택 본명궁에 따른 대길 방위 4개와 대흉 방위 4개를 조회해요. 집·문·주방·침대에 맞는 방위를 알 수 있어요. 더 깊은 풀이는 선생님께 물어보세요.",
+  "h": "4bcadf9b"
+ },
+ "battrach2.tra-huong-bat-trach": {
+  "t": "팔택 방위 조회하기 →",
+  "h": "e3808961"
+ },
+ "battrach2.y-nghia": {
+  "t": "의미",
+  "h": "b1973c6d"
+ },
  "battu.1-nhap-thong-tin": {
   "t": "<span class=\"wss-n\">1</span><span class=\"wss-l\">정보 입력</span>",
   "h": "487c9507"
@@ -1362,6 +1434,38 @@
  "js.auth.vui-long-dien-email-va-mat": {
   "t": "이메일과 비밀번호를 입력해 주세요.",
   "h": "d84b9abd"
+ },
+ "js.battrach.chip1": {
+  "t": "집은 어느 방위가 가장 잘 맞나요?",
+  "h": "cc262fd1"
+ },
+ "js.battrach.chip2": {
+  "t": "주방은 어느 방향에 두는 게 좋나요?",
+  "h": "3eafdc4a"
+ },
+ "js.battrach.chip3": {
+  "t": "침대는 어느 쪽을 향하게 해야 하나요?",
+  "h": "08ee9028"
+ },
+ "js.battrach.chip4": {
+  "t": "나쁜 방위를 피할 수 없다면 어떻게 액막이하나요?",
+  "h": "8900960b"
+ },
+ "js.battrach.dong-tu-menh": {
+  "t": "동사명",
+  "h": "860976af"
+ },
+ "js.battrach.greeting": {
+  "t": "회원님의 본명괘는 **{q}**({n})예요. 어떤 일의 방위를 묻고 싶으세요?",
+  "h": "9701f4f7"
+ },
+ "js.battrach.label": {
+  "t": "팔택 · {q} · {n}",
+  "h": "38326507"
+ },
+ "js.battrach.tay-tu-menh": {
+  "t": "서사명",
+  "h": "e606c821"
  },
  "js.battu.10-luan-ky-giup-toi": {
   "t": "/10)’ — 자세히 풀이해 주세요",
@@ -4278,6 +4382,118 @@
  "js.shellui.brand": {
   "t": "명보 자미두수",
   "h": "33336b26"
+ },
+ "js.shellui.bt-cd-0": {
+  "t": "재물운, 건강, 가장 좋은 발전",
+  "h": "ba2fcc5f"
+ },
+ "js.shellui.bt-cd-1": {
+  "t": "건강, 장수, 의료 인연",
+  "h": "f2b6c53a"
+ },
+ "js.shellui.bt-cd-2": {
+  "t": "결혼과 사업의 안정",
+  "h": "eaa1aa66"
+ },
+ "js.shellui.bt-cd-3": {
+  "t": "안정, 편안한 거처, 굳건히 지킴",
+  "h": "9d377762"
+ },
+ "js.shellui.bt-cu-0": {
+  "t": "현관문, 침실, 업무용 책상",
+  "h": "9598844f"
+ },
+ "js.shellui.bt-cu-1": {
+  "t": "침실, 침대 머리 방향",
+  "h": "ff2bdd07"
+ },
+ "js.shellui.bt-cu-2": {
+  "t": "제단, 거실, 식탁",
+  "h": "18d25898"
+ },
+ "js.shellui.bt-cu-3": {
+  "t": "창고, 화장실, 보조 방",
+  "h": "b7d8011a"
+ },
+ "js.shellui.bt-cung-menh": {
+  "t": "본명궁",
+  "h": "3dc5da1d"
+ },
+ "js.shellui.bt-cung-n": {
+  "t": "제{c}궁",
+  "h": "b2bf68e0"
+ },
+ "js.shellui.bt-dong-hop": {
+  "t": "동사명 — 동·동남·남·북 방위에 맞음",
+  "h": "37481bde"
+ },
+ "js.shellui.bt-dong-tu-menh": {
+  "t": "동사명",
+  "h": "860976af"
+ },
+ "js.shellui.bt-hd-0": {
+  "t": "재물 손실, 구설, 좋지 않은 일",
+  "h": "224b7b52"
+ },
+ "js.shellui.bt-hd-1": {
+  "t": "애정 문제, 건강 악화",
+  "h": "234cd72a"
+ },
+ "js.shellui.bt-hd-2": {
+  "t": "소인배, 은밀한 훼방",
+  "h": "e6644f6c"
+ },
+ "js.shellui.bt-hd-3": {
+  "t": "운이 끊김, 중병, 큰 재앙",
+  "h": "72905f33"
+ },
+ "js.shellui.bt-hu-0": {
+  "t": "현관문과 침실은 피하세요",
+  "h": "460c1435"
+ },
+ "js.shellui.bt-hu-1": {
+  "t": "제단과 침실은 두지 마세요",
+  "h": "f713260a"
+ },
+ "js.shellui.bt-hu-2": {
+  "t": "주방과 안방은 피하세요",
+  "h": "8fd85d89"
+ },
+ "js.shellui.bt-hu-3": {
+  "t": "문이나 침대를 두지 마세요",
+  "h": "fde05a0d"
+ },
+ "js.shellui.bt-khong-tinh-duoc-cung": {
+  "t": "본명궁을 계산하지 못했어요.",
+  "h": "ce9bd2a4"
+ },
+ "js.shellui.bt-ngu-hanh": {
+  "t": "오행",
+  "h": "68ac2473"
+ },
+ "js.shellui.bt-nhap-nam-hop-le": {
+  "t": "올바른 출생 연도(1900~2010)를 입력해 주세요.",
+  "h": "8363c20b"
+ },
+ "js.shellui.bt-nhom": {
+  "t": "그룹",
+  "h": "ce7eab0a"
+ },
+ "js.shellui.bt-tay-hop": {
+  "t": "서사명 — 서·서북·동북·서남 방위에 맞음",
+  "h": "6f187842"
+ },
+ "js.shellui.bt-tay-tu-menh": {
+  "t": "서사명",
+  "h": "e606c821"
+ },
+ "js.shellui.bt-title": {
+  "t": "{y}년 — 제{c}궁 {q} — {n}",
+  "h": "44ed4978"
+ },
+ "js.shellui.bt-vi-tri-cung": {
+  "t": "궁의 위치",
+  "h": "5a046cd0"
  },
  "js.shellui.buoc-o-huong-xau-thi-hoa": {
   "t": "나쁜 방향에 묶어 두었다면 어떻게 풀어야 하나요?",

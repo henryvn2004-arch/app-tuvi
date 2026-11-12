@@ -1,4 +1,76 @@
 {
+ "battrach2.4-huong-dai-cat": {
+  "t": "4个<br>大吉方位",
+  "h": "0b0b6a6a"
+ },
+ "battrach2.4-huong-dai-hung": {
+  "t": "4个<br>大凶方位",
+  "h": "45c6e01a"
+ },
+ "battrach2.bang-8-huong-chi-tiet": {
+  "t": "<span class=\"res-block-title\">八方位详细表</span>",
+  "h": "0ef24790"
+ },
+ "battrach2.bat-trach-la-mot-truong-phai": {
+  "t": "八宅是传统风水的一个流派，将住宅依八卦分为八个方位，再与屋主的命卦对照，判断方位与位置的吉凶。<i>八宅明镜</i>是将此法系统化的古籍之一。",
+  "h": "daa2d3d2"
+ },
+ "battrach2.goi-y-dung": {
+  "t": "建议用途",
+  "h": "1e297636"
+ },
+ "battrach2.hoi-thay-huong-hop-cach-hoa": {
+  "t": "✦ 请问老师合适方位与化解之道",
+  "h": "d656b02e"
+ },
+ "battrach2.huong": {
+  "t": "方位",
+  "h": "05c861c1"
+ },
+ "battrach2.huong-bat-trach": {
+  "t": "八宅方位",
+  "h": "a9176f82"
+ },
+ "battrach2.huong-bat-trach-cung-menh-8": {
+  "t": "<b>八宅方位</b><span>命宫与八个吉凶方位</span>",
+  "h": "7f6f63a9"
+ },
+ "battrach2.huong-bat-trach-tu-vi-minh": {
+  "t": "八宅方位——明宝紫微斗数",
+  "h": "1dd7c74f"
+ },
+ "battrach2.menh-quai-cung-menh": {
+  "t": "命卦、<br>命宫",
+  "h": "a7cd9aa8"
+ },
+ "battrach2.mua-nha-thue-van-phong-roi": {
+  "t": "买了房、租了办公室才发现大门朝向与命卦不合，已经来不及。输入出生年与性别，付订金前就能知道该选哪个方位。",
+  "h": "22a1a2e8"
+ },
+ "battrach2.nam-sinh-gioi-tinh": {
+  "t": "出生年与性别",
+  "h": "2fe866aa"
+ },
+ "battrach2.nhap-nam-sinh-va-gioi-tinh": {
+  "t": "输入出生年与性别。系统依出生年准确推算命卦，并回传命卦、宫位与八个吉凶方位的详细表。",
+  "h": "5374993f"
+ },
+ "battrach2.ten-huong": {
+  "t": "方位名称",
+  "h": "a2de1255"
+ },
+ "battrach2.tra-4-huong-dai-cat-va": {
+  "t": "依八宅命宫查找4个大吉方位与4个大凶方位——适合您的房屋、大门、厨房、床位朝向。更深入的解读可请教老师。",
+  "h": "4bcadf9b"
+ },
+ "battrach2.tra-huong-bat-trach": {
+  "t": "查找八宅方位 →",
+  "h": "e3808961"
+ },
+ "battrach2.y-nghia": {
+  "t": "意义",
+  "h": "b1973c6d"
+ },
  "battu.1-nhap-thong-tin": {
   "t": "<span class=\"wss-n\">1</span><span class=\"wss-l\">输入数据</span>",
   "h": "487c9507"
@@ -1362,6 +1434,38 @@
  "js.auth.vui-long-dien-email-va-mat": {
   "t": "请填写电子邮件与密码。",
   "h": "d84b9abd"
+ },
+ "js.battrach.chip1": {
+  "t": "房屋哪个方位最适合我？",
+  "h": "cc262fd1"
+ },
+ "js.battrach.chip2": {
+  "t": "厨房该设在哪个方位？",
+  "h": "3eafdc4a"
+ },
+ "js.battrach.chip3": {
+  "t": "床该朝向哪个方位？",
+  "h": "08ee9028"
+ },
+ "js.battrach.chip4": {
+  "t": "若被迫面对凶方位，该如何化解？",
+  "h": "8900960b"
+ },
+ "js.battrach.dong-tu-menh": {
+  "t": "东四命",
+  "h": "860976af"
+ },
+ "js.battrach.greeting": {
+  "t": "您的命卦是**{q}**（{n}）。想问哪件事的方位？",
+  "h": "9701f4f7"
+ },
+ "js.battrach.label": {
+  "t": "八宅・{q}・{n}",
+  "h": "38326507"
+ },
+ "js.battrach.tay-tu-menh": {
+  "t": "西四命",
+  "h": "e606c821"
  },
  "js.battu.10-luan-ky-giup-toi": {
   "t": "/10) — 请帮我详细解读",
@@ -4278,6 +4382,118 @@
  "js.shellui.brand": {
   "t": "明宝紫微斗数",
   "h": "33336b26"
+ },
+ "js.shellui.bt-cd-0": {
+  "t": "财禄、健康、发展最佳",
+  "h": "ba2fcc5f"
+ },
+ "js.shellui.bt-cd-1": {
+  "t": "健康、长寿、医缘",
+  "h": "f2b6c53a"
+ },
+ "js.shellui.bt-cd-2": {
+  "t": "婚姻、事业长久",
+  "h": "eaa1aa66"
+ },
+ "js.shellui.bt-cd-3": {
+  "t": "平稳、安居、守成",
+  "h": "9d377762"
+ },
+ "js.shellui.bt-cu-0": {
+  "t": "大门、卧室、办公桌",
+  "h": "9598844f"
+ },
+ "js.shellui.bt-cu-1": {
+  "t": "卧室、床头朝向",
+  "h": "ff2bdd07"
+ },
+ "js.shellui.bt-cu-2": {
+  "t": "神桌、客厅、餐桌",
+  "h": "18d25898"
+ },
+ "js.shellui.bt-cu-3": {
+  "t": "仓库、厕所、次要房间",
+  "h": "b7d8011a"
+ },
+ "js.shellui.bt-cung-menh": {
+  "t": "命宫",
+  "h": "3dc5da1d"
+ },
+ "js.shellui.bt-cung-n": {
+  "t": "第{c}宫",
+  "h": "b2bf68e0"
+ },
+ "js.shellui.bt-dong-hop": {
+  "t": "东四命——适合东、东南、南、北方位",
+  "h": "37481bde"
+ },
+ "js.shellui.bt-dong-tu-menh": {
+  "t": "东四命",
+  "h": "860976af"
+ },
+ "js.shellui.bt-hd-0": {
+  "t": "破财、是非、不顺之事",
+  "h": "224b7b52"
+ },
+ "js.shellui.bt-hd-1": {
+  "t": "感情失和、健康衰退",
+  "h": "234cd72a"
+ },
+ "js.shellui.bt-hd-2": {
+  "t": "小人、暗中破坏",
+  "h": "e6644f6c"
+ },
+ "js.shellui.bt-hd-3": {
+  "t": "绝运、重病、大灾祸",
+  "h": "72905f33"
+ },
+ "js.shellui.bt-hu-0": {
+  "t": "避免用于大门、卧室",
+  "h": "460c1435"
+ },
+ "js.shellui.bt-hu-1": {
+  "t": "避免设神桌、卧室",
+  "h": "f713260a"
+ },
+ "js.shellui.bt-hu-2": {
+  "t": "避免设厨房、主卧",
+  "h": "8fd85d89"
+ },
+ "js.shellui.bt-hu-3": {
+  "t": "不设门、不放床",
+  "h": "fde05a0d"
+ },
+ "js.shellui.bt-khong-tinh-duoc-cung": {
+  "t": "无法推算命宫。",
+  "h": "ce9bd2a4"
+ },
+ "js.shellui.bt-ngu-hanh": {
+  "t": "五行",
+  "h": "68ac2473"
+ },
+ "js.shellui.bt-nhap-nam-hop-le": {
+  "t": "请输入有效的出生年份（1900–2010）。",
+  "h": "8363c20b"
+ },
+ "js.shellui.bt-nhom": {
+  "t": "组别",
+  "h": "ce7eab0a"
+ },
+ "js.shellui.bt-tay-hop": {
+  "t": "西四命——适合西、西北、东北、西南方位",
+  "h": "6f187842"
+ },
+ "js.shellui.bt-tay-tu-menh": {
+  "t": "西四命",
+  "h": "e606c821"
+ },
+ "js.shellui.bt-title": {
+  "t": "{y}年——第{c}宫 {q}——{n}",
+  "h": "44ed4978"
+ },
+ "js.shellui.bt-vi-tri-cung": {
+  "t": "宫位方位",
+  "h": "5a046cd0"
  },
  "js.shellui.buoc-o-huong-xau-thi-hoa": {
   "t": "如果绑在不吉的方位，该如何化解？",
