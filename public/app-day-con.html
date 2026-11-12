@@ -500,6 +500,11 @@ window.SHELL_INTRO={key:'day-con'};</script>
 <script src="/tools-shared/shell-soft-nav.js?v=49"></script>
 <script src="/tools-shared/ai-loading-steps.js?v=11"></script>
 <script>
+// W30c: chữ do engine viết (nhãn nhóm tuổi · cách tham gia · cách dạy · dấu hiệu · mặt đọc · nhãn chặng · điều đang lo)
+// dịch Ở ĐÂY theo MÃ có sẵn trong payload — engine/route/cache giữ chữ Việt (rail, prompt không đổi byte).
+// Thiếu mã/bản dịch (payload cũ trong cache) ⇒ câu Việt, không vỡ. vi không nạp gì.
+if (window.I18n && I18n.loadLong) I18n.loadLong('daycon');
+function _dcLong(key, vi) { return window.I18n && I18n.long ? I18n.long('daycon', key, vi) : vi; }
 
 var _currentSlug = '';
 var _last = null;
@@ -1034,7 +1039,7 @@ async function _doGenerate(freeRerun, lo) {
       text: [
         _tvmbT('js.daycon.ten-nghieng-ve-kieu-kieu', '{ten} nghiêng về kiểu {kieu} ({tutuong})', {ten: ten, kieu: data.kieu.ten, tutuong: data.kieu.tuTuong}),
         data.kieu.motCau,
-        data.moiLo && data.moiLo.label ? _tvmbT('js.daycon.dieu-cha-me-dang-lo', 'Điều cha mẹ đang lo: {lo}', {lo: data.moiLo.label}) : '',
+        data.moiLo && data.moiLo.label ? _tvmbT('js.daycon.dieu-cha-me-dang-lo', 'Điều cha mẹ đang lo: {lo}', {lo: _dcLong('moilo.' + data.moiLo.id + '.label', data.moiLo.label)}) : '',
       ].filter(Boolean).join('\n'),
     });
     if ((data.truc || []).length) {
@@ -1058,7 +1063,7 @@ async function _doGenerate(freeRerun, lo) {
     }
     var cuoi = [
       data.dinhHuong ? _tvmbT('js.daycon.dinh-huong-dh', 'Định hướng: {dh}', {dh: data.dinhHuong}) : '',
-      data.hoc && data.hoc.kyLuatHong ? _tvmbT('js.daycon.ky-luat-phan-tac-dung-kl', 'Kỷ luật phản tác dụng: {kl}', {kl: data.hoc.kyLuatHong}) : '',
+      data.hoc && data.hoc.kyLuatHong ? _tvmbT('js.daycon.ky-luat-phan-tac-dung-kl', 'Kỷ luật phản tác dụng: {kl}', {kl: _dcLong('hoc.' + data.hoc.kieu + '.kyLuatHong', data.hoc.kyLuatHong)}) : '',
       data.motCau ? '— ' + data.motCau : '',
     ].filter(Boolean).join('\n\n');
     if (cuoi) blocks.push({ header: _tvmbT('js.daycon.dinh-huong-cach-day', 'Định hướng & cách dạy'), text: cuoi });
@@ -1190,11 +1195,11 @@ function renderKhieu(data) {
 
 /** BƯỚC 5 — hoạt động. Danh sách do engine chọn (chất × nhóm tuổi), cách tham
  *  gia do kiểu người quyết — hai trục độc lập, xem lib/engine/day-con-hoat-dong.ts. */
-function renderHoatDong(h) {
+function renderHoatDong(h, kieuId) {
   if (!h) { document.getElementById('hdBlock').style.display = 'none'; return; }
   var ds = h.chuaRo ? (h.dangThu || []) : (h.theoChat || []);
   document.getElementById('hdBand').innerHTML =
-    _tvmbT('js.daycon.nhom-tuoi', 'Nhóm tuổi: <b>') + esc(h.bandLabel) + '</b>' +
+    _tvmbT('js.daycon.nhom-tuoi', 'Nhóm tuổi: <b>') + esc(_dcLong('band.' + h.band, h.bandLabel)) + '</b>' +
     (h.chuaRo ? _tvmbT('js.daycon.chua-chat-nao-noi-han-nen', ' · chưa chất nào nổi hẳn nên đây là <b>ba chất đáng thử trước</b>') : '');
 
   // Danh sách CÂU LẠC BỘ/HOẠT ĐỘNG CỤ THỂ là thứ đọc xong là dùng được ngay,
@@ -1210,11 +1215,12 @@ function renderHoatDong(h) {
   }).join('');
 
   var d = h.dinhDang || {};
+  var dk = 'dd.' + kieuId + '.';
   document.getElementById('hdFormat').innerHTML =
     _tvmbT('js.daycon.cho-con-tham-gia-kieu-nao', '<h5>Cho con tham gia kiểu nào</h5>') +
-    _tvmbT('js.daycon.hop', '<p><b>Hợp:</b> ') + esc(d.nen || '') + '</p>' +
-    _tvmbT('js.daycon.lam-con-bo-ngang', '<p><b>Làm con bỏ ngang:</b> ') + esc(d.tranh || '') + '</p>' +
-    ('<p style="margin-bottom:0">' + _tvmbT('js.daycon.bat-dau-the-nao', '<b>Bắt đầu thế nào:</b>') + ' ') + esc(d.batDau || '') + '</p>';
+    _tvmbT('js.daycon.hop', '<p><b>Hợp:</b> ') + esc(d.nen ? _dcLong(dk + 'nen', d.nen) : '') + '</p>' +
+    _tvmbT('js.daycon.lam-con-bo-ngang', '<p><b>Làm con bỏ ngang:</b> ') + esc(d.tranh ? _dcLong(dk + 'tranh', d.tranh) : '') + '</p>' +
+    ('<p style="margin-bottom:0">' + _tvmbT('js.daycon.bat-dau-the-nao', '<b>Bắt đầu thế nào:</b>') + ' ') + esc(d.batDau ? _dcLong(dk + 'batDau', d.batDau) : '') + '</p>';
   document.getElementById('hdBlock').style.display = 'block';
 }
 
@@ -1274,8 +1280,8 @@ function renderMetaHead(data) {
   if (line) { bl.textContent = _tvmbT('js.daycon.la-so', 'Lá số: ') + line; bl.style.display = 'block'; }
   else { bl.style.display = 'none'; }
 
-  document.getElementById('dauHieuChips').innerHTML = (hoc.dauHieu || []).map(function (c) {
-    return '<span class="dc-chip">' + esc(c) + '</span>';
+  document.getElementById('dauHieuChips').innerHTML = (hoc.dauHieu || []).map(function (c, i) {
+    return '<span class="dc-chip">' + esc(_dcLong('hoc.' + hoc.kieu + '.dh.' + i, c)) + '</span>';
   }).join('');
 }
 
@@ -1313,16 +1319,17 @@ function renderMetaRest(data) {
   // Ba bậc tra bảng của khung — 0 lượt LLM.
   renderTruc(data.truc);
   renderKhieu(data);
-  renderHoatDong(data.goiYHoatDong);
+  renderHoatDong(data.goiYHoatDong, (data.kieu || {}).id || hoc.kieu);
 
   if (hoc.tiepThu) {
+    var hk = 'hoc.' + hoc.kieu + '.';
     var cards = [
-      [_tvmbT('js.daycon.cach-con-tiep-thu', 'Cách con tiếp thu'), hoc.tiepThu, ''],
-      [_tvmbT('js.daycon.ra-bai-giao-viec', 'Ra bài / giao việc'), hoc.giaoViec, ''],
-      [_tvmbT('js.daycon.dong-vien-kieu-nay-moi-vao', 'Động viên kiểu này mới vào'), hoc.dongVien, ''],
-      [_tvmbT('js.daycon.ky-luat-kieu-nay-phan-tac', 'Kỷ luật kiểu này phản tác dụng'), hoc.kyLuatHong, 'warn'],
-      [_tvmbT('js.daycon.cho-nguoi-lon-hay-hieu-nham', 'Chỗ người lớn hay hiểu nhầm'), hoc.hieuNham, ''],
-      [_tvmbT('js.daycon.thu-con-can-duoc-day-them', 'Thứ con cần được dạy thêm'), hoc.canHoc, ''],
+      [_tvmbT('js.daycon.cach-con-tiep-thu', 'Cách con tiếp thu'), _dcLong(hk + 'tiepThu', hoc.tiepThu), ''],
+      [_tvmbT('js.daycon.ra-bai-giao-viec', 'Ra bài / giao việc'), _dcLong(hk + 'giaoViec', hoc.giaoViec), ''],
+      [_tvmbT('js.daycon.dong-vien-kieu-nay-moi-vao', 'Động viên kiểu này mới vào'), _dcLong(hk + 'dongVien', hoc.dongVien), ''],
+      [_tvmbT('js.daycon.ky-luat-kieu-nay-phan-tac', 'Kỷ luật kiểu này phản tác dụng'), _dcLong(hk + 'kyLuatHong', hoc.kyLuatHong), 'warn'],
+      [_tvmbT('js.daycon.cho-nguoi-lon-hay-hieu-nham', 'Chỗ người lớn hay hiểu nhầm'), _dcLong(hk + 'hieuNham', hoc.hieuNham), ''],
+      [_tvmbT('js.daycon.thu-con-can-duoc-day-them', 'Thứ con cần được dạy thêm'), _dcLong(hk + 'canHoc', hoc.canHoc), ''],
     ].filter(function (c) { return c[1]; }).map(function (c) {
       return '<div class="dc-howcard ' + c[2] + '"><h5>' + esc(c[0]) + '</h5><p>' + esc(c[1]) + '</p></div>';
     }).join('');
@@ -1335,7 +1342,7 @@ function renderMetaRest(data) {
     document.getElementById('changList').innerHTML = ch.map(function (c) {
       return '<div class="dc-changrow' + (c.dangChay ? ' now' : '') + '">' +
         '<b>' + c.tuoiStart + '–' + c.tuoiEnd + _tvmbT('js.daycon.tuoi', ' tuổi</b>') +
-        '<span class="n">' + esc(c.nhan) +
+        '<span class="n">' + esc(c.nhanMa ? _dcLong('chang.' + c.nhanMa, c.nhan) : c.nhan) +
         (c.namStart ? ' · ' + c.namStart + '–' + c.namEnd : '') +
         (c.diem == null ? '' : ' · ' + c.diem + '/10') +
         (c.dangChay ? _tvmbT('js.daycon.dang-o-chang-nay', ' · đang ở chặng này') : '') + '</span></div>';
@@ -1360,7 +1367,7 @@ function renderMetaRest(data) {
 
   var rows = [];
   (data.matDoc || []).forEach(function (m) {
-    rows.push('<li><b>' + esc(m.nhan) + '</b> — ' + _tvmbT('js.daycon.cung-name', 'cung {name}', {name: _tvmbG('cung', m.cung)}) +
+    rows.push('<li><b>' + esc(_dcLong('mat.' + m.cung + '.nhan', m.nhan)) + '</b> — ' + _tvmbT('js.daycon.cung-name', 'cung {name}', {name: _tvmbG('cung', m.cung)}) +
       (m.muon ? _tvmbT('js.daycon.muon-xung-chieu', ' (mượn xung chiếu)') : '') + ': ' +
       esc((m.sao || []).map(function (x) { return _tvmbG(['chinh', 'sao'], x); }).join(', ') || _tvmbT('js.daycon.khong-co-chinh-tinh', 'không có chính tinh')) +
       ((m.cachCuc || []).length ? ' · ' + esc(m.cachCuc.join('; ')) : '') + '</li>');
@@ -1466,7 +1473,7 @@ function renderProse(data) {
 
   if (data.loLang) {
     document.getElementById('loLang').textContent = data.loLang;
-    if (data.moiLo && data.moiLo.label) document.getElementById('loTitle').textContent = data.moiLo.label;
+    if (data.moiLo && data.moiLo.label) document.getElementById('loTitle').textContent = _dcLong('moilo.' + data.moiLo.id + '.label', data.moiLo.label);
     document.getElementById('loBlock').style.display = 'block';
   }
 
