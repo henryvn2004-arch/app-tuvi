@@ -140,12 +140,13 @@
 // khong lat som luc boot, va vung ket qua khong tran o ca cot artifact 420px lan man 393px.
 window.SHELL_CHATFIRST=true;
 window.SHELL_INTRO={key:'kim-lau'};</script>
-<script src="/tools-shared/kim-lau.js?v=2"></script>
+<script src="/tools-shared/kim-lau.js?v=3"></script>
 <script src="/tools-shared/hook-charts.js?v=3"></script>
 <script src="/auth.js?v=9"></script>
   <script src="/nav.js?v=49" data-icons-only></script>
 <script src="/shell.js?v=150"></script>
 <script src="/tools-shared/shell-soft-nav.js?v=49"></script>
+<script src="/tools-shared/glossary.js?v=4"></script>
 <script>
 // Ô giữa dùng CHUNG module /tools-shared/kim-lau.js với trang standalone
 // /kim-lau → kết quả y hệt, sửa 1 chỗ 2 nơi cập nhật. Rail nhận
@@ -164,12 +165,12 @@ function renderDai(d){
   if(typeof HookCharts==='undefined'){ host.innerHTML=''; return; }
   var years=(d.rows||[]).map(function(rw){
     var co=[];
-    if(rw.kimLau) co.push('Kim Lâu' + (rw.kimLauLoai ? ' ' + rw.kimLauLoai : ''));
-    if(rw.tamTai) co.push('Tam Tai');
-    if(rw.hoangOc) co.push('Hoang Ốc');
+    if(rw.kimLau) co.push(_tvmbG('lich','Kim Lâu') + (rw.kimLauLoai ? ' ' + KimLauTool.loaiTen(rw.kimLauLoai) : ''));
+    if(rw.tamTai) co.push(_tvmbG('lich','Tam Tai'));
+    if(rw.hoangOc) co.push(_tvmbG('lich','Hoang Ốc'));
     return {nam:rw.year, tuoi:rw.tuoiTa, nhan:co[0]||'', them:co.length>1, now:rw.year===d.namHienTai};
   });
-  host.innerHTML=HookCharts.yearStrip({years:years,ariaLabel:'Dải 20 năm tới — năm nào làm được'});
+  host.innerHTML=HookCharts.yearStrip({years:years,ariaLabel:_tvmbT('js.kimlau.dai-20-nam','Dải 20 năm tới — năm nào làm được')});
 }
 
 // Thanh tiến trình (`.ws-steps`, xem shell.css) — chỉ phản ánh trạng thái đã
@@ -203,9 +204,9 @@ function calculate(){
   if(window.SHELL_INTRO)Shell.dismissIntro(window.SHELL_INTRO.key);
   Shell.setContext({
     scenario:{type:'kim-lau',data:r.data},
-    label:'Kim Lâu · tuổi '+r.data.canChi,
-    greeting:'Đã tra Kim Lâu · Tam Tai · Hoang Ốc cho tuổi **'+r.data.canChi+'** (20 năm tới). Bạn muốn hỏi gì?',
-    chips:['Năm nào đẹp nhất để làm nhà?','Năm nào cưới hỏi được?','Phạm Kim Lâu thì hóa giải sao?','Tam Tai kiêng những gì?']
+    label:_tvmbT('js.kimlau.label','Kim Lâu · tuổi {cc}',{cc:_tvmbG('canchi',r.data.canChi)}),
+    greeting:_tvmbT('js.kimlau.greeting','Đã tra Kim Lâu · Tam Tai · Hoang Ốc cho tuổi **{cc}** (20 năm tới). Bạn muốn hỏi gì?',{cc:_tvmbG('canchi',r.data.canChi)}),
+    chips:[_tvmbT('js.kimlau.chip1','Năm nào đẹp nhất để làm nhà?'),_tvmbT('js.kimlau.chip2','Năm nào cưới hỏi được?'),_tvmbT('js.kimlau.chip3','Phạm Kim Lâu thì hóa giải sao?'),_tvmbT('js.kimlau.chip4','Tam Tai kiêng những gì?')]
   });
   var _klLines=['Kim Lâu · Tam Tai · Hoang Ốc — tuổi '+r.data.canChi+' ('+r.data.nam+')'];
   _klLines.push('Nạp âm: '+r.data.napAm+' · Tuổi ta năm '+r.data.namHienTai+': '+r.data.tuoiTaHienTai);

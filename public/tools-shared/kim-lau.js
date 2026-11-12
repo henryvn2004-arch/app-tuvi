@@ -20,6 +20,20 @@
    API: window.KimLauTool = { vnYear, compute } (thuần dữ liệu + chuỗi HTML;
    không đụng DOM — trang tự gắn vào phần tử của mình). */
 (function (root) {
+  // Chữ HIỂN THỊ qua I18n.tv + glossary (trang /<locale>/); vi / trang standalone / Node không nạp ⇒ chữ Việt nguyên.
+  // `data` (gửi rail/server) và `rows` GIỮ chữ Việt — chỉ `*HTML`/`resTitleText`/`error` đổi theo ngôn ngữ.
+  function _tv(key, vi, vars) {
+    var I = root.I18n;
+    if (I && I.tv) return I.tv(key, vi, vars);
+    return vars ? vi.replace(/\{(\w+)\}/g, function (x, n) { return vars[n] !== undefined ? vars[n] : x; }) : vi;
+  }
+  function _g(kind, v) {
+    var g = root.TuviGlossary;
+    return g && v ? g.t(kind, v) : v;
+  }
+  // Bảng nạp âm ở file này viết khác glossary hai chỗ (Đại Trạch/Xoa Xuyến) — chỉ ánh xạ để TRA, không đổi dữ liệu.
+  var NA_ALIAS = { 'Đại Trạch Thổ': 'Đại Dịch Thổ', 'Xoa Xuyến Kim': 'Thoa Xuyến Kim' };
+  function _na(v) { return _g('napam', NA_ALIAS[v] || v); }
   var CAN = ['Giáp', 'Ất', 'Bính', 'Đinh', 'Mậu', 'Kỷ', 'Canh', 'Tân', 'Nhâm', 'Quý'];
   var CHI = ['Tý', 'Sửu', 'Dần', 'Mão', 'Thìn', 'Tỵ', 'Ngọ', 'Mùi', 'Thân', 'Dậu', 'Tuất', 'Hợi'];
   // NAP_AM giữ NGUYÊN chính tả bản legacy (khác diachi.ts vài chữ) để byte-khớp.
@@ -36,6 +50,15 @@
     Tử: 'ảnh hưởng tới con cái',
     'Lục Súc': 'ảnh hưởng tới vật nuôi, tài sản',
   };
+  // Hiển thị: tên loại + câu "hại ai" qua khoá (literal để bộ dò thấy).
+  function _loaiTen(l) {
+    return l === 'Thân' ? _tv('js.shellui.kl-loai-than', 'Thân') : l === 'Thê' ? _tv('js.shellui.kl-loai-the', 'Thê')
+      : l === 'Tử' ? _tv('js.shellui.kl-loai-tu', 'Tử') : l === 'Lục Súc' ? _tv('js.shellui.kl-loai-luc-suc', 'Lục Súc') : l;
+  }
+  function _loaiHai(l) {
+    return l === 'Thân' ? _tv('js.shellui.kl-hai-than', KIM_LAU_HAI['Thân']) : l === 'Thê' ? _tv('js.shellui.kl-hai-the', KIM_LAU_HAI['Thê'])
+      : l === 'Tử' ? _tv('js.shellui.kl-hai-tu', KIM_LAU_HAI['Tử']) : _tv('js.shellui.kl-hai-luc-suc', KIM_LAU_HAI['Lục Súc']);
+  }
 
   /** Trả tên loại Kim Lâu, hoặc null nếu không phạm. Tuổi ÂM (tuổi ta). */
   function kimLauLoai(t) { return KIM_LAU_LOAI[((t % 9) + 9) % 9] || null; }
@@ -47,10 +70,10 @@
 
   function getStatusHTML(kl, ho, tt, loai) {
     var tags = [];
-    if (kl) tags.push('<span class="res-tag res-tag-bad">Kim Lâu' + (loai ? ' ' + loai : '') + '</span>');
-    if (ho) tags.push('<span class="res-tag res-tag-warn">Hoang Ốc</span>');
-    if (tt) tags.push('<span class="res-tag res-tag-bad" style="background:#e8f0fe;color:#1455A4;border-color:#c5d4f5">Tam Tai</span>');
-    if (!tags.length) return '<span class="res-tag res-tag-good">Bình thường</span>';
+    if (kl) tags.push('<span class="res-tag res-tag-bad">' + _g('lich', 'Kim Lâu') + (loai ? ' ' + _loaiTen(loai) : '') + '</span>');
+    if (ho) tags.push('<span class="res-tag res-tag-warn">' + _g('lich', 'Hoang Ốc') + '</span>');
+    if (tt) tags.push('<span class="res-tag res-tag-bad" style="background:#e8f0fe;color:#1455A4;border-color:#c5d4f5">' + _g('lich', 'Tam Tai') + '</span>');
+    if (!tags.length) return '<span class="res-tag res-tag-good">' + _tv('js.shellui.kl-binh-thuong', 'Bình thường') + '</span>';
     return tags.join(' ');
   }
 
@@ -65,13 +88,13 @@
   function compute(by, curYear) {
     if (curYear == null) curYear = vnYear();
     if (!by || by < 1900 || by > 2010) {
-      return { ok: false, error: 'Vui lòng nhập năm sinh hợp lệ (1900–2010).' };
+      return { ok: false, error: _tv('js.shellui.kl-nhap-nam-hop-le', 'Vui lòng nhập năm sinh hợp lệ (1900–2010).') };
     }
     var idx60 = (((by - 4) % 60) + 60) % 60;
     var bCan = idx60 % 10, bChi = idx60 % 12;
     var na = NAP_AM[Math.floor(idx60 / 2)];
     var tuoiTa = curYear - by + 1;
-    var resTitleText = CAN[bCan] + ' ' + CHI[bChi] + ' (' + by + ') — ' + na + ' · Tuổi ta năm ' + curYear + ': ' + tuoiTa;
+    var resTitleText = _tv('js.shellui.kl-title', '{cc} ({by}) — {na} · Tuổi ta năm {cy}: {t}', { cc: _g('canchi', CAN[bCan] + ' ' + CHI[bChi]), by: by, na: _na(na), cy: curYear, t: tuoiTa });
 
     var y60 = (((curYear - 4) % 60) + 60) % 60;
     var yChi = y60 % 12;
@@ -81,11 +104,11 @@
     if (kl || ho || tt) {
       // Nêu ĐÍCH DANH loại Kim Lâu và nó hại ai — đó là phần người ta thật sự
       // cần để quyết (Kim Lâu Thê thì hoãn cưới, Lục Súc thì nhẹ hơn hẳn).
-      var klCau = kl ? 'Năm nay là tuổi Kim Lâu ' + klLoai + ' — ' + KIM_LAU_HAI[klLoai] + ', kiêng cưới hỏi, xây dựng, khởi công lớn.' : '';
-      var desc = kl && tt ? klCau + ' Năm nay còn trùng Tam Tai nên cần thận trọng đặc biệt.' : kl ? klCau : ho ? 'Năm nay là tuổi Hoang Ốc — kiêng mua bán và xây nhà.' : 'Năm nay đang trong vận Tam Tai — cẩn thận với các quyết định lớn.';
-      currentBoxHTML = '<div style="background:#fef0ef;border-left:3px solid #c9a84c;padding:14px 16px;border-radius:0 6px 6px 0;margin-bottom:12px"><div style="font-size:13px;font-weight:700;margin-bottom:4px;color:#1a1a1a">Năm ' + curYear + ' (Tuổi ' + tuoiTa + ') — ' + getStatusHTML(kl, ho, tt, klLoai) + '</div><div style="font-size:13px;color:#4a4a4a">' + desc + '</div></div>';
+      var klCau = kl ? _tv('js.shellui.kl-cau-kim-lau', 'Năm nay là tuổi Kim Lâu {loai} — {hai}, kiêng cưới hỏi, xây dựng, khởi công lớn.', { loai: _loaiTen(klLoai), hai: _loaiHai(klLoai) }) : '';
+      var desc = kl && tt ? klCau + ' ' + _tv('js.shellui.kl-con-tam-tai', 'Năm nay còn trùng Tam Tai nên cần thận trọng đặc biệt.') : kl ? klCau : ho ? _tv('js.shellui.kl-cau-hoang-oc', 'Năm nay là tuổi Hoang Ốc — kiêng mua bán và xây nhà.') : _tv('js.shellui.kl-cau-tam-tai', 'Năm nay đang trong vận Tam Tai — cẩn thận với các quyết định lớn.');
+      currentBoxHTML = '<div style="background:#fef0ef;border-left:3px solid #c9a84c;padding:14px 16px;border-radius:0 6px 6px 0;margin-bottom:12px"><div style="font-size:13px;font-weight:700;margin-bottom:4px;color:#1a1a1a">' + _tv('js.shellui.kl-nam-tuoi', 'Năm {y} (Tuổi {t})', { y: curYear, t: tuoiTa }) + ' — ' + getStatusHTML(kl, ho, tt, klLoai) + '</div><div style="font-size:13px;color:#4a4a4a">' + desc + '</div></div>';
     } else {
-      currentBoxHTML = '<div style="background:#eaf4ed;border-left:3px solid #1E6B3C;padding:14px 16px;border-radius:0 6px 6px 0;margin-bottom:12px"><div style="font-size:13px;font-weight:700;margin-bottom:4px;color:#1a1a1a">Năm ' + curYear + ' (Tuổi ' + tuoiTa + ') — <span class="res-tag res-tag-good">Bình thường</span></div><div style="font-size:13px;color:#4a4a4a">Năm nay không có Kim Lâu, Hoang Ốc hay Tam Tai.</div></div>';
+      currentBoxHTML = '<div style="background:#eaf4ed;border-left:3px solid #1E6B3C;padding:14px 16px;border-radius:0 6px 6px 0;margin-bottom:12px"><div style="font-size:13px;font-weight:700;margin-bottom:4px;color:#1a1a1a">' + _tv('js.shellui.kl-nam-tuoi', 'Năm {y} (Tuổi {t})', { y: curYear, t: tuoiTa }) + ' — <span class="res-tag res-tag-good">' + _tv('js.shellui.kl-binh-thuong', 'Bình thường') + '</span></div><div style="font-size:13px;color:#4a4a4a">' + _tv('js.shellui.kl-nam-nay-khong-co', 'Năm nay không có Kim Lâu, Hoang Ốc hay Tam Tai.') + '</div></div>';
     }
 
     var rowsArr = [], rowsHTML = '';
@@ -96,7 +119,7 @@
       var klLoai2 = kimLauLoai(t);
       var kl2 = klLoai2 !== null, ho2 = isHoangOc(t), tt2 = isTamTai(bChi, yC);
       var bold = y === curYear ? 'font-weight:700' : '';
-      rowsHTML += '<tr' + ((kl2 || ho2 || tt2) ? ' class="highlight"' : '') + ' style="' + bold + '"><td>' + y + (y === curYear ? ' ▶' : '') + '</td><td>' + t + '</td><td>' + CAN[yN] + ' ' + CHI[yC] + '</td><td>' + getStatusHTML(kl2, ho2, tt2, klLoai2) + '</td></tr>';
+      rowsHTML += '<tr' + ((kl2 || ho2 || tt2) ? ' class="highlight"' : '') + ' style="' + bold + '"><td>' + y + (y === curYear ? ' ▶' : '') + '</td><td>' + t + '</td><td>' + _g('canchi', CAN[yN] + ' ' + CHI[yC]) + '</td><td>' + getStatusHTML(kl2, ho2, tt2, klLoai2) + '</td></tr>';
       // `kimLauLoai` là trường THÊM — consumer cũ vẫn đọc `kimLau` boolean như cũ.
       rowsArr.push({ year: y, tuoiTa: t, canChi: CAN[yN] + ' ' + CHI[yC], kimLau: kl2, kimLauLoai: klLoai2, hoangOc: ho2, tamTai: tt2 });
     }
@@ -118,7 +141,7 @@
     };
   }
 
-  var API = { vnYear: vnYear, compute: compute, kimLauLoai: kimLauLoai };
+  var API = { vnYear: vnYear, compute: compute, kimLauLoai: kimLauLoai, loaiTen: _loaiTen };
   if (typeof module !== 'undefined' && module.exports) module.exports = API;
   else root.KimLauTool = API;
 })(typeof window !== 'undefined' ? window : globalThis);

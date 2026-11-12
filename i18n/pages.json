@@ -157,6 +157,42 @@
    "shell"
   ]
  },
+ "/app/bat-trach": {
+  "file": "app-bat-trach.html",
+  "keys": [
+   "battrach2.4-huong-dai-cat",
+   "battrach2.4-huong-dai-hung",
+   "battrach2.bang-8-huong-chi-tiet",
+   "battrach2.bat-trach-la-mot-truong-phai",
+   "battrach2.goi-y-dung",
+   "battrach2.hoi-thay-huong-hop-cach-hoa",
+   "battrach2.huong",
+   "battrach2.huong-bat-trach",
+   "battrach2.huong-bat-trach-cung-menh-8",
+   "battrach2.huong-bat-trach-tu-vi-minh",
+   "battrach2.menh-quai-cung-menh",
+   "battrach2.mua-nha-thue-van-phong-roi",
+   "battrach2.nam-sinh-gioi-tinh",
+   "battrach2.nhap-nam-sinh-va-gioi-tinh",
+   "battrach2.ten-huong",
+   "battrach2.tra-4-huong-dai-cat-va",
+   "battrach2.tra-huong-bat-trach",
+   "battrach2.y-nghia",
+   "battu.1-nhap-thong-tin",
+   "battu.chi-phi-su-dung",
+   "battu.gioi-thieu",
+   "battu.hoi",
+   "battu.mien-phi",
+   "giosinh.gioi-tinh",
+   "kimlau.nam-sinh-duong-lich",
+   "laso.nu",
+   "napam.sua",
+   "ngaytot.2-nhan-ket-qua"
+  ],
+  "js": [
+   "shell"
+  ]
+ },
  "/app/bat-tu": {
   "file": "app-bat-tu.html",
   "keys": [
@@ -400,6 +436,40 @@
    "shell"
   ]
  },
+ "/app/kim-lau": {
+  "file": "app-kim-lau.html",
+  "keys": [
+   "battu.chi-phi-su-dung",
+   "battu.gioi-thieu",
+   "battu.hoi",
+   "battu.mien-phi",
+   "kimlau.bang-tra-20-nam-toi",
+   "kimlau.bang-tra-20-nam-toi-9fqx",
+   "kimlau.can-chi",
+   "kimlau.cuoi-hoi-lam-nha",
+   "kimlau.hoi-thay-nam-dep-cach-hoa",
+   "kimlau.ket-luan-ngay-tuc-thi",
+   "kimlau.kim-lau-la-quan-niem-dan",
+   "kimlau.kim-lau-tam-tai",
+   "kimlau.kim-lau-tam-tai-tu-vi",
+   "kimlau.kim-lau-tam-tai-tuoi-lam",
+   "kimlau.nam-dl",
+   "kimlau.nam-sinh-duong-lich",
+   "kimlau.nhap-nam-sinh-duong-lich-he",
+   "kimlau.pham-kim-lau-tam-tai-ma",
+   "kimlau.tinh-trang",
+   "kimlau.tra-cuu",
+   "kimlau.tuoi-ta",
+   "kimlau.xem-tuoi-lam-nha-cuoi-hoi",
+   "napam.1-nhap-nam-sinh",
+   "napam.nam-sinh-duong-lich",
+   "napam.sua",
+   "ngaytot.2-nhan-ket-qua"
+  ],
+  "js": [
+   "shell"
+  ]
+ },
  "/app/kinh-dich": {
   "file": "app-kinh-dich.html",
   "keys": [
@@ -500,6 +570,49 @@
    "luangiai.tra-loi-thay-o-khung-chat",
    "luangiai.tu-vi-dau-so-la-mot",
    "luangiai.tu-vi-khong-du-doan-tuong"
+  ],
+  "js": [
+   "shell"
+  ]
+ },
+ "/app/luc-nham": {
+  "file": "app-luc-nham.html",
+  "keys": [
+   "battu.chi-phi-su-dung",
+   "battu.gioi-thieu",
+   "battu.hoi",
+   "giosinh.nam",
+   "giosinh.ngay",
+   "giosinh.thang",
+   "lucnham.1-nhap-ngay-gio",
+   "lucnham.dang-phan-van-chuyen-tien-bac",
+   "lucnham.de-trong-la-lay-gio-hien",
+   "lucnham.gio-can-xem",
+   "lucnham.gio-dan-03-05h",
+   "lucnham.gio-dau-17-19h",
+   "lucnham.gio-hoi-21-23h",
+   "lucnham.gio-mao-05-07h",
+   "lucnham.gio-mui-13-15h",
+   "lucnham.gio-ngo-11-13h",
+   "lucnham.gio-suu-01-03h",
+   "lucnham.gio-than-15-17h",
+   "lucnham.gio-thin-07-09h",
+   "lucnham.gio-tuat-19-21h",
+   "lucnham.gio-ty-09-11h",
+   "lucnham.gio-ty-23-01h",
+   "lucnham.hoi-thay-luan-than-tuong",
+   "lucnham.luan-theo-khao-bien-chiem",
+   "lucnham.luc-nham-gian",
+   "lucnham.luc-nham-gian-12-than-tuong",
+   "lucnham.luc-nham-gian-tra-12-than",
+   "lucnham.luc-nham-gian-tu-vi-minh",
+   "lucnham.luc-nham-la-mot-trong-tam",
+   "lucnham.ngay-gio-can-xem",
+   "lucnham.quy-nhan-dan-loi",
+   "lucnham.tu-khoa-tam-truyen",
+   "lucnham.xem-que",
+   "napam.2-xem-ket-qua",
+   "napam.sua"
   ],
   "js": [
    "shell"
@@ -657,6 +770,43 @@
    "ngaytot.thang-can-xem-duong-lich",
    "ngaytot.truc-nhi-thap-bat-tu",
    "ngaytot.xem-lich"
+  ],
+  "js": [
+   "shell"
+  ]
+ },
+ "/app/ngu-hanh-ten": {
+  "file": "app-ngu-hanh-ten.html",
+  "keys": [
+   "battu.1-nhap-thong-tin",
+   "battu.chi-phi-su-dung",
+   "battu.gioi-thieu",
+   "battu.hoi",
+   "napam.sua",
+   "ngaytot.2-nhan-ket-qua",
+   "nguhanhten.can-bang-ngu-hanh",
+   "nguhanhten.can-bang-ngu-hanh-h4ql",
+   "nguhanhten.chua-tim-thay-chu-han-cho",
+   "nguhanhten.diem-so-hop-khac",
+   "nguhanhten.ho-va-ten-day-du",
+   "nguhanhten.hoa",
+   "nguhanhten.hoi-thay-luan-sau-ngu-hanh",
+   "nguhanhten.khong-ro-bo-qua",
+   "nguhanhten.moc",
+   "nguhanhten.mot-cai-ten-goi-hang-ngay",
+   "nguhanhten.ngu-hanh-ban-menh-tuy-chon",
+   "nguhanhten.ngu-hanh-kim-moc-thuy-hoa",
+   "nguhanhten.ngu-hanh-ten",
+   "nguhanhten.ngu-hanh-ten-ngu-hanh-tung",
+   "nguhanhten.ngu-hanh-ten-tu-vi-minh",
+   "nguhanhten.ngu-hanh-tung-chu",
+   "nguhanhten.nhap-du-ho-ten-co-dau",
+   "nguhanhten.nhap-ho-ten-day-du-co",
+   "nguhanhten.nhap-ten-tieng-viet-tra-chu",
+   "nguhanhten.tho",
+   "nguhanhten.thuy",
+   "nguhanhten.tra-ngu-hanh-ten-mien-phi",
+   "nguhanhten.vd-nguyen-van-an"
   ],
   "js": [
    "shell"
