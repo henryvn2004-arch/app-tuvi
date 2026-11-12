@@ -224,6 +224,18 @@ for (const [p, fn] of [
   );
 }
 
+// 5b. resend-pdf: văn theo ngôn ngữ NGƯỜI NHẬN, hụt ⇒ lùi bản Việt (không từ chối gửi)
+{
+  const r = read('app/api/luan-giai/resend-pdf/route.ts');
+  const iLoc = r.indexOf('const locale = cookieLocale ?? (await getUserLocale(user.id));');
+  const iRead = r.indexOf('await readLuanI18n(slug, locale)');
+  const iBuild = r.indexOf('buildPhans((ngoaiNgu?.luanGiai ?? row.luan_giai)');
+  must(
+    iLoc > 0 && iRead > iLoc && iBuild > iRead,
+    'resend-pdf: phải lấy locale người nhận → readLuanI18n → buildPhans(bản ngôn ngữ ?? bản Việt)'
+  );
+}
+
 // 6. migration
 {
   const m = read('_patches/migration-laso-public-i18n.sql');
