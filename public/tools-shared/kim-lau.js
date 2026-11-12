@@ -33,7 +33,7 @@
   }
   // Bảng nạp âm ở file này viết khác glossary hai chỗ (Đại Trạch/Xoa Xuyến) — chỉ ánh xạ để TRA, không đổi dữ liệu.
   var NA_ALIAS = { 'Đại Trạch Thổ': 'Đại Dịch Thổ', 'Xoa Xuyến Kim': 'Thoa Xuyến Kim' };
-  function _na(v) { return _g('napam', NA_ALIAS[v] || v); }
+  function _na(v) { var a = NA_ALIAS[v] || v, r = _g('napam', a); return r === a ? v : r; } // vi: glossary trả nguyên chuỗi ⇒ giữ đúng chữ gốc của bảng
   var CAN = ['Giáp', 'Ất', 'Bính', 'Đinh', 'Mậu', 'Kỷ', 'Canh', 'Tân', 'Nhâm', 'Quý'];
   var CHI = ['Tý', 'Sửu', 'Dần', 'Mão', 'Thìn', 'Tỵ', 'Ngọ', 'Mùi', 'Thân', 'Dậu', 'Tuất', 'Hợi'];
   // NAP_AM giữ NGUYÊN chính tả bản legacy (khác diachi.ts vài chữ) để byte-khớp.
@@ -56,8 +56,8 @@
       : l === 'Tử' ? _tv('js.shellui.kl-loai-tu', 'Tử') : l === 'Lục Súc' ? _tv('js.shellui.kl-loai-luc-suc', 'Lục Súc') : l;
   }
   function _loaiHai(l) {
-    return l === 'Thân' ? _tv('js.shellui.kl-hai-than', KIM_LAU_HAI['Thân']) : l === 'Thê' ? _tv('js.shellui.kl-hai-the', KIM_LAU_HAI['Thê'])
-      : l === 'Tử' ? _tv('js.shellui.kl-hai-tu', KIM_LAU_HAI['Tử']) : _tv('js.shellui.kl-hai-luc-suc', KIM_LAU_HAI['Lục Súc']);
+    return l === 'Thân' ? _tv('js.shellui.kl-hai-than', 'ảnh hưởng tới chính gia chủ') : l === 'Thê' ? _tv('js.shellui.kl-hai-the', 'ảnh hưởng tới người vợ')
+      : l === 'Tử' ? _tv('js.shellui.kl-hai-tu', 'ảnh hưởng tới con cái') : _tv('js.shellui.kl-hai-luc-suc', 'ảnh hưởng tới vật nuôi, tài sản');
   }
 
   /** Trả tên loại Kim Lâu, hoặc null nếu không phạm. Tuổi ÂM (tuổi ta). */

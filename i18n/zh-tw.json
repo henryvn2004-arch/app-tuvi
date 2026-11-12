@@ -2379,6 +2379,34 @@
   "t": "沖生肖 ",
   "h": "e92ab4fa"
  },
+ "js.kimlau.chip1": {
+  "t": "哪一年最適合蓋房？",
+  "h": "992ff775"
+ },
+ "js.kimlau.chip2": {
+  "t": "哪一年可以婚嫁？",
+  "h": "5de89c72"
+ },
+ "js.kimlau.chip3": {
+  "t": "犯金樓該如何化解？",
+  "h": "f9c9cb33"
+ },
+ "js.kimlau.chip4": {
+  "t": "三災期間要忌什麼？",
+  "h": "27ba3819"
+ },
+ "js.kimlau.dai-20-nam": {
+  "t": "未來20年——哪些年可行",
+  "h": "bd73ccbd"
+ },
+ "js.kimlau.greeting": {
+  "t": "已查詢**{cc}**的金樓・三災・荒屋（未來20年）。您想問什麼？",
+  "h": "cf9daca6"
+ },
+ "js.kimlau.label": {
+  "t": "金樓・{cc}",
+  "h": "2529b317"
+ },
  "js.kinhdich.bam-de-bat-dau-gieo-que": {
   "t": "按下開始起卦——共擲 6 次，每次決定一個爻",
   "h": "5f61aa02"
@@ -5011,6 +5039,14 @@
   "t": "**，還是建議新的名字？",
   "h": "d922a861"
  },
+ "js.shellui.hc-ban-o-day": {
+  "t": "您在這裡",
+  "h": "0ed02beb"
+ },
+ "js.shellui.hc-duoc": {
+  "t": "可",
+  "h": "4c144474"
+ },
  "js.shellui.hd-al": {
   "t": "（農曆{m}/{d}）",
   "h": "3fd68961"
@@ -5710,6 +5746,74 @@
  "js.shellui.kinh-mat-nao-hop-tuong-mat": {
   "t": "哪種眼鏡適合我的臉型？",
   "h": "e2a2a092"
+ },
+ "js.shellui.kl-binh-thuong": {
+  "t": "一般",
+  "h": "7a1fa869"
+ },
+ "js.shellui.kl-cau-hoang-oc": {
+  "t": "今年屬荒屋之年——忌買賣與蓋房。",
+  "h": "50677d38"
+ },
+ "js.shellui.kl-cau-kim-lau": {
+  "t": "今年屬金樓（{loai}）之年——{hai}。忌婚嫁、建築與大型動土。",
+  "h": "53df32eb"
+ },
+ "js.shellui.kl-cau-tam-tai": {
+  "t": "今年正值三災運——重大決定務必謹慎。",
+  "h": "72ae51c8"
+ },
+ "js.shellui.kl-con-tam-tai": {
+  "t": "今年又逢三災，須格外謹慎。",
+  "h": "6d4d5899"
+ },
+ "js.shellui.kl-hai-luc-suc": {
+  "t": "牲畜與財產受影響",
+  "h": "214ff98e"
+ },
+ "js.shellui.kl-hai-than": {
+  "t": "屋主本人受影響",
+  "h": "682a3213"
+ },
+ "js.shellui.kl-hai-the": {
+  "t": "妻子受影響",
+  "h": "09bcf309"
+ },
+ "js.shellui.kl-hai-tu": {
+  "t": "子女受影響",
+  "h": "f3ad84bb"
+ },
+ "js.shellui.kl-loai-luc-suc": {
+  "t": "六畜",
+  "h": "524f4cec"
+ },
+ "js.shellui.kl-loai-than": {
+  "t": "身",
+  "h": "77575b16"
+ },
+ "js.shellui.kl-loai-the": {
+  "t": "妻",
+  "h": "ccd000d4"
+ },
+ "js.shellui.kl-loai-tu": {
+  "t": "子",
+  "h": "bef3174e"
+ },
+ "js.shellui.kl-nam-nay-khong-co": {
+  "t": "今年沒有金樓、荒屋或三災。",
+  "h": "2d212f11"
+ },
+ "js.shellui.kl-nam-tuoi": {
+  "t": "{y}年（虛歲{t}歲）",
+  "h": "511d7f9e"
+ },
+ "js.shellui.kl-nhap-nam-hop-le": {
+  "t": "請輸入有效的出生年份（1900–2010）。",
+  "h": "8363c20b"
+ },
+ "js.shellui.kl-title": {
+  "t": "{cc}（{by}）——{na}・{cy}年虛歲：{t}歲",
+  "h": "f6b9127c"
  },
  "js.shellui.km-cuc": {
   "t": "{dun}{n}局",
@@ -8414,6 +8518,78 @@
  "js.xemtuoi.xet-nhanh-hai-tuoi-co-hop": {
   "t": "只需出生年，快速判斷兩人的生肖是否相合——立即得到答案，不必深入解讀。",
   "h": "ee011392"
+ },
+ "kimlau.bang-tra-20-nam-toi": {
+  "t": "未來20年<br>查詢表",
+  "h": "ded0c033"
+ },
+ "kimlau.bang-tra-20-nam-toi-9fqx": {
+  "t": "<span class=\"res-block-title\">未來20年查詢表</span>",
+  "h": "8e04bf8f"
+ },
+ "kimlau.can-chi": {
+  "t": "干支",
+  "h": "8b784611"
+ },
+ "kimlau.cuoi-hoi-lam-nha": {
+  "t": "婚嫁、<br>蓋房",
+  "h": "7e98e435"
+ },
+ "kimlau.hoi-thay-nam-dep-cach-hoa": {
+  "t": "✦ 請問老師吉年與化解之道",
+  "h": "5f76ab82"
+ },
+ "kimlau.ket-luan-ngay-tuc-thi": {
+  "t": "即時<br>結論",
+  "h": "b2797a93"
+ },
+ "kimlau.kim-lau-la-quan-niem-dan": {
+  "t": "金樓是依屋主虛歲（農曆）計算的民間觀念，認為某些年紀不利於蓋房或婚嫁。三災是相關概念，指十二生肖週期中被認為容易遇到阻礙的連續三年。",
+  "h": "625e5413"
+ },
+ "kimlau.kim-lau-tam-tai": {
+  "t": "金樓與三災",
+  "h": "cea3719a"
+ },
+ "kimlau.kim-lau-tam-tai-tu-vi": {
+  "t": "金樓與三災——明寶紫微斗數",
+  "h": "b2ec2af2"
+ },
+ "kimlau.kim-lau-tam-tai-tuoi-lam": {
+  "t": "<b>金樓與三災</b><span>蓋房、婚嫁的年紀是否犯忌</span>",
+  "h": "1fb12a82"
+ },
+ "kimlau.nam-dl": {
+  "t": "國曆年",
+  "h": "6c965b9e"
+ },
+ "kimlau.nam-sinh-duong-lich": {
+  "t": "出生年（國曆）",
+  "h": "9f8721e0"
+ },
+ "kimlau.nhap-nam-sinh-duong-lich-he": {
+  "t": "輸入國曆出生年。系統依金樓、三災、荒屋的古法比對，給出結論與未來20年查詢表。",
+  "h": "cca6f199"
+ },
+ "kimlau.pham-kim-lau-tam-tai-ma": {
+  "t": "許多人是在婚嫁、蓋房之後才發現自己犯了金樓或三災，為時已晚。輸入出生年，即刻取得結論與現成的未來20年查詢表。",
+  "h": "7e987b4a"
+ },
+ "kimlau.tinh-trang": {
+  "t": "狀態",
+  "h": "5a46503e"
+ },
+ "kimlau.tra-cuu": {
+  "t": "查詢 →",
+  "h": "fd5b08a7"
+ },
+ "kimlau.tuoi-ta": {
+  "t": "虛歲",
+  "h": "536f1746"
+ },
+ "kimlau.xem-tuoi-lam-nha-cuoi-hoi": {
+  "t": "依虛歲查看蓋房、婚嫁的年紀是否犯金樓、三災、荒屋，附未來20年查詢表。化解之道可請教老師。",
+  "h": "041eccbd"
  },
  "kinhdich.1-gieo-que": {
   "t": "<span class=\"wss-n\">1</span><span class=\"wss-l\">起卦</span>",

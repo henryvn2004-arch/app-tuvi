@@ -2379,6 +2379,34 @@
   "t": "충하는 띠: ",
   "h": "e92ab4fa"
  },
+ "js.kimlau.chip1": {
+  "t": "집을 짓기에 가장 좋은 해는 언제인가요?",
+  "h": "992ff775"
+ },
+ "js.kimlau.chip2": {
+  "t": "결혼할 수 있는 해는 언제인가요?",
+  "h": "5de89c72"
+ },
+ "js.kimlau.chip3": {
+  "t": "금루에 걸리면 어떻게 액막이하나요?",
+  "h": "f9c9cb33"
+ },
+ "js.kimlau.chip4": {
+  "t": "삼재에는 무엇을 피해야 하나요?",
+  "h": "27ba3819"
+ },
+ "js.kimlau.dai-20-nam": {
+  "t": "향후 20년 — 해도 되는 해",
+  "h": "bd73ccbd"
+ },
+ "js.kimlau.greeting": {
+  "t": "**{cc}**의 금루·삼재·황옥(향후 20년)을 조회했어요. 무엇이 궁금하세요?",
+  "h": "cf9daca6"
+ },
+ "js.kimlau.label": {
+  "t": "금루 · {cc}",
+  "h": "2529b317"
+ },
  "js.kinhdich.bam-de-bat-dau-gieo-que": {
   "t": "눌러서 괘 뽑기를 시작하세요 — 6번 던지며, 한 번에 효 하나가 정해집니다",
   "h": "5f61aa02"
@@ -5011,6 +5039,14 @@
   "t": "**의 점수 평가인가요, 새 이름 추천인가요?",
   "h": "d922a861"
  },
+ "js.shellui.hc-ban-o-day": {
+  "t": "현재 위치",
+  "h": "0ed02beb"
+ },
+ "js.shellui.hc-duoc": {
+  "t": "가능",
+  "h": "4c144474"
+ },
  "js.shellui.hd-al": {
   "t": " (음력 {m}/{d})",
   "h": "3fd68961"
@@ -5710,6 +5746,74 @@
  "js.shellui.kinh-mat-nao-hop-tuong-mat": {
   "t": "내 얼굴형에는 어떤 안경이 어울려요?",
   "h": "e2a2a092"
+ },
+ "js.shellui.kl-binh-thuong": {
+  "t": "보통",
+  "h": "7a1fa869"
+ },
+ "js.shellui.kl-cau-hoang-oc": {
+  "t": "올해는 황옥 해예요. 매매와 집짓기는 피하세요.",
+  "h": "50677d38"
+ },
+ "js.shellui.kl-cau-kim-lau": {
+  "t": "올해는 금루({loai}) 해로, {hai}. 결혼, 건축, 큰 착공은 피하세요.",
+  "h": "53df32eb"
+ },
+ "js.shellui.kl-cau-tam-tai": {
+  "t": "올해는 삼재 운에 해당해요. 큰 결정은 신중하게 하세요.",
+  "h": "72ae51c8"
+ },
+ "js.shellui.kl-con-tam-tai": {
+  "t": "올해는 삼재와도 겹치므로 각별히 조심해야 해요.",
+  "h": "6d4d5899"
+ },
+ "js.shellui.kl-hai-luc-suc": {
+  "t": "가축과 재산에 영향을 미치고",
+  "h": "214ff98e"
+ },
+ "js.shellui.kl-hai-than": {
+  "t": "집주인 본인에게 영향을 미치고",
+  "h": "682a3213"
+ },
+ "js.shellui.kl-hai-the": {
+  "t": "아내에게 영향을 미치고",
+  "h": "09bcf309"
+ },
+ "js.shellui.kl-hai-tu": {
+  "t": "자녀에게 영향을 미치고",
+  "h": "f3ad84bb"
+ },
+ "js.shellui.kl-loai-luc-suc": {
+  "t": "육축",
+  "h": "524f4cec"
+ },
+ "js.shellui.kl-loai-than": {
+  "t": "신",
+  "h": "77575b16"
+ },
+ "js.shellui.kl-loai-the": {
+  "t": "처",
+  "h": "ccd000d4"
+ },
+ "js.shellui.kl-loai-tu": {
+  "t": "자",
+  "h": "bef3174e"
+ },
+ "js.shellui.kl-nam-nay-khong-co": {
+  "t": "올해는 금루·황옥·삼재에 해당하지 않아요.",
+  "h": "2d212f11"
+ },
+ "js.shellui.kl-nam-tuoi": {
+  "t": "{y}년 (세는나이 {t}세)",
+  "h": "511d7f9e"
+ },
+ "js.shellui.kl-nhap-nam-hop-le": {
+  "t": "올바른 출생 연도(1900~2010)를 입력해 주세요.",
+  "h": "8363c20b"
+ },
+ "js.shellui.kl-title": {
+  "t": "{cc} ({by}) — {na} · {cy}년 세는나이: {t}세",
+  "h": "f6b9127c"
  },
  "js.shellui.km-cuc": {
   "t": "{dun} {n}국",
@@ -8414,6 +8518,78 @@
  "js.xemtuoi.xet-nhanh-hai-tuoi-co-hop": {
   "t": "두 띠가 맞는지 빠르게 확인해요. 출생 연도만 있으면 바로 답이 나와요 — 깊이 보기 전의 간단한 확인이에요.",
   "h": "ee011392"
+ },
+ "kimlau.bang-tra-20-nam-toi": {
+  "t": "향후 20년<br>조회표",
+  "h": "ded0c033"
+ },
+ "kimlau.bang-tra-20-nam-toi-9fqx": {
+  "t": "<span class=\"res-block-title\">향후 20년 조회표</span>",
+  "h": "8e04bf8f"
+ },
+ "kimlau.can-chi": {
+  "t": "간지",
+  "h": "8b784611"
+ },
+ "kimlau.cuoi-hoi-lam-nha": {
+  "t": "결혼식·<br>집짓기",
+  "h": "7e98e435"
+ },
+ "kimlau.hoi-thay-nam-dep-cach-hoa": {
+  "t": "✦ 선생님께 좋은 해와 액막이 방법 묻기",
+  "h": "5f76ab82"
+ },
+ "kimlau.ket-luan-ngay-tuc-thi": {
+  "t": "즉시<br>결론",
+  "h": "b2797a93"
+ },
+ "kimlau.kim-lau-la-quan-niem-dan": {
+  "t": "금루는 집주인의 세는나이(음력)에 바탕을 둔 민간 신앙으로, 특정 나이에는 집짓기나 결혼이 불리하다고 봐요. 삼재는 관련된 개념으로, 12지 주기 중 장애를 만나기 쉽다고 여기는 연속 3년을 말해요.",
+  "h": "625e5413"
+ },
+ "kimlau.kim-lau-tam-tai": {
+  "t": "금루와 삼재",
+  "h": "cea3719a"
+ },
+ "kimlau.kim-lau-tam-tai-tu-vi": {
+  "t": "금루와 삼재 — 명보 자미두수",
+  "h": "b2ec2af2"
+ },
+ "kimlau.kim-lau-tam-tai-tuoi-lam": {
+  "t": "<b>금루와 삼재</b><span>집짓기·결혼에 걸리는 나이인지 확인</span>",
+  "h": "1fb12a82"
+ },
+ "kimlau.nam-dl": {
+  "t": "양력 연도",
+  "h": "6c965b9e"
+ },
+ "kimlau.nam-sinh-duong-lich": {
+  "t": "출생 연도 (양력)",
+  "h": "9f8721e0"
+ },
+ "kimlau.nhap-nam-sinh-duong-lich-he": {
+  "t": "출생 연도(양력)를 입력하세요. 시스템이 금루·삼재·황옥의 고법에 따라 대조해 결론과 향후 20년 조회표를 알려 줘요.",
+  "h": "cca6f199"
+ },
+ "kimlau.pham-kim-lau-tam-tai-ma": {
+  "t": "금루나 삼재에 걸린 줄 모르고 결혼하고 집을 지은 뒤에야 알게 되는 사람이 많아요. 출생 연도를 입력하면 바로 결론과 향후 20년 조회표를 받아 볼 수 있어요.",
+  "h": "7e987b4a"
+ },
+ "kimlau.tinh-trang": {
+  "t": "상태",
+  "h": "5a46503e"
+ },
+ "kimlau.tra-cuu": {
+  "t": "조회하기 →",
+  "h": "fd5b08a7"
+ },
+ "kimlau.tuoi-ta": {
+  "t": "세는나이",
+  "h": "536f1746"
+ },
+ "kimlau.xem-tuoi-lam-nha-cuoi-hoi": {
+  "t": "집짓기·결혼을 할 나이가 세는나이로 금루·삼재·황옥에 걸리는지 확인하고 향후 20년 조회표를 보여 줘요. 액막이 방법은 선생님께 물어보세요.",
+  "h": "041eccbd"
  },
  "kinhdich.1-gieo-que": {
   "t": "<span class=\"wss-n\">1</span><span class=\"wss-l\">괘 뽑기</span>",

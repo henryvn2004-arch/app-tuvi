@@ -2379,6 +2379,34 @@
   "t": "Zodiac clash ",
   "h": "e92ab4fa"
  },
+ "js.kimlau.chip1": {
+  "t": "Which year is best to build a house?",
+  "h": "992ff775"
+ },
+ "js.kimlau.chip2": {
+  "t": "Which year can I get married?",
+  "h": "5de89c72"
+ },
+ "js.kimlau.chip3": {
+  "t": "How do I remedy Jin Lou?",
+  "h": "f9c9cb33"
+ },
+ "js.kimlau.chip4": {
+  "t": "What should I avoid during San Zai?",
+  "h": "27ba3819"
+ },
+ "js.kimlau.dai-20-nam": {
+  "t": "Next 20 years — which years are clear",
+  "h": "bd73ccbd"
+ },
+ "js.kimlau.greeting": {
+  "t": "I've checked Jin Lou · San Zai · Huang Wu for **{cc}** (next 20 years). What would you like to ask?",
+  "h": "cf9daca6"
+ },
+ "js.kimlau.label": {
+  "t": "Jin Lou · {cc}",
+  "h": "2529b317"
+ },
  "js.kinhdich.bam-de-bat-dau-gieo-que": {
   "t": "Tap to start casting — 6 tosses, each one determines a line",
   "h": "5f61aa02"
@@ -5011,6 +5039,14 @@
   "t": "** or suggest new names?",
   "h": "d922a861"
  },
+ "js.shellui.hc-ban-o-day": {
+  "t": "you are here",
+  "h": "0ed02beb"
+ },
+ "js.shellui.hc-duoc": {
+  "t": "OK",
+  "h": "4c144474"
+ },
  "js.shellui.hd-al": {
   "t": " (Lunar {d}/{m})",
   "h": "3fd68961"
@@ -5710,6 +5746,74 @@
  "js.shellui.kinh-mat-nao-hop-tuong-mat": {
   "t": "Which glasses suit my face?",
   "h": "e2a2a092"
+ },
+ "js.shellui.kl-binh-thuong": {
+  "t": "Normal",
+  "h": "7a1fa869"
+ },
+ "js.shellui.kl-cau-hoang-oc": {
+  "t": "This year is a Huang Wu year for you — avoid buying, selling and building a house.",
+  "h": "50677d38"
+ },
+ "js.shellui.kl-cau-kim-lau": {
+  "t": "This year is a Jin Lou ({loai}) year for you — {hai}. Avoid weddings, construction and major groundbreaking.",
+  "h": "53df32eb"
+ },
+ "js.shellui.kl-cau-tam-tai": {
+  "t": "This year falls in your Three Calamities (San Zai) cycle — be careful with big decisions.",
+  "h": "72ae51c8"
+ },
+ "js.shellui.kl-con-tam-tai": {
+  "t": "This year also coincides with the Three Calamities, so take extra care.",
+  "h": "6d4d5899"
+ },
+ "js.shellui.kl-hai-luc-suc": {
+  "t": "it affects livestock and property",
+  "h": "214ff98e"
+ },
+ "js.shellui.kl-hai-than": {
+  "t": "it affects the homeowner personally",
+  "h": "682a3213"
+ },
+ "js.shellui.kl-hai-the": {
+  "t": "it affects the wife",
+  "h": "09bcf309"
+ },
+ "js.shellui.kl-hai-tu": {
+  "t": "it affects the children",
+  "h": "f3ad84bb"
+ },
+ "js.shellui.kl-loai-luc-suc": {
+  "t": "Livestock",
+  "h": "524f4cec"
+ },
+ "js.shellui.kl-loai-than": {
+  "t": "Self",
+  "h": "77575b16"
+ },
+ "js.shellui.kl-loai-the": {
+  "t": "Wife",
+  "h": "ccd000d4"
+ },
+ "js.shellui.kl-loai-tu": {
+  "t": "Children",
+  "h": "bef3174e"
+ },
+ "js.shellui.kl-nam-nay-khong-co": {
+  "t": "This year has no Jin Lou, Huang Wu or Three Calamities.",
+  "h": "2d212f11"
+ },
+ "js.shellui.kl-nam-tuoi": {
+  "t": "Year {y} (age {t})",
+  "h": "511d7f9e"
+ },
+ "js.shellui.kl-nhap-nam-hop-le": {
+  "t": "Please enter a valid birth year (1900–2010).",
+  "h": "8363c20b"
+ },
+ "js.shellui.kl-title": {
+  "t": "{cc} ({by}) — {na} · Traditional age in {cy}: {t}",
+  "h": "f6b9127c"
  },
  "js.shellui.km-cuc": {
   "t": "{dun}, Ju {n}",
@@ -8414,6 +8518,78 @@
  "js.xemtuoi.xet-nhanh-hai-tuoi-co-hop": {
   "t": "Quickly check whether two ages are compatible — just birth years, an instant answer, no deep reading yet.",
   "h": "ee011392"
+ },
+ "kimlau.bang-tra-20-nam-toi": {
+  "t": "20-year<br>lookup table",
+  "h": "ded0c033"
+ },
+ "kimlau.bang-tra-20-nam-toi-9fqx": {
+  "t": "<span class=\"res-block-title\">20-Year Lookup Table</span>",
+  "h": "8e04bf8f"
+ },
+ "kimlau.can-chi": {
+  "t": "Stem-Branch",
+  "h": "8b784611"
+ },
+ "kimlau.cuoi-hoi-lam-nha": {
+  "t": "Weddings,<br>building a home",
+  "h": "7e98e435"
+ },
+ "kimlau.hoi-thay-nam-dep-cach-hoa": {
+  "t": "✦ Ask the Master for good years &amp; remedies",
+  "h": "5f76ab82"
+ },
+ "kimlau.ket-luan-ngay-tuc-thi": {
+  "t": "Instant<br>verdict",
+  "h": "b2797a93"
+ },
+ "kimlau.kim-lau-la-quan-niem-dan": {
+  "t": "Jin Lou is a folk belief based on the homeowner's age counted by the lunar calendar, holding that certain ages are unfavorable for building a house or getting married. San Zai (Three Calamities) is a related concept, referring to three consecutive years believed to bring obstacles in the 12-animal cycle.",
+  "h": "625e5413"
+ },
+ "kimlau.kim-lau-tam-tai": {
+  "t": "Jin Lou &amp; San Zai",
+  "h": "cea3719a"
+ },
+ "kimlau.kim-lau-tam-tai-tu-vi": {
+  "t": "Jin Lou & San Zai — Minh Bao Zi Wei Dou Shu",
+  "h": "b2ec2af2"
+ },
+ "kimlau.kim-lau-tam-tai-tuoi-lam": {
+  "t": "<b>Jin Lou & San Zai</b><span>Is your age unlucky for building a home or getting married?</span>",
+  "h": "1fb12a82"
+ },
+ "kimlau.nam-dl": {
+  "t": "Solar year",
+  "h": "6c965b9e"
+ },
+ "kimlau.nam-sinh-duong-lich": {
+  "t": "Birth year (solar calendar)",
+  "h": "9f8721e0"
+ },
+ "kimlau.nhap-nam-sinh-duong-lich-he": {
+  "t": "Enter your birth year (solar calendar). The system checks it against the classical rules for Jin Lou, San Zai and Huang Wu — get a verdict and a lookup table for the next 20 years.",
+  "h": "cca6f199"
+ },
+ "kimlau.pham-kim-lau-tam-tai-ma": {
+  "t": "Many people only discover they have hit Jin Lou or San Zai after it is too late — after the wedding or the build. Enter your birth year for an instant verdict and a ready-made table for the next 20 years.",
+  "h": "7e987b4a"
+ },
+ "kimlau.tinh-trang": {
+  "t": "Status",
+  "h": "5a46503e"
+ },
+ "kimlau.tra-cuu": {
+  "t": "Look up →",
+  "h": "fd5b08a7"
+ },
+ "kimlau.tuoi-ta": {
+  "t": "Traditional age",
+  "h": "536f1746"
+ },
+ "kimlau.xem-tuoi-lam-nha-cuoi-hoi": {
+  "t": "Check whether your age hits Jin Lou, San Zai or Huang Wu for building a home or getting married, by traditional age — with a 20-year lookup table. Ask the Master for remedies.",
+  "h": "041eccbd"
  },
  "kinhdich.1-gieo-que": {
   "t": "<span class=\"wss-n\">1</span><span class=\"wss-l\">Cast the hexagram</span>",

@@ -2379,6 +2379,34 @@
   "t": "相冲 ",
   "h": "e92ab4fa"
  },
+ "js.kimlau.chip1": {
+  "t": "家を建てるのに一番良い年はいつですか？",
+  "h": "992ff775"
+ },
+ "js.kimlau.chip2": {
+  "t": "結婚できる年はいつですか？",
+  "h": "5de89c72"
+ },
+ "js.kimlau.chip3": {
+  "t": "金楼にあたったときの対処法は？",
+  "h": "f9c9cb33"
+ },
+ "js.kimlau.chip4": {
+  "t": "三災のあいだ、何を避けるべきですか？",
+  "h": "27ba3819"
+ },
+ "js.kimlau.dai-20-nam": {
+  "t": "今後20年 — 進めてよい年",
+  "h": "bd73ccbd"
+ },
+ "js.kimlau.greeting": {
+  "t": "**{cc}**の金楼・三災・荒屋（今後20年）を調べました。何を聞きたいですか？",
+  "h": "cf9daca6"
+ },
+ "js.kimlau.label": {
+  "t": "金楼・{cc}",
+  "h": "2529b317"
+ },
  "js.kinhdich.bam-de-bat-dau-gieo-que": {
   "t": "押すと卦立てを開始します——6回投げ、1回につき1つの爻が決まります",
   "h": "5f61aa02"
@@ -5011,6 +5039,14 @@
   "t": "**。それとも、新しい名前を提案しましょうか？",
   "h": "d922a861"
  },
+ "js.shellui.hc-ban-o-day": {
+  "t": "現在地",
+  "h": "0ed02beb"
+ },
+ "js.shellui.hc-duoc": {
+  "t": "可",
+  "h": "4c144474"
+ },
  "js.shellui.hd-al": {
   "t": "（旧暦{m}/{d}）",
   "h": "3fd68961"
@@ -5710,6 +5746,74 @@
  "js.shellui.kinh-mat-nao-hop-tuong-mat": {
   "t": "どんなメガネが私の顔に合いますか？",
   "h": "e2a2a092"
+ },
+ "js.shellui.kl-binh-thuong": {
+  "t": "平常",
+  "h": "7a1fa869"
+ },
+ "js.shellui.kl-cau-hoang-oc": {
+  "t": "今年は荒屋の年です。売買や家の建築は避けましょう。",
+  "h": "50677d38"
+ },
+ "js.shellui.kl-cau-kim-lau": {
+  "t": "今年は金楼（{loai}）の年で、{hai}。結婚、建築、大きな着工は避けましょう。",
+  "h": "53df32eb"
+ },
+ "js.shellui.kl-cau-tam-tai": {
+  "t": "今年は三災の運にあたります。大きな決断には慎重に。",
+  "h": "72ae51c8"
+ },
+ "js.shellui.kl-con-tam-tai": {
+  "t": "今年は三災とも重なるため、特に慎重さが必要です。",
+  "h": "6d4d5899"
+ },
+ "js.shellui.kl-hai-luc-suc": {
+  "t": "家畜や財産に影響する",
+  "h": "214ff98e"
+ },
+ "js.shellui.kl-hai-than": {
+  "t": "家主本人に影響する",
+  "h": "682a3213"
+ },
+ "js.shellui.kl-hai-the": {
+  "t": "妻に影響する",
+  "h": "09bcf309"
+ },
+ "js.shellui.kl-hai-tu": {
+  "t": "子どもに影響する",
+  "h": "f3ad84bb"
+ },
+ "js.shellui.kl-loai-luc-suc": {
+  "t": "六畜",
+  "h": "524f4cec"
+ },
+ "js.shellui.kl-loai-than": {
+  "t": "身",
+  "h": "77575b16"
+ },
+ "js.shellui.kl-loai-the": {
+  "t": "妻",
+  "h": "ccd000d4"
+ },
+ "js.shellui.kl-loai-tu": {
+  "t": "子",
+  "h": "bef3174e"
+ },
+ "js.shellui.kl-nam-nay-khong-co": {
+  "t": "今年は金楼・荒屋・三災のいずれにもあたりません。",
+  "h": "2d212f11"
+ },
+ "js.shellui.kl-nam-tuoi": {
+  "t": "{y}年（数え年{t}歳）",
+  "h": "511d7f9e"
+ },
+ "js.shellui.kl-nhap-nam-hop-le": {
+  "t": "有効な生まれ年（1900〜2010）を入力してください。",
+  "h": "8363c20b"
+ },
+ "js.shellui.kl-title": {
+  "t": "{cc}（{by}）— {na} · {cy}年の数え年：{t}歳",
+  "h": "f6b9127c"
  },
  "js.shellui.km-cuc": {
   "t": "{dun}{n}局",
@@ -8414,6 +8518,78 @@
  "js.xemtuoi.xet-nhanh-hai-tuoi-co-hop": {
   "t": "生まれ年だけで、お二人の年の相性をさっと確認できます。すぐに答えが出ます（詳しい鑑定ではありません）。",
   "h": "ee011392"
+ },
+ "kimlau.bang-tra-20-nam-toi": {
+  "t": "今後20年の<br>早見表",
+  "h": "ded0c033"
+ },
+ "kimlau.bang-tra-20-nam-toi-9fqx": {
+  "t": "<span class=\"res-block-title\">今後20年の早見表</span>",
+  "h": "8e04bf8f"
+ },
+ "kimlau.can-chi": {
+  "t": "干支",
+  "h": "8b784611"
+ },
+ "kimlau.cuoi-hoi-lam-nha": {
+  "t": "結婚式・<br>家の建築",
+  "h": "7e98e435"
+ },
+ "kimlau.hoi-thay-nam-dep-cach-hoa": {
+  "t": "✦ 先生に、良い年と対処法を聞く",
+  "h": "5f76ab82"
+ },
+ "kimlau.ket-luan-ngay-tuc-thi": {
+  "t": "その場で<br>結論",
+  "h": "b2797a93"
+ },
+ "kimlau.kim-lau-la-quan-niem-dan": {
+  "t": "金楼は、家主の数え年にもとづく民間信仰で、特定の年齢は家の建築や結婚に向かないとされます。三災は関連する概念で、十二支の周期のなかで障害に遭いやすいとされる連続3年を指します。",
+  "h": "625e5413"
+ },
+ "kimlau.kim-lau-tam-tai": {
+  "t": "金楼と三災",
+  "h": "cea3719a"
+ },
+ "kimlau.kim-lau-tam-tai-tu-vi": {
+  "t": "金楼と三災 — 明宝紫微斗数",
+  "h": "b2ec2af2"
+ },
+ "kimlau.kim-lau-tam-tai-tuoi-lam": {
+  "t": "<b>金楼と三災</b><span>家の建築・結婚に障りのある年齢かどうか</span>",
+  "h": "1fb12a82"
+ },
+ "kimlau.nam-dl": {
+  "t": "西暦年",
+  "h": "6c965b9e"
+ },
+ "kimlau.nam-sinh-duong-lich": {
+  "t": "生まれ年（新暦）",
+  "h": "9f8721e0"
+ },
+ "kimlau.nhap-nam-sinh-duong-lich-he": {
+  "t": "生まれ年（新暦）を入力してください。システムが金楼・三災・荒屋の古法に照らして確認し、結論と今後20年の早見表を返します。",
+  "h": "cca6f199"
+ },
+ "kimlau.pham-kim-lau-tam-tai-ma": {
+  "t": "金楼や三災にあたっていると知らないまま、結婚や家の建築をしてしまい、手遅れになってから気づく人は少なくありません。生まれ年を入力すれば、すぐに結論と今後20年の早見表が届きます。",
+  "h": "7e987b4a"
+ },
+ "kimlau.tinh-trang": {
+  "t": "状態",
+  "h": "5a46503e"
+ },
+ "kimlau.tra-cuu": {
+  "t": "調べる →",
+  "h": "fd5b08a7"
+ },
+ "kimlau.tuoi-ta": {
+  "t": "数え年",
+  "h": "536f1746"
+ },
+ "kimlau.xem-tuoi-lam-nha-cuoi-hoi": {
+  "t": "家の建築や結婚の年齢が、数え年で金楼・三災・荒屋にあたるかを調べ、今後20年の早見表を示します。対処法は先生に聞けます。",
+  "h": "041eccbd"
  },
  "kinhdich.1-gieo-que": {
   "t": "<span class=\"wss-n\">1</span><span class=\"wss-l\">卦を立てる</span>",
