@@ -1,6 +1,6 @@
 # Nhật ký phát triển — mục lục
 
-581 mục ghi chép từng PR, tách khỏi `CLAUDE.md` để nó thôi ngốn ~350k token mỗi lượt.
+583 mục ghi chép từng PR, tách khỏi `CLAUDE.md` để nó thôi ngốn ~350k token mỗi lượt.
 
 **Sáu file dưới đây KHÔNG được nạp tự động.** Cần thì tra:
 
@@ -12,7 +12,7 @@ sed -n '120,190p' docs/nhat-ky/2026-08.md    # đọc đúng đoạn, đừng ca
 
 | file | số mục | dung lượng |
 |---|---:|---:|
-| `2026-11.md` | 40 | 139,390 B |
+| `2026-11.md` | 42 | 152,643 B |
 | `2026-10.md` | 16 | 39,635 B |
 | `2026-09.md` | 360 | 1,241,867 B |
 | `2026-08.md` | 148 | 1,024,027 B |
@@ -28,6 +28,7 @@ Luật rút ra từ các mục này đã được cô đọng lên `CLAUDE.md`. 
 
 | # | tháng | file | mục |
 |---:|---|---|---|
+| 1 | 2026-11 | `2026-11.md` | 🧰 W27 — Việc dùng chung đợt 5: "Thầy {tên}" ở shell.js · `I18n.db` cho nhãn DB (công cụ/gói/thầy) · JSON-LD theo ngôn ngữ (`ld.*`) · `js.auth`/`js.taikhoan` nhúng đúng · check:i18n quét tools-shared |
 | 1 | 2026-11 | `2026-11.md` | 🗓️ W24 — Công cụ ngày giờ · đặt tên · phong thuỷ: 11/12 trang 5 ngôn ngữ (còn `so-dep`); route `xem-tuoi` đặt tên/chọn ngày sinh chữ theo trang |
 | 1 | 2026-11 | `2026-11.md` | 🏷️ W26c — Badge 4 tầng "Ai sinh cùng ngày" theo ngôn ngữ (client dịch theo mã `tang`, route không đổi) |
 | 1 | 2026-11 | `2026-11.md` | 💄 W23b (lô 2) — Kiểu Tóc · Personal Color · Màu Sắc Hợp Mệnh · Trang Phục Theo Ngày · Trang Điểm · Da Liệu đủ 5 ngôn ngữ; action JSON tuong-mat/phong-thuy truyền locale; bẫy enum/khoá tra cứu do LLM sinh |
@@ -35,6 +36,7 @@ Luật rút ra từ các mục này đã được cô đọng lên `CLAUDE.md`. 
 | 1 | 2026-11 | `2026-11.md` | 💳 W21 — Đường tiền + niềm tin: 16 trang đủ 5 ngôn ngữ (Hồ sơ, xác nhận thanh toán, combo, báo cáo, thầy, FAQ…) · khuôn "Thầy {tên}" · PayPal trả về đúng `/<locale>` |
 | 1 | 2026-11 | `2026-11.md` | 🧒 W22 — 10 trang gia đình/công sở (Dạy Con · Người Khác · Duyên Nợ · Hướng Nghiệp Trẻ · Chân Dung ×2 · Nhân Mạch · Công Sở · Cả Nhà · Sinh Con) đủ 5 ngôn ngữ; văn engine TS còn tiếng Việt |
 | 1 | 2026-11 | `2026-11.md` | 🧩 W26b — Widget dùng chung (2): hook-layer · ai-loading-steps · cung-ngay-sinh · sample-hint · laso-chart (62 khoá) |
+| 1 | 2026-11 | `2026-11.md` | 🗓️ W24 — Công cụ ngày giờ (Giờ Sinh · Chọn Ngày · Ngày Tốt · Hoàng Đạo · Kim Lâu) 5 ngôn ngữ; route `xem-tuoi` đặt tên/chọn ngày sinh chữ theo trang |
 | 1 | 2026-11 | `2026-11.md` | 🃏 W25 — Tarot · Bói Bài Tây · Oracle đủ 5 ngôn ngữ; khung tĩnh 10 trang (thần số học, bản đồ sao, phong thủy ×3, mệnh khố, công cụ, tài liệu) vào từ điển; tên sách giữ gốc; bẫy `i18n:prune` · chuỗi Việt không dấu |
 | 1 | 2026-11 | `2026-11.md` | 🎙️ W23 — Thanh Tướng Pro · Thanh Tướng · Nhãn Tướng đủ 5 ngôn ngữ; Thủ Tướng dở dang; 9 trang còn lại chưa làm |
 | 1 | 2026-11 | `2026-11.md` | 🧩 W26a — Widget dùng chung: `tuvi-form.js` + `noi-sinh.js` theo ngôn ngữ (114 khoá, tên nước qua Intl.DisplayNames) |

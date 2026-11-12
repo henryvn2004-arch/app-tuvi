@@ -8,7 +8,10 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { detectJsNamespaces, detectSoftNamespaces } from '../../lib/i18n/render.mjs';
 
-export const REF_RE = /\b(?:T|_tvmbT)\(\s*'(js\.[\w.-]+)'/g;
+// Mọi kiểu gọi tra khoá `js.*` đang dùng: T/_tvmbT (trang, shell, auth) · _tv/tv/I.tv/I18n.tv (module tools-shared) ·
+// _lcT (laso-chart.js). Khoá ghép động (`'js.tool.' + id`) không khớp — cố ý: chỉ khoá NGUYÊN VĂN mới kiểm được.
+const PUBLIC_DIR = path.join(path.dirname(new URL(import.meta.url).pathname), '..', '..', 'public');
+export const REF_RE = /(?:\b(?:T|_tvmbT|_tv|tv|_lcT)|\.tv)\(\s*'(js\.[\w.-]*\w)'(?!\s*\+)/g;
 export const refsIn = (src) => [...src.matchAll(REF_RE)].map((m) => m[1]);
 export const nsOf = (k) => k.split('.')[1];
 
@@ -19,6 +22,7 @@ export function scriptsOf(html) {
   for (const f of ['shell.js', 'tuvi-paywall.js', 'auth.js', 'tool-prices.js', 'tuvi-form.js'])
     if (has(f)) out.add(f);
   for (const f of [
+    'account-core.js',
     'laso-chart.js',
     'tool-sources.js',
     'tools-shared/hook-layer.js',
@@ -27,6 +31,10 @@ export function scriptsOf(html) {
     'tools-shared/sample-hint.js',
   ])
     if (has(f)) out.add(f);
+  // W27: mọi module `tools-shared/*.js` trang nạp bằng thẻ <script> (ky-mon.js, mai-hoa.js…) — trước chỉ một danh sách tay.
+  for (const m of html.matchAll(/<script[^>]+src=["']\/(tools-shared\/[\w-]+\.js)/gi))
+    if (m[1] !== 'tools-shared/i18n.js' && fs.existsSync(path.join(PUBLIC_DIR, m[1])))
+      out.add(m[1]); // i18n.js = khung (ví dụ trong chú thích)
   if (out.has('shell.js'))
     ['tuvi-paywall.js', 'auth.js', 'tool-prices.js', 'tuvi-form.js'].forEach((f) => out.add(f));
   if (detectJsNamespaces(html).includes('nav')) out.add('nav.js');

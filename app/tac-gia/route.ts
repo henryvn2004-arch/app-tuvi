@@ -109,7 +109,7 @@ body{font-family:'Be Vietnam Pro',Arial,sans-serif;background:var(--bg);color:va
   </div>
   <div class="grid">${cards}</div>
 </main>
-<script src="/track.js?v=4" defer></script><script src="/nav.js?v=49" defer></script>
+<script src="/track.js?v=8" defer></script><script src="/nav.js?v=49" defer></script>
 <script>(function(){var I=window.I18n;if(!I||!I.master)return;document.querySelectorAll('[data-master]').forEach(function(e){var id=e.getAttribute('data-master');e.textContent=I.master(id,e.textContent);});})();</script>
 </body></html>`;
 }

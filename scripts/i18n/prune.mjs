@@ -20,6 +20,7 @@ import {
 } from '../../lib/i18n/dict.mjs';
 import { buildZhCn } from './zhcn.mjs';
 import { padEdges } from '../../lib/i18n/core.mjs';
+import { DB_NS } from '../../lib/i18n/render.mjs';
 
 function walk(dir, out = []) {
   for (const e of fs.readdirSync(dir, { withFileTypes: true })) {
@@ -33,7 +34,12 @@ const src = walk(PUBLIC)
   .map((f) => fs.readFileSync(f, 'utf8'))
   .join('\n');
 const vi = loadVi();
-const dropVi = Object.keys(vi).filter((k) => k.startsWith('js.') && !src.includes(`'${k}'`));
+// DB_NS (js.tool.<tool_id>, js.goi.<package_id>, js.thay.*): khoá ghép động `'js.tool.' + id` — không có chuỗi
+// '…' nguyên vẹn trong mã nguồn nhưng KHÔNG mồ côi (câu gốc là nhãn trong DB). Đừng xoá.
+const isDbKey = (k) => DB_NS.some((n) => k.startsWith(`js.${n}.`));
+const dropVi = Object.keys(vi).filter(
+  (k) => k.startsWith('js.') && !isDbKey(k) && !src.includes(`'${k}'`)
+);
 for (const k of dropVi) delete vi[k];
 const report = { 'vi.json': dropVi.length };
 const own = TRANSLATED.filter((l) => !GENERATED[l]);

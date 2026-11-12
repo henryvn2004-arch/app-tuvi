@@ -104,7 +104,7 @@
 <script src="/nav.js?v=49" data-icons-only></script>
 <script src="/auth.js?v=9"></script>
 <script>window.SHELL_ACTIVE='bao-cao';</script>
-<script src="/shell.js?v=150"></script>
+<script src="/shell.js?v=152"></script>
 <script src="/tools-shared/shell-soft-nav.js?v=49"></script>
 <script>
 (function(){
@@ -125,19 +125,23 @@
     if (d < 30*86400000) return Math.floor(d/86400000) + _tvmbT('js.baocao.ngay-truoc', ' ngày trước');
     var t = new Date(ts); return t.getDate() + '/' + (t.getMonth()+1) + '/' + t.getFullYear();
   }
+  // Nhãn công cụ (tool_pricing.label lưu vào bản chụp) theo ngôn ngữ trang — I18n.db dịch chỉ khi nhãn còn trùng
+  // câu gốc (W27). Tên bản chụp trùng nhãn thì cũng là nhãn ⇒ hiện bản dịch. Chỉ hiển thị.
+  function lbl(r){ return r.toolLabel && window.I18n && I18n.db ? I18n.db('js.tool.' + r.toolId, r.toolLabel) : r.toolLabel; }
+  function nameOf(r){ return r.title && r.title !== r.toolLabel ? r.title : (lbl(r) || r.title); }
   function paint(){
     if (!ROWS) return;
     var list = ROWS.filter(function(r){
-      return !Q || ((r.toolLabel || '') + ' ' + r.title + ' ' + (r.subtitle || '')).toLowerCase().indexOf(Q) >= 0;
+      return !Q || ((lbl(r) || '') + ' ' + (r.toolLabel || '') + ' ' + r.title + ' ' + (r.subtitle || '')).toLowerCase().indexOf(Q) >= 0;
     });
     el('bcLoading').style.display = 'none';
     el('bcEmpty').style.display = list.length ? 'none' : 'block';
     el('bcTbl').style.display = list.length ? '' : 'none';
     el('bcBody').innerHTML = list.map(function(r){
-      var name = r.title && r.title !== r.toolLabel ? r.title : (r.toolLabel || r.title);
+      var name = nameOf(r);
       return '<tr class="bc-row" data-id="' + esc(r.id) + '"><td><div class="bc-nm"><span class="bc-ic" data-icon="' + (r.hasImage ? 'image' : 'file-text') + '"></span><span><b>' + esc(name) + '</b>' +
         (r.subtitle ? '<span>' + esc(r.subtitle) + '</span>' : '') + '</span></div></td>' +
-        '<td class="bc-hide bc-muted">' + esc(r.toolLabel || '') + '</td>' +
+        '<td class="bc-hide bc-muted">' + esc(lbl(r) || '') + '</td>' +
         '<td class="bc-muted"><div class="bc-when">' + esc(rel(+new Date(r.updatedAt))) +
         (r.pdfSlug ? '<button type="button" class="bc-pdf" data-pdf="' + esc(r.pdfSlug) + '"><span data-icon="mail"></span>' + _tvmbT('js.baocao.gui-pdf', 'Gửi PDF') + '</button>' +
           '<button type="button" class="bc-chat" data-chat="' + esc(r.pdfSlug) + '"><span data-icon="message-circle"></span>' + _tvmbT('js.baocao.gui-ve-zalo', 'Gửi về Zalo') + '</button>' : '') +
@@ -189,7 +193,7 @@
   }
   function openView(id){
     var r = (ROWS || []).filter(function(x){ return x.id === id; })[0] || {};
-    el('rvTitle').textContent = r.title && r.title !== r.toolLabel ? r.title : (r.toolLabel || r.title || _tvmbT('js.baocao.bao-cao', 'Báo cáo'));
+    el('rvTitle').textContent = nameOf(r) || _tvmbT('js.baocao.bao-cao', 'Báo cáo');
     el('rvSub').textContent = r.subtitle || '';
     el('rvBody').innerHTML = '<div class="rv-msg">' + _tvmbT('js.baocao.dang-mo-bao-cao', 'Đang mở báo cáo…') + '</div>';
     el('rvBody').scrollTop = 0;

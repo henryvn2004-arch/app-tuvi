@@ -202,7 +202,7 @@ ${CJK_CSS[locale]}</style>
 <script src="/auth.js?v=9"></script>
 </head><body>
 <div id="nav-ph" style="height:60px;background:#FBFAF6"></div>
-<script src="/track.js?v=4" defer></script><script src="/nav.js?v=49" defer></script>
+<script src="/track.js?v=8" defer></script><script src="/nav.js?v=49" defer></script>
 <nav class="bc" aria-label="Breadcrumb"><a href="${pre}/">${L.home}</a><span>›</span><span>${C.ten}</span></nav>
 <main class="wrap">
   <div class="eyebrow">${C.ten}</div>

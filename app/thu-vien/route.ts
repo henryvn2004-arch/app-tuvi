@@ -304,11 +304,11 @@ export async function GET(): Promise<Response> {
     </div>
   </main>
 </div>
-<script src="/track.js?v=4" defer></script>
+<script src="/track.js?v=8" defer></script>
 <script src="/nav.js?v=49" data-icons-only></script>
 <script src="/auth.js?v=9"></script>
 <script>window.SHELL_ACTIVE='thu-vien';</script>
-<script src="/shell.js?v=150"></script>
+<script src="/shell.js?v=152"></script>
 </body></html>`;
 
   return new NextResponse(html, {

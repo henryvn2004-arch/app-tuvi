@@ -8399,6 +8399,22 @@
   "t": "See the 12 candidate hours",
   "h": "3cd9aabf"
  },
+ "js.goi.120": {
+  "t": "Standard",
+  "h": "01d0c63f"
+ },
+ "js.goi.350": {
+  "t": "Premium",
+  "h": "12f26fd0"
+ },
+ "js.goi.50": {
+  "t": "Starter",
+  "h": "fd7bbfc8"
+ },
+ "js.goi.800": {
+  "t": "VIP",
+  "h": "944b88d0"
+ },
  "js.hdtt.goi-cao-cap": {
   "t": "Premium",
   "h": "12f26fd0"
@@ -10616,7 +10632,7 @@
   "h": "a601efbf"
  },
  "js.nav.cong-ty-tnhh-kira-tech-kira": {
-  "t": "<strong>Kira Tech Company Limited</strong><br><span class=\"dim\">(Công ty TNHH Kira Tech)</span>",
+  "t": "<strong>Công ty TNHH Kira Tech</strong><br><span class=\"dim\">(Kira Tech Company Limited)</span>",
   "h": "40cbf05c"
  },
  "js.nav.contact-tuviminhbao-com-0343-848-795": {
@@ -10676,11 +10692,11 @@
   "h": "4df839b4"
  },
  "js.nav.menh-kho": {
-  "t": "Mệnh Khố",
+  "t": "Chart Vault (Mệnh Khố)",
   "h": "2de2772c"
  },
  "js.nav.menh-kho-438k-la-so": {
-  "t": "Mệnh Khố — 438K charts",
+  "t": "Chart Vault (Mệnh Khố) — 438K charts",
   "h": "dbdd9b4f"
  },
  "js.nav.ngay-tot": {
@@ -10748,7 +10764,7 @@
   "h": "017d8d21"
  },
  "js.nav.toa-nha-master-building-41-43": {
-  "t": "Master Building, 41-43 Tran Cao Van Street,<br>Xuan Hoa Ward (District 3), Ho Chi Minh City",
+  "t": "Toà nhà Master Building, 41-43 Trần Cao Vân,<br>Phường Xuân Hòa (Quận 3), TP.HCM",
   "h": "249c141e"
  },
  "js.nav.tra-cuu": {
@@ -14279,6 +14295,10 @@
   "t": "Tom",
   "h": "30acaacf"
  },
+ "js.shellui.b-thay-ten": {
+  "t": "<b>Master {ten}</b>",
+  "h": "695f3d85"
+ },
  "js.shellui.ba": {
   "t": "your mother",
   "h": "f1d8177e"
@@ -14703,9 +14723,9 @@
   "t": " free questions</b>",
   "h": "8ddf771c"
  },
- "js.shellui.cau-nay-thi": {
-  "t": "For this question,",
-  "h": "084951c0"
+ "js.shellui.cau-nay-nguoi-xem-ky-nhat": {
+  "t": "<p>For this question, the one who reads it best is <b>Master {ten}</b>. Bringing them in now.</p>",
+  "h": "b2dcac0b"
  },
  "js.shellui.cau-vua-roi-duoc-tra-loi": {
   "t": " — your last question was answered right away",
@@ -14935,10 +14955,6 @@
   "t": "<p>Couldn't add the calendar — please try again from the Family page.</p>",
   "h": "2e6ef436"
  },
- "js.shellui.chuyen": {
-  "t": "As for ",
-  "h": "2844303d"
- },
  "js.shellui.chuyen-do-the-nao-roi-con": {
   "t": "<p>How did that turn out?</p>",
   "h": "9e184650"
@@ -14947,13 +14963,13 @@
   "t": "For this, the Master needs to look at your chart to answer accurately. Please give your full name and gender.",
   "h": "58f00a90"
  },
+ "js.shellui.chuyen-x-nguoi-xem-ky-nhat": {
+  "t": "<p>For {nghia}, the one who reads it best is <b>Master {ten}</b>. Bringing them in now.</p>",
+  "h": "ea4b5f77"
+ },
  "js.shellui.co-loi-thu-lai-giup-con": {
   "t": "Something went wrong — please try again.",
   "h": "320cbdc2"
- },
- "js.shellui.co-noi": {
-  "t": " said: <i>“",
-  "h": "7960bcfb"
  },
  "js.shellui.con": {
   "t": "<b>",
@@ -15199,10 +15215,6 @@
   "t": "Checked Jin Lou · Three Calamities · Huang Wu for zodiac year **",
   "h": "2c862356"
  },
- "js.shellui.da-vao-tiep-chuyen": {
-  "t": " has joined the conversation",
-  "h": "31cef520"
- },
  "js.shellui.da-xem-lich-thang": {
   "t": "Viewed the calendar for **month ",
   "h": "bd12b12f"
@@ -15290,10 +15302,6 @@
  "js.shellui.dat-ten-dn": {
   "t": "Business naming · ",
   "h": "e07d8451"
- },
- "js.shellui.day": {
-  "t": " .",
-  "h": "7cac21ab"
  },
  "js.shellui.day-so": {
   "t": "Number",
@@ -15474,10 +15482,6 @@
  "js.shellui.dung-roi-thay": {
   "t": "That's right, Master",
   "h": "393b0d29"
- },
- "js.shellui.dung-ten": {
-  "t": "</b> put their name to",
-  "h": "70d07a35"
  },
  "js.shellui.dung-than-la-gi-hanh-nao": {
   "t": "What is the Useful God, and which element is it?",
@@ -15971,13 +15975,17 @@
   "t": "**. Ask me and I'll read it for you.",
   "h": "da298819"
  },
- "js.shellui.hom": {
-  "t": "<p>On ",
-  "h": "5bfbea9a"
- },
  "js.shellui.hom-nay-nen-lam-gi-kieng": {
   "t": "What should I do and avoid today?",
   "h": "1e8037df"
+ },
+ "js.shellui.hom-thay-noi": {
+  "t": "<p>On {ngay}, the Master said: <i>“{noi}”</i></p>",
+  "h": "9c24768f"
+ },
+ "js.shellui.hom-thay-ten-noi": {
+  "t": "<p>On {ngay}, Master {ten} said: <i>“{noi}”</i></p>",
+  "h": "8b32b5bc"
  },
  "js.shellui.hop-mau-gi-ky-mau-gi": {
   "t": "Which colors suit me, and which should I avoid?",
@@ -16959,10 +16967,6 @@
   "t": "Minh Bao · your guide",
   "h": "225df799"
  },
- "js.shellui.minh-moi-thay-vao-ngay": {
-  "t": "</b>. Let me bring the Master in right now.</p>",
-  "h": "7d9c9c4b"
- },
  "js.shellui.mn-binh": {
   "t": "Neutral",
   "h": "33e3bf5e"
@@ -17035,13 +17039,13 @@
   "t": "Get your own daily outlook for your chart every morning",
   "h": "6f9ffa30"
  },
- "js.shellui.moi-thay": {
-  "t": "Invite Master",
-  "h": "077afd49"
- },
  "js.shellui.moi-thay-mot-van-phong-rieng": {
   "t": "Each Master has a voice of their own. Pick the one you like, or let us choose at random.",
   "h": "9f6ba6f2"
+ },
+ "js.shellui.moi-thay-ten-xem-bang": {
+  "t": "Invite Master {ten} to read with {mon}",
+  "h": "77a781d9"
  },
  "js.shellui.muc": {
   "t": " sections — ",
@@ -17386,10 +17390,6 @@
  "js.shellui.nguoi-thau-tan-long-minh-thi": {
   "t": "One who has fully understood their own heart knows their nature; knowing their nature, they know Heaven.",
   "h": "ee637ff3"
- },
- "js.shellui.nguoi-xem-ky-nhat-la-thay": {
-  "t": " the one who knows this best is <b>Master ",
-  "h": "d5168fd0"
  },
  "js.shellui.nguyen": {
   "t": "Nguyen",
@@ -17951,25 +17951,9 @@
   "t": "Master ",
   "h": "90b92a70"
  },
- "js.shellui.thay-3v67": {
-  "t": " Master",
-  "h": "e443187d"
- },
- "js.shellui.thay-5jjy": {
-  "t": "Master",
-  "h": "f0644739"
- },
- "js.shellui.thay-6ofb": {
-  "t": "<b>Master",
-  "h": "c643e073"
- },
- "js.shellui.thay-7g4t": {
-  "t": "<span>Master <b>",
-  "h": "a8757512"
- },
- "js.shellui.thay-chuyen-xem": {
-  "t": "<p>The Master specializes in <b>",
-  "h": "ace3cd01"
+ "js.shellui.thay-chuyen-xem-mon": {
+  "t": "<p>I specialize in <b>{mon}</b>.</p>",
+  "h": "fa55968b"
  },
  "js.shellui.thay-da-lap-la-so-cua": {
   "t": "<p>The Master has cast the chart of <b>",
@@ -17998,6 +17982,18 @@
  "js.shellui.thay-moi-nhin": {
   "t": "The Master takes a first look at",
   "h": "e695ea5f"
+ },
+ "js.shellui.thay-ten-da-vao": {
+  "t": "Master {ten} has joined the conversation",
+  "h": "6bcfd560"
+ },
+ "js.shellui.thay-ten-day": {
+  "t": "Master {ten} here.",
+  "h": "7297ba80"
+ },
+ "js.shellui.thay-ten-dung-ten": {
+  "t": "Led by <b>Master {ten}</b>",
+  "h": "7c08f3db"
  },
  "js.shellui.thay-vi-hoi-le-tung-cau": {
   "t": "… — instead of asking one question at a time.</div>",
@@ -18034,10 +18030,6 @@
  "js.shellui.theo-mot-con-so": {
   "t": "By a number",
   "h": "6f19ed96"
- },
- "js.shellui.thi": {
-  "t": " ,",
-  "h": "084e1779"
  },
  "js.shellui.tho": {
   "t": "Earth",
@@ -18350,10 +18342,6 @@
  "js.shellui.xem": {
   "t": "View →",
   "h": "1e272706"
- },
- "js.shellui.xem-bang": {
-  "t": " via ",
-  "h": "b50dfad0"
  },
  "js.shellui.xem-bat-trach": {
   "t": "View Eight Mansions →",
@@ -22331,6 +22319,210 @@
   "t": "Please choose an image file.",
   "h": "71a61127"
  },
+ "js.tool.an-sao": {
+  "t": "Chart Star Placement",
+  "h": "5c7c4676"
+ },
+ "js.tool.ban-do-sao": {
+  "t": "Birth Star Chart",
+  "h": "2c2ee68e"
+ },
+ "js.tool.ban-lam-viec": {
+  "t": "Desk Feng Shui",
+  "h": "2f08993f"
+ },
+ "js.tool.bat-trach": {
+  "t": "Eight Mansions Directions",
+  "h": "a9176f82"
+ },
+ "js.tool.boi-bai-tay": {
+  "t": "Playing Card Reading",
+  "h": "4a54dbba"
+ },
+ "js.tool.but-tuong": {
+  "t": "Handwriting Reading — Signature",
+  "h": "87aec873"
+ },
+ "js.tool.chan-dung-tien-kiep": {
+  "t": "Past-Life Portrait",
+  "h": "e7d0f866"
+ },
+ "js.tool.chan-dung-vo-chong": {
+  "t": "Couple Portrait",
+  "h": "ed0abbb5"
+ },
+ "js.tool.chon-ngay-tot": {
+  "t": "Auspicious Date Selection",
+  "h": "e4844e35"
+ },
+ "js.tool.chu-trinh-cuoc-doi": {
+  "t": "Life Cycles",
+  "h": "38c0c6ce"
+ },
+ "js.tool.combo-laso-tubinh": {
+  "t": "Bundle: Chart Reading + Zi Ping",
+  "h": "c69e7864"
+ },
+ "js.tool.combo-tron-bo": {
+  "t": "Bundle: All 4 Tools",
+  "h": "0726a4ab"
+ },
+ "js.tool.cong-so": {
+  "t": "Zi Wei Workplace & Career",
+  "h": "11e82a20"
+ },
+ "js.tool.cua-hang-phong-thuy": {
+  "t": "Shop & Office Feng Shui",
+  "h": "b64cd170"
+ },
+ "js.tool.dat-ten-con": {
+  "t": "Child Naming",
+  "h": "c79dbebf"
+ },
+ "js.tool.dat-ten-dn": {
+  "t": "Business Naming",
+  "h": "56f1bfbe"
+ },
+ "js.tool.day-con": {
+  "t": "Parenting by the Chart",
+  "h": "2013a771"
+ },
+ "js.tool.dien-tuong": {
+  "t": "Face Reading",
+  "h": "1e5e41e3"
+ },
+ "js.tool.duyen-no-tien-kiep": {
+  "t": "Past-Life Karmic Bonds",
+  "h": "c6b0ccb5"
+ },
+ "js.tool.gio-sinh": {
+  "t": "Birth Hour Finder",
+  "h": "2b570401"
+ },
+ "js.tool.hoang-dao": {
+  "t": "Auspicious Hours",
+  "h": "940fb21d"
+ },
+ "js.tool.huong-nghiep-tre": {
+  "t": "Early Career Guidance for Your Child",
+  "h": "2735212c"
+ },
+ "js.tool.khi-sac": {
+  "t": "Complexion",
+  "h": "e1205bcd"
+ },
+ "js.tool.kim-lau": {
+  "t": "Jin Lou & Three Calamities",
+  "h": "541e773b"
+ },
+ "js.tool.kinh-dich": {
+  "t": "I Ching 64 Hexagrams",
+  "h": "3470aa58"
+ },
+ "js.tool.ky-mon": {
+  "t": "Qi Men Dun Jia",
+  "h": "857ee290"
+ },
+ "js.tool.laso": {
+  "t": "Chart Reading",
+  "h": "72f1fa6d"
+ },
+ "js.tool.luc-nham": {
+  "t": "Simple Liu Ren",
+  "h": "a7f92fcb"
+ },
+ "js.tool.mai-hoa": {
+  "t": "Plum Blossom Numerology",
+  "h": "9093e560"
+ },
+ "js.tool.nap-am": {
+  "t": "Na Yin Five Elements",
+  "h": "0c34d19e"
+ },
+ "js.tool.ngay-tot": {
+  "t": "Auspicious Days This Month",
+  "h": "b2360cbb"
+ },
+ "js.tool.ngu-hanh-ten": {
+  "t": "Name Five Elements",
+  "h": "324f0d41"
+ },
+ "js.tool.nguoi-khac": {
+  "t": "Someone Else's Chart",
+  "h": "e454923c"
+ },
+ "js.tool.nhan-mach": {
+  "t": "Network Ledger",
+  "h": "17e83429"
+ },
+ "js.tool.nhan-tuong": {
+  "t": "Eye Reading",
+  "h": "1bc89b2e"
+ },
+ "js.tool.oracle": {
+  "t": "Eastern Oracle",
+  "h": "1146fb81"
+ },
+ "js.tool.phong-thuy": {
+  "t": "Interior Feng Shui",
+  "h": "3f80b53f"
+ },
+ "js.tool.phong-thuy-render": {
+  "t": "Feng Shui Room Render",
+  "h": "0806581b"
+ },
+ "js.tool.rail-message": {
+  "t": "Ask the Master — per message",
+  "h": "730dc918"
+ },
+ "js.tool.so-dep": {
+  "t": "Lucky Numbers",
+  "h": "367135ef"
+ },
+ "js.tool.tarot": {
+  "t": "Tarot 78 Cards",
+  "h": "0454df6e"
+ },
+ "js.tool.than-so-hoc": {
+  "t": "Numerology",
+  "h": "dac00660"
+ },
+ "js.tool.thanh-tuong": {
+  "t": "Voice Reading",
+  "h": "d47f6d49"
+ },
+ "js.tool.thanh-tuong-pro": {
+  "t": "Voice Reading Pro",
+  "h": "b2e5a151"
+ },
+ "js.tool.thu-tuong": {
+  "t": "Palm Reading",
+  "h": "869631da"
+ },
+ "js.tool.tu-binh": {
+  "t": "Zi Ping BaZi",
+  "h": "6ade52e9"
+ },
+ "js.tool.tuong-hop": {
+  "t": "Age Compatibility",
+  "h": "0e3495f7"
+ },
+ "js.tool.van-han-nam": {
+  "t": "Next 12 Months",
+  "h": "f265e49d"
+ },
+ "js.tool.xem-lam-an": {
+  "t": "Business Compatibility",
+  "h": "5f5ba4e2"
+ },
+ "js.tool.xem-tuoi": {
+  "t": "Marriage Compatibility",
+  "h": "f3e7b1ed"
+ },
+ "js.tool.xem-tuoi-sinh-con": {
+  "t": "Childbirth Timing",
+  "h": "e7626a5f"
+ },
  "js.toolsrc.data": {
   "t": "Uses {name} as a benchmark, not as a displayed catalog.",
   "h": "acff5b26"
@@ -22444,7 +22636,7 @@
   "h": "66c4edf1"
  },
  "js.toolsrc.nm-tu-vi-dau-so-tan-bien-van-dang-thai-thu-lang": {
-  "t": "Zi Wei Dou Shu Xin Bian (Van Dang Thai Thu Lang)",
+  "t": "Zi Wei Dou Shu: A New Compilation (Van Dang Thai Thu Lang)",
   "h": "2e7fd5a8"
  },
  "js.toolsrc.theo": {
@@ -24647,6 +24839,322 @@
   "t": "Minh Bao Zi Wei Dou Shu",
   "h": "33336b26"
  },
+ "ld.about.1": {
+  "t": "About — Minh Bao Zi Wei Dou Shu",
+  "h": "6d156f99"
+ },
+ "ld.about.2": {
+  "t": "A classical Zi Wei Dou Shu star-placement system with in-depth readings of the 12 palaces, 9 major cycles and minor cycles",
+  "h": "65de9e89"
+ },
+ "ld.faqs.1": {
+  "t": "What is Minh Bao Zi Wei Dou Shu?",
+  "h": "efcbcc8e"
+ },
+ "ld.faqs.10": {
+  "t": "A destiny-research group that takes the classics as its foundation and real-world evidence as its standard, combined with modern methods and technology — made up of scholars, Zi Wei Dou Shu researchers and practitioners with experience reading many charts.",
+  "h": "74b04251"
+ },
+ "ld.faqs.11": {
+  "t": "Why do I need to enter my exact birth time?",
+  "h": "82794875"
+ },
+ "ld.faqs.12": {
+  "t": "Birth time is a key factor in Zi Wei Dou Shu. A small error can shift star positions and affect the whole reading. If you are not sure, treat the results more as a reference.",
+  "h": "499ff150"
+ },
+ "ld.faqs.13": {
+  "t": "Can I change my destiny?",
+  "h": "bf404e5b"
+ },
+ "ld.faqs.14": {
+  "t": "Zi Wei Dou Shu is not an absolute verdict. A chart reflects trends, timing and possibilities — the final outcome still depends on each person's actions and choices.",
+  "h": "486c616a"
+ },
+ "ld.faqs.15": {
+  "t": "Why does the reading sound \"just like me\"?",
+  "h": "7314b8c1"
+ },
+ "ld.faqs.16": {
+  "t": "A chart's structure is systematic, real-world data helps identify patterns, and the system interprets them in your personal context. Being \"right\" comes from the method, not from random guessing.",
+  "h": "c6fc228d"
+ },
+ "ld.faqs.17": {
+  "t": "Does the system \"make things up\"?",
+  "h": "06bfe5e6"
+ },
+ "ld.faqs.18": {
+  "t": "No. The system is only used to explain content and clarify points — the reading logic is built in advance from classical methods, data and tested rules.",
+  "h": "94424770"
+ },
+ "ld.faqs.19": {
+  "t": "Why do I have to pay to see the full reading?",
+  "h": "733113cc"
+ },
+ "ld.faqs.2": {
+  "t": "Minh Bao Zi Wei Dou Shu is a personalized reading system that combines classical Eastern learning, real-world data and modern technology to help you better understand yourself, the stages of your life and the trends likely to unfold.",
+  "h": "f5d146bd"
+ },
+ "ld.faqs.20": {
+  "t": "The cost covers building and processing large-scale data, developing the reading system, maintaining the technical infrastructure and continuously refining the content. The fee ensures quality and serious investment in the system.",
+  "h": "aea79109"
+ },
+ "ld.faqs.21": {
+  "t": "How should I use the results?",
+  "h": "1644cda6"
+ },
+ "ld.faqs.22": {
+  "t": "Treat a reading as a systematic perspective, a decision-support tool and a well-grounded reference — do not rely on the results entirely.",
+  "h": "969f31b7"
+ },
+ "ld.faqs.23": {
+  "t": "What if I think the reading is wrong?",
+  "h": "6ad0ebc9"
+ },
+ "ld.faqs.24": {
+  "t": "It may be due to an incorrect birth time, differences between schools, or personal factors not yet fully reflected. You can send feedback via the Contact page to help improve the system.",
+  "h": "7b7ec9cc"
+ },
+ "ld.faqs.25": {
+  "t": "Is the system updated?",
+  "h": "4d0b3cd2"
+ },
+ "ld.faqs.26": {
+  "t": "Yes. The system is continuously improved based on new data, user feedback and real-world testing.",
+  "h": "bc3e5b44"
+ },
+ "ld.faqs.27": {
+  "t": "What are credits?",
+  "h": "069f33f5"
+ },
+ "ld.faqs.28": {
+  "t": "Credits are the unit used to unlock the in-depth reading tools on Minh Bao Zi Wei Dou Shu. Top up once and use them on every tool, with no need to buy each feature separately.",
+  "h": "9df7912f"
+ },
+ "ld.faqs.29": {
+  "t": "How do I top up credits?",
+  "h": "20e35eb4"
+ },
+ "ld.faqs.3": {
+  "t": "Is this just a Zi Wei Dou Shu website?",
+  "h": "7ef25581"
+ },
+ "ld.faqs.30": {
+  "t": "Go to the Top Up page, choose a suitable package and pay. Credits are added to your wallet as soon as the transaction succeeds.",
+  "h": "8c235e3f"
+ },
+ "ld.faqs.31": {
+  "t": "What payment methods are available?",
+  "h": "1a669669"
+ },
+ "ld.faqs.32": {
+  "t": "VND bank transfer via payOS (Vietnam only, by scanning a QR code in a Vietnamese banking app), or PayPal / international cards: Visa, Mastercard, JCB.",
+  "h": "2f728294"
+ },
+ "ld.faqs.33": {
+  "t": "Am I charged credits again each time I reopen an old result?",
+  "h": "aeaa9757"
+ },
+ "ld.faqs.34": {
+  "t": "No. Each chart or result is charged only once, when it is first read — after that you can view it again as many times as you like for free.",
+  "h": "a2f32d2a"
+ },
+ "ld.faqs.35": {
+  "t": "What do I get after paying?",
+  "h": "d394ecec"
+ },
+ "ld.faqs.36": {
+  "t": "The full in-depth reading from that tool, written for your chart and personal context, plus unlimited re-viewing and downloads where the tool supports them.",
+  "h": "9665e777"
+ },
+ "ld.faqs.37": {
+  "t": "Paid but the credits have not arrived in my wallet?",
+  "h": "f2404c88"
+ },
+ "ld.faqs.38": {
+  "t": "Try refreshing the page, or go to Profile, the \"Credit wallet\" tab, to check your balance. If they still have not arrived after 1–2 minutes, contact us via the Contact page with your transaction ID.",
+  "h": "5065a5a5"
+ },
+ "ld.faqs.39": {
+  "t": "Are refunds available?",
+  "h": "404fcc8d"
+ },
+ "ld.faqs.4": {
+  "t": "No. Minh Bao Zi Wei Dou Shu is a system of many research and reading tools, with Zi Wei Dou Shu at its core, alongside tools for analyzing fortune over time, cross-referencing destiny charts, and applied research content.",
+  "h": "715ad41b"
+ },
+ "ld.faqs.40": {
+  "t": "Because the results are digital, no refunds are given once a result has been displayed. If a transaction goes wrong — you were charged but did not receive the result — contact us right away and we will check and resolve it.",
+  "h": "61a53ff2"
+ },
+ "ld.faqs.41": {
+  "t": "Where can I see my transaction history?",
+  "h": "4208f20f"
+ },
+ "ld.faqs.42": {
+  "t": "Go to Profile, the \"Credit wallet\" tab, to see your current balance and the full history of credit top-ups and deductions.",
+  "h": "5145b202"
+ },
+ "ld.faqs.5": {
+  "t": "Are the readings really accurate?",
+  "h": "bb52dc39"
+ },
+ "ld.faqs.6": {
+  "t": "No system gives absolute conclusions. Minh Bao Zi Wei Dou Shu is built on birth data from more than 270,000 real people, combined with the international AstroDataBank database and checked against how their lives actually unfolded. The results are better grounded, but should still be treated as a valuable reference.",
+  "h": "4ca0eca8"
+ },
+ "ld.faqs.7": {
+  "t": "How does the system work?",
+  "h": "3941c852"
+ },
+ "ld.faqs.8": {
+  "t": "The process has 5 steps: building the chart from your birth date and hour, analyzing its structure by Zi Wei principles, checking it against real-world data, having the system explain the content, and calibration by experts. The system does not guess on its own; it only re-explains conclusions that have already been established.",
+  "h": "c79d1d79"
+ },
+ "ld.faqs.9": {
+  "t": "Who is behind this system?",
+  "h": "7748fa78"
+ },
+ "ld.home.1": {
+  "t": "Destiny portal: Zi Wei Dou Shu, Zi Ping, physiognomy and feng shui by classical method",
+  "h": "04b8bb4a"
+ },
+ "ld.home.10": {
+  "t": "People interested in Zi Wei Dou Shu, destiny reading and fortune cycles",
+  "h": "e7968823"
+ },
+ "ld.home.2": {
+  "t": "A destiny portal with 50 tools — Zi Wei Dou Shu, Zi Ping, physiognomy and feng shui by classical method",
+  "h": "8e99ad51"
+ },
+ "ld.home.3": {
+  "t": "Read your Zi Wei Dou Shu chart online by classical method — accurate star placement, analysis of the 12 palaces, 9 major cycles, yearly minor cycles and special chart patterns. An in-depth reading in 24 parts.",
+  "h": "0f5739e9"
+ },
+ "ld.home.4": {
+  "t": "Classical Zi Wei Dou Shu star placement",
+  "h": "e1f50f8f"
+ },
+ "ld.home.5": {
+  "t": "Analysis of the 12 palaces, major and minor stars",
+  "h": "65c3811e"
+ },
+ "ld.home.6": {
+  "t": "9 major cycles and yearly minor cycles",
+  "h": "4b13b85e"
+ },
+ "ld.home.7": {
+  "t": "Special chart patterns from a 200+ pattern database",
+  "h": "20455fed"
+ },
+ "ld.home.8": {
+  "t": "In-depth reading in 24 parts",
+  "h": "e4bc967d"
+ },
+ "ld.home.9": {
+  "t": "Yearly fortune outlook",
+  "h": "1407d4a1"
+ },
+ "ld.menhkho.1": {
+  "t": "Mệnh Khố — Look Up Your Zi Wei Dou Shu Chart by Birth Year",
+  "h": "7bda7a71"
+ },
+ "ld.menhkho.10": {
+  "t": "What is classical star placement?",
+  "h": "085ce033"
+ },
+ "ld.menhkho.11": {
+  "t": "Classical star placement is the traditional method of Chinese Zi Wei Dou Shu, without modern adjustments. Major stars (Zi Wei, Tian Fu, Lian Zhen, Tian Xiang...) are placed by lunar birth day and year stem. Minor stars (Wen Chang, Wen Qu, Zuo Fu, You Bi...) are placed by birth month and hour. The Four Transformations (Lu, Quan, Ke, Ji) follow the birth-year stem.",
+  "h": "54ee5bb7"
+ },
+ "ld.menhkho.12": {
+  "t": "What is a minor cycle and how does it differ from a major cycle?",
+  "h": "b9ecd9d8"
+ },
+ "ld.menhkho.13": {
+  "t": "A minor cycle is the fortune of each single year, set within a 10-year major cycle. Each year's minor cycle corresponds to a different palace and is judged by the annual stars and minor-limit stars together with their interaction with the running major cycle. It tells you whether that year runs smooth or against you within the larger picture of the major cycle.",
+  "h": "ab3ec36d"
+ },
+ "ld.menhkho.14": {
+  "t": "How many Zi Wei Dou Shu charts are in Mệnh Khố?",
+  "h": "b5b5fcbf"
+ },
+ "ld.menhkho.15": {
+  "t": "Minh Bao Zi Wei Dou Shu's Mệnh Khố holds 575,000+ pre-calculated charts for birth dates from 1960 to 2026, covering all 12 birth hours and both male and female charts. Each chart is star-placed by classical method, with analysis of the 12 palaces, chart patterns, major cycles and the 2027 minor cycle.",
+  "h": "ad526b66"
+ },
+ "ld.menhkho.16": {
+  "t": "How to look up a Zi Wei Dou Shu chart in Mệnh Khố",
+  "h": "cd3dd5da"
+ },
+ "ld.menhkho.17": {
+  "t": "How to look up a Zi Wei Dou Shu chart by birth date on tuviminhbao.com",
+  "h": "2b4fd705"
+ },
+ "ld.menhkho.18": {
+  "t": "Choose your solar (Gregorian) birth year, from 1960 to 2026, in the lookup table below.",
+  "h": "7f96dda5"
+ },
+ "ld.menhkho.19": {
+  "t": "On the birth-year page, click your solar (Gregorian) birth date in the calendar.",
+  "h": "fac7eaef"
+ },
+ "ld.menhkho.2": {
+  "t": "Look up Zi Wei Dou Shu charts by birth year, 1960–2026. Analysis of the 12 palaces, chart patterns, major and minor cycles by classical method. 575,000+ charts ready to look up.",
+  "h": "5f63c8fa"
+ },
+ "ld.menhkho.20": {
+  "t": "Choose birth hour and gender",
+  "h": "ae177207"
+ },
+ "ld.menhkho.21": {
+  "t": "Choose one of the 12 double-hours (Zi to Hai) and your gender (Male / Female).",
+  "h": "a786c8b7"
+ },
+ "ld.menhkho.22": {
+  "t": "The Zi Wei chart appears on a 4×4 grid, with analysis of the 12 palaces, chart patterns, major cycles and the minor cycle for the year viewed.",
+  "h": "32bff80c"
+ },
+ "ld.menhkho.3": {
+  "t": "A Zi Wei Dou Shu chart is a destiny map built from the lunar date and hour of birth. It has 12 palaces (Life, Parents, Fortune, Property, Career, Friends, Travel, Health, Wealth, Children, Spouse, Siblings) with stars placed in each palace by classical rules. From it, one reads character, career, love and the fortune of each year.",
+  "h": "8234ae98"
+ },
+ "ld.menhkho.4": {
+  "t": "What is the Life Palace in Zi Wei Dou Shu?",
+  "h": "0571cf12"
+ },
+ "ld.menhkho.5": {
+  "t": "The Life Palace is the most important palace in a Zi Wei Dou Shu chart, reflecting the character, appearance and overall destiny of the person read. It is determined from the birth hour and lunar birth month, then checked against the year stem to fix the major star. Each major star (Zi Wei, Tian Fu, Lian Zhen...) has its own traits.",
+  "h": "3bab4e00"
+ },
+ "ld.menhkho.6": {
+  "t": "What is a major cycle in Zi Wei Dou Shu?",
+  "h": "ccdc71d2"
+ },
+ "ld.menhkho.7": {
+  "t": "A major cycle is a 10-year phase of fortune, counted from the age of the first minor limit. Each major cycle corresponds to one of the chart's 12 palaces and rotates forward or backward depending on yin and yang. Whether it is good or bad depends on the stars in that palace and their link to the Life Palace.",
+  "h": "d13804cb"
+ },
+ "ld.menhkho.8": {
+  "t": "Why does birth time matter in Zi Wei Dou Shu?",
+  "h": "cd346b68"
+ },
+ "ld.menhkho.9": {
+  "t": "The birth hour determines the Life Palace and the Body Palace — the two foundation palaces of the chart. Same birth date but a different hour gives a completely different Life Palace, and with it different major stars, chart patterns and fortune. Zi Wei Dou Shu uses 12 double-hours (Zi, Chou, Yin, Mao, Chen, Si, Wu, Wei, Shen, You, Xu, Hai), each lasting 2 hours.",
+  "h": "a9592b90"
+ },
+ "ld.phuongphap.1": {
+  "t": "How the system works — Zi Wei Verification",
+  "h": "711a09b1"
+ },
+ "ld.phuongphap.2": {
+  "t": "How Minh Bao Zi Wei Dou Shu produces a reading",
+  "h": "fe4244f3"
+ },
+ "ld.phuongphap.3": {
+  "t": "More than 270,000 verified birth-time records, combined with biographical data and life events of people across many fields: politics, science, the arts and business.",
+  "h": "029a3ae7"
+ },
  "lienhe.24-48-gio": {
   "t": "24 – 48 hours",
   "h": "dbc9b8ce"
@@ -24824,7 +25332,7 @@
   "h": "14557bde"
  },
  "luangiai.tu-vi-dau-so-la-mot": {
-  "t": "Zi Wei Dou Shu (Purple Star Astrology) is a traditional system of Chinese destiny reading. It casts a chart from the lunar birth hour, with 12 palaces and a system of major and minor stars. Refined over many generations, it became popular in Vietnam through the translation of <i>Zi Wei Dou Shu Xin Bian</i> (Tử Vi Đẩu Số Tân Biên) by Vân Đằng Thái Thứ Lang, and grew into a distinct Vietnamese school.",
+  "t": "Zi Wei Dou Shu (Purple Star Astrology) is a traditional system of Chinese destiny reading. It casts a chart from the lunar birth hour, with 12 palaces and a system of major and minor stars. Refined over many generations, it became popular in Vietnam through the translation of <i>Zi Wei Dou Shu: A New Compilation</i> by Van Dang Thai Thu Lang, and grew into a distinct Vietnamese school.",
   "h": "81546c5f"
  },
  "luangiai.tu-vi-khong-du-doan-tuong": {

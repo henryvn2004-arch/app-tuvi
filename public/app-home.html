@@ -552,10 +552,12 @@
 <script src="/auth.js?v=9"></script>
   <script src="/nav.js?v=49" data-icons-only></script>
 <script src="/tools-shared/tool-icons.js?v=1"></script>
-<script src="/shell.js?v=150"></script>
+<script src="/shell.js?v=152"></script>
 <script src="/tools-shared/shell-soft-nav.js?v=49"></script>
 <script>
 function esc(s){return String(s==null?'':s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
+// Nhãn công cụ từ DB (tool_pricing.label) theo ngôn ngữ trang — I18n.db dịch chỉ khi nhãn DB còn trùng câu gốc (W27). Chỉ hiển thị.
+function toolLb(r){return window.I18n&&I18n.db?I18n.db('js.tool.'+r.tool_id,r.label):r.label;}
 /* ── Ô icon đầu .ws-top: `mountToolIcon()` (shell.js) tự chèn SVG của tool
    đang active vào `.ws-avatar` — cho Home nó vẽ icon nhà chung chung, lệch
    hẳn triện thật vừa đổi vào `.ws-title` bên cạnh. Thay bằng ảnh triện thật.
@@ -689,7 +691,7 @@ function renderNext(d) {
     ('<div class="grp-title">' + _tvmbT('js.home.goi-y-cho-ban', '✦ Gợi ý cho bạn') + '</div>') +
     '<a class="nx-main" href="' + esc(first.row.app_path) + '">' +
       '<div class="ic">' + cardIcon(first.row) + '</div>' +
-      '<div class="nx-tx"><b>' + esc(first.row.label) + '</b>' +
+      '<div class="nx-tx"><b>' + esc(toolLb(first.row)) + '</b>' +
         '<div class="nx-why">' + esc(first.why) + '</div></div>' +
       '<div class="nx-go" aria-hidden="true">›</div>' +
     '</a>';
@@ -719,7 +721,7 @@ function tileTint(row) {
 function tileHtml(row) {
   return '<a class="tile" href="' + esc(row.app_path) + '">' +
     '<div class="tile-ic tint-' + esc(tileTint(row)) + '">' + cardIcon(row) + '</div>' +
-    '<span class="tile-lb">' + esc(row.label) + '</span></a>';
+    '<span class="tile-lb">' + esc(toolLb(row)) + '</span></a>';
 }
 /** `d` là bản `navFallback()` hoặc bản `load()` đã về — xem `activeBanners()`
  *  trong public/tool-prices.js cho cách lọc hiệu lực + tra `href`. */
