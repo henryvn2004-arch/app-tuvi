@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>Cả nhà mình — Tử Vi Minh Bảo</title>
+<title data-i18n="cn.ca-nha-minh-tu-vi-minh">Cả nhà mình — Tử Vi Minh Bảo</title>
 <link rel="icon" type="image/webp" href="/seal.webp"/>
 <link rel="preload" href="/fonts/noto-serif-latin-400.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="/fonts/noto-serif-vietnamese-400.woff2" as="font" type="font/woff2" crossorigin>
@@ -57,36 +57,36 @@
   <main class="ws" id="ws">
     <div class="ws-top">
       <button class="btn mobile-only" onclick="document.getElementById('shell-sidebar').classList.toggle('open');window.shellSyncBackdrop&&shellSyncBackdrop()" aria-label="Menu">☰</button>
-      <div class="ws-title"><b>Cả nhà mình</b><span id="cnSub">Lá số của cả nhà xếp cạnh nhau, 12 tháng âm tới.</span></div>
+      <div data-i18n="cn.ca-nha-minh-la-so-cua" class="ws-title"><b>Cả nhà mình</b><span id="cnSub">Lá số của cả nhà xếp cạnh nhau, 12 tháng âm tới.</span></div>
     </div>
     <div class="ws-body">
-      <div id="cnLoading" class="cn-msg">Đang xếp lá số cả nhà…</div>
+      <div data-i18n="cn.dang-xep-la-so-ca-nha" id="cnLoading" class="cn-msg">Đang xếp lá số cả nhà…</div>
       <div id="cnGuest" class="cn-msg" style="display:none">
-        <p style="margin-bottom:1rem">Đăng nhập để xem lá số cả nhà.</p>
-        <button class="btn" type="button" onclick="window.showAuthModal && showAuthModal(function(){location.reload();})">Đăng nhập / Đăng ký</button>
+        <p data-i18n="cn.dang-nhap-de-xem-la-so" style="margin-bottom:1rem">Đăng nhập để xem lá số cả nhà.</p>
+        <button data-i18n="cn.dang-nhap-dang-ky" class="btn" type="button" onclick="window.showAuthModal && showAuthModal(function(){location.reload();})">Đăng nhập / Đăng ký</button>
       </div>
-      <div id="cnEmpty" class="cn-msg" style="display:none">
+      <div data-i18n="cn.so-la-so-chua-co-nguoi" id="cnEmpty" class="cn-msg" style="display:none">
         Sổ lá số chưa có người nhà nào.<br>Cứ hỏi thầy về chồng, con hay bố mẹ — thầy sẽ mời thêm lá số ngay trong lúc trò chuyện.<br>
         Lá số đã lưu thì chuyển sang nhóm <b>Gia đình</b> ở <a href="/app/so-la-so">Sổ lá số</a>.
       </div>
       <div id="cnMain" style="display:none">
         <div class="cn-people" id="cnPeople"></div>
-        <h2 class="cn-h2">12 tháng âm tới</h2>
+        <h2 data-i18n="cn.12-thang-am-toi" class="cn-h2">12 tháng âm tới</h2>
         <div class="cn-grid-wrap"><table class="cn-grid" id="cnGrid"></table></div>
-        <p class="cn-legend">Mỗi ô là cung nguyệt hạn của tháng đó (Tài = Tài Bạch, Quan = Quan Lộc…). Ô vàng: tháng mà hai người trở lên cùng hạn vào một cung. Bấm một ô để xem sao.</p>
+        <p data-i18n="cn.moi-o-la-cung-nguyet-han" class="cn-legend">Mỗi ô là cung nguyệt hạn của tháng đó (Tài = Tài Bạch, Quan = Quan Lộc…). Ô vàng: tháng mà hai người trở lên cùng hạn vào một cung. Bấm một ô để xem sao.</p>
         <div class="cn-detail" id="cnDetail" style="display:none"></div>
         <div id="cnTrungWrap" style="display:none">
-          <h2 class="cn-h2">Tháng cả nhà nên để ý</h2>
+          <h2 data-i18n="cn.thang-ca-nha-nen-de-y" class="cn-h2">Tháng cả nhà nên để ý</h2>
           <ul class="cn-trung" id="cnTrung"></ul>
         </div>
-        <div class="cn-cta">
+        <div data-i18n="cn.hoi-thay-ve-ca-nha-so" class="cn-cta">
           <a class="go" id="cnAsk" href="/app">Hỏi thầy về cả nhà</a>
           <a class="sub" href="/app/so-la-so">Sổ lá số</a>
         </div>
         <div class="cn-lich" id="cnLich" style="display:none">
-          <h2 class="cn-h2">Lịch riêng</h2>
-          <p>Đưa ngày tốt và ngày xung tuổi của riêng con vào lịch điện thoại. Lịch tự cập nhật mỗi ngày.</p>
-          <div class="cn-lich-act"><button type="button" data-k="ical">iPhone / Mac</button><button type="button" data-k="google">Google Lịch</button></div>
+          <h2 data-i18n="cn.lich-rieng" class="cn-h2">Lịch riêng</h2>
+          <p data-i18n="cn.dua-ngay-tot-va-ngay-xung">Đưa ngày tốt và ngày xung tuổi của riêng con vào lịch điện thoại. Lịch tự cập nhật mỗi ngày.</p>
+          <div class="cn-lich-act"><button data-i18n="cn.iphone-mac" type="button" data-k="ical">iPhone / Mac</button><button data-i18n="cn.google-lich" type="button" data-k="google">Google Lịch</button></div>
           <p class="cn-lich-msg" id="cnLichMsg" hidden></p>
         </div>
       </div>
