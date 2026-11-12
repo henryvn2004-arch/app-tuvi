@@ -134,6 +134,8 @@ out.cc = [];
 for (let i = 0; i < 700; i++) {
   const l = ls(mk());
   for (const v of Object.values(l.cachCucTungCung || {})) for (const x of v) out.cc.push(x);
+  // ls.cachCuc[] (cách cục có tên): hiện ten + moTa ở Chân Dung / Luận Giải
+  for (const c of l.cachCuc || []) for (const x of [c.ten, c.moTa]) if (x) out.cc.push(x);
 }
 // GOLDEN: chữ Việt do engine TRƯỚC lô D dựng bằng chuỗi viết tay (scripts/fixtures/engine-ma-golden.json) — engine nay
 // dựng từ bảng khuôn và phải giữ từng byte (chữ còn vào prompt LLM + portrait_cache).

@@ -11,6 +11,12 @@
    cần Chart.js; tự thoát nếu thiếu Chart) — đúng khuôn
    BatTuCore.renderInlineDaiVanLineChart của bat-tu-core.js.
    Public API: window.LuanGiaiCore = { TONG_PHAN, PHAN_LABELS_BASE, phanLabels, buildPreGenHtml, buildCalcSectionHtml, renderInlineDaiVanLineChart }. */
+
+// Câu cách cục / ý nghĩa cung do engine viết (chữ Việt) → bản dịch ở chỗ VẼ (tools-shared/cach-cuc.js); thiếu ⇒ nguyên câu.
+function _ccT(s) {
+  return typeof window !== 'undefined' && window.TuviCachCuc ? window.TuviCachCuc.t(s) : s;
+}
+
 /* global Chart */
 (function (root) {
   var TONG_PHAN = 24;
@@ -199,7 +205,7 @@
       const cc = _astrolabe.cachCuc || [];
       if (cc.length > 0) {
         preGenHtml += `<div class="pregen-block"><div class="pregen-title"><span class="ic-inline" data-icon-emoji="⚙" style="display:inline-flex;width:1em;height:1em;vertical-align:-2px;color:#7C6942">⚙</span> Cách cục đặc biệt</div>`;
-        cc.forEach(c => { preGenHtml += `<div class="pregen-item"><span class="cc-label cc-${c.loai}">${c.ten}</span><span class="cc-mota">${c.moTa}</span></div>`; });
+        cc.forEach(c => { preGenHtml += `<div class="pregen-item"><span class="cc-label cc-${c.loai}">${_ccT(c.ten)}</span><span class="cc-mota">${_ccT(c.moTa)}</span></div>`; });
         preGenHtml += `</div>`;
       }
       if (_astrolabe.cungScores) {
@@ -234,7 +240,7 @@
       const sc = _astrolabe.cungScores?.[cungForPhan];
       if (ccItems.length > 0) {
         preGenHtml += `<div class="pregen-block"><div class="pregen-title"><span class="ic-inline" data-icon-emoji="⚙" style="display:inline-flex;width:1em;height:1em;vertical-align:-2px;color:#7C6942">⚙</span> Cách cục đặc biệt</div>`;
-        ccItems.forEach(c => { preGenHtml += `<div class="pregen-item"><span class="cc-label cc-${c.loai}">${c.ten}</span></div>`; });
+        ccItems.forEach(c => { preGenHtml += `<div class="pregen-item"><span class="cc-label cc-${c.loai}">${_ccT(c.ten)}</span></div>`; });
         preGenHtml += `</div>`;
       }
       // Sao ở cung (LUÔN có) — chính tinh + tam phương tứ chính; đứng trước "Phân
@@ -248,7 +254,7 @@
             : y.includes('đại hung') ? 'yn-great-hung'
             : y.includes('hung')||y.includes('vất vả')||y.includes('tai') ? 'yn-hung'
             : y.includes('Tuần')||y.includes('Triệt') ? 'yn-tuan' : 'yn-neutral';
-          preGenHtml += `<div class="pregen-yn ${cls}">• ${y}</div>`;
+          preGenHtml += `<div class="pregen-yn ${cls}">• ${_ccT(y)}</div>`;
         });
         preGenHtml += `</div>`;
       }
@@ -344,7 +350,7 @@
           const ccDV=(_astrolabe.cachCuc||[]).filter(c=>c.cung===dvCungName||c.cung==='');
           if (ccDV.length>0) {
             preGenHtml += `<div class="pregen-block"><div class="pregen-title"><span class="ic-inline" data-icon-emoji="⚙" style="display:inline-flex;width:1em;height:1em;vertical-align:-2px;color:#7C6942">⚙</span> Cách cục liên quan</div>`;
-            ccDV.forEach(c=>{ preGenHtml += `<div class="pregen-item"><span class="cc-label cc-${c.loai}">${c.ten}</span><span class="cc-mota">${c.moTa}</span></div>`; });
+            ccDV.forEach(c=>{ preGenHtml += `<div class="pregen-item"><span class="cc-label cc-${c.loai}">${_ccT(c.ten)}</span><span class="cc-mota">${_ccT(c.moTa)}</span></div>`; });
             preGenHtml += `</div>`;
           }
           const dvRules=dv.rules||[];

@@ -42,6 +42,19 @@
     [new RegExp('^Triệt án ngữ( \\[hết tác dụng — trên 30 tuổi\\])?: ' + TOT_XAU + ' 80%( \\(đang tác dụng\\))?$'), 'triet-an', function (m) { return m[1] ? 'off' : 'on'; }, 0],
   ];
 
+  // Mẫu `moTa` của ls.cachCuc[] có biến (phanTichCachCuc): danh sách địa chi nối "/" (`{dc}`) hoặc tên cung (`{cung}`).
+  function dsChi(ds) {
+    return ds
+      .split('/')
+      .map(chi)
+      .join('/');
+  }
+  var MAU_CC = [
+    [/^Triệt đóng thường trú tại (.+?) \(Kim cung\) — đặc cách cát: hóa giải sát khí, giảm tính xấu sát tinh, tăng tính tốt cát tinh trong cung\. Tác dụng mạnh nhất trước 30 tuổi\.$/, 'triet-thuong', 'dc'],
+    [/^Tuần đóng thường trú tại (.+?) \(Hỏa địa\) — đặc cách cát: giảm tính xấu sát tinh, hóa giải hung khí trong cung\. Tác dụng mạnh sau 30 tuổi\.$/, 'tuan-thuong', 'dc'],
+    [/^Hóa Kỵ đóng cùng nhiều sát tinh tại cung (.+?) — hung hại trong lĩnh vực cung đó tăng gấp bội, đặc biệt thận trọng\.$/, 'hoaky-sat', 'cung'],
+  ];
+
   function t(s) {
     if (viet() || s == null) return s;
     var s0 = String(s);
@@ -60,6 +73,13 @@
         });
         return '[' + ten.join(', ') + '] ' + body;
       }
+    }
+    for (var j = 0; j < MAU_CC.length; j++) {
+      var mc = MAU_CC[j][0].exec(s0);
+      if (!mc) continue;
+      var kc = L('t.' + MAU_CC[j][1]);
+      if (kc == null) return s;
+      return kc.replace(/\{dc\}/g, MAU_CC[j][2] === 'dc' ? dsChi(mc[1]) : mc[1]).replace(/\{cung\}/g, MAU_CC[j][2] === 'cung' ? (window.TuviGlossary && window.TuviGlossary.t ? window.TuviGlossary.t('cung', mc[1]) : mc[1]) : '');
     }
     for (var i = 0; i < MAU.length; i++) {
       var m = MAU[i][0].exec(s0);
