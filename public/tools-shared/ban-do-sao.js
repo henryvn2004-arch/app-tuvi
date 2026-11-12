@@ -14,6 +14,10 @@
    ⚠️ Hàm vẽ cho `poster.js` phải ĐỒNG BỘ. Không nạp ảnh, không await.
    ============================================================ */
 (function () {
+  // i18n (W25): chữ khung qua I18n.tv (khoá js.shellui.bds-*), tên hành tinh/cung/góc chiếu… qua TuviGlossary 'chiemtinh'.
+  // Dữ liệu server trả (nghia, tên) giữ chữ Việt gốc — chỉ đổi ở chỗ VẼ; thiếu bản dịch ⇒ nguyên chữ Việt.
+  function T(k, vi, v) { return window.I18n && window.I18n.tv ? window.I18n.tv(k, vi, v) : (v ? String(vi).replace(/\{(\w+)\}/g, function (m, n) { return v[n] !== undefined ? v[n] : m; }) : vi); }
+  function G(x) { return window.TuviGlossary && x ? window.TuviGlossary.t('chiemtinh', x) : x; }
   var TAU = Math.PI * 2;
   var CUNG_KH = ['♈', '♉', '♊', '♋', '♌', '♍', '♎', '♏', '♐', '♑', '♒', '♓'];
   // Màu theo NGUYÊN TỐ của cung — người đọc nhận ra nhóm ngay cả khi không biết
@@ -221,46 +225,46 @@
     var H = function (t) {
       return '<div style="font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--text-lt,#8a8f98);margin:18px 0 8px">' + esc(t) + '</div>';
     };
-    o.push(H('Bốn trục'));
+    o.push(H(T('js.shellui.bds-bon-truc', 'Bốn trục')));
     o.push('<div style="font-size:13px;line-height:1.9;color:var(--text-mid,#4a5058)">' +
       (b.truc || []).map(function (t) {
-        return '<div><b>' + esc(t.ten) + '</b> — ' + esc(t.do) + '° ' + esc(t.cung) + ' · <span style="color:var(--text-lt,#8a8f98)">' + esc(t.nghia) + '</span></div>';
+        return '<div><b>' + esc(G(t.ten)) + '</b> — ' + esc(t.do) + '° ' + esc(G(t.cung)) + ' · <span style="color:var(--text-lt,#8a8f98)">' + esc(t.nghia) + '</span></div>';
       }).join('') + '</div>');
 
-    o.push(H('Hành tinh'));
+    o.push(H(T('js.shellui.bds-hanh-tinh', 'Hành tinh')));
     o.push('<div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(190px,1fr));gap:6px">' +
       (b.sao || []).map(function (s) {
         return '<div style="padding:9px 11px;border:1px solid var(--border-lt,#e3e5e8);border-radius:6px' + (s.chinh ? '' : ';opacity:.7') + '">' +
-          '<div style="font-size:14px;font-weight:700;color:var(--navy,#061A2E)">' + esc(s.kyHieu) + ' ' + esc(s.ten) +
-          (s.nghich ? ' <span style="color:#B8912B;font-size:11px">℞ nghịch</span>' : '') + '</div>' +
-          '<div style="font-size:12px;color:var(--text-mid,#4a5058)">' + esc(s.do) + '°' + esc(s.phut) + "' " + esc(s.cung) +
-          ' · nhà ' + esc(s.nha == null ? '?' : s.nha) + (s.pham ? ' · ' + esc(s.pham) : '') + '</div>' +
+          '<div style="font-size:14px;font-weight:700;color:var(--navy,#061A2E)">' + esc(s.kyHieu) + ' ' + esc(G(s.ten)) +
+          (s.nghich ? ' <span style="color:#B8912B;font-size:11px">' + esc(T('js.shellui.bds-nghich', '℞ nghịch')) + '</span>' : '') + '</div>' +
+          '<div style="font-size:12px;color:var(--text-mid,#4a5058)">' + esc(s.do) + '°' + esc(s.phut) + "' " + esc(G(s.cung)) +
+          ' · ' + esc(T('js.shellui.bds-nha', 'nhà {n}', { n: s.nha == null ? '?' : s.nha })) + (s.pham ? ' · ' + esc(G(s.pham)) : '') + '</div>' +
           (s.nghia ? '<div style="font-size:10.5px;color:var(--text-lt,#8a8f98);line-height:1.45;margin-top:3px">' + esc(s.nghia) + '</div>' : '') +
           '</div>';
       }).join('') + '</div>');
 
     if ((b.gocChieu || []).length) {
-      o.push(H('Góc chiếu nổi bật'));
+      o.push(H(T('js.shellui.bds-goc-chieu', 'Góc chiếu nổi bật')));
       o.push('<div style="font-size:12.5px;line-height:1.8;color:var(--text-mid,#4a5058)">' +
         b.gocChieu.slice(0, 12).map(function (g) {
           var mau = g.muc === 'cang' ? '#C0392B' : g.muc === 'hoa' ? '#2E6DA4' : '#6b5b2e';
-          return '<div><b>' + esc(g.a) + '</b> <span style="color:' + mau + '">' + esc(g.kyHieu) + ' ' + esc(g.loai) + '</span> <b>' + esc(g.b) + '</b>' +
-            ' <span style="color:var(--text-lt,#8a8f98)">(lệch ' + esc(g.lech) + '°, mạnh ' + esc(g.manh) + '%) — ' + esc(g.nghia) + '</span></div>';
+          return '<div><b>' + esc(G(g.a)) + '</b> <span style="color:' + mau + '">' + esc(g.kyHieu) + ' ' + esc(G(g.loai)) + '</span> <b>' + esc(G(g.b)) + '</b>' +
+            ' <span style="color:var(--text-lt,#8a8f98)">' + esc(T('js.shellui.bds-lech', '(lệch {lech}°, mạnh {manh}%)', { lech: g.lech, manh: g.manh })) + ' — ' + esc(g.nghia) + '</span></div>';
         }).join('') + '</div>');
     }
     if ((b.hinhThe || []).length) {
-      o.push(H('Hình thế'));
+      o.push(H(T('js.shellui.bds-hinh-the', 'Hình thế')));
       o.push('<div style="font-size:12.5px;line-height:1.8;color:var(--text-mid,#4a5058)">' +
         b.hinhThe.map(function (h) {
-          return '<div><b>' + esc(h.ten) + '</b> [' + esc(h.sao.join(', ')) + '] — <span style="color:var(--text-lt,#8a8f98)">' + esc(h.nghia) + '</span></div>';
+          return '<div><b>' + esc(G(h.ten)) + '</b> [' + esc(h.sao.map(G).join(', ')) + '] — <span style="color:var(--text-lt,#8a8f98)">' + esc(h.nghia) + '</span></div>';
         }).join('') + '</div>');
     }
-    o.push(H('Cân bằng'));
+    o.push(H(T('js.shellui.bds-can-bang', 'Cân bằng')));
     o.push('<div style="font-size:12.5px;line-height:1.9;color:var(--text-mid,#4a5058)">' +
-      '<div><b>Nguyên tố:</b> ' + esc((b.canBang.hanh || []).map(function (x) { return x.ten + ' ' + x.so; }).join(' · ')) + '</div>' +
-      '<div><b>Thể:</b> ' + esc((b.canBang.the || []).map(function (x) { return x.ten + ' ' + x.so; }).join(' · ')) + '</div>' +
-      '<div><b>Bán cầu:</b> ' + esc((b.canBang.banCau || []).map(function (x) { return x.ten + ' ' + x.so; }).join(' · ')) + '</div>' +
-      '<div><b>Nghịch hành:</b> ' + esc((b.canBang.nghich || []).join(', ') || 'không có') + '</div></div>');
+      '<div><b>' + esc(T('js.shellui.bds-nguyen-to', 'Nguyên tố:')) + '</b> ' + esc((b.canBang.hanh || []).map(function (x) { return G(x.ten) + ' ' + x.so; }).join(' · ')) + '</div>' +
+      '<div><b>' + esc(T('js.shellui.bds-the', 'Thể:')) + '</b> ' + esc((b.canBang.the || []).map(function (x) { return G(x.ten) + ' ' + x.so; }).join(' · ')) + '</div>' +
+      '<div><b>' + esc(T('js.shellui.bds-ban-cau', 'Bán cầu:')) + '</b> ' + esc((b.canBang.banCau || []).map(function (x) { return G(x.ten) + ' ' + x.so; }).join(' · ')) + '</div>' +
+      '<div><b>' + esc(T('js.shellui.bds-nghich-hanh', 'Nghịch hành:')) + '</b> ' + esc((b.canBang.nghich || []).map(G).join(', ') || T('js.shellui.bds-khong-co', 'không có')) + '</div></div>');
     return o.join('');
   }
 

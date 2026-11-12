@@ -69,6 +69,13 @@
   "zh-tw",
   "zh-cn"
  ],
+ "/app/but-tuong": [
+  "en",
+  "ja",
+  "ko",
+  "zh-tw",
+  "zh-cn"
+ ],
  "/app/ca-nha": [
   "en",
   "ja",
@@ -160,6 +167,13 @@
   "zh-tw",
   "zh-cn"
  ],
+ "/app/dien-tuong": [
+  "en",
+  "ja",
+  "ko",
+  "zh-tw",
+  "zh-cn"
+ ],
  "/app/duyen-no-tien-kiep": [
   "en",
   "ja",
@@ -189,6 +203,13 @@
   "zh-cn"
  ],
  "/app/huong-nghiep-tre": [
+  "en",
+  "ja",
+  "ko",
+  "zh-tw",
+  "zh-cn"
+ ],
+ "/app/khi-sac": [
   "en",
   "ja",
   "ko",
@@ -343,6 +364,13 @@
   "zh-cn"
  ],
  "/app/thay": [
+  "en",
+  "ja",
+  "ko",
+  "zh-tw",
+  "zh-cn"
+ ],
+ "/app/thu-tuong": [
   "en",
   "ja",
   "ko",

@@ -867,6 +867,170 @@
   "t": "<span class=\"bg-label\"><span class=\"ic\" data-icon=\"spade\"></span><b id=\"drawBtnLabel\">Shuffle &amp; Draw</b></span>",
   "h": "e53dcebd"
  },
+ "buto.11h-13h-ngo": {
+  "t": "11 AM–1 PM (Wu · Horse)",
+  "h": "6a3975fa"
+ },
+ "buto.13h-15h-mui": {
+  "t": "1–3 PM (Wei · Goat)",
+  "h": "b5abb37a"
+ },
+ "buto.15h-17h-than": {
+  "t": "3–5 PM (Shen · Monkey)",
+  "h": "d3239832"
+ },
+ "buto.17h-19h-dau": {
+  "t": "5–7 PM (You · Rooster)",
+  "h": "892ef5c0"
+ },
+ "buto.19h-21h-tuat": {
+  "t": "7–9 PM (Xu · Dog)",
+  "h": "bfb8a38f"
+ },
+ "buto.1h-3h-suu": {
+  "t": "1–3 AM (Chou · Ox)",
+  "h": "43af3d63"
+ },
+ "buto.2-xem-truoc-6-truc": {
+  "t": "<span class=\"wss-n\">2</span><span class=\"wss-l\">Preview the 6 axes</span>",
+  "h": "752b4fb3"
+ },
+ "buto.21h-23h-hoi": {
+  "t": "9–11 PM (Hai · Pig)",
+  "h": "6d57bf9d"
+ },
+ "buto.23h-1h-ty": {
+  "t": "11 PM–1 AM (Zi · Rat)",
+  "h": "3b1ae1a9"
+ },
+ "buto.3h-5h-dan": {
+  "t": "3–5 AM (Yin · Tiger)",
+  "h": "801ae495"
+ },
+ "buto.5h-7h-mao": {
+  "t": "5–7 AM (Mao · Rabbit)",
+  "h": "a3681f23"
+ },
+ "buto.7h-9h-thin": {
+  "t": "7–9 AM (Chen · Dragon)",
+  "h": "dd0d719c"
+ },
+ "buto.9h-11h-ty": {
+  "t": "9–11 AM (Si · Snake)",
+  "h": "396e5fe1"
+ },
+ "buto.anh-chu-ky": {
+  "t": "<span class=\"ic\" data-icon=\"folder\"></span> Signature Image",
+  "h": "d254fb71"
+ },
+ "buto.anh-chu-ky-xqwx": {
+  "t": "Signature image",
+  "h": "41b431b6"
+ },
+ "buto.ban-ky-dua-theo-chu-nao": {
+  "t": "Which part of your name is your signature based on? (optional)",
+  "h": "e757bef0"
+ },
+ "buto.but-tuong": {
+  "t": "Handwriting Reading",
+  "h": "6eab7d7c"
+ },
+ "buto.but-tuong-hoc-phuong-dong-cho": {
+  "t": "Eastern signature reading (bi xiang) holds that handwriting, and the signature above all, reflects the writer’s spirit and character, based on six classical criteria of calligraphy: Spirit, Qi, Bone, Flesh, Blood and Momentum. It is a branch of physiognomy applied to handwriting.",
+  "h": "16117b43"
+ },
+ "buto.but-tuong-tu-vi-minh-bao": {
+  "t": "Signature Reading — Minh Bao Zi Wei Dou Shu",
+  "h": "01e38f8b"
+ },
+ "buto.but-tuong-xem-chu-ky-theo": {
+  "t": "<b>Signature Reading</b><span>Read your signature by the classical method — <span data-tvp-price=\"but-tuong\">…</span> credits</span>",
+  "h": "68cc134b"
+ },
+ "buto.chu-ky-khong-duoc-luu-chi": {
+  "t": "Your signature is NOT stored — only the measured metrics are sent for the reading.",
+  "h": "e651b4d2"
+ },
+ "buto.co-phap-thu-phap-trung-hoa": {
+  "t": "Classical Chinese Calligraphy",
+  "h": "ce0e060e"
+ },
+ "buto.do-6-truc-co-phap-thu": {
+  "t": "<span class=\"hp-ic\" data-icon=\"scroll-text\"></span><span>Measure 6 axes by<br>classical calligraphy</span>",
+  "h": "a97de25d"
+ },
+ "buto.do-chu-ky": {
+  "t": "<span class=\"ic\" data-icon=\"pen-line\"></span> Measure My Signature →",
+  "h": "afdd3301"
+ },
+ "buto.do-chu-ky-khac": {
+  "t": "Measure Another Signature",
+  "h": "d0b9860f"
+ },
+ "buto.doi-chieu-voi-dung-than-bat": {
+  "t": "+ Compare with your BaZi useful god (optional)",
+  "h": "027429c6"
+ },
+ "buto.gio-sinh-bo-trong-neu-khong": {
+  "t": "Birth hour (leave blank if unknown)",
+  "h": "72d40487"
+ },
+ "buto.keo-tha-anh-chu-ky-hoac": {
+  "t": "Drag and drop a signature image, or click to choose",
+  "h": "c5c50566"
+ },
+ "buto.khong-luu-chu-ky": {
+  "t": "<span class=\"hp-ic\" data-icon=\"shield-check\"></span><span>Your signature<br>is not stored</span>",
+  "h": "99c2aaad"
+ },
+ "buto.ky-chu-ky": {
+  "t": "Sign here",
+  "h": "6043c0d7"
+ },
+ "buto.ky-lai-lan-nua": {
+  "t": "+ Sign once more",
+  "h": "a28512df"
+ },
+ "buto.ky-truc-tiep": {
+  "t": "<span class=\"ic\" data-icon=\"pen-line\"></span> Sign Live",
+  "h": "604362e3"
+ },
+ "buto.ky-truc-tiep-tren-man-hinh": {
+  "t": "<span class=\"hp-ic\" data-icon=\"pen-line\"></span><span>Sign live<br>on screen</span>",
+  "h": "2e08b69a"
+ },
+ "buto.ky-truc-tiep-tren-man-hinh-d4z1": {
+  "t": "Sign directly on the screen or upload an existing signature image. The system measures 6 axes of your strokes and reads them by classical calligraphy.",
+  "h": "74ad947e"
+ },
+ "buto.ky-truc-tiep-tren-man-hinh-j0mj": {
+  "t": "Sign directly on the screen — the system measures the 6 axes of Spirit · Qi · Bone · Flesh · Blood · Momentum by classical calligraphy and reads your signature.",
+  "h": "d92707db"
+ },
+ "buto.ky-voi-toc-do-that-dung": {
+  "t": "Sign at your natural speed — don’t slow down on purpose.",
+  "h": "8ac53b46"
+ },
+ "buto.luan-giai-but-tuong": {
+  "t": "Signature Reading",
+  "h": "0760be41"
+ },
+ "buto.moi-ngay-ky-hang-chuc-chu": {
+  "t": "You sign dozens of contracts and papers every day — yet you may never have wondered what that signature says about your fortune. Sign live on the screen and get a full reading across all 6 axes: Spirit, Qi, Bone, Flesh, Blood and Momentum.",
+  "h": "150efb97"
+ },
+ "buto.muc-sam-tren-nen-sang-toi": {
+  "t": "Dark ink on a light background · 5MB max — only Bone/Flesh/Momentum can be measured",
+  "h": "ddf489f7"
+ },
+ "buto.vd-khoa-dang-khoa": {
+  "t": "e.g. Smith, Anna…",
+  "h": "bbb7526d"
+ },
+ "buto.xoa": {
+  "t": "Clear",
+  "h": "82339c0a"
+ },
  "cdvc.2-xem-truoc-cung-phu-the": {
   "t": "<span class=\"wss-n\">2</span><span class=\"wss-l\">Preview the Spouse Palace</span>",
   "h": "108dcc06"
@@ -2114,6 +2278,66 @@
  "daycon.xem-cach-day-con-ton-luong": {
   "t": "<span class=\"bg-label\"><span class=\"ic\" data-icon=\"baby\"></span><b>See how to teach your child →</b></span> <small>Costs <span class=\"vnd\" data-tvp-price-vnd=\"day-con\"></span> <span class=\"cb-sub\">(<span data-tvp-price=\"day-con\">…</span> credits)</span></small>",
   "h": "ccbaaea3"
+ },
+ "dient.anh-chi-gui-toi-may-chu": {
+  "t": "The photo is only sent to the server for analysis and isn't stored there. Shoot straight on, in good light, with nothing covering your face for the most accurate result.",
+  "h": "b68f127c"
+ },
+ "dient.dien-tuong": {
+  "t": "Face Reading",
+  "h": "1e5e41e3"
+ },
+ "dient.dien-tuong-tu-vi-minh-bao": {
+  "t": "Face Reading — Minh Bao Zi Wei Dou Shu",
+  "h": "1279c8b1"
+ },
+ "dient.dien-tuong-xem-tuong-khuon-mat": {
+  "t": "<b>Face Reading</b><span>Read the face by the classical method — <span data-tvp-price=\"dien-tuong\">…</span> credits</span>",
+  "h": "4af70f75"
+ },
+ "dient.do-tam-dinh-ngu-quan": {
+  "t": "<span class=\"hp-ic\" data-icon=\"layout-grid\"></span><span>Measure the Three<br>Divisions, Five Features</span>",
+  "h": "fb2a8a23"
+ },
+ "dient.jpg-png-webp-toi-da-5mb": {
+  "t": "JPG, PNG, WebP — 5MB max",
+  "h": "e7e468cd"
+ },
+ "dient.luan-theo-ma-y-than-tuong": {
+  "t": "<span class=\"hp-ic\" data-icon=\"scroll-text\"></span><span>A reading by<br>Ma Yi Shen Xiang</span>",
+  "h": "eecee1d3"
+ },
+ "dient.ma-y-than-tuong-co-phap": {
+  "t": "Classical Ma Yi Shen Xiang",
+  "h": "c9dac5c1"
+ },
+ "dient.moi-luot-luong": {
+  "t": "<span class=\"vnd\" data-tvp-price-vnd=\"dien-tuong\"></span> per reading <span class=\"cb-sub\">(<span data-tvp-price=\"dien-tuong\">…</span> credits)</span>",
+  "h": "2e7a2c43"
+ },
+ "dient.phan-tich-nhan-tuong-hoc": {
+  "t": "Physiognomy Analysis",
+  "h": "9b4da9c2"
+ },
+ "dient.phan-tich-tuong-mat-ton-luong": {
+  "t": "<span class=\"bg-label\"><span class=\"ic\" data-icon=\"sparkles\"></span><b id=\"analyzeBtnLabel\">Analyze My Face →</b></span> <small>Costs <span class=\"vnd\" data-tvp-price-vnd=\"dien-tuong\"></span> <span class=\"cb-sub\">(<span data-tvp-price=\"dien-tuong\">…</span> credits)</span></small>",
+  "h": "3a64a361"
+ },
+ "dient.tai-hoac-chup-anh-khuon-mat": {
+  "t": "Upload or take a photo of your face — the system analyzes classical physiognomy by Ma Yi Shen Xiang: the Three Divisions, the Five Features and other key areas.",
+  "h": "f24ad8af"
+ },
+ "dient.tai-mot-tam-anh-chan-dung": {
+  "t": "Upload one portrait taken straight on, in good light, with your face clearly visible. The system analyzes the Three Divisions, the Five Features and each area, and reads your character and fortune.",
+  "h": "453bd1c6"
+ },
+ "dient.tam-dinh-da-xac-dinh": {
+  "t": "✦ Three Divisions detected",
+  "h": "ab4a740f"
+ },
+ "dient.tam-dinh-ngu-quan-tren-guong": {
+  "t": "The Three Divisions and Five Features of the face are not mystery — the ancients turned them into a concrete method for reading character and fortune. Upload one portrait and receive a reading by Ma Yi Shen Xiang.",
+  "h": "3c70322e"
  },
  "disclaimer.1-tinh-chat-tham-khao": {
   "t": "1. For reference only",
@@ -3883,6 +4107,346 @@
   "t": "Please enter your email and password.",
   "h": "d84b9abd"
  },
+ "js.bandosao.ban-do-sao": {
+  "t": "Star chart — ",
+  "h": "aaf64809"
+ },
+ "js.bandosao.ban-do-sao-gm5h": {
+  "t": "Star Chart",
+  "h": "0b3459d8"
+ },
+ "js.bandosao.ban-do-sao-luc-sinh": {
+  "t": "Birth star chart — ",
+  "h": "3f6bcfea"
+ },
+ "js.bandosao.ban-do-sao-tqhx": {
+  "t": "Star chart · ",
+  "h": "86318dde"
+ },
+ "js.bandosao.ban-muon-toi-doc-phan-nao": {
+  "t": "**. Which part shall I read first?",
+  "h": "e9d17729"
+ },
+ "js.bandosao.buon-ma-thuot": {
+  "t": "Buon Ma Thuot",
+  "h": "8bf97db6"
+ },
+ "js.bandosao.can-tho": {
+  "t": "Can Tho",
+  "h": "462902c5"
+ },
+ "js.bandosao.chua-dung-duoc-anh-thu-lai": {
+  "t": "Could not build the image. Please try again in a few seconds.",
+  "h": "f8055429"
+ },
+ "js.bandosao.chua-lap-duoc-ban-do-luc": {
+  "t": "Could not build the chart right now — please try again.",
+  "h": "a5e46558"
+ },
+ "js.bandosao.chuyen-tinh-cam-nhin-tu-ban": {
+  "t": "What does this chart say about love?",
+  "h": "9a016ff9"
+ },
+ "js.bandosao.cung-moc": {
+  "t": "**, Ascendant **",
+  "h": "340f627c"
+ },
+ "js.bandosao.cung-moc-1y0y": {
+  "t": "Ascendant: ",
+  "h": "230ed8b5"
+ },
+ "js.bandosao.cung-moc-bgoi": {
+  "t": " · Ascendant ",
+  "h": "cad089c9"
+ },
+ "js.bandosao.da-lap-ban-do-sao": {
+  "t": "Your chart is ready: **",
+  "h": "c16ca110"
+ },
+ "js.bandosao.da-nang": {
+  "t": "Da Nang",
+  "h": "fff4a50e"
+ },
+ "js.bandosao.dang-dung-anh": {
+  "t": "Building the image…",
+  "h": "7bce9760"
+ },
+ "js.bandosao.dang-lap": {
+  "t": "Building…",
+  "h": "b47d9598"
+ },
+ "js.bandosao.goc-chieu-nao-gay-kho-nhat": {
+  "t": "Which aspect is hardest for me?",
+  "h": "8439668d"
+ },
+ "js.bandosao.ha-noi": {
+  "t": "Hanoi",
+  "h": "89974fad"
+ },
+ "js.bandosao.hai-phong": {
+  "t": "Hai Phong",
+  "h": "18cf9167"
+ },
+ "js.bandosao.he-nha": {
+  "t": " (house system ",
+  "h": "cb040ba9"
+ },
+ "js.bandosao.hue": {
+  "t": "Hue",
+  "h": "23ed9a98"
+ },
+ "js.bandosao.mat-trang": {
+  "t": "**, Moon **",
+  "h": "bfc8f041"
+ },
+ "js.bandosao.mat-troi": {
+  "t": "**. Sun **",
+  "h": "b483737c"
+ },
+ "js.bandosao.mat-troi-8vvi": {
+  "t": "Sun ",
+  "h": "40bd8b96"
+ },
+ "js.bandosao.nguyen-to": {
+  "t": "Elements: ",
+  "h": "503b548c"
+ },
+ "js.bandosao.nha": {
+  "t": " (house ",
+  "h": "953fb7b3"
+ },
+ "js.bandosao.noi-khac-tu-nhap": {
+  "t": "— Other (enter manually) —",
+  "h": "5bda72d4"
+ },
+ "js.bandosao.quet-ma-lap-ban-do-sao": {
+  "t": "Scan the code — build your own star chart",
+  "h": "2abde300"
+ },
+ "js.bandosao.quy-nhon": {
+  "t": "Quy Nhon",
+  "h": "2b52fd6e"
+ },
+ "js.bandosao.su-nghiep-hop-huong-nao": {
+  "t": "Which career direction suits me?",
+  "h": "8d8b01c6"
+ },
+ "js.bandosao.tinh-cach-cot-loi-cua-toi": {
+  "t": "What is my core personality?",
+  "h": "485d721a"
+ },
+ "js.bandosao.tp-ho-chi-minh": {
+  "t": "Ho Chi Minh City",
+  "h": "4fc20e5f"
+ },
+ "js.bandosao.vui-long-chon-noi-sinh-hoac": {
+  "t": "Please choose a birthplace or enter latitude / longitude.",
+  "h": "1e78fa74"
+ },
+ "js.bandosao.vui-long-nhap-du-ngay-thang": {
+  "t": "Please enter the full day, month and year of birth.",
+  "h": "771ff27f"
+ },
+ "js.banlamviec.100-sau-dieu-chinh-co-the": {
+  "t": "/100**; after the adjustments it could reach **",
+  "h": "a4c14f33"
+ },
+ "js.banlamviec.bac": {
+  "t": "North",
+  "h": "130d45d1"
+ },
+ "js.banlamviec.ban-lam-viec-cua-toi-sau": {
+  "t": "My desk after the feng shui makeover",
+  "h": "b345368e"
+ },
+ "js.banlamviec.ban-lam-viec-diem": {
+  "t": "Desk — score ",
+  "h": "1bfcfce8"
+ },
+ "js.banlamviec.ban-muon-hoi-them-ve-de": {
+  "t": ". Which suggestion would you like to ask about?",
+  "h": "23ca71bc"
+ },
+ "js.banlamviec.bo-tri-hien-tai-tuong-doi": {
+  "t": "<p style=\"color:var(--text-lt);font-size:12px\">Your current layout is fairly good.</p>",
+  "h": "16b60bfc"
+ },
+ "js.banlamviec.chua-xac-dinh": {
+  "t": "Not determined",
+  "h": "3120f6db"
+ },
+ "js.banlamviec.chuan-bi-prompt-render-theo-ngu": {
+  "t": "Preparing the render prompt by Five Elements",
+  "h": "17f4d17e"
+ },
+ "js.banlamviec.dang-render-khong-gian-moi": {
+  "t": "Rendering the new space",
+  "h": "814b3683"
+ },
+ "js.banlamviec.diem": {
+  "t": "points",
+  "h": "4a404c32"
+ },
+ "js.banlamviec.diem-phong-thuy-ban-lam-viec": {
+  "t": "Current desk feng shui score: **",
+  "h": "b68f30c6"
+ },
+ "js.banlamviec.diem-phong-thuy-ban-lam-viec-8sd8": {
+  "t": "My desk feng shui score",
+  "h": "21a93499"
+ },
+ "js.banlamviec.diem-phong-thuy-hien-tai": {
+  "t": "Current feng shui score: ",
+  "h": "d4ac7afe"
+ },
+ "js.banlamviec.dieu-chinh": {
+  "t": "Adjust",
+  "h": "37c5bf6b"
+ },
+ "js.banlamviec.don-bo": {
+  "t": "Remove",
+  "h": "0825ec6d"
+ },
+ "js.banlamviec.dong": {
+  "t": "East",
+  "h": "6bd70b62"
+ },
+ "js.banlamviec.dong-bac": {
+  "t": "Northeast",
+  "h": "9690921a"
+ },
+ "js.banlamviec.dong-nam": {
+  "t": "Southeast",
+  "h": "dd71e07a"
+ },
+ "js.banlamviec.giu-nguyen-tpl": {
+  "t": "<span class=\"pos-keep\">✓ Keep as is</span>",
+  "h": "aa00d929"
+ },
+ "js.banlamviec.hien-tai": {
+  "t": "Current:",
+  "h": "b17d885a"
+ },
+ "js.banlamviec.khong-co-de-xuat-them-vat": {
+  "t": "<p style=\"color:var(--text-lt);font-size:12px\">No additional items to suggest.</p>",
+  "h": "3a6c6f34"
+ },
+ "js.banlamviec.khong-nhan-duoc-anh": {
+  "t": "No image was received.",
+  "h": "62488d2f"
+ },
+ "js.banlamviec.loi": {
+  "t": "Error: ",
+  "h": "471c0087"
+ },
+ "js.banlamviec.loi-doc-file": {
+  "t": "File read error",
+  "h": "3c56711b"
+ },
+ "js.banlamviec.loi-ppkl": {
+  "t": "⚠ Error: ",
+  "h": "a4f4adbc"
+ },
+ "js.banlamviec.loi-tai-anh": {
+  "t": "Image load error",
+  "h": "13fb84a7"
+ },
+ "js.banlamviec.menh-quai-cua-ban-la": {
+  "t": "; your Life Gua is **",
+  "h": "18a75d53"
+ },
+ "js.banlamviec.nam": {
+  "t": "South",
+  "h": "b580ba1b"
+ },
+ "js.banlamviec.nen-co": {
+  "t": "Must-have",
+  "h": "3f6537af"
+ },
+ "js.banlamviec.nen-doi-sang": {
+  "t": "Change to:",
+  "h": "32c9bd3d"
+ },
+ "js.banlamviec.nen-lam": {
+  "t": "→ Should do",
+  "h": "85492f9d"
+ },
+ "js.banlamviec.nhan-dien-do-vat-trong-anh": {
+  "t": "Identifying objects in the photo",
+  "h": "5ecd0446"
+ },
+ "js.banlamviec.phan-tich-bat-trach-dua-de": {
+  "t": "Analyzing Ba Zhai and preparing suggestions",
+  "h": "dd12d6d9"
+ },
+ "js.banlamviec.phan-tich-that-bai": {
+  "t": "Analysis failed",
+  "h": "44b68aa6"
+ },
+ "js.banlamviec.quai-n": {
+  "t": "Gua {n}",
+  "h": "1b238b88"
+ },
+ "js.banlamviec.quan-trong": {
+  "t": "⚠ Important",
+  "h": "ebd388e2"
+ },
+ "js.banlamviec.sau-dieu-chinh-co-the-len": {
+  "t": " — after adjustments it could reach ",
+  "h": "9e6292bc"
+ },
+ "js.banlamviec.tay": {
+  "t": "West",
+  "h": "74b26936"
+ },
+ "js.banlamviec.tay-bac": {
+  "t": "Northwest",
+  "h": "0b1f47fd"
+ },
+ "js.banlamviec.tay-nam": {
+  "t": "Southwest",
+  "h": "c0484c26"
+ },
+ "js.banlamviec.tot-neu-co": {
+  "t": "Nice to have",
+  "h": "e48b654c"
+ },
+ "js.banlamviec.trung-tam": {
+  "t": "Center",
+  "h": "26bda5d2"
+ },
+ "js.banlamviec.tuy-y": {
+  "t": "◎ Optional",
+  "h": "430debc7"
+ },
+ "js.banlamviec.tuy-y-4s40": {
+  "t": "Optional",
+  "h": "87b1fcd0"
+ },
+ "js.banlamviec.uu-tien-lam-gi-truoc": {
+  "t": "What should I prioritize first?",
+  "h": "f3cab683"
+ },
+ "js.banlamviec.vat-pham-nao-nen-mua-truoc": {
+  "t": "Which items should I buy first?",
+  "h": "85fe11d3"
+ },
+ "js.banlamviec.vi-sao-diem-hien-tai-thap": {
+  "t": "Why is the current score low?",
+  "h": "6c51a2da"
+ },
+ "js.banlamviec.vui-long-chon-anh": {
+  "t": "Please choose a photo",
+  "h": "dc2490ac"
+ },
+ "js.banlamviec.vui-long-nhap-nam-sinh-hop": {
+  "t": "Please enter a valid birth year",
+  "h": "16abd384"
+ },
+ "js.banlamviec.vui-long-thu-lai": {
+  "t": "Please try again.",
+  "h": "2f1d18ee"
+ },
  "js.baocao.bao-cao": {
   "t": "Report",
   "h": "7013ca8b"
@@ -4575,6 +5139,222 @@
   "t": "The trend about to unfold",
   "h": "6e5a1980"
  },
+ "js.buto.anh-qua-lon": {
+  "t": "The image is too large.",
+  "h": "cb4417d0"
+ },
+ "js.buto.anh-tinh-chua-do-duoc": {
+  "t": "A still image can’t measure: {list} — sign live to get all 6 axes.",
+  "h": "e61f9e1c"
+ },
+ "js.buto.but-tuong": {
+  "t": "Handwriting Reading",
+  "h": "6eab7d7c"
+ },
+ "js.buto.but-tuong-cua-toi": {
+  "t": "My handwriting reading",
+  "h": "71e77c95"
+ },
+ "js.buto.but-tuong-diem": {
+  "t": "Signature Reading — {n}/100",
+  "h": "8b96c2af"
+ },
+ "js.buto.chi-phi-su-dung": {
+  "t": "Cost",
+  "h": "c2d36be8"
+ },
+ "js.buto.chip-ngu-hanh": {
+  "t": "How does the stroke's Five Element relate to the Useful God?",
+  "h": "a163e0cf"
+ },
+ "js.buto.chip-on-dinh": {
+  "t": "Why can signing several times measure stability?",
+  "h": "db6978cc"
+ },
+ "js.buto.chip-than": {
+  "t": "What is the Spirit (Shen) axis?",
+  "h": "47cc8c8c"
+ },
+ "js.buto.chuyen-khoan-qr": {
+  "t": "Bank transfer (via bank QR)",
+  "h": "d15d92d3"
+ },
+ "js.buto.dang-luan": {
+  "t": "Reading your signature…",
+  "h": "c11b136b"
+ },
+ "js.buto.dau-phay": {
+  "t": ", ",
+  "h": "d3bc9a37"
+ },
+ "js.buto.diem-tong": {
+  "t": "/ 100 · overall score",
+  "h": "734b18a3"
+ },
+ "js.buto.diem-tong-anh": {
+  "t": "/ 100 · overall score (3 axes measured from the image)",
+  "h": "2eeaa72f"
+ },
+ "js.buto.diem-tong-n": {
+  "t": "Overall score: {n}/100",
+  "h": "1a30535a"
+ },
+ "js.buto.goi-y": {
+  "t": "Tip:",
+  "h": "ca8836e0"
+ },
+ "js.buto.goiy-cot": {
+  "t": "Your signature lacks a decisive stopping point (or, conversely, has too many small corners). Add ONE straight stroke as the main axis and let the other strokes lean on it.",
+  "h": "8398323b"
+ },
+ "js.buto.goiy-huyet": {
+  "t": "Your speed rises and falls erratically, and the pen lingers in places. Sign at an even rhythm — think of drawing a curve rather than writing letters.",
+  "h": "a216d5ef"
+ },
+ "js.buto.goiy-khi": {
+  "t": "Your strokes break off many times. Try to gather the signature into FEWER pen lifts — one long continuous flow beats many short, disjointed strokes.",
+  "h": "e111c883"
+ },
+ "js.buto.goiy-nhuc": {
+  "t": "Your strokes are thin or hurried. Slow down in the middle of the signature — you don’t need to press hard everywhere, just 1–2 key spots.",
+  "h": "6df98c3a"
+ },
+ "js.buto.goiy-than": {
+  "t": "Slow down a beat and practice REPEATING the same signature 5–10 times a day — spirit grows strong through consistency, not through signing fast.",
+  "h": "e914cedd"
+ },
+ "js.buto.goiy-the": {
+  "t": "Your baseline is sloping downward. Try ending the signature with a light upward flick — the classical calligraphy “rising momentum.”",
+  "h": "e992fa88"
+ },
+ "js.buto.greeting": {
+  "t": "Your signature’s overall score is **{n}/100**. Which part of the reading would you like to ask more about?",
+  "h": "6d9edb5f"
+ },
+ "js.buto.greeting-best": {
+  "t": "Your signature’s overall score is **{n}/100**, and the strongest axis is **{t}** ({s}/100). Which part of the reading would you like to ask more about?",
+  "h": "b3ab7c3e"
+ },
+ "js.buto.khong-co-ket-qua": {
+  "t": "No result.",
+  "h": "97fa6f91"
+ },
+ "js.buto.khong-do-duoc": {
+  "t": "not measurable",
+  "h": "ba0114d8"
+ },
+ "js.buto.khong-doc-duoc-net-muc-tu": {
+  "t": "Couldn't read the ink strokes from this photo.",
+  "h": "7c89a420"
+ },
+ "js.buto.khong-the-ket-noi": {
+  "t": "Can't connect.",
+  "h": "3dc4d8cb"
+ },
+ "js.buto.lan-n": {
+  "t": "Take {n} ✓",
+  "h": "8b97f3d0"
+ },
+ "js.buto.loi-e": {
+  "t": "Error: {e}",
+  "h": "a7267203"
+ },
+ "js.buto.loi-s": {
+  "t": "Error {s}",
+  "h": "c406c72b"
+ },
+ "js.buto.luan-giai-day-du": {
+  "t": "Full Reading →",
+  "h": "4c2c4d70"
+ },
+ "js.buto.moi-luot-luong": {
+  "t": "<span class=\"vnd\" data-tvp-price-vnd=\"but-tuong\"></span> per reading <span class=\"cb-sub\">(<span data-tvp-price=\"but-tuong\">…</span> credits)</span>",
+  "h": "72b273e4"
+ },
+ "js.buto.mua-goi": {
+  "t": "Buy a package for better value.<br><a href=\"/topup.html\">See packages →</a>",
+  "h": "074cd07f"
+ },
+ "js.buto.nghia-cot": {
+  "t": "the skeleton, how decisive the strokes are",
+  "h": "11b35dc9"
+ },
+ "js.buto.nghia-huyet": {
+  "t": "how smoothly it flows, how even the speed is",
+  "h": "bbf8ddc8"
+ },
+ "js.buto.nghia-khi": {
+  "t": "how connected the pen flow is, with few breaks",
+  "h": "ddda4d5b"
+ },
+ "js.buto.nghia-nhuc": {
+  "t": "fullness and stroke pressure",
+  "h": "fa2ac7b3"
+ },
+ "js.buto.nghia-than": {
+  "t": "vitality, the consistency of the strokes",
+  "h": "1e27242e"
+ },
+ "js.buto.nghia-the": {
+  "t": "the direction of the baseline",
+  "h": "c9a78d22"
+ },
+ "js.buto.ngu-hanh-net": {
+  "t": "Five Elements of the Strokes",
+  "h": "fed1c22a"
+ },
+ "js.buto.paypal-the": {
+  "t": "PayPal / International card",
+  "h": "70ff945c"
+ },
+ "js.buto.thuong-mat-10-20-giay": {
+  "t": "Usually takes 10–20 seconds",
+  "h": "9c118003"
+ },
+ "js.buto.tinh-tu-n-truc": {
+  "t": "Based on {n} axes measured directly from the still image. The full reading by classical signature analysis (Spirit/Qi/Bone/Flesh/Blood/Momentum) is in the in-depth analysis.",
+  "h": "dd2d2e04"
+ },
+ "js.buto.ton-luong": {
+  "t": "Costs <span class=\"vnd\" data-tvp-price-vnd=\"but-tuong\"></span> <span class=\"cb-sub\">(<span data-tvp-price=\"but-tuong\">…</span> credits)</span>",
+  "h": "4051f122"
+ },
+ "js.buto.truc-cot": {
+  "t": "Bone",
+  "h": "e5b9e8aa"
+ },
+ "js.buto.truc-huyet": {
+  "t": "Blood",
+  "h": "b28ba369"
+ },
+ "js.buto.truc-khi": {
+  "t": "Qi",
+  "h": "8ce20f05"
+ },
+ "js.buto.truc-manh-nhat-body": {
+  "t": "{y}. The other axes and specific tips for improvement are in the in-depth analysis.",
+  "h": "fcd915ce"
+ },
+ "js.buto.truc-manh-nhat-t": {
+  "t": "Strongest axis: {t} ({h}) — {s}/100",
+  "h": "a03ee856"
+ },
+ "js.buto.truc-nhuc": {
+  "t": "Flesh",
+  "h": "cb0d2007"
+ },
+ "js.buto.truc-than": {
+  "t": "Spirit",
+  "h": "b7cbb4d4"
+ },
+ "js.buto.truc-the": {
+  "t": "Momentum",
+  "h": "4b2db277"
+ },
+ "js.buto.vui-long-chon-file-anh": {
+  "t": "Please choose an image file.",
+  "h": "71a61127"
+ },
  "js.cdvc.anh-dang-tai-co-the-hoi": {
   "t": "The image is loading and may be a little slow — please wait, or",
   "h": "c4e9709b"
@@ -5090,6 +5870,22 @@
  "js.cns.rodden": {
   "t": "Reliability of the birth time on the Rodden scale",
   "h": "45221bc0"
+ },
+ "js.cns.tang-t0": {
+  "t": "Same birthday",
+  "h": "6b9b0710"
+ },
+ "js.cns.tang-t1": {
+  "t": "Same lunar date",
+  "h": "25904580"
+ },
+ "js.cns.tang-t2": {
+  "t": "SAME CHART",
+  "h": "10a40788"
+ },
+ "js.cns.tang-t2b": {
+  "t": "Same chart frame",
+  "h": "bd4da5be"
  },
  "js.cns.tim-hieu": {
   "t": "Learn more",
@@ -5971,6 +6767,194 @@
   "t": "Please enter your full birth date.",
   "h": "2545b4dd"
  },
+ "js.cuahang.100-sau-dieu-chinh-co-the": {
+  "t": "/100**; after the adjustments it could reach **",
+  "h": "a4c14f33"
+ },
+ "js.cuahang.bac": {
+  "t": "North",
+  "h": "130d45d1"
+ },
+ "js.cuahang.ban-muon-hoi-them-ve-de": {
+  "t": ". Which suggestion would you like to ask about?",
+  "h": "23ca71bc"
+ },
+ "js.cuahang.bo-tri-hien-tai-tuong-doi": {
+  "t": "<p style=\"color:var(--text-lt);font-size:12px\">Your current layout is fairly good.</p>",
+  "h": "16b60bfc"
+ },
+ "js.cuahang.chuan-bi-prompt-render-theo-ngu": {
+  "t": "Preparing the render prompt by Five Elements",
+  "h": "17f4d17e"
+ },
+ "js.cuahang.cua-hang-cua-toi-sau-khi": {
+  "t": "My shop after the feng shui makeover",
+  "h": "110c4b6e"
+ },
+ "js.cuahang.cua-hang-van-phong-diem": {
+  "t": "Shop & Office — score ",
+  "h": "70910085"
+ },
+ "js.cuahang.dang-render-khong-gian-moi": {
+  "t": "Rendering the new space",
+  "h": "814b3683"
+ },
+ "js.cuahang.diem": {
+  "t": "points",
+  "h": "4a404c32"
+ },
+ "js.cuahang.diem-phong-thuy-cua-hang-cua": {
+  "t": "My shop feng shui score",
+  "h": "f1a71fd5"
+ },
+ "js.cuahang.diem-phong-thuy-cua-hang-van": {
+  "t": "Current shop/office feng shui score: **",
+  "h": "abf14d8f"
+ },
+ "js.cuahang.diem-phong-thuy-hien-tai": {
+  "t": "Current feng shui score: ",
+  "h": "d4ac7afe"
+ },
+ "js.cuahang.dieu-chinh": {
+  "t": "Adjust",
+  "h": "37c5bf6b"
+ },
+ "js.cuahang.don-bo": {
+  "t": "Remove",
+  "h": "0825ec6d"
+ },
+ "js.cuahang.dong": {
+  "t": "East",
+  "h": "6bd70b62"
+ },
+ "js.cuahang.dong-bac": {
+  "t": "Northeast",
+  "h": "9690921a"
+ },
+ "js.cuahang.dong-nam": {
+  "t": "Southeast",
+  "h": "dd71e07a"
+ },
+ "js.cuahang.giu-nguyen-tpl": {
+  "t": "<span class=\"pos-keep\">✓ Keep as is</span>",
+  "h": "aa00d929"
+ },
+ "js.cuahang.khong-co-de-xuat-them-vat": {
+  "t": "<p style=\"color:var(--text-lt);font-size:12px\">No additional items to suggest.</p>",
+  "h": "3a6c6f34"
+ },
+ "js.cuahang.khong-nhan-duoc-anh": {
+  "t": "No image was received.",
+  "h": "62488d2f"
+ },
+ "js.cuahang.loi": {
+  "t": "Error: ",
+  "h": "471c0087"
+ },
+ "js.cuahang.loi-doc-file": {
+  "t": "File read error",
+  "h": "3c56711b"
+ },
+ "js.cuahang.loi-ppkl": {
+  "t": "⚠ Error: ",
+  "h": "a4f4adbc"
+ },
+ "js.cuahang.loi-tai-anh": {
+  "t": "Image load error",
+  "h": "13fb84a7"
+ },
+ "js.cuahang.menh-quai-cua-ban-la": {
+  "t": "; your Life Gua is **",
+  "h": "18a75d53"
+ },
+ "js.cuahang.nam": {
+  "t": "South",
+  "h": "b580ba1b"
+ },
+ "js.cuahang.nen-co": {
+  "t": "Must-have",
+  "h": "3f6537af"
+ },
+ "js.cuahang.nen-lam": {
+  "t": "→ Should do",
+  "h": "85492f9d"
+ },
+ "js.cuahang.nhan-dien-do-vat-trong-anh": {
+  "t": "Identifying objects in the photo",
+  "h": "5ecd0446"
+ },
+ "js.cuahang.phan-tich-bat-trach-dua-de": {
+  "t": "Analyzing Ba Zhai and preparing suggestions",
+  "h": "dd12d6d9"
+ },
+ "js.cuahang.phan-tich-that-bai": {
+  "t": "Analysis failed",
+  "h": "44b68aa6"
+ },
+ "js.cuahang.quai-n": {
+  "t": "Gua {n}",
+  "h": "1b238b88"
+ },
+ "js.cuahang.quan-trong": {
+  "t": "⚠ Important",
+  "h": "ebd388e2"
+ },
+ "js.cuahang.sau-dieu-chinh-co-the-len": {
+  "t": " — after adjustments it could reach ",
+  "h": "9e6292bc"
+ },
+ "js.cuahang.tay": {
+  "t": "West",
+  "h": "74b26936"
+ },
+ "js.cuahang.tay-bac": {
+  "t": "Northwest",
+  "h": "0b1f47fd"
+ },
+ "js.cuahang.tay-nam": {
+  "t": "Southwest",
+  "h": "c0484c26"
+ },
+ "js.cuahang.tot-neu-co": {
+  "t": "Nice to have",
+  "h": "e48b654c"
+ },
+ "js.cuahang.trung-tam": {
+  "t": "Center",
+  "h": "26bda5d2"
+ },
+ "js.cuahang.tuy-y": {
+  "t": "◎ Optional",
+  "h": "430debc7"
+ },
+ "js.cuahang.tuy-y-4s40": {
+  "t": "Optional",
+  "h": "87b1fcd0"
+ },
+ "js.cuahang.uu-tien-lam-gi-truoc": {
+  "t": "What should I prioritize first?",
+  "h": "f3cab683"
+ },
+ "js.cuahang.vat-pham-nao-nen-mua-truoc": {
+  "t": "Which items should I buy first?",
+  "h": "85fe11d3"
+ },
+ "js.cuahang.vi-sao-diem-hien-tai-thap": {
+  "t": "Why is the current score low?",
+  "h": "6c51a2da"
+ },
+ "js.cuahang.vui-long-chon-anh": {
+  "t": "Please choose a photo",
+  "h": "dc2490ac"
+ },
+ "js.cuahang.vui-long-nhap-nam-sinh-hop": {
+  "t": "Please enter a valid birth year",
+  "h": "16abd384"
+ },
+ "js.cuahang.vui-long-thu-lai": {
+  "t": "Please try again.",
+  "h": "2f1d18ee"
+ },
  "js.datten.be-gai": {
   "t": "girl",
   "h": "af93dba0"
@@ -6622,6 +7606,142 @@
  "js.daycon.xem-them": {
   "t": "<summary>See ",
   "h": "c5afdcd1"
+ },
+ "js.dient.anh-qua-lon-toi-da-5mb": {
+  "t": "The image is too large (5MB max).",
+  "h": "874f95b2"
+ },
+ "js.dient.canh-bao-chup": {
+  "t": "⚠ {w} — the result will be more accurate with a straight-on photo.",
+  "h": "231fb68c"
+ },
+ "js.dient.chip-ngu-quan": {
+  "t": "What do the Five Features include?",
+  "h": "e8847ad0"
+ },
+ "js.dient.chip-tam-dinh": {
+  "t": "What are the Three Divisions of the face?",
+  "h": "25930850"
+ },
+ "js.dient.chip-thay-doi": {
+  "t": "Can a face reading change?",
+  "h": "602a11f2"
+ },
+ "js.dient.da-doc-xong": {
+  "t": "I have finished reading your face by Ma Yi Shen Xiang. Is there anything more you would like to ask?",
+  "h": "8cee9c62"
+ },
+ "js.dient.dang-phan-tich": {
+  "t": "Analyzing your face…",
+  "h": "b2f15cf4"
+ },
+ "js.dient.dau-nghieng": {
+  "t": "Head tilted ~{n}° — please shoot straighter",
+  "h": "ad34a7cb"
+ },
+ "js.dient.dien-tuong": {
+  "t": "Face Reading",
+  "h": "1e5e41e3"
+ },
+ "js.dient.dien-tuong-cua-toi": {
+  "t": "My face reading",
+  "h": "d5784500"
+ },
+ "js.dient.do-truc-tiep-bo-vi": {
+  "t": "Measured directly from the image with MediaPipe. The meaning by Ma Yi Shen Xiang and the remaining areas (eyes, nose, mouth, forehead, chin) are in the in-depth analysis.",
+  "h": "6d9235fd"
+ },
+ "js.dient.do-truc-tiep-tam-dinh": {
+  "t": "Measured directly from the image with MediaPipe — the Upper/Middle/Lower Divisions follow your own facial landmarks. The full reading by Ma Yi Shen Xiang is in the in-depth analysis.",
+  "h": "3ded4f7e"
+ },
+ "js.dient.ha-dinh": {
+  "t": "LOWER",
+  "h": "11254397"
+ },
+ "js.dient.khong-doc-duoc-anh-nay-vui": {
+  "t": "Can't read this image — please choose a JPG or PNG image.",
+  "h": "32a1faf4"
+ },
+ "js.dient.khong-nhan-dien-duoc-mat": {
+  "t": "⚠ Couldn't clearly detect a face. You can still run the analysis, but the result may be less accurate.",
+  "h": "b3bd7a6e"
+ },
+ "js.dient.khong-the-ket-noi": {
+  "t": "Can't connect. Please try again.",
+  "h": "bf0b6e7b"
+ },
+ "js.dient.khong-the-mo-camera": {
+  "t": "Can't open the camera. Please upload an image instead.",
+  "h": "a57244b6"
+ },
+ "js.dient.loi-e": {
+  "t": "Error: {e}",
+  "h": "a7267203"
+ },
+ "js.dient.loi-s": {
+  "t": "Error {s}",
+  "h": "c406c72b"
+ },
+ "js.dient.mat-bau-duc": {
+  "t": "oval face",
+  "h": "d9034e8f"
+ },
+ "js.dient.mat-dai-hep": {
+  "t": "long/narrow face",
+  "h": "ea8512c9"
+ },
+ "js.dient.mat-quay": {
+  "t": "Your face is turned slightly to one side — please shoot straight on",
+  "h": "589f7ce3"
+ },
+ "js.dient.mat-tron-vuong": {
+  "t": "round/square face",
+  "h": "64bb08c2"
+ },
+ "js.dient.may-chu-khong-tra-ve": {
+  "t": "The server returned no result.",
+  "h": "d1312308"
+ },
+ "js.dient.tam-bach-ha": {
+  "t": "Lower Sanpaku eyes — white shows below the iris",
+  "h": "1d45c786"
+ },
+ "js.dient.tam-bach-thuong": {
+  "t": "Upper Sanpaku eyes — white shows above the iris",
+  "h": "2f061c22"
+ },
+ "js.dient.tam-dinh-da-xac-dinh": {
+  "t": "✦ Three Divisions detected",
+  "h": "ab4a740f"
+ },
+ "js.dient.tam-dinh-t": {
+  "t": "Three Divisions: Upper {t}% · Middle {tr}% · Lower {h}%",
+  "h": "47b2936f"
+ },
+ "js.dient.thuong-dinh": {
+  "t": "UPPER",
+  "h": "eb4f7b4f"
+ },
+ "js.dient.thuong-mat-15-25-giay": {
+  "t": "Usually takes 15–25 seconds",
+  "h": "f0dba195"
+ },
+ "js.dient.trung-dinh": {
+  "t": "MIDDLE",
+  "h": "bfbaff8b"
+ },
+ "js.dient.tu-bach": {
+  "t": "Four-white eyes (Si Bai Yan) — white shows on several sides of the iris",
+  "h": "1ded61cb"
+ },
+ "js.dient.ty-le-rong-dai-mat": {
+  "t": "Face width/length ratio: {r} ({s})",
+  "h": "59af24fc"
+ },
+ "js.dient.vui-long-chon-file-anh": {
+  "t": "Please choose an image file.",
+  "h": "71a61127"
  },
  "js.duyenno.anh-dang-tai-co-the-hoi": {
   "t": "The image is loading and may be a little slow — please wait, or",
@@ -7894,6 +9014,66 @@
  "js.hooklayer.nap-luong": {
   "t": "Top up credits →",
   "h": "96c6fb5d"
+ },
+ "js.khis.anh-qua-lon-toi-da-10mb": {
+  "t": "The image is too large (10MB max).",
+  "h": "27f729fb"
+ },
+ "js.khis.chip-5-sac": {
+  "t": "What do the five Five-Element colors mean?",
+  "h": "98715ca7"
+ },
+ "js.khis.chip-an-duong": {
+  "t": "What is the Yin Tang (the spot between the eyebrows)?",
+  "h": "e1de6d6d"
+ },
+ "js.khis.chip-khac-dien-tuong": {
+  "t": "How is complexion reading different from face reading?",
+  "h": "d826036b"
+ },
+ "js.khis.da-luan-xong": {
+  "t": "I have finished reading your complexion by Ma Yi Shen Xiang. Is there anything more you would like to ask?",
+  "h": "26c2acd5"
+ },
+ "js.khis.khi-sac": {
+  "t": "Complexion",
+  "h": "e1205bcd"
+ },
+ "js.khis.khi-sac-cua-toi": {
+  "t": "My complexion reading",
+  "h": "f4b00328"
+ },
+ "js.khis.khong-doc-duoc-anh": {
+  "t": "Can't read the image",
+  "h": "12ab7c26"
+ },
+ "js.khis.khong-doc-duoc-file": {
+  "t": "Can't read the file",
+  "h": "1d32d14b"
+ },
+ "js.khis.khong-the-ket-noi": {
+  "t": "Can't connect. Please try again.",
+  "h": "bf0b6e7b"
+ },
+ "js.khis.loi-e": {
+  "t": "Error: {e}",
+  "h": "a7267203"
+ },
+ "js.khis.loi-s": {
+  "t": "Error {s}",
+  "h": "c406c72b"
+ },
+ "js.khis.loi-xu-ly-anh": {
+  "t": "Image processing error: {e}",
+  "h": "973ba3bb"
+ },
+ "js.khis.may-chu-khong-tra-ve": {
+  "t": "The server returned no result.",
+  "h": "d1312308"
+ },
+ "js.khis.vui-long-chon-file-anh": {
+  "t": "Please choose an image file (JPG or PNG).",
+  "h": "ad4caa5b"
  },
  "js.kimlau.chip1": {
   "t": "Which year is best to build a house?",
@@ -11547,6 +12727,194 @@
   "t": "Sorry, something went wrong",
   "h": "4195c600"
  },
+ "js.phongthuy.100-sau-dieu-chinh-co-the": {
+  "t": "/100**; after the adjustments it could reach **",
+  "h": "a4c14f33"
+ },
+ "js.phongthuy.bac": {
+  "t": "North",
+  "h": "130d45d1"
+ },
+ "js.phongthuy.ban-muon-hoi-them-ve-de": {
+  "t": ". Which suggestion would you like to ask about?",
+  "h": "23ca71bc"
+ },
+ "js.phongthuy.bo-tri-hien-tai-tuong-doi": {
+  "t": "<p style=\"color:var(--text-lt);font-size:12px\">Your current layout is fairly good.</p>",
+  "h": "65d526db"
+ },
+ "js.phongthuy.chuan-bi-prompt-render-theo-ngu": {
+  "t": "Preparing the render prompt by Five Elements",
+  "h": "17f4d17e"
+ },
+ "js.phongthuy.dang-render-lai-phong": {
+  "t": "Re-rendering the room",
+  "h": "4f7ce5f5"
+ },
+ "js.phongthuy.diem": {
+  "t": " points</div>",
+  "h": "8d925dd9"
+ },
+ "js.phongthuy.diem-phong-thuy-hien-tai": {
+  "t": "Current feng shui score:",
+  "h": "91e0a1f2"
+ },
+ "js.phongthuy.diem-phong-thuy-hien-tai-kmy1": {
+  "t": "Current feng shui score: ",
+  "h": "d4ac7afe"
+ },
+ "js.phongthuy.diem-phong-thuy-phong-cua-toi": {
+  "t": "My room feng shui score",
+  "h": "373da765"
+ },
+ "js.phongthuy.dieu-chinh": {
+  "t": "Adjust",
+  "h": "37c5bf6b"
+ },
+ "js.phongthuy.don-bo": {
+  "t": "Remove",
+  "h": "0825ec6d"
+ },
+ "js.phongthuy.dong": {
+  "t": "East",
+  "h": "6bd70b62"
+ },
+ "js.phongthuy.dong-bac": {
+  "t": "Northeast",
+  "h": "9690921a"
+ },
+ "js.phongthuy.dong-nam": {
+  "t": "Southeast",
+  "h": "dd71e07a"
+ },
+ "js.phongthuy.giu-nguyen": {
+  "t": "<span class=\"pos-keep\">✓ Keep as is</span>",
+  "h": "aa00d929"
+ },
+ "js.phongthuy.khong-co-de-xuat-them-vat": {
+  "t": "<p style=\"color:var(--text-lt);font-size:12px\">No additional items to suggest.</p>",
+  "h": "b8141e06"
+ },
+ "js.phongthuy.khong-nhan-duoc-anh": {
+  "t": "No image was received.",
+  "h": "62488d2f"
+ },
+ "js.phongthuy.loi": {
+  "t": "Error: ",
+  "h": "471c0087"
+ },
+ "js.phongthuy.loi-doc-file": {
+  "t": "File read error",
+  "h": "3c56711b"
+ },
+ "js.phongthuy.loi-ppkl": {
+  "t": "⚠ Error: ",
+  "h": "a4f4adbc"
+ },
+ "js.phongthuy.loi-tai-anh": {
+  "t": "Image load error",
+  "h": "13fb84a7"
+ },
+ "js.phongthuy.menh-quai-cua-ban-la": {
+  "t": "; your Life Gua is **",
+  "h": "18a75d53"
+ },
+ "js.phongthuy.nam": {
+  "t": "South",
+  "h": "b580ba1b"
+ },
+ "js.phongthuy.nen-co": {
+  "t": "Must-have",
+  "h": "3f6537af"
+ },
+ "js.phongthuy.nen-lam": {
+  "t": "→ Should do",
+  "h": "85492f9d"
+ },
+ "js.phongthuy.nhan-dien-do-vat-trong-anh": {
+  "t": "Identifying objects in the photo",
+  "h": "5ecd0446"
+ },
+ "js.phongthuy.phan-tich-bat-trach-dua-de": {
+  "t": "Analyzing Ba Zhai and preparing suggestions",
+  "h": "dd12d6d9"
+ },
+ "js.phongthuy.phan-tich-that-bai": {
+  "t": "Analysis failed",
+  "h": "44b68aa6"
+ },
+ "js.phongthuy.phong-cua-toi-sau-khi-phong": {
+  "t": "My room after the feng shui makeover",
+  "h": "788d257f"
+ },
+ "js.phongthuy.phong-thuy-diem": {
+  "t": "Feng Shui — score ",
+  "h": "4c90b82a"
+ },
+ "js.phongthuy.quai": {
+  "t": "Gua ",
+  "h": "fc8feb12"
+ },
+ "js.phongthuy.quan-trong": {
+  "t": "⚠ Important",
+  "h": "ebd388e2"
+ },
+ "js.phongthuy.sau-dieu-chinh-co-the-len": {
+  "t": " — after adjustments it could reach ",
+  "h": "9e6292bc"
+ },
+ "js.phongthuy.tay": {
+  "t": "West",
+  "h": "74b26936"
+ },
+ "js.phongthuy.tay-bac": {
+  "t": "Northwest",
+  "h": "0b1f47fd"
+ },
+ "js.phongthuy.tay-nam": {
+  "t": "Southwest",
+  "h": "c0484c26"
+ },
+ "js.phongthuy.tot-neu-co": {
+  "t": "Nice to have",
+  "h": "e48b654c"
+ },
+ "js.phongthuy.trung-tam": {
+  "t": "Center",
+  "h": "26bda5d2"
+ },
+ "js.phongthuy.tuy-y": {
+  "t": "◎ Optional",
+  "h": "430debc7"
+ },
+ "js.phongthuy.tuy-y-4s40": {
+  "t": "Optional",
+  "h": "87b1fcd0"
+ },
+ "js.phongthuy.uu-tien-lam-gi-truoc": {
+  "t": "What should I prioritize first?",
+  "h": "f3cab683"
+ },
+ "js.phongthuy.vat-pham-nao-nen-mua-truoc": {
+  "t": "Which items should I buy first?",
+  "h": "85fe11d3"
+ },
+ "js.phongthuy.vi-sao-diem-hien-tai-thap": {
+  "t": "Why is the current score low?",
+  "h": "6c51a2da"
+ },
+ "js.phongthuy.vui-long-chon-anh-phong": {
+  "t": "Please choose a photo of the room",
+  "h": "90bec971"
+ },
+ "js.phongthuy.vui-long-nhap-nam-sinh-hop": {
+  "t": "Please enter a valid birth year",
+  "h": "16abd384"
+ },
+ "js.phongthuy.vui-long-thu-lai": {
+  "t": "Please try again.",
+  "h": "2f1d18ee"
+ },
  "js.prices.luong-moi-luot": {
   "t": "{credits} credits per use",
   "h": "d8f9af98"
@@ -12034,6 +13402,58 @@
  "js.shellui.bat-tu-ky-mon": {
   "t": "BaZi, Qi Men",
   "h": "eac6b8dd"
+ },
+ "js.shellui.bds-ban-cau": {
+  "t": "Hemispheres:",
+  "h": "91679aa1"
+ },
+ "js.shellui.bds-bon-truc": {
+  "t": "Four angles",
+  "h": "600b207c"
+ },
+ "js.shellui.bds-can-bang": {
+  "t": "Balance",
+  "h": "9fe59d4b"
+ },
+ "js.shellui.bds-goc-chieu": {
+  "t": "Key aspects",
+  "h": "77aad29d"
+ },
+ "js.shellui.bds-hanh-tinh": {
+  "t": "Planets",
+  "h": "0bfb6634"
+ },
+ "js.shellui.bds-hinh-the": {
+  "t": "Aspect patterns",
+  "h": "de8e9e43"
+ },
+ "js.shellui.bds-khong-co": {
+  "t": "none",
+  "h": "2884bacc"
+ },
+ "js.shellui.bds-lech": {
+  "t": "(orb {lech}°, strength {manh}%)",
+  "h": "17e9c540"
+ },
+ "js.shellui.bds-nghich": {
+  "t": "℞ retrograde",
+  "h": "8093efa5"
+ },
+ "js.shellui.bds-nghich-hanh": {
+  "t": "Retrograde:",
+  "h": "6917d7e7"
+ },
+ "js.shellui.bds-nguyen-to": {
+  "t": "Elements:",
+  "h": "69e4c7a2"
+ },
+ "js.shellui.bds-nha": {
+  "t": "house {n}",
+  "h": "19a346e7"
+ },
+ "js.shellui.bds-the": {
+  "t": "Modalities:",
+  "h": "3b48438e"
  },
  "js.shellui.be-an": {
   "t": "Annie",
@@ -19779,6 +21199,130 @@
   "t": "Classified from the 12 measured acoustic metrics (HNR, sustain, jitter, centroid…). The full meaning by the classical Five Tones method is in the in-depth analysis.",
   "h": "0c3c0a37"
  },
+ "js.thtu.anh-qua-lon": {
+  "t": "The image is too large.",
+  "h": "cb4417d0"
+ },
+ "js.thtu.da-doc-xong-chi-tay-cua": {
+  "t": "I have finished reading your palm by classical palmistry. Is there anything more you would like to ask?",
+  "h": "0e67099e"
+ },
+ "js.thtu.dang-doc-chi-tay": {
+  "t": "Reading your palm…",
+  "h": "1d4e7200"
+ },
+ "js.thtu.do-truc-tiep-tu-anh-bang": {
+  "t": "Measured directly from the image with MediaPipe Hands — the shape of your palm from your real landmarks. The full reading by classical palmistry is in the in-depth analysis.",
+  "h": "94672af2"
+ },
+ "js.thtu.do-truc-tiep-tu-anh-bang-vwvq": {
+  "t": "Measured directly from the image with MediaPipe Hands. The meaning of each finger, the 2D:4D ratio and the palm lines are in the in-depth analysis.",
+  "h": "68dd31bc"
+ },
+ "js.thtu.duong-van-menh-noi-len-dieu-gi": {
+  "t": "What does the fate line say?",
+  "h": "04b0d761"
+ },
+ "js.thtu.hinh-bau-duc": {
+  "t": "oval",
+  "h": "209cc96b"
+ },
+ "js.thtu.hinh-dai-thon": {
+  "t": "long/slender",
+  "h": "36c13178"
+ },
+ "js.thtu.hinh-dang-s": {
+  "t": "Shape: {s}",
+  "h": "b7ac9175"
+ },
+ "js.thtu.hinh-vuong-rong": {
+  "t": "square/broad",
+  "h": "2114c5c3"
+ },
+ "js.thtu.khong-co-ket-qua": {
+  "t": "No result.",
+  "h": "97fa6f91"
+ },
+ "js.thtu.khong-doc-duoc-anh-nay-vui": {
+  "t": "Can't read this image — please choose a JPG or PNG image.",
+  "h": "32a1faf4"
+ },
+ "js.thtu.khong-nhan-dien-duoc-ban-tay": {
+  "t": "⚠ Couldn't detect a palm. Try again with a clearer photo, a contrasting background and enough light.",
+  "h": "5abad846"
+ },
+ "js.thtu.khong-the-ket-noi": {
+  "t": "Can't connect.",
+  "h": "3dc4d8cb"
+ },
+ "js.thtu.khong-the-mo-camera": {
+  "t": "Can't open the camera.",
+  "h": "39a33224"
+ },
+ "js.thtu.loi-e": {
+  "t": "Error: {e}",
+  "h": "a7267203"
+ },
+ "js.thtu.loi-s": {
+  "t": "Error {s}",
+  "h": "c406c72b"
+ },
+ "js.thtu.ngon-ap-ut": {
+  "t": "Ring finger",
+  "h": "44dd840f"
+ },
+ "js.thtu.ngon-cai": {
+  "t": "Thumb",
+  "h": "aa7ff125"
+ },
+ "js.thtu.ngon-dai-nhat-f": {
+  "t": "Longest finger: {f}",
+  "h": "8a5684eb"
+ },
+ "js.thtu.ngon-giua": {
+  "t": "Middle finger",
+  "h": "b5a038e9"
+ },
+ "js.thtu.ngon-tro": {
+  "t": "Index finger",
+  "h": "379d7ea9"
+ },
+ "js.thtu.ngon-ut": {
+  "t": "Little finger",
+  "h": "6a313fb1"
+ },
+ "js.thtu.rong-dai-r": {
+  "t": "Width/Length = {r}",
+  "h": "86f06997"
+ },
+ "js.thtu.tam-dai-chi-la-gi": {
+  "t": "What are the Three Great Fingers?",
+  "h": "baef21dd"
+ },
+ "js.thtu.tay-thuan-khac-nhau": {
+  "t": "How do the dominant and non-dominant hands differ?",
+  "h": "10468033"
+ },
+ "js.thtu.thu-tuong": {
+  "t": "Palm Reading",
+  "h": "869631da"
+ },
+ "js.thtu.thu-tuong-cua-toi": {
+  "t": "My palm reading",
+  "h": "0af7a78d"
+ },
+ "js.thtu.thuong-mat-15-20-giay": {
+  "t": "Usually takes 15–20 seconds",
+  "h": "087173ee"
+ },
+ "js.thtu.ty-le-rong-dai-long-ban-tay": {
+  "t": "Palm width/length ratio: {r} ({s})",
+  "h": "e753f592"
+ },
+ "js.thtu.vui-long-chon-file-anh": {
+  "t": "Please choose an image file.",
+  "h": "71a61127"
+ },
  "js.toolsrc.data": {
   "t": "Uses {name} as a benchmark, not as a displayed catalog.",
   "h": "acff5b26"
@@ -21154,6 +22698,86 @@
  "js.xlg.thang-n": {
   "t": "Month {n}",
   "h": "4dd9659f"
+ },
+ "khis.anh-chan-dung": {
+  "t": "Portrait photo",
+  "h": "13ef800c"
+ },
+ "khis.anh-chi-gui-toi-may-chu": {
+  "t": "The photo is only sent to the server for analysis and isn't stored there. Take it in the morning or afternoon, with no makeup and no filter.",
+  "h": "ee45336b"
+ },
+ "khis.chon-anh-khac": {
+  "t": "Choose another image",
+  "h": "0c82c787"
+ },
+ "khis.chup-anh-khuon-mat-he-thong": {
+  "t": "Take a photo of your face — the system reads your complexion by Ma Yi Shen Xiang: the Yin Tang, the Five Peaks, and your outlook for the next 1–3 months.",
+  "h": "1722144a"
+ },
+ "khis.chup-anh-trong-24-gio": {
+  "t": "<span class=\"hp-ic\" data-icon=\"camera\"></span><span>Take a photo<br>within 24 hours</span>",
+  "h": "1e9673f3"
+ },
+ "khis.chup-mot-tam-anh-mat-ro": {
+  "t": "Take one clear photo of your face within the last 24 hours. The system analyzes the Yin Tang and the Five Peaks, your outlook for the next 1–3 months and how to nourish your qi.",
+  "h": "912812d7"
+ },
+ "khis.dang-quan-sat-khi-sac-tu": {
+  "t": "Observing the complexion in your photo — please wait about 30 seconds…<br><span style=\"font-size:12px;color:var(--text-lt)\">Analyzing the color of the Yin Tang and the 5 areas of the Five Peaks.</span>",
+  "h": "f82ea2fa"
+ },
+ "khis.do-an-duong-ngu-nhac": {
+  "t": "<span class=\"hp-ic\" data-icon=\"sunrise\"></span><span>Measure the Yin Tang,<br>Five Peaks</span>",
+  "h": "c8eb70da"
+ },
+ "khis.du-bao-van-khi-1-3": {
+  "t": "<span class=\"hp-ic\" data-icon=\"scroll-text\"></span><span>Outlook for the<br>next 1–3 months</span>",
+  "h": "4a1cf555"
+ },
+ "khis.jpg-png-toi-da-10mb-chup": {
+  "t": "JPG, PNG — 10MB max · Taken within 24h",
+  "h": "3b51d9fa"
+ },
+ "khis.khi-sac": {
+  "t": "Complexion",
+  "h": "e1205bcd"
+ },
+ "khis.khi-sac-luan": {
+  "t": "Complexion Reading",
+  "h": "95b743c6"
+ },
+ "khis.khi-sac-tren-guong-mat-thay": {
+  "t": "The complexion of the face changes before fortune actually changes — the ancients could read it earlier than almost any other sign. Upload a recent face photo and receive a reading of your outlook for the next 1–3 months.",
+  "h": "b8d7084d"
+ },
+ "khis.khi-sac-tu-vi-minh-bao": {
+  "t": "Complexion — Minh Bao Zi Wei Dou Shu",
+  "h": "3bb0e032"
+ },
+ "khis.khi-sac-van-khi-1-3": {
+  "t": "<b>Complexion</b><span>Your 1–3 month outlook through the Yin Tang and Five Peaks — <span data-tvp-price=\"khi-sac\">…</span> credits</span>",
+  "h": "460ed941"
+ },
+ "khis.luan-khi-sac-ton-luong": {
+  "t": "<span class=\"bg-label\"><span class=\"ic\" data-icon=\"sunrise\"></span><b id=\"analyzeBtnLabel\">Read My Complexion →</b></span> <small>Costs <span class=\"vnd\" data-tvp-price-vnd=\"khi-sac\"></span> <span class=\"cb-sub\">(<span data-tvp-price=\"khi-sac\">…</span> credits)</span></small>",
+  "h": "d256b1ce"
+ },
+ "khis.moi-luot-luong": {
+  "t": "<span class=\"vnd\" data-tvp-price-vnd=\"khi-sac\"></span> per reading <span class=\"cb-sub\">(<span data-tvp-price=\"khi-sac\">…</span> credits)</span>",
+  "h": "212bf76e"
+ },
+ "khis.nhan-de-chon-anh-hoac-keo": {
+  "t": "Tap to choose an image, or drag and drop it here",
+  "h": "988cbe04"
+ },
+ "khis.xem-anh-khac": {
+  "t": "View Another Photo",
+  "h": "c3d65ffa"
+ },
+ "khis.xem-khi-sac": {
+  "t": "Read Complexion",
+  "h": "7863a81d"
  },
  "kimlau.bang-tra-20-nam-toi": {
   "t": "20-year<br>lookup table",
@@ -25114,6 +26738,90 @@
  "thtp.xem-ban-mau": {
   "t": "See a sample →",
   "h": "ba3671b1"
+ },
+ "thtu.1-tai-anh-ban-tay": {
+  "t": "<span class=\"wss-n\">1</span><span class=\"wss-l\">Upload a palm photo</span>",
+  "h": "0c95364a"
+ },
+ "thtu.anh-chi-gui-toi-may-chu": {
+  "t": "The photo is only sent to the server for analysis and isn't stored there. Spread your hand flat, palm facing up, in good light.",
+  "h": "9007a9b3"
+ },
+ "thtu.ban-tay-da-xac-dinh": {
+  "t": "<span class=\"ic\" data-icon=\"hand\"></span> Palm detected",
+  "h": "720bc996"
+ },
+ "thtu.chi-tuong-hoc-phuong-dong-la": {
+  "t": "Eastern palmistry reads character, career and fortune from the main lines of the palm and the mounts around them. It is a branch of its own within traditional physiognomy, running alongside face reading.",
+  "h": "f4eb23c1"
+ },
+ "thtu.chup-va-tai-mot-tam-anh": {
+  "t": "Take or upload a clear photo of your palm. The system analyzes your palm lines by the Five Elements body-type method, reading the three main lines, the fate line, the mounts and the fingers.",
+  "h": "ecabc37d"
+ },
+ "thtu.do-luong-mediapipe": {
+  "t": "<span class=\"ic\" data-icon=\"bar-chart-3\"></span> Measured with MediaPipe",
+  "h": "b51ea8c8"
+ },
+ "thtu.do-tam-dai-chi-duong-van": {
+  "t": "<span class=\"hp-ic\" data-icon=\"hand\"></span><span>Measure the three main<br>lines and the fate line</span>",
+  "h": "91a1d8ca"
+ },
+ "thtu.dung-tay-thuan-de-xem-van": {
+  "t": "Use your <strong>dominant</strong> hand to read your current fortune",
+  "h": "0fd522f1"
+ },
+ "thtu.jpg-png-webp-toi-da-5mb": {
+  "t": "JPG, PNG, WebP — 5MB max · Photograph your palm with the lines clearly visible",
+  "h": "757ec708"
+ },
+ "thtu.keo-tha-anh-long-ban-tay": {
+  "t": "Drag and drop a palm photo here, or click to choose",
+  "h": "8281c1d6"
+ },
+ "thtu.long-ban-tay-luu-lai-dau": {
+  "t": "Your palm keeps the traces of the whole road you have walked — career, love and health each leave their own lines. Photograph your palm and receive a reading by the Five Elements body-type method.",
+  "h": "75a0d71c"
+ },
+ "thtu.luan-theo-ngu-hanh-hinh-tuong": {
+  "t": "<span class=\"hp-ic\" data-icon=\"scroll-text\"></span><span>A reading by the<br>Five Elements body type</span>",
+  "h": "afdecc3a"
+ },
+ "thtu.moi-luot-luong": {
+  "t": "<span class=\"vnd\" data-tvp-price-vnd=\"thu-tuong\"></span> per reading <span class=\"cb-sub\">(<span data-tvp-price=\"thu-tuong\">…</span> credits)</span>",
+  "h": "21fe0a1c"
+ },
+ "thtu.phan-tich-thu-tuong-hoc": {
+  "t": "Palmistry Analysis",
+  "h": "f33d42ad"
+ },
+ "thtu.phan-tich-thu-tuong-ton-luong": {
+  "t": "<span class=\"bg-label\"><span class=\"ic\" data-icon=\"hand\"></span><b id=\"analyzeBtnLabel\">Analyze My Palm →</b></span> <small>Costs <span class=\"vnd\" data-tvp-price-vnd=\"thu-tuong\"></span> <span class=\"cb-sub\">(<span data-tvp-price=\"thu-tuong\">…</span> credits)</span></small>",
+  "h": "527662b0"
+ },
+ "thtu.tai-anh-long-ban-tay": {
+  "t": "Upload a palm photo",
+  "h": "4d287ee7"
+ },
+ "thtu.tai-hoac-chup-anh-long-ban": {
+  "t": "Upload or take a photo of your palm — the system reads the three main lines, the fate line and the mounts of the hand by classical Eastern and Western methods.",
+  "h": "1f98998a"
+ },
+ "thtu.thu-tuong": {
+  "t": "Palm Reading",
+  "h": "869631da"
+ },
+ "thtu.thu-tuong-co-phap-dong-tay": {
+  "t": "Classical Eastern & Western Palmistry",
+  "h": "cce8e613"
+ },
+ "thtu.thu-tuong-tu-vi-minh-bao": {
+  "t": "Palm Reading — Minh Bao Zi Wei Dou Shu",
+  "h": "e64f49ab"
+ },
+ "thtu.thu-tuong-xem-chi-tay-theo": {
+  "t": "<b>Palm Reading</b><span>Read your palm lines by the classical method — <span data-tvp-price=\"thu-tuong\">…</span> credits</span>",
+  "h": "7461fe05"
  },
  "topup.ban-dang-mo-khoa": {
   "t": "You're unlocking…",

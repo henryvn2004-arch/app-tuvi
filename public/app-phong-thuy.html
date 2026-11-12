@@ -387,7 +387,7 @@ function wsStepsSet(n){
 // đây sai 12/64 ô Du Niên + dùng công thức cung mệnh SAI (tổng 4 chữ số năm
 // thay vì 2 chữ số cuối — xem ghi chú đầu file bat-trach.js).
 var GUA_DATA=BatTrachTool.guaDataLegacy();
-var DIR_VN={N:'Bắc',NE:'Đông Bắc',E:'Đông',SE:'Đông Nam',S:'Nam',SW:'Tây Nam',W:'Tây',NW:'Tây Bắc',C:'Trung Tâm'};
+var DIR_VN={N:_tvmbT('js.phongthuy.bac', 'Bắc'),NE:_tvmbT('js.phongthuy.dong-bac', 'Đông Bắc'),E:_tvmbT('js.phongthuy.dong', 'Đông'),SE:_tvmbT('js.phongthuy.dong-nam', 'Đông Nam'),S:_tvmbT('js.phongthuy.nam', 'Nam'),SW:_tvmbT('js.phongthuy.tay-nam', 'Tây Nam'),W:_tvmbT('js.phongthuy.tay', 'Tây'),NW:_tvmbT('js.phongthuy.tay-bac', 'Tây Bắc'),C:_tvmbT('js.phongthuy.trung-tam', 'Trung Tâm')};
 var BAGUA=[['SE','S','SW'],['E','C','W'],['NE','N','NW']];
 var TIER_BG={best:'#1E6B3C',good:'#2D8E52',ok:'#5B8A3C',neutral:'#6B7280',warn:'#B45309',bad:'#B91C1C',worst:'#7F1D1D'};
 var TIER_CLR={best:'#86EFAC',good:'#BBF7D0',ok:'#D9F99D',neutral:'#E5E7EB',warn:'#FCD34D',bad:'#FCA5A5',worst:'#FECACA'};
@@ -395,18 +395,18 @@ var TIER_CLR={best:'#86EFAC',good:'#BBF7D0',ok:'#D9F99D',neutral:'#E5E7EB',warn:
 function calcGua(y,g){return BatTrachTool.getCungMenh(y,g==='male'?'nam':'nu');}
 
 function cellQuality(dir,gua){if(!gua||dir==='C')return'neutral';const g=GUA_DATA[gua];if(!g)return'neutral';if(g.good[dir]){const v=g.good[dir];return v.includes('Sinh')?'best':v.includes('Thiên')?'good':'ok';}if(g.bad[dir]){const v=g.bad[dir];return v.includes('Tuyệt')?'worst':v.includes('Ngũ')?'bad':'warn';}return'neutral';}
-function getQLabel(dir,gua){if(!gua)return'';const g=GUA_DATA[gua];return(g?.good[dir]||g?.bad[dir]||'');}
+function getQLabel(dir,gua){if(!gua)return'';const g=GUA_DATA[gua];return _tvmbG('battrach',(g?.good[dir]||g?.bad[dir]||''));}
 var ITEM_ICON={bed:'home',desk:'briefcase',sofa:'home',altar:'temple',stove:'flame',plant:'leaf',mirror:'aperture',door:'door-open',toilet:'droplet',water:'droplet',wardrobe:'door-open',tv:'monitor',table:'package'};
 function getFIcon(id){return '<span class="ic" data-icon="'+(ITEM_ICON[id]||'package')+'"></span>';}
 
 var _gua=null,_img64=null,_imgType='image/jpeg';
 var ANALYSIS_STEPS=[
-  {label:'Nhận diện đồ vật trong ảnh',ms:6000},
-  {label:'Phân tích Bát Trạch & đưa đề xuất',ms:0},
+  {label:_tvmbT('js.phongthuy.nhan-dien-do-vat-trong-anh', 'Nhận diện đồ vật trong ảnh'),ms:6000},
+  {label:_tvmbT('js.phongthuy.phan-tich-bat-trach-dua-de', 'Phân tích Bát Trạch & đưa đề xuất'),ms:0},
 ];
 var RENDER_STEPS=[
-  {label:'Chuẩn bị prompt render theo ngũ hành',ms:1200},
-  {label:'Đang render lại phòng',ms:0},
+  {label:_tvmbT('js.phongthuy.chuan-bi-prompt-render-theo-ngu', 'Chuẩn bị prompt render theo ngũ hành'),ms:1200},
+  {label:_tvmbT('js.phongthuy.dang-render-lai-phong', 'Đang render lại phòng'),ms:0},
 ];
 var _analysisLoadingCtl=null;
 var _renderLoadingCtl=null;
@@ -417,7 +417,7 @@ function onYearChange(){
   if(!y||y<1900||y>new Date().getFullYear()){document.getElementById('guaBadge').classList.remove('show');return;}
   _gua=calcGua(y,g);const d=GUA_DATA[_gua];if(!d)return;
   document.getElementById('guaIcon').textContent=d.icon;
-  document.getElementById('guaName').textContent='Quái '+_gua+' — '+d.name+' ('+d.elem+')';
+  document.getElementById('guaName').textContent=_tvmbT('js.phongthuy.quai', 'Quái ')+_gua+' — '+_tvmbG('quai', d.name)+' ('+_tvmbG('hanh', d.elem)+')';
   document.getElementById('guaGood').textContent=Object.entries(d.good).map(([k,v])=>(DIR_VN[k]||k)+' ('+v+')').join(' · ');
   document.getElementById('guaBad').textContent=Object.entries(d.bad).map(([k,v])=>(DIR_VN[k]||k)+' ('+v+')').join(' · ');
   document.getElementById('guaBadge').classList.add('show');
@@ -435,13 +435,13 @@ async function processFile(file){
   document.getElementById('uploadZone').style.display='none';
   document.getElementById('previewWrap').classList.add('show');
 }
-function resizeImg(file){return new Promise((res,rej)=>{const r=new FileReader();r.onerror=()=>rej(new Error('Lỗi đọc file'));r.onload=e=>{const img=new Image();img.onerror=()=>rej(new Error('Lỗi tải ảnh'));img.onload=()=>{const M=1024;let{width:w,height:h}=img;if(w>M||h>M){if(w>h){h=Math.round(h*M/w);w=M;}else{w=Math.round(w*M/h);h=M;}}const c=document.createElement('canvas');c.width=w;c.height=h;c.getContext('2d').drawImage(img,0,0,w,h);res({base64:c.toDataURL('image/jpeg',.78).split(',')[1],type:'image/jpeg'});};img.src=e.target.result;};r.readAsDataURL(file);});}
+function resizeImg(file){return new Promise((res,rej)=>{const r=new FileReader();r.onerror=()=>rej(new Error(_tvmbT('js.phongthuy.loi-doc-file', 'Lỗi đọc file')));r.onload=e=>{const img=new Image();img.onerror=()=>rej(new Error(_tvmbT('js.phongthuy.loi-tai-anh', 'Lỗi tải ảnh')));img.onload=()=>{const M=1024;let{width:w,height:h}=img;if(w>M||h>M){if(w>h){h=Math.round(h*M/w);w=M;}else{w=Math.round(w*M/h);h=M;}}const c=document.createElement('canvas');c.width=w;c.height=h;c.getContext('2d').drawImage(img,0,0,w,h);res({base64:c.toDataURL('image/jpeg',.78).split(',')[1],type:'image/jpeg'});};img.src=e.target.result;};r.readAsDataURL(file);});}
 
 async function doAnalyze(){
   document.getElementById('errorBox').classList.remove('show');
   const y=parseInt(document.getElementById('namSinh').value),g=document.getElementById('gioiTinh').value;
-  if(!y||y<1900||y>new Date().getFullYear()){showErr('Vui lòng nhập năm sinh hợp lệ');return;}
-  if(!_img64){showErr('Vui lòng chọn ảnh phòng');return;}
+  if(!y||y<1900||y>new Date().getFullYear()){showErr(_tvmbT('js.phongthuy.vui-long-nhap-nam-sinh-hop', 'Vui lòng nhập năm sinh hợp lệ'));return;}
+  if(!_img64){showErr(_tvmbT('js.phongthuy.vui-long-chon-anh-phong', 'Vui lòng chọn ảnh phòng'));return;}
   if(!window.Auth?.isLoggedIn()){window.Auth?.require?.(()=>doAnalyze());return;}
   _gua=calcGua(y,g);
   const token=window.Auth.getSession()?.access_token;
@@ -460,14 +460,14 @@ async function doAnalyze(){
         try{
           const res=await fetch('/api/phong-thuy?action=analyze',{method:'POST',headers:{'Content-Type':'application/json','Authorization':'Bearer '+token},body:JSON.stringify({imageBase64:_img64,imageType:_imgType,roomType,doorDir,guaNumber:_gua,namSinh:y,gioiTinh:g})});
           const data=await res.json();
-          if(!data.success)throw new Error(data.error||'Phân tích thất bại');
+          if(!data.success)throw new Error(data.error||_tvmbT('js.phongthuy.phan-tich-that-bai', 'Phân tích thất bại'));
           window.refreshNavCredits&&window.refreshNavCredits();
           _analysisLoadingCtl&&_analysisLoadingCtl.finish();
           renderResults(data);resolve();
         }catch(e){reject(e);}
       });
     });
-  }catch(e){_analysisLoadingCtl&&_analysisLoadingCtl.stop();showErr('Lỗi: '+e.message);}
+  }catch(e){_analysisLoadingCtl&&_analysisLoadingCtl.stop();showErr(_tvmbT('js.phongthuy.loi', 'Lỗi: ')+e.message);}
   finally{document.getElementById('loadingOverlay').classList.remove('show');document.getElementById('btnAnalyze').disabled=false;}
 }
 
@@ -511,17 +511,17 @@ function renderResults(data){
   renderFloorPlan(detected.detectedFurniture||[],analysis.recommendations||[]);
   const recs=(analysis.recommendations||[]).sort((a,b)=>({high:0,medium:1,low:2}[a.priority]||1)-({high:0,medium:1,low:2}[b.priority]||1));
   const rl=document.getElementById('recList');rl.innerHTML='';
-  if(!recs.length){rl.innerHTML='<p style="color:var(--text-lt);font-size:12px">Bố trí hiện tại tương đối tốt.</p>';}
+  if(!recs.length){rl.innerHTML=_tvmbT('js.phongthuy.bo-tri-hien-tai-tuong-doi', '<p style="color:var(--text-lt);font-size:12px">Bố trí hiện tại tương đối tốt.</p>');}
   else recs.forEach(r=>{
     const isMove=r.action==='move',isKeep=r.action==='keep';
-    const mv=isKeep?'<span class="pos-keep">✓ Giữ nguyên</span>':isMove?'<span class="pos-from">'+(DIR_VN[r.currentPosition]||r.currentPosition)+'</span> → <span class="pos-to">'+(DIR_VN[r.recommendedPosition]||r.recommendedPosition)+'</span>':'<span style="color:var(--text-mid)">'+(r.action==='remove'?'Dọn bỏ':'Điều chỉnh')+'</span>';
-    const pl={high:'⚠ Quan Trọng',medium:'→ Nên Làm',low:'◎ Tuỳ Ý'}[r.priority]||r.priority;
-    rl.innerHTML+='<div class="rec-item priority-'+(r.priority||'medium')+'"><div><span class="rec-badge">'+pl+'</span></div><div class="rec-body"><div class="rec-title">'+getFIcon(r.furnitureId)+' '+r.furnitureName+'</div><div class="rec-move">'+mv+'</div><div class="rec-reason">'+(r.reason||'')+'</div>'+(r.improvement?'<div class="rec-impr">↑ ~'+r.improvement+' điểm</div>':'')+'</div></div>';
+    const mv=isKeep?_tvmbT('js.phongthuy.giu-nguyen', '<span class="pos-keep">✓ Giữ nguyên</span>'):isMove?'<span class="pos-from">'+(DIR_VN[r.currentPosition]||r.currentPosition)+'</span> → <span class="pos-to">'+(DIR_VN[r.recommendedPosition]||r.recommendedPosition)+'</span>':'<span style="color:var(--text-mid)">'+(r.action==='remove'?_tvmbT('js.phongthuy.don-bo', 'Dọn bỏ'):_tvmbT('js.phongthuy.dieu-chinh', 'Điều chỉnh'))+'</span>';
+    const pl={high:_tvmbT('js.phongthuy.quan-trong', '⚠ Quan Trọng'),medium:_tvmbT('js.phongthuy.nen-lam', '→ Nên Làm'),low:_tvmbT('js.phongthuy.tuy-y', '◎ Tuỳ Ý')}[r.priority]||r.priority;
+    rl.innerHTML+='<div class="rec-item priority-'+(r.priority||'medium')+'"><div><span class="rec-badge">'+pl+'</span></div><div class="rec-body"><div class="rec-title">'+getFIcon(r.furnitureId)+' '+r.furnitureName+'</div><div class="rec-move">'+mv+'</div><div class="rec-reason">'+(r.reason||'')+'</div>'+(r.improvement?'<div class="rec-impr">↑ ~'+r.improvement+_tvmbT('js.phongthuy.diem', ' điểm</div>'):'')+'</div></div>';
   });
   window.mountIcons && window.mountIcons(rl);
   const sg=document.getElementById('shopGrid');sg.innerHTML='';
-  (analysis.shoppingList||[]).forEach(s=>{const uc=s.urgency==='nên có'?'urg-must':s.urgency==='tốt nếu có'?'urg-good':'urg-opt';const ul=s.urgency==='nên có'?'Nên Có':s.urgency==='tốt nếu có'?'Tốt Nếu Có':'Tuỳ Ý';const sIc=window.iconHtml?window.iconHtml(s.icon,window.ICONS&&window.ICONS.sparkles):(s.icon||'✨');sg.innerHTML+='<div class="shop-item"><div class="shop-hdr"><span class="shop-icon">'+sIc+'</span><span class="shop-name">'+s.item+'</span><span class="shop-urg '+uc+'">'+ul+'</span></div><div class="shop-pos">'+(window.iconHtml?window.iconHtml('pin'):'📍')+' '+(DIR_VN[s.position]||s.position||'')+'</div><div class="shop-reason">'+(s.reason||'')+'</div><div class="shop-price">'+(window.iconHtml?window.iconHtml('dollar-sign'):'💰')+' '+(s.priceRange||'')+'</div></div>';});
-  if(!(analysis.shoppingList||[]).length)sg.innerHTML='<p style="color:var(--text-lt);font-size:12px">Không có đề xuất thêm vật phẩm.</p>';
+  (analysis.shoppingList||[]).forEach(s=>{const uc=s.urgency==='nên có'?'urg-must':s.urgency==='tốt nếu có'?'urg-good':'urg-opt';const ul=s.urgency==='nên có'?_tvmbT('js.phongthuy.nen-co', 'Nên Có'):s.urgency==='tốt nếu có'?_tvmbT('js.phongthuy.tot-neu-co', 'Tốt Nếu Có'):_tvmbT('js.phongthuy.tuy-y-4s40', 'Tuỳ Ý');const sIc=window.iconHtml?window.iconHtml(s.icon,window.ICONS&&window.ICONS.sparkles):(s.icon||'✨');sg.innerHTML+='<div class="shop-item"><div class="shop-hdr"><span class="shop-icon">'+sIc+'</span><span class="shop-name">'+s.item+'</span><span class="shop-urg '+uc+'">'+ul+'</span></div><div class="shop-pos">'+(window.iconHtml?window.iconHtml('pin'):'📍')+' '+(DIR_VN[s.position]||s.position||'')+'</div><div class="shop-reason">'+(s.reason||'')+'</div><div class="shop-price">'+(window.iconHtml?window.iconHtml('dollar-sign'):'💰')+' '+(s.priceRange||'')+'</div></div>';});
+  if(!(analysis.shoppingList||[]).length)sg.innerHTML=_tvmbT('js.phongthuy.khong-co-de-xuat-them-vat', '<p style="color:var(--text-lt);font-size:12px">Không có đề xuất thêm vật phẩm.</p>');
   document.getElementById('adviceText').textContent=analysis.generalAdvice||'';
 
   _renderGua = _gua;
@@ -537,9 +537,9 @@ function renderResults(data){
   if(window.SHELL_INTRO)Shell.dismissIntro(window.SHELL_INTRO.key);
   var _guaD=GUA_DATA[_gua];
   Shell.setContext({
-    label:'Phong Thủy — điểm '+before+'→'+after,
-    greeting:'Điểm phong thủy hiện tại: **'+before+'/100**, sau điều chỉnh có thể lên **'+after+'/100**'+(_guaD?', mệnh quái của bạn là **'+_gua+' — '+_guaD.name+'**':'')+'. Bạn muốn hỏi thêm về đề xuất nào?',
-    chips:['Vì sao điểm hiện tại thấp?','Ưu tiên làm gì trước?','Vật phẩm nào nên mua trước?']
+    label:_tvmbT('js.phongthuy.phong-thuy-diem', 'Phong Thủy — điểm ')+before+'→'+after,
+    greeting:_tvmbT('js.phongthuy.diem-phong-thuy-hien-tai', 'Điểm phong thủy hiện tại: **')+before+_tvmbT('js.phongthuy.100-sau-dieu-chinh-co-the', '/100**, sau điều chỉnh có thể lên **')+after+'/100**'+(_guaD?_tvmbT('js.phongthuy.menh-quai-cua-ban-la', ', mệnh quái của bạn là **')+_gua+' — '+_guaD.name+'**':'')+_tvmbT('js.phongthuy.ban-muon-hoi-them-ve-de', '. Bạn muốn hỏi thêm về đề xuất nào?'),
+    chips:[_tvmbT('js.phongthuy.vi-sao-diem-hien-tai-thap', 'Vì sao điểm hiện tại thấp?'),_tvmbT('js.phongthuy.uu-tien-lam-gi-truoc', 'Ưu tiên làm gì trước?'),_tvmbT('js.phongthuy.vat-pham-nao-nen-mua-truoc', 'Vật phẩm nào nên mua trước?')]
   });
   // Chia sẻ (chưa có ảnh hệ thống render lúc này — CHỈ text điểm+lời khuyên; KHÔNG
   // dùng ảnh phòng thật của user vì lý do riêng tư). Nâng cấp lên kind='image'
@@ -548,8 +548,8 @@ function renderResults(data){
   Shell.setShareable({
     kind:'text',
     toolId:'phong-thuy',
-    title:'Điểm Phong Thủy phòng của tôi',
-    text:'Điểm phong thủy hiện tại: '+before+'/100'+(after>before?' — sau điều chỉnh có thể lên '+after+'/100':'')+(_ptAdvice?'\n\n'+_ptAdvice:'')
+    title:_tvmbT('js.phongthuy.diem-phong-thuy-phong-cua-toi', 'Điểm Phong Thủy phòng của tôi'),
+    text:_tvmbT('js.phongthuy.diem-phong-thuy-hien-tai-kmy1', 'Điểm phong thủy hiện tại: ')+before+'/100'+(after>before?_tvmbT('js.phongthuy.sau-dieu-chinh-co-the-len', ' — sau điều chỉnh có thể lên ')+after+'/100':'')+(_ptAdvice?'\n\n'+_ptAdvice:'')
   });
 }
 
@@ -599,7 +599,7 @@ async function _doRenderCall() {
       }),
     });
     const data = await res.json();
-    if (!data.imageUrl) throw new Error(data.error || 'Không nhận được ảnh.');
+    if (!data.imageUrl) throw new Error(data.error || _tvmbT('js.phongthuy.khong-nhan-duoc-anh', 'Không nhận được ảnh.'));
     _renderResultUrl = data.imageUrl;
     document.getElementById('renderBefore').src = 'data:' + _imgType + ';base64,' + _img64;
     document.getElementById('renderAfter').src = data.imageUrl;
@@ -612,16 +612,16 @@ async function _doRenderCall() {
     Shell.setShareable({
       kind: 'image',
       toolId: 'phong-thuy',
-      title: 'Phòng của tôi sau khi Phong Thủy hóa',
+      title: _tvmbT('js.phongthuy.phong-cua-toi-sau-khi-phong', 'Phòng của tôi sau khi Phong Thủy hóa'),
       imageUrl: data.imageUrl,
-      text: (_ptBefore != null ? 'Điểm phong thủy hiện tại: ' + _ptBefore + '/100' + (_ptAfter > _ptBefore ? ' — sau điều chỉnh có thể lên ' + _ptAfter + '/100' : '') : '') + (_ptAdvice ? '\n\n' + _ptAdvice : ''),
+      text: (_ptBefore != null ? _tvmbT('js.phongthuy.diem-phong-thuy-hien-tai-kmy1', 'Điểm phong thủy hiện tại: ') + _ptBefore + '/100' + (_ptAfter > _ptBefore ? _tvmbT('js.phongthuy.sau-dieu-chinh-co-the-len', ' — sau điều chỉnh có thể lên ') + _ptAfter + '/100' : '') : '') + (_ptAdvice ? '\n\n' + _ptAdvice : ''),
     });
   } catch(e) {
     _renderLoadingCtl && _renderLoadingCtl.stop();
     document.getElementById('renderLoading').style.display = 'none';
     document.getElementById('renderIdle').style.display = 'block';
     const el = document.getElementById('renderErr');
-    el.textContent = '⚠ Lỗi: ' + (e.message || 'Vui lòng thử lại.');
+    el.textContent = _tvmbT('js.phongthuy.loi-ppkl', '⚠ Lỗi: ') + (e.message || _tvmbT('js.phongthuy.vui-long-thu-lai', 'Vui lòng thử lại.'));
     el.style.display = 'block';
   } finally {
     document.getElementById('btnRender').disabled = false;

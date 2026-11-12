@@ -11,6 +11,7 @@ import { NextRequest } from 'next/server';
 import { ARC_GIONG_NGU_HANH } from '@/lib/agent/prompts';
 import { ok, err, options, parseBody } from '@/lib/cors';
 import { llmText, type LlmImage } from '@/lib/llm/complete';
+import { requestLocale, withLang } from '@/lib/llm/locale';
 import { authUserFromRequest, parseLlmJson } from '@/lib/api/tool-helpers';
 import { withToolOutcome } from '@/lib/ops/tool-outcome';
 import { guaOf } from '@/lib/engine/bat-trach';
@@ -194,7 +195,8 @@ async function handleVisionTool(
 
   // Analysis
   const analysisText = await claude(
-    [{ role: 'user', content: analysisUserPrompt(detected, guaCtx, body) }],
+    // Câu chỉ định ngôn ngữ vào USER message (vi ⇒ nguyên byte); enum tiếng Việt (urgency, category…) giữ nguyên cho client.
+    [{ role: 'user', content: withLang(analysisUserPrompt(detected, guaCtx, body), requestLocale(request), [], { json: true }) }],
     analysisSystemPrompt,
     2000,
   );

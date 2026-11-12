@@ -104,7 +104,8 @@ function them(k, vi, han, en, flags, nSyl, ov = {}) {
   const where = `${k}:${vi}`;
   const sylVi = vi.split(/\s+/).length;
   const expected = nSyl ?? sylVi;
-  if (!flags.includes('n') && [...han].length !== expected)
+  // Cờ 'v' (tên Việt không phải phiên Hán-Việt: Bạch Dương ↔ 牡羊座) cũng miễn kiểm số chữ — W25.
+  if (!flags.includes('n') && !flags.includes('v') && [...han].length !== expected)
     throw new Error(`${where}: ${[...han].length} chữ Hán ≠ ${expected} âm tiết`);
   // Soát chéo với Unihan kVietnamese: chỉ CẢNH BÁO (kVietnamese hay ghi âm thuần Việt: 紫 "tía").
   const syl = vi.split(/\s+/);
