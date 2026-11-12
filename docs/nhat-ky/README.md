@@ -28,7 +28,7 @@ Luật rút ra từ các mục này đã được cô đọng lên `CLAUDE.md`. 
 
 | # | tháng | file | mục |
 |---:|---|---|---|
-| 1 | 2026-11 | `2026-11.md` | 🗓️ W24 — Công cụ ngày giờ (Giờ Sinh · Chọn Ngày · Ngày Tốt · Hoàng Đạo · Kim Lâu) 5 ngôn ngữ; route `xem-tuoi` đặt tên/chọn ngày sinh chữ theo trang |
+| 1 | 2026-11 | `2026-11.md` | 🗓️ W24 — Công cụ ngày giờ · đặt tên · phong thuỷ: 11/12 trang 5 ngôn ngữ (còn `so-dep`); route `xem-tuoi` đặt tên/chọn ngày sinh chữ theo trang |
 | 1 | 2026-11 | `2026-11.md` | 🧩 W26a — Widget dùng chung: `tuvi-form.js` + `noi-sinh.js` theo ngôn ngữ (114 khoá, tên nước qua Intl.DisplayNames) |
 | 1 | 2026-11 | `2026-11.md` | 📨 W17b — "Gửi lại PDF" đọc văn luận theo ngôn ngữ người nhận (`readLuanI18n`), hụt lùi bản Việt |
 | 1 | 2026-11 | `2026-11.md` | 🌐 W18 — Chân dung/cẩm nang theo locale (cache tách ngôn ngữ, sở hữu giữ nguyên) · link email `/<locale>/` · PDF font CJK/Hangul + khung theo ngôn ngữ |
