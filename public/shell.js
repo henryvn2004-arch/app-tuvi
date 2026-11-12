@@ -1133,8 +1133,8 @@
   }
   function startFamilyForm(vai, v, q) {
     var chat = document.getElementById('chat');
-    ensureScripts(['/tools-shared/vn-timezone.js?v=1', '/tools-shared/noi-sinh.js?v=1'], function (e1) {
-      ensureScripts(['/tuvi-form.js?v=15'], function (e2) {
+    ensureScripts(['/tools-shared/vn-timezone.js?v=1', '/tools-shared/noi-sinh.js?v=2'], function (e1) {
+      ensureScripts(['/tuvi-form.js?v=16'], function (e2) {
         if (e1 || e2 || typeof TuviForm === 'undefined') {
           inlineErrorBubble(chat, T('js.shellui.chua-mo-duoc-form-ngay-sinh', 'chưa mở được form ngày sinh.'), '/app/so-la-so');
           return;
@@ -5659,8 +5659,8 @@
       if (input) { input.disabled = false; input.placeholder = ph; }
       setSend(true); renderSuggs();
     };
-    ensureScripts(['/tools-shared/vn-timezone.js?v=1', '/tools-shared/noi-sinh.js?v=1'], function (e1) {
-      ensureScripts(['/tuvi-form.js?v=15'], function (e2) {
+    ensureScripts(['/tools-shared/vn-timezone.js?v=1', '/tools-shared/noi-sinh.js?v=2'], function (e1) {
+      ensureScripts(['/tuvi-form.js?v=16'], function (e2) {
         if (e1 || e2 || typeof TuviForm === 'undefined') {
           release();
           inlineErrorBubble(chat, T('js.shellui.chua-mo-duoc-form-ngay-sinh', 'chưa mở được form ngày sinh.'), '/app/la-so');

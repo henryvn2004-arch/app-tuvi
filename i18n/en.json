@@ -3119,6 +3119,206 @@
   "t": "Good days · {y}/{m}",
   "h": "cbd777dc"
  },
+ "js.noisinh.noi-khac": {
+  "t": "Other (choose a time zone)",
+  "h": "dee91293"
+ },
+ "js.noisinh.vung-america-anchorage": {
+  "t": "Alaska",
+  "h": "7288f7f8"
+ },
+ "js.noisinh.vung-america-cancun": {
+  "t": "Quintana Roo (Cancún)",
+  "h": "a0570d82"
+ },
+ "js.noisinh.vung-america-chicago": {
+  "t": "Central (Chicago, Texas)",
+  "h": "bff83b4f"
+ },
+ "js.noisinh.vung-america-chihuahua": {
+  "t": "Chihuahua",
+  "h": "c505a9ee"
+ },
+ "js.noisinh.vung-america-cuiaba": {
+  "t": "Mato Grosso (Cuiabá)",
+  "h": "93bc2a58"
+ },
+ "js.noisinh.vung-america-denver": {
+  "t": "Mountain (Denver, Utah)",
+  "h": "134332e5"
+ },
+ "js.noisinh.vung-america-edmonton": {
+  "t": "Alberta (Calgary, Edmonton)",
+  "h": "b2e43118"
+ },
+ "js.noisinh.vung-america-fortaleza": {
+  "t": "Northeast (Fortaleza, Recife)",
+  "h": "9aec8b83"
+ },
+ "js.noisinh.vung-america-halifax": {
+  "t": "Nova Scotia, New Brunswick",
+  "h": "a8df3343"
+ },
+ "js.noisinh.vung-america-hermosillo": {
+  "t": "Sonora",
+  "h": "6bf7497c"
+ },
+ "js.noisinh.vung-america-los-angeles": {
+  "t": "Pacific (California, Washington, Nevada)",
+  "h": "575d6232"
+ },
+ "js.noisinh.vung-america-manaus": {
+  "t": "Amazonas (Manaus)",
+  "h": "ed2318c2"
+ },
+ "js.noisinh.vung-america-mexico-city": {
+  "t": "Mexico City",
+  "h": "6f2504a8"
+ },
+ "js.noisinh.vung-america-new-york": {
+  "t": "Eastern (New York, Washington, Florida)",
+  "h": "dd133140"
+ },
+ "js.noisinh.vung-america-noronha": {
+  "t": "Fernando de Noronha",
+  "h": "2fde06cc"
+ },
+ "js.noisinh.vung-america-phoenix": {
+  "t": "Arizona",
+  "h": "104fd3fd"
+ },
+ "js.noisinh.vung-america-regina": {
+  "t": "Saskatchewan",
+  "h": "59faf251"
+ },
+ "js.noisinh.vung-america-rio-branco": {
+  "t": "Acre (Rio Branco)",
+  "h": "f9bd2753"
+ },
+ "js.noisinh.vung-america-sao-paulo": {
+  "t": "São Paulo, Rio de Janeiro, Brasília",
+  "h": "399ffe72"
+ },
+ "js.noisinh.vung-america-st-johns": {
+  "t": "Newfoundland",
+  "h": "26141861"
+ },
+ "js.noisinh.vung-america-tijuana": {
+  "t": "Baja California (Tijuana)",
+  "h": "13926f45"
+ },
+ "js.noisinh.vung-america-toronto": {
+  "t": "Ontario, Québec (Toronto, Montréal)",
+  "h": "269b79f5"
+ },
+ "js.noisinh.vung-america-vancouver": {
+  "t": "British Columbia (Vancouver)",
+  "h": "28973314"
+ },
+ "js.noisinh.vung-america-winnipeg": {
+  "t": "Manitoba (Winnipeg)",
+  "h": "80e2d9ca"
+ },
+ "js.noisinh.vung-asia-almaty": {
+  "t": "Almaty, Astana",
+  "h": "aa213dd9"
+ },
+ "js.noisinh.vung-asia-aqtobe": {
+  "t": "Western Kazakhstan (Aktobe)",
+  "h": "6d10ee22"
+ },
+ "js.noisinh.vung-asia-irkutsk": {
+  "t": "Irkutsk",
+  "h": "f9bd4c15"
+ },
+ "js.noisinh.vung-asia-jakarta": {
+  "t": "Western Indonesia (Jakarta, Sumatra)",
+  "h": "2392de20"
+ },
+ "js.noisinh.vung-asia-jayapura": {
+  "t": "Eastern Indonesia (Papua)",
+  "h": "df48b98d"
+ },
+ "js.noisinh.vung-asia-kamchatka": {
+  "t": "Kamchatka",
+  "h": "23e8a422"
+ },
+ "js.noisinh.vung-asia-krasnoyarsk": {
+  "t": "Krasnoyarsk",
+  "h": "7f9fde59"
+ },
+ "js.noisinh.vung-asia-magadan": {
+  "t": "Magadan",
+  "h": "4fdccca9"
+ },
+ "js.noisinh.vung-asia-makassar": {
+  "t": "Central Indonesia (Bali, Sulawesi)",
+  "h": "8702559b"
+ },
+ "js.noisinh.vung-asia-novosibirsk": {
+  "t": "Novosibirsk",
+  "h": "fb8d7707"
+ },
+ "js.noisinh.vung-asia-omsk": {
+  "t": "Omsk",
+  "h": "eb8ebb22"
+ },
+ "js.noisinh.vung-asia-vladivostok": {
+  "t": "Vladivostok",
+  "h": "fa32a249"
+ },
+ "js.noisinh.vung-asia-yakutsk": {
+  "t": "Yakutsk",
+  "h": "0613e23b"
+ },
+ "js.noisinh.vung-asia-yekaterinburg": {
+  "t": "Yekaterinburg",
+  "h": "c2daa856"
+ },
+ "js.noisinh.vung-australia-adelaide": {
+  "t": "South Australia (Adelaide)",
+  "h": "72ad53b3"
+ },
+ "js.noisinh.vung-australia-brisbane": {
+  "t": "Queensland (Brisbane)",
+  "h": "272e1f8b"
+ },
+ "js.noisinh.vung-australia-darwin": {
+  "t": "Northern Territory (Darwin)",
+  "h": "450de8f0"
+ },
+ "js.noisinh.vung-australia-hobart": {
+  "t": "Tasmania (Hobart)",
+  "h": "902ee4e7"
+ },
+ "js.noisinh.vung-australia-melbourne": {
+  "t": "Victoria (Melbourne)",
+  "h": "34e81b5d"
+ },
+ "js.noisinh.vung-australia-perth": {
+  "t": "Western Australia (Perth)",
+  "h": "de084687"
+ },
+ "js.noisinh.vung-australia-sydney": {
+  "t": "New South Wales, ACT (Sydney, Canberra)",
+  "h": "5bc1b945"
+ },
+ "js.noisinh.vung-europe-kaliningrad": {
+  "t": "Kaliningrad",
+  "h": "7484e853"
+ },
+ "js.noisinh.vung-europe-moscow": {
+  "t": "Moscow, Saint Petersburg",
+  "h": "5a57fbcd"
+ },
+ "js.noisinh.vung-europe-samara": {
+  "t": "Samara",
+  "h": "f6b8e61f"
+ },
+ "js.noisinh.vung-pacific-honolulu": {
+  "t": "Hawaii",
+  "h": "a1be9509"
+ },
  "js.paywall.bam-mo-la-tra-tien-va": {
   "t": " · tap to open — you pay and read right away, ",
   "h": "9a6023cd"
@@ -7926,6 +8126,262 @@
  "js.topup.xem-lich-su": {
   "t": "View history",
   "h": "21a19fb0"
+ },
+ "js.tuviform.ca-nhan": {
+  "t": "Personal details",
+  "h": "bbe1cce8"
+ },
+ "js.tuviform.chon-du-ngay": {
+  "t": "Please select the full day, month and year of birth.",
+  "h": "808dc076"
+ },
+ "js.tuviform.chon-noi-sinh": {
+  "t": "— Select place of birth —",
+  "h": "87b109c3"
+ },
+ "js.tuviform.con-hoi-cho-ai": {
+  "t": "Who is this reading for?",
+  "h": "4171dda8"
+ },
+ "js.tuviform.con-muon-xem-nam": {
+  "t": "Which year would you like to read?",
+  "h": "43e3ee2b"
+ },
+ "js.tuviform.dien-day-du": {
+  "t": "Fill in the details on the left — solar birth date and birth time — then start the reading.",
+  "h": "618a618f"
+ },
+ "js.tuviform.gio": {
+  "t": "Hour",
+  "h": "75f92388"
+ },
+ "js.tuviform.gio-am": {
+  "t": "Hour: {chi}",
+  "h": "9ce5a400"
+ },
+ "js.tuviform.gio-sinh": {
+  "t": "Birth time",
+  "h": "2d0aa7eb"
+ },
+ "js.tuviform.gio-sinh-ok": {
+  "t": "Birth time: <b>{hm}</b> ✓",
+  "h": "b77347e7"
+ },
+ "js.tuviform.gioi-tinh": {
+  "t": "Gender",
+  "h": "80bbce55"
+ },
+ "js.tuviform.gt-nam": {
+  "t": "Male",
+  "h": "b580ba1b"
+ },
+ "js.tuviform.gt-nu": {
+  "t": "Female",
+  "h": "feb92ccd"
+ },
+ "js.tuviform.ho-ten": {
+  "t": "Full name",
+  "h": "ad9f2994"
+ },
+ "js.tuviform.hoi-cho": {
+  "t": "Asking for <b>{ten}</b> ✓",
+  "h": "3ced148a"
+ },
+ "js.tuviform.khong-nho-chinh-xac": {
+  "t": "Not sure of your exact birth time? Work it out →",
+  "h": "333f8bee"
+ },
+ "js.tuviform.khong-ten": {
+  "t": "Unnamed",
+  "h": "7c5b38ee"
+ },
+ "js.tuviform.lich-cn": {
+  "t": "Chinese calendar time",
+  "h": "5fe3ccc2"
+ },
+ "js.tuviform.lich-jp": {
+  "t": "Japanese calendar time",
+  "h": "fe6e8036"
+ },
+ "js.tuviform.lich-kr": {
+  "t": "Korean calendar time",
+  "h": "a8ae0a48"
+ },
+ "js.tuviform.lich-vn": {
+  "t": "Vietnam time",
+  "h": "f54ee2eb"
+ },
+ "js.tuviform.luan-giai-la-so": {
+  "t": "Chart Reading →",
+  "h": "4bb771eb"
+ },
+ "js.tuviform.nam": {
+  "t": "Year",
+  "h": "98926c7e"
+ },
+ "js.tuviform.nam-sinh": {
+  "t": "Year of birth",
+  "h": "75a6785f"
+ },
+ "js.tuviform.nam-xem-van": {
+  "t": "Year to read",
+  "h": "8f575533"
+ },
+ "js.tuviform.ngay": {
+  "t": "Day",
+  "h": "368c4575"
+ },
+ "js.tuviform.ngay-sinh": {
+  "t": "Day of birth",
+  "h": "6f8de308"
+ },
+ "js.tuviform.ngay-sinh-duong": {
+  "t": "Solar-calendar birth date",
+  "h": "5b85cc30"
+ },
+ "js.tuviform.ngay-sinh-ok": {
+  "t": "Date of birth: <b>{d}/{m}/{y}</b> ✓",
+  "h": "c457dbc0"
+ },
+ "js.tuviform.ngay-thang-nam-sinh": {
+  "t": "Date of birth (day / month / year)",
+  "h": "84864f2e"
+ },
+ "js.tuviform.ngoai-goi-y": {
+  "t": "Check this if you were born abroad — the time zone, daylight saving time and lunar calendar of your birthplace are worked out automatically.",
+  "h": "6af69dc4"
+ },
+ "js.tuviform.ngoai-vn": {
+  "t": "Born outside Vietnam?",
+  "h": "db788745"
+ },
+ "js.tuviform.nguoi-moi": {
+  "t": "+ New person",
+  "h": "eab3d0ff"
+ },
+ "js.tuviform.nguoi-moi-nhe": {
+  "t": "A new person, then.",
+  "h": "021dd849"
+ },
+ "js.tuviform.nhap-ho-ten": {
+  "t": "Please enter your name.",
+  "h": "69dc7698"
+ },
+ "js.tuviform.noi-sinh": {
+  "t": "Place of birth",
+  "h": "39348136"
+ },
+ "js.tuviform.phut": {
+  "t": "Minute",
+  "h": "34ca51a4"
+ },
+ "js.tuviform.q1-gt": {
+  "t": "What is your gender?",
+  "h": "d8b7441e"
+ },
+ "js.tuviform.q1-ten": {
+  "t": "May I have your full name, please?",
+  "h": "1e9a5600"
+ },
+ "js.tuviform.q1-ten-gt": {
+  "t": "May I have your full name and gender, please?",
+  "h": "24ab2186"
+ },
+ "js.tuviform.q2": {
+  "t": "What is your solar-calendar date of birth?",
+  "h": "abef36df"
+ },
+ "js.tuviform.q3": {
+  "t": "What time were you born?",
+  "h": "e5d555b9"
+ },
+ "js.tuviform.ten-mau": {
+  "t": "John Smith",
+  "h": "7388465b"
+ },
+ "js.tuviform.ten-mau-vd": {
+  "t": "e.g. John Smith",
+  "h": "eafae45a"
+ },
+ "js.tuviform.thang": {
+  "t": "Month",
+  "h": "0e2b3099"
+ },
+ "js.tuviform.thang-khong-co-ngay": {
+  "t": "Month {m}/{y} has no day {d} — please choose again.",
+  "h": "da49ec5e"
+ },
+ "js.tuviform.thang-sinh": {
+  "t": "Month of birth",
+  "h": "4695b6cf"
+ },
+ "js.tuviform.thong-tin": {
+  "t": "Details",
+  "h": "d5fc2a3b"
+ },
+ "js.tuviform.thuc-thi": {
+  "t": "Submit",
+  "h": "c591a584"
+ },
+ "js.tuviform.tiep-tuc": {
+  "t": "Continue →",
+  "h": "86f35ed9"
+ },
+ "js.tuviform.tip-auto": {
+  "t": "The system adjusts automatically based on the date of birth you enter.",
+  "h": "62305e4c"
+ },
+ "js.tuviform.tip-intro": {
+  "t": "By classical rules, the <b>Zi</b> hour runs 23:00–00:59. In history, however, Vietnam changed its time zone several times:",
+  "h": "2cd8aaeb"
+ },
+ "js.tuviform.tip-khong-nho": {
+  "t": "<b>Don’t remember your birth time?</b> Many people don’t know it exactly — yet the birth hour shapes many readings on this site. <a href=\"/app/gio-sinh\" target=\"_blank\" style=\"color:#1455A4;font-weight:600\">Work out your birth time →</a>",
+  "h": "af1572d3"
+ },
+ "js.tuviform.tip-li1": {
+  "t": "<b>1942 – 9 Mar 1944</b> (UTC+8): Zi hour = 00:00–01:59",
+  "h": "0d7e7b3f"
+ },
+ "js.tuviform.tip-li2": {
+  "t": "<b>9 Mar 1944 – 2 Sep 1945</b> (UTC+9): Zi hour = 01:00–02:59",
+  "h": "ac7257ad"
+ },
+ "js.tuviform.tip-li3": {
+  "t": "<b>2 Sep 1945 – 18 Dec 1946</b> (UTC+7): Zi hour = 23:00–00:59",
+  "h": "8375e4b8"
+ },
+ "js.tuviform.tip-li4": {
+  "t": "<b>19 Dec 1946 – 30 Jun 1955</b> (UTC+8): Zi hour = 00:00–01:59",
+  "h": "72d27e9b"
+ },
+ "js.tuviform.tip-li5": {
+  "t": "<b>1 Jul 1955 – 31 Dec 1959</b> (UTC+7): Zi hour = 23:00–00:59",
+  "h": "88a1bc9a"
+ },
+ "js.tuviform.tip-li6": {
+  "t": "<b>1 Jan 1960 – 30 Apr 1975</b> (UTC+8, South Vietnam): Zi hour = 00:00–01:59",
+  "h": "a0d6511f"
+ },
+ "js.tuviform.tip-li7": {
+  "t": "<b>From 1 May 1975</b> (UTC+7): Zi hour = 23:00–00:59",
+  "h": "4995b03d"
+ },
+ "js.tuviform.tip-title": {
+  "t": "History of Vietnam’s time zones",
+  "h": "3172a126"
+ },
+ "js.tuviform.xem-mau-pdf": {
+  "t": "View a sample PDF reading",
+  "h": "0053d860"
+ },
+ "js.tuviform.xem-van-nam": {
+  "t": "reading for {n}",
+  "h": "c2204f1d"
+ },
+ "js.tuviform.xem-van-nam-ok": {
+  "t": "Reading for <b>{n}</b> ✓",
+  "h": "f47721f2"
  },
  "js.vanhannam.bai-tinh": {
   "t": "Destructive stars:",

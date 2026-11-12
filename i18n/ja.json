@@ -3119,6 +3119,206 @@
   "t": "吉日・{y}年{m}月",
   "h": "cbd777dc"
  },
+ "js.noisinh.noi-khac": {
+  "t": "その他（タイムゾーンを選択）",
+  "h": "dee91293"
+ },
+ "js.noisinh.vung-america-anchorage": {
+  "t": "アラスカ",
+  "h": "7288f7f8"
+ },
+ "js.noisinh.vung-america-cancun": {
+  "t": "キンタナ・ロー（カンクン）",
+  "h": "a0570d82"
+ },
+ "js.noisinh.vung-america-chicago": {
+  "t": "中部（シカゴ、テキサス）",
+  "h": "bff83b4f"
+ },
+ "js.noisinh.vung-america-chihuahua": {
+  "t": "チワワ",
+  "h": "c505a9ee"
+ },
+ "js.noisinh.vung-america-cuiaba": {
+  "t": "マットグロッソ（クイアバ）",
+  "h": "93bc2a58"
+ },
+ "js.noisinh.vung-america-denver": {
+  "t": "山岳部（デンバー、ユタ）",
+  "h": "134332e5"
+ },
+ "js.noisinh.vung-america-edmonton": {
+  "t": "アルバータ（カルガリー、エドモントン）",
+  "h": "b2e43118"
+ },
+ "js.noisinh.vung-america-fortaleza": {
+  "t": "北東部（フォルタレザ、レシフェ）",
+  "h": "9aec8b83"
+ },
+ "js.noisinh.vung-america-halifax": {
+  "t": "ノバスコシア、ニューブランズウィック",
+  "h": "a8df3343"
+ },
+ "js.noisinh.vung-america-hermosillo": {
+  "t": "ソノラ",
+  "h": "6bf7497c"
+ },
+ "js.noisinh.vung-america-los-angeles": {
+  "t": "太平洋岸（カリフォルニア、ワシントン、ネバダ）",
+  "h": "575d6232"
+ },
+ "js.noisinh.vung-america-manaus": {
+  "t": "アマゾナス（マナウス）",
+  "h": "ed2318c2"
+ },
+ "js.noisinh.vung-america-mexico-city": {
+  "t": "メキシコシティ",
+  "h": "6f2504a8"
+ },
+ "js.noisinh.vung-america-new-york": {
+  "t": "東部（ニューヨーク、ワシントン、フロリダ）",
+  "h": "dd133140"
+ },
+ "js.noisinh.vung-america-noronha": {
+  "t": "フェルナンド・デ・ノローニャ",
+  "h": "2fde06cc"
+ },
+ "js.noisinh.vung-america-phoenix": {
+  "t": "アリゾナ",
+  "h": "104fd3fd"
+ },
+ "js.noisinh.vung-america-regina": {
+  "t": "サスカチュワン",
+  "h": "59faf251"
+ },
+ "js.noisinh.vung-america-rio-branco": {
+  "t": "アクレ（リオブランコ）",
+  "h": "f9bd2753"
+ },
+ "js.noisinh.vung-america-sao-paulo": {
+  "t": "サンパウロ、リオデジャネイロ、ブラジリア",
+  "h": "399ffe72"
+ },
+ "js.noisinh.vung-america-st-johns": {
+  "t": "ニューファンドランド",
+  "h": "26141861"
+ },
+ "js.noisinh.vung-america-tijuana": {
+  "t": "バハ・カリフォルニア（ティファナ）",
+  "h": "13926f45"
+ },
+ "js.noisinh.vung-america-toronto": {
+  "t": "オンタリオ、ケベック（トロント、モントリオール）",
+  "h": "269b79f5"
+ },
+ "js.noisinh.vung-america-vancouver": {
+  "t": "ブリティッシュコロンビア（バンクーバー）",
+  "h": "28973314"
+ },
+ "js.noisinh.vung-america-winnipeg": {
+  "t": "マニトバ（ウィニペグ）",
+  "h": "80e2d9ca"
+ },
+ "js.noisinh.vung-asia-almaty": {
+  "t": "アルマトイ、アスタナ",
+  "h": "aa213dd9"
+ },
+ "js.noisinh.vung-asia-aqtobe": {
+  "t": "カザフスタン西部（アクトベ）",
+  "h": "6d10ee22"
+ },
+ "js.noisinh.vung-asia-irkutsk": {
+  "t": "イルクーツク",
+  "h": "f9bd4c15"
+ },
+ "js.noisinh.vung-asia-jakarta": {
+  "t": "インドネシア西部（ジャカルタ、スマトラ）",
+  "h": "2392de20"
+ },
+ "js.noisinh.vung-asia-jayapura": {
+  "t": "インドネシア東部（パプア）",
+  "h": "df48b98d"
+ },
+ "js.noisinh.vung-asia-kamchatka": {
+  "t": "カムチャツカ",
+  "h": "23e8a422"
+ },
+ "js.noisinh.vung-asia-krasnoyarsk": {
+  "t": "クラスノヤルスク",
+  "h": "7f9fde59"
+ },
+ "js.noisinh.vung-asia-magadan": {
+  "t": "マガダン",
+  "h": "4fdccca9"
+ },
+ "js.noisinh.vung-asia-makassar": {
+  "t": "インドネシア中部（バリ、スラウェシ）",
+  "h": "8702559b"
+ },
+ "js.noisinh.vung-asia-novosibirsk": {
+  "t": "ノヴォシビルスク",
+  "h": "fb8d7707"
+ },
+ "js.noisinh.vung-asia-omsk": {
+  "t": "オムスク",
+  "h": "eb8ebb22"
+ },
+ "js.noisinh.vung-asia-vladivostok": {
+  "t": "ウラジオストク",
+  "h": "fa32a249"
+ },
+ "js.noisinh.vung-asia-yakutsk": {
+  "t": "ヤクーツク",
+  "h": "0613e23b"
+ },
+ "js.noisinh.vung-asia-yekaterinburg": {
+  "t": "エカテリンブルク",
+  "h": "c2daa856"
+ },
+ "js.noisinh.vung-australia-adelaide": {
+  "t": "南オーストラリア（アデレード）",
+  "h": "72ad53b3"
+ },
+ "js.noisinh.vung-australia-brisbane": {
+  "t": "クイーンズランド（ブリスベン）",
+  "h": "272e1f8b"
+ },
+ "js.noisinh.vung-australia-darwin": {
+  "t": "ノーザンテリトリー（ダーウィン）",
+  "h": "450de8f0"
+ },
+ "js.noisinh.vung-australia-hobart": {
+  "t": "タスマニア（ホバート）",
+  "h": "902ee4e7"
+ },
+ "js.noisinh.vung-australia-melbourne": {
+  "t": "ビクトリア（メルボルン）",
+  "h": "34e81b5d"
+ },
+ "js.noisinh.vung-australia-perth": {
+  "t": "西オーストラリア（パース）",
+  "h": "de084687"
+ },
+ "js.noisinh.vung-australia-sydney": {
+  "t": "ニューサウスウェールズ、ACT（シドニー、キャンベラ）",
+  "h": "5bc1b945"
+ },
+ "js.noisinh.vung-europe-kaliningrad": {
+  "t": "カリーニングラード",
+  "h": "7484e853"
+ },
+ "js.noisinh.vung-europe-moscow": {
+  "t": "モスクワ、サンクトペテルブルク",
+  "h": "5a57fbcd"
+ },
+ "js.noisinh.vung-europe-samara": {
+  "t": "サマーラ",
+  "h": "f6b8e61f"
+ },
+ "js.noisinh.vung-pacific-honolulu": {
+  "t": "ハワイ",
+  "h": "a1be9509"
+ },
  "js.paywall.bam-mo-la-tra-tien-va": {
   "t": " ・開くとお支払いのうえ、すぐにお読みいただけます。",
   "h": "9a6023cd"
@@ -7926,6 +8126,262 @@
  "js.topup.xem-lich-su": {
   "t": "履歴を見る",
   "h": "21a19fb0"
+ },
+ "js.tuviform.ca-nhan": {
+  "t": "個人情報",
+  "h": "bbe1cce8"
+ },
+ "js.tuviform.chon-du-ngay": {
+  "t": "生年月日（日・月・年）をすべて選択してください。",
+  "h": "808dc076"
+ },
+ "js.tuviform.chon-noi-sinh": {
+  "t": "— 出生地を選択 —",
+  "h": "87b109c3"
+ },
+ "js.tuviform.con-hoi-cho-ai": {
+  "t": "どなたの鑑定ですか？",
+  "h": "4171dda8"
+ },
+ "js.tuviform.con-muon-xem-nam": {
+  "t": "どの年の運勢を見ますか？",
+  "h": "43e3ee2b"
+ },
+ "js.tuviform.dien-day-du": {
+  "t": "左の情報（西暦の生年月日と出生時刻）を入力して、鑑定を始めてください。",
+  "h": "618a618f"
+ },
+ "js.tuviform.gio": {
+  "t": "時",
+  "h": "75f92388"
+ },
+ "js.tuviform.gio-am": {
+  "t": "時辰：{chi}",
+  "h": "9ce5a400"
+ },
+ "js.tuviform.gio-sinh": {
+  "t": "出生時刻",
+  "h": "2d0aa7eb"
+ },
+ "js.tuviform.gio-sinh-ok": {
+  "t": "出生時刻：<b>{hm}</b> ✓",
+  "h": "b77347e7"
+ },
+ "js.tuviform.gioi-tinh": {
+  "t": "性別",
+  "h": "80bbce55"
+ },
+ "js.tuviform.gt-nam": {
+  "t": "男性",
+  "h": "b580ba1b"
+ },
+ "js.tuviform.gt-nu": {
+  "t": "女性",
+  "h": "feb92ccd"
+ },
+ "js.tuviform.ho-ten": {
+  "t": "氏名",
+  "h": "ad9f2994"
+ },
+ "js.tuviform.hoi-cho": {
+  "t": "<b>{ten}</b>さんについて ✓",
+  "h": "3ced148a"
+ },
+ "js.tuviform.khong-nho-chinh-xac": {
+  "t": "出生時刻が正確に分かりませんか？割り出す →",
+  "h": "333f8bee"
+ },
+ "js.tuviform.khong-ten": {
+  "t": "名前なし",
+  "h": "7c5b38ee"
+ },
+ "js.tuviform.lich-cn": {
+  "t": "中国暦の時刻",
+  "h": "5fe3ccc2"
+ },
+ "js.tuviform.lich-jp": {
+  "t": "日本暦の時刻",
+  "h": "fe6e8036"
+ },
+ "js.tuviform.lich-kr": {
+  "t": "韓国暦の時刻",
+  "h": "a8ae0a48"
+ },
+ "js.tuviform.lich-vn": {
+  "t": "ベトナム時間",
+  "h": "f54ee2eb"
+ },
+ "js.tuviform.luan-giai-la-so": {
+  "t": "命盤鑑定 →",
+  "h": "4bb771eb"
+ },
+ "js.tuviform.nam": {
+  "t": "年",
+  "h": "98926c7e"
+ },
+ "js.tuviform.nam-sinh": {
+  "t": "生まれた年",
+  "h": "75a6785f"
+ },
+ "js.tuviform.nam-xem-van": {
+  "t": "占う年",
+  "h": "8f575533"
+ },
+ "js.tuviform.ngay": {
+  "t": "日",
+  "h": "368c4575"
+ },
+ "js.tuviform.ngay-sinh": {
+  "t": "生まれた日",
+  "h": "6f8de308"
+ },
+ "js.tuviform.ngay-sinh-duong": {
+  "t": "西暦の生年月日",
+  "h": "5b85cc30"
+ },
+ "js.tuviform.ngay-sinh-ok": {
+  "t": "生年月日：<b>{y}年{m}月{d}日</b> ✓",
+  "h": "c457dbc0"
+ },
+ "js.tuviform.ngay-thang-nam-sinh": {
+  "t": "生年月日（日／月／年）",
+  "h": "84864f2e"
+ },
+ "js.tuviform.ngoai-goi-y": {
+  "t": "海外で生まれた場合はチェックしてください。出生地のタイムゾーン・夏時間・旧暦を自動で計算します。",
+  "h": "6af69dc4"
+ },
+ "js.tuviform.ngoai-vn": {
+  "t": "ベトナム国外の生まれですか？",
+  "h": "db788745"
+ },
+ "js.tuviform.nguoi-moi": {
+  "t": "+ 新しい人",
+  "h": "eab3d0ff"
+ },
+ "js.tuviform.nguoi-moi-nhe": {
+  "t": "新しい方ですね。",
+  "h": "021dd849"
+ },
+ "js.tuviform.nhap-ho-ten": {
+  "t": "氏名を入力してください。",
+  "h": "69dc7698"
+ },
+ "js.tuviform.noi-sinh": {
+  "t": "出生地",
+  "h": "39348136"
+ },
+ "js.tuviform.phut": {
+  "t": "分",
+  "h": "34ca51a4"
+ },
+ "js.tuviform.q1-gt": {
+  "t": "性別を教えてください。",
+  "h": "d8b7441e"
+ },
+ "js.tuviform.q1-ten": {
+  "t": "お名前をフルネームで教えてください。",
+  "h": "1e9a5600"
+ },
+ "js.tuviform.q1-ten-gt": {
+  "t": "お名前と性別を教えてください。",
+  "h": "24ab2186"
+ },
+ "js.tuviform.q2": {
+  "t": "西暦の生年月日はいつですか？",
+  "h": "abef36df"
+ },
+ "js.tuviform.q3": {
+  "t": "生まれた時刻は何時ですか？",
+  "h": "e5d555b9"
+ },
+ "js.tuviform.ten-mau": {
+  "t": "山田太郎",
+  "h": "7388465b"
+ },
+ "js.tuviform.ten-mau-vd": {
+  "t": "例：山田太郎",
+  "h": "eafae45a"
+ },
+ "js.tuviform.thang": {
+  "t": "月",
+  "h": "0e2b3099"
+ },
+ "js.tuviform.thang-khong-co-ngay": {
+  "t": "{y}年{m}月に{d}日はありません。選び直してください。",
+  "h": "da49ec5e"
+ },
+ "js.tuviform.thang-sinh": {
+  "t": "生まれた月",
+  "h": "4695b6cf"
+ },
+ "js.tuviform.thong-tin": {
+  "t": "情報",
+  "h": "d5fc2a3b"
+ },
+ "js.tuviform.thuc-thi": {
+  "t": "送信",
+  "h": "c591a584"
+ },
+ "js.tuviform.tiep-tuc": {
+  "t": "続ける →",
+  "h": "86f35ed9"
+ },
+ "js.tuviform.tip-auto": {
+  "t": "入力された生年月日に合わせて自動的に補正されます。",
+  "h": "62305e4c"
+ },
+ "js.tuviform.tip-intro": {
+  "t": "古法では<b>子</b>の刻は 23:00–00:59 です。ただしベトナムは歴史上、何度か標準時を変えています。",
+  "h": "2cd8aaeb"
+ },
+ "js.tuviform.tip-khong-nho": {
+  "t": "<b>出生時刻を覚えていませんか？</b> 正確に覚えていない方は多いのですが、出生時刻はこのサイトの多くの鑑定を左右します。<a href=\"/app/gio-sinh\" target=\"_blank\" style=\"color:#1455A4;font-weight:600\">出生時刻を割り出す →</a>",
+  "h": "af1572d3"
+ },
+ "js.tuviform.tip-li1": {
+  "t": "<b>1942年〜1944年3月9日</b>（UTC+8）：子の刻 = 00:00–01:59",
+  "h": "0d7e7b3f"
+ },
+ "js.tuviform.tip-li2": {
+  "t": "<b>1944年3月9日〜1945年9月2日</b>（UTC+9）：子の刻 = 01:00–02:59",
+  "h": "ac7257ad"
+ },
+ "js.tuviform.tip-li3": {
+  "t": "<b>1945年9月2日〜1946年12月18日</b>（UTC+7）：子の刻 = 23:00–00:59",
+  "h": "8375e4b8"
+ },
+ "js.tuviform.tip-li4": {
+  "t": "<b>1946年12月19日〜1955年6月30日</b>（UTC+8）：子の刻 = 00:00–01:59",
+  "h": "72d27e9b"
+ },
+ "js.tuviform.tip-li5": {
+  "t": "<b>1955年7月1日〜1959年12月31日</b>（UTC+7）：子の刻 = 23:00–00:59",
+  "h": "88a1bc9a"
+ },
+ "js.tuviform.tip-li6": {
+  "t": "<b>1960年1月1日〜1975年4月30日</b>（UTC+8、南ベトナム）：子の刻 = 00:00–01:59",
+  "h": "a0d6511f"
+ },
+ "js.tuviform.tip-li7": {
+  "t": "<b>1975年5月1日以降</b>（UTC+7）：子の刻 = 23:00–00:59",
+  "h": "4995b03d"
+ },
+ "js.tuviform.tip-title": {
+  "t": "ベトナムの標準時の変遷",
+  "h": "3172a126"
+ },
+ "js.tuviform.xem-mau-pdf": {
+  "t": "鑑定サンプル（PDF）を見る",
+  "h": "0053d860"
+ },
+ "js.tuviform.xem-van-nam": {
+  "t": "{n}年の運勢",
+  "h": "c2204f1d"
+ },
+ "js.tuviform.xem-van-nam-ok": {
+  "t": "<b>{n}</b>年の運勢 ✓",
+  "h": "f47721f2"
  },
  "js.vanhannam.bai-tinh": {
   "t": "敗星：",
