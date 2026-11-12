@@ -1,4 +1,4 @@
-/* global Poster */
+/* global Poster, _tvmbT, _tvmbG */
 // ============================================================
 // tools-shared/cong-so.js — Tử Vi Công Sở (dùng chung)
 //

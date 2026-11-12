@@ -1,3 +1,4 @@
+/* global _tvmbT, _tvmbG */
 /* tools-shared/xem-tuoi-sinh-con.js — Module DÙNG CHUNG tool Xem Tuổi Sinh Con.
    Nguồn DUY NHẤT cho standalone /tools/xem-tuoi-sinh-con.html + shell /app/sinh-con.
    Địa chi (lục hợp/tam hợp/lục xung/tam hình) + chấm điểm 15 năm + render bảng
