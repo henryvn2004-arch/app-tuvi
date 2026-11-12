@@ -214,8 +214,6 @@ export interface PhanKieu {
   /** Vai trò suy từ chính tinh cung Mệnh, kèm trích dẫn (dùng chung bảng với
    * tool Chân Dung Tiền Kiếp — một nguồn, hai chỗ đọc). */
   vaiTro: { role: string; source: string } | null;
-  /** Khoá `past-life` (`menh.<sao>.role`) của `vaiTro` — additive, để client dịch; null khi không có vai. */
-  vaiTroMa: string | null;
 }
 
 /** Ngưỡng "sát ranh giới". 0,25 trên thang toạ độ thô (dải đo được ±3,1) cho
@@ -257,8 +255,7 @@ export function phanKieu(ls: Laso): PhanKieu {
   const norm = (v: number) => Math.max(-1, Math.min(1, v / 3.2));
 
   const menhKey = m.stars.map((s) => s.ten).sort().join('+');
-  const vaiTroSao = MENH_ROLE[menhKey] ? menhKey : m.stars[0] && MENH_ROLE[m.stars[0].ten] ? m.stars[0].ten : null;
-  const vaiTro = vaiTroSao ? MENH_ROLE[vaiTroSao] : null;
+  const vaiTro = MENH_ROLE[menhKey] || (m.stars[0] ? MENH_ROLE[m.stars[0].ten] : undefined) || null;
 
   return {
     kieu,
@@ -273,7 +270,6 @@ export function phanKieu(ls: Laso): PhanKieu {
     muonMenh: m.muon,
     muonQuan: q.muon,
     vaiTro,
-    vaiTroMa: vaiTroSao ? `menh.${vaiTroSao}.role` : null,
   };
 }
 
@@ -575,6 +571,12 @@ function goiYNganh(cb: CareerBase, kieu: KieuId): NganhGoiY {
 
 // ── Kết quả ─────────────────────────────────────────────────
 
+/** Khoá `menh.<sao>.role` của đúng mục `MENH_ROLE` mà `phanKieu` đã chọn (so theo THAM CHIẾU — cùng một đối tượng). */
+function vaiTroMaCua(v: PhanKieu['vaiTro']): string | null {
+  const sao = v ? Object.keys(MENH_ROLE).find((k) => MENH_ROLE[k] === v) : undefined;
+  return sao ? `menh.${sao}.role` : null;
+}
+
 export interface CongSoProfile {
   namXem: number;
   trangThai: TrangThai;
@@ -587,6 +589,12 @@ export interface CongSoProfile {
   vanNam: VanNam | null;
   doi: GhepDoi[];
   loiTrangThai: string;
+  /**
+   * Khoá `past-life` (`menh.<sao>.role`) của `phan.vaiTro` — mã tra ADDITIVE cho client dịch. Đặt ở CẤP HỒ SƠ chứ không
+   * trong `phan`: `phanKieu` còn đi vào payload Dạy Con/Người Khác (lưu `portrait_cache`) — thêm trường ở đó là đổi
+   * `SHAPE` của hai tool kia mà không đem lại gì cho chúng.
+   */
+  vaiTroMa: string | null;
   /** Gợi ngành nghề cụ thể — đọc chức phận cung Quan Lộc theo CẶP chính tinh. */
   nganh: NganhGoiY;
   /**
@@ -702,6 +710,7 @@ export function computeCongSo(ls: Laso, trangThai: TrangThai = 'nhan-vien', namX
     kieu: KIEU[phan.kieu],
     kieuPhu: phan.kieuPhu ? KIEU[phan.kieuPhu] : null,
     phan,
+    vaiTroMa: vaiTroMaCua(phan.vaiTro),
     radar,
     loTrinh,
     vanNam,

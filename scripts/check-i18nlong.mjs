@@ -178,7 +178,7 @@ for (const ns of Object.keys(ENGINE_NS)) {
   ])
     if (!eng.includes(snip)) fail(`${ENGINE_NS['past-life']}: thiếu mã tra — ${snip}`);
   const cs = fs.readFileSync(path.join(ROOT, 'lib/engine/cong-so.ts'), 'utf8');
-  for (const snip of ['ma: cb.ma,', '`menh.${vaiTroSao}.role`'])
+  for (const snip of ['ma: cb.ma,', '`menh.${sao}.role`'])
     if (!cs.includes(snip)) fail(`lib/engine/cong-so.ts: thiếu mã tra — ${snip}`);
   const page = fs.readFileSync(path.join(ROOT, LONG_MODULE['past-life']), 'utf8');
   for (const t of ['ma.desc', 'ma.src', 'ma.tier', 'vaiTroMa', 'ma.bd', 'ma.notes', "'bd.'"])

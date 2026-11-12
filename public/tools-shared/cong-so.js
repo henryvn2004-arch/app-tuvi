@@ -52,7 +52,7 @@
   }
   /** Mục có mã ⇒ tra theo `<bảng>.<mã>`; thiếu mã (payload cũ trong CDN) ⇒ chữ Việt. */
   // ── i18n (W30f-3) — chữ do past-life.ts viết (bậc · khoản chấm · chức phận cổ · trích dẫn · sắc thái · tư cách Mệnh):
-  // `ho.nganh.ma` / `ho.phan.vaiTroMa` là MÃ tra ns `past-life`; thiếu mã/bản dịch ⇒ giữ NGUYÊN câu Việt (vi byte-giống).
+  // `ho.nganh.ma` / `ho.vaiTroMa` là MÃ tra ns `past-life`; thiếu mã/bản dịch ⇒ giữ NGUYÊN câu Việt (vi byte-giống).
   if (window.I18n && window.I18n.loadLong) window.I18n.loadLong('past-life');
   function PL(key, vi, vars) {
     return key && window.I18n && window.I18n.long ? window.I18n.long('past-life', key, vi, vars) : vi;
@@ -585,7 +585,7 @@
         row(_tvmbT('js.cs.chinh-tinh-cung-menh', 'Chính tinh cung Mệnh'), (GS(ho.phan.saoMenh) || _tvmbT('js.cs.vo-chinh-dieu-pwt9', 'vô chính diệu')) + (ho.phan.muonMenh ? _tvmbT('js.cs.muon-cung-xung-chieu', ' — mượn cung xung chiếu') : '')) +
         row(_tvmbT('js.cs.chinh-tinh-cung-quan-loc', 'Chính tinh cung Quan Lộc'), (GS(ho.phan.saoQuan) || _tvmbT('js.cs.vo-chinh-dieu-pwt9', 'vô chính diệu')) + (ho.phan.muonQuan ? _tvmbT('js.cs.muon-cung-xung-chieu', ' — mượn cung xung chiếu') : '')) +
         row(_tvmbT('js.cs.toa-do', 'Toạ độ'), _tvmbT('js.cs.tranh-nhuong', 'tranh ↔ nhường: ') + ho.phan.x + _tvmbT('js.cs.xong-tram', ' · xông ↔ trầm: ') + ho.phan.y) +
-        (ho.phan.vaiTro ? row(_tvmbT('js.cs.tu-cach-theo-cung-menh', 'Tư cách theo cung Mệnh'), PL(ho.phan.vaiTroMa, ho.phan.vaiTro.role)) : '') +
+        (ho.phan.vaiTro ? row(_tvmbT('js.cs.tu-cach-theo-cung-menh', 'Tư cách theo cung Mệnh'), PL(ho.vaiTroMa, ho.phan.vaiTro.role)) : '') +
         row(_tvmbT('js.cs.sao-quyet-dinh-linh-vuc', 'Sao quyết định lĩnh vực'), saoNganh(ho.nganh.sao) + (ho.nganh.laCap ? _tvmbT('js.cs.doc-theo-cap-dong-cung', ' — đọc theo CẶP đồng cung') : '') + (ho.nganh.muon ? _tvmbT('js.cs.muon-cung-xung-chieu', ' — mượn cung xung chiếu') : '')) +
         row(_tvmbT('js.cs.bac-chuc-phan', 'Bậc chức phận'), PL(ho.nganh.ma && ho.nganh.ma.tier, ho.nganh.bac) + _tvmbT('js.cs.diem', ' · điểm ') + ho.nganh.bacDiem + (ho.nganh.bacChiTiet.length ? ' (' + bdList(ho.nganh).join(', ') + ')' : '')) +
         row(_tvmbT('js.cs.chuc-phan-theo-loi-co', 'Chức phận theo lối cổ'), PL(ho.nganh.ma && ho.nganh.ma.desc, ho.nganh.chucPhanCo)) +

@@ -277,7 +277,7 @@ console.log('__KQ__' + JSON.stringify(out));
   const { loadSources } = await import('../lib/i18n/long.mjs');
   const src = loadSources(ROOT);
   const viTheoKhoa = {};
-  for (const ns of ['giosinh', 'giosinh-sao'])
+  for (const ns of ['giosinh', 'giosinh-sao', 'past-life'])
     viTheoKhoa[ns] = new Map(src[ns].map((e) => [e.k, e.vi]));
   const page = readFileSync(join(ROOT, 'public/app-gio-sinh.html'), 'utf8');
   const a = page.indexOf('function _long(');
@@ -307,16 +307,13 @@ console.log('__KQ__' + JSON.stringify(out));
             loi++;
             continue;
           }
-          // Mệnh NGƯỜI LỚN theo sao đọc `MENH_ROLE` (ns past-life): null (giữ chữ Việt) là hợp lệ.
-          const menhLon =
-            q.cung === 'Mệnh' && o.ma.k === 'o.sao' && o.ma.v.tre === 0 && o.value !== 'VCD';
           const t = goi(o.ma, o.label);
           if (t !== o.label) {
             console.error(
               `❌ ${m.ten} — nhãn dựng ở client ≠ engine (${q.id} = ${o.value}):\n   engine: ${o.label}\n   client: ${t}`
             );
             loi++;
-          } else if (menhLon ? true : dung(o.ma) !== null) ok++;
+          } else if (dung(o.ma) !== null) ok++;
           else {
             console.error(
               `❌ ${m.ten} — ${q.id} = ${o.value}: hụt bản dịch (mã ${o.ma.k}) ⇒ lộ chữ Việt`

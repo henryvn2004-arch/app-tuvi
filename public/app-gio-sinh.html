@@ -316,14 +316,17 @@ function _gsTr(ma,vi){var r=_gsR(ma);return r==null?vi:r;}
 
 // ── Nhãn đáp án DỰNG THEO SAO (W30f) — bảng dấu hiệu `lib/engine/data/gio-sinh-dauhieu.ts`, ns `gio-sinh`. Mã `o.sao` =
 // {cung, vl: 'A+B'|'VCD', tre: 0|1}; nhãn = nối ' · ' bản dịch từng sao. Thiếu MỘT phần ⇒ null ⇒ giữ NGUYÊN chữ Việt.
-if(window.I18n&&window.I18n.loadLong) window.I18n.loadLong('giosinh-sao');
+if(window.I18n&&window.I18n.loadLong){ window.I18n.loadLong('giosinh-sao'); window.I18n.loadLong('past-life'); }
 function _gsSao(v){
   var cung=v.cung, tre=Number(v.tre)===1, st=v.vl==='VCD'?[]:String(v.vl).split('+');
   if(!st.length) return cung==='Tật Ách'?_long('giosinh-sao','tat.vcd'):null; // cung trống khác: mã `o.*` của khuôn
   var pre=cung==='Tật Ách'?'tat':cung==='Mệnh'?(tre?'mtre':null):(tre&&cung==='Phúc Đức')?'pdtre':(tre&&cung==='Phụ Mẫu')?'pmtre':'net.'+cung;
-  if(!pre) return null; // Mệnh người lớn đọc MENH_ROLE (past-life) — chưa có bản dịch ⇒ chữ Việt
   var out=[];
-  for(var i=0;i<st.length;i++){ var t=_long('giosinh-sao',pre+'.'+st[i]); if(t==null) return null; out.push(t); }
+  for(var i=0;i<st.length;i++){
+    // Mệnh NGƯỜI LỚN đọc `MENH_ROLE` ⇒ ns `past-life` (khoá `menh.<sao>.role`), còn lại bảng của `giosinh-sao`.
+    var t=pre?_long('giosinh-sao',pre+'.'+st[i]):_long('past-life','menh.'+st[i]+'.role');
+    if(t==null) return null; out.push(t);
+  }
   return out.join(' · ');
 }
 
