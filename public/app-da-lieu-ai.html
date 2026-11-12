@@ -3,8 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Da Liệu — Tử Vi Minh Bảo</title>
-<meta name="description" content="Phân tích da mặt — kết hợp Đông y, Tây y và cổ pháp ngũ hành. Tư vấn ăn uống, mỹ phẩm và chăm sóc da theo bản mệnh.">
+<title data-i18n="dali.da-lieu-tu-vi-minh-bao">Da Liệu — Tử Vi Minh Bảo</title>
+<meta data-i18n-attr="content:dali.phan-tich-da-mat-ket-hop" name="description" content="Phân tích da mặt — kết hợp Đông y, Tây y và cổ pháp ngũ hành. Tư vấn ăn uống, mỹ phẩm và chăm sóc da theo bản mệnh.">
 <link rel="icon" type="image/webp" href="/seal.webp">
 <link rel="preload" href="/fonts/noto-serif-latin-400.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="/fonts/noto-serif-vietnamese-400.woff2" as="font" type="font/woff2" crossorigin>
@@ -115,9 +115,9 @@ body.chat-first-live .routine-grid{grid-template-columns:1fr}
   <main class="ws" id="ws">
     <div class="ws-top">
       <button class="btn mobile-only" onclick="document.getElementById('shell-sidebar').classList.toggle('open');window.shellSyncBackdrop&&shellSyncBackdrop()" aria-label="Menu">☰</button>
-      <div class="ws-title"><b>Da Liệu Toàn Diện</b><span>Chụp ảnh da mặt — Đông y, Tây y và cổ pháp ngũ hành</span></div>
+      <div data-i18n="dali.da-lieu-toan-dien-chup-anh" class="ws-title"><b>Da Liệu Toàn Diện</b><span>Chụp ảnh da mặt — Đông y, Tây y và cổ pháp ngũ hành</span></div>
       <div class="ws-actions">
-        <button class="btn mobile-only" onclick="Shell.openRail()">✦ Hỏi</button>
+        <button data-i18n="battu.hoi" class="btn mobile-only" onclick="Shell.openRail()">✦ Hỏi</button>
       </div>
     </div>
     <div class="ws-body">
@@ -131,8 +131,8 @@ body.chat-first-live .routine-grid{grid-template-columns:1fr}
         <img class="intro-avatar" src="/tool-avatars/da-lieu-ai.webp" alt="" onerror="this.remove()">
         <div class="intro-body">
           <div class="intro-text">
-            <div class="intro-t">Da Liệu Toàn Diện</div>
-            <div class="intro-d">Da xuống cấp mà cứ đổ tại tuổi tác, trong khi vấn đề thật có thể nằm ở nơi bạn chưa từng soi kỹ. Tải một tấm ảnh da mặt, nhận phân tích khách quan trước khi chi tiền cho mỹ phẩm mới.</div>
+            <div data-i18n="dali.da-lieu-toan-dien" class="intro-t">Da Liệu Toàn Diện</div>
+            <div data-i18n="dali.da-xuong-cap-ma-cu-do" class="intro-d">Da xuống cấp mà cứ đổ tại tuổi tác, trong khi vấn đề thật có thể nằm ở nơi bạn chưa từng soi kỹ. Tải một tấm ảnh da mặt, nhận phân tích khách quan trước khi chi tiền cho mỹ phẩm mới.</div>
             <div id="introSrc"></div>
           </div>
         </div>
@@ -142,13 +142,13 @@ body.chat-first-live .routine-grid{grid-template-columns:1fr}
            chuyển bước ở `wsStepsSet` (cuối file), gọi tại đúng chỗ trạng thái
            đã đổi (analyze/paywall/renderResults/resetAll). -->
       <div class="ws-steps" id="wsSteps">
-        <div class="wss-step active"><span class="wss-n">1</span><span class="wss-l">Nhập thông tin</span></div>
-        <div class="wss-step"><span class="wss-n">2</span><span class="wss-l">Thanh toán</span></div>
-        <div class="wss-step"><span class="wss-n">3</span><span class="wss-l">Nhận kết quả</span></div>
+        <div data-i18n="battu.1-nhap-thong-tin" class="wss-step active"><span class="wss-n">1</span><span class="wss-l">Nhập thông tin</span></div>
+        <div data-i18n="thtg.2-thanh-toan" class="wss-step"><span class="wss-n">2</span><span class="wss-l">Thanh toán</span></div>
+        <div data-i18n="thtg.3-nhan-ket-qua" class="wss-step"><span class="wss-n">3</span><span class="wss-l">Nhận kết quả</span></div>
       </div>
       <div class="dl-card">
-        <h2><span class="ic" data-icon="camera"></span> Ảnh Da Mặt</h2>
-        <p class="sub">Tải lên một tấm ảnh da mặt rõ nét, không trang điểm. Hệ thống phân tích tình trạng từng vùng da trên ảnh. Nhận về đánh giá da, luận theo Đông y và gợi ý thực dưỡng, mỹ phẩm phù hợp.</p>
+        <h2 data-i18n="dali.anh-da-mat"><span class="ic" data-icon="camera"></span> Ảnh Da Mặt</h2>
+        <p data-i18n="dali.tai-len-mot-tam-anh-da" class="sub">Tải lên một tấm ảnh da mặt rõ nét, không trang điểm. Hệ thống phân tích tình trạng từng vùng da trên ảnh. Nhận về đánh giá da, luận theo Đông y và gợi ý thực dưỡng, mỹ phẩm phù hợp.</p>
         <p class="price-note" data-tvp-price-label="da-lieu-ai">…</p>
 
         <div class="upload-zone" id="uploadZone"
@@ -158,26 +158,26 @@ body.chat-first-live .routine-grid{grid-template-columns:1fr}
           <input type="file" accept="image/*" id="fileInput" onchange="loadFile(this.files[0])">
           <div id="uploadPrompt">
             <div class="upload-icon ic" data-icon="camera" style="font-size:36px;display:block"></div>
-            <div class="upload-text">Chụp hoặc chọn ảnh khuôn mặt</div>
-            <div class="upload-hint">Ánh sáng tự nhiên · Không filter · Chụp gần rõ mặt<br>JPG/PNG tối đa 5MB</div>
+            <div data-i18n="pcol.chup-hoac-chon-anh-khuon-mat" class="upload-text">Chụp hoặc chọn ảnh khuôn mặt</div>
+            <div data-i18n="dali.anh-sang-tu-nhien-khong-filter" class="upload-hint">Ánh sáng tự nhiên · Không filter · Chụp gần rõ mặt<br>JPG/PNG tối đa 5MB</div>
           </div>
           <div id="previewBox" class="preview-box" style="display:none">
             <img id="previewImg" alt="preview">
-            <button class="btn-change" onclick="clearPhoto()">✕ Đổi ảnh</button>
+            <button data-i18n="phongthuy.doi-anh" class="btn-change" onclick="clearPhoto()">✕ Đổi ảnh</button>
           </div>
         </div>
 
-        <div class="tips-row">
+        <div data-i18n="dali.chup-noi-co-anh-sang-tu" class="tips-row">
           <span class="tip-badge"><span class="ic" data-icon="lightbulb"></span> Chụp nơi có ánh sáng tự nhiên</span>
           <span class="tip-badge"><span class="ic" data-icon="x-circle"></span> Không dùng flash</span>
           <span class="tip-badge"><span class="ic" data-icon="smile"></span> Mặt sạch, không trang điểm</span>
         </div>
 
         <div class="pt-row">
-          <div class="pt-fg"><label>Năm sinh (tùy chọn — tư vấn theo mệnh)</label><input type="number" id="namSinh" placeholder="VD: 1990" min="1920" max="2010" oninput="mountHook()"></div>
-          <div class="pt-fg"><label>Giới tính</label>
+          <div class="pt-fg"><label data-i18n="dali.nam-sinh-tuy-chon-tu-van">Năm sinh (tùy chọn — tư vấn theo mệnh)</label><input data-i18n-attr="placeholder:phongthuy.vd-1990" type="number" id="namSinh" placeholder="VD: 1990" min="1920" max="2010" oninput="mountHook()"></div>
+          <div class="pt-fg"><label data-i18n="phongthuy.gioi-tinh">Giới tính</label>
             <select id="gioiTinh">
-              <option value="nu">Nữ</option>
+              <option data-i18n="laso.nu" value="nu">Nữ</option>
               <option value="nam">Nam</option>
             </select>
           </div>
@@ -185,16 +185,16 @@ body.chat-first-live .routine-grid{grid-template-columns:1fr}
 
         <div id="hookHost"></div>
 
-        <button class="btn-analyze" id="btnAnalyze" onclick="analyze()" disabled>
+        <button data-i18n="dali.phan-tich-da-toan-dien-luong" class="btn-analyze" id="btnAnalyze" onclick="analyze()" disabled>
           <span class="ic" data-icon="leaf"></span> Phân Tích Da Toàn Diện — <span data-tvp-price="da-lieu-ai">…</span> Lượng
         </button>
       </div>
       </div>
       <div class="ws-side-col">
       <div class="ws-promo">
-        <div class="wsp-eyebrow"><span class="wsp-ic" data-icon="book-open"></span><span>Giới thiệu</span></div>
-        <div class="wsp-title">Da Liệu Toàn Diện</div>
-        <p class="wsp-desc">Tướng học da mặt phương Đông cho rằng tình trạng làn da phản ánh phần nào sức khoẻ nội tại, được đối chiếu cùng các quan sát của da liễu học hiện đại. Cách tiếp cận kết hợp Đông – Tây y này nhìn làn da như một chỉ dấu cần theo dõi, không chỉ đánh giá bằng cảm quan thẩm mỹ.</p>
+        <div data-i18n="battu.gioi-thieu" class="wsp-eyebrow"><span class="wsp-ic" data-icon="book-open"></span><span>Giới thiệu</span></div>
+        <div data-i18n="dali.da-lieu-toan-dien" class="wsp-title">Da Liệu Toàn Diện</div>
+        <p data-i18n="dali.tuong-hoc-da-mat-phuong-dong" class="wsp-desc">Tướng học da mặt phương Đông cho rằng tình trạng làn da phản ánh phần nào sức khoẻ nội tại, được đối chiếu cùng các quan sát của da liễu học hiện đại. Cách tiếp cận kết hợp Đông – Tây y này nhìn làn da như một chỉ dấu cần theo dõi, không chỉ đánh giá bằng cảm quan thẩm mỹ.</p>
       </div>
       <div id="shellRecent"></div>
       </div>
@@ -226,26 +226,26 @@ body.chat-first-live .routine-grid{grid-template-columns:1fr}
         </div>
 
         <div class="section-tabs">
-          <button class="tab-btn active" onclick="showTab('dongy',this)"><span class="ic" data-icon="scale"></span> Đông Y</button>
-          <button class="tab-btn" onclick="showTab('anuong',this)"><span class="ic" data-icon="leaf"></span> Ăn Uống</button>
-          <button class="tab-btn" onclick="showTab('mypham',this)"><span class="ic" data-icon="sparkles"></span> Mỹ Phẩm</button>
+          <button data-i18n="dali.dong-y" class="tab-btn active" onclick="showTab('dongy',this)"><span class="ic" data-icon="scale"></span> Đông Y</button>
+          <button data-i18n="dali.an-uong" class="tab-btn" onclick="showTab('anuong',this)"><span class="ic" data-icon="leaf"></span> Ăn Uống</button>
+          <button data-i18n="dali.my-pham" class="tab-btn" onclick="showTab('mypham',this)"><span class="ic" data-icon="sparkles"></span> Mỹ Phẩm</button>
         </div>
 
         <div class="tab-panel show dl-card" id="tab-dongy">
-          <h2><span class="ic" data-icon="scale"></span> Luận Giải Đông Y</h2>
+          <h2 data-i18n="dali.luan-giai-dong-y"><span class="ic" data-icon="scale"></span> Luận Giải Đông Y</h2>
           <div class="dongy-grid" id="dongyGrid"></div>
         </div>
 
         <div class="tab-panel dl-card" id="tab-anuong">
-          <h2><span class="ic" data-icon="leaf"></span> Thực Dưỡng & Ăn Uống</h2>
+          <h2 data-i18n="dali.thuc-duong-an-uong"><span class="ic" data-icon="leaf"></span> Thực Dưỡng & Ăn Uống</h2>
           <div class="food-grid" id="foodGrid"></div>
         </div>
 
         <div class="tab-panel dl-card" id="tab-mypham">
-          <h2><span class="ic" data-icon="sparkles"></span> Mỹ Phẩm & Routine</h2>
+          <h2 data-i18n="dali.my-pham-routine"><span class="ic" data-icon="sparkles"></span> Mỹ Phẩm & Routine</h2>
           <div class="ingredient-grid" id="ingredientGrid"></div>
           <div class="routine-grid" id="routineGrid"></div>
-          <div class="luu-y-box" id="luuYBox" style="display:none">
+          <div data-i18n="dali.luu-y-theo-ban-menh" class="luu-y-box" id="luuYBox" style="display:none">
             <strong>✦ Lưu Ý Theo Bản Mệnh</strong>
             <span id="luuYText">—</span>
           </div>
@@ -255,12 +255,12 @@ body.chat-first-live .routine-grid{grid-template-columns:1fr}
           <div style="font-size:13px;color:var(--text-mid);line-height:1.75;font-style:italic;text-align:center;padding:4px 0" id="tongKet">—</div>
         </div>
 
-        <div class="disclaimer">
+        <div data-i18n="dali.day-la-tu-van-tham-khao" class="disclaimer">
           <span class="ic" data-icon="alert-triangle"></span> Đây là tư vấn tham khảo kết hợp Đông Tây y, không thay thế chẩn đoán và điều trị của bác sĩ da liễu. Nếu có tình trạng da nghiêm trọng, vui lòng tham khảo chuyên gia.
         </div>
 
         <div style="text-align:center;padding:14px 0 4px">
-          <button onclick="resetAll()" class="btn-cancel">← Phân Tích Lại</button>
+          <button data-i18n="banlamviec.phan-tich-lai" onclick="resetAll()" class="btn-cancel">← Phân Tích Lại</button>
         </div>
       </div>
     </div>
@@ -292,6 +292,12 @@ window.SHELL_INTRO={key:'da-lieu-ai'};</script>
 var SKIN_TYPE_ICON = {
   'da dầu':'droplet','da khô':'sun','da hỗn hợp':'scale','da thường':'leaf','da nhạy cảm':'flower'
 };
+// `loai_da` do server trả bằng enum Việt (tra icon + hiển thị) — chữ hiển thị qua map này, enum gốc giữ nguyên.
+var SKIN_TYPE_SHOWN = {
+  'da dầu':_tvmbT('js.dali.da-dau','da dầu'),'da khô':_tvmbT('js.dali.da-kho','da khô'),'da hỗn hợp':_tvmbT('js.dali.da-hon-hop','da hỗn hợp'),'da thường':_tvmbT('js.dali.da-thuong','da thường'),'da nhạy cảm':_tvmbT('js.dali.da-nhay-cam','da nhạy cảm')
+};
+// Gắn cờ cảnh báo cho thẻ tình trạng: từ khoá Việt (server vi) + từ khoá bản ngữ (server trả đúng ngôn ngữ trang).
+var ALERT_CONDITION_RE = /mụn|viêm|nhạy|acne|pimple|breakout|inflam|sensitiv|irritat|ニキビ|吹き出物|炎症|敏感|여드름|트러블|염증|민감|痘|粉刺|發炎|发炎|敏感/i;
 var MENH_COLOR = {Kim:'#888',Mộc:'#2E8B57',Thủy:'#1455A4',Hỏa:'#C0392B',Thổ:'#9A7B3A'};
 
 var _imgData = null, _mediaType = 'image/jpeg';
@@ -316,17 +322,17 @@ function mountHook() {
     charts: [],
     facts: [{
       tone: 'good',
-      title: 'Mệnh ' + na,
-      body: 'Tạng phủ liên quan, xu hướng da theo mệnh, và phân tích da từ ảnh (loại da, tình trạng, mức độ) nằm trong bản phân tích chuyên sâu.',
+      title: _tvmbT('js.dali.menh-n','Mệnh {h}',{ h: _tvmbG('hanh', na) }),
+      body: _tvmbT('js.dali.tang-phu-lien-quan','Tạng phủ liên quan, xu hướng da theo mệnh, và phân tích da từ ảnh (loại da, tình trạng, mức độ) nằm trong bản phân tích chuyên sâu.'),
       source: 'engine · Nạp Âm',
     }],
   });
 }
 var ANALYSIS_STEPS = [
-  { label: '<span class="ic" data-icon="flask-conical"></span> Tây y: nhận diện loại da & tình trạng', ms: 2600 },
-  { label: '<span class="ic" data-icon="scale"></span> Đông y: luận giải tạng phủ & bản mệnh', ms: 2600 },
-  { label: '<span class="ic" data-icon="leaf"></span> Lập kế hoạch ăn uống thực dưỡng', ms: 2600 },
-  { label: '<span class="ic" data-icon="sparkles"></span> Gợi ý mỹ phẩm & routine', ms: 0 },
+  { label: '<span class="ic" data-icon="flask-conical"></span> ' + _tvmbT('js.dali.step-tay-y','Tây y: nhận diện loại da & tình trạng'), ms: 2600 },
+  { label: '<span class="ic" data-icon="scale"></span> ' + _tvmbT('js.dali.step-dong-y','Đông y: luận giải tạng phủ & bản mệnh'), ms: 2600 },
+  { label: '<span class="ic" data-icon="leaf"></span> ' + _tvmbT('js.dali.step-thuc-duong','Lập kế hoạch ăn uống thực dưỡng'), ms: 2600 },
+  { label: '<span class="ic" data-icon="sparkles"></span> ' + _tvmbT('js.dali.step-my-pham','Gợi ý mỹ phẩm & routine'), ms: 0 },
 ];
 var _analysisLoadingCtl = null;
 
@@ -420,7 +426,7 @@ async function analyze() {
             body: JSON.stringify({ action: 'da-lieu-ai', image: _imgData, mediaType: _mediaType, namSinh }),
           });
           const data = await res.json();
-          if (!res.ok || data.error) throw new Error(data.error || 'Lỗi phân tích');
+          if (!res.ok || data.error) throw new Error(data.error || _tvmbT('js.dali.loi-phan-tich','Lỗi phân tích'));
           window.refreshNavCredits?.();
           _analysisLoadingCtl && _analysisLoadingCtl.finish();
           renderResults(data);
@@ -430,7 +436,7 @@ async function analyze() {
     });
   } catch(e) {
     _analysisLoadingCtl && _analysisLoadingCtl.stop();
-    alert('Lỗi: ' + (e.message || 'Vui lòng thử lại.'));
+    alert(_tvmbT('js.dali.loi-e','Lỗi: {e}',{ e: e.message || _tvmbT('js.dali.vui-long-thu-lai','Vui lòng thử lại.') }));
   } finally {
     document.getElementById('btnAnalyze').disabled = false;
     document.getElementById('loading').classList.remove('show');
@@ -447,22 +453,23 @@ function renderResults(d) {
 
   const loaiDa = da.loai_da || 'da thường';
   const skinIconKey = SKIN_TYPE_ICON[loaiDa] || 'leaf';
+  const loaiDaShown = SKIN_TYPE_SHOWN[loaiDa] || loaiDa;
   document.getElementById('skinEmoji').innerHTML = window.iconHtml ? window.iconHtml(skinIconKey) : '';
-  document.getElementById('skinLabel').textContent = loaiDa;
-  document.getElementById('summaryTitle').textContent = `${loaiDa.charAt(0).toUpperCase() + loaiDa.slice(1)} · ${da.muc_do || ''}`;
+  document.getElementById('skinLabel').textContent = loaiDaShown;
+  document.getElementById('summaryTitle').textContent = `${loaiDaShown.charAt(0).toUpperCase() + loaiDaShown.slice(1)} · ${da.muc_do || ''}`;
   document.getElementById('summarySub').textContent = da.vung_can_chu_y || '';
   document.getElementById('summaryMoTa').textContent = da.mo_ta || '';
 
   const tagsEl = document.getElementById('conditionTags');
   tagsEl.innerHTML = '';
   (da.tinh_trang || []).forEach(t => {
-    const isAlert = t.includes('mụn') || t.includes('viêm') || t.includes('nhạy');
+    const isAlert = ALERT_CONDITION_RE.test(t);
     tagsEl.innerHTML += `<span class="condition-tag${isAlert ? ' alert' : ''}">${t}</span>`;
   });
 
   if (d.menhHanh) {
-    document.getElementById('menhHanh').textContent = 'Mệnh ' + d.menhHanh;
-    document.getElementById('menhLabel').textContent = d.menhFull || d.canChi || '';
+    document.getElementById('menhHanh').textContent = _tvmbT('js.dali.menh-n','Mệnh {h}',{ h: _tvmbG('hanh', d.menhHanh) });
+    document.getElementById('menhLabel').textContent = d.menhFull ? _tvmbG('napam', d.menhFull) : (d.canChi ? _tvmbG('canchi', d.canChi) : '');
     const badge = document.getElementById('menhBadge');
     badge.style.display = 'block';
     badge.style.borderColor = (MENH_COLOR[d.menhHanh] || '#888') + '66';
@@ -470,10 +477,10 @@ function renderResults(d) {
 
   const dg = document.getElementById('dongyGrid');
   dg.innerHTML = `
-    <div class="dongy-item"><div class="dongy-label">Tạng Phủ Liên Quan</div><div class="dongy-val"><strong>${dongy.tang_phu || '—'}</strong></div></div>
-    <div class="dongy-item"><div class="dongy-label">Cân Bằng Âm Dương</div><div class="dongy-val">${dongy.can_bang || '—'}</div></div>
-    <div class="dongy-item dongy-full"><div class="dongy-label">Lý Giải Đông Y</div><div class="dongy-val">${dongy.ly_giai || '—'}</div></div>
-    ${dongy.menh_lien_quan ? `<div class="dongy-item dongy-full"><div class="dongy-label">✦ Ảnh Hưởng Của Bản Mệnh</div><div class="dongy-val">${dongy.menh_lien_quan}</div></div>` : ''}
+    <div class="dongy-item"><div class="dongy-label">${_tvmbT('js.dali.lbl-tang-phu','Tạng Phủ Liên Quan')}</div><div class="dongy-val"><strong>${dongy.tang_phu || '—'}</strong></div></div>
+    <div class="dongy-item"><div class="dongy-label">${_tvmbT('js.dali.lbl-can-bang','Cân Bằng Âm Dương')}</div><div class="dongy-val">${dongy.can_bang || '—'}</div></div>
+    <div class="dongy-item dongy-full"><div class="dongy-label">${_tvmbT('js.dali.lbl-ly-giai','Lý Giải Đông Y')}</div><div class="dongy-val">${dongy.ly_giai || '—'}</div></div>
+    ${dongy.menh_lien_quan ? `<div class="dongy-item dongy-full"><div class="dongy-label">✦ ${_tvmbT('js.dali.lbl-anh-huong-menh','Ảnh Hưởng Của Bản Mệnh')}</div><div class="dongy-val">${dongy.menh_lien_quan}</div></div>` : ''}
   `;
 
   const fg = document.getElementById('foodGrid');
@@ -489,15 +496,15 @@ function renderResults(d) {
     </div>`).join('');
   fg.innerHTML = `
     <div>
-      <div class="food-col-title good">✓ Nên Ăn</div>
+      <div class="food-col-title good">✓ ${_tvmbT('js.dali.nen-an','Nên Ăn')}</div>
       <div class="food-list">${nenAnHTML}</div>
     </div>
     <div>
-      <div class="food-col-title bad">✗ Nên Tránh</div>
+      <div class="food-col-title bad">✗ ${_tvmbT('js.dali.nen-tranh','Nên Tránh')}</div>
       <div class="food-list">${tranhAnHTML}</div>
     </div>
-    ${anuong.thuc_duong ? `<div class="thuc-duong-box"><strong>✦ Thực Dưỡng Theo Mệnh</strong>${anuong.thuc_duong}</div>` : ''}
-    ${anuong.nuoc_uong ? `<div class="nuoc-uong"><strong><span class="ic" data-icon="droplet"></span> Nước Uống & Trà Dược Liệu</strong>${anuong.nuoc_uong}</div>` : ''}
+    ${anuong.thuc_duong ? `<div class="thuc-duong-box"><strong>✦ ${_tvmbT('js.dali.thuc-duong-theo-menh','Thực Dưỡng Theo Mệnh')}</strong>${anuong.thuc_duong}</div>` : ''}
+    ${anuong.nuoc_uong ? `<div class="nuoc-uong"><strong><span class="ic" data-icon="droplet"></span> ${_tvmbT('js.dali.nuoc-uong','Nước Uống & Trà Dược Liệu')}</strong>${anuong.nuoc_uong}</div>` : ''}
   `;
   window.mountIcons && window.mountIcons(fg);
 
@@ -506,7 +513,7 @@ function renderResults(d) {
     <div class="ing-item good">
       <div class="ing-name">${i.ten}</div>
       <div class="ing-desc">${i.cong_dung}</div>
-      ${i.phu_hop_hanh ? `<span class="ing-hanh">Hành ${i.phu_hop_hanh}</span>` : ''}
+      ${i.phu_hop_hanh ? `<span class="ing-hanh">${_tvmbT('js.dali.hanh-n','Hành {h}',{ h: _tvmbG('hanh', i.phu_hop_hanh) })}</span>` : ''}
     </div>`).join('');
   const tranhIngHTML = (mypham.ingredients_tranh || []).map(i => `
     <div class="ing-item bad">
@@ -515,11 +522,11 @@ function renderResults(d) {
     </div>`).join('');
   ig.innerHTML = `
     <div>
-      <div class="ing-title good">✓ Thành Phần Nên Dùng</div>
+      <div class="ing-title good">✓ ${_tvmbT('js.dali.ing-nen-dung','Thành Phần Nên Dùng')}</div>
       <div class="ing-list">${nenIngHTML}</div>
     </div>
     <div>
-      <div class="ing-title bad">✗ Thành Phần Nên Tránh</div>
+      <div class="ing-title bad">✗ ${_tvmbT('js.dali.ing-nen-tranh','Thành Phần Nên Tránh')}</div>
       <div class="ing-list">${tranhIngHTML}</div>
     </div>
   `;
@@ -527,11 +534,11 @@ function renderResults(d) {
   const rg = document.getElementById('routineGrid');
   rg.innerHTML = `
     <div class="routine-item">
-      <div class="routine-time"><span class="ic" data-icon="sun"></span> Buổi Sáng</div>
+      <div class="routine-time"><span class="ic" data-icon="sun"></span> ${_tvmbT('js.dali.buoi-sang','Buổi Sáng')}</div>
       <div class="routine-steps">${mypham.routine_sang || '—'}</div>
     </div>
     <div class="routine-item">
-      <div class="routine-time"><span class="ic" data-icon="moon"></span> Buổi Tối</div>
+      <div class="routine-time"><span class="ic" data-icon="moon"></span> ${_tvmbT('js.dali.buoi-toi','Buổi Tối')}</div>
       <div class="routine-steps">${mypham.routine_toi || '—'}</div>
     </div>
   `;
@@ -549,13 +556,13 @@ function renderResults(d) {
 
   if (window.SHELL_INTRO) Shell.dismissIntro(window.SHELL_INTRO.key);
   Shell.setContext({
-    label: 'Da Liệu — ' + loaiDa,
-    greeting: 'Kết quả phân tích da: **' + loaiDa + '**' + (da.muc_do ? ' — ' + da.muc_do : '') + '. Bạn muốn hỏi thêm về Đông y, ăn uống hay mỹ phẩm?',
-    chips: ['Vì sao da tôi thuộc loại này?', 'Nên dùng sản phẩm nào trước?', 'Cách cải thiện theo Đông y?']
+    label: _tvmbT('js.dali.label','Da Liệu — {d}',{ d: loaiDaShown }),
+    greeting: _tvmbT('js.dali.greeting','Kết quả phân tích da: **{d}**{m}. Bạn muốn hỏi thêm về Đông y, ăn uống hay mỹ phẩm?',{ d: loaiDaShown, m: da.muc_do ? ' — ' + da.muc_do : '' }),
+    chips: [_tvmbT('js.dali.chip-vi-sao','Vì sao da tôi thuộc loại này?'), _tvmbT('js.dali.chip-san-pham','Nên dùng sản phẩm nào trước?'), _tvmbT('js.dali.chip-dong-y','Cách cải thiện theo Đông y?')]
   });
   Shell.setShareable({
-    kind: 'text', toolId: 'da-lieu-ai', title: 'Kết quả Da Liệu của tôi',
-    text: 'Loại da: ' + loaiDa + (da.muc_do ? ' — ' + da.muc_do : '') + (d.tong_ket ? '\n\n' + d.tong_ket : '')
+    kind: 'text', toolId: 'da-lieu-ai', title: _tvmbT('js.dali.share-title','Kết quả Da Liệu của tôi'),
+    text: _tvmbT('js.dali.share-loai-da','Loại da: {d}{m}',{ d: loaiDaShown, m: da.muc_do ? ' — ' + da.muc_do : '' }) + (d.tong_ket ? '\n\n' + d.tong_ket : '')
   });
 }
 

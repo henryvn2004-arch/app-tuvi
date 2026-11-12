@@ -1855,6 +1855,86 @@
   "t": "会社のオフィス",
   "h": "d678c2d6"
  },
+ "dali.an-uong": {
+  "t": "<span class=\"ic\" data-icon=\"leaf\"></span> 食事",
+  "h": "a8b06b78"
+ },
+ "dali.anh-da-mat": {
+  "t": "<span class=\"ic\" data-icon=\"camera\"></span> 顔の肌の画像",
+  "h": "d3d3689b"
+ },
+ "dali.anh-sang-tu-nhien-khong-filter": {
+  "t": "自然光 · フィルターなし · 近くではっきり撮影<br>JPG/PNG、最大5MB",
+  "h": "13e0d13e"
+ },
+ "dali.chup-noi-co-anh-sang-tu": {
+  "t": "<span class=\"tip-badge\"><span class=\"ic\" data-icon=\"lightbulb\"></span> 自然光のある場所で撮影</span> <span class=\"tip-badge\"><span class=\"ic\" data-icon=\"x-circle\"></span> フラッシュは使わない</span> <span class=\"tip-badge\"><span class=\"ic\" data-icon=\"smile\"></span> 洗顔後のすっぴん</span>",
+  "h": "5c098d4e"
+ },
+ "dali.da-lieu-toan-dien": {
+  "t": "肌の総合鑑定",
+  "h": "91cdb627"
+ },
+ "dali.da-lieu-toan-dien-chup-anh": {
+  "t": "<b>肌の総合鑑定</b><span>顔の肌を撮影 — 漢方、西洋医学、五行の古法</span>",
+  "h": "72690cfa"
+ },
+ "dali.da-lieu-tu-vi-minh-bao": {
+  "t": "肌診断 — 明宝紫微斗数",
+  "h": "a3b8548f"
+ },
+ "dali.da-xuong-cap-ma-cu-do": {
+  "t": "肌が衰えても年齢のせいにしてしまうけれど、本当の問題は、まだじっくり見たことのない場所にあるのかもしれません。顔の肌の画像を1枚アップロードして、新しいコスメにお金をかける前に客観的な分析を受け取りましょう。",
+  "h": "78702e4b"
+ },
+ "dali.day-la-tu-van-tham-khao": {
+  "t": "<span class=\"ic\" data-icon=\"alert-triangle\"></span> これは漢方と西洋医学を組み合わせた参考アドバイスであり、皮膚科医の診断・治療に代わるものではありません。深刻な肌トラブルがある場合は、専門家にご相談ください。",
+  "h": "b51f96df"
+ },
+ "dali.dong-y": {
+  "t": "<span class=\"ic\" data-icon=\"scale\"></span> 漢方",
+  "h": "dd81a951"
+ },
+ "dali.luan-giai-dong-y": {
+  "t": "<span class=\"ic\" data-icon=\"scale\"></span> 漢方の見立て",
+  "h": "fd58cfd1"
+ },
+ "dali.luu-y-theo-ban-menh": {
+  "t": "<strong>✦ 本命に応じた注意点</strong> <span id=\"luuYText\">—</span>",
+  "h": "d6e60118"
+ },
+ "dali.my-pham": {
+  "t": "<span class=\"ic\" data-icon=\"sparkles\"></span> コスメ",
+  "h": "3d3cb659"
+ },
+ "dali.my-pham-routine": {
+  "t": "<span class=\"ic\" data-icon=\"sparkles\"></span> コスメとルーティン",
+  "h": "bf4abdec"
+ },
+ "dali.nam-sinh-tuy-chon-tu-van": {
+  "t": "生まれ年（任意 — 本命に合わせたアドバイス）",
+  "h": "2abf3e72"
+ },
+ "dali.phan-tich-da-mat-ket-hop": {
+  "t": "顔の肌を分析 — 漢方、西洋医学、五行の古法を組み合わせます。本命に合わせた食事、コスメ、スキンケアのアドバイス。",
+  "h": "c9ffa0cc"
+ },
+ "dali.phan-tich-da-toan-dien-luong": {
+  "t": "<span class=\"ic\" data-icon=\"leaf\"></span> 肌を総合分析 — <span data-tvp-price=\"da-lieu-ai\">…</span> 両",
+  "h": "b46628df"
+ },
+ "dali.tai-len-mot-tam-anh-da": {
+  "t": "メイクをしていない、顔の肌がはっきり写った画像を1枚アップロードしてください。システムが画像上の肌の各部位の状態を分析します。肌の評価、漢方による見立て、合う薬膳とコスメの提案が届きます。",
+  "h": "5a19c79c"
+ },
+ "dali.thuc-duong-an-uong": {
+  "t": "<span class=\"ic\" data-icon=\"leaf\"></span> 薬膳と食事",
+  "h": "9ce2b777"
+ },
+ "dali.tuong-hoc-da-mat-phuong-dong": {
+  "t": "東洋の顔の肌の相学では、肌の状態は体の内側の健康をある程度映すと考え、現代皮膚科学の観察とも照らし合わせます。漢方と西洋医学を組み合わせたこのアプローチは、肌を見た目の美しさだけで判断せず、経過を見るべき手がかりとして捉えます。",
+  "h": "466d834a"
+ },
  "datten.12-goi-y-ten-chia": {
   "t": "名前の候補12個<br>3グループ",
   "h": "41bbf053"
@@ -6955,6 +7035,142 @@
   "t": "もう一度お試しください。",
   "h": "2f1d18ee"
  },
+ "js.dali.buoi-sang": {
+  "t": "朝",
+  "h": "d95d88da"
+ },
+ "js.dali.buoi-toi": {
+  "t": "夜",
+  "h": "adcf496a"
+ },
+ "js.dali.chip-dong-y": {
+  "t": "漢方ではどう改善しますか？",
+  "h": "e84646cb"
+ },
+ "js.dali.chip-san-pham": {
+  "t": "どの製品から使うべきですか？",
+  "h": "c4d20f9a"
+ },
+ "js.dali.chip-vi-sao": {
+  "t": "なぜ私の肌はこのタイプなのですか？",
+  "h": "92ad930f"
+ },
+ "js.dali.da-dau": {
+  "t": "脂性肌",
+  "h": "2e16ebef"
+ },
+ "js.dali.da-hon-hop": {
+  "t": "混合肌",
+  "h": "68410286"
+ },
+ "js.dali.da-kho": {
+  "t": "乾燥肌",
+  "h": "6dcefb2d"
+ },
+ "js.dali.da-nhay-cam": {
+  "t": "敏感肌",
+  "h": "336f6fce"
+ },
+ "js.dali.da-thuong": {
+  "t": "普通肌",
+  "h": "830c17ab"
+ },
+ "js.dali.greeting": {
+  "t": "肌の分析結果: **{d}**{m}。漢方・食事・コスメのうち、ほかに知りたいことはありますか？",
+  "h": "edab53d9"
+ },
+ "js.dali.hanh-n": {
+  "t": "{h}の行",
+  "h": "3e50daab"
+ },
+ "js.dali.ing-nen-dung": {
+  "t": "おすすめの成分",
+  "h": "35fd5e5b"
+ },
+ "js.dali.ing-nen-tranh": {
+  "t": "避けたい成分",
+  "h": "c6f4ec17"
+ },
+ "js.dali.label": {
+  "t": "肌診断 — {d}",
+  "h": "8fcf6fa4"
+ },
+ "js.dali.lbl-anh-huong-menh": {
+  "t": "本命の影響",
+  "h": "28408328"
+ },
+ "js.dali.lbl-can-bang": {
+  "t": "陰陽のバランス",
+  "h": "716d7b88"
+ },
+ "js.dali.lbl-ly-giai": {
+  "t": "漢方の見立て",
+  "h": "58af6bfb"
+ },
+ "js.dali.lbl-tang-phu": {
+  "t": "関連する臓腑",
+  "h": "288ab910"
+ },
+ "js.dali.loi-e": {
+  "t": "エラー: {e}",
+  "h": "a7267203"
+ },
+ "js.dali.loi-phan-tich": {
+  "t": "分析エラー",
+  "h": "3e06a99e"
+ },
+ "js.dali.menh-n": {
+  "t": "本命 {h}",
+  "h": "e46cbb3b"
+ },
+ "js.dali.nen-an": {
+  "t": "食べるとよいもの",
+  "h": "b29db199"
+ },
+ "js.dali.nen-tranh": {
+  "t": "避けたいもの",
+  "h": "41d7ed06"
+ },
+ "js.dali.nuoc-uong": {
+  "t": "飲み物と薬草茶",
+  "h": "706a3d71"
+ },
+ "js.dali.share-loai-da": {
+  "t": "肌タイプ: {d}{m}",
+  "h": "928754ce"
+ },
+ "js.dali.share-title": {
+  "t": "私の肌診断の結果",
+  "h": "7e7757f7"
+ },
+ "js.dali.step-dong-y": {
+  "t": "漢方: 臓腑と本命を読み解く",
+  "h": "8122b336"
+ },
+ "js.dali.step-my-pham": {
+  "t": "コスメとルーティンを提案",
+  "h": "0014c3fb"
+ },
+ "js.dali.step-tay-y": {
+  "t": "西洋医学: 肌タイプと状態を判定",
+  "h": "c11ccb03"
+ },
+ "js.dali.step-thuc-duong": {
+  "t": "薬膳の食事プランを作成",
+  "h": "99292ce2"
+ },
+ "js.dali.tang-phu-lien-quan": {
+  "t": "関連する臓腑、本命に応じた肌の傾向、画像からの肌分析（肌タイプ・状態・程度）は、詳細分析に含まれています。",
+  "h": "d1caef52"
+ },
+ "js.dali.thuc-duong-theo-menh": {
+  "t": "本命に合わせた薬膳",
+  "h": "7187b22e"
+ },
+ "js.dali.vui-long-thu-lai": {
+  "t": "もう一度お試しください。",
+  "h": "2f1d18ee"
+ },
  "js.datten.be-gai": {
   "t": "女の子",
   "h": "af93dba0"
@@ -9091,6 +9307,282 @@
   "t": "画像ファイル（JPGまたはPNG）を選んでください。",
   "h": "ad4caa5b"
  },
+ "js.kieut.anh-qua-lon": {
+  "t": "画像が大きすぎます（最大5MB）。別の画像を選んでください。",
+  "h": "84a5fa2b"
+ },
+ "js.kieut.chip-kinh": {
+  "t": "どんなメガネが私の顔に合いますか？",
+  "h": "e2a2a092"
+ },
+ "js.kieut.chip-tranh": {
+  "t": "避けるべき髪型は？",
+  "h": "71021350"
+ },
+ "js.kieut.chip-vi-sao": {
+  "t": "なぜこのスタイルが私の顔に合うのですか？",
+  "h": "e507a96f"
+ },
+ "js.kieut.do-truc-tiep": {
+  "t": "MediaPipeで画像から直接測定しました。あなたの顔に合わせてランク付けした髪型とメガネのリストは、詳細分析に含まれています。",
+  "h": "45879030"
+ },
+ "js.kieut.gl-aviator-sub": {
+  "t": "クラシックなティアドロップ — ユニセックスで力強く自信に満ちた印象",
+  "h": "c07019a3"
+ },
+ "js.kieut.gl-browline-name": {
+  "t": "ブロウラインフレーム",
+  "h": "f7013797"
+ },
+ "js.kieut.gl-browline-sub": {
+  "t": "上半分に太いリム — 知的で端正",
+  "h": "076a871f"
+ },
+ "js.kieut.gl-cat_eye-sub": {
+  "t": "目尻が跳ね上がる形 — 女性らしく魅力的（女性向けが多い）",
+  "h": "49a590df"
+ },
+ "js.kieut.gl-oval-name": {
+  "t": "オーバルフレーム",
+  "h": "30d636c4"
+ },
+ "js.kieut.gl-oval-sub": {
+  "t": "やわらかく上品 — どんな顔型にもなじむ",
+  "h": "851997e8"
+ },
+ "js.kieut.gl-rectangle-name": {
+  "t": "長方形フレーム",
+  "h": "a0b6dd72"
+ },
+ "js.kieut.gl-rectangle-sub": {
+  "t": "細めでモダンなフレーム — ほとんどの顔型に合う",
+  "h": "0d7fb906"
+ },
+ "js.kieut.gl-round-name": {
+  "t": "レトロな丸フレーム",
+  "h": "3fddc6b6"
+ },
+ "js.kieut.gl-round-sub": {
+  "t": "韓国風・ヴィンテージ — 四角い顔をやわらげる",
+  "h": "801e4e9b"
+ },
+ "js.kieut.greeting": {
+  "t": "あなたの顔型は **{s}** です。あなたの相に合う髪型やメガネについて、さらに質問はありますか？",
+  "h": "05992171"
+ },
+ "js.kieut.hinh-dai": {
+  "t": "面長",
+  "h": "67167578"
+ },
+ "js.kieut.hinh-oval": {
+  "t": "卵型",
+  "h": "181b45bd"
+ },
+ "js.kieut.hinh-tron-vuong": {
+  "t": "丸・四角",
+  "h": "a30fca34"
+ },
+ "js.kieut.khong-nhan-duoc-anh": {
+  "t": "結果の画像を受け取れませんでした。",
+  "h": "a16f02df"
+ },
+ "js.kieut.khong-the-mo-camera": {
+  "t": "カメラを開けません。代わりに画像をアップロードしてください。",
+  "h": "4f7396b7"
+ },
+ "js.kieut.kieu-toc-label": {
+  "t": "髪型 — {s}",
+  "h": "c1e88a18"
+ },
+ "js.kieut.loi-phan-tich": {
+  "t": "分析エラー: {e}",
+  "h": "1d8ed1a8"
+ },
+ "js.kieut.loi-s": {
+  "t": "エラー {s}",
+  "h": "c406c72b"
+ },
+ "js.kieut.loi-tao-anh": {
+  "t": "画像の生成エラー: {e}",
+  "h": "091a4baf"
+ },
+ "js.kieut.share-shape": {
+  "t": "顔型: {s}",
+  "h": "e52e2cf1"
+ },
+ "js.kieut.share-title": {
+  "t": "顔相に合う私の髪型",
+  "h": "d1806e98"
+ },
+ "js.kieut.share-tryon-text": {
+  "t": "髪型を試着: {n}",
+  "h": "0d923cba"
+ },
+ "js.kieut.share-tryon-title": {
+  "t": "新しい髪型（バーチャル試着）",
+  "h": "5887ab87"
+ },
+ "js.kieut.st-aline_bob-sub": {
+  "t": "斜めにカットしたボブ — 後ろが短く前が長い、シャープでモダン",
+  "h": "9eb34b60"
+ },
+ "js.kieut.st-blunt_fringe-sub": {
+  "t": "額で真っすぐ切りそろえた前髪＋ロング — くっきりと個性的",
+  "h": "18f3e1fe"
+ },
+ "js.kieut.st-bob-name": {
+  "t": "ショートボブ",
+  "h": "c19d992e"
+ },
+ "js.kieut.st-bob-sub": {
+  "t": "あご下のすっきりしたボブ — しっかりとして清潔感がある",
+  "h": "532a2aad"
+ },
+ "js.kieut.st-butterfly-sub": {
+  "t": "顔まわりのレイヤー、ふんわりボリューム — 2025年のTikTokで人気",
+  "h": "6460949f"
+ },
+ "js.kieut.st-buzz-sub": {
+  "t": "均一に短く刈る — 顔の輪郭を引き立てる",
+  "h": "3b06ae07"
+ },
+ "js.kieut.st-curtain-sub": {
+  "t": "センター分けのカーテンバング、自然な雰囲気",
+  "h": "ca32d507"
+ },
+ "js.kieut.st-curtain_nu-sub": {
+  "t": "やわらかいカーテンバングのセンター分け — ロマンチックで女性らしい",
+  "h": "d0dece43"
+ },
+ "js.kieut.st-cushion_perm-sub": {
+  "t": "韓国風のやわらかい波状パーマ — 自然なふんわり感、2026年の人気",
+  "h": "bdca143d"
+ },
+ "js.kieut.st-glass_hair-sub": {
+  "t": "極上のつや髪ストレート — 韓国トレンドの頂点",
+  "h": "db26a044"
+ },
+ "js.kieut.st-hime-sub": {
+  "t": "ぱっつん前髪＋レイヤーの日本のお姫様風 — SNSで話題",
+  "h": "af1c27e2"
+ },
+ "js.kieut.st-jellyfish-sub": {
+  "t": "上段は短く下段は長く — Z世代、エッジの効いた印象",
+  "h": "f2002985"
+ },
+ "js.kieut.st-korean_perm-sub": {
+  "t": "ロマンチックな韓国風ウェーブパーマ — 2025年のアジアNo.1トレンド",
+  "h": "22d3d20d"
+ },
+ "js.kieut.st-layered_curl-sub": {
+  "t": "ふんわり段差のカール — 若々しく、若見え効果",
+  "h": "49a65a0e"
+ },
+ "js.kieut.st-lob-sub": {
+  "t": "肩に届くロングボブ — 上品でどんな場面にも合う",
+  "h": "e2b1a249"
+ },
+ "js.kieut.st-long_layers-sub": {
+  "t": "やわらかく自然なロングレイヤー — 女性らしく上品",
+  "h": "500da152"
+ },
+ "js.kieut.st-money_piece-sub": {
+  "t": "顔の両側のハイライト — トレンド感があり、手間が少ない",
+  "h": "c4d6fd9f"
+ },
+ "js.kieut.st-perm_wave-sub": {
+  "t": "自然な韓国風ウェーブパーマ — スタイリングしやすくモダン",
+  "h": "30da2ec0"
+ },
+ "js.kieut.st-pixie-sub": {
+  "t": "大胆なごく短い髪 — 個性的で自信にあふれる",
+  "h": "f42299de"
+ },
+ "js.kieut.st-pompadour-sub": {
+  "t": "前髪を高く持ち上げる — ヴィンテージ×モダン",
+  "h": "25e80198"
+ },
+ "js.kieut.st-pompadour_nu-name": {
+  "t": "ポンパドール（女性向け）",
+  "h": "9d31fa58"
+ },
+ "js.kieut.st-pompadour_nu-sub": {
+  "t": "前側をやわらかくふくらませる — 上品でゴージャス",
+  "h": "336c3d80"
+ },
+ "js.kieut.st-shag-sub": {
+  "t": "ざっくりレイヤー＋カーテンバング — レトロ×モダン",
+  "h": "60b2f94f"
+ },
+ "js.kieut.st-side_part-sub": {
+  "t": "サイド分けで平らに整える — プロフェッショナルで端正",
+  "h": "cb1f2ff5"
+ },
+ "js.kieut.st-side_waves-sub": {
+  "t": "サイド分け＋やわらかいウェーブ — 気品があり色気も",
+  "h": "5d4fd178"
+ },
+ "js.kieut.st-slick_back-sub": {
+  "t": "つややかに後ろへなでつける — 力強くて高級感がある",
+  "h": "405b36d5"
+ },
+ "js.kieut.st-textured-sub": {
+  "t": "ざっくり短く、質感のある個性派 — スタイリングしやすい",
+  "h": "4ca046ff"
+ },
+ "js.kieut.st-textured_wavy-sub": {
+  "t": "質感のある自然なウェーブ — 抜け感があってトレンディ",
+  "h": "c565798c"
+ },
+ "js.kieut.st-two_block-sub": {
+  "t": "韓国スタイル — 両サイドを刈り上げ、トップは自然な長さ",
+  "h": "b7230e49"
+ },
+ "js.kieut.st-undercut-sub": {
+  "t": "サイドをきわどくフェード、トップは長め — クラシックでモダン",
+  "h": "b16e15c9"
+ },
+ "js.kieut.st-wispy-sub": {
+  "t": "やわらかいシースルーバング — 若々しく軽やか",
+  "h": "6c6c0591"
+ },
+ "js.kieut.st-wolf-sub": {
+  "t": "段差のあるウィスピーなレイヤー — Z世代らしい個性",
+  "h": "1444c559"
+ },
+ "js.kieut.step-chuan-bi": {
+  "t": "画像とプロンプトを準備",
+  "h": "02fe352b"
+ },
+ "js.kieut.step-do-mat": {
+  "t": "MediaPipeで顔を測定",
+  "h": "4af85689"
+ },
+ "js.kieut.step-phan-tich": {
+  "t": "顔型を分析",
+  "h": "5059a835"
+ },
+ "js.kieut.step-tao-anh": {
+  "t": "新しい髪型の画像を生成中",
+  "h": "80940ba2"
+ },
+ "js.kieut.thu": {
+  "t": "試す →",
+  "h": "c1480a0a"
+ },
+ "js.kieut.thu-n": {
+  "t": "試着: {n}",
+  "h": "a246266d"
+ },
+ "js.kieut.ty-le-rong-cao": {
+  "t": "顔の幅÷高さの比: {r} — 傾向: {s}",
+  "h": "2094599e"
+ },
+ "js.kieut.vui-long-thu-lai": {
+  "t": "もう一度お試しください。",
+  "h": "2f1d18ee"
+ },
  "js.kimlau.chip1": {
   "t": "家を建てるのに一番良い年はいつですか？",
   "h": "992ff775"
@@ -9790,6 +10282,334 @@
  "js.maihoa.tuc": {
   "t": "）、すなわち **",
   "h": "52e6128d"
+ },
+ "js.mshm.anh-qua-lon": {
+  "t": "画像が大きすぎます（最大5MB）",
+  "h": "5113c5f3"
+ },
+ "js.mshm.bang-du": {
+  "t": "完全な一覧（サブカラー、避けたい色）と、シーン・役割別のコーディネートの案内は、詳細分析に含まれています。",
+  "h": "06901dd7"
+ },
+ "js.mshm.cat-ao": {
+  "t": "トップス / ジャケット",
+  "h": "84c67299"
+ },
+ "js.mshm.cat-ao-khoac": {
+  "t": "アウター",
+  "h": "7878fdb1"
+ },
+ "js.mshm.cat-giay": {
+  "t": "靴 / サンダル",
+  "h": "d1f9572f"
+ },
+ "js.mshm.cat-phu-kien": {
+  "t": "アクセサリー",
+  "h": "f1f0fba9"
+ },
+ "js.mshm.cat-quan": {
+  "t": "パンツ / スカート",
+  "h": "84562745"
+ },
+ "js.mshm.cat-tui": {
+  "t": "バッグ / リュック",
+  "h": "1979c758"
+ },
+ "js.mshm.chip-phoi-do": {
+  "t": "本命の色に合わせた服の合わせ方は？",
+  "h": "3d2ef763"
+ },
+ "js.mshm.chip-phong-van": {
+  "t": "面接で避けるべき色は？",
+  "h": "61460b1c"
+ },
+ "js.mshm.chip-vi-sao": {
+  "t": "なぜ私の本命はこの色に合うのですか？",
+  "h": "7ef6e8bc"
+ },
+ "js.mshm.combo-n": {
+  "t": "コーデ {n}",
+  "h": "9769d38a"
+ },
+ "js.mshm.dau-phay": {
+  "t": "、",
+  "h": "d3bc9a37"
+ },
+ "js.mshm.greeting": {
+  "t": "あなたの本命は **{h}** です。メインカラー: {m}。色やコーディネートについて、さらに質問はありますか？",
+  "h": "e8cef7c1"
+ },
+ "js.mshm.khong-nhan-duoc-anh": {
+  "t": "結果の画像を受け取れませんでした。",
+  "h": "a16f02df"
+ },
+ "js.mshm.label": {
+  "t": "本命に合う色 — 本命 {h}",
+  "h": "71fc87a5"
+ },
+ "js.mshm.loi-e": {
+  "t": "エラー: {e}",
+  "h": "a7267203"
+ },
+ "js.mshm.mau-bac": {
+  "t": "銀",
+  "h": "7386c9c6"
+ },
+ "js.mshm.mau-be": {
+  "t": "ベージュ",
+  "h": "11d1bf27"
+ },
+ "js.mshm.mau-be-dam": {
+  "t": "濃いベージュ",
+  "h": "c660f0a6"
+ },
+ "js.mshm.mau-cam": {
+  "t": "オレンジ",
+  "h": "5e09769d"
+ },
+ "js.mshm.mau-cam-dat": {
+  "t": "テラコッタ",
+  "h": "aaa37477"
+ },
+ "js.mshm.mau-chu": {
+  "t": "メインカラー: {m}",
+  "h": "7813be48"
+ },
+ "js.mshm.mau-den": {
+  "t": "黒",
+  "h": "4d0c0faf"
+ },
+ "js.mshm.mau-do": {
+  "t": "赤",
+  "h": "2eb7503e"
+ },
+ "js.mshm.mau-hong-phan": {
+  "t": "淡いピンク",
+  "h": "0ec650f1"
+ },
+ "js.mshm.mau-hong-tuoi": {
+  "t": "ビビッドピンク",
+  "h": "74592632"
+ },
+ "js.mshm.mau-kem": {
+  "t": "クリーム",
+  "h": "e52e6c26"
+ },
+ "js.mshm.mau-kem-dam": {
+  "t": "濃いクリーム",
+  "h": "e42e248c"
+ },
+ "js.mshm.mau-nau-am": {
+  "t": "暖かい茶色",
+  "h": "e0f4fd1e"
+ },
+ "js.mshm.mau-nau-do": {
+  "t": "赤茶",
+  "h": "9222313d"
+ },
+ "js.mshm.mau-nau-go": {
+  "t": "ウッドブラウン",
+  "h": "24e064f8"
+ },
+ "js.mshm.mau-nau-vang": {
+  "t": "ゴールデンブラウン",
+  "h": "48377d46"
+ },
+ "js.mshm.mau-navy": {
+  "t": "ネイビー",
+  "h": "0229e960"
+ },
+ "js.mshm.mau-tim": {
+  "t": "紫",
+  "h": "684e5966"
+ },
+ "js.mshm.mau-tim-do": {
+  "t": "赤紫",
+  "h": "0b78db8f"
+ },
+ "js.mshm.mau-tim-than": {
+  "t": "インディゴ",
+  "h": "7ca4120f"
+ },
+ "js.mshm.mau-trang": {
+  "t": "白",
+  "h": "9cf5e0eb"
+ },
+ "js.mshm.mau-vang-dat": {
+  "t": "黄土色",
+  "h": "1552080b"
+ },
+ "js.mshm.mau-vang-kim": {
+  "t": "金色",
+  "h": "b441fe1f"
+ },
+ "js.mshm.mau-vang-nhat": {
+  "t": "淡い黄色",
+  "h": "14fd960f"
+ },
+ "js.mshm.mau-vang-tuoi": {
+  "t": "鮮やかな黄色",
+  "h": "f58c4a57"
+ },
+ "js.mshm.mau-xam-dam": {
+  "t": "濃いグレー",
+  "h": "01959534"
+ },
+ "js.mshm.mau-xam-kim-loai": {
+  "t": "メタリックグレー",
+  "h": "6e7d3e23"
+ },
+ "js.mshm.mau-xam-nhat": {
+  "t": "薄いグレー",
+  "h": "d8017939"
+ },
+ "js.mshm.mau-xanh-bien": {
+  "t": "オーシャンブルー",
+  "h": "9a3a3414"
+ },
+ "js.mshm.mau-xanh-duong-dam": {
+  "t": "濃い青",
+  "h": "8d89093c"
+ },
+ "js.mshm.mau-xanh-la": {
+  "t": "緑",
+  "h": "d0e8c4b1"
+ },
+ "js.mshm.mau-xanh-lam-nhat": {
+  "t": "水色",
+  "h": "a72ef9cf"
+ },
+ "js.mshm.mau-xanh-mint": {
+  "t": "ミントグリーン",
+  "h": "3607442e"
+ },
+ "js.mshm.mau-xanh-ngoc": {
+  "t": "ターコイズ",
+  "h": "b8cbaa2e"
+ },
+ "js.mshm.mau-xanh-olive": {
+  "t": "オリーブ",
+  "h": "2dd139ab"
+ },
+ "js.mshm.mau-xanh-reu": {
+  "t": "モスグリーン",
+  "h": "836bccc5"
+ },
+ "js.mshm.mau-xanh-reu-dam": {
+  "t": "濃いモスグリーン",
+  "h": "b49975fe"
+ },
+ "js.mshm.mau-xanh-tim": {
+  "t": "青紫",
+  "h": "08e76f57"
+ },
+ "js.mshm.menh-mau-chinh": {
+  "t": "本命 {h} — 着るべきメインカラー: {m}",
+  "h": "9a1a497e"
+ },
+ "js.mshm.menh-quai": {
+  "t": "本命 {h} · 卦 {n} {g}",
+  "h": "da1abf25"
+ },
+ "js.mshm.nam-sinh-khong-hop-le": {
+  "t": "有効な生まれ年（1900〜2025）を入力してください",
+  "h": "c628d3be"
+ },
+ "js.mshm.nap-am-line": {
+  "t": "納音: {h} · {h}の行に合わせたメインカラー",
+  "h": "6e1df23d"
+ },
+ "js.mshm.occ-doi-tac": {
+  "t": "取引先との面会",
+  "h": "241559f4"
+ },
+ "js.mshm.occ-hang-ngay": {
+  "t": "日常",
+  "h": "c19adb2a"
+ },
+ "js.mshm.occ-hen-ho": {
+  "t": "デート",
+  "h": "c601615d"
+ },
+ "js.mshm.occ-phong-van": {
+  "t": "面接",
+  "h": "0bfbac35"
+ },
+ "js.mshm.phan-tich-that-bai": {
+  "t": "分析に失敗しました",
+  "h": "44b68aa6"
+ },
+ "js.mshm.phan-tich-truoc": {
+  "t": "先に色の分析を行ってください。",
+  "h": "10049eff"
+ },
+ "js.mshm.phoi-mau-dua-tren": {
+  "t": "配色は、上のカラーパレットをもとにします。",
+  "h": "c4d3c4d3"
+ },
+ "js.mshm.quai-line": {
+  "t": "卦 {n} — {name}（{elem}）",
+  "h": "c5a1c901"
+ },
+ "js.mshm.share-text": {
+  "t": "本命 {h} · メインカラー: {m}",
+  "h": "d05a5128"
+ },
+ "js.mshm.share-title": {
+  "t": "私の本命に合う色",
+  "h": "2ba34c9a"
+ },
+ "js.mshm.share-tryon-title": {
+  "t": "私の本命に合う服装（バーチャル試着）",
+  "h": "cd9fdc43"
+ },
+ "js.mshm.step-chuan-bi": {
+  "t": "本命に合う服装を準備",
+  "h": "6ae0380a"
+ },
+ "js.mshm.step-tao-anh": {
+  "t": "服装の画像を生成中",
+  "h": "ba6faaec"
+ },
+ "js.mshm.step-tinh-quai": {
+  "t": "卦数と本命の納音を算出",
+  "h": "39571eee"
+ },
+ "js.mshm.step-tu-van": {
+  "t": "色とコーディネートを提案",
+  "h": "58244246"
+ },
+ "js.mshm.style-cong-so": {
+  "t": "オフィス",
+  "h": "ff273e47"
+ },
+ "js.mshm.style-dao-pho": {
+  "t": "街歩き",
+  "h": "115c50ac"
+ },
+ "js.mshm.style-sang-trong": {
+  "t": "ラグジュアリー",
+  "h": "17db9fb4"
+ },
+ "js.mshm.tai-anh-truoc": {
+  "t": "先に画像をアップロードしてください。",
+  "h": "733c1fec"
+ },
+ "js.mshm.tranh": {
+  "t": "避ける色:",
+  "h": "89f38636"
+ },
+ "js.mshm.tryon-label": {
+  "t": "{s} · 本命 {h}",
+  "h": "e69e839c"
+ },
+ "js.mshm.vui-long-thu-lai": {
+  "t": "もう一度お試しください。",
+  "h": "2f1d18ee"
+ },
+ "js.mshm.xem-mau-chinh": {
+  "t": "上のメインカラーを参考にしてください。",
+  "h": "95e8229c"
  },
  "js.nav.brand": {
   "t": "明宝紫微斗数",
@@ -12742,6 +13562,194 @@
  "js.paywall.xin-loi-da-co-loi-xay": {
   "t": "申し訳ありません。エラーが発生しました",
   "h": "4195c600"
+ },
+ "js.pcol.ban-menh": {
+  "t": "✦ 本命 {h}（{f}）— 古法が勧めるシーズン: {s}",
+  "h": "cadb88ef"
+ },
+ "js.pcol.chip-phoi-do": {
+  "t": "シーズンに合わせた服の合わせ方は？",
+  "h": "3a3ed4e0"
+ },
+ "js.pcol.chip-tranh": {
+  "t": "避けるべき色は？",
+  "h": "19ab5099"
+ },
+ "js.pcol.chip-vi-sao": {
+  "t": "なぜ私はこのシーズンなのですか？",
+  "h": "fd530a4e"
+ },
+ "js.pcol.conf-cao": {
+  "t": "高い",
+  "h": "db10c479"
+ },
+ "js.pcol.conf-thap": {
+  "t": "低い",
+  "h": "ecd6f14a"
+ },
+ "js.pcol.conf-trung-binh": {
+  "t": "普通",
+  "h": "9d324d94"
+ },
+ "js.pcol.day-la-goi-y": {
+  "t": "これは納音にもとづく目安であり、画像から実際の肌のトーンを読み取った結果ではありません。正確なシーズン、カラーパレット、服装の提案は、詳細分析に含まれています。",
+  "h": "25abe372"
+ },
+ "js.pcol.desc-autumn-deep": {
+  "t": "深みのあるアースカラー、リッチ — 暖かみのある褐色の肌、高コントラスト",
+  "h": "90f10d0f"
+ },
+ "js.pcol.desc-autumn-warm": {
+  "t": "黄みのあるアースカラー、深いウォーム — オリーブ・小麦色の肌",
+  "h": "9b6a0f54"
+ },
+ "js.pcol.desc-spring-bright": {
+  "t": "はっきり明るいトーン、高コントラスト、鮮やかな色",
+  "h": "20f039c2"
+ },
+ "js.pcol.desc-spring-warm": {
+  "t": "黄みがかった暖かく明るい肌 — ピーチ／ゴールドの輝き",
+  "h": "468acee7"
+ },
+ "js.pcol.desc-summer-cool": {
+  "t": "青みがかったやさしいピンクのトーン — 青みを帯びたピンクの肌",
+  "h": "1ed00edd"
+ },
+ "js.pcol.desc-summer-soft": {
+  "t": "くすんだクールトーン、ソフト — やわらかいグレーがかった色",
+  "h": "5b194cf9"
+ },
+ "js.pcol.desc-winter-cool": {
+  "t": "高コントラストのクールトーン — 青白い肌、または暗めのクールな肌",
+  "h": "91dd2746"
+ },
+ "js.pcol.desc-winter-deep": {
+  "t": "深いクールトーン、非常に高いコントラスト — 褐色・暗めのクールな肌",
+  "h": "ca5cbf23"
+ },
+ "js.pcol.do-tin-cay": {
+  "t": "信頼度: {c}",
+  "h": "d9faf072"
+ },
+ "js.pcol.greeting": {
+  "t": "あなたのシーズンは **{s}**、アンダートーンは {u} です。色やコーディネートについて、さらに質問はありますか？",
+  "h": "72b706d2"
+ },
+ "js.pcol.lbl-ao": {
+  "t": "トップス",
+  "h": "373c84b7"
+ },
+ "js.pcol.lbl-giay": {
+  "t": "靴",
+  "h": "a47dc437"
+ },
+ "js.pcol.lbl-layer": {
+  "t": "アウター",
+  "h": "c3f10446"
+ },
+ "js.pcol.lbl-quan-vay": {
+  "t": "パンツ / スカート",
+  "h": "879b0cdf"
+ },
+ "js.pcol.loi": {
+  "t": "エラー",
+  "h": "d2907807"
+ },
+ "js.pcol.loi-e": {
+  "t": "エラー: {e}",
+  "h": "a7267203"
+ },
+ "js.pcol.loi-phan-tich": {
+  "t": "分析エラー",
+  "h": "3e06a99e"
+ },
+ "js.pcol.menh-goi-y": {
+  "t": "本命 {h} — 古法が勧めるシーズン: {s}",
+  "h": "a8bdf4cb"
+ },
+ "js.pcol.nen-tranh": {
+  "t": "避けたい色",
+  "h": "4fd3dd20"
+ },
+ "js.pcol.season-autumn-deep": {
+  "t": "オータム・ディープ",
+  "h": "576a8bf3"
+ },
+ "js.pcol.season-autumn-warm": {
+  "t": "オータム・ウォーム",
+  "h": "1034d9af"
+ },
+ "js.pcol.season-spring-bright": {
+  "t": "スプリング・ブライト",
+  "h": "eedcebfe"
+ },
+ "js.pcol.season-spring-warm": {
+  "t": "スプリング・ウォーム",
+  "h": "1c006148"
+ },
+ "js.pcol.season-summer-cool": {
+  "t": "サマー・クール",
+  "h": "ee7b3719"
+ },
+ "js.pcol.season-summer-soft": {
+  "t": "サマー・ソフト",
+  "h": "3545a106"
+ },
+ "js.pcol.season-winter-cool": {
+  "t": "ウィンター・クール",
+  "h": "bde54243"
+ },
+ "js.pcol.season-winter-deep": {
+  "t": "ウィンター・ディープ",
+  "h": "0f222647"
+ },
+ "js.pcol.share-outfit-text": {
+  "t": "シーズン {s}",
+  "h": "f1a309aa"
+ },
+ "js.pcol.share-outfit-title": {
+  "t": "私のパーソナルカラーに合うコーディネート",
+  "h": "26cbac11"
+ },
+ "js.pcol.share-text": {
+  "t": "シーズン: {n}（{s}）· アンダートーン: {u}",
+  "h": "d299d1fa"
+ },
+ "js.pcol.share-title": {
+  "t": "私のパーソナルカラー",
+  "h": "07a149e4"
+ },
+ "js.pcol.step-chuan-bi": {
+  "t": "シーズンに合わせたコーディネートを準備",
+  "h": "23134132"
+ },
+ "js.pcol.step-phan-tich": {
+  "t": "肌のトーンとカラーシーズンを分析",
+  "h": "d712f3c3"
+ },
+ "js.pcol.step-tao-anh": {
+  "t": "新しいコーディネートの画像を生成中",
+  "h": "f192809a"
+ },
+ "js.pcol.step-tinh-menh": {
+  "t": "生まれ年から本命を算出",
+  "h": "6c35f608"
+ },
+ "js.pcol.undertone-cool": {
+  "t": "クール（Cool）",
+  "h": "83997975"
+ },
+ "js.pcol.undertone-neutral": {
+  "t": "ニュートラル（Neutral）",
+  "h": "26af9b58"
+ },
+ "js.pcol.undertone-warm": {
+  "t": "ウォーム（Warm）",
+  "h": "8e0429c4"
+ },
+ "js.pcol.vui-long-thu-lai": {
+  "t": "もう一度お試しください。",
+  "h": "2f1d18ee"
  },
  "js.phongthuy.100-sau-dieu-chinh-co-the": {
   "t": "/100**、調整後は **",
@@ -21927,6 +22935,402 @@
   "t": "履歴を見る",
   "h": "21a19fb0"
  },
+ "js.tpng.cat-ao": {
+  "t": "トップス",
+  "h": "373c84b7"
+ },
+ "js.tpng.cat-ao-khoac": {
+  "t": "アウター",
+  "h": "dee0e8de"
+ },
+ "js.tpng.cat-giay": {
+  "t": "靴",
+  "h": "a47dc437"
+ },
+ "js.tpng.cat-phu-kien": {
+  "t": "アクセサリー",
+  "h": "f1f0fba9"
+ },
+ "js.tpng.cat-quan": {
+  "t": "パンツ / スカート",
+  "h": "879b0cdf"
+ },
+ "js.tpng.chip-diem-nhan": {
+  "t": "最も効果的なアクセントカラーは？",
+  "h": "6d38e6a5"
+ },
+ "js.tpng.chip-hoa-giai": {
+  "t": "どう化解すればよいですか？",
+  "h": "1dee5079"
+ },
+ "js.tpng.chip-khac": {
+  "t": "なぜこの日は私の本命を剋すのですか？",
+  "h": "a98c2e50"
+ },
+ "js.tpng.greeting": {
+  "t": "本命 **{m}**、今日の五行 **{n}** — {r}。色やスタイルについて、さらに質問はありますか？",
+  "h": "36a537dc"
+ },
+ "js.tpng.hanh-n": {
+  "t": "{h}の行",
+  "h": "3e50daab"
+ },
+ "js.tpng.label": {
+  "t": "日別コーディネート — {r}",
+  "h": "26ec2299"
+ },
+ "js.tpng.loi": {
+  "t": "エラー",
+  "h": "d2907807"
+ },
+ "js.tpng.loi-e": {
+  "t": "エラー: {e}",
+  "h": "a7267203"
+ },
+ "js.tpng.loi-phan-tich": {
+  "t": "分析エラー",
+  "h": "3e06a99e"
+ },
+ "js.tpng.mau-bac": {
+  "t": "銀",
+  "h": "7386c9c6"
+ },
+ "js.tpng.mau-be": {
+  "t": "ベージュ",
+  "h": "11d1bf27"
+ },
+ "js.tpng.mau-cam": {
+  "t": "オレンジ",
+  "h": "5e09769d"
+ },
+ "js.tpng.mau-cam-dat": {
+  "t": "テラコッタ",
+  "h": "aaa37477"
+ },
+ "js.tpng.mau-den": {
+  "t": "黒",
+  "h": "4d0c0faf"
+ },
+ "js.tpng.mau-do": {
+  "t": "赤",
+  "h": "2eb7503e"
+ },
+ "js.tpng.mau-hong": {
+  "t": "ピンク",
+  "h": "5a43ba9e"
+ },
+ "js.tpng.mau-hong-phan": {
+  "t": "淡いピンク",
+  "h": "0ec650f1"
+ },
+ "js.tpng.mau-kem": {
+  "t": "クリーム",
+  "h": "e52e6c26"
+ },
+ "js.tpng.mau-nau": {
+  "t": "茶色",
+  "h": "42ff42d9"
+ },
+ "js.tpng.mau-nau-go": {
+  "t": "ウッドブラウン",
+  "h": "24e064f8"
+ },
+ "js.tpng.mau-navy": {
+  "t": "ネイビー",
+  "h": "0229e960"
+ },
+ "js.tpng.mau-nen-mac": {
+  "t": "{r}。着るとよい色、おすすめのスタイル、その日の五行に合った具体的な服装は、詳細分析に含まれています。",
+  "h": "51d59e76"
+ },
+ "js.tpng.mau-tim": {
+  "t": "紫",
+  "h": "684e5966"
+ },
+ "js.tpng.mau-tim-do": {
+  "t": "赤紫",
+  "h": "0b78db8f"
+ },
+ "js.tpng.mau-trang": {
+  "t": "白",
+  "h": "9cf5e0eb"
+ },
+ "js.tpng.mau-vang": {
+  "t": "黄色",
+  "h": "27d57aed"
+ },
+ "js.tpng.mau-vang-kim": {
+  "t": "金色",
+  "h": "b441fe1f"
+ },
+ "js.tpng.mau-xam-dam": {
+  "t": "濃いグレー",
+  "h": "01959534"
+ },
+ "js.tpng.mau-xam-nhat": {
+  "t": "薄いグレー",
+  "h": "d8017939"
+ },
+ "js.tpng.mau-xanh-duong": {
+  "t": "青",
+  "h": "95beb520"
+ },
+ "js.tpng.mau-xanh-la": {
+  "t": "緑",
+  "h": "d0e8c4b1"
+ },
+ "js.tpng.mau-xanh-lam": {
+  "t": "水色",
+  "h": "0537307a"
+ },
+ "js.tpng.mau-xanh-ngoc": {
+  "t": "ターコイズ",
+  "h": "b8cbaa2e"
+ },
+ "js.tpng.mau-xanh-reu": {
+  "t": "モスグリーン",
+  "h": "836bccc5"
+ },
+ "js.tpng.menh-ngay": {
+  "t": "本命 {h} · {c}の日",
+  "h": "ac19a8fe"
+ },
+ "js.tpng.ngay-hanh": {
+  "t": "{c}の日 — 五行は{h}",
+  "h": "6fd10f47"
+ },
+ "js.tpng.rel-binh-hoa": {
+  "t": "同気の日 — 安定していて順調",
+  "h": "d1971f40"
+ },
+ "js.tpng.rel-menh-khac-ngay": {
+  "t": "本命が日を剋す — 平均的な日、慎重に",
+  "h": "256fb5ff"
+ },
+ "js.tpng.rel-menh-sinh-ngay": {
+  "t": "本命が日を生じる — 少し消耗するが、良い日",
+  "h": "995978d5"
+ },
+ "js.tpng.rel-ngay-khac-menh": {
+  "t": "日が本命を剋す ✦ 色で化解を",
+  "h": "f331fca5"
+ },
+ "js.tpng.rel-ngay-sinh-menh": {
+  "t": "日が本命を生じる ✦ 非常に順調",
+  "h": "81b455cf"
+ },
+ "js.tpng.share-text": {
+  "t": "本命 {m} · {c}の日（{n}）— {r}",
+  "h": "a603ba42"
+ },
+ "js.tpng.share-title": {
+  "t": "私の今日に合う服装",
+  "h": "36dc7dba"
+ },
+ "js.tpng.share-tryon-title": {
+  "t": "私の今日に合う服装（バーチャル試着）",
+  "h": "7767c7e3"
+ },
+ "js.tpng.step-chuan-bi": {
+  "t": "五行に合わせた服装を準備",
+  "h": "cf955a11"
+ },
+ "js.tpng.step-tao-anh": {
+  "t": "服装の画像を生成中",
+  "h": "ba6faaec"
+ },
+ "js.tpng.step-tinh": {
+  "t": "日の干支と五行の関係を算出",
+  "h": "7112616b"
+ },
+ "js.tpng.step-tu-van": {
+  "t": "その日に合う服装を提案",
+  "h": "86c6bfcc"
+ },
+ "js.tpng.style-hoa-dan": {
+  "t": "ソフト花旦スタイル",
+  "h": "c859a2ac"
+ },
+ "js.tpng.tryon-casual": {
+  "t": "カジュアル",
+  "h": "7b664f70"
+ },
+ "js.tpng.tryon-cong-so": {
+  "t": "オフィス",
+  "h": "81a4c6c6"
+ },
+ "js.tpng.tryon-dao-pho": {
+  "t": "街歩き",
+  "h": "c1f7f4a0"
+ },
+ "js.tpng.tryon-label": {
+  "t": "本命 {h} · {s}",
+  "h": "c91f44b2"
+ },
+ "js.tpng.tryon-sang-trong": {
+  "t": "ラグジュアリー",
+  "h": "3c6421de"
+ },
+ "js.tpng.vui-long-thu-lai": {
+  "t": "もう一度お試しください。",
+  "h": "2f1d18ee"
+ },
+ "js.trdi.chip-mau-son": {
+  "t": "私の肌のトーンに合う口紅の色は？",
+  "h": "f013cf8c"
+ },
+ "js.trdi.chip-van-khi": {
+  "t": "メイクは運気にどう影響しますか？",
+  "h": "a175f487"
+ },
+ "js.trdi.chip-vi-sao": {
+  "t": "なぜこのスタイルが私に合うのですか？",
+  "h": "7ed2d820"
+ },
+ "js.trdi.do-truc-tiep": {
+  "t": "MediaPipeで画像から直接測定しました。",
+  "h": "6bca61a6"
+ },
+ "js.trdi.goi-y-menh": {
+  "t": "メイクスタイルの提案では、この本命に合う色味を優先します。",
+  "h": "30df970d"
+ },
+ "js.trdi.greeting": {
+  "t": "あなたの顔型は **{s}** です。どのメイクスタイルについて、さらに知りたいですか？",
+  "h": "b80d300f"
+ },
+ "js.trdi.greeting-menh": {
+  "t": "あなたの顔型は **{s}**、本命は{h}です。どのメイクスタイルについて、さらに知りたいですか？",
+  "h": "3a4fb4b5"
+ },
+ "js.trdi.hinh-dai": {
+  "t": "面長",
+  "h": "67167578"
+ },
+ "js.trdi.hinh-oval": {
+  "t": "卵型",
+  "h": "181b45bd"
+ },
+ "js.trdi.hinh-tron-vuong": {
+  "t": "丸・四角",
+  "h": "a30fca34"
+ },
+ "js.trdi.hop-menh": {
+  "t": "本命に合う",
+  "h": "44069c43"
+ },
+ "js.trdi.label": {
+  "t": "メイク — {s}",
+  "h": "f0eca080"
+ },
+ "js.trdi.loi-e": {
+  "t": "エラー: {e}",
+  "h": "a7267203"
+ },
+ "js.trdi.loi-phan-tich": {
+  "t": "分析エラー",
+  "h": "3e06a99e"
+ },
+ "js.trdi.loi-xu-ly-anh": {
+  "t": "画像の処理エラー",
+  "h": "52fb0d60"
+ },
+ "js.trdi.mat-tuoi-da": {
+  "t": "{s} · {a} · 肌 {d}",
+  "h": "07bd0f9d"
+ },
+ "js.trdi.menh-n": {
+  "t": "本命 {h}",
+  "h": "e46cbb3b"
+ },
+ "js.trdi.rank-phu-hop": {
+  "t": "おすすめ #{n}",
+  "h": "20cdc5b5"
+ },
+ "js.trdi.share-mat": {
+  "t": "顔型 {s}",
+  "h": "04abbf18"
+ },
+ "js.trdi.share-title": {
+  "t": "顔相に合う私のメイク提案",
+  "h": "c6d0e9a5"
+ },
+ "js.trdi.share-tryon-text": {
+  "t": "スタイルを試着: {n}",
+  "h": "4641d81c"
+ },
+ "js.trdi.share-tryon-title": {
+  "t": "私のメイク試着（バーチャル）",
+  "h": "a431ac26"
+ },
+ "js.trdi.st-dark_muse-sub": {
+  "t": "くすんだスモーキー、クールトーン、エディトリアルな個性",
+  "h": "e51b61c7"
+ },
+ "js.trdi.st-glass_skin-sub": {
+  "t": "ノーメイク風メイク、内側から光るようなつや肌",
+  "h": "0c6ac518"
+ },
+ "js.trdi.st-guochao-sub": {
+  "t": "濃い赤リップ、シャープなライナー、古の気品",
+  "h": "2df3d2b1"
+ },
+ "js.trdi.st-hoa-dan-name": {
+  "t": "ソフト花旦スタイル",
+  "h": "c859a2ac"
+ },
+ "js.trdi.st-hoa_dan-sub": {
+  "t": "桃色のピンク、ローズのチーク、やわらかく優雅",
+  "h": "ee95019a"
+ },
+ "js.trdi.st-j_gyaru-sub": {
+  "t": "サークルレンズ風、ドラマチックなまつ毛、鮮やかなライナー",
+  "h": "8342ee69"
+ },
+ "js.trdi.st-j_sheer-sub": {
+  "t": "透明感のある肌、シアーなリップ、侘び寂びのミニマル",
+  "h": "bef5b3e4"
+ },
+ "js.trdi.st-kdrama_glam-sub": {
+  "t": "くっきりライナー、大胆なリップ、最高峰の気品",
+  "h": "f6378d7f"
+ },
+ "js.trdi.st-soft_girl-sub": {
+  "t": "ふんわりチーク、グラデーションリップ、無垢なツヤ",
+  "h": "68ac4e8f"
+ },
+ "js.trdi.step-chuan-bi": {
+  "t": "メイクのプロンプトを準備",
+  "h": "f2303939"
+ },
+ "js.trdi.step-nap-am": {
+  "t": "本命の納音を算出",
+  "h": "94bf98e8"
+ },
+ "js.trdi.step-phan-tich": {
+  "t": "顔を分析してメイクスタイルを提案",
+  "h": "17ac9e7f"
+ },
+ "js.trdi.step-tao-anh": {
+  "t": "新しいメイクの画像を生成中",
+  "h": "060bcb1f"
+ },
+ "js.trdi.tam-phong-cach": {
+  "t": "ランク付けされた8つのメイクスタイル、カラーパレット、そのまま試着は、詳細分析に含まれています。",
+  "h": "d0bfd7a6"
+ },
+ "js.trdi.thu": {
+  "t": "試す →",
+  "h": "c1480a0a"
+ },
+ "js.trdi.ty-le-rong-cao": {
+  "t": "顔の幅÷高さの比: {r} — 傾向: {s}",
+  "h": "2094599e"
+ },
+ "js.trdi.vui-long-thu-lai": {
+  "t": "もう一度お試しください。",
+  "h": "2f1d18ee"
+ },
  "js.trochuyen.gio-truoc": {
   "t": "{n}時間前",
   "h": "19a19d72"
@@ -22970,6 +24374,138 @@
  "khis.xem-khi-sac": {
   "t": "気色を見る",
   "h": "7863a81d"
+ },
+ "kieut.anh-sang-tu-nhien-deu": {
+  "t": "✓ 自然で均一な光",
+  "h": "7f81d51a"
+ },
+ "kieut.chon-gioi-tinh-va-tai-len": {
+  "t": "性別を選び、顔がはっきり写った画像を1枚アップロードしてください。システムが顔型を分析し、そのまま画像に合成して試着します。似合う髪型・メガネの提案と、試着画像が届きます。",
+  "h": "5c22b94e"
+ },
+ "kieut.chup-anh-khuon-mat-he-thong": {
+  "t": "顔写真を撮影してください — システムが顔型を分析し、人相学にもとづいて似合う髪型を提案します。髪型はそのまま画像で試せます。",
+  "h": "fd003738"
+ },
+ "kieut.doi-anh-khac": {
+  "t": "✕ 別の画像に変更",
+  "h": "d058264f"
+ },
+ "kieut.doi-mu-doi-khan-che-toc": {
+  "t": "✗ 帽子やスカーフで髪を隠している",
+  "h": "a40d8fd8"
+ },
+ "kieut.hinh-dang-khuon-mat": {
+  "t": "顔型",
+  "h": "20dd1d13"
+ },
+ "kieut.huy": {
+  "t": "キャンセル",
+  "h": "33639e92"
+ },
+ "kieut.ket-qua": {
+  "t": "結果",
+  "h": "c9f95514"
+ },
+ "kieut.kieu-kinh-phu-hop-theo-cau": {
+  "t": "<span class=\"ic\" data-icon=\"glasses\"></span> 顔の骨格に合うメガネ",
+  "h": "39d8292c"
+ },
+ "kieut.kieu-toc": {
+  "t": "<span class=\"ic\" data-icon=\"scissors\"></span> 髪型",
+  "h": "7d47a3d3"
+ },
+ "kieut.kieu-toc-kinh-mat-hop-tuong": {
+  "t": "顔相に合う髪型とメガネ — 明宝紫微斗数",
+  "h": "704b6aa7"
+ },
+ "kieut.kieu-toc-kinh-mat-hop-tuong-v1r6": {
+  "t": "<b>顔相に合う髪型とメガネ</b><span>顔型を分析し、髪型を提案して、そのまま画像で試着</span>",
+  "h": "745fe887"
+ },
+ "kieut.kieu-toc-kinh-mat-hop-tuong-x53w": {
+  "t": "顔相に合う髪型とメガネ",
+  "h": "a6dff7d5"
+ },
+ "kieut.kinh-mat": {
+  "t": "<span class=\"ic\" data-icon=\"glasses\"></span> メガネ",
+  "h": "508d6f59"
+ },
+ "kieut.loi-khuyen": {
+  "t": "<strong><span class=\"ic\" data-icon=\"message-circle\"></span> アドバイス: </strong><span id=\"tipText\"></span>",
+  "h": "25976b6b"
+ },
+ "kieut.nghieng-mat-nhieu": {
+  "t": "✗ 顔が大きく傾いている",
+  "h": "9d537acf"
+ },
+ "kieut.nguoc-sang-toi": {
+  "t": "✗ 逆光・暗い",
+  "h": "97a94265"
+ },
+ "kieut.nhan-tuong-hoc-phuong-dong-khong": {
+  "t": "東洋の人相学は運命を論じるだけでなく、顔の形を五行（金・木・水・火・土）で分類し、それぞれの行が特徴的な輪郭に対応すると考えます。この分類は、顔に調和する髪型やメイクの提案に応用されています。",
+  "h": "bff2f554"
+ },
+ "kieut.nhin-thang-vao-camera-dam-bao": {
+  "t": "カメラをまっすぐ見て、十分な明るさで、顔がフレームの大部分を占めるようにしてください。",
+  "h": "d5f2b4f9"
+ },
+ "kieut.phan-tich-5s-thu-kieu-25s": {
+  "t": "分析 約5秒 · 試着 約25秒",
+  "h": "d75a8d73"
+ },
+ "kieut.phan-tich-anh-khac": {
+  "t": "<span class=\"ic\" data-icon=\"rotate-cw\"></span> 別の画像を分析",
+  "h": "727c28a0"
+ },
+ "kieut.phan-tich-khuon-mat-goi-y": {
+  "t": "<span class=\"ic\" data-icon=\"sparkles\"></span> 顔型の分析とスタイル提案 — <span data-tvp-price=\"kieu-toc-phan-tich\">…</span> 両",
+  "h": "7ce5c0fd"
+ },
+ "kieut.preview-anh": {
+  "t": "画像プレビュー",
+  "h": "6bc7c7e2"
+ },
+ "kieut.quyen-rieng-tu-anh-chi-gui": {
+  "t": "<strong>プライバシー:</strong> 画像は分析のためにサーバーへ送るだけで、当社のサーバーには保存しません。Replicateが処理して結果の画像を返し、長期保存はしません。",
+  "h": "5d8fcc8b"
+ },
+ "kieut.sau-khi-thu": {
+  "t": "試着後",
+  "h": "c3de1d39"
+ },
+ "kieut.tai-anh-ket-qua": {
+  "t": "<span class=\"ic\" data-icon=\"chevron-down\"></span> 結果の画像をダウンロード",
+  "h": "5f15ca5b"
+ },
+ "kieut.tai-anh-len": {
+  "t": "<span class=\"ic\" data-icon=\"camera\"></span> 画像をアップロード",
+  "h": "633baad5"
+ },
+ "kieut.tat-ca-kieu-toc-la-phu": {
+  "t": "<span class=\"ic\" data-icon=\"sparkles\"></span> すべての髪型 — <span class=\"ic\" data-icon=\"star\"></span> はあなたの顔相に最も合うもの",
+  "h": "8a472eaa"
+ },
+ "kieut.thang-mat-chinh-dien": {
+  "t": "✓ まっすぐ正面向き",
+  "h": "7a6bfbf8"
+ },
+ "kieut.thay-ro-tu-tran-den-cam": {
+  "t": "✓ 額からあごまではっきり見える",
+  "h": "4ac86958"
+ },
+ "kieut.thu-kieu-khac": {
+  "t": "<span class=\"ic\" data-icon=\"rotate-cw\"></span> 別のスタイルを試す",
+  "h": "0054a608"
+ },
+ "kieut.thu-tren-anh": {
+  "t": "<span class=\"ic\" id=\"tryonTitleIcon\"></span> <span id=\"tryonTitleText\">画像で試着</span>",
+  "h": "586df119"
+ },
+ "kieut.ton-tien-lam-toc-doi-kinh": {
+  "t": "髪型を変えてもメガネを替えても、なんだかしっくりこない — 問題はセンスではなく、実際に変える前に試着してみなかったことかもしれません。ポートレート画像をアップロードして、あなたの顔相に似合うスタイルを今すぐ確認しましょう。",
+  "h": "b6de26af"
  },
  "kimlau.bang-tra-20-nam-toi": {
   "t": "今後20年の<br>早見表",
@@ -24507,6 +26043,110 @@
   "t": "命盤と鑑定を見る →",
   "h": "95889730"
  },
+ "mshm.anh-chup-thang-nguoi-du-sang": {
+  "t": "全身をまっすぐ撮影、十分な明るさ · JPG/PNG",
+  "h": "fe4086d9"
+ },
+ "mshm.bang-mau-theo-menh": {
+  "t": "<span class=\"ic\" data-icon=\"palette\"></span> 本命別カラーパレット",
+  "h": "75158994"
+ },
+ "mshm.chi-phi-luong": {
+  "t": "<span>料金: <strong><span data-tvp-price=\"mau-sac-hop-menh\">…</span> 両</strong></span>",
+  "h": "72c219ac"
+ },
+ "mshm.chon-phong-cach-trang-phuc": {
+  "t": "服のスタイルを選ぶ:",
+  "h": "b115ee23"
+ },
+ "mshm.dao-pho": {
+  "t": "<span class=\"ic\" data-icon=\"compass\"></span> 街歩き",
+  "h": "5a035e78"
+ },
+ "mshm.goi-y-phoi-do-hoan-chinh": {
+  "t": "<span class=\"ic\" data-icon=\"sparkles\"></span> 完成コーディネートの提案",
+  "h": "233b565f"
+ },
+ "mshm.huong-dan-trang-phuc-chi-tiet": {
+  "t": "<span class=\"ic\" data-icon=\"shirt\"></span> 服装の詳しい案内",
+  "h": "68e382ef"
+ },
+ "mshm.lam-an-e-am-tai-loc": {
+  "t": "商売が振るわず、金運も集まらない — 毎日身につけ、使っている色が本命と相剋していないか、考えたことはありますか。生年を入力すれば、使うべき色と避けるべき色の一覧がすぐに届きます。",
+  "h": "fe0800d1"
+ },
+ "mshm.mau-chinh-tot-nhat": {
+  "t": "✓ メインカラー — 最良",
+  "h": "d169b014"
+ },
+ "mshm.mau-nen-tranh": {
+  "t": "✗ 避けたい色",
+  "h": "adc4005c"
+ },
+ "mshm.mau-phu-chap-nhan-duoc": {
+  "t": "◎ サブカラー — 許容範囲",
+  "h": "5679d14e"
+ },
+ "mshm.mau-sac-hop-menh": {
+  "t": "命に合う色",
+  "h": "64b3b887"
+ },
+ "mshm.mau-sac-hop-menh-tu-van": {
+  "t": "<b>本命に合う色</b><span>五行納音と八宅にもとづく服の色の提案、そのまま画像で試着</span>",
+  "h": "764edb0c"
+ },
+ "mshm.mau-sac-hop-menh-tu-vi": {
+  "t": "本命に合う色 — 明宝紫微斗数",
+  "h": "d1cab1d9"
+ },
+ "mshm.mau-theo-dip": {
+  "t": "<span class=\"ic\" data-icon=\"calendar\"></span> シーン別の色",
+  "h": "193da2e8"
+ },
+ "mshm.meo-dac-biet-theo-ban-menh": {
+  "t": "<span class=\"ic\" data-icon=\"lightbulb\"></span> 本命別のとっておきのコツ",
+  "h": "ec862b7f"
+ },
+ "mshm.ngu-hanh-nap-am-gan-moi": {
+  "t": "納音五行は、六十花甲子のなかで生まれ年ごとに固有の本命を割り当て、八宅は方位と空間の要素を加えて見ます。この二つの体系を組み合わせて、古人はその人の本命と相生または相剋する色や品物を導き出しました。",
+  "h": "245a2b78"
+ },
+ "mshm.nhap-nam-sinh-va-gioi-tinh": {
+  "t": "生まれ年と性別を入力してください。システムが卦数を算出し、五行のカラーパレットと照らし合わせます。本命に合うカラーパレット、シーン別の色、コーディネートの提案が届きます。",
+  "h": "9b015181"
+ },
+ "mshm.sang-trong": {
+  "t": "<span class=\"ic\" data-icon=\"sparkles\"></span> ラグジュアリー",
+  "h": "e0db35aa"
+ },
+ "mshm.tai-anh-cua-ban-len": {
+  "t": "画像をアップロード",
+  "h": "1444e1ba"
+ },
+ "mshm.tai-sao-nen-tranh-nhung-mau": {
+  "t": "⚠ なぜこれらの色を避けるのか？",
+  "h": "d3b71bb0"
+ },
+ "mshm.thong-tin-ban-menh": {
+  "t": "<span class=\"ic\" data-icon=\"sparkles\"></span> 本命の情報",
+  "h": "0a614b1f"
+ },
+ "mshm.thu-trang-phuc-theo-menh-luong": {
+  "t": "<span class=\"ic\" data-icon=\"shirt\"></span> 本命に合う服を試着 <span style=\"font-size:10px;background:var(--gold-lt);color:var(--tx-blue);padding:2px 8px;border-radius:10px;font-weight:600\"><span data-tvp-price=\"trang-phuc-tryon\">…</span> 両/回</span>",
+  "h": "f74ca71d"
+ },
+ "mshm.tu-van-mau-sac-trang-phuc": {
+  "t": "五行納音にもとづき、本命に合う服の色を提案します — トップス、パンツ、靴、バッグ、アクセサリー。シーンごとの完成コーディネートも。",
+  "h": "d55c587d"
+ },
+ "mshm.xem-lai": {
+  "t": "← 見直す",
+  "h": "e2aaadb4"
+ },
+ "mshm.xem-mau-sac-hop-menh-luong": {
+  "t": "<span class=\"ic\" data-icon=\"palette\"></span> 本命に合う色を見る — <span data-tvp-price=\"mau-sac-hop-menh\">…</span> 両",
+  "h": "85a1dcbd"
+ },
  "napam.1-nhap-nam-sinh": {
   "t": "<span class=\"wss-n\">1</span><span class=\"wss-l\">生まれ年を入力</span>",
   "h": "ecce406c"
@@ -25314,6 +26954,162 @@
  "paysuc.xac-nhan-thanh-toan-tu-vi": {
   "t": "お支払いの確認 — 明宝紫微斗数",
   "h": "b7b66e97"
+ },
+ "pcol.anh-cua-ban": {
+  "t": "あなたの画像",
+  "h": "e41a257b"
+ },
+ "pcol.anh-khuon-mat": {
+  "t": "<span class=\"ic\" data-icon=\"camera\"></span> 顔写真",
+  "h": "553ce737"
+ },
+ "pcol.anh-sang-tu-nhien-ban-ngay": {
+  "t": "昼間の自然光 · フィルターもメイクもなし<br>肌のトーンがはっきり見え、白飛びしていないこと",
+  "h": "4cff1a71"
+ },
+ "pcol.anh-sang-tu-nhien-tot-nhat": {
+  "t": "<span class=\"tip-badge\"><span class=\"ic\" data-icon=\"sun\"></span> 自然光が最適</span> <span class=\"tip-badge\"><span class=\"ic\" data-icon=\"x-circle\"></span> 色フィルターなし</span> <span class=\"tip-badge\"><span class=\"ic\" data-icon=\"smile\"></span> すっぴん</span> <span class=\"tip-badge\"><span class=\"ic\" data-icon=\"camera\"></span> 近くで肌がはっきり見えるように</span>",
+  "h": "30e85f5e"
+ },
+ "pcol.bang-mau-ca-nhan": {
+  "t": "<span class=\"ic\" data-icon=\"palette\"></span> あなたのカラーパレット",
+  "h": "eda62269"
+ },
+ "pcol.celeb-cung-tong-mau": {
+  "t": "<span class=\"ic\" data-icon=\"star\"></span> <strong>同じトーンの著名人:</strong> <span id=\"celebInspo\">—</span>",
+  "h": "3b09c33a"
+ },
+ "pcol.chon-style": {
+  "t": "スタイルを選ぶ",
+  "h": "92f6c1b3"
+ },
+ "pcol.chup-anh-toan-than": {
+  "t": "全身写真を撮影",
+  "h": "3269c13d"
+ },
+ "pcol.chup-hoac-chon-anh-khuon-mat": {
+  "t": "顔写真を撮影または選択",
+  "h": "93732afc"
+ },
+ "pcol.cong-so": {
+  "t": "<span class=\"ic\" data-icon=\"briefcase\"></span> オフィス",
+  "h": "2a18c4c4"
+ },
+ "pcol.cong-so-li34": {
+  "t": "<span class=\"ic\" data-icon=\"briefcase\"></span> オフィス",
+  "h": "57f12434"
+ },
+ "pcol.dien-do-dung-mot-ma-van": {
+  "t": "流行の服を着ているのに疲れて見える、くすんで見えると言われる — 自分がどのカラーシーズンか、まだ知らないのかもしれません。ポートレート画像をアップロードして、実際の写真での試着をすぐに見てみましょう。",
+  "h": "d671ee98"
+ },
+ "pcol.goi-y-trang-phuc-theo-season": {
+  "t": "<span class=\"ic\" data-icon=\"shirt\"></span> シーズン別コーディネート提案",
+  "h": "dc3ddd6e"
+ },
+ "pcol.gong-kinh": {
+  "t": "メガネフレーム",
+  "h": "9e539d7d"
+ },
+ "pcol.hang-ngay": {
+  "t": "<span class=\"ic\" data-icon=\"leaf\"></span> 日常",
+  "h": "e45465a4"
+ },
+ "pcol.hang-ngay-dbs5": {
+  "t": "<span class=\"ic\" data-icon=\"leaf\"></span> 日常",
+  "h": "55d92049"
+ },
+ "pcol.kim-loai": {
+  "t": "金属",
+  "h": "8ff50d1f"
+ },
+ "pcol.kim-loai-phu-kien": {
+  "t": "<span class=\"ic\" data-icon=\"gem\"></span> 金属とアクセサリー",
+  "h": "90e92f92"
+ },
+ "pcol.ly-do": {
+  "t": "理由",
+  "h": "0cbf3763"
+ },
+ "pcol.mau-ao-so-mi": {
+  "t": "シャツの色",
+  "h": "870c2997"
+ },
+ "pcol.mau-hop-lam-sang-noi-bat": {
+  "t": "✓ 似合う色 — 顔を明るく引き立てる",
+  "h": "b47aaef5"
+ },
+ "pcol.mau-nen-tranh-lam-xin-toi": {
+  "t": "✗ 避けたい色 — くすんで肌が暗く見える",
+  "h": "190a8061"
+ },
+ "pcol.mau-toc": {
+  "t": "ヘアカラー",
+  "h": "2a321f26"
+ },
+ "pcol.nam-sinh-tuy-chon-ket-hop": {
+  "t": "生まれ年（任意 — 本命と組み合わせます）",
+  "h": "a6c5911c"
+ },
+ "pcol.personal-color": {
+  "t": "パーソナルカラー",
+  "h": "52515e4c"
+ },
+ "pcol.personal-color-phan-tich-mau-sac": {
+  "t": "パーソナルカラー（個人の色彩分析）は、肌・髪・瞳のトーンを「春・夏・秋・冬」のカラーシーズンに分類する手法です。西洋の配色理論にもとづき、韓国や日本のファッションや美容で広く使われています。各シーズンには、服やメイクに最も合うカラーパレットが対応します。",
+  "h": "4d195af6"
+ },
+ "pcol.personal-color-phan-tich-undertone-seaso": {
+  "t": "<b>パーソナルカラー</b><span>アンダートーンとカラーシーズンを分析し、コーディネートを提案して、そのまま画像で試着</span>",
+  "h": "1946e328"
+ },
+ "pcol.personal-color-tu-vi-minh-bao": {
+  "t": "パーソナルカラー — 明宝紫微斗数",
+  "h": "9b10e278"
+ },
+ "pcol.phan-tich-personal-color-luong": {
+  "t": "<span class=\"ic\" data-icon=\"palette\"></span> パーソナルカラーを分析 — <span data-tvp-price=\"personal-color\">…</span> 両",
+  "h": "cfa46f2a"
+ },
+ "pcol.phan-tich-undertone-va-personal-color": {
+  "t": "アンダートーンとパーソナルカラーシーズンを分析 — 顔を最も明るく見せるトップスの色、髪色、アクセサリーを提案します。五行の古法も組み合わせます。",
+  "h": "69b0927d"
+ },
+ "pcol.su-kien": {
+  "t": "<span class=\"ic\" data-icon=\"sparkles\"></span> イベント",
+  "h": "f4429e62"
+ },
+ "pcol.su-kien-cbgc": {
+  "t": "<span class=\"ic\" data-icon=\"sparkles\"></span> イベント",
+  "h": "f80867ad"
+ },
+ "pcol.tai-len-mot-tam-anh-chan": {
+  "t": "顔がはっきり写り、自然光で十分明るいポートレート画像を1枚アップロードしてください。システムが肌のトーンを分析し、そのまま画像で色を試着します。あなたのカラーシーズン、似合う色と避けたい色のパレット、試着画像が届きます。",
+  "h": "f645c739"
+ },
+ "pcol.thu-lai": {
+  "t": "<span class=\"ic\" data-icon=\"rotate-cw\"></span> もう一度試す",
+  "h": "66e7a368"
+ },
+ "pcol.thu-trang-phuc-luong-lan": {
+  "t": "<span class=\"ic\" data-icon=\"sparkles\"></span> 服を試着 <span style=\"font-size:10px;background:var(--gold-lt);color:var(--tx-blue);padding:2px 8px;border-radius:10px;margin-left:4px\"><span data-tvp-price=\"personal-color-tryon\">…</span> 両/回</span>",
+  "h": "0b55d845"
+ },
+ "pcol.thu-trang-phuc-ngay": {
+  "t": "<span class=\"ic\" data-icon=\"sparkles\"></span> 今すぐ服を試着",
+  "h": "92e398a6"
+ },
+ "pcol.tip-ap-dung-ngay": {
+  "t": "✦ すぐ使えるヒント",
+  "h": "236e351f"
+ },
+ "pcol.upload-anh-toan-than-he-thong": {
+  "t": "全身画像をアップロード → システムが服を、あなたのシーズン <strong id=\"tryonSeasonLabel\"></strong> に合う色に着せ替えます",
+  "h": "6403994e"
+ },
+ "pcol.vd-1992": {
+  "t": "例：1992",
+  "h": "b50ab05e"
  },
  "phongthuy.1-ban-menh-thong-tin-phong": {
   "t": "<span class=\"pt-num\">1</span> 本命と部屋の情報",
@@ -27542,6 +29338,194 @@
  "topup.xem-lai-ket-qua-co-bi": {
   "t": "結果を見直すと、また両が差し引かれますか？",
   "h": "64b49a22"
+ },
+ "tpng.anh-chup-toan-than-hoac-nua": {
+  "t": "全身または上半身の写真 · JPG/PNG",
+  "h": "17435ed7"
+ },
+ "tpng.co-ngay-an-mac-chin-chu": {
+  "t": "きちんと装ってもうまくいかない日もあれば、ラフな格好で順風満帆な日もある — 運気は日ごとに違います。生年月日を入力して、今日に合う色と服のスタイルを受け取りましょう。",
+  "h": "6350ffd2"
+ },
+ "tpng.diem-nhan": {
+  "t": "◎ アクセント",
+  "h": "a95e46c4"
+ },
+ "tpng.du-lich": {
+  "t": "<span class=\"ic\" data-icon=\"compass\"></span> 旅行",
+  "h": "d7d6e7ed"
+ },
+ "tpng.goi-y-trang-phuc-cu-the": {
+  "t": "<span class=\"ic\" data-icon=\"shirt\"></span> 具体的なコーディネート提案",
+  "h": "d9e6894d"
+ },
+ "tpng.hanh-ngay": {
+  "t": "その日の五行",
+  "h": "f96db196"
+ },
+ "tpng.hen-ho": {
+  "t": "<span class=\"ic\" data-icon=\"heart\"></span> デート",
+  "h": "398a0192"
+ },
+ "tpng.kinh-doanh": {
+  "t": "<span class=\"ic\" data-icon=\"handshake\"></span> ビジネス",
+  "h": "5e9fdd61"
+ },
+ "tpng.mau-sac-hop-ngay": {
+  "t": "<span class=\"ic\" data-icon=\"palette\"></span> その日に合う色",
+  "h": "e47839c0"
+ },
+ "tpng.meo-co-phap": {
+  "t": "<strong>✦ 古法のヒント</strong> <span id=\"tipText\">—</span>",
+  "h": "cd8f1791"
+ },
+ "tpng.muc-dich-chon-1": {
+  "t": "目的（1つ選択）",
+  "h": "a7f0975c"
+ },
+ "tpng.nen-mac": {
+  "t": "✓ 着るとよい",
+  "h": "4d634b8d"
+ },
+ "tpng.nen-tranh": {
+  "t": "✗ 避けたい",
+  "h": "b4981595"
+ },
+ "tpng.ngay-di-duong-lich": {
+  "t": "出かける日（西暦）",
+  "h": "dfc6af38"
+ },
+ "tpng.nhap-nam-sinh-gioi-tinh-ngay": {
+  "t": "生まれ年、性別、着たい日、外出の目的を入力してください。システムがその日の運気とあなたの本命を照らし合わせます。着るとよい色、避けたい色、具体的な服装の提案が届きます。",
+  "h": "737914fb"
+ },
+ "tpng.phong-cach": {
+  "t": "スタイル:",
+  "h": "62e2075f"
+ },
+ "tpng.phong-cach-goi-y": {
+  "t": "✦ おすすめのスタイル",
+  "h": "b9a77fc8"
+ },
+ "tpng.phong-van": {
+  "t": "<span class=\"ic\" data-icon=\"briefcase\"></span> 面接",
+  "h": "0f6621da"
+ },
+ "tpng.thong-tin": {
+  "t": "<span class=\"ic\" data-icon=\"calendar\"></span> 情報",
+  "h": "fb81e21c"
+ },
+ "tpng.thu-trang-phuc-luong-lan": {
+  "t": "<span class=\"ic\" data-icon=\"sparkles\"></span> 服を試着 <span style=\"font-size:10px;background:var(--gold-lt);color:var(--tx-blue);padding:2px 8px;border-radius:10px;margin-left:4px\"><span data-tvp-price=\"trang-phuc-tryon\">…</span> 両/回</span>",
+  "h": "a56af403"
+ },
+ "tpng.thuong-ngay": {
+  "t": "<span class=\"ic\" data-icon=\"leaf\"></span> 普段",
+  "h": "f84f5bc4"
+ },
+ "tpng.trang-phuc-theo-ngay": {
+  "t": "今日の服装",
+  "h": "6cfe1c1e"
+ },
+ "tpng.trang-phuc-theo-ngay-can-chi": {
+  "t": "<b>日別コーディネート</b><span>日の干支 × 本命の納音 — 出かける日に合う色とスタイル</span>",
+  "h": "4c8d4580"
+ },
+ "tpng.trang-phuc-theo-ngay-tu-vi": {
+  "t": "日別コーディネート — 明宝紫微斗数",
+  "h": "654b038b"
+ },
+ "tpng.tu-van-mau-sac-trang-phuc": {
+  "t": "日の干支と本命にもとづき、服の色を提案します — 五行納音の古法。",
+  "h": "dd5ad2b6"
+ },
+ "tpng.xem-trang-phuc-hop-ngay-luong": {
+  "t": "<span class=\"ic\" data-icon=\"shirt\"></span> その日に合う服装を見る — <span data-tvp-price=\"trang-phuc-theo-ngay\">…</span> 両",
+  "h": "589f0801"
+ },
+ "trdi.anh-ro-mat-anh-sang-du": {
+  "t": "顔がはっきり写り、十分な明るさ、メガネなし",
+  "h": "68ec19ab"
+ },
+ "trdi.bang-mau-goi-y": {
+  "t": "<span class=\"ic\" data-icon=\"palette\"></span> おすすめカラーパレット",
+  "h": "d62e715b"
+ },
+ "trdi.chup-hoac-tai-anh-khuon-mat": {
+  "t": "<span class=\"ic\" data-icon=\"camera\"></span> 顔写真を撮影またはアップロード",
+  "h": "781a5bfa"
+ },
+ "trdi.loi-khuyen-co-phap": {
+  "t": "<strong>✦ 古法のアドバイス</strong> <span id=\"tipText\">—</span>",
+  "h": "0417547e"
+ },
+ "trdi.ma-hong": {
+  "t": "チーク",
+  "h": "21b3e53a"
+ },
+ "trdi.mat": {
+  "t": "目",
+  "h": "5e87cc74"
+ },
+ "trdi.moi": {
+  "t": "リップ",
+  "h": "299ea53e"
+ },
+ "trdi.nam-sinh-tuy-chon": {
+  "t": "生まれ年（任意）",
+  "h": "82f3a240"
+ },
+ "trdi.nap-am": {
+  "t": "納音",
+  "h": "006a48d6"
+ },
+ "trdi.nhin-nguoi-khac-trang-diem-ma": {
+  "t": "ほかの人はメイクで輝いて見えるのに、自分は何度メイクしても外出のたびに自信が持てない。ポートレート画像をアップロードして、顔に合うスタイルの提案と試着画像をすぐに受け取りましょう。",
+  "h": "27d407e0"
+ },
+ "trdi.phan-tich-phong-cach-luong": {
+  "t": "<span class=\"ic\" data-icon=\"palette\"></span> スタイルを分析 — <span data-tvp-price=\"trang-diem-phan-tich\">…</span> 両",
+  "h": "5e1ca3e2"
+ },
+ "trdi.phan-tich-tuong-mat-theo-co": {
+  "t": "古法で顔相を分析 — あなたの本命と相に合うアジアのメイクスタイルを提案します。",
+  "h": "30eda66e"
+ },
+ "trdi.phong-cach-makeup-phu-hop-nhan": {
+  "t": "✦ 似合うメイクスタイル — 「試す →」を押すと結果を見られます",
+  "h": "25e2d0d8"
+ },
+ "trdi.tai-anh": {
+  "t": "<span class=\"ic\" data-icon=\"chevron-down\"></span> 画像をダウンロード",
+  "h": "a343e31b"
+ },
+ "trdi.tai-len-mot-tam-anh-chan": {
+  "t": "顔がはっきり写ったポートレート画像を1枚アップロードしてください。システムが顔を分析し、そのまま画像でメイクを試着します。似合うメイクスタイル、リップ・アイ・チークのカラーパレット、試着画像が届きます。",
+  "h": "c8c9461c"
+ },
+ "trdi.thu-lai": {
+  "t": "↺ もう一度試す",
+  "h": "a1d342d1"
+ },
+ "trdi.thu-trang-diem": {
+  "t": "<span class=\"ic\" data-icon=\"sparkles\"></span> メイクを試着 — <span id=\"tryonStyleName\"></span>",
+  "h": "cd545d92"
+ },
+ "trdi.trang-diem": {
+  "t": "メイク",
+  "h": "b67e6b3f"
+ },
+ "trdi.trang-diem-phan-tich-tuong-mat": {
+  "t": "<b>メイク</b><span>古法で顔相を分析し、メイクスタイルを提案、そのまま画像で試着</span>",
+  "h": "132106df"
+ },
+ "trdi.trang-diem-tu-vi-minh-bao": {
+  "t": "メイク — 明宝紫微斗数",
+  "h": "10926a7a"
+ },
+ "trdi.tuong-mat": {
+  "t": "顔相",
+  "h": "424915c5"
  },
  "trochuyen.chua-co-hoi-thoai-nao-bam": {
   "t": "まだ会話はありません。<br>上の「新しく聞く」を押すか、どのツールからでも先生に聞いてみてください。",
