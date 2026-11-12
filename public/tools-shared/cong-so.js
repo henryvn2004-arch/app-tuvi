@@ -27,7 +27,19 @@
 
   // Chỗ HIỂN THỊ: tên sao/cung qua glossary (vi trả nguyên), tên kiểu qua id (server trả chữ Việt).
   function G(kind, v) { return typeof _tvmbG === 'function' && v ? _tvmbG(kind, v) : v; }
-  function GS(arr) { return (arr || []).map(function (x) { return G(['chinh', 'sao'], x); }).join(', '); }
+  // Nhãn sao do engine dựng: `Tên (độ sáng) [Hóa X]` — tách ra dịch từng phần (độ sáng ← 'sang', Hóa X ← 'sao'); vi trả nguyên.
+  var SANG_ALIAS = { 'Đắc địa': 'Đắc', 'Bình hòa': 'Bình', 'Bình hoà': 'Bình' }; // cùng nghĩa, glossary chỉ có dạng ngắn
+  function starT(x) {
+    var m = /^(.+?)(?: \((.+?)\))?(?: \[Hóa (.+?)\])?$/.exec(String(x == null ? '' : x));
+    if (!m) return x;
+    return G(['chinh', 'sao'], m[1]) + (m[2] ? ' (' + G('sang', SANG_ALIAS[m[2]] || m[2]) + ')' : '') + (m[3] ? ' [' + G('sao', 'Hóa ' + m[3]) + ']' : '');
+  }
+  // `nganh.sao` (past-life.ts) là tên sao HOẶC cặp 'A + B' kèm đuôi ' đồng cung' — tách từng tên rồi ghép lại.
+  function saoNganh(x) {
+    var m = /^(.*?)( đồng cung)?$/.exec(String(x == null ? '' : x));
+    return m[1].split(' + ').map(starT).join(' + ') + (m[2] ? _tvmbT('js.cs.dong-cung', ' đồng cung') : '');
+  }
+  function GS(arr) { return (arr || []).map(starT).join(', '); }
   var KIEU_TEN = {
     'khai-sang': function () { return _tvmbT('js.cs.khai-sang', 'Khai sáng'); },
     'lanh-dao': function () { return _tvmbT('js.cs.lanh-dao', 'Lãnh đạo'); },
@@ -35,6 +47,28 @@
     'hop-tac': function () { return _tvmbT('js.cs.hop-tac', 'Hợp tác'); },
   };
   function kieuTen(k) { return k ? (KIEU_TEN[k.id] ? KIEU_TEN[k.id]() : k.ten) : ''; }
+  // ── i18n (W30b) — VĂN ENGINE SERVER: /api/cong-so trả chữ Việt (lib/engine/cong-so.ts) KÈM mã tra additive
+  // (`luanMa`, `goiYMa`, `nganh.domainMa/quyMoMa`; còn lại tra theo id sẵn có: kieu.id · trangThai · cung · stt).
+  // Dịch ở CHỖ VẼ, ns 'cong-so' (/tools-shared/i18n-long/<locale>/cong-so.js, docs/i18n/QUY-UOC.md "Văn engine
+  // server"); thiếu mã/bản dịch ⇒ chữ Việt (vi không nạp gì ⇒ byte-giống). Dữ liệu gửi server/rail GIỮ chữ Việt.
+  if (window.I18n && window.I18n.loadLong) window.I18n.loadLong('cong-so');
+  function L(key, vi, vars) {
+    return window.I18n && window.I18n.long ? window.I18n.long('cong-so', key, vi, vars) : vi;
+  }
+  /** Mục có mã ⇒ tra theo `<bảng>.<mã>`; thiếu mã (payload cũ trong CDN) ⇒ chữ Việt. */
+  function LM(prefix, ma, vi, suffix) { return ma ? L(prefix + ma + (suffix || ''), vi) : vi; }
+  /** Chữ của KIỂU người theo id (kieu.<id>.<trường>). */
+  function KF(k, f, vi) { return k && k.id ? L('kieu.' + k.id + '.' + f, vi) : vi; }
+  function KL(k, f, arr) { return (arr || []).map(function (v, i) { return KF(k, f + '.' + i, v); }); }
+  // Câu khuôn: biến lấy từ id có sẵn trong payload (stt · kieu · nenTim); tên kiểu qua `js.cs.*`, viết thường.
+  function luanNac(n) {
+    return n.luanMa ? L('luan.' + n.luanMa, n.luan, { nac: L('nac.' + n.stt, n.nac).toLowerCase() }) : n.luan;
+  }
+  function goiYGhep(d) {
+    var ten = function (id) { return id ? kieuTen({ id: id }).toLowerCase() : ''; };
+    return d.goiYMa ? L('ghep.' + d.goiYMa, d.goiY, { kieu: ten(d.kieu), nen: ten(d.nenTim) }) : d.goiY;
+  }
+  function radarNhan(it) { return LM('radar.', it.cung, it.nhan, '.nhan'); }
   function cungTen(c) { return _tvmbT('js.cs.cung-name', 'cung {name}', { name: G('cung', c) }); }
 
   function dpiFit(canvas, w, h) {
@@ -116,7 +150,7 @@
     ctx.save();
     ctx.translate(x0 + s + af * 0.9, cy);
     ctx.rotate(Math.PI / 2);
-    ctx.fillText('tranh', 0, 0);
+    ctx.fillText(_tvmbT('js.cs.tranh', 'tranh'), 0, 0);
     ctx.restore();
 
     // Chấm vị trí — bán kính vẽ theo nửa cạnh, kẹp trong khung.
@@ -188,7 +222,7 @@
     var lh = fs * 1.25;
 
     var labs = items.map(function (it) {
-      return wrap2(ctx, it.nhan, side * 0.145);
+      return wrap2(ctx, radarNhan(it), side * 0.145);
     });
     var labW = labs.map(function (ls) {
       return ls.reduce(function (m, s) {
@@ -312,7 +346,7 @@
 
       ctx.fillStyle = 'rgba(255,255,255,.72)';
       ctx.font = '28px ' + sans;
-      ctx.fillText(ho.kieu.tuTuong, box.x + box.w / 2, box.y + 206);
+      ctx.fillText(KF(ho.kieu, 'tuTuong', ho.kieu.tuTuong), box.x + box.w / 2, box.y + 206);
 
       var side = Math.min(box.w - 150, box.h - 400);
       veToaDo(
@@ -326,7 +360,7 @@
       ctx.fillStyle = 'rgba(255,255,255,.9)';
       ctx.font = '30px ' + sans;
       var y = box.y + 250 + side + 56;
-      wrapCenter(ctx, ho.kieu.motCau, box.x + box.w / 2, y, box.w - 160, 42, 2);
+      wrapCenter(ctx, KF(ho.kieu, 'motCau', ho.kieu.motCau), box.x + box.w / 2, y, box.w - 160, 42, 2);
       ctx.textAlign = 'left';
     };
   }
@@ -362,8 +396,8 @@
     return (
       '<div class="cs-head" style="border-left:4px solid ' + mau + '">' +
         '<div class="cs-kieu" style="color:' + mau + '">' + esc(kieuTen(k)) + '</div>' +
-        '<div class="cs-tt">' + esc(k.tuTuong) + ' · ' + esc(k.saoNhom.join(' · ')) + '</div>' +
-        '<div class="cs-mot">' + esc(k.motCau) + '</div>' +
+        '<div class="cs-tt">' + esc(KF(k, 'tuTuong', k.tuTuong)) + ' · ' + esc((k.saoNhom || []).map(starT).join(' · ')) + '</div>' +
+        '<div class="cs-mot">' + esc(KF(k, 'motCau', k.motCau)) + '</div>' +
         (ho.phan.lai && ho.kieuPhu
           ? ('<div class="cs-lai">' + _tvmbT('js.cs.kieu-lai-toa-do-cua-ban', '⚠ <b>Kiểu lai.</b> Toạ độ của bạn nằm sát ranh giới nên nghiêng <b>')) +
             esc(kieuTen(k)) + _tvmbT('js.cs.nhung-pha-kha-ro', '</b> nhưng pha khá rõ <b>') + esc(kieuTen(ho.kieuPhu)) +
@@ -380,19 +414,19 @@
 
     h.push(
       '<div class="cs-grid">' +
-        card(_tvmbT('js.cs.cai-thuc-ban-di', 'Cái thúc bạn đi'), esc(k.dongLuc)) +
-        card(_tvmbT('js.cs.nhan-ra-o-cho-lam', 'Nhận ra ở chỗ làm'), esc(k.datChat)) +
-        card(_tvmbT('js.cs.cau-hoi-chay-ngam-trong-dau', 'Câu hỏi chạy ngầm trong đầu'), '<ul class="cs-ul"><li>' + k.cauHoi.map(esc).join('</li><li>') + '</li></ul>') +
-        card(_tvmbT('js.cs.khi-duoc-giao-quyen', 'Khi được giao quyền'), esc(k.kieuDan)) +
-        card(_tvmbT('js.cs.moi-truong-hop', 'Môi trường hợp'), esc(k.moiTruongHop)) +
-        card(_tvmbT('js.cs.moi-truong-ky', 'Môi trường kỵ'), esc(k.moiTruongKy)) +
+        card(_tvmbT('js.cs.cai-thuc-ban-di', 'Cái thúc bạn đi'), esc(KF(k, 'dongLuc', k.dongLuc))) +
+        card(_tvmbT('js.cs.nhan-ra-o-cho-lam', 'Nhận ra ở chỗ làm'), esc(KF(k, 'datChat', k.datChat))) +
+        card(_tvmbT('js.cs.cau-hoi-chay-ngam-trong-dau', 'Câu hỏi chạy ngầm trong đầu'), '<ul class="cs-ul"><li>' + KL(k, 'cauHoi', k.cauHoi).map(esc).join('</li><li>') + '</li></ul>') +
+        card(_tvmbT('js.cs.khi-duoc-giao-quyen', 'Khi được giao quyền'), esc(KF(k, 'kieuDan', k.kieuDan))) +
+        card(_tvmbT('js.cs.moi-truong-hop', 'Môi trường hợp'), esc(KF(k, 'moiTruongHop', k.moiTruongHop))) +
+        card(_tvmbT('js.cs.moi-truong-ky', 'Môi trường kỵ'), esc(KF(k, 'moiTruongKy', k.moiTruongKy))) +
         '</div>'
     );
 
     h.push(
       '<div class="cs-two">' +
-        ('<div class="cs-box cs-ok">' + _tvmbT('js.cs.manh-nhat-gixi', '<b>Mạnh nhất</b>') + '<p>') + esc(k.manh) + '</p></div>' +
-        ('<div class="cs-box cs-no">' + _tvmbT('js.cs.cho-hay-vap', '<b>Chỗ hay vấp</b>') + '<p>') + esc(k.yeu) + '</p></div>' +
+        ('<div class="cs-box cs-ok">' + _tvmbT('js.cs.manh-nhat-gixi', '<b>Mạnh nhất</b>') + '<p>') + esc(KF(k, 'manh', k.manh)) + '</p></div>' +
+        ('<div class="cs-box cs-no">' + _tvmbT('js.cs.cho-hay-vap', '<b>Chỗ hay vấp</b>') + '<p>') + esc(KF(k, 'yeu', k.yeu)) + '</p></div>' +
         '</div>'
     );
 
@@ -403,13 +437,13 @@
     h.push(
       ('<div class="cs-sec"><h3>' + _tvmbT('js.cs.ban-hop-lam-gi', 'Bạn hợp làm gì') + '</h3>') +
         '<div class="cs-linhvuc" style="border-color:' + mau + '">' +
-        '<div class="cs-lv-ten">' + esc(ng.linhVuc) + '</div>' +
-        '<div class="cs-lv-chat">' + esc(ng.chatViec) + '</div>' +
-        '<ul class="cs-nganh">' + ng.nganh.map(function (x) { return '<li>' + esc(x) + '</li>'; }).join('') + '</ul>' +
+        '<div class="cs-lv-ten">' + esc(LM('nganh.', ng.domainMa, ng.linhVuc, '.linhVuc')) + '</div>' +
+        '<div class="cs-lv-chat">' + esc(LM('nganh.', ng.domainMa, ng.chatViec, '.chatViec')) + '</div>' +
+        '<ul class="cs-nganh">' + ng.nganh.map(function (x, i) { return '<li>' + esc(LM('nganh.', ng.domainMa, x, '.n.' + i)) + '</li>'; }).join('') + '</ul>' +
         '</div>' +
         '<div class="cs-grid" style="margin-top:11px">' +
-        card(_tvmbT('js.cs.vai-ban-nen-nhan-trong-nganh', 'Vai bạn nên nhận trong ngành đó'), esc(ng.vaiTro)) +
-        card(_tvmbT('js.cs.quy-mo-ganh-duoc-bac', 'Quy mô gánh được — bậc ') + esc(ng.bac), esc(ng.quyMo)) +
+        card(_tvmbT('js.cs.vai-ban-nen-nhan-trong-nganh', 'Vai bạn nên nhận trong ngành đó'), esc(L('vai.' + ho.kieu.id, ng.vaiTro))) +
+        card(_tvmbT('js.cs.quy-mo-ganh-duoc-bac', 'Quy mô gánh được — bậc ') + esc(ng.bac), esc(LM('quymo.', ng.quyMoMa, ng.quyMo))) +
         '</div>' +
         // ⚠️ Sắc thái phụ tinh THU HẸP TRONG lĩnh vực, KHÔNG thay lĩnh vực. Không
         // nói rõ chỗ này thì nó đọc thành mâu thuẫn ngay trên màn hình: lĩnh vực
@@ -434,13 +468,13 @@
     // Lời theo tình trạng nghề — đặt CAO trên trang vì đây là phần người ta
     // thấy "nói đúng mình" nhất, và nó phụ thuộc ô người dùng vừa tự khai.
     h.push(
-      ('<div class="cs-sec"><h3>' + _tvmbT('js.cs.cho-nguoi-dang-o-vi-tri', 'Cho người đang ở vị trí:') + ' ') + esc(ho.trangThaiLabel) + '</h3>' +
-        '<p class="cs-lead">' + esc(ho.loiTrangThai) + '</p></div>'
+      ('<div class="cs-sec"><h3>' + _tvmbT('js.cs.cho-nguoi-dang-o-vi-tri', 'Cho người đang ở vị trí:') + ' ') + esc(L('tt.' + ho.trangThai, ho.trangThaiLabel)) + '</h3>' +
+        '<p class="cs-lead">' + esc(L('loi.' + ho.trangThai + '.' + ho.kieu.id, ho.loiTrangThai)) + '</p></div>'
     );
 
     h.push(
       ('<div class="cs-sec"><h3>' + _tvmbT('js.cs.bon-viec-phai-hoc-khi-bat', 'Bốn việc phải học khi bắt đầu cầm người') + '</h3>') +
-        '<ol class="cs-ol"><li>' + k.baiHoc.map(esc).join('</li><li>') + '</li></ol></div>'
+        '<ol class="cs-ol"><li>' + KL(k, 'baiHoc', k.baiHoc).map(esc).join('</li><li>') + '</li></ol></div>'
     );
 
     // Radar
@@ -459,9 +493,9 @@
                 '</span>'
               : '';
             return (
-              '<tr><td><b>' + esc(r.nhan) + '</b> ' + badge + '<div class="cs-sub">' + esc(cungTen(r.cung)) +
+              '<tr><td><b>' + esc(radarNhan(r)) + '</b> ' + badge + '<div class="cs-sub">' + esc(cungTen(r.cung)) +
               (r.sao.length ? ' · ' + esc(GS(r.sao)) : _tvmbT('js.cs.vo-chinh-dieu', ' · vô chính diệu')) + '</div></td>' +
-              '<td class="cs-num">' + esc(r.diem) + '</td><td class="cs-sm">' + esc(r.y) + '</td></tr>'
+              '<td class="cs-num">' + esc(r.diem) + '</td><td class="cs-sm">' + esc(LM('radar.', r.cung, r.y, '.y')) + '</td></tr>'
             );
           })
           .join('') +
@@ -478,13 +512,13 @@
           .map(function (n) {
             return (
               '<div class="cs-nac' + (n.dangChay ? ' now' : '') + '">' +
-              '<div class="cs-nac-top"><b>' + esc(n.nac) + '</b>' + (n.dangChay ? ('<span class="cs-badge">' + _tvmbT('js.cs.dang-o-day', 'đang ở đây') + '</span>') : '') + '</div>' +
+              '<div class="cs-nac-top"><b>' + esc(LM('nac.', n.stt, n.nac)) + '</b>' + (n.dangChay ? ('<span class="cs-badge">' + _tvmbT('js.cs.dang-o-day', 'đang ở đây') + '</span>') : '') + '</div>' +
               '<div class="cs-sub">' + esc(n.tuoiStart) + '–' + esc(n.tuoiEnd) + _tvmbT('js.cs.tuoi', ' tuổi') +
               (n.namStart ? ' · ' + esc(n.namStart) + '–' + esc(n.namEnd) : '') +
               ' · ' + esc(cungTen(n.cung)) + (n.diem != null ? ' · <b>' + esc(n.diem) + '/10</b> ' + esc(n.flag) : '') + '</div>' +
               '<div class="cs-sub">' + (n.sao.length ? esc(GS(n.sao)) + (n.muon ? _tvmbT('js.cs.muon-xung-chieu', ' (mượn xung chiếu)') : '') : _tvmbT('js.cs.vo-chinh-dieu-pwt9', 'vô chính diệu')) +
               (n.hopMenh === null ? '' : n.hopMenh ? (' · <span class="cs-ok-t">' + _tvmbT('js.cs.thuan-da', 'thuận đà') + '</span>') : (' · <span class="cs-no-t">' + _tvmbT('js.cs.nguoc-da', 'ngược đà') + '</span>')) + '</div>' +
-              '<p>' + esc(n.luan) + '</p></div>'
+              '<p>' + esc(luanNac(n)) + '</p></div>'
             );
           })
           .join('') +
@@ -500,10 +534,10 @@
         ho.doi
           .map(function (d) {
             return card(
-              esc(d.vai) + ' <span class="cs-sub">(' + esc(cungTen(d.cung)) + ')</span>',
+              esc(LM('doi.', d.cung, d.vai)) + ' <span class="cs-sub">(' + esc(cungTen(d.cung)) + ')</span>',
               '<div class="cs-sub" style="margin-bottom:6px">' +
                 (d.sao.length ? esc(GS(d.sao)) + (d.muon ? _tvmbT('js.cs.muon-xung-chieu', ' (mượn xung chiếu)') : '') : _tvmbT('js.cs.vo-chinh-dieu-pwt9', 'vô chính diệu')) +
-                '</div>' + esc(d.goiY)
+                '</div>' + esc(goiYGhep(d))
             );
           })
           .join('') +
@@ -517,7 +551,7 @@
         row(_tvmbT('js.cs.chinh-tinh-cung-quan-loc', 'Chính tinh cung Quan Lộc'), (GS(ho.phan.saoQuan) || _tvmbT('js.cs.vo-chinh-dieu-pwt9', 'vô chính diệu')) + (ho.phan.muonQuan ? _tvmbT('js.cs.muon-cung-xung-chieu', ' — mượn cung xung chiếu') : '')) +
         row(_tvmbT('js.cs.toa-do', 'Toạ độ'), _tvmbT('js.cs.tranh-nhuong', 'tranh ↔ nhường: ') + ho.phan.x + _tvmbT('js.cs.xong-tram', ' · xông ↔ trầm: ') + ho.phan.y) +
         (ho.phan.vaiTro ? row(_tvmbT('js.cs.tu-cach-theo-cung-menh', 'Tư cách theo cung Mệnh'), ho.phan.vaiTro.role) : '') +
-        row(_tvmbT('js.cs.sao-quyet-dinh-linh-vuc', 'Sao quyết định lĩnh vực'), G(['chinh', 'sao'], ho.nganh.sao) + (ho.nganh.laCap ? _tvmbT('js.cs.doc-theo-cap-dong-cung', ' — đọc theo CẶP đồng cung') : '') + (ho.nganh.muon ? _tvmbT('js.cs.muon-cung-xung-chieu', ' — mượn cung xung chiếu') : '')) +
+        row(_tvmbT('js.cs.sao-quyet-dinh-linh-vuc', 'Sao quyết định lĩnh vực'), saoNganh(ho.nganh.sao) + (ho.nganh.laCap ? _tvmbT('js.cs.doc-theo-cap-dong-cung', ' — đọc theo CẶP đồng cung') : '') + (ho.nganh.muon ? _tvmbT('js.cs.muon-cung-xung-chieu', ' — mượn cung xung chiếu') : '')) +
         row(_tvmbT('js.cs.bac-chuc-phan', 'Bậc chức phận'), ho.nganh.bac + _tvmbT('js.cs.diem', ' · điểm ') + ho.nganh.bacDiem + (ho.nganh.bacChiTiet.length ? ' (' + ho.nganh.bacChiTiet.join(', ') + ')' : '')) +
         row(_tvmbT('js.cs.chuc-phan-theo-loi-co', 'Chức phận theo lối cổ'), ho.nganh.chucPhanCo) +
         row(_tvmbT('js.cs.trich-dan-co-thu', 'Trích dẫn cổ thư'), ho.nganh.nguon) +
@@ -529,7 +563,7 @@
                 _tvmbT('js.cs.tieu-han-o-cung', 'tiểu hạn ở cung ') + (G('cung', ho.vanNam.tieuHanCung) || '—') + _tvmbT('js.cs.luu-nien-o-cung', ' · lưu niên ở cung ') + (G('cung', ho.vanNam.luuNienCung) || '—')
             )
           : '') +
-        row(_tvmbT('js.cs.nguon-cach-chia-bon-kieu', 'Nguồn cách chia bốn kiểu'), ho.kieu.source) +
+        row(_tvmbT('js.cs.nguon-cach-chia-bon-kieu', 'Nguồn cách chia bốn kiểu'), KF(ho.kieu, 'source', ho.kieu.source)) +
         '</div></div>'
     );
 
