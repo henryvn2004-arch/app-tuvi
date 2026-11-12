@@ -243,6 +243,210 @@
   "t": "← Back to today",
   "h": "24faf89e"
  },
+ "daycon.2-xem-truoc-chan-dung-con": {
+  "t": "<span class=\"wss-n\">2</span><span class=\"wss-l\">Preview your child's portrait</span>",
+  "h": "d8f50448"
+ },
+ "daycon.5-la-muc-giua-cua-hang": {
+  "t": "<b>5 is the midpoint</b> across thousands of children's charts — it does not mean “5 out of 10”. The grey band is the range where your child can work either way. Both ends of each axis have value.",
+  "h": "0a475048"
+ },
+ "daycon.5-truc-tinh-khi": {
+  "t": "<span class=\"hp-ic\" data-icon=\"scale\"></span><span>5 temperament<br>axes</span>",
+  "h": "2ee56c76"
+ },
+ "daycon.8-chat-nang-khieu": {
+  "t": "<span class=\"hp-ic\" data-icon=\"star\"></span><span>8 talent<br>strengths</span>",
+  "h": "a2098312"
+ },
+ "daycon.ban-luan-giai-mau-tai-pdf": {
+  "t": "<span class=\"sc-ic\" data-icon=\"file-text\"></span> <span class=\"sc-txt\"><b>Sample reading</b><span>Download the full “Parenting by Chart” PDF for a sample chart to preview the real content.</span></span> <a class=\"sc-btn\" href=\"/tai-mau/mau-day-con.pdf\" target=\"_blank\" rel=\"noopener\">Download PDF →</a>",
+  "h": "93827cd3"
+ },
+ "daycon.ban-nay-phac-hoa-tu-cac": {
+  "t": "<span class=\"ic\" data-icon=\"lightbulb\"></span> This reading is drawn from the data in the Zi Wei Dou Shu chart, combined with the research experience handed down by earlier masters. The <b>parenting advice</b> is this page's own interpretation, not text from the classics. Please treat it as a reference.<br><br> <span class=\"ic\" data-icon=\"scale\"></span> This is a framework for <b>understanding your child so you can teach in the right way</b>. A child is still growing and is not here, so this reading deliberately <b>does not predict exam results, fix a career, or read health or romance</b>. A born temperament is neither good nor bad — it either suits or does not suit what the adults are doing.<br><br> <span class=\"ic\" data-icon=\"book-open\"></span> <b>Source:</b> the Life, Fortune and Parents Palaces and so on are set up following <i>Zi Wei Dou Shu Xin Bian</i> (Tử Vi Đẩu Số Tân Biên) by Vân Đằng Thái Thứ Lang. The 5-axis · 8-strength framework and the type-based parenting approach are a method built by the <b>Minh Bao Zi Wei Dou Shu expert team</b>. <a href=\"/nguon-du-lieu.html\" target=\"_blank\" rel=\"noopener\" style=\"color:#9A7B3A\">See the full data sources →</a>",
+  "h": "77ff2cc9"
+ },
+ "daycon.boi-canh": {
+  "t": "<b>Background</b><i></i>",
+  "h": "a85d826c"
+ },
+ "daycon.buong-cai-lai-noi-khong-nghe": {
+  "t": "Stubborn, talks back, won't listen",
+  "h": "76509c43"
+ },
+ "daycon.cac-chang-di-hoc": {
+  "t": "<span class=\"res-block-title\">Stages of Schooling</span>",
+  "h": "b2c2bb10"
+ },
+ "daycon.cach-day-con-nay": {
+  "t": "<span class=\"res-block-title\">How to Teach This Child</span>",
+  "h": "e203e71f"
+ },
+ "daycon.chon-dieu-dang-lo-nhap-ngay": {
+  "t": "Choose what worries you and enter your child's birth date and time. You'll get the approach that suits your child and what to do starting tonight.",
+  "h": "b14b84f4"
+ },
+ "daycon.co-la-so-cua-ban-thi": {
+  "t": "If you add your own chart, the reading gains a <b>“The Two of You”</b> section — where parent and child tend to clash, and how to ease it. Leave it blank and you still get everything else.",
+  "h": "0ea6e4fe"
+ },
+ "daycon.co-so-trong-la-so": {
+  "t": "<span class=\"res-block-title\">Basis in the Chart</span>",
+  "h": "c215623b"
+ },
+ "daycon.con-khong-chiu-noi-chuyen-voi": {
+  "t": "My child no longer wants to talk to me",
+  "h": "245ca1b1"
+ },
+ "daycon.con-la-nguoi-the-nao": {
+  "t": "<span class=\"res-block-title\">What Kind of Child</span>",
+  "h": "d97bd561"
+ },
+ "daycon.cung-mot-cach-day-co-dua": {
+  "t": "The same way of teaching helps one child visibly progress and pushes another further away — because every child takes things in differently. Read your child's chart to see which approach is backfiring.",
+  "h": "eec3a103"
+ },
+ "daycon.da-xem-truoc-do": {
+  "t": "<span class=\"res-block-title\">Previously Viewed</span>",
+  "h": "5dc13a72"
+ },
+ "daycon.dau-hieu-nhan-ra-o-nha": {
+  "t": "Signs you can spot at home",
+  "h": "a07a9d36"
+ },
+ "daycon.day-con-theo-la-so": {
+  "t": "Parenting by Chart",
+  "h": "2013a771"
+ },
+ "daycon.day-con-theo-la-so-dua": {
+  "t": "<b>Parenting by Chart</b><span>Does this child need a push, or to be left alone</span>",
+  "h": "89056d92"
+ },
+ "daycon.day-con-theo-la-so-tu": {
+  "t": "Parenting by Chart — Minh Bao Zi Wei Dou Shu",
+  "h": "43088648"
+ },
+ "daycon.day-la-kieu-moi-truong-hoc": {
+  "t": "This is the <b>kind of learning environment</b> that suits your child — it deliberately does not fix a field of study or a career.",
+  "h": "db05bd75"
+ },
+ "daycon.diem-o-day-la-muc-thuan": {
+  "t": "The score here is how <b>favourable or adverse that stretch</b> is — not an academic score and not a score for the child.",
+  "h": "799bb1dc"
+ },
+ "daycon.dieu-ban-dang-lo": {
+  "t": "What worries you",
+  "h": "bd0e3bcd"
+ },
+ "daycon.dieu-ban-dang-lo-pjp3": {
+  "t": "<span class=\"res-block-title\" id=\"loTitle\">What Worries You</span>",
+  "h": "86a3d90a"
+ },
+ "daycon.dinh-huong": {
+  "t": "<span class=\"res-block-title\">Direction</span>",
+  "h": "ee21cc8a"
+ },
+ "daycon.dinh-huong-cach-day": {
+  "t": "<span class=\"hp-ic\" data-icon=\"compass\"></span><span>Parenting<br>direction</span>",
+  "h": "c22dffe6"
+ },
+ "daycon.do-duoc-gi": {
+  "t": "<b>What was measured</b><i></i>",
+  "h": "0ae0b676"
+ },
+ "daycon.goi-y-de-thu-khong-phai": {
+  "t": "These are suggestions to try, not prescriptions — the classics speak about a person's nature and know nothing about which clubs are open near you. Let your child try one session, then watch the real reaction.",
+  "h": "5f3bcee3"
+ },
+ "daycon.hai-ben-voi-nhau": {
+  "t": "<span class=\"res-block-title\">The Two of You</span>",
+  "h": "12457260"
+ },
+ "daycon.hoat-dong-nen-cho-con-thu": {
+  "t": "<span class=\"res-block-title\">Activities Worth Trying</span>",
+  "h": "f4d526be"
+ },
+ "daycon.hoc-hanh-sa-sut-ngoi-vao": {
+  "t": "Grades are slipping and they can't sit down at the desk",
+  "h": "fab00484"
+ },
+ "daycon.khong-co-gi-gap-chi-muon": {
+  "t": "Nothing urgent — I just want to understand my child better",
+  "h": "cf2efa39"
+ },
+ "daycon.lam-gi-tu-toi-nay": {
+  "t": "<span class=\"res-block-title\">What to Do from Tonight</span>",
+  "h": "1f882975"
+ },
+ "daycon.moi-luot-luong": {
+  "t": "<span class=\"vnd\" data-tvp-price-vnd=\"day-con\"></span> per reading <span class=\"cb-sub\">(<span data-tvp-price=\"day-con\">…</span> credits)</span>",
+  "h": "10afd8c1"
+ },
+ "daycon.nam-truc-tinh-khi": {
+  "t": "<span class=\"res-block-title\">Five Temperament Axes</span>",
+  "h": "587fa869"
+ },
+ "daycon.nen": {
+  "t": "Do",
+  "h": "078cfc62"
+ },
+ "daycon.nen-lam-gi": {
+  "t": "<b>What to do</b><i></i>",
+  "h": "021dc84d"
+ },
+ "daycon.neu-chi-nho-mot-cau": {
+  "t": "<span class=\"res-block-title\">If You Remember One Line</span>",
+  "h": "6e372478"
+ },
+ "daycon.ngay-sinh-cua-con": {
+  "t": "Your child's birth date",
+  "h": "3837783b"
+ },
+ "daycon.nhap-la-so-cua-con-nhan": {
+  "t": "Enter your child's chart to learn how your child takes things in, how to set tasks so they'll actually do them, which kinds of discipline backfire, and where parent and child tend to clash.",
+  "h": "244ebedb"
+ },
+ "daycon.phan-luan-chua-mo": {
+  "t": "<span class=\"res-block-title\">Locked Parts of the Reading</span>",
+  "h": "68cac5d9"
+ },
+ "daycon.rut-re-ngai-dam-dong-it": {
+  "t": "Shy, uneasy in crowds, few friends",
+  "h": "56c6a43d"
+ },
+ "daycon.sap-phai-chon-truong-chon-nganh": {
+  "t": "About to choose a school or a field of study",
+  "h": "926ae29e"
+ },
+ "daycon.tam-chat-nang-khieu": {
+  "t": "<span class=\"res-block-title\">Eight Talent Strengths</span>",
+  "h": "8ac0e142"
+ },
+ "daycon.them-la-so-cua-ban-cha": {
+  "t": "Add your own chart — father or mother (optional)",
+  "h": "e158b2b1"
+ },
+ "daycon.thoi": {
+  "t": "Avoid",
+  "h": "aa7d2f5d"
+ },
+ "daycon.tra-loi-thay-o-khung-chat": {
+  "t": "Reply to the Master in the chat to share what worries you and your child's birth date.",
+  "h": "4cf5eddf"
+ },
+ "daycon.vuot-vach-dut-la-chat-dang": {
+  "t": "A strength that passes the dashed line is <b>worth trying</b>, not a confirmed talent. Check it against the signs you see at home — if they don't match, trust your own eyes.",
+  "h": "fbb5fd98"
+ },
+ "daycon.xem-be-khac": {
+  "t": "View another child",
+  "h": "3ff33fa6"
+ },
+ "daycon.xem-cach-day-con-ton-luong": {
+  "t": "<span class=\"bg-label\"><span class=\"ic\" data-icon=\"baby\"></span><b>See how to teach your child →</b></span> <small>Costs <span class=\"vnd\" data-tvp-price-vnd=\"day-con\"></span> <span class=\"cb-sub\">(<span data-tvp-price=\"day-con\">…</span> credits)</span></small>",
+  "h": "ccbaaea3"
+ },
  "disclaimer.1-tinh-chat-tham-khao": {
   "t": "1. For reference only",
   "h": "99856a52"
@@ -1258,6 +1462,514 @@
  "js.chutrinh.tieu-van-nam": {
   "t": "Annual cycle for ",
   "h": "1979c56a"
+ },
+ "js.daycon.5-la-muc-giua-cua-hang": {
+  "t": "\n\n5 is the midpoint across thousands of children's charts — it does not mean “5 out of 10”. Both ends of each axis have value.",
+  "h": "99fb1a17"
+ },
+ "js.daycon.7-chat-con-lai-5-truc": {
+  "t": "The other 7 strengths, the 5 temperament axes and the parenting direction are in the full version.",
+  "h": "00fde99c"
+ },
+ "js.daycon.ba-chat-dung-dau-o-duoi": {
+  "t": "The top three strengths below are where to try first — not a conclusion.</p></div>",
+  "h": "fa2636f2"
+ },
+ "js.daycon.ban-co-muon-doi-chieu-them": {
+  "t": "Would you also like to compare it with your own chart (as father or mother)? That adds a “The Two of You” section.",
+  "h": "1fea98b9"
+ },
+ "js.daycon.ban-da-xem-ban-nay-roi": {
+  "t": "✓ You've already viewed this reading — reopening it costs no credits",
+  "h": "7d2c6a5b"
+ },
+ "js.daycon.ban-huong-dan-day-du-chua": {
+  "t": "⊙ The full parenting guide is not unlocked yet",
+  "h": "1e7a8a78"
+ },
+ "js.daycon.ban-luan": {
+  "t": "reading",
+  "h": "b6f609bf"
+ },
+ "js.daycon.ban-nay-doc-tu": {
+  "t": "This reading draws on <b>",
+  "h": "d989b954"
+ },
+ "js.daycon.ban-se-nhan-cach-ra-bai": {
+  "t": "You'll get: how to set homework and arrange the study desk to fit how your child takes things in, instead of forcing extra hours.",
+  "h": "49791304"
+ },
+ "js.daycon.ban-se-nhan-chat-viec-hop": {
+  "t": "You'll get: the kind of work that suits your child and how to ask so your child opens up on their own — not the name of a field of study.",
+  "h": "dd0da12e"
+ },
+ "js.daycon.ban-se-nhan-chuyen-gi-con": {
+  "t": "You'll get: what your child is still willing to hear, and which openings make them shut down at once.",
+  "h": "20335789"
+ },
+ "js.daycon.ban-se-nhan-dua-nay-can": {
+  "t": "You'll get: whether this child needs to be pushed out or left alone — two very different kinds of child that look alike from the outside.",
+  "h": "cd7192ac"
+ },
+ "js.daycon.ban-se-nhan-mot-ban-mo": {
+  "t": "You'll get: a description of who this child is, clear enough to recognise them in everyday life.",
+  "h": "2846cd50"
+ },
+ "js.daycon.ban-se-nhan-phan-nao-la": {
+  "t": "You'll get: which part is the child's core temperament to be guided, and which part comes from how the adults speak — fixable straight away.",
+  "h": "565f27fd"
+ },
+ "js.daycon.bat-dau-the-nao": {
+  "t": "<b>How to start:</b>",
+  "h": "ac776bdf"
+ },
+ "js.daycon.bay-cua-chat-nay": {
+  "t": "<b>The trap of this strength:</b>",
+  "h": "1847b63e"
+ },
+ "js.daycon.be-gai": {
+  "t": "Girl",
+  "h": "af93dba0"
+ },
+ "js.daycon.be-trai": {
+  "t": "Boy",
+  "h": "274225bc"
+ },
+ "js.daycon.bo-qua": {
+  "t": "Skip",
+  "h": "861dafde"
+ },
+ "js.daycon.bo-qua-doi-chieu-la-so": {
+  "t": "Skipped the comparison with your own chart.",
+  "h": "7c25b196"
+ },
+ "js.daycon.cach-choi-ngay-o-nha-hop": {
+  "t": " ways to play at home</b> that suit this strength — open the full version to see the names.</p>",
+  "h": "4d33ef7d"
+ },
+ "js.daycon.cach-con-tiep-thu": {
+  "t": "How your child takes things in",
+  "h": "d4eac771"
+ },
+ "js.daycon.cach-cuc": {
+  "t": " patterns, ",
+  "h": "a4f8bc9a"
+ },
+ "js.daycon.cat": {
+  "t": "good ",
+  "h": "bbbbd4e0"
+ },
+ "js.daycon.chan-dung": {
+  "t": "Portrait",
+  "h": "30421728"
+ },
+ "js.daycon.chang-dai-van": {
+  "t": " major-cycle stretches. ",
+  "h": "0bc2d397"
+ },
+ "js.daycon.chat-can-boi-them-nhat": {
+  "t": "Strength most in need of support: ",
+  "h": "4c7acf8e"
+ },
+ "js.daycon.chat-nang-khieu-cao-nhat": {
+  "t": "Highest talent strength: ",
+  "h": "1018ec48"
+ },
+ "js.daycon.chat-nua-cung-noi": {
+  "t": " more strengths</b> also stand out (",
+  "h": "7f9974ca"
+ },
+ "js.daycon.cho-con-tham-gia-kieu-nao": {
+  "t": "<h5>How to involve your child</h5>",
+  "h": "1b74c443"
+ },
+ "js.daycon.cho-nguoi-lon-hay-hieu-nham": {
+  "t": "Where adults often misunderstand",
+  "h": "f78ab78d"
+ },
+ "js.daycon.cho-thay-xin-thong-tin-cua": {
+  "t": "Please tell me about your child.",
+  "h": "e81463c3"
+ },
+ "js.daycon.chua-cham": {
+  "t": "not scored yet",
+  "h": "a20bbf69"
+ },
+ "js.daycon.chua-chat-nao-noi-han-len": {
+  "t": "No strength stands out yet",
+  "h": "44a78494"
+ },
+ "js.daycon.chua-chat-nao-noi-han-nen": {
+  "t": " · no strength stands out yet, so these are <b>the three worth trying first</b>",
+  "h": "95fc607c"
+ },
+ "js.daycon.chua-chat-nao-vuot-nguong-nen": {
+  "t": "No strength has passed the threshold yet — let your child try broadly, then watch the real reaction.",
+  "h": "986be904"
+ },
+ "js.daycon.chua-vuot-nguong-nhung-cao-nhat": {
+  "t": "Not past the threshold yet, but the highest of the 8 strengths. ",
+  "h": "7b04f512"
+ },
+ "js.daycon.co-doi-chieu": {
+  "t": "Yes, compare →",
+  "h": "a3846e57"
+ },
+ "js.daycon.cung-an-than": {
+  "t": "<li><b>Body Palace</b> — ",
+  "h": "23b5a7a9"
+ },
+ "js.daycon.cung-tinh-am-duong-de-va": {
+  "t": "Same yin/yang nature — easy to clash",
+  "h": "38ee66ae"
+ },
+ "js.daycon.cung-tu-tuc-cua-ban": {
+  "t": "Your Children Palace",
+  "h": "f546ca50"
+ },
+ "js.daycon.da": {
+  "t": "trend ",
+  "h": "ea471098"
+ },
+ "js.daycon.da-chon-san": {
+  "t": "<p>We've pre-selected <b>",
+  "h": "0f8b5933"
+ },
+ "js.daycon.dang-o-chang-nay": {
+  "t": " · currently in this stretch",
+  "h": "dca615be"
+ },
+ "js.daycon.day-con-theo-la-so": {
+  "t": "Parenting by Chart",
+  "h": "2013a771"
+ },
+ "js.daycon.day-con-theo-la-so-6c04": {
+  "t": "Parenting by Chart",
+  "h": "80688ea6"
+ },
+ "js.daycon.day-con-theo-la-so-l6v3": {
+  "t": "Parenting by Chart — ",
+  "h": "90ccd72e"
+ },
+ "js.daycon.day-la-ban-huong-dan-nuoi-ten": {
+  "t": "This is the parenting guide for **{ten}**. Which situation would you like to ask about next?",
+  "h": "6e9c3d69"
+ },
+ "js.daycon.dieu-ban-dang-lo-ve-con": {
+  "t": "What worries you about your child?",
+  "h": "75d020b9"
+ },
+ "js.daycon.dieu-ban-dang-lo-viet-rieng": {
+  "t": "What worries you, written specifically from your child's chart",
+  "h": "3f67856e"
+ },
+ "js.daycon.dieu-cha-me-dang-lo": {
+  "t": "What the parent worries about: {lo}",
+  "h": "cc98d53f"
+ },
+ "js.daycon.dieu-dang-lo": {
+  "t": "What worries you",
+  "h": "1c1218e7"
+ },
+ "js.daycon.dieu-dang-lo-s1b1": {
+  "t": "Worry: <b>",
+  "h": "707a2eb1"
+ },
+ "js.daycon.dinh-huong-cach-day": {
+  "t": "Direction & approach",
+  "h": "fb8a0485"
+ },
+ "js.daycon.dinh-huong-dh": {
+  "t": "Direction: {dh}",
+  "h": "c20461b0"
+ },
+ "js.daycon.dinh-huong-moi-truong-hoc-phuong": {
+  "t": "Direction for the learning environment + a teaching method that suits your child",
+  "h": "9673ce91"
+ },
+ "js.daycon.do-5-truc-tinh-khi-va": {
+  "t": "Measuring the 5 temperament axes and 8 talent strengths",
+  "h": "44451f2e"
+ },
+ "js.daycon.doi-chieu-them-voi-la-so": {
+  "t": "Added the comparison with your own chart ✓",
+  "h": "65992be6"
+ },
+ "js.daycon.doi-chieu-voi-la-so-cua": {
+  "t": "Compared with your chart: ",
+  "h": "69111647"
+ },
+ "js.daycon.dong-vien-kieu-nay-moi-vao": {
+  "t": "Encouragement that lands this way",
+  "h": "8615f222"
+ },
+ "js.daycon.du-kien-lap-ra-tu-chinh": {
+  "t": " data points</b> built from the exact birth date and time you entered — ",
+  "h": "fdb76ddf"
+ },
+ "js.daycon.gio-sinh-cua-ban-la-may": {
+  "t": "What time were you born?",
+  "h": "3e121266"
+ },
+ "js.daycon.gioi-tinh-cua-ban-cha-me": {
+  "t": "What is your gender (father / mother)?",
+  "h": "3e7f29e6"
+ },
+ "js.daycon.hai-me-con-hay-va-nhau": {
+  "t": "Where do the two of you tend to clash?",
+  "h": "8121e071"
+ },
+ "js.daycon.hay-bi-doc-nham": {
+  "t": "<p><b>Often misread:</b> ",
+  "h": "560ec4eb"
+ },
+ "js.daycon.hoat-dong-de-dang-ky-ra": {
+  "t": " activities to sign up for or go out to</b> and <b>",
+  "h": "047d6333"
+ },
+ "js.daycon.hoi-nha-truong": {
+  "t": "<b>Ask the school:</b>",
+  "h": "2b67b4bb"
+ },
+ "js.daycon.hop": {
+  "t": "<p><b>Suits:</b> ",
+  "h": "23262161"
+ },
+ "js.daycon.khac-tinh-am-duong-de-bu": {
+  "t": "Different yin/yang nature — easy to complement",
+  "h": "b5f77a93"
+ },
+ "js.daycon.khoa": {
+  "t": "Locked",
+  "h": "393cb36a"
+ },
+ "js.daycon.khoang-mot-phan-bay-so-la": {
+  "t": "About one chart in seven falls here.</p>",
+  "h": "ff8e890c"
+ },
+ "js.daycon.khong-co-buoc-nao-doan-mo": {
+  "t": "No step is guesswork: change one detail of the birth data and the whole table above changes with it.",
+  "h": "065d23da"
+ },
+ "js.daycon.khong-co-chinh-tinh": {
+  "t": "no major star",
+  "h": "753ded73"
+ },
+ "js.daycon.khong-dat-ten": {
+  "t": "Unnamed",
+  "h": "295915d5"
+ },
+ "js.daycon.khong-the-ket-noi-vui-long": {
+  "t": "Couldn't connect. Please try again.",
+  "h": "bf0b6e7b"
+ },
+ "js.daycon.khung-dai-van": {
+  "t": "major-cycle span ",
+  "h": "06be9124"
+ },
+ "js.daycon.kieu-cua-ban-kieu": {
+  "t": "Your type: {kieu}",
+  "h": "1f89ad05"
+ },
+ "js.daycon.ky-luat-kieu-nay-phan-tac": {
+  "t": "Discipline that backfires",
+  "h": "0af70e1c"
+ },
+ "js.daycon.ky-luat-phan-tac-dung-kl": {
+  "t": "Discipline that backfires: {kl}",
+  "h": "4ed18b67"
+ },
+ "js.daycon.la-so": {
+  "t": "Chart: ",
+  "h": "2644d5f2"
+ },
+ "js.daycon.la-so-cua-con-khong-nghieng": {
+  "t": "<p>Your child's chart <b>doesn't lean clearly</b> toward any area — and this is a genuine result, not a misread by the machine. ",
+  "h": "4465b58f"
+ },
+ "js.daycon.lam-con-bo-ngang": {
+  "t": "<p><b>What makes your child quit halfway:</b> ",
+  "h": "4bfcce62"
+ },
+ "js.daycon.lam-gi-tu-toi-nay-nen": {
+  "t": "What to do from tonight — what to do and what to avoid",
+  "h": "fabc2ced"
+ },
+ "js.daycon.lap-la-so-phan-kieu-nguoi": {
+  "t": "Casting the chart and classifying the type",
+  "h": "61f07874"
+ },
+ "js.daycon.loi": {
+  "t": "Error ",
+  "h": "1b80116b"
+ },
+ "js.daycon.loi-8d72": {
+  "t": "Error: ",
+  "h": "471c0087"
+ },
+ "js.daycon.luong": {
+  "t": "credits →",
+  "h": "36d6704d"
+ },
+ "js.daycon.luu-nien-cung": {
+  "t": "Liu Nian palace ",
+  "h": "8f5a16cc"
+ },
+ "js.daycon.mo-ban-huong-dan-day-du": {
+  "t": "Open the full parenting guide",
+  "h": "5b95fbd4"
+ },
+ "js.daycon.muc-trong-la-so": {
+  "t": "more items in the chart",
+  "h": "4e83a32a"
+ },
+ "js.daycon.muon-xung-chieu": {
+  "t": " (borrowed from the opposite palace)",
+  "h": "7363dfe3"
+ },
+ "js.daycon.nam-giua-dung-duoc-ca-hai": {
+  "t": "in the middle — either approach works",
+  "h": "88eb619c"
+ },
+ "js.daycon.nam-truc-tinh-khi": {
+  "t": "Five temperament axes",
+  "h": "9d3afdaa"
+ },
+ "js.daycon.nam-truc-tinh-khi-tam-chat": {
+  "t": "Five temperament axes + eight talent strengths, scored from your child's chart",
+  "h": "3ff91004"
+ },
+ "js.daycon.nen": {
+  "t": "<p><b>Do:</b> ",
+  "h": "96dd52e2"
+ },
+ "js.daycon.nen-cho-ten-thu-hoat-dong": {
+  "t": "Which activity should {ten} try first?",
+  "h": "c13288e1"
+ },
+ "js.daycon.ngay-sinh-duong-lich-cua-ban": {
+  "t": "What is your birth date in the solar calendar?",
+  "h": "ef23d3fb"
+ },
+ "js.daycon.nhom-tuoi": {
+  "t": "Age group: <b>",
+  "h": "974ef95b"
+ },
+ "js.daycon.o-nha": {
+  "t": "<p><b>At home:</b> ",
+  "h": "adc7648c"
+ },
+ "js.daycon.pha-them": {
+  "t": "with a touch of",
+  "h": "4b629d3a"
+ },
+ "js.daycon.ra-bai-giao-viec": {
+  "t": "Setting homework / handing over tasks",
+  "h": "2dde825d"
+ },
+ "js.daycon.sach-dan-ve-sao": {
+  "t": "— book quote on the star",
+  "h": "7b5e7401"
+ },
+ "js.daycon.sao-an-tren-12-cung": {
+  "t": " stars placed across 12 palaces, ",
+  "h": "a6914f13"
+ },
+ "js.daycon.sat": {
+  "t": " / harsh ",
+  "h": "c472d1aa"
+ },
+ "js.daycon.suy-tu": {
+  "t": "</b> — inferred from: ",
+  "h": "55a15f14"
+ },
+ "js.daycon.tai-cung-menh": {
+  "t": " in the Life Palace</span></div>",
+  "h": "173c6b01"
+ },
+ "js.daycon.tam-chat-nang-khieu": {
+  "t": "Eight talent strengths",
+  "h": "10c9f44e"
+ },
+ "js.daycon.ten-nghieng-ve-kieu-kieu": {
+  "t": "{ten} leans toward the {kieu} type ({tutuong})",
+  "h": "aea15b43"
+ },
+ "js.daycon.thap-nhat-trong-8-chat-cach": {
+  "t": "The lowest of the 8 strengths — how to support it and the specific direction are in the full version.",
+  "h": "a2f3c473"
+ },
+ "js.daycon.thu-con-can-duoc-day-them": {
+  "t": "What your child still needs to be taught",
+  "h": "45fd44a4"
+ },
+ "js.daycon.tiep-tuc": {
+  "t": "Continue →",
+  "h": "86f35ed9"
+ },
+ "js.daycon.tieu-han-cung": {
+  "t": "Xiao Xian palace ",
+  "h": "4d7ba471"
+ },
+ "js.daycon.toi-nay-ten-lai-khong-chiu": {
+  "t": "{ten} won't study again tonight — how should I start the conversation?",
+  "h": "5cea25be"
+ },
+ "js.daycon.tuoi": {
+  "t": " years</b>",
+  "h": "e5f74880"
+ },
+ "js.daycon.tuoi-3v6h": {
+  "t": " years",
+  "h": "2e261bf5"
+ },
+ "js.daycon.tuoi-tuoi-mu": {
+  "t": " years old (traditional age count)",
+  "h": "f62485fd"
+ },
+ "js.daycon.vach-dut-nguong-dang-cho-thu": {
+  "t": "▲ dashed line = the “worth trying” threshold",
+  "h": "16e23b36"
+ },
+ "js.daycon.van-nam": {
+  "t": "<li><b>Year outlook ",
+  "h": "1192aa32"
+ },
+ "js.daycon.vi-sao-la-so-lai-do": {
+  "t": "Why does the chart measure these axes?",
+  "h": "f65c0dfb"
+ },
+ "js.daycon.viec-dung-luc-nay-la-cho": {
+  "t": "What matters now is to <b>let your child try broadly and watch the real reaction</b> — don't choose for them.",
+  "h": "b4af8a17"
+ },
+ "js.daycon.viet-dinh-huong-va-huong-dan": {
+  "t": "Writing the direction and parenting guide",
+  "h": "10f821e4"
+ },
+ "js.daycon.vui-long-nhap-day-du-ngay": {
+  "t": "Please enter your child's full birth date (day, month and year).",
+  "h": "784233ac"
+ },
+ "js.daycon.vuot-nguong-dang-cho-thu": {
+  "t": "Past the “worth trying” threshold. ",
+  "h": "ee663dd4"
+ },
+ "js.daycon.vuot-nguong-dang-cho-thu-khong": {
+  "t": "★ = a strength past the threshold (“worth trying”), not a confirmed talent.",
+  "h": "1dec3af7"
+ },
+ "js.daycon.xem-ban-huong-dan-day-du": {
+  "t": "✦ See the full parenting guide —",
+  "h": "3a668eed"
+ },
+ "js.daycon.xem-diem-o-bieu-do-tren": {
+  "t": ") — see the scores in the chart above; open the full version to read each strength in detail.",
+  "h": "edfabb37"
+ },
+ "js.daycon.xem-them": {
+  "t": "<summary>See ",
+  "h": "c5afdcd1"
  },
  "js.home.3-buoc-dau-tien": {
   "t": "First 3 steps",

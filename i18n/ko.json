@@ -243,6 +243,210 @@
   "t": "← 오늘로 돌아가기",
   "h": "24faf89e"
  },
+ "daycon.2-xem-truoc-chan-dung-con": {
+  "t": "<span class=\"wss-n\">2</span><span class=\"wss-l\">아이 초상 미리보기</span>",
+  "h": "d8f50448"
+ },
+ "daycon.5-la-muc-giua-cua-hang": {
+  "t": "<b>5는 중간값</b>이에요. 수천 건의 아이 명반을 기준으로 한 중간이며 “10점 만점에 5점”이라는 뜻이 아니에요. 회색 띠는 아이가 두 가지 방식 모두 소화할 수 있는 구간이에요. 축의 양 끝 모두 가치가 있어요.",
+  "h": "0a475048"
+ },
+ "daycon.5-truc-tinh-khi": {
+  "t": "<span class=\"hp-ic\" data-icon=\"scale\"></span><span>5가지<br>기질 축</span>",
+  "h": "2ee56c76"
+ },
+ "daycon.8-chat-nang-khieu": {
+  "t": "<span class=\"hp-ic\" data-icon=\"star\"></span><span>8가지<br>재능 기질</span>",
+  "h": "a2098312"
+ },
+ "daycon.ban-luan-giai-mau-tai-pdf": {
+  "t": "<span class=\"sc-ic\" data-icon=\"file-text\"></span> <span class=\"sc-txt\"><b>샘플 풀이서</b><span>샘플 명반으로 만든 「명반 맞춤 자녀 교육」 전체 PDF를 내려받아 실제 내용을 미리 확인해 보세요.</span></span> <a class=\"sc-btn\" href=\"/tai-mau/mau-day-con.pdf\" target=\"_blank\" rel=\"noopener\">PDF 받기 →</a>",
+  "h": "93827cd3"
+ },
+ "daycon.ban-nay-phac-hoa-tu-cac": {
+  "t": "<span class=\"ic\" data-icon=\"lightbulb\"></span> 이 풀이는 자미두수 명반의 데이터에 선인들이 남긴 연구 경험을 더해 그려낸 것이에요. <b>가르치는 방법</b> 부분은 이 페이지가 해석을 덧붙인 것이며 고전에 적힌 글귀가 아니에요. 참고용으로만 봐 주세요.<br><br> <span class=\"ic\" data-icon=\"scale\"></span> 이것은 <b>아이에게 맞게 이해하고 가르치기 위한</b> 틀이에요. 아이는 아직 자라는 중이고 이 자리에 없기 때문에, 이 풀이는 <b>합격·불합격 예측, 직업 단정, 건강이나 연애 풀이를 일부러 하지 않아요</b>. 타고난 기질에는 좋고 나쁨이 없고, 어른이 하는 방식에 맞거나 맞지 않을 뿐이에요.<br><br> <span class=\"ic\" data-icon=\"book-open\"></span> <b>출처:</b> 명궁, 복덕궁, 부모궁 등은 <i>『자미두수 신편』</i>(Vân Đằng Thái Thứ Lang)에 따라 작성했어요. 5가지 축·8가지 기질의 틀과 유형별 교육 방식은 <b>명보 자미두수 전문가 팀</b>이 직접 만든 방법이에요. <a href=\"/nguon-du-lieu.html\" target=\"_blank\" rel=\"noopener\" style=\"color:#9A7B3A\">데이터 출처 전체 보기 →</a>",
+  "h": "77ff2cc9"
+ },
+ "daycon.boi-canh": {
+  "t": "<b>배경</b><i></i>",
+  "h": "a85d826c"
+ },
+ "daycon.buong-cai-lai-noi-khong-nghe": {
+  "t": "고집이 세고 말대꾸하며 말을 안 들어요",
+  "h": "76509c43"
+ },
+ "daycon.cac-chang-di-hoc": {
+  "t": "<span class=\"res-block-title\">학업 단계별 흐름</span>",
+  "h": "b2c2bb10"
+ },
+ "daycon.cach-day-con-nay": {
+  "t": "<span class=\"res-block-title\">이 아이에게 맞는 교육법</span>",
+  "h": "e203e71f"
+ },
+ "daycon.chon-dieu-dang-lo-nhap-ngay": {
+  "t": "걱정되는 점을 고르고 아이의 생년월일과 시간을 입력하세요. 아이에게 맞는 교육법과 오늘 밤부터 할 수 있는 일을 알려 드려요.",
+  "h": "b14b84f4"
+ },
+ "daycon.co-la-so-cua-ban-thi": {
+  "t": "내 명반이 있으면 풀이에 <b>“두 사람의 관계”</b> 항목이 더해져요. 부모와 아이가 자주 부딪히는 지점과 충돌을 줄이는 방법이에요. 비워 두어도 나머지 내용은 모두 볼 수 있어요.",
+  "h": "0ea6e4fe"
+ },
+ "daycon.co-so-trong-la-so": {
+  "t": "<span class=\"res-block-title\">명반상의 근거</span>",
+  "h": "c215623b"
+ },
+ "daycon.con-khong-chiu-noi-chuyen-voi": {
+  "t": "아이가 더는 저와 말을 하려고 하지 않아요",
+  "h": "245ca1b1"
+ },
+ "daycon.con-la-nguoi-the-nao": {
+  "t": "<span class=\"res-block-title\">어떤 아이인가</span>",
+  "h": "d97bd561"
+ },
+ "daycon.cung-mot-cach-day-co-dua": {
+  "t": "똑같은 방식으로 가르쳐도 눈에 띄게 나아지는 아이가 있고, 가르칠수록 멀어지는 아이도 있어요. 아이마다 받아들이는 방식이 다르기 때문이에요. 아이의 명반으로 어떤 방법이 역효과를 내고 있는지 읽어 보세요.",
+  "h": "eec3a103"
+ },
+ "daycon.da-xem-truoc-do": {
+  "t": "<span class=\"res-block-title\">이전에 본 내용</span>",
+  "h": "5dc13a72"
+ },
+ "daycon.dau-hieu-nhan-ra-o-nha": {
+  "t": "집에서 알아볼 수 있는 신호",
+  "h": "a07a9d36"
+ },
+ "daycon.day-con-theo-la-so": {
+  "t": "명반 맞춤 자녀 교육",
+  "h": "2013a771"
+ },
+ "daycon.day-con-theo-la-so-dua": {
+  "t": "<b>명반 맞춤 자녀 교육</b><span>이 아이에게 필요한 건 재촉일까, 기다림일까</span>",
+  "h": "89056d92"
+ },
+ "daycon.day-con-theo-la-so-tu": {
+  "t": "명반 맞춤 자녀 교육 — 명보 자미두수",
+  "h": "43088648"
+ },
+ "daycon.day-la-kieu-moi-truong-hoc": {
+  "t": "아이에게 맞는 <b>학습 환경의 유형</b>일 뿐이에요. 전공이나 직업은 일부러 정하지 않았어요.",
+  "h": "db05bd75"
+ },
+ "daycon.diem-o-day-la-muc-thuan": {
+  "t": "여기 점수는 <b>그 시기가 순조로운지 거스르는지의 정도</b>이지 학업 성적도, 아이에 대한 점수도 아니에요.",
+  "h": "799bb1dc"
+ },
+ "daycon.dieu-ban-dang-lo": {
+  "t": "걱정되는 점",
+  "h": "bd0e3bcd"
+ },
+ "daycon.dieu-ban-dang-lo-pjp3": {
+  "t": "<span class=\"res-block-title\" id=\"loTitle\">걱정되는 점</span>",
+  "h": "86a3d90a"
+ },
+ "daycon.dinh-huong": {
+  "t": "<span class=\"res-block-title\">방향 설정</span>",
+  "h": "ee21cc8a"
+ },
+ "daycon.dinh-huong-cach-day": {
+  "t": "<span class=\"hp-ic\" data-icon=\"compass\"></span><span>교육<br>방향</span>",
+  "h": "c22dffe6"
+ },
+ "daycon.do-duoc-gi": {
+  "t": "<b>무엇을 측정했나</b><i></i>",
+  "h": "0ae0b676"
+ },
+ "daycon.goi-y-de-thu-khong-phai": {
+  "t": "시도해 볼 만한 제안일 뿐 처방이 아니에요. 고서는 사람의 기질을 말할 뿐, 지금 사는 곳에 어떤 동아리가 열려 있는지는 몰라요. 한 번 해 보게 하고 아이의 실제 반응을 살펴보세요.",
+  "h": "5f3bcee3"
+ },
+ "daycon.hai-ben-voi-nhau": {
+  "t": "<span class=\"res-block-title\">두 사람의 관계</span>",
+  "h": "12457260"
+ },
+ "daycon.hoat-dong-nen-cho-con-thu": {
+  "t": "<span class=\"res-block-title\">아이에게 해 보게 할 활동</span>",
+  "h": "f4d526be"
+ },
+ "daycon.hoc-hanh-sa-sut-ngoi-vao": {
+  "t": "성적이 떨어지고 책상에 앉지를 못해요",
+  "h": "fab00484"
+ },
+ "daycon.khong-co-gi-gap-chi-muon": {
+  "t": "급한 건 없고, 그저 아이를 더 이해하고 싶어요",
+  "h": "cf2efa39"
+ },
+ "daycon.lam-gi-tu-toi-nay": {
+  "t": "<span class=\"res-block-title\">오늘 밤부터 할 일</span>",
+  "h": "1f882975"
+ },
+ "daycon.moi-luot-luong": {
+  "t": "<span class=\"vnd\" data-tvp-price-vnd=\"day-con\"></span> / 회 <span class=\"cb-sub\">(<span data-tvp-price=\"day-con\">…</span> 냥)</span>",
+  "h": "10afd8c1"
+ },
+ "daycon.nam-truc-tinh-khi": {
+  "t": "<span class=\"res-block-title\">다섯 가지 기질 축</span>",
+  "h": "587fa869"
+ },
+ "daycon.nen": {
+  "t": "하면 좋은 것",
+  "h": "078cfc62"
+ },
+ "daycon.nen-lam-gi": {
+  "t": "<b>하면 좋은 일</b><i></i>",
+  "h": "021dc84d"
+ },
+ "daycon.neu-chi-nho-mot-cau": {
+  "t": "<span class=\"res-block-title\">한 문장만 기억한다면</span>",
+  "h": "6e372478"
+ },
+ "daycon.ngay-sinh-cua-con": {
+  "t": "아이의 생년월일",
+  "h": "3837783b"
+ },
+ "daycon.nhap-la-so-cua-con-nhan": {
+  "t": "아이의 명반을 입력하면 아이가 받아들이는 방식, 과제를 내줄 때 하게 만드는 방법, 역효과를 내는 훈육 방식, 부모와 아이가 부딪히는 지점을 알 수 있어요.",
+  "h": "244ebedb"
+ },
+ "daycon.phan-luan-chua-mo": {
+  "t": "<span class=\"res-block-title\">아직 열리지 않은 풀이</span>",
+  "h": "68cac5d9"
+ },
+ "daycon.rut-re-ngai-dam-dong-it": {
+  "t": "소심하고 사람 많은 곳을 어려워하며 친구가 적어요",
+  "h": "56c6a43d"
+ },
+ "daycon.sap-phai-chon-truong-chon-nganh": {
+  "t": "곧 학교나 전공을 골라야 해요",
+  "h": "926ae29e"
+ },
+ "daycon.tam-chat-nang-khieu": {
+  "t": "<span class=\"res-block-title\">여덟 가지 재능 기질</span>",
+  "h": "8ac0e142"
+ },
+ "daycon.them-la-so-cua-ban-cha": {
+  "t": "내 명반 추가 — 아버지 또는 어머니 (선택)",
+  "h": "e158b2b1"
+ },
+ "daycon.thoi": {
+  "t": "피할 것",
+  "h": "aa7d2f5d"
+ },
+ "daycon.tra-loi-thay-o-khung-chat": {
+  "t": "채팅창에서 선생님께 걱정되는 점과 아이의 생년월일을 알려 주세요.",
+  "h": "4cf5eddf"
+ },
+ "daycon.vuot-vach-dut-la-chat-dang": {
+  "t": "점선을 넘은 기질은 <b>해 볼 만한</b> 것일 뿐, 재능이 확인된 것은 아니에요. 집에서 보이는 신호와 맞춰 보고, 맞지 않으면 내 눈을 믿으세요.",
+  "h": "fbb5fd98"
+ },
+ "daycon.xem-be-khac": {
+  "t": "다른 아이 보기",
+  "h": "3ff33fa6"
+ },
+ "daycon.xem-cach-day-con-ton-luong": {
+  "t": "<span class=\"bg-label\"><span class=\"ic\" data-icon=\"baby\"></span><b>자녀 교육법 보기 →</b></span> <small>비용 <span class=\"vnd\" data-tvp-price-vnd=\"day-con\"></span> <span class=\"cb-sub\">(<span data-tvp-price=\"day-con\">…</span> 냥)</span></small>",
+  "h": "ccbaaea3"
+ },
  "disclaimer.1-tinh-chat-tham-khao": {
   "t": "1. 참고용이라는 성격",
   "h": "99856a52"
@@ -1258,6 +1462,514 @@
  "js.chutrinh.tieu-van-nam": {
   "t": "소한 ‘ ",
   "h": "1979c56a"
+ },
+ "js.daycon.5-la-muc-giua-cua-hang": {
+  "t": "\n\n5는 수천 건의 아이 명반을 기준으로 한 중간값이며 “10점 만점에 5점”이라는 뜻이 아니에요. 축의 양 끝 모두 가치가 있어요.",
+  "h": "99fb1a17"
+ },
+ "js.daycon.7-chat-con-lai-5-truc": {
+  "t": "나머지 7가지 기질, 5가지 기질 축, 교육 방향은 전체 버전에 들어 있어요.",
+  "h": "00fde99c"
+ },
+ "js.daycon.ba-chat-dung-dau-o-duoi": {
+  "t": "위에 있는 상위 세 가지 기질은 결론이 아니라 먼저 해 볼 만한 곳이에요.</p></div>",
+  "h": "fa2636f2"
+ },
+ "js.daycon.ban-co-muon-doi-chieu-them": {
+  "t": "나 자신(아버지 또는 어머니)의 명반도 함께 대조해 볼까요? “두 사람의 관계” 항목이 더해져요.",
+  "h": "1fea98b9"
+ },
+ "js.daycon.ban-da-xem-ban-nay-roi": {
+  "t": "✓ 이미 본 풀이예요 — 다시 열어도 냥이 차감되지 않아요",
+  "h": "7d2c6a5b"
+ },
+ "js.daycon.ban-huong-dan-day-du-chua": {
+  "t": "⊙ 전체 교육 가이드가 아직 열리지 않았어요",
+  "h": "1e7a8a78"
+ },
+ "js.daycon.ban-luan": {
+  "t": "풀이서",
+  "h": "b6f609bf"
+ },
+ "js.daycon.ban-nay-doc-tu": {
+  "t": "이 풀이는 입력하신 생년월일시로 세운 <b>",
+  "h": "d989b954"
+ },
+ "js.daycon.ban-se-nhan-cach-ra-bai": {
+  "t": "받을 수 있는 내용: 공부 시간을 더 늘리는 대신, 아이가 받아들이는 방식에 맞는 과제 내기와 책상 꾸리기.",
+  "h": "49791304"
+ },
+ "js.daycon.ban-se-nhan-chat-viec-hop": {
+  "t": "받을 수 있는 내용: 아이에게 맞는 일의 결과, 아이가 스스로 말하게 만드는 질문법 — 전공 이름이 아니에요.",
+  "h": "dd0da12e"
+ },
+ "js.daycon.ban-se-nhan-chuyen-gi-con": {
+  "t": "받을 수 있는 내용: 아이가 아직 들어 주는 이야기와, 꺼내는 즉시 마음을 닫게 만드는 말투.",
+  "h": "20335789"
+ },
+ "js.daycon.ban-se-nhan-dua-nay-can": {
+  "t": "받을 수 있는 내용: 이 아이에게 필요한 건 밖으로 이끌어 주는 것일까, 가만히 두는 것일까. 겉으로는 비슷해 보여도 전혀 다른 두 유형의 아이예요.",
+  "h": "cd7192ac"
+ },
+ "js.daycon.ban-se-nhan-mot-ban-mo": {
+  "t": "받을 수 있는 내용: 이 아이가 어떤 사람인지 그려 낸 글이에요. 일상에서 그 아이를 알아볼 수 있을 만큼요.",
+  "h": "2846cd50"
+ },
+ "js.daycon.ban-se-nhan-phan-nao-la": {
+  "t": "받을 수 있는 내용: 어디까지가 타고난 기질이라 이끌어 줘야 하는 부분이고, 어디부터가 어른의 말투 때문인지 — 바로 고칠 수 있어요.",
+  "h": "565f27fd"
+ },
+ "js.daycon.bat-dau-the-nao": {
+  "t": "<b>시작하는 방법:</b>",
+  "h": "ac776bdf"
+ },
+ "js.daycon.bay-cua-chat-nay": {
+  "t": "<b>이 기질의 함정:</b>",
+  "h": "1847b63e"
+ },
+ "js.daycon.be-gai": {
+  "t": "여자아이",
+  "h": "af93dba0"
+ },
+ "js.daycon.be-trai": {
+  "t": "남자아이",
+  "h": "274225bc"
+ },
+ "js.daycon.bo-qua": {
+  "t": "건너뛰기",
+  "h": "861dafde"
+ },
+ "js.daycon.bo-qua-doi-chieu-la-so": {
+  "t": "내 명반 대조는 건너뛰었어요.",
+  "h": "7c25b196"
+ },
+ "js.daycon.cach-choi-ngay-o-nha-hop": {
+  "t": " 개의 집에서 할 수 있는 놀이</b>를 미리 골랐어요 — 구체적인 이름은 전체 버전에서 확인하세요.</p>",
+  "h": "4d33ef7d"
+ },
+ "js.daycon.cach-con-tiep-thu": {
+  "t": "아이가 받아들이는 방식",
+  "h": "d4eac771"
+ },
+ "js.daycon.cach-cuc": {
+  "t": " 개의 격국, ",
+  "h": "a4f8bc9a"
+ },
+ "js.daycon.cat": {
+  "t": "길 ",
+  "h": "bbbbd4e0"
+ },
+ "js.daycon.chan-dung": {
+  "t": "초상",
+  "h": "30421728"
+ },
+ "js.daycon.chang-dai-van": {
+  "t": " 개의 대운 구간이 있어요. ",
+  "h": "0bc2d397"
+ },
+ "js.daycon.chat-can-boi-them-nhat": {
+  "t": "가장 보완이 필요한 기질: ",
+  "h": "4c7acf8e"
+ },
+ "js.daycon.chat-nang-khieu-cao-nhat": {
+  "t": "가장 높은 재능 기질: ",
+  "h": "1018ec48"
+ },
+ "js.daycon.chat-nua-cung-noi": {
+  "t": " 가지 기질</b>도 두드러져요(",
+  "h": "7f9974ca"
+ },
+ "js.daycon.cho-con-tham-gia-kieu-nao": {
+  "t": "<h5>어떤 방식으로 참여시킬까</h5>",
+  "h": "1b74c443"
+ },
+ "js.daycon.cho-nguoi-lon-hay-hieu-nham": {
+  "t": "어른들이 자주 오해하는 부분",
+  "h": "f78ab78d"
+ },
+ "js.daycon.cho-thay-xin-thong-tin-cua": {
+  "t": "아이의 정보를 알려 주세요.",
+  "h": "e81463c3"
+ },
+ "js.daycon.chua-cham": {
+  "t": "미채점",
+  "h": "a20bbf69"
+ },
+ "js.daycon.chua-chat-nao-noi-han-len": {
+  "t": "아직 두드러진 기질이 없어요",
+  "h": "44a78494"
+ },
+ "js.daycon.chua-chat-nao-noi-han-nen": {
+  "t": " · 두드러진 기질이 없어서 <b>먼저 해 볼 만한 상위 세 가지 기질</b>을 보여 드려요",
+  "h": "95fc607c"
+ },
+ "js.daycon.chua-chat-nao-vuot-nguong-nen": {
+  "t": "기준선을 넘은 기질이 아직 없어요 — 폭넓게 해 보게 하고 아이의 실제 반응을 살펴보세요.",
+  "h": "986be904"
+ },
+ "js.daycon.chua-vuot-nguong-nhung-cao-nhat": {
+  "t": "아직 기준선을 넘지는 않았지만 8가지 기질 중에서는 가장 높아요. ",
+  "h": "7b04f512"
+ },
+ "js.daycon.co-doi-chieu": {
+  "t": "네, 대조할게요 →",
+  "h": "a3846e57"
+ },
+ "js.daycon.cung-an-than": {
+  "t": "<li><b>신궁 위치</b> — ",
+  "h": "23b5a7a9"
+ },
+ "js.daycon.cung-tinh-am-duong-de-va": {
+  "t": "음양 성질이 같아요 — 부딪히기 쉬워요",
+  "h": "38ee66ae"
+ },
+ "js.daycon.cung-tu-tuc-cua-ban": {
+  "t": "내 자녀궁",
+  "h": "f546ca50"
+ },
+ "js.daycon.da": {
+  "t": "흐름 ",
+  "h": "ea471098"
+ },
+ "js.daycon.da-chon-san": {
+  "t": "<p>이 기질에 맞는 활동으로 <b>",
+  "h": "0f8b5933"
+ },
+ "js.daycon.dang-o-chang-nay": {
+  "t": " · 지금 이 구간에 있어요",
+  "h": "dca615be"
+ },
+ "js.daycon.day-con-theo-la-so": {
+  "t": "명반 맞춤 자녀 교육",
+  "h": "2013a771"
+ },
+ "js.daycon.day-con-theo-la-so-6c04": {
+  "t": "명반 맞춤 자녀 교육",
+  "h": "80688ea6"
+ },
+ "js.daycon.day-con-theo-la-so-l6v3": {
+  "t": "명반 맞춤 자녀 교육 — ",
+  "h": "90ccd72e"
+ },
+ "js.daycon.day-la-ban-huong-dan-nuoi-ten": {
+  "t": "**{ten}**의 교육 가이드예요. 더 묻고 싶은 상황이 있나요?",
+  "h": "6e9c3d69"
+ },
+ "js.daycon.dieu-ban-dang-lo-ve-con": {
+  "t": "아이에 대해 걱정되는 점은 무엇인가요?",
+  "h": "75d020b9"
+ },
+ "js.daycon.dieu-ban-dang-lo-viet-rieng": {
+  "t": "걱정되는 점을 아이의 명반에 맞춰 따로 작성",
+  "h": "3f67856e"
+ },
+ "js.daycon.dieu-cha-me-dang-lo": {
+  "t": "부모가 걱정하는 점: {lo}",
+  "h": "cc98d53f"
+ },
+ "js.daycon.dieu-dang-lo": {
+  "t": "걱정되는 점",
+  "h": "1c1218e7"
+ },
+ "js.daycon.dieu-dang-lo-s1b1": {
+  "t": "걱정되는 점: <b>",
+  "h": "707a2eb1"
+ },
+ "js.daycon.dinh-huong-cach-day": {
+  "t": "교육 방향과 방법",
+  "h": "fb8a0485"
+ },
+ "js.daycon.dinh-huong-dh": {
+  "t": "방향: {dh}",
+  "h": "c20461b0"
+ },
+ "js.daycon.dinh-huong-moi-truong-hoc-phuong": {
+  "t": "학습 환경의 방향 + 아이에게 맞는 교육 방법",
+  "h": "9673ce91"
+ },
+ "js.daycon.do-5-truc-tinh-khi-va": {
+  "t": "5가지 기질 축과 8가지 재능 기질 측정",
+  "h": "44451f2e"
+ },
+ "js.daycon.doi-chieu-them-voi-la-so": {
+  "t": "내 명반과의 대조도 더했어요 ✓",
+  "h": "65992be6"
+ },
+ "js.daycon.doi-chieu-voi-la-so-cua": {
+  "t": "내 명반과의 대조: ",
+  "h": "69111647"
+ },
+ "js.daycon.dong-vien-kieu-nay-moi-vao": {
+  "t": "이런 방식이어야 마음에 와닿는 격려",
+  "h": "8615f222"
+ },
+ "js.daycon.du-kien-lap-ra-tu-chinh": {
+  "t": " 건의 데이터</b>를 읽어 낸 거예요 — ",
+  "h": "fdb76ddf"
+ },
+ "js.daycon.gio-sinh-cua-ban-la-may": {
+  "t": "태어난 시간은 몇 시인가요?",
+  "h": "3e121266"
+ },
+ "js.daycon.gioi-tinh-cua-ban-cha-me": {
+  "t": "내 성별(아버지/어머니)은 무엇인가요?",
+  "h": "3e7f29e6"
+ },
+ "js.daycon.hai-me-con-hay-va-nhau": {
+  "t": "엄마와 아이는 어디에서 자주 부딪히나요?",
+  "h": "8121e071"
+ },
+ "js.daycon.hay-bi-doc-nham": {
+  "t": "<p><b>자주 오해받는 점:</b> ",
+  "h": "560ec4eb"
+ },
+ "js.daycon.hoat-dong-de-dang-ky-ra": {
+  "t": " 개의 등록·외출 활동</b>과 <b>",
+  "h": "047d6333"
+ },
+ "js.daycon.hoi-nha-truong": {
+  "t": "<b>학교에 물어볼 것:</b>",
+  "h": "2b67b4bb"
+ },
+ "js.daycon.hop": {
+  "t": "<p><b>잘 맞는 것:</b> ",
+  "h": "23262161"
+ },
+ "js.daycon.khac-tinh-am-duong-de-bu": {
+  "t": "음양 성질이 달라요 — 서로 채워 주기 쉬워요",
+  "h": "b5f77a93"
+ },
+ "js.daycon.khoa": {
+  "t": "잠김",
+  "h": "393cb36a"
+ },
+ "js.daycon.khoang-mot-phan-bay-so-la": {
+  "t": "명반 일곱 개 중 하나쯤이 여기에 해당해요.</p>",
+  "h": "ff8e890c"
+ },
+ "js.daycon.khong-co-buoc-nao-doan-mo": {
+  "t": "짐작으로 한 단계는 하나도 없어요. 생년월일시의 세부를 하나만 바꿔도 위 표 전체가 달라져요.",
+  "h": "065d23da"
+ },
+ "js.daycon.khong-co-chinh-tinh": {
+  "t": "주성 없음",
+  "h": "753ded73"
+ },
+ "js.daycon.khong-dat-ten": {
+  "t": "이름 없음",
+  "h": "295915d5"
+ },
+ "js.daycon.khong-the-ket-noi-vui-long": {
+  "t": "연결할 수 없어요. 다시 시도해 주세요.",
+  "h": "bf0b6e7b"
+ },
+ "js.daycon.khung-dai-van": {
+  "t": "대운 구간 ",
+  "h": "06be9124"
+ },
+ "js.daycon.kieu-cua-ban-kieu": {
+  "t": "내 유형: {kieu}",
+  "h": "1f89ad05"
+ },
+ "js.daycon.ky-luat-kieu-nay-phan-tac": {
+  "t": "역효과를 내는 훈육 방식",
+  "h": "0af70e1c"
+ },
+ "js.daycon.ky-luat-phan-tac-dung-kl": {
+  "t": "역효과를 내는 훈육 방식: {kl}",
+  "h": "4ed18b67"
+ },
+ "js.daycon.la-so": {
+  "t": "명반: ",
+  "h": "2644d5f2"
+ },
+ "js.daycon.la-so-cua-con-khong-nghieng": {
+  "t": "<p>아이의 명반은 어느 영역으로도 <b>뚜렷하게 기울지 않아요</b>. 기계가 못 읽은 것이 아니라 엄연한 하나의 결과예요. ",
+  "h": "4465b58f"
+ },
+ "js.daycon.lam-con-bo-ngang": {
+  "t": "<p><b>아이가 중간에 그만두게 되는 것:</b> ",
+  "h": "4bfcce62"
+ },
+ "js.daycon.lam-gi-tu-toi-nay-nen": {
+  "t": "오늘 밤부터 할 일 — 하면 좋은 것과 피할 것",
+  "h": "fabc2ced"
+ },
+ "js.daycon.lap-la-so-phan-kieu-nguoi": {
+  "t": "명반을 세우고 유형 분류",
+  "h": "61f07874"
+ },
+ "js.daycon.loi": {
+  "t": "오류 ",
+  "h": "1b80116b"
+ },
+ "js.daycon.loi-8d72": {
+  "t": "오류: ",
+  "h": "471c0087"
+ },
+ "js.daycon.luong": {
+  "t": "냥 →",
+  "h": "36d6704d"
+ },
+ "js.daycon.luu-nien-cung": {
+  "t": "유년 궁 ",
+  "h": "8f5a16cc"
+ },
+ "js.daycon.mo-ban-huong-dan-day-du": {
+  "t": "전체 교육 가이드 열기",
+  "h": "5b95fbd4"
+ },
+ "js.daycon.muc-trong-la-so": {
+  "t": "개 더 보기",
+  "h": "4e83a32a"
+ },
+ "js.daycon.muon-xung-chieu": {
+  "t": " (맞은편 궁을 빌림)",
+  "h": "7363dfe3"
+ },
+ "js.daycon.nam-giua-dung-duoc-ca-hai": {
+  "t": "중간이라 두 방식 모두 쓸 수 있어요",
+  "h": "88eb619c"
+ },
+ "js.daycon.nam-truc-tinh-khi": {
+  "t": "다섯 가지 기질 축",
+  "h": "9d3afdaa"
+ },
+ "js.daycon.nam-truc-tinh-khi-tam-chat": {
+  "t": "다섯 가지 기질 축 + 여덟 가지 재능 기질을 아이의 명반으로 채점",
+  "h": "3ff91004"
+ },
+ "js.daycon.nen": {
+  "t": "<p><b>하면 좋은 것:</b> ",
+  "h": "96dd52e2"
+ },
+ "js.daycon.nen-cho-ten-thu-hoat-dong": {
+  "t": "{ten}에게 먼저 어떤 활동을 해 보게 하면 좋을까요?",
+  "h": "c13288e1"
+ },
+ "js.daycon.ngay-sinh-duong-lich-cua-ban": {
+  "t": "양력 생년월일은 언제인가요?",
+  "h": "ef23d3fb"
+ },
+ "js.daycon.nhom-tuoi": {
+  "t": "연령대: <b>",
+  "h": "974ef95b"
+ },
+ "js.daycon.o-nha": {
+  "t": "<p><b>집에서의 모습:</b> ",
+  "h": "adc7648c"
+ },
+ "js.daycon.pha-them": {
+  "t": "추가로 섞인 유형:",
+  "h": "4b629d3a"
+ },
+ "js.daycon.ra-bai-giao-viec": {
+  "t": "과제 내기 / 일 맡기기",
+  "h": "2dde825d"
+ },
+ "js.daycon.sach-dan-ve-sao": {
+  "t": "— 명궁의 별",
+  "h": "7b5e7401"
+ },
+ "js.daycon.sao-an-tren-12-cung": {
+  "t": " 개의 별이 12궁에 배치되고, ",
+  "h": "a6914f13"
+ },
+ "js.daycon.sat": {
+  "t": " / 살 ",
+  "h": "c472d1aa"
+ },
+ "js.daycon.suy-tu": {
+  "t": "</b> — 추론 근거: ",
+  "h": "55a15f14"
+ },
+ "js.daycon.tai-cung-menh": {
+  "t": " 에 대한 고전의 인용</span></div>",
+  "h": "173c6b01"
+ },
+ "js.daycon.tam-chat-nang-khieu": {
+  "t": "여덟 가지 재능 기질",
+  "h": "10c9f44e"
+ },
+ "js.daycon.ten-nghieng-ve-kieu-kieu": {
+  "t": "{ten}은(는) {kieu} 유형에 가까워요({tutuong})",
+  "h": "aea15b43"
+ },
+ "js.daycon.thap-nhat-trong-8-chat-cach": {
+  "t": "8가지 기질 중 가장 낮아요 — 보완하는 방법과 구체적인 방향은 전체 버전에 들어 있어요.",
+  "h": "a2f3c473"
+ },
+ "js.daycon.thu-con-can-duoc-day-them": {
+  "t": "아이에게 더 가르쳐야 할 것",
+  "h": "45fd44a4"
+ },
+ "js.daycon.tiep-tuc": {
+  "t": "계속 →",
+  "h": "86f35ed9"
+ },
+ "js.daycon.tieu-han-cung": {
+  "t": "소한 궁 ",
+  "h": "4d7ba471"
+ },
+ "js.daycon.toi-nay-ten-lai-khong-chiu": {
+  "t": "오늘 밤 {ten}이(가) 또 공부를 안 하려고 해요. 어떻게 말을 꺼내야 할까요?",
+  "h": "5cea25be"
+ },
+ "js.daycon.tuoi": {
+  "t": " 세</b>",
+  "h": "e5f74880"
+ },
+ "js.daycon.tuoi-3v6h": {
+  "t": " 세",
+  "h": "2e261bf5"
+ },
+ "js.daycon.tuoi-tuoi-mu": {
+  "t": " 세 (세는나이)",
+  "h": "f62485fd"
+ },
+ "js.daycon.vach-dut-nguong-dang-cho-thu": {
+  "t": "▲ 점선 = “해 볼 만한” 기준선",
+  "h": "16e23b36"
+ },
+ "js.daycon.van-nam": {
+  "t": "<li><b>연운 ",
+  "h": "1192aa32"
+ },
+ "js.daycon.vi-sao-la-so-lai-do": {
+  "t": "왜 명반에서 이런 축들이 측정되나요?",
+  "h": "f65c0dfb"
+ },
+ "js.daycon.viec-dung-luc-nay-la-cho": {
+  "t": "지금 필요한 건 <b>폭넓게 해 보게 하고 아이의 실제 반응을 살펴보는 것</b>이에요. 아이를 대신해 고르지 마세요.",
+  "h": "b4af8a17"
+ },
+ "js.daycon.viet-dinh-huong-va-huong-dan": {
+  "t": "방향과 교육 가이드 작성",
+  "h": "10f821e4"
+ },
+ "js.daycon.vui-long-nhap-day-du-ngay": {
+  "t": "아이의 생년월일을 연·월·일까지 모두 입력해 주세요.",
+  "h": "784233ac"
+ },
+ "js.daycon.vuot-nguong-dang-cho-thu": {
+  "t": "기준선을 넘었어요(“해 볼 만함”). ",
+  "h": "ee663dd4"
+ },
+ "js.daycon.vuot-nguong-dang-cho-thu-khong": {
+  "t": "★ = 기준선을 넘은 기질(“해 볼 만함”)이며 재능이 확인된 것은 아니에요.",
+  "h": "1dec3af7"
+ },
+ "js.daycon.xem-ban-huong-dan-day-du": {
+  "t": "✦ 전체 교육 가이드 보기 —",
+  "h": "3a668eed"
+ },
+ "js.daycon.xem-diem-o-bieu-do-tren": {
+  "t": ") — 점수는 위 그래프에서 확인하세요. 각 기질의 자세한 내용은 전체 버전에서 읽을 수 있어요.",
+  "h": "edfabb37"
+ },
+ "js.daycon.xem-them": {
+  "t": "<summary>명반 항목 ",
+  "h": "c5afdcd1"
  },
  "js.home.3-buoc-dau-tien": {
   "t": "처음 3단계",

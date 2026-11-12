@@ -243,6 +243,210 @@
   "t": "← 回到今天",
   "h": "24faf89e"
  },
+ "daycon.2-xem-truoc-chan-dung-con": {
+  "t": "<span class=\"wss-n\">2</span><span class=\"wss-l\">預覽孩子的肖像</span>",
+  "h": "d8f50448"
+ },
+ "daycon.5-la-muc-giua-cua-hang": {
+  "t": "<b>5 是中間值</b>，是數千份孩童命盤的中間水準，並不是「10 分得 5 分」。灰色帶是孩子兩種方式都能適應的範圍。軸的兩端都各有價值。",
+  "h": "0a475048"
+ },
+ "daycon.5-truc-tinh-khi": {
+  "t": "<span class=\"hp-ic\" data-icon=\"scale\"></span><span>5 條<br>氣質軸</span>",
+  "h": "2ee56c76"
+ },
+ "daycon.8-chat-nang-khieu": {
+  "t": "<span class=\"hp-ic\" data-icon=\"star\"></span><span>8 種<br>天賦特質</span>",
+  "h": "a2098312"
+ },
+ "daycon.ban-luan-giai-mau-tai-pdf": {
+  "t": "<span class=\"sc-ic\" data-icon=\"file-text\"></span> <span class=\"sc-txt\"><b>範例解讀報告</b><span>下載範例命盤的「依命盤教養孩子」完整 PDF，先預覽真實內容。</span></span> <a class=\"sc-btn\" href=\"/tai-mau/mau-day-con.pdf\" target=\"_blank\" rel=\"noopener\">下載 PDF →</a>",
+  "h": "93827cd3"
+ },
+ "daycon.ban-nay-phac-hoa-tu-cac": {
+  "t": "<span class=\"ic\" data-icon=\"lightbulb\"></span> 本解讀依據紫微斗數命盤中的資料，並結合前人留下的研究經驗描繪而成。<b>教養方式</b>的部分是本頁自行的對應與詮釋，並非古籍原文，僅供參考。<br><br> <span class=\"ic\" data-icon=\"scale\"></span> 這是一個<b>了解孩子、因材施教</b>的框架。孩子尚未成年，也不在這裡，因此本解讀刻意<b>不預測考試成敗、不斷定職業、不談健康或感情</b>。天生氣質沒有好壞，只有適合或不適合大人目前的做法。<br><br> <span class=\"ic\" data-icon=\"book-open\"></span> <b>出處：</b>命宮、福德宮、父母宮等，依<i>《紫微斗數新編》</i>（雲騰太次郎，Vân Đằng Thái Thứ Lang）排定。5 條軸・8 種特質的框架與依類型而定的教養方式，是<b>明寶紫微斗數專家團隊</b>自行建立的方法。<a href=\"/nguon-du-lieu.html\" target=\"_blank\" rel=\"noopener\" style=\"color:#9A7B3A\">查看完整資料出處 →</a>",
+  "h": "77ff2cc9"
+ },
+ "daycon.boi-canh": {
+  "t": "<b>背景</b><i></i>",
+  "h": "a85d826c"
+ },
+ "daycon.buong-cai-lai-noi-khong-nghe": {
+  "t": "倔強、頂嘴、不聽話",
+  "h": "76509c43"
+ },
+ "daycon.cac-chang-di-hoc": {
+  "t": "<span class=\"res-block-title\">求學各階段</span>",
+  "h": "b2c2bb10"
+ },
+ "daycon.cach-day-con-nay": {
+  "t": "<span class=\"res-block-title\">這個孩子的教養方式</span>",
+  "h": "e203e71f"
+ },
+ "daycon.chon-dieu-dang-lo-nhap-ngay": {
+  "t": "選擇您擔心的事，輸入孩子的出生日期與時辰，即可得到適合孩子的教養方式，以及今晚就能做的事。",
+  "h": "b14b84f4"
+ },
+ "daycon.co-la-so-cua-ban-thi": {
+  "t": "若有您自己的命盤，解讀會多出<b>「雙方關係」</b>一節——親子容易起衝突之處，以及減少衝突的方法。留空也能看到其餘完整內容。",
+  "h": "0ea6e4fe"
+ },
+ "daycon.co-so-trong-la-so": {
+  "t": "<span class=\"res-block-title\">命盤中的依據</span>",
+  "h": "c215623b"
+ },
+ "daycon.con-khong-chiu-noi-chuyen-voi": {
+  "t": "孩子不再願意跟我說話",
+  "h": "245ca1b1"
+ },
+ "daycon.con-la-nguoi-the-nao": {
+  "t": "<span class=\"res-block-title\">孩子是怎樣的人</span>",
+  "h": "d97bd561"
+ },
+ "daycon.cung-mot-cach-day-co-dua": {
+  "t": "同樣的教法，有的孩子進步明顯，有的孩子卻越教越疏遠——因為每個孩子吸收的方式不同。從孩子的命盤，看出哪種做法正在適得其反。",
+  "h": "eec3a103"
+ },
+ "daycon.da-xem-truoc-do": {
+  "t": "<span class=\"res-block-title\">先前看過的內容</span>",
+  "h": "5dc13a72"
+ },
+ "daycon.dau-hieu-nhan-ra-o-nha": {
+  "t": "在家中可以辨認的跡象",
+  "h": "a07a9d36"
+ },
+ "daycon.day-con-theo-la-so": {
+  "t": "依命盤教養孩子",
+  "h": "2013a771"
+ },
+ "daycon.day-con-theo-la-so-dua": {
+  "t": "<b>依命盤教養孩子</b><span>這個孩子需要催一把，還是需要靜靜等待</span>",
+  "h": "89056d92"
+ },
+ "daycon.day-con-theo-la-so-tu": {
+  "t": "依命盤教養孩子——明寶紫微斗數",
+  "h": "43088648"
+ },
+ "daycon.day-la-kieu-moi-truong-hoc": {
+  "t": "這是適合孩子的<b>學習環境類型</b>，刻意不指定科系或職業。",
+  "h": "db05bd75"
+ },
+ "daycon.diem-o-day-la-muc-thuan": {
+  "t": "這裡的分數是<b>該階段順或逆的程度</b>，不是學業成績，也不是孩子的分數。",
+  "h": "799bb1dc"
+ },
+ "daycon.dieu-ban-dang-lo": {
+  "t": "您擔心的事",
+  "h": "bd0e3bcd"
+ },
+ "daycon.dieu-ban-dang-lo-pjp3": {
+  "t": "<span class=\"res-block-title\" id=\"loTitle\">您擔心的事</span>",
+  "h": "86a3d90a"
+ },
+ "daycon.dinh-huong": {
+  "t": "<span class=\"res-block-title\">方向建議</span>",
+  "h": "ee21cc8a"
+ },
+ "daycon.dinh-huong-cach-day": {
+  "t": "<span class=\"hp-ic\" data-icon=\"compass\"></span><span>教養方式<br>的方向</span>",
+  "h": "c22dffe6"
+ },
+ "daycon.do-duoc-gi": {
+  "t": "<b>測得出什麼</b><i></i>",
+  "h": "0ae0b676"
+ },
+ "daycon.goi-y-de-thu-khong-phai": {
+  "t": "這些是可以嘗試的建議，不是指定。古籍談的是人的特質，並不知道您所在的地方開了哪些社團或課程。讓孩子試上一堂，再觀察真實的反應。",
+  "h": "5f3bcee3"
+ },
+ "daycon.hai-ben-voi-nhau": {
+  "t": "<span class=\"res-block-title\">雙方關係</span>",
+  "h": "12457260"
+ },
+ "daycon.hoat-dong-nen-cho-con-thu": {
+  "t": "<span class=\"res-block-title\">適合讓孩子嘗試的活動</span>",
+  "h": "f4d526be"
+ },
+ "daycon.hoc-hanh-sa-sut-ngoi-vao": {
+  "t": "成績下滑，坐不住、無法坐在書桌前",
+  "h": "fab00484"
+ },
+ "daycon.khong-co-gi-gap-chi-muon": {
+  "t": "沒有什麼急事，只是想更了解孩子",
+  "h": "cf2efa39"
+ },
+ "daycon.lam-gi-tu-toi-nay": {
+  "t": "<span class=\"res-block-title\">今晚起可以做的事</span>",
+  "h": "1f882975"
+ },
+ "daycon.moi-luot-luong": {
+  "t": "<span class=\"vnd\" data-tvp-price-vnd=\"day-con\"></span> 每次 <span class=\"cb-sub\">(<span data-tvp-price=\"day-con\">…</span> 兩)</span>",
+  "h": "10afd8c1"
+ },
+ "daycon.nam-truc-tinh-khi": {
+  "t": "<span class=\"res-block-title\">五條氣質軸</span>",
+  "h": "587fa869"
+ },
+ "daycon.nen": {
+  "t": "宜",
+  "h": "078cfc62"
+ },
+ "daycon.nen-lam-gi": {
+  "t": "<b>該怎麼做</b><i></i>",
+  "h": "021dc84d"
+ },
+ "daycon.neu-chi-nho-mot-cau": {
+  "t": "<span class=\"res-block-title\">只記住一句話</span>",
+  "h": "6e372478"
+ },
+ "daycon.ngay-sinh-cua-con": {
+  "t": "孩子的出生日期",
+  "h": "3837783b"
+ },
+ "daycon.nhap-la-so-cua-con-nhan": {
+  "t": "輸入孩子的命盤，即可知道孩子如何吸收、怎麼出作業孩子才肯做、哪種管教會適得其反，以及親子容易起衝突之處。",
+  "h": "244ebedb"
+ },
+ "daycon.phan-luan-chua-mo": {
+  "t": "<span class=\"res-block-title\">尚未開啟的解讀</span>",
+  "h": "68cac5d9"
+ },
+ "daycon.rut-re-ngai-dam-dong-it": {
+  "t": "害羞、怕人多、朋友少",
+  "h": "56c6a43d"
+ },
+ "daycon.sap-phai-chon-truong-chon-nganh": {
+  "t": "即將要選學校／選科系",
+  "h": "926ae29e"
+ },
+ "daycon.tam-chat-nang-khieu": {
+  "t": "<span class=\"res-block-title\">八種天賦特質</span>",
+  "h": "8ac0e142"
+ },
+ "daycon.them-la-so-cua-ban-cha": {
+  "t": "加入您自己的命盤——父親或母親（非必填）",
+  "h": "e158b2b1"
+ },
+ "daycon.thoi": {
+  "t": "忌",
+  "h": "aa7d2f5d"
+ },
+ "daycon.tra-loi-thay-o-khung-chat": {
+  "t": "請在聊天欄回覆老師，告訴老師您擔心的事與孩子的出生日期。",
+  "h": "4cf5eddf"
+ },
+ "daycon.vuot-vach-dut-la-chat-dang": {
+  "t": "超過虛線的特質是<b>值得嘗試</b>的方向，並非已證實的天賦。請對照在家中看到的跡象——若不吻合，就相信自己的眼睛。",
+  "h": "fbb5fd98"
+ },
+ "daycon.xem-be-khac": {
+  "t": "查看另一個孩子",
+  "h": "3ff33fa6"
+ },
+ "daycon.xem-cach-day-con-ton-luong": {
+  "t": "<span class=\"bg-label\"><span class=\"ic\" data-icon=\"baby\"></span><b>查看教養方式 →</b></span> <small>費用 <span class=\"vnd\" data-tvp-price-vnd=\"day-con\"></span> <span class=\"cb-sub\">(<span data-tvp-price=\"day-con\">…</span> 兩)</span></small>",
+  "h": "ccbaaea3"
+ },
  "disclaimer.1-tinh-chat-tham-khao": {
   "t": "1. 僅供參考",
   "h": "99856a52"
@@ -1258,6 +1462,514 @@
  "js.chutrinh.tieu-van-nam": {
   "t": "流年小運 ",
   "h": "1979c56a"
+ },
+ "js.daycon.5-la-muc-giua-cua-hang": {
+  "t": "\n\n5 是數千份孩童命盤的中間水準，並不是「10 分得 5 分」。軸的兩端都各有價值。",
+  "h": "99fb1a17"
+ },
+ "js.daycon.7-chat-con-lai-5-truc": {
+  "t": "其餘 7 種特質、5 條氣質軸與教養方向，都在完整版中。",
+  "h": "00fde99c"
+ },
+ "js.daycon.ba-chat-dung-dau-o-duoi": {
+  "t": "排在前面的三種特質是值得優先嘗試之處，並不是結論。</p></div>",
+  "h": "fa2636f2"
+ },
+ "js.daycon.ban-co-muon-doi-chieu-them": {
+  "t": "要不要再對照您自己（父親或母親）的命盤？這樣會多出「雙方關係」一節。",
+  "h": "1fea98b9"
+ },
+ "js.daycon.ban-da-xem-ban-nay-roi": {
+  "t": "✓ 您已看過這份解讀——再次開啟不會扣除兩",
+  "h": "7d2c6a5b"
+ },
+ "js.daycon.ban-huong-dan-day-du-chua": {
+  "t": "⊙ 完整教養指南尚未開啟",
+  "h": "1e7a8a78"
+ },
+ "js.daycon.ban-luan": {
+  "t": "解讀報告",
+  "h": "b6f609bf"
+ },
+ "js.daycon.ban-nay-doc-tu": {
+  "t": "本解讀讀取了依您輸入的出生日期與時辰所排出的<b>",
+  "h": "d989b954"
+ },
+ "js.daycon.ban-se-nhan-cach-ra-bai": {
+  "t": "您將得到：與孩子吸收方式相符的出作業方式與書桌擺設，而不是硬加讀書時間。",
+  "h": "49791304"
+ },
+ "js.daycon.ban-se-nhan-chat-viec-hop": {
+  "t": "您將得到：適合孩子的工作特質，以及讓孩子自己開口說的提問方式——而不是一個科系名稱。",
+  "h": "dd0da12e"
+ },
+ "js.daycon.ban-se-nhan-chuyen-gi-con": {
+  "t": "您將得到：孩子還願意聽什麼，以及哪種開口方式會讓孩子立刻關上心門。",
+  "h": "20335789"
+ },
+ "js.daycon.ban-se-nhan-dua-nay-can": {
+  "t": "您將得到：這個孩子需要被推一把，還是需要被留在原地。兩種孩子外表看起來相似，其實完全不同。",
+  "h": "cd7192ac"
+ },
+ "js.daycon.ban-se-nhan-mot-ban-mo": {
+  "t": "您將得到：一份描述這個孩子是怎樣的人的文字，足以讓您在日常中認出他／她。",
+  "h": "2846cd50"
+ },
+ "js.daycon.ban-se-nhan-phan-nao-la": {
+  "t": "您將得到：哪些是天生氣質、必須順著引導，哪些是大人說話方式造成的——可以馬上調整。",
+  "h": "565f27fd"
+ },
+ "js.daycon.bat-dau-the-nao": {
+  "t": "<b>該怎麼開始：</b>",
+  "h": "ac776bdf"
+ },
+ "js.daycon.bay-cua-chat-nay": {
+  "t": "<b>這項特質的陷阱：</b>",
+  "h": "1847b63e"
+ },
+ "js.daycon.be-gai": {
+  "t": "女孩",
+  "h": "af93dba0"
+ },
+ "js.daycon.be-trai": {
+  "t": "男孩",
+  "h": "274225bc"
+ },
+ "js.daycon.bo-qua": {
+  "t": "略過",
+  "h": "861dafde"
+ },
+ "js.daycon.bo-qua-doi-chieu-la-so": {
+  "t": "已略過與您命盤的對照。",
+  "h": "7c25b196"
+ },
+ "js.daycon.cach-choi-ngay-o-nha-hop": {
+  "t": " 種在家就能玩的方式</b> — 具體名稱請開啟完整版查看。</p>",
+  "h": "4d33ef7d"
+ },
+ "js.daycon.cach-con-tiep-thu": {
+  "t": "孩子如何吸收學習",
+  "h": "d4eac771"
+ },
+ "js.daycon.cach-cuc": {
+  "t": " 種格局、",
+  "h": "a4f8bc9a"
+ },
+ "js.daycon.cat": {
+  "t": "吉 ",
+  "h": "bbbbd4e0"
+ },
+ "js.daycon.chan-dung": {
+  "t": "肖像",
+  "h": "30421728"
+ },
+ "js.daycon.chang-dai-van": {
+  "t": " 個大運階段。",
+  "h": "0bc2d397"
+ },
+ "js.daycon.chat-can-boi-them-nhat": {
+  "t": "最需要加強的特質：",
+  "h": "4c7acf8e"
+ },
+ "js.daycon.chat-nang-khieu-cao-nhat": {
+  "t": "最突出的天賦特質：",
+  "h": "1018ec48"
+ },
+ "js.daycon.chat-nua-cung-noi": {
+  "t": " 種特質</b>也很突出（",
+  "h": "7f9974ca"
+ },
+ "js.daycon.cho-con-tham-gia-kieu-nao": {
+  "t": "<h5>用什麼方式讓孩子參與</h5>",
+  "h": "1b74c443"
+ },
+ "js.daycon.cho-nguoi-lon-hay-hieu-nham": {
+  "t": "大人常誤解之處",
+  "h": "f78ab78d"
+ },
+ "js.daycon.cho-thay-xin-thong-tin-cua": {
+  "t": "請告訴老師孩子的資料。",
+  "h": "e81463c3"
+ },
+ "js.daycon.chua-cham": {
+  "t": "尚未評分",
+  "h": "a20bbf69"
+ },
+ "js.daycon.chua-chat-nao-noi-han-len": {
+  "t": "目前還沒有特別突出的特質",
+  "h": "44a78494"
+ },
+ "js.daycon.chua-chat-nao-noi-han-nen": {
+  "t": " · 目前沒有特別突出的特質，所以列出<b>最值得優先嘗試的三種特質</b>",
+  "h": "95fc607c"
+ },
+ "js.daycon.chua-chat-nao-vuot-nguong-nen": {
+  "t": "目前沒有特質超過門檻——建議讓孩子廣泛嘗試，再觀察真實的反應。",
+  "h": "986be904"
+ },
+ "js.daycon.chua-vuot-nguong-nhung-cao-nhat": {
+  "t": "尚未超過門檻，但在 8 種特質中最高。",
+  "h": "7b04f512"
+ },
+ "js.daycon.co-doi-chieu": {
+  "t": "好，來對照 →",
+  "h": "a3846e57"
+ },
+ "js.daycon.cung-an-than": {
+  "t": "<li><b>身宮所在</b>—— ",
+  "h": "23b5a7a9"
+ },
+ "js.daycon.cung-tinh-am-duong-de-va": {
+  "t": "陰陽屬性相同——容易起衝突",
+  "h": "38ee66ae"
+ },
+ "js.daycon.cung-tu-tuc-cua-ban": {
+  "t": "您的子女宮",
+  "h": "f546ca50"
+ },
+ "js.daycon.da": {
+  "t": "走勢 ",
+  "h": "ea471098"
+ },
+ "js.daycon.da-chon-san": {
+  "t": "<p>已為這項特質預先選好 <b>",
+  "h": "0f8b5933"
+ },
+ "js.daycon.dang-o-chang-nay": {
+  "t": " · 目前正處於這個階段",
+  "h": "dca615be"
+ },
+ "js.daycon.day-con-theo-la-so": {
+  "t": "依命盤教養孩子",
+  "h": "2013a771"
+ },
+ "js.daycon.day-con-theo-la-so-6c04": {
+  "t": "依命盤教養孩子",
+  "h": "80688ea6"
+ },
+ "js.daycon.day-con-theo-la-so-l6v3": {
+  "t": "依命盤教養孩子—— ",
+  "h": "90ccd72e"
+ },
+ "js.daycon.day-la-ban-huong-dan-nuoi-ten": {
+  "t": "這是**{ten}**的教養指南。還想多問哪個情境嗎？",
+  "h": "6e9c3d69"
+ },
+ "js.daycon.dieu-ban-dang-lo-ve-con": {
+  "t": "您對孩子最擔心的是什麼呢？",
+  "h": "75d020b9"
+ },
+ "js.daycon.dieu-ban-dang-lo-viet-rieng": {
+  "t": "針對您擔心的事，依孩子的命盤個別撰寫",
+  "h": "3f67856e"
+ },
+ "js.daycon.dieu-cha-me-dang-lo": {
+  "t": "父母擔心的事：{lo}",
+  "h": "cc98d53f"
+ },
+ "js.daycon.dieu-dang-lo": {
+  "t": "擔心的事",
+  "h": "1c1218e7"
+ },
+ "js.daycon.dieu-dang-lo-s1b1": {
+  "t": "擔心的事：<b>",
+  "h": "707a2eb1"
+ },
+ "js.daycon.dinh-huong-cach-day": {
+  "t": "教養方向與方式",
+  "h": "fb8a0485"
+ },
+ "js.daycon.dinh-huong-dh": {
+  "t": "方向：{dh}",
+  "h": "c20461b0"
+ },
+ "js.daycon.dinh-huong-moi-truong-hoc-phuong": {
+  "t": "學習環境的方向 + 適合孩子的教養方法",
+  "h": "9673ce91"
+ },
+ "js.daycon.do-5-truc-tinh-khi-va": {
+  "t": "測量 5 條氣質軸與 8 種天賦特質",
+  "h": "44451f2e"
+ },
+ "js.daycon.doi-chieu-them-voi-la-so": {
+  "t": "已加入與您命盤的對照 ✓",
+  "h": "65992be6"
+ },
+ "js.daycon.doi-chieu-voi-la-so-cua": {
+  "t": "與您命盤的對照：",
+  "h": "69111647"
+ },
+ "js.daycon.dong-vien-kieu-nay-moi-vao": {
+  "t": "這樣的鼓勵方式才聽得進去",
+  "h": "8615f222"
+ },
+ "js.daycon.du-kien-lap-ra-tu-chinh": {
+  "t": " 筆資料</b> — ",
+  "h": "fdb76ddf"
+ },
+ "js.daycon.gio-sinh-cua-ban-la-may": {
+  "t": "您的出生時辰是幾點？",
+  "h": "3e121266"
+ },
+ "js.daycon.gioi-tinh-cua-ban-cha-me": {
+  "t": "請問您的性別（父親／母親）是？",
+  "h": "3e7f29e6"
+ },
+ "js.daycon.hai-me-con-hay-va-nhau": {
+  "t": "母子（親子）兩人容易在哪些地方起衝突？",
+  "h": "8121e071"
+ },
+ "js.daycon.hay-bi-doc-nham": {
+  "t": "<p><b>常被誤解之處：</b> ",
+  "h": "560ec4eb"
+ },
+ "js.daycon.hoat-dong-de-dang-ky-ra": {
+  "t": " 項需報名／外出的活動</b>與 <b>",
+  "h": "047d6333"
+ },
+ "js.daycon.hoi-nha-truong": {
+  "t": "<b>可以問學校的事：</b>",
+  "h": "2b67b4bb"
+ },
+ "js.daycon.hop": {
+  "t": "<p><b>適合：</b> ",
+  "h": "23262161"
+ },
+ "js.daycon.khac-tinh-am-duong-de-bu": {
+  "t": "陰陽屬性不同——容易互補",
+  "h": "b5f77a93"
+ },
+ "js.daycon.khoa": {
+  "t": "鎖定",
+  "h": "393cb36a"
+ },
+ "js.daycon.khoang-mot-phan-bay-so-la": {
+  "t": "大約每七份命盤就有一份屬於這種情況。</p>",
+  "h": "ff8e890c"
+ },
+ "js.daycon.khong-co-buoc-nao-doan-mo": {
+  "t": "沒有任何一步是猜的：出生資料改動一個細節，上面整張表都會跟著變。",
+  "h": "065d23da"
+ },
+ "js.daycon.khong-co-chinh-tinh": {
+  "t": "無主星",
+  "h": "753ded73"
+ },
+ "js.daycon.khong-dat-ten": {
+  "t": "未命名",
+  "h": "295915d5"
+ },
+ "js.daycon.khong-the-ket-noi-vui-long": {
+  "t": "無法連線，請再試一次。",
+  "h": "bf0b6e7b"
+ },
+ "js.daycon.khung-dai-van": {
+  "t": "大運區間 ",
+  "h": "06be9124"
+ },
+ "js.daycon.kieu-cua-ban-kieu": {
+  "t": "您的類型：{kieu}",
+  "h": "1f89ad05"
+ },
+ "js.daycon.ky-luat-kieu-nay-phan-tac": {
+  "t": "會適得其反的管教方式",
+  "h": "0af70e1c"
+ },
+ "js.daycon.ky-luat-phan-tac-dung-kl": {
+  "t": "會適得其反的管教方式：{kl}",
+  "h": "4ed18b67"
+ },
+ "js.daycon.la-so": {
+  "t": "命盤：",
+  "h": "2644d5f2"
+ },
+ "js.daycon.la-so-cua-con-khong-nghieng": {
+  "t": "<p>孩子的命盤<b>沒有明顯偏向</b>任何領域——這是真實的結果，不是機器漏讀。",
+  "h": "4465b58f"
+ },
+ "js.daycon.lam-con-bo-ngang": {
+  "t": "<p><b>會讓孩子半途放棄的事：</b> ",
+  "h": "4bfcce62"
+ },
+ "js.daycon.lam-gi-tu-toi-nay-nen": {
+  "t": "今晚起可以做的事——宜做與宜避免的",
+  "h": "fabc2ced"
+ },
+ "js.daycon.lap-la-so-phan-kieu-nguoi": {
+  "t": "排出命盤並判定類型",
+  "h": "61f07874"
+ },
+ "js.daycon.loi": {
+  "t": "錯誤 ",
+  "h": "1b80116b"
+ },
+ "js.daycon.loi-8d72": {
+  "t": "錯誤：",
+  "h": "471c0087"
+ },
+ "js.daycon.luong": {
+  "t": "兩 →",
+  "h": "36d6704d"
+ },
+ "js.daycon.luu-nien-cung": {
+  "t": "流年宮 ",
+  "h": "8f5a16cc"
+ },
+ "js.daycon.mo-ban-huong-dan-day-du": {
+  "t": "開啟完整教養指南",
+  "h": "5b95fbd4"
+ },
+ "js.daycon.muc-trong-la-so": {
+  "t": "項命盤依據",
+  "h": "4e83a32a"
+ },
+ "js.daycon.muon-xung-chieu": {
+  "t": "（借對宮）",
+  "h": "7363dfe3"
+ },
+ "js.daycon.nam-giua-dung-duoc-ca-hai": {
+  "t": "位於中間，兩種方式都能用",
+  "h": "88eb619c"
+ },
+ "js.daycon.nam-truc-tinh-khi": {
+  "t": "五條氣質軸",
+  "h": "9d3afdaa"
+ },
+ "js.daycon.nam-truc-tinh-khi-tam-chat": {
+  "t": "五條氣質軸 + 八種天賦特質，依孩子的命盤評分",
+  "h": "3ff91004"
+ },
+ "js.daycon.nen": {
+  "t": "<p><b>宜：</b> ",
+  "h": "96dd52e2"
+ },
+ "js.daycon.nen-cho-ten-thu-hoat-dong": {
+  "t": "先讓{ten}試哪一種活動比較好？",
+  "h": "c13288e1"
+ },
+ "js.daycon.ngay-sinh-duong-lich-cua-ban": {
+  "t": "您的國曆（陽曆）出生日期是哪一天？",
+  "h": "ef23d3fb"
+ },
+ "js.daycon.nhom-tuoi": {
+  "t": "年齡層：<b>",
+  "h": "974ef95b"
+ },
+ "js.daycon.o-nha": {
+  "t": "<p><b>在家的表現：</b> ",
+  "h": "adc7648c"
+ },
+ "js.daycon.pha-them": {
+  "t": "另外混有",
+  "h": "4b629d3a"
+ },
+ "js.daycon.ra-bai-giao-viec": {
+  "t": "出作業／交辦事情的方式",
+  "h": "2dde825d"
+ },
+ "js.daycon.sach-dan-ve-sao": {
+  "t": "——命宮之星「",
+  "h": "7b5e7401"
+ },
+ "js.daycon.sao-an-tren-12-cung": {
+  "t": " 顆星安在十二宮、",
+  "h": "a6914f13"
+ },
+ "js.daycon.sat": {
+  "t": " / 煞 ",
+  "h": "c472d1aa"
+ },
+ "js.daycon.suy-tu": {
+  "t": "</b>——推斷依據：",
+  "h": "55a15f14"
+ },
+ "js.daycon.tai-cung-menh": {
+  "t": "」的典籍引文</span></div>",
+  "h": "173c6b01"
+ },
+ "js.daycon.tam-chat-nang-khieu": {
+  "t": "八種天賦特質",
+  "h": "10c9f44e"
+ },
+ "js.daycon.ten-nghieng-ve-kieu-kieu": {
+  "t": "{ten}偏向{kieu}類型（{tutuong}）",
+  "h": "aea15b43"
+ },
+ "js.daycon.thap-nhat-trong-8-chat-cach": {
+  "t": "在 8 種特質中最低——如何加強與具體方向，都在完整版中。",
+  "h": "a2f3c473"
+ },
+ "js.daycon.thu-con-can-duoc-day-them": {
+  "t": "孩子還需要多學的事",
+  "h": "45fd44a4"
+ },
+ "js.daycon.tiep-tuc": {
+  "t": "繼續 →",
+  "h": "86f35ed9"
+ },
+ "js.daycon.tieu-han-cung": {
+  "t": "小限宮 ",
+  "h": "4d7ba471"
+ },
+ "js.daycon.toi-nay-ten-lai-khong-chiu": {
+  "t": "今晚{ten}又不肯讀書，我該怎麼開口？",
+  "h": "5cea25be"
+ },
+ "js.daycon.tuoi": {
+  "t": " 歲</b>",
+  "h": "e5f74880"
+ },
+ "js.daycon.tuoi-3v6h": {
+  "t": " 歲",
+  "h": "2e261bf5"
+ },
+ "js.daycon.tuoi-tuoi-mu": {
+  "t": " 歲（虛歲）",
+  "h": "f62485fd"
+ },
+ "js.daycon.vach-dut-nguong-dang-cho-thu": {
+  "t": "▲ 虛線 = 「值得嘗試」的門檻",
+  "h": "16e23b36"
+ },
+ "js.daycon.van-nam": {
+  "t": "<li><b>年運 ",
+  "h": "1192aa32"
+ },
+ "js.daycon.vi-sao-la-so-lai-do": {
+  "t": "為什麼命盤能量出這幾條軸？",
+  "h": "f65c0dfb"
+ },
+ "js.daycon.viec-dung-luc-nay-la-cho": {
+  "t": "現在最該做的是<b>讓孩子廣泛嘗試，再觀察真實的反應</b>，不要替孩子做選擇。",
+  "h": "b4af8a17"
+ },
+ "js.daycon.viet-dinh-huong-va-huong-dan": {
+  "t": "撰寫方向與教養指南",
+  "h": "10f821e4"
+ },
+ "js.daycon.vui-long-nhap-day-du-ngay": {
+  "t": "請完整輸入孩子的出生年、月、日。",
+  "h": "784233ac"
+ },
+ "js.daycon.vuot-nguong-dang-cho-thu": {
+  "t": "已超過門檻（「值得嘗試」）。",
+  "h": "ee663dd4"
+ },
+ "js.daycon.vuot-nguong-dang-cho-thu-khong": {
+  "t": "★ = 超過門檻的特質（「值得嘗試」），並非已證實的天賦。",
+  "h": "1dec3af7"
+ },
+ "js.daycon.xem-ban-huong-dan-day-du": {
+  "t": "✦ 查看完整教養指南 —",
+  "h": "3a668eed"
+ },
+ "js.daycon.xem-diem-o-bieu-do-tren": {
+  "t": "）——分數請見上方圖表，各項特質的詳細內容請開啟完整版閱讀。",
+  "h": "edfabb37"
+ },
+ "js.daycon.xem-them": {
+  "t": "<summary>再看 ",
+  "h": "c5afdcd1"
  },
  "js.home.3-buoc-dau-tien": {
   "t": "最初的 3 步",
