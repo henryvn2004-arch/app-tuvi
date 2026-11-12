@@ -48,6 +48,20 @@
     var s0 = String(s);
     var r = L('s.' + fnv(s0));
     if (r != null) return r;
+    // `[Sao, Sao] câu` (bảng CACH_CUC_DATA): câu dịch riêng, tiền tố dịch từng tên (tên tắt ⇒ `n.<tên>`, không có ⇒ glossary/nguyên).
+    var pf = /^\[([^\]]+)\] ([\s\S]+)$/.exec(s0);
+    if (pf) {
+      var body = L('s.' + fnv(pf[2]));
+      if (body != null) {
+        var ten = pf[1].split(', ').map(function (n) {
+          var x = L('n.' + n);
+          if (x != null) return x;
+          var g = window.TuviGlossary;
+          return g && g.term ? g.term(window.I18n.locale, ['chinh', 'sao'], n) : n;
+        });
+        return '[' + ten.join(', ') + '] ' + body;
+      }
+    }
     for (var i = 0; i < MAU.length; i++) {
       var m = MAU[i][0].exec(s0);
       if (!m) continue;

@@ -418,7 +418,20 @@ console.log('__KQ__' + JSON.stringify(out));
     vm.runInContext(readFileSync(join(ROOT, 'public/tools-shared/cach-cuc.js'), 'utf8'), ctx);
     const cc = ctx.window.TuviCachCuc;
     const duy = [...new Set(kq.cc)];
-    const thieu = duy.filter((x) => cc.t(x) !== '\u0001' + x);
+    // câu có tiền tố `[Sao, Sao] …` ⇒ mong đợi từng tên đã tra `n.<tên>` và câu đã tra `s.<fnv>` (đều kèm dấu \u0001)
+    const mongDoi = (x) => {
+      const m = /^\[([^\]]+)\] ([\s\S]+)$/.exec(x);
+      return m && !S.has(`s.${cc.fnv(x)}`)
+        ? '[' +
+            m[1]
+              .split(', ')
+              .map((n) => '\u0001' + n)
+              .join(', ') +
+            '] \u0001' +
+            m[2]
+        : '\u0001' + x;
+    };
+    const thieu = duy.filter((x) => cc.t(x) !== mongDoi(x));
     bao(
       thieu.length === 0,
       `cach-cuc — ${duy.length} câu khác nhau từ ${kq.cc.length} lượt (700 lá số), không câu nào hụt khoá: ${thieu.slice(0, 3).join(' | ') || 'không'}`
