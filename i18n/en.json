@@ -1,4 +1,392 @@
 {
+ "about.1-nen-tang-du-lieu-thuc": {
+  "t": "1. An empirical data foundation",
+  "h": "06f1cf11"
+ },
+ "about.2-he-thong-hoa-co-phap": {
+  "t": "2. Systematizing the classical method",
+  "h": "c85d8fdb"
+ },
+ "about.3-mo-hinh-hoa-va-kiem": {
+  "t": "3. Modeling and testing",
+  "h": "1d0efb46"
+ },
+ "about.4-dien-giai-bang-he-thong": {
+  "t": "4. Explanation through a language system",
+  "h": "00f2b090"
+ },
+ "about.5-hieu-chinh-boi-chuyen-gia": {
+  "t": "5. Calibration by specialists",
+  "h": "ca3a8140"
+ },
+ "about.bat-ky-he-thong-luan-giai": {
+  "t": "Any reading system, however carefully built, has its limits.",
+  "h": "0e8a20f5"
+ },
+ "about.biet-menh-khong-phai-de-pho": {
+  "t": "Knowing your destiny is not about resignation — it is about moving with the times, avoiding what harms you and making the most of what is possible.",
+  "h": "aefd2bae"
+ },
+ "about.cac-chuyen-gia-nghien-cuu-tu": {
+  "t": "Zi Wei Dou Shu research specialists",
+  "h": "6d130b45"
+ },
+ "about.cac-hoc-gia-va-nha-nghien": {
+  "t": "Scholars and researchers in related fields such as history and Eastern philosophy",
+  "h": "9593da42"
+ },
+ "about.cac-ket-qua-luan-giai-nen": {
+  "t": "Readings should be taken as well-grounded reference material rather than a final verdict.",
+  "h": "cd55943a"
+ },
+ "about.cac-kinh-dien-ve-tu-vi": {
+  "t": "The Zi Wei Dou Shu classics exist in many variant editions and their interpretations are not fully consistent, so systematizing them inevitably involves choices and a frame of reference.",
+  "h": "1b957db9"
+ },
+ "about.cac-mo-hinh-duoc-xay-dung": {
+  "t": "Models are built to identify links between the chart and real life",
+  "h": "5de73c5a"
+ },
+ "about.cac-nguyen-ly-va-cau-truc": {
+  "t": "The principles and structure of traditional Zi Wei Dou Shu",
+  "h": "a25d74ee"
+ },
+ "about.cac-quy-tac-duoc-dieu-chinh": {
+  "t": "Rules are adjusted according to how well they fit reality",
+  "h": "4ceb5ffc"
+ },
+ "about.cac-thay-va-nguoi-thuc-hanh": {
+  "t": "Masters and long-time practitioners of Zi Wei Dou Shu and the esoteric arts",
+  "h": "01aafa8a"
+ },
+ "about.cach-xay-dung-he-thong-luan": {
+  "t": "How the Reading System Is Built",
+  "h": "b8c3ccad"
+ },
+ "about.chung-toi-xay-dung-he-thong": {
+  "t": "We build the system on:",
+  "h": "eeb432ac"
+ },
+ "about.cong-nghe-duoc-su-dung-o": {
+  "t": "Technology is used here to:",
+  "h": "93bb9357"
+ },
+ "about.dam-bao-tinh-can-bang-giua": {
+  "t": "Keep theory and practice in balance",
+  "h": "01471d41"
+ },
+ "about.dieu-quan-trong-la": {
+  "t": "What matters is:",
+  "h": "0d9b396c"
+ },
+ "about.do-do-phuong-phap-ma-chung": {
+  "t": "So the method we pursue combines systematizing the traditional principles with checking them against documented real cases. Technology is only a research aid — never a replacement for human judgment.",
+  "h": "8fb84663"
+ },
+ "about.doi-chieu-voi-cac-dien-bien": {
+  "t": "Checked against what actually happened in their lives",
+  "h": "e59344b7"
+ },
+ "about.du-lieu-ngay-gio-sinh-cua": {
+  "t": "Birth date and time data for more than 270,000 people",
+  "h": "b1e54c19"
+ },
+ "about.du-lieu-nguyen-ly-mo-hinh": {
+  "t": "Data → Principles → Models → Testing → Explanation → Calibration — a multi-layered process, so that every reading is not only logical but can also be checked against reality.",
+  "h": "47a0b07e"
+ },
+ "about.gia-tri-cua-tu-vi-dau": {
+  "t": "The value of Zi Wei Dou Shu lies not in absolute prediction but in prompting people to understand themselves better.",
+  "h": "37d2ea4c"
+ },
+ "about.giam-sai-lech-do-yeu-to": {
+  "t": "Reduce bias from subjective factors",
+  "h": "dd267c7a"
+ },
+ "about.gioi-han-cua-he-thong": {
+  "t": "Limits of the System",
+  "h": "7fa9c9a0"
+ },
+ "about.gioi-thieu-phuong-phap-tinh-than": {
+  "t": "About — Method & Spirit | Minh Bao Zi Wei Dou Shu",
+  "h": "6455ef7c"
+ },
+ "about.gioi-thieu-tu-vi-minh-bao": {
+  "t": "About Minh Bao Zi Wei Dou Shu — Method & Spirit",
+  "h": "6eee8cba"
+ },
+ "about.giu-vung-tinh-than-cua-co": {
+  "t": "Stay true to the spirit of the classical method",
+  "h": "9e74633e"
+ },
+ "about.han-che-cac-dien-giai-cuc": {
+  "t": "Limit extreme or unfounded interpretations",
+  "h": "7537c280"
+ },
+ "about.he-thong-an-sao-tu-vi": {
+  "t": "Classical Zi Wei Dou Shu chart construction and in-depth readings. Learn about Minh Bao Zi Wei Dou Shu's methods and reading principles.",
+  "h": "4a00d1c0"
+ },
+ "about.he-thong-khong-tu-suy-doan": {
+  "t": "The system does not invent its own conclusions",
+  "h": "e89edab4"
+ },
+ "about.he-thong-luan-giai-tai-tu": {
+  "t": "The reading system at Minh Bao Zi Wei Dou Shu is built by combining a foundation in classical learning, empirical data and modern technology, to ensure consistency, testability and real-world usefulness.",
+  "h": "6d5da226"
+ },
+ "about.he-thong-ngon-ngu-duoc-su": {
+  "t": "A language system is used to explain the content clearly, accessibly and practically",
+  "h": "2caad752"
+ },
+ "about.ket-hop-giua-ly-thuyet-va": {
+  "t": "Combining theory and practice",
+  "h": "c0fb9eab"
+ },
+ "about.ket-hop-voi-co-so-du": {
+  "t": "Combined with the international AstroDataBank database",
+  "h": "cbdd4e16"
+ },
+ "about.ket-qua-duoc-doi-chieu-nguoc": {
+  "t": "Results are checked back against existing data",
+  "h": "24c827a1"
+ },
+ "about.khong-gay-hoang-mang": {
+  "t": "No fear-mongering",
+  "h": "e0832f25"
+ },
+ "about.khong-phan-xet": {
+  "t": "No judgment",
+  "h": "b0409d0a"
+ },
+ "about.khong-tuyet-doi-hoa": {
+  "t": "No absolutes",
+  "h": "4df88785"
+ },
+ "about.kiem-nghiem-lai-cac-nguyen-ly": {
+  "t": "Re-test classical principles on real data",
+  "h": "b2f40cd9"
+ },
+ "about.la-so-chi-phan-anh-nhung": {
+  "t": "A chart reflects tendencies that may unfold, not an immutable fate.",
+  "h": "2f15ed93"
+ },
+ "about.lien-he": {
+  "t": "Contact",
+  "h": "603522f1"
+ },
+ "about.lien-tuc-hieu-chinh": {
+  "t": "Continuous calibration",
+  "h": "45ab3f13"
+ },
+ "about.loai-bo-cac-yeu-to-mang": {
+  "t": "Remove elements based on guesswork or lacking grounds",
+  "h": "e9b79749"
+ },
+ "about.ma-chi-dien-giai-lai-cac": {
+  "t": "It only re-explains results that have already been determined",
+  "h": "101c64d5"
+ },
+ "about.mo-dau": {
+  "t": "Introduction",
+  "h": "44717b8f"
+ },
+ "about.mo-rong-quy-mo-kiem-nghiem": {
+  "t": "Widen the scale of testing",
+  "h": "ab8a2f59"
+ },
+ "about.moi-mo-hinh-luan-giai-duoc": {
+  "t": "Every reading model is reviewed and re-tested against accumulated data and real feedback.",
+  "h": "4f3e7b8d"
+ },
+ "about.moi-nhan-dinh-deu-nham-giup": {
+  "t": "Every assessment aims to help you understand your situation better so you can make a fitting choice.",
+  "h": "6a29f2d0"
+ },
+ "about.moi-y-kien-trao-doi-gop": {
+  "t": "For any comments, suggestions or questions about our readings, research methods or using the system, please get in touch.",
+  "h": "0b3d271b"
+ },
+ "about.mot-so-thanh-vien-theo-duoi": {
+  "t": "Some members practice destiny reading as their main profession, while others come from different professional fields but have long, serious records of study and practice.",
+  "h": "a852a127"
+ },
+ "about.muc-tieu-chung-cua-nhom-khong": {
+  "t": "The team's shared goal is not to hand down absolute conclusions, but to build a reading system that is well-grounded, tested and usable in real life.",
+  "h": "81a815ce"
+ },
+ "about.muc-tieu-la-chuyen-tu-cac": {
+  "t": "The goal is to turn the scattered knowledge of the classics into a structured, consistent and testable reading system.",
+  "h": "fbf9c61c"
+ },
+ "about.nguyen-tac": {
+  "t": "Principles",
+  "h": "17807d55"
+ },
+ "about.nguyen-tac-luan-giai": {
+  "t": "Reading Principles",
+  "h": "23987592"
+ },
+ "about.nhan-dien-cac-mo-hinh-lap": {
+  "t": "Identify recurring patterns between chart structure and the course of a life",
+  "h": "d2f81c8f"
+ },
+ "about.nhieu-thanh-vien-da-co-kinh": {
+  "t": "Many members have studied and engaged with Zi Wei Dou Shu and esoteric schools in China and Hong Kong, where these theoretical systems developed and are still strongly transmitted.",
+  "h": "3b355fa3"
+ },
+ "about.nhom-nghien-cuu": {
+  "t": "Research Team",
+  "h": "91d9432b"
+ },
+ "about.nhung-nguoi-co-kinh-nghiem-thuc": {
+  "t": "People with hands-on experience in the esoteric arts",
+  "h": "e3fc3042"
+ },
+ "about.nhung-nguoi-lam-viec-trong-moi": {
+  "t": "People working in academia, including university lecturers and researchers",
+  "h": "4e7bc04a"
+ },
+ "about.noi-dung-duoc-trinh-bay-theo": {
+  "t": "Content is presented in your personal context rather than in generic descriptions",
+  "h": "997e3c47"
+ },
+ "about.o-nuoc-ta-viec-nghien-cuu": {
+  "t": "In Vietnam, the study of Zi Wei Dou Shu goes back a long way. That is why we believe it is necessary to return to first principles and examine them carefully and systematically.",
+  "h": "8b0850cc"
+ },
+ "about.phan-hoi-trong-vong-24-48": {
+  "t": "We reply within 24–48 business hours",
+  "h": "ff250e5f"
+ },
+ "about.phuong-phap": {
+  "t": "Method",
+  "h": "4f7ecd74"
+ },
+ "about.phuong-phap-luan": {
+  "t": "Methodology",
+  "h": "2c2e64e2"
+ },
+ "about.qua-trinh-nay-cho-phep": {
+  "t": "This process makes it possible to:",
+  "h": "e87bc961"
+ },
+ "about.quan-diem": {
+  "t": "Outlook",
+  "h": "b9aa2091"
+ },
+ "about.quy-trinh-nay-giup": {
+  "t": "This process helps:",
+  "h": "196d0c1e"
+ },
+ "about.sai-lech-co-the-phat-sinh": {
+  "t": "Errors can come from the input data — an inaccurate birth time, or differences in star-placement methods between traditions.",
+  "h": "bfa633e6"
+ },
+ "about.sau-khi-xac-dinh-duoc-cau": {
+  "t": "Once the structure and main points are established:",
+  "h": "8b98ad49"
+ },
+ "about.su-bien-chuyen-cua-doi-nguoi": {
+  "t": "The turns of a human life are, in the end, the result of many interwoven factors — including each person's own choices and actions. If studying and applying Zi Wei Dou Shu has any meaning, it is in helping people stay clear-headed at the turning points of their lives.",
+  "h": "2d06614d"
+ },
+ "about.su-da-dang-ve-nen-tang": {
+  "t": "The diversity of backgrounds helps the team:",
+  "h": "ff2c1cfd"
+ },
+ "about.tang-tinh-nhat-quan-trong-luan": {
+  "t": "Increase consistency across readings",
+  "h": "66a7712a"
+ },
+ "about.thanh-phan-nhom-bao-gom": {
+  "t": "The team includes:",
+  "h": "62092e20"
+ },
+ "about.thanh-that-ma-noi": {
+  "t": "In all honesty",
+  "h": "b765edeb"
+ },
+ "about.theo-truyen-thong-luu-truyen-mon": {
+  "t": "According to tradition, the art was founded by Chen Tuan (Xi Yi Zi), a profound scholar of the Song dynasty. Over many generations, scholars continued to supplement, interpret and systematize it, making Zi Wei Dou Shu a coherent, well-ordered discipline.",
+  "h": "6de49b2f"
+ },
+ "about.tiep-can-van-de-tu-nhieu": {
+  "t": "Approach problems from many angles",
+  "h": "db146275"
+ },
+ "about.toan-bo-he-thong-duoc-ra": {
+  "t": "The whole system is reviewed and calibrated by a collaborating team that includes:",
+  "h": "9ed0fc71"
+ },
+ "about.toan-bo-logic-luan-giai-duoc": {
+  "t": "All the reading logic is built on:",
+  "h": "b742fa01"
+ },
+ "about.tranh-su-phien-dien-trong-qua": {
+  "t": "Avoid one-sidedness when systematizing and interpreting",
+  "h": "f4dc0a94"
+ },
+ "about.trao-doi-gop-y": {
+  "t": "Questions &amp; Feedback",
+  "h": "f6890a8e"
+ },
+ "about.tren-nen-tang-du-lieu-va": {
+  "t": "On the foundation of systematized data and classical method:",
+  "h": "d691aa6d"
+ },
+ "about.tri-tue-nhan-tao-chi-xu": {
+  "t": "Artificial intelligence can only work from the data and rules it has been given. Anything beyond that still requires human judgment.",
+  "h": "32a7ac28"
+ },
+ "about.tu-vi-dau-so": {
+  "t": "紫微斗數 · Zi Wei Dou Shu",
+  "h": "33616a8e"
+ },
+ "about.tu-vi-dau-so-hemc": {
+  "t": "Zi Wei Dou Shu",
+  "h": "cdc48904"
+ },
+ "about.tu-vi-dau-so-la-mot": {
+  "t": "Zi Wei Dou Shu is a classical Eastern discipline through which one can glimpse something of how a human life unfolds, from beginning to end, within the bounds of destiny. One studies Zi Wei to understand oneself — and to understand others.",
+  "h": "176262d0"
+ },
+ "about.tu-vi-la-cong-cu-quan": {
+  "t": "Zi Wei Dou Shu is a tool for observation and analysis, not a measure of a person's worth or a basis for judging people.",
+  "h": "317bf0cc"
+ },
+ "about.tu-vi-minh-bao-duoc-phat": {
+  "t": "Minh Bao Zi Wei Dou Shu is developed by an independent research team that brings together people of different backgrounds and paths, united by a deep interest in Eastern destiny studies.",
+  "h": "81fe0d3c"
+ },
+ "about.tu-vi-minh-bao-la-he": {
+  "t": "Minh Bao Zi Wei Dou Shu is a system for constructing and reading Zi Wei Dou Shu charts by the classical method. Learn about its methods, principles and spirit.",
+  "h": "2f6ab085"
+ },
+ "about.ve-chung-toi": {
+  "t": "About us",
+  "h": "e96992fa"
+ },
+ "about.ve-phuong-phap-tinh-than-va": {
+  "t": "On the method, spirit and limits of the Minh Bao Zi Wei Dou Shu reading system",
+  "h": "2a8ba5a3"
+ },
+ "about.viec-chuan-hoa-cac-cach-cuc": {
+  "t": "Standardizing chart patterns, rules and the order of judgment",
+  "h": "0ef7ac43"
+ },
+ "about.viec-luan-giai-tu-vi-dau": {
+  "t": "In our humble view, reading Zi Wei Dou Shu must first rest on the classics, and only then take account of how things vary in practice. Abandon the principles and rely on intuition alone, and one easily slides into arbitrariness; cling to the letter of the texts without testing them against evidence, and rigidity is hard to avoid.",
+  "h": "86255e75"
+ },
+ "about.xac-dinh-cac-giai-doan-bien": {
+  "t": "Identify periods of change over time",
+  "h": "e0adca76"
+ },
+ "about.y-nghia-cua-tu-vi": {
+  "t": "The Meaning of Zi Wei Dou Shu",
+  "h": "835e8685"
+ },
  "bandosao.10-hanh-tinh-vi-tri": {
   "t": "<span class=\"hp-ic\" data-icon=\"sun\"></span><span>10 planet<br>positions</span>",
   "h": "86d502e2"
@@ -194,6 +582,42 @@
  "banlamviec.vat-pham-nen-them": {
   "t": "<span class=\"ic\" data-icon=\"store\"></span> Items to Add",
   "h": "b07795fe"
+ },
+ "baocao.bao-cao-moi-ban-luan-ban": {
+  "t": "<b>Reports</b><span>Every reading you've opened — view again at no extra credits</span>",
+  "h": "03ea853c"
+ },
+ "baocao.bao-cao-tu-vi-minh-bao": {
+  "t": "Reports — Minh Bao Zi Wei Dou Shu",
+  "h": "424869c8"
+ },
+ "baocao.cap-nhat": {
+  "t": "Updated",
+  "h": "8f92d966"
+ },
+ "baocao.chua-co-bao-cao-nao-ket": {
+  "t": "No reports yet.<br>Results you view in any tool (previews included) are saved here automatically.",
+  "h": "8daa85e0"
+ },
+ "baocao.dang-nhap-dang-ky": {
+  "t": "Sign in / Sign up",
+  "h": "2bcf279e"
+ },
+ "baocao.dang-nhap-de-xem-cac-bao": {
+  "t": "Sign in to see the reports you already have.",
+  "h": "4afe4408"
+ },
+ "baocao.ten": {
+  "t": "Name",
+  "h": "e826b62a"
+ },
+ "baocao.tim-bao-cao": {
+  "t": "Search reports",
+  "h": "dac215a4"
+ },
+ "baocao.tim-theo-ten-cong-cu": {
+  "t": "Search by name, tool…",
+  "h": "86f221f0"
  },
  "battu.1-nhap-thong-tin": {
   "t": "<span class=\"wss-n\">1</span><span class=\"wss-l\">Enter details</span>",
@@ -718,6 +1142,82 @@
  "cn.thang-ca-nha-nen-de-y": {
   "t": "Months the family should watch",
   "h": "e66184b3"
+ },
+ "combolt.combo-luan-giai-tu-binh-mua": {
+  "t": "<b>Bundle: Chart Reading + BaZi</b><span>Both full readings together, cheaper than buying separately</span>",
+  "h": "af0cc437"
+ },
+ "combolt.combo-luan-giai-tu-binh-tu": {
+  "t": "Chart Reading + BaZi Bundle — Minh Bao Zi Wei Dou Shu",
+  "h": "0df54f90"
+ },
+ "combolt.da-mo-khoa-ca-hai-ban": {
+  "t": "Both readings are unlocked",
+  "h": "91f94c21"
+ },
+ "combolt.luong": {
+  "t": "<span data-tvp-price=\"combo-laso-tubinh\">…</span> credits",
+  "h": "8fbbb057"
+ },
+ "combolt.mua-tron-luan-giai-tu-vi": {
+  "t": "Get the full 13-part Zi Wei reading and Zi Ping BaZi together, cheaper than buying separately.",
+  "h": "05aa9b4c"
+ },
+ "combolt.xem-luan-giai-tu-vi-xem": {
+  "t": "<a href=\"/app/luan-giai\" id=\"cbLinkLaso\">See the Zi Wei reading →</a> <a href=\"/app/bat-tu\" id=\"cbLinkTuBinh\">See Zi Ping BaZi →</a>",
+  "h": "4bf08a19"
+ },
+ "combotb.chu-trinh-cuoc-doi-9-chang": {
+  "t": "✦ <b>Life Cycles</b> — 9 major-cycle stages, life's peaks and troughs",
+  "h": "af10818a"
+ },
+ "combotb.combo": {
+  "t": "紫微明寶 · Bundle",
+  "h": "da13096a"
+ },
+ "combotb.combo-tron-bo-4-tool-mua": {
+  "t": "<b>Bundle: All 4 Tools</b><span>All 4 readings together, cheaper than buying separately</span>",
+  "h": "c20edb9c"
+ },
+ "combotb.combo-tron-bo-4-tool-tu": {
+  "t": "All 4 Tools Bundle — Minh Bao Zi Wei Dou Shu",
+  "h": "e2aba5d5"
+ },
+ "combotb.da-mo-khoa-ca-4-ban": {
+  "t": "All 4 readings are unlocked",
+  "h": "809c0f7b"
+ },
+ "combotb.dang-tai-gia": {
+  "t": "Loading price…",
+  "h": "d6a0be25"
+ },
+ "combotb.luan-giai-tu-vi-tron-13": {
+  "t": "✦ <b>Zi Wei Reading</b> — all 13 parts, 12 palaces + overview",
+  "h": "adbc495f"
+ },
+ "combotb.luong": {
+  "t": "<span data-tvp-price=\"combo-tron-bo\">…</span> credits",
+  "h": "9b9ca891"
+ },
+ "combotb.mua-combo": {
+  "t": "Buy the bundle →",
+  "h": "7eaa5de2"
+ },
+ "combotb.mua-tron-luan-giai-tu-vi": {
+  "t": "Get the Zi Wei reading, Zi Ping BaZi, Life Cycles and the Year Ahead together, cheaper than buying separately.",
+  "h": "8103dab5"
+ },
+ "combotb.tu-binh-bat-tu-nhat-can": {
+  "t": "✦ <b>Zi Ping BaZi</b> — Day Master, Useful God, structure, major cycles",
+  "h": "67131116"
+ },
+ "combotb.van-han-nam-12-thang-toi": {
+  "t": "✦ <b>Year Ahead</b> — the next 12 months, starting today",
+  "h": "4dba2179"
+ },
+ "combotb.xem-luan-giai-tu-vi-xem": {
+  "t": "<a href=\"/app/luan-giai\" id=\"cbLinkLaso\">See the Zi Wei reading →</a> <a href=\"/app/bat-tu\" id=\"cbLinkTuBinh\">See Zi Ping BaZi →</a> <a href=\"/app/chu-trinh-cuoc-doi\" id=\"cbLinkCtcd\">See Life Cycles →</a> <a href=\"/app/van-han-nam\" id=\"cbLinkVhn\">See the Year Ahead →</a>",
+  "h": "8849b82c"
  },
  "congcu.3-ngay-toi": {
   "t": "Next 3 days",
@@ -1491,6 +1991,450 @@
   "t": "<span class=\"bg-label\"><span class=\"ic\" data-icon=\"sparkles\"></span><b id=\"btnGoLabel\">See the bond →</b></span> <small>Costs <span class=\"vnd\" data-tvp-price-vnd=\"duyen-no-tien-kiep\"></span> <span class=\"cb-sub\">(<span data-tvp-price=\"duyen-no-tien-kiep\">…</span> credits)</span></small>",
   "h": "990649b6"
  },
+ "faqs.1-chuyen-khoan-ngan-hang-vnd": {
+  "t": "<strong>(1) VND bank transfer</strong> (Vietnam only) via payOS — scan the QR code with a Vietnamese banking app and credits land in your wallet automatically.",
+  "h": "e24f0f9d"
+ },
+ "faqs.2-paypal-the-quoc-te-nhan": {
+  "t": "<strong>(2) PayPal / international cards</strong> — Visa, Mastercard and JCB accepted; in the PayPal window you can choose \"Pay with Debit or Credit Card\" to pay by card without a PayPal account.",
+  "h": "1c2327ba"
+ },
+ "faqs.ai-dung-sau-he-thong-nay": {
+  "t": "Who is behind this system? <span class=\"icon\">+</span>",
+  "h": "cbc0edbf"
+ },
+ "faqs.anh-huong-den-toan-bo-luan": {
+  "t": "Affect the whole reading",
+  "h": "ec484c31"
+ },
+ "faqs.ban-co-the-gui-phan-hoi": {
+  "t": "You can send feedback through the <a href=\"/contact.html\">Contact page</a> to help improve the system.",
+  "h": "5c411910"
+ },
+ "faqs.ban-nen-xem-luan-giai-nhu": {
+  "t": "You should treat a reading as:",
+  "h": "55e40baf"
+ },
+ "faqs.ban-than": {
+  "t": "Yourself",
+  "h": "b2d3973b"
+ },
+ "faqs.cac-cong-cu-phan-tich-van": {
+  "t": "Tools that analyze luck over time",
+  "h": "8bbb8706"
+ },
+ "faqs.cac-giai-doan-trong-cuoc-doi": {
+  "t": "The stages of your life",
+  "h": "6c24f2a6"
+ },
+ "faqs.cac-nguyen-ly-co-hoc-duoc": {
+  "t": "Classical principles are tested on data rather than resting on intuition alone. Results are therefore better grounded, but should still be treated as valuable reference material. See how the cross-checking works in <a href=\"/phuong-phap\">How the system works</a>, or other questions about reliability in <a href=\"/van-dap/do-tin-cay\">Q&amp;A — Reliability</a>.",
+  "h": "78384f09"
+ },
+ "faqs.cac-noi-dung-nghien-cuu-va": {
+  "t": "Research content and practical guides",
+  "h": "b8acb1ad"
+ },
+ "faqs.cau-hoi-thuong-gap-q-a": {
+  "t": "Frequently Asked Questions (Q&amp;A) — Minh Bao Zi Wei Dou Shu",
+  "h": "c5f5cedb"
+ },
+ "faqs.cau-hoi-thuong-gap-q-a-q5rv": {
+  "t": "Frequently Asked Questions (Q&A) — Minh Bao Zi Wei Dou Shu",
+  "h": "6090dd15"
+ },
+ "faqs.cau-truc-la-so-co-tinh": {
+  "t": "Chart structures are systematic",
+  "h": "657db941"
+ },
+ "faqs.chi-phi-bao-gom": {
+  "t": "The cost covers:",
+  "h": "b91ae52a"
+ },
+ "faqs.co-he-thong-duoc-cai-thien": {
+  "t": "Yes. The system is continuously improved based on:",
+  "h": "1e990dc4"
+ },
+ "faqs.co-hoan-tien-khong": {
+  "t": "Do you offer refunds? <span class=\"icon\">+</span>",
+  "h": "b6d3b591"
+ },
+ "faqs.co-nhung-cach-thanh-toan-nao": {
+  "t": "What payment methods are there? <span class=\"icon\">+</span>",
+  "h": "ed0165ac"
+ },
+ "faqs.co-phap": {
+  "t": "Classical method",
+  "h": "2f658ba5"
+ },
+ "faqs.cong-cu-tra-cuu-doi-chieu": {
+  "t": "Tools for looking up and cross-checking destiny charts",
+  "h": "0a4b7d02"
+ },
+ "faqs.day-co-phai-chi-la-website": {
+  "t": "Is this just a Zi Wei fortune-telling website? <span class=\"icon\">+</span>",
+  "h": "9af05020"
+ },
+ "faqs.day-la-cau-hoi-ve-he": {
+  "t": "These are questions about the system and transactions. If you're wondering about your own chart — marriage, finances, career, timing — see <a href=\"/van-dap\">Zi Wei Q&amp;A</a>.",
+  "h": "79a010b3"
+ },
+ "faqs.dien-giai-noi-dung": {
+  "t": "Explain the content",
+  "h": "324af67f"
+ },
+ "faqs.dieu-nay-co-the-do": {
+  "t": "This may be due to:",
+  "h": "90c41523"
+ },
+ "faqs.dieu-nay-den-tu": {
+  "t": "This comes from:",
+  "h": "8448adbc"
+ },
+ "faqs.do-tinh-chat-la-ket-qua": {
+  "t": "Because results are digital, the system <a href=\"/dieu-khoan-dich-vu.html#thanh-toan-va-hoan-tien\">does not refund</a> once a result has been displayed. If a transaction goes wrong — you were charged but didn't get the result — <a href=\"/contact.html\">contact us</a> right away so we can check and fix it.",
+  "h": "2a30361f"
+ },
+ "faqs.doi-chieu-voi-cac-dien-bien": {
+  "t": "Checked against what actually happened in people's lives",
+  "h": "6a063fc7"
+ },
+ "faqs.doi-chieu-voi-du-lieu-thuc": {
+  "t": "Check against real data",
+  "h": "94bad6e5"
+ },
+ "faqs.du-lieu-moi": {
+  "t": "New data",
+  "h": "d2983792"
+ },
+ "faqs.du-lieu-ngay-gio-sinh-cua": {
+  "t": "Birth date and time data for more than 270,000 real people",
+  "h": "234d93e8"
+ },
+ "faqs.du-lieu-thuc-te-giup-xac": {
+  "t": "Real data helps identify patterns",
+  "h": "9f6ebf01"
+ },
+ "faqs.duy-tri-ha-tang-cong-nghe": {
+  "t": "Maintaining the technical infrastructure",
+  "h": "7d34730c"
+ },
+ "faqs.giai-dap-ve-he-thong-luan": {
+  "t": "Answers about the reading system, accuracy, and credits &amp; payment.",
+  "h": "b23b0625"
+ },
+ "faqs.giai-dap-ve-he-thong-luan-4j0m": {
+  "t": "Answers about the Minh Bao Zi Wei Dou Shu reading system — how it works, how accurate it is, and questions about credits, payment and refunds.",
+  "h": "c5884acb"
+ },
+ "faqs.giai-dap-ve-he-thong-luan-cptq": {
+  "t": "Answers about the Minh Bao Zi Wei Dou Shu reading system — how it works, how accurate it is, the research team behind it, and questions about credits, payment and refunds.",
+  "h": "29c93c9e"
+ },
+ "faqs.giao-dich-luong-thanh-toan": {
+  "t": "Transactions, Credits &amp; Payment",
+  "h": "6de5f2ee"
+ },
+ "faqs.gio-sinh-la-yeu-to-quan": {
+  "t": "Birth time is a key factor in Zi Wei Dou Shu. A small error can:",
+  "h": "638bef44"
+ },
+ "faqs.he-thong-chi-dung-de": {
+  "t": "The system is only used to:",
+  "h": "9b5aa25a"
+ },
+ "faqs.he-thong-co-duoc-cap-nhat": {
+  "t": "Is the system updated? <span class=\"icon\">+</span>",
+  "h": "d573dfc9"
+ },
+ "faqs.he-thong-co-tu-bia-noi": {
+  "t": "Does the system \"make things up\"? <span class=\"icon\">+</span>",
+  "h": "9163335f"
+ },
+ "faqs.he-thong-dien-giai-noi-dung": {
+  "t": "The system explains the content",
+  "h": "45f13e71"
+ },
+ "faqs.he-thong-dien-giai-theo-dung": {
+  "t": "The system explains it in your personal context",
+  "h": "f598cd0b"
+ },
+ "faqs.he-thong-giup-ban-hieu-ro": {
+  "t": "The system helps you better understand:",
+  "h": "e0d167f6"
+ },
+ "faqs.he-thong-hoat-dong-nhu-the": {
+  "t": "How does the system work? <span class=\"icon\">+</span>",
+  "h": "879a3e4e"
+ },
+ "faqs.he-thong-khong-tu-doan-ma": {
+  "t": "The system doesn't \"guess\" — it only re-explains conclusions that have already been determined. See the full 5-step process in <a href=\"/phuong-phap\">Zi Wei Verification</a>.",
+  "h": "4480c36f"
+ },
+ "faqs.hieu-chinh-boi-chuyen-gia": {
+  "t": "Calibration by specialists",
+  "h": "10b36d86"
+ },
+ "faqs.hieu-chinh-noi-dung-lien-tuc": {
+  "t": "Continuously calibrate the content",
+  "h": "69973443"
+ },
+ "faqs.ket-hop-voi-phuong-phap-va": {
+  "t": "Combined with modern methods and technology",
+  "h": "9ecf21e0"
+ },
+ "faqs.kha-nang": {
+  "t": "Possibilities",
+  "h": "550f7b6b"
+ },
+ "faqs.khac-biet-trong-truong-phai": {
+  "t": "Differences between schools",
+  "h": "28a67aec"
+ },
+ "faqs.khong": {
+  "t": "No.",
+  "h": "f102a5bb"
+ },
+ "faqs.khong-co-he-thong-nao-co": {
+  "t": "No system can deliver absolute conclusions.",
+  "h": "bb36c938"
+ },
+ "faqs.khong-luong-duoc-luu-vinh-vien": {
+  "t": "No. Credits stay in your account forever — use them whenever you like.",
+  "h": "ed0f9e73"
+ },
+ "faqs.khong-moi-la-so-hay-ket": {
+  "t": "No. Each chart or result deducts credits only once, the first time it is read. After that you can view it as many times as you like, free.",
+  "h": "75165ddc"
+ },
+ "faqs.khong-nen-phu-thuoc-hoan-toan": {
+  "t": "Don't rely on the results entirely.",
+  "h": "cb04372e"
+ },
+ "faqs.khong-tu-vi-minh-bao-la": {
+  "t": "No. Minh Bao Zi Wei Dou Shu is a system of many research and reading tools, of which Zi Wei Dou Shu is the core.",
+  "h": "6d75d055"
+ },
+ "faqs.la-so-phan-anh": {
+  "t": "A chart reflects:",
+  "h": "784be23d"
+ },
+ "faqs.lam-ro-luan-diem": {
+  "t": "Clarify the points",
+  "h": "6e34e839"
+ },
+ "faqs.lam-sao-de-nap-luong": {
+  "t": "How do I top up credits? <span class=\"icon\">+</span>",
+  "h": "73577e49"
+ },
+ "faqs.lam-thay-doi-vi-tri-sao": {
+  "t": "Shift star positions",
+  "h": "9ecafe04"
+ },
+ "faqs.lay-kinh-dien-lam-nen-tang": {
+  "t": "The classics as the foundation",
+  "h": "a47b04f6"
+ },
+ "faqs.lay-thuc-chung-lam-tieu-chuan": {
+  "t": "Evidence as the standard",
+  "h": "d1df793c"
+ },
+ "faqs.logic-luan-giai-da-duoc-xay": {
+  "t": "The reading logic has been built in advance on:",
+  "h": "6084cf0a"
+ },
+ "faqs.luong-co-het-han-khong": {
+  "t": "Do credits expire? <span class=\"icon\">+</span>",
+  "h": "05ce0b06"
+ },
+ "faqs.luong-la-don-vi-dung-de": {
+  "t": "Credits are the unit used to unlock the in-depth reading tools on Minh Bao Zi Wei Dou Shu. Top up once and use them on every tool — no need to buy each feature separately.",
+  "h": "fe222fa9"
+ },
+ "faqs.luong-la-gi": {
+  "t": "What are credits? <span class=\"icon\">+</span>",
+  "h": "af09a5b2"
+ },
+ "faqs.moi-lan-mo-lai-ket-qua": {
+  "t": "Am I charged credits every time I reopen an old result? <span class=\"icon\">+</span>",
+  "h": "8d7c06a5"
+ },
+ "faqs.mot-cong-cu-ho-tro-quyet": {
+  "t": "A decision-support tool",
+  "h": "b3fa5457"
+ },
+ "faqs.mot-goc-nhin-co-he-thong": {
+  "t": "A systematic perspective",
+  "h": "b79d8456"
+ },
+ "faqs.mot-nguon-tham-khao-co-co": {
+  "t": "A well-grounded reference",
+  "h": "5a51df4e"
+ },
+ "faqs.muc-tieu-khong-chi-la-xem": {
+  "t": "The goal isn't just \"fortune-telling\" but building an ecosystem of tools that help people understand destiny systems and apply them in real life.",
+  "h": "90ed16bd"
+ },
+ "faqs.neu-khong-chac-chan-ban-nen": {
+  "t": "If you're unsure, treat the results more as a reference.",
+  "h": "e402d31b"
+ },
+ "faqs.neu-toi-thay-noi-dung-chua": {
+  "t": "What if I think the content is wrong? <span class=\"icon\">+</span>",
+  "h": "8818d326"
+ },
+ "faqs.ngoai-ra-nen-tang-con-bao": {
+  "t": "The platform also includes:",
+  "h": "c98ec9b0"
+ },
+ "faqs.nhom-bao-gom-cac-hoc-gia": {
+  "t": "The team includes Zi Wei Dou Shu scholars and researchers, along with people who have hands-on experience reading a great many charts. Each brings their own perspective, from academic to practical, but all share the goal of understanding and systematizing destiny studies seriously. More on the <a href=\"/about.html\">About</a> page.",
+  "h": "fd39d8c1"
+ },
+ "faqs.nhung-ket-qua-cuoi-cung-van": {
+  "t": "But the final outcome still depends on each person's actions and choices.",
+  "h": "8d1d8452"
+ },
+ "faqs.nhung-xu-huong-co-the-xay": {
+  "t": "Tendencies that may unfold",
+  "h": "e3dbdcb7"
+ },
+ "faqs.noi-dung-luan-giai-co-thuc": {
+  "t": "Are the readings really accurate? <span class=\"icon\">+</span>",
+  "h": "08936df9"
+ },
+ "faqs.phan-hoi-nguoi-dung": {
+  "t": "User feedback",
+  "h": "fe75cdef"
+ },
+ "faqs.phan-tich-cau-truc-theo-nguyen": {
+  "t": "Analyze the structure by Zi Wei principles",
+  "h": "3b937e5e"
+ },
+ "faqs.phat-trien-he-thong-luan-giai": {
+  "t": "Developing the reading system",
+  "h": "cb9ef15b"
+ },
+ "faqs.phi-dich-vu-giup-dam-bao": {
+  "t": "The service fee ensures quality and serious investment in the system.",
+  "h": "19322883"
+ },
+ "faqs.qua-trinh-kiem-nghiem-thuc-te": {
+  "t": "Real-world testing",
+  "h": "de20f584"
+ },
+ "faqs.quy-tac-da-kiem-nghiem": {
+  "t": "Tested rules",
+  "h": "bfadc1f0"
+ },
+ "faqs.quy-trinh-luan-giai-gom-nhieu": {
+  "t": "The reading process has several steps:",
+  "h": "dc04d724"
+ },
+ "faqs.sai-gio-sinh": {
+  "t": "A wrong birth time",
+  "h": "740a22eb"
+ },
+ "faqs.su-dung-la-ket-qua-cua": {
+  "t": "Being \"right\" is the result of method, not a lucky guess.",
+  "h": "517839bc"
+ },
+ "faqs.tai-sao-noi-dung-doc-giong": {
+  "t": "Why does the reading sound \"just like me\"? <span class=\"icon\">+</span>",
+  "h": "f5983ec4"
+ },
+ "faqs.thanh-toan-xong-ma-chua-thay": {
+  "t": "Paid but no credits in your wallet yet? <span class=\"icon\">+</span>",
+  "h": "eab1cb35"
+ },
+ "faqs.thoi-diem": {
+  "t": "Timing",
+  "h": "020b0562"
+ },
+ "faqs.thu-lam-moi-trang-f5-hoac": {
+  "t": "Try refreshing the page (F5), or go to <a href=\"/app/ho-so\">Profile</a> → the \"Credit wallet\" tab to check your balance. If they still haven't arrived after 1–2 minutes, contact us via the <a href=\"/contact.html\">Contact page</a> with your transaction ID (PayPal or payOS) so we can sort it out.",
+  "h": "226c73c9"
+ },
+ "faqs.toan-bo-noi-dung-luan-giai": {
+  "t": "The tool's complete in-depth reading — written for your chart and personal context — plus unlimited re-viewing, and a download where the tool supports it.",
+  "h": "f4f821fa"
+ },
+ "faqs.toi-co-the-thay-doi-van": {
+  "t": "Can I change my destiny? <span class=\"icon\">+</span>",
+  "h": "5dfa0b85"
+ },
+ "faqs.toi-nen-su-dung-ket-qua": {
+  "t": "How should I use the results? <span class=\"icon\">+</span>",
+  "h": "01d8b923"
+ },
+ "faqs.tra-phi-xong-toi-nhan-duoc": {
+  "t": "What do I get when I pay? <span class=\"icon\">+</span>",
+  "h": "7bfad677"
+ },
+ "faqs.tu-vi-khong-phai-la-su": {
+  "t": "Zi Wei is not an absolute verdict.",
+  "h": "cbd47d29"
+ },
+ "faqs.tu-vi-minh-bao-duoc-xay": {
+  "t": "Minh Bao Zi Wei Dou Shu was built by a destiny-studies research team guided by:",
+  "h": "6fb267dd"
+ },
+ "faqs.tu-vi-minh-bao-la-gi": {
+  "t": "What is Minh Bao Zi Wei Dou Shu? <span class=\"icon\">+</span>",
+  "h": "7085b3b2"
+ },
+ "faqs.tu-vi-minh-bao-la-he": {
+  "t": "Minh Bao Zi Wei Dou Shu is a personalized reading system combining classical Eastern learning, real data and modern technology.",
+  "h": "253a2e07"
+ },
+ "faqs.tuy-nhien-tu-vi-minh-bao": {
+  "t": "That said, Minh Bao Zi Wei Dou Shu is built on:",
+  "h": "3adb9017"
+ },
+ "faqs.vao-ho-so-tab-vi-luong": {
+  "t": "Go to <a href=\"/app/ho-so\">Profile</a> → the \"Credit wallet\" tab to see your current balance and the full history of credit top-ups and deductions.",
+  "h": "1b550c61"
+ },
+ "faqs.vao-trang-nap-luong-chon-mot": {
+  "t": "Go to the <a href=\"/topup.html\">Top up credits</a> page, choose a suitable pack and pay. Credits are added to your wallet as soon as the transaction succeeds.",
+  "h": "a8423928"
+ },
+ "faqs.ve-he-thong": {
+  "t": "About the System",
+  "h": "f81106ca"
+ },
+ "faqs.vi-sao-phai-nhap-chinh-xac": {
+  "t": "Why do I need to enter my exact birth time? <span class=\"icon\">+</span>",
+  "h": "28f58ae2"
+ },
+ "faqs.vi-sao-phai-tra-phi-de": {
+  "t": "Why do I have to pay to see everything? <span class=\"icon\">+</span>",
+  "h": "9fa7926b"
+ },
+ "faqs.xay-dung-la-so-tu-ngay": {
+  "t": "Build the chart from the birth date and time",
+  "h": "82018c4e"
+ },
+ "faqs.xay-dung-va-xu-ly-du": {
+  "t": "Building and processing large-scale data",
+  "h": "5b3550e6"
+ },
+ "faqs.xem-lai-lich-su-giao-dich": {
+  "t": "Where can I see my transaction history? <span class=\"icon\">+</span>",
+  "h": "c1de6029"
+ },
+ "faqs.xem-them": {
+  "t": "See Also",
+  "h": "55d48a8e"
+ },
+ "faqs.xu-huong": {
+  "t": "Tendencies",
+  "h": "7964ab99"
+ },
+ "faqs.yeu-to-ca-nhan-chua-duoc": {
+  "t": "Personal factors not yet fully reflected",
+  "h": "4fbc118f"
+ },
  "giosinh.12-la-so-kha-nghi": {
   "t": "12 candidate<br>charts",
   "h": "6b8b7bde"
@@ -1646,6 +2590,114 @@
  "giosinh.xep-hang-do-khop": {
   "t": "Rank by<br>match",
   "h": "a6655e79"
+ },
+ "hdtt.cach-hoat-dong": {
+  "t": "How it works",
+  "h": "8ad7f762"
+ },
+ "hdtt.cau-hoi-thuong-gap": {
+  "t": "Frequently asked questions",
+  "h": "ef0eb919"
+ },
+ "hdtt.chi-phi": {
+  "t": "Cost",
+  "h": "3c453110"
+ },
+ "hdtt.chon-goi-nap-luong": {
+  "t": "Choose a credit pack",
+  "h": "a8809b21"
+ },
+ "hdtt.cong-cu": {
+  "t": "Tool",
+  "h": "6029ffef"
+ },
+ "hdtt.dang-ky-tai-khoan-mien-phi": {
+  "t": "Create a free account",
+  "h": "dc9cfb39"
+ },
+ "hdtt.gia-doc-truc-tiep-tu-he": {
+  "t": "Prices are read live from the system and may change. Full list of packs on the <a href=\"/topup.html\">Top up credits</a> page.",
+  "h": "40462886"
+ },
+ "hdtt.he-thong-luong-nap-1-lan": {
+  "t": "Credits · Top up once, use on every tool · No expiry · Last updated: September 2026",
+  "h": "393b8272"
+ },
+ "hdtt.ho-tro": {
+  "t": "Support",
+  "h": "01dbe5e4"
+ },
+ "hdtt.huong-dan-nap-luong-va-su": {
+  "t": "How to top up credits and use Minh Bao Zi Wei Dou Shu — top up once, use on every tool, no expiry.",
+  "h": "24909177"
+ },
+ "hdtt.huong-dan-thanh-toan": {
+  "t": "Payment Guide",
+  "h": "52fb0da5"
+ },
+ "hdtt.huong-dan-thanh-toan-tu-vi": {
+  "t": "Payment Guide — Minh Bao Zi Wei Dou Shu",
+  "h": "68863047"
+ },
+ "hdtt.luan-giai-la-so-24-phan": {
+  "t": "<span class=\"ic\" data-icon=\"sparkles\"></span> Chart Reading (24 parts)",
+  "h": "5f257ac9"
+ },
+ "hdtt.luong-co-het-han-khong-khong": {
+  "t": "<strong>Do credits expire?</strong><br> No. Credits never expire.",
+  "h": "fa64598b"
+ },
+ "hdtt.moi-ket-qua-chi-tru-luong": {
+  "t": "✓ Each result deducts credits <strong>only once</strong>. You can view it again for free at any time from your Profile page.",
+  "h": "70edf1aa"
+ },
+ "hdtt.nap-xong-luong-nhung-chua-thay": {
+  "t": "<strong>Topped up but the credits aren't showing in your account?</strong><br> Try refreshing the page (F5) or go to <a href=\"/app/ho-so\">Profile</a> → the <strong>Credit wallet</strong> tab to check. If they still aren't there, contact us via the <a href=\"/contact.html\">Contact page</a> with your transaction ID.",
+  "h": "2751c285"
+ },
+ "hdtt.neu-gap-bat-ky-van-de": {
+  "t": "If you run into any problem with a payment, please contact us before trying the transaction again, to avoid being charged twice.",
+  "h": "be148f9d"
+ },
+ "hdtt.nhan-dang-nhap-o-goc-tren": {
+  "t": "Click <strong>Sign in</strong> in the top-right corner. Use Google, Facebook, or email/password. Your account keeps your balance and usage history.",
+  "h": "74382ed3"
+ },
+ "hdtt.quy-doi": {
+  "t": "Equivalent",
+  "h": "7fedefea"
+ },
+ "hdtt.sau-khi-nap-xong-quay-lai": {
+  "t": "Once you've topped up, go back to any tool and click <strong>Unlock</strong>. Credits are deducted instantly and automatically — no redirect, no waiting for confirmation.",
+  "h": "68a4a3c2"
+ },
+ "hdtt.su-dung-cong-cu": {
+  "t": "Use a tool",
+  "h": "db5111aa"
+ },
+ "hdtt.toi-co-the-chuyen-luong-cho": {
+  "t": "<strong>Can I transfer credits to someone else?</strong><br> No. Credits are tied to your personal account and cannot be transferred.",
+  "h": "8fa6a001"
+ },
+ "hdtt.toi-co-the-dung-luong-cho": {
+  "t": "<strong>Can I use credits across several tools?</strong><br> Yes. One top-up works for every tool: the chart, marriage compatibility, business compatibility and every tool launched later.",
+  "h": "efdd8796"
+ },
+ "hdtt.toi-co-the-thanh-toan-bang": {
+  "t": "<strong>Can I pay by card without a PayPal account?</strong><br> Yes. On the Top up page choose <strong>Visa / Mastercard</strong> — PayPal opens the card form directly, no PayPal login needed.",
+  "h": "07387ee6"
+ },
+ "hdtt.vao-trang-nap-luong-va-chon": {
+  "t": "Go to the <a href=\"/topup.html\"><strong>Top up credits</strong></a> page and pick one of the packs below. Pay in <strong>USD</strong> via <strong>PayPal</strong> or <strong>Visa / Mastercard</strong> (no PayPal account needed); credits land in your account automatically.",
+  "h": "0cf8596a"
+ },
+ "hdtt.xem-tuoi-lam-an": {
+  "t": "<span class=\"ic\" data-icon=\"briefcase\"></span> Business Compatibility",
+  "h": "d5dec0bd"
+ },
+ "hdtt.xem-tuoi-vo-chong": {
+  "t": "<span class=\"ic\" data-icon=\"heart-handshake\"></span> Marriage Compatibility",
+  "h": "177d20f4"
  },
  "hnt.2-xem-truoc": {
   "t": "<span class=\"wss-n\">2</span><span class=\"wss-l\">Preview</span>",
@@ -2538,6 +3590,82 @@
  "js.auth.vui-long-dien-email-va-mat": {
   "t": "Please enter your email and password.",
   "h": "d84b9abd"
+ },
+ "js.baocao.bao-cao": {
+  "t": "Report",
+  "h": "7013ca8b"
+ },
+ "js.baocao.bao-cao-nay-trong": {
+  "t": "This report is empty.",
+  "h": "173edc16"
+ },
+ "js.baocao.chua-gui-duoc-thu-lai-sau": {
+  "t": "Couldn't send. Please try again in a few minutes.",
+  "h": "22c4f6e1"
+ },
+ "js.baocao.chua-mo-duoc-bao-cao-thu": {
+  "t": "Couldn't open the report. Please try again in a few minutes.",
+  "h": "881dfbd0"
+ },
+ "js.baocao.chua-tai-duoc-danh-sach-bao": {
+  "t": "Couldn't load the report list. Please reload the page.",
+  "h": "ebdf3123"
+ },
+ "js.baocao.da-gui-vao-email": {
+  "t": "✓ Sent to your email",
+  "h": "9a79e18c"
+ },
+ "js.baocao.da-gui-vao-zalo": {
+  "t": "✓ Sent to Zalo",
+  "h": "8b84b9e9"
+ },
+ "js.baocao.dang-gui": {
+  "t": "Sending…",
+  "h": "f04c8be3"
+ },
+ "js.baocao.dang-mo-bao-cao": {
+  "t": "Opening report…",
+  "h": "401bc684"
+ },
+ "js.baocao.gio-truoc": {
+  "t": " h ago",
+  "h": "ce828227"
+ },
+ "js.baocao.gui-lai-chua-thanh-cong": {
+  "t": "Resend failed: ",
+  "h": "b6ab8dbd"
+ },
+ "js.baocao.gui-lai-loi": {
+  "t": "Resend error: ",
+  "h": "1364cea5"
+ },
+ "js.baocao.gui-loi": {
+  "t": "Send error: ",
+  "h": "485901a2"
+ },
+ "js.baocao.gui-pdf": {
+  "t": "Send PDF",
+  "h": "c2a33934"
+ },
+ "js.baocao.gui-ve-zalo": {
+  "t": "Send to Zalo",
+  "h": "3ae6f411"
+ },
+ "js.baocao.loi-khong-ro": {
+  "t": "unknown error",
+  "h": "33ea1001"
+ },
+ "js.baocao.ngay-truoc": {
+  "t": " d ago",
+  "h": "92423d27"
+ },
+ "js.baocao.phut-truoc": {
+  "t": " min ago",
+  "h": "b1017a2c"
+ },
+ "js.baocao.thu-lai-sau-it-phut": {
+  "t": ". Please try again in a few minutes.",
+  "h": "0795401e"
  },
  "js.battu.10-luan-ky-giup-toi": {
   "t": "/10) — please read this in detail for me",
@@ -3646,6 +4774,50 @@
  "js.cns.trung-ca": {
   "t": "Some people share <b>both your birth date and birth hour</b> — their chart comes out exactly the same.",
   "h": "3272dba6"
+ },
+ "js.combo.cham-tran": {
+  "t": "You've reached the free-trial limit.",
+  "h": "2fdb2e1a"
+ },
+ "js.combo.dang-tinh": {
+  "t": "Calculating…",
+  "h": "76a9d5f0"
+ },
+ "js.combo.dang-xu-ly": {
+  "t": "Processing…",
+  "h": "a2e96c58"
+ },
+ "js.combo.het-phien": {
+  "t": "Your session has expired. Please sign in again.",
+  "h": "aba6739e"
+ },
+ "js.combo.khong-du-luong": {
+  "t": "Not enough credits — please top up.",
+  "h": "1d9e17da"
+ },
+ "js.combo.khong-dung-khung": {
+  "t": "Couldn't build the Year Ahead frame. Please try again.",
+  "h": "07f0a83f"
+ },
+ "js.combo.loi": {
+  "t": "Error: ",
+  "h": "471c0087"
+ },
+ "js.combo.loi-ket-noi": {
+  "t": "Connection error: ",
+  "h": "46e34d76"
+ },
+ "js.combo.ngoai-pham-vi": {
+  "t": "Birth date is outside the supported range (1900–2100).",
+  "h": "5e5d6ef9"
+ },
+ "js.combo.nhap-du-ngay": {
+  "t": "Please enter your full birth day, month and year.",
+  "h": "075a6b15"
+ },
+ "js.combo.thu-lai": {
+  "t": "Please try again.",
+  "h": "2f1d18ee"
  },
  "js.congcutr.chua-xep-vao-nhom-nao": {
   "t": "Not yet grouped",
@@ -5427,6 +6599,26 @@
   "t": "See the 12 candidate hours",
   "h": "3cd9aabf"
  },
+ "js.hdtt.goi-cao-cap": {
+  "t": "Premium",
+  "h": "12f26fd0"
+ },
+ "js.hdtt.goi-khoi-dau": {
+  "t": "Starter",
+  "h": "fd7bbfc8"
+ },
+ "js.hdtt.goi-n": {
+  "t": "Pack {n}",
+  "h": "dde5589f"
+ },
+ "js.hdtt.goi-pho-thong": {
+  "t": "Standard",
+  "h": "01d0c63f"
+ },
+ "js.hdtt.n-luong": {
+  "t": "{n} credits",
+  "h": "c4904a65"
+ },
  "js.hnt.ba-huong-dang-cho-con-thu": {
   "t": "Three directions worth trying, with specific activities for your child's age",
   "h": "b8c61ec7"
@@ -6582,6 +7774,10 @@
  "js.lasochart.tuoi-al": {
   "t": "Age {n} (lunar)",
   "h": "cd4bc076"
+ },
+ "js.lienhe.gui-email": {
+  "t": "Send email",
+  "h": "5901b176"
  },
  "js.loading.45-60": {
   "t": "about 45–60 seconds",
@@ -9198,6 +10394,74 @@
  "js.oracle.xem-xet-dau-la-nhung-dieu": {
   "t": "Consider where your life is out of balance. Work/rest, giving/receiving, action/reflection — readjust.",
   "h": "64dee7e0"
+ },
+ "js.paysuc.cam-on": {
+  "t": "Thank you for choosing Minh Bao Zi Wei Dou Shu.<br>Use your credits for chart readings and compatibility checks.",
+  "h": "25108a9b"
+ },
+ "js.paysuc.co-loi": {
+  "t": "Something went wrong",
+  "h": "f2ebd14e"
+ },
+ "js.paysuc.cong-credits": {
+  "t": "+{n} credits",
+  "h": "2b2cc385"
+ },
+ "js.paysuc.dang-quay-lai": {
+  "t": "Taking you back to finish unlocking…",
+  "h": "018f2e01"
+ },
+ "js.paysuc.hoac-dung-ngay": {
+  "t": "Or use them now",
+  "h": "53432ef3"
+ },
+ "js.paysuc.lien-he-ho-tro": {
+  "t": "Contact support",
+  "h": "554c1a63"
+ },
+ "js.paysuc.loi-ket-noi": {
+  "t": "Connection error. Please try again later.",
+  "h": "8d18d14b"
+ },
+ "js.paysuc.luan-giai-la-so": {
+  "t": "Chart Reading",
+  "h": "72f1fa6d"
+ },
+ "js.paysuc.nap-thanh-cong": {
+  "t": "Top-up successful!",
+  "h": "897b5556"
+ },
+ "js.paysuc.nap-them": {
+  "t": "Top up more credits",
+  "h": "70a597bd"
+ },
+ "js.paysuc.quay-lai-nap": {
+  "t": "← Back to top-up",
+  "h": "477330f2"
+ },
+ "js.paysuc.so-du": {
+  "t": "Current balance: {n} credits",
+  "h": "0ed1f309"
+ },
+ "js.paysuc.that-bai": {
+  "t": "Payment failed. Please contact support.",
+  "h": "bddbcf89"
+ },
+ "js.paysuc.thieu-thong-tin": {
+  "t": "Payment details are missing. Please contact support.",
+  "h": "1309e497"
+ },
+ "js.paysuc.xem-tai-khoan": {
+  "t": "View account →",
+  "h": "0ad98c44"
+ },
+ "js.paysuc.xem-tuoi-lam-an": {
+  "t": "Business Compatibility",
+  "h": "5f5ba4e2"
+ },
+ "js.paysuc.xem-tuoi-vo-chong": {
+  "t": "Marriage Compatibility",
+  "h": "f3e7b1ed"
  },
  "js.paywall.bam-mo-la-tra-tien-va": {
   "t": " · tap to open — you pay and read right away, ",
@@ -13875,6 +15139,466 @@
   "t": "Zalo",
   "h": "53b71aec"
  },
+ "js.taikhoan.ban-chua-chia-se-luot-nao": {
+  "t": "You haven't shared anything yet.",
+  "h": "4be43058"
+ },
+ "js.taikhoan.ban-chua-gui-gop-y-nao": {
+  "t": "You haven't sent any feedback yet.",
+  "h": "ed1ab4a7"
+ },
+ "js.taikhoan.ban-da-dung-het-luot-moi": {
+  "t": "You've used all <strong>{n}</strong> rewarded invites for the past 30 days — ",
+  "h": "fbab17bd"
+ },
+ "js.taikhoan.ban-muon-noi-gi": {
+  "t": "What would you like to tell us?",
+  "h": "7a12a7f9"
+ },
+ "js.taikhoan.ban-tu-them": {
+  "t": "Added by you",
+  "h": "39ff4ca3"
+ },
+ "js.taikhoan.buoc-xong": {
+  "t": "{a}/{b} steps",
+  "h": "ab8c9cf8"
+ },
+ "js.taikhoan.cap-luong-quan-tri": {
+  "t": "Credits granted (admin)",
+  "h": "24c9d12a"
+ },
+ "js.taikhoan.chua-co-giao-dich-nao": {
+  "t": "No transactions yet.",
+  "h": "eca9ffd5"
+ },
+ "js.taikhoan.chua-dung": {
+  "t": " Not right",
+  "h": "ddd914ee"
+ },
+ "js.taikhoan.chua-lien-ket": {
+  "t": "Not linked.",
+  "h": "e0fe1693"
+ },
+ "js.taikhoan.da-chep": {
+  "t": "Copied ✓",
+  "h": "846252e0"
+ },
+ "js.taikhoan.da-copy": {
+  "t": "✓ Copied",
+  "h": "86409906"
+ },
+ "js.taikhoan.da-doi-mat-khau-thanh-cong": {
+  "t": "✓ Password changed.",
+  "h": "b0be11cd"
+ },
+ "js.taikhoan.da-hoan-tat-luong": {
+  "t": "✓ Done — +{n} credits added to your wallet.",
+  "h": "7974b68b"
+ },
+ "js.taikhoan.da-lien-ket-bot-messenger-dung": {
+  "t": "✓ Linked — the Messenger bot shares this credit wallet.",
+  "h": "ead6c730"
+ },
+ "js.taikhoan.da-lien-ket-bot-telegram-dung": {
+  "t": "✓ Linked — the Telegram bot shares this credit wallet.",
+  "h": "6f58b63f"
+ },
+ "js.taikhoan.da-lien-ket-bot-whatsapp-dung": {
+  "t": "✓ Linked — the WhatsApp bot shares this credit wallet.",
+  "h": "882115d7"
+ },
+ "js.taikhoan.da-lien-ket-bot-zalo-dung": {
+  "t": "✓ Linked — the Zalo bot shares this credit wallet.",
+  "h": "deed0e79"
+ },
+ "js.taikhoan.da-luu-ten-hien-thi": {
+  "t": "✓ Display name saved.",
+  "h": "48253036"
+ },
+ "js.taikhoan.da-mo-messenger-bam-bat-dau": {
+  "t": " Messenger opened — tap \"Get Started\" or send one message to finish, then reload the page.",
+  "h": "e353366d"
+ },
+ "js.taikhoan.da-mo-telegram-bam-bat-dau": {
+  "t": " Telegram opened — tap \"Start\" in the bot to finish, then reload the page.",
+  "h": "4d2c8d09"
+ },
+ "js.taikhoan.da-mo-whatsapp-bam-gui-tin": {
+  "t": " WhatsApp opened — SEND the pre-filled message to finish, then reload the page.",
+  "h": "c9e07106"
+ },
+ "js.taikhoan.da-nhan-cam-on-ban-trang": {
+  "t": "Received — thank you. The status appears right below.",
+  "h": "a25f2423"
+ },
+ "js.taikhoan.dang-gui": {
+  "t": "Sending…",
+  "h": "f04c8be3"
+ },
+ "js.taikhoan.dang-nhap-de-xem-ho-so": {
+  "t": "Sign in to see your profile.",
+  "h": "1bfe72cf"
+ },
+ "js.taikhoan.dang-tai": {
+  "t": "Loading…",
+  "h": "577a1d59"
+ },
+ "js.taikhoan.dang-tao": {
+  "t": "Creating…",
+  "h": "47662404"
+ },
+ "js.taikhoan.dang-tao-lien-ket": {
+  "t": "Creating link…",
+  "h": "c32c93b3"
+ },
+ "js.taikhoan.dang-tao-ma": {
+  "t": "Creating code…",
+  "h": "a761e1d7"
+ },
+ "js.taikhoan.day-la-hop-thu-toi-thang": {
+  "t": "This inbox goes straight to the people who run the site — it's not the place to ask the Masters. ",
+  "h": "4eeaf74a"
+ },
+ "js.taikhoan.doi-mat-khau-that-bai": {
+  "t": "✗ Couldn't change the password.",
+  "h": "85e611bb"
+ },
+ "js.taikhoan.dung": {
+  "t": " Right",
+  "h": "552da34c"
+ },
+ "js.taikhoan.fb-bug": {
+  "t": "Technical bug",
+  "h": "ac755291"
+ },
+ "js.taikhoan.fb-da-nhan": {
+  "t": "Received",
+  "h": "efb7534b"
+ },
+ "js.taikhoan.fb-da-xem": {
+  "t": "Seen",
+  "h": "f9809904"
+ },
+ "js.taikhoan.fb-da-xu-ly": {
+  "t": "Resolved",
+  "h": "500a2314"
+ },
+ "js.taikhoan.fb-dang-xu-ly": {
+  "t": "In progress",
+  "h": "39fc9334"
+ },
+ "js.taikhoan.fb-noi-dung": {
+  "t": "Reading content",
+  "h": "535d1e57"
+ },
+ "js.taikhoan.fb-placeholder": {
+  "t": "The more specific, the easier to fix. For example: &quot;In the reading for a chart born in 1990, the Wealth section contradicts the Major Cycle section&quot; is far more useful than &quot;the reading isn't great&quot;.",
+  "h": "e9db4ac9"
+ },
+ "js.taikhoan.fb-thanh-toan": {
+  "t": "Payment · Credits",
+  "h": "8987b413"
+ },
+ "js.taikhoan.fb-tinh-nang": {
+  "t": "Feature request",
+  "h": "f6ecc4b0"
+ },
+ "js.taikhoan.giu-toi-da-muc": {
+  "t": "Keeps up to {n} items — beyond that, the Master drops the oldest.",
+  "h": "1ca9d45e"
+ },
+ "js.taikhoan.gop-y-da-gui": {
+  "t": "Feedback sent",
+  "h": "edc5809d"
+ },
+ "js.taikhoan.gui-gop-y-ka3h": {
+  "t": "Send feedback",
+  "h": "9e3497a6"
+ },
+ "js.taikhoan.gui-gop-y-tieu-de": {
+  "t": "Send feedback",
+  "h": "dc7d7429"
+ },
+ "js.taikhoan.hien-thi-giao-dich": {
+  "t": "Showing {a}–{b} of {n} transactions",
+  "h": "7ab97fcf"
+ },
+ "js.taikhoan.hoac": {
+  "t": "or",
+  "h": "2797f4b3"
+ },
+ "js.taikhoan.hoi-dap-tu-tu-vi-minh": {
+  "t": "Reply from Minh Bao Zi Wei Dou Shu",
+  "h": "dd209967"
+ },
+ "js.taikhoan.hoi-thay": {
+  "t": "Ask the Master",
+  "h": "c9ffbbaf"
+ },
+ "js.taikhoan.huong-dan-thanh-toan": {
+  "t": "Payment Guide",
+  "h": "53371141"
+ },
+ "js.taikhoan.huy": {
+  "t": "Cancel",
+  "h": "33639e92"
+ },
+ "js.taikhoan.huy-lien-ket-messenger-bot-se": {
+  "t": "Unlink Messenger? The bot will no longer use your credit wallet.",
+  "h": "e19d5555"
+ },
+ "js.taikhoan.huy-lien-ket-telegram-bot-se": {
+  "t": "Unlink Telegram? The bot will no longer use your credit wallet.",
+  "h": "6c158247"
+ },
+ "js.taikhoan.huy-lien-ket-whatsapp-bot-se": {
+  "t": "Unlink WhatsApp? The bot will no longer use your credit wallet.",
+  "h": "31f159a4"
+ },
+ "js.taikhoan.huy-lien-ket-zalo-bot-se": {
+  "t": "Unlink Zalo? The bot will no longer use your credit wallet.",
+  "h": "a3a4a628"
+ },
+ "js.taikhoan.ket-qua": {
+  "t": "Result",
+  "h": "c9f95514"
+ },
+ "js.taikhoan.khac": {
+  "t": "Other",
+  "h": "5b8a28ab"
+ },
+ "js.taikhoan.khi-ho-nap-luong-lan-dau": {
+  "t": "When they top up for the first time, you both get another <strong>30 credits</strong>.",
+  "h": "201f2475"
+ },
+ "js.taikhoan.khong-co-giao-dich-khop-bo": {
+  "t": "No transactions match the filter.",
+  "h": "b78b80e3"
+ },
+ "js.taikhoan.khong-doc-duoc-ho-so-thu": {
+  "t": "Couldn't load your profile. Try reloading the page.",
+  "h": "ac5f4991"
+ },
+ "js.taikhoan.khong-doc-duoc-lich-su": {
+  "t": "Couldn't load the history.",
+  "h": "c7ccf5f8"
+ },
+ "js.taikhoan.khong-doc-duoc-tien-do-thu": {
+  "t": "Couldn't load your progress. Try reloading the page.",
+  "h": "873418be"
+ },
+ "js.taikhoan.khong-gui-duoc-xin-thu-lai": {
+  "t": "Couldn't send. Please try again.",
+  "h": "c29e25ae"
+ },
+ "js.taikhoan.khong-tai-duoc-danh-sach-gop": {
+  "t": "Couldn't load your feedback list.",
+  "h": "56f9aa7c"
+ },
+ "js.taikhoan.khong-tai-duoc-trang-thai-lien": {
+  "t": "Couldn't load the link status.",
+  "h": "d42a2701"
+ },
+ "js.taikhoan.khong-tao-duoc-key-thu-lai": {
+  "t": "Couldn't create a key. Please try again later.",
+  "h": "d5bedd90"
+ },
+ "js.taikhoan.khong-tao-duoc-lien-ket-thu": {
+  "t": "Couldn't create the link. Please try again later.",
+  "h": "095112a9"
+ },
+ "js.taikhoan.khong-the-tai-lich-su": {
+  "t": "Can't load the history.",
+  "h": "034a35a9"
+ },
+ "js.taikhoan.khong-thuc-hien-duoc": {
+  "t": "Couldn't do that.",
+  "h": "ec9f72a3"
+ },
+ "js.taikhoan.lien-he": {
+  "t": "Contact",
+  "h": "603522f1"
+ },
+ "js.taikhoan.lien-ket-messenger": {
+  "t": "Link Messenger",
+  "h": "99c405ee"
+ },
+ "js.taikhoan.lien-ket-telegram": {
+  "t": "Link Telegram",
+  "h": "e4c7777f"
+ },
+ "js.taikhoan.lien-ket-whatsapp": {
+  "t": "Link WhatsApp",
+  "h": "007375bb"
+ },
+ "js.taikhoan.lien-ket-zalo": {
+  "t": "Link Zalo",
+  "h": "73727376"
+ },
+ "js.taikhoan.loi-mang": {
+  "t": "Network error.",
+  "h": "8fe8f313"
+ },
+ "js.taikhoan.loi-mang-thu-lai-sau-nhe": {
+  "t": "Network error — please try again later.",
+  "h": "e09e98e7"
+ },
+ "js.taikhoan.loi-mang-xin-thu-lai": {
+  "t": "Network error — please try again.",
+  "h": "1464653a"
+ },
+ "js.taikhoan.luan-giai-la-so": {
+  "t": "Chart Reading",
+  "h": "72f1fa6d"
+ },
+ "js.taikhoan.luong-khi-xong-ca-n": {
+  "t": "+{n} credits when all {b} are done",
+  "h": "6a55c9a9"
+ },
+ "js.taikhoan.luot-moi-se-mo-lai-dan": {
+  "t": "invites reopen gradually as each one passes its 30-day mark.",
+  "h": "3ce174a5"
+ },
+ "js.taikhoan.luu": {
+  "t": "Save",
+  "h": "a306970e"
+ },
+ "js.taikhoan.luu-that-bai-thu-lai": {
+  "t": "✗ Couldn't save. Try again.",
+  "h": "0543df5d"
+ },
+ "js.taikhoan.mat-khau-khong-khop": {
+  "t": "Passwords don't match.",
+  "h": "782aade8"
+ },
+ "js.taikhoan.mat-khau-toi-thieu-6-ky": {
+  "t": "Password must be at least 6 characters.",
+  "h": "56257bc3"
+ },
+ "js.taikhoan.moi-nguoi-dang-ky-thuong": {
+  "t": "For everyone who signs up through your link: <strong>+{n} credits</strong> go into your wallet as soon as they create an account. ",
+  "h": "a78b2e10"
+ },
+ "js.taikhoan.moi-y-kien-ve-noi-dung": {
+  "t": "Any thoughts on the readings, technical bugs, credit prices or features you'd like — ",
+  "h": "76ce940d"
+ },
+ "js.taikhoan.n-luong": {
+  "t": "{n} credits",
+  "h": "c4904a65"
+ },
+ "js.taikhoan.n-luong-thuong": {
+  "t": "{n} credits",
+  "h": "4c7471c6"
+ },
+ "js.taikhoan.n-luot-xem": {
+  "t": "{n} views",
+  "h": "b99dc30e"
+ },
+ "js.taikhoan.nap-luong": {
+  "t": "Credit top-up",
+  "h": "b70a5d1d"
+ },
+ "js.taikhoan.nap-thuong": {
+  "t": "Top-up / Reward",
+  "h": "1f6352ba"
+ },
+ "js.taikhoan.neu-chua-tu-lien-ket": {
+  "t": " If it doesn't link automatically, send: /link {t}",
+  "h": "4271bec8"
+ },
+ "js.taikhoan.nguoi-dung": {
+  "t": "User",
+  "h": "06f23b4d"
+ },
+ "js.taikhoan.nhan-cho-oa-zalo": {
+  "t": " Message the Minh Bao Zi Wei Dou Shu OA on Zalo with exactly this line (the code lasts 15 minutes), then reload the page: <code>/link {t}</code>",
+  "h": "1cbb362f"
+ },
+ "js.taikhoan.noi-dung-gop-y-ve": {
+  "t": "Your feedback is about",
+  "h": "b744e759"
+ },
+ "js.taikhoan.sao-chep": {
+  "t": "Copy",
+  "h": "09a1db3e"
+ },
+ "js.taikhoan.su-dung": {
+  "t": "Usage",
+  "h": "a6ee0e07"
+ },
+ "js.taikhoan.sua": {
+  "t": "Edit",
+  "h": "0963749f"
+ },
+ "js.taikhoan.tao-duong-ket-noi": {
+  "t": "Create connection link",
+  "h": "1ea224f1"
+ },
+ "js.taikhoan.tat-ca-loai-giao-dich": {
+  "t": "All transaction types",
+  "h": "32529f70"
+ },
+ "js.taikhoan.thanh-vien-tu": {
+  "t": "Member since {d}",
+  "h": "43b4abd6"
+ },
+ "js.taikhoan.thay-chua-ghi-lai": {
+  "t": "The Master hasn't noted anything about you yet.<br>Just chat a few times and the Master will remember what's worth remembering.",
+  "h": "9f324126"
+ },
+ "js.taikhoan.thay-tu-ghi": {
+  "t": "Noted by the Master",
+  "h": "4a9b5be3"
+ },
+ "js.taikhoan.thoi-gian-loai-noi-dung-so": {
+  "t": "<th>#</th><th>Time</th><th>Type</th><th>Details</th><th>Amount</th><th>Transaction ID</th>",
+  "h": "a6125b8d"
+ },
+ "js.taikhoan.thu-hoi-key-hien-tai-ket": {
+  "t": "Revoke the current key? Connections using the old key will stop — you'll get a new key right away.",
+  "h": "92016734"
+ },
+ "js.taikhoan.trang-thiet-bi-ban-dang-dung": {
+  "t": " The page and device you're using are attached automatically so we can trace bugs — no need to describe them. ",
+  "h": "62db43d2"
+ },
+ "js.taikhoan.viec-gap-ve-thanh-toan-xem": {
+  "t": "Urgent payment issues: see",
+  "h": "ba40de24"
+ },
+ "js.taikhoan.viet-dai-hon-mot-chut-nhe": {
+  "t": "Please write a bit more.",
+  "h": "42a09878"
+ },
+ "js.taikhoan.viet-giup-vai-dong-de-chung": {
+  "t": "Please write a few lines so we understand.",
+  "h": "d9864f5c"
+ },
+ "js.taikhoan.viet-vao-day-chung-toi-doc": {
+  "t": "write them here. We read everything and reply right on this page.",
+  "h": "d8eb64da"
+ },
+ "js.taikhoan.vua-cong-luong": {
+  "t": "✓ Just added <b>+{n} credits</b> to your wallet.",
+  "h": "32cba2ec"
+ },
+ "js.taikhoan.xem-tuoi-lam-an": {
+  "t": "Business Compatibility",
+  "h": "5f5ba4e2"
+ },
+ "js.taikhoan.xem-tuoi-vo-chong": {
+  "t": "Marriage Compatibility",
+  "h": "f3e7b1ed"
+ },
+ "js.taikhoan.xoa": {
+  "t": "Delete",
+  "h": "82339c0a"
+ },
+ "js.taikhoan.xoa-dieu-nay-khoi-ho-so": {
+  "t": "Delete this from your profile? The Master will forget it completely.",
+  "h": "d35cee4f"
+ },
  "js.tailieu.cat-cach-cuc": {
   "t": "Chart Patterns",
   "h": "760d1ac9"
@@ -16167,6 +17891,206 @@
   "t": "<button type=\"button\" class=\"chat-hl-cta\" id=\"tshOpenSheet\">See all 13 numbers →</button></div></div>",
   "h": "f89bb371"
  },
+ "js.thay.disc-bac-minh": {
+  "t": "Physiognomy",
+  "h": "ae8ee50b"
+ },
+ "js.thay.disc-co-nguyet": {
+  "t": "Zi Wei Fundamentals & Readings",
+  "h": "582cc3fc"
+ },
+ "js.thay.disc-dau-nam": {
+  "t": "Love & Marriage",
+  "h": "03de9681"
+ },
+ "js.thay.disc-dieu-khong": {
+  "t": "Career & Money",
+  "h": "5866572a"
+ },
+ "js.thay.disc-huyen-khong": {
+  "t": "Feng Shui",
+  "h": "181a3d4e"
+ },
+ "js.thay.disc-linh-co": {
+  "t": "I Ching & Plum Blossom",
+  "h": "deb6aa38"
+ },
+ "js.thay.disc-linh-son": {
+  "t": "Competitive Careers & Networks",
+  "h": "074cb601"
+ },
+ "js.thay.disc-ngoc-tinh": {
+  "t": "Compatibility & Karmic Bonds",
+  "h": "bf736fe8"
+ },
+ "js.thay.disc-nhat-nguyen": {
+  "t": "Short-term Luck & Date Selection",
+  "h": "4649ae54"
+ },
+ "js.thay.disc-tam-kinh": {
+  "t": "BaZi & Qi Men",
+  "h": "f8e8d286"
+ },
+ "js.thay.disc-thai-hu": {
+  "t": "Quick Answers, Pushback",
+  "h": "2b657843"
+ },
+ "js.thay.disc-thanh-hu": {
+  "t": "Tarot & Numerology",
+  "h": "bf665759"
+ },
+ "js.thay.disc-thien-an": {
+  "t": "Naming & Parenting",
+  "h": "049ae929"
+ },
+ "js.thay.disc-tinh-quang": {
+  "t": "Western Astrology",
+  "h": "d690a059"
+ },
+ "js.thay.disc-tu-nguyen": {
+  "t": "Major Cycles & Life Cycles",
+  "h": "8dfa0970"
+ },
+ "js.thay.greet-bac-minh": {
+  "t": "Bac Minh here. Send a photo, or describe your face and the way you walk — I'll read your features.",
+  "h": "c8d61d46"
+ },
+ "js.thay.greet-co-nguyet": {
+  "t": "I am Co Nguyet. Give me your date and hour of birth; I'll draw up your chart and we'll look closely at the roots together.",
+  "h": "0167331e"
+ },
+ "js.thay.greet-dau-nam": {
+  "t": "Dau Nam here. Don't hold back about matters of the heart — I speak plainly, but always for your sake.",
+  "h": "ecce6c42"
+ },
+ "js.thay.greet-dieu-khong": {
+  "t": "Dieu Khong here. Money and work — let's be direct and quick; I don't beat around the bush.",
+  "h": "8d902959"
+ },
+ "js.thay.greet-huyen-khong": {
+  "t": "Huyen Khong here. The space you live in — let me see whether it suits you.",
+  "h": "95554030"
+ },
+ "js.thay.greet-linh-co": {
+  "t": "Linh Co here. If something is weighing on you, cast a hexagram — I'll read it for you.",
+  "h": "7b0cb4da"
+ },
+ "js.thay.greet-linh-son": {
+  "t": "Linh Son here. Your circle of people — let me see who is worth keeping and who to let go.",
+  "h": "da3eb08e"
+ },
+ "js.thay.greet-ngoc-tinh": {
+  "t": "Ngoc Tinh here. The bond between two people — let me tell it to you as a completely different story.",
+  "h": "63614772"
+ },
+ "js.thay.greet-nhat-nguyen": {
+  "t": "Nhat Nguyen here. If it's urgent, ask right away — I'll work out the timing for you before you forget.",
+  "h": "c7694458"
+ },
+ "js.thay.greet-tam-kinh": {
+  "t": "Tam Kinh here. Give me your hour of birth; I'll look through both BaZi and Qi Men and tell you what they point to together.",
+  "h": "b8879f89"
+ },
+ "js.thay.greet-thai-hu": {
+  "t": "Thai Hu here. Before I answer, let me ask you one thing back — are you sure you're asking what you really need?",
+  "h": "85a85832"
+ },
+ "js.thay.greet-thanh-hu": {
+  "t": "Thanh Hu here! Draw a card or ask for your lucky number — let's take a look together.",
+  "h": "61e37793"
+ },
+ "js.thay.greet-thien-an": {
+  "t": "Thien An here. Children, names — ask away, and I'll answer unhurriedly.",
+  "h": "80ff291c"
+ },
+ "js.thay.greet-tinh-quang": {
+  "t": "Tinh Quang here. I read the chart the way Western astronomy does — where would you like to start?",
+  "h": "50328bf9"
+ },
+ "js.thay.greet-tu-nguyen": {
+  "t": "Tu Nguyen here. When it comes to major cycles, no going in circles — show me the chart and I'll settle it in one sentence.",
+  "h": "5910c96c"
+ },
+ "js.thay.tag-bac-minh": {
+  "t": "A face hides nothing from someone who knows how to look.",
+  "h": "dedb2c1b"
+ },
+ "js.thay.tag-co-nguyet": {
+  "t": "Look closely at the root before judging the branches.",
+  "h": "c13f4553"
+ },
+ "js.thay.tag-dau-nam": {
+  "t": "The truth is hard to hear, but you need to hear it.",
+  "h": "b0888693"
+ },
+ "js.thay.tag-dieu-khong": {
+  "t": "Your talent is being wasted right here.",
+  "h": "c8ebbbce"
+ },
+ "js.thay.tag-huyen-khong": {
+  "t": "A house facing the wrong way wears its people out, and they never know why.",
+  "h": "71c8a862"
+ },
+ "js.thay.tag-linh-co": {
+  "t": "One hexagram, one image, one answer.",
+  "h": "d0c7ad43"
+ },
+ "js.thay.tag-linh-son": {
+  "t": "Who helps you and who just stands in your way — the chart tells.",
+  "h": "fb8e84e7"
+ },
+ "js.thay.tag-ngoc-tinh": {
+  "t": "A comparison you'd never have seen coming.",
+  "h": "d4381ff1"
+ },
+ "js.thay.tag-nhat-nguyen": {
+  "t": "How much longer? I'll count it down for you.",
+  "h": "f8d8a373"
+ },
+ "js.thay.tag-tam-kinh": {
+  "t": "Three systems side by side, to find where they converge.",
+  "h": "0d0249f0"
+ },
+ "js.thay.tag-thai-hu": {
+  "t": "The problem isn't where you think it is.",
+  "h": "915233ed"
+ },
+ "js.thay.tag-thanh-hu": {
+  "t": "Draw one card and see what you truly want to hear.",
+  "h": "c2a5a989"
+ },
+ "js.thay.tag-thien-an": {
+  "t": "Few words, but every one of them weighed.",
+  "h": "a23f6db3"
+ },
+ "js.thay.tag-tinh-quang": {
+  "t": "Reading the whole sky to understand one person.",
+  "h": "9913b826"
+ },
+ "js.thay.tag-tu-nguyen": {
+  "t": "One sentence, settled — no further explanation.",
+  "h": "cfa2af4b"
+ },
+ "js.thaycct.chua-dung-ten-cong-cu": {
+  "t": "Master {ten} doesn't head any tool yet — you can still ask directly through Ask the Master.",
+  "h": "fda6df93"
+ },
+ "js.thaycct.cong-cu-thay-dung-ten": {
+  "t": "Tools headed by Master {ten}",
+  "h": "657398c9"
+ },
+ "js.thaycct.hoi-thay-ten": {
+  "t": "Ask Master {ten}",
+  "h": "e23cca0d"
+ },
+ "js.thaycct.khong-tim-thay-thay-nay": {
+  "t": "This master could not be found.",
+  "h": "d044e6e1"
+ },
+ "js.thaycct.tieu-de-duoi": {
+  "t": " — Minh Bao Zi Wei Dou Shu",
+  "h": "ef7f10f4"
+ },
  "js.thtg.am-luong": {
   "t": "Volume",
   "h": "71662f1b"
@@ -17259,6 +19183,94 @@
   "t": "View history",
   "h": "21a19fb0"
  },
+ "js.trochuyen.gio-truoc": {
+  "t": "{n} h ago",
+  "h": "19a19d72"
+ },
+ "js.trochuyen.ngay-truoc": {
+  "t": "{n} d ago",
+  "h": "21fad5cc"
+ },
+ "js.trochuyen.phut-truoc": {
+  "t": "{n} min ago",
+  "h": "f63d5687"
+ },
+ "js.trochuyen.tool-bat-trach": {
+  "t": "Eight Mansions Directions",
+  "h": "a9176f82"
+ },
+ "js.trochuyen.tool-bat-tu": {
+  "t": "BaZi Chart",
+  "h": "8959032f"
+ },
+ "js.trochuyen.tool-chon-ngay": {
+  "t": "Auspicious Date Picker",
+  "h": "bac69f03"
+ },
+ "js.trochuyen.tool-dat-ten": {
+  "t": "Baby Naming",
+  "h": "8debaf02"
+ },
+ "js.trochuyen.tool-dat-ten-dn": {
+  "t": "Business Naming",
+  "h": "86ab8b27"
+ },
+ "js.trochuyen.tool-kim-lau": {
+  "t": "Jin Lou & Three Calamities",
+  "h": "541e773b"
+ },
+ "js.trochuyen.tool-kinh-dich": {
+  "t": "I Ching",
+  "h": "9e1c199b"
+ },
+ "js.trochuyen.tool-la-so": {
+  "t": "Zi Wei Chart",
+  "h": "d6fada77"
+ },
+ "js.trochuyen.tool-luan-giai": {
+  "t": "Zi Wei Reading",
+  "h": "19e52bc9"
+ },
+ "js.trochuyen.tool-nap-am": {
+  "t": "Na Yin Five Elements",
+  "h": "0de9a4ee"
+ },
+ "js.trochuyen.tool-ngu-hanh-ten": {
+  "t": "Five Elements of a Name",
+  "h": "9b92ea0c"
+ },
+ "js.trochuyen.tool-phong-thuy": {
+  "t": "Feng Shui",
+  "h": "06ec3c82"
+ },
+ "js.trochuyen.tool-sinh-con": {
+  "t": "Birth-Year Match for a Child",
+  "h": "2e015092"
+ },
+ "js.trochuyen.tool-than-so-hoc": {
+  "t": "Numerology",
+  "h": "686db34b"
+ },
+ "js.trochuyen.tool-tuong-hop": {
+  "t": "Age Compatibility",
+  "h": "e9fd3f4c"
+ },
+ "js.trochuyen.tool-xem-lam-an": {
+  "t": "Business Compatibility",
+  "h": "791a32dc"
+ },
+ "js.trochuyen.tool-xem-tuoi": {
+  "t": "Marriage Compatibility",
+  "h": "d6d67d5c"
+ },
+ "js.trochuyen.tool-xem-tuong": {
+  "t": "Physiognomy",
+  "h": "7460a628"
+ },
+ "js.trochuyen.vua-xong": {
+  "t": "just now",
+  "h": "d1a7c7fa"
+ },
  "js.tuviform.ca-nhan": {
   "t": "Personal details",
   "h": "bbe1cce8"
@@ -18107,6 +20119,34 @@
   "t": "Quickly check whether two ages are compatible — just birth years, an instant answer, no deep reading yet.",
   "h": "ee011392"
  },
+ "js.xlg.chon-gio": {
+  "t": "Choose a time",
+  "h": "c10b0d98"
+ },
+ "js.xlg.gio": {
+  "t": "{h}:00",
+  "h": "68dda372"
+ },
+ "js.xlg.gio-chi": {
+  "t": "{h}:00 ({chi} hour)",
+  "h": "349b413b"
+ },
+ "js.xlg.nam": {
+  "t": "Year",
+  "h": "98926c7e"
+ },
+ "js.xlg.ngay": {
+  "t": "Day",
+  "h": "368c4575"
+ },
+ "js.xlg.thang": {
+  "t": "Month",
+  "h": "0e2b3099"
+ },
+ "js.xlg.thang-n": {
+  "t": "Month {n}",
+  "h": "4dd9659f"
+ },
  "kimlau.bang-tra-20-nam-toi": {
   "t": "20-year<br>lookup table",
   "h": "ded0c033"
@@ -18438,6 +20478,90 @@
  "laso.tu-vi-minh-bao": {
   "t": "Minh Bao Zi Wei Dou Shu",
   "h": "33336b26"
+ },
+ "lienhe.24-48-gio": {
+  "t": "24 – 48 hours",
+  "h": "dbc9b8ce"
+ },
+ "lienhe.an-sao-va-luan-giai-truc": {
+  "t": "Build your chart and get a reading right on the home page",
+  "h": "df0989a0"
+ },
+ "lienhe.cau-hoi-ve-luan-giai-la": {
+  "t": "<b>Questions about a chart reading</b> — please say which part of the result needs clarifying, and be specific about what you didn't understand or found unconvincing.",
+  "h": "814a0c60"
+ },
+ "lienhe.chung-toi-tran-trong-moi-phan": {
+  "t": "We value every message and will do our best to reply",
+  "h": "2f5ea451"
+ },
+ "lienhe.de-chung-toi-co-the-ho": {
+  "t": "To help us help you",
+  "h": "6a75128e"
+ },
+ "lienhe.gop-y-ve-phuong-phap-neu": {
+  "t": "<b>Feedback on method</b> — if you see something in how stars are placed or how readings are judged that could be improved, we'd love to hear your specific view, with evidence if you have it.",
+  "h": "429de005"
+ },
+ "lienhe.hop-tac-nghien-cuu-chung-toi": {
+  "t": "<b>Research collaboration</b> — we're always open to anyone who shares an interest in studying and testing Zi Wei Dou Shu in a scholarly spirit.",
+  "h": "2f2bc8e0"
+ },
+ "lienhe.huong-dan-lien-he": {
+  "t": "How to reach us",
+  "h": "dfd0a511"
+ },
+ "lienhe.kenh-lien-he-chinh-phan-hoi": {
+  "t": "Main contact channel — we reply within 24–48 business hours",
+  "h": "cb8ce6fa"
+ },
+ "lienhe.lien-he-tu-vi-minh-bao": {
+  "t": "Contact — Minh Bao Zi Wei Dou Shu",
+  "h": "6036fce9"
+ },
+ "lienhe.lien-he-voi-tu-vi-minh": {
+  "t": "Contact Minh Bao Zi Wei Dou Shu — Know your destiny, follow the flow.",
+  "h": "1a5c4e42"
+ },
+ "lienhe.moi-y-kien-trao-doi-gop": {
+  "t": "Every comment, suggestion or question about our readings, our research methods or using the system is warmly welcome.",
+  "h": "0a0f0110"
+ },
+ "lienhe.nhung-y-kien-dong-gop-xac": {
+  "t": "Well-founded feedback not only helps refine the system, it also helps shed light on questions that remain open in the study of Zi Wei Dou Shu.",
+  "h": "9d745b63"
+ },
+ "lienhe.thoi-gian-phan-hoi": {
+  "t": "Response time",
+  "h": "b2537f52"
+ },
+ "lienhe.thu-dien-tu": {
+  "t": "Email",
+  "h": "472b2949"
+ },
+ "lienhe.trao-doi-gop-y-cau-hoi": {
+  "t": "Questions · Feedback · Discussion",
+  "h": "2e532773"
+ },
+ "lienhe.tri-menh-ly-thuan-the-hanh": {
+  "t": "Know your destiny, follow the flow. Zi Wei Dou Shu by classical methods, with readings.",
+  "h": "677cab94"
+ },
+ "lienhe.trong-cac-ngay-lam-viec-nhung": {
+  "t": "On business days. Well-founded suggestions are fed into how we improve the system.",
+  "h": "2458c959"
+ },
+ "lienhe.tu-vi-minh-bao-la-so": {
+  "t": "Minh Bao Zi Wei Dou Shu – Accurate Zi Wei charts",
+  "h": "6f4cabbc"
+ },
+ "lienhe.van-de-ky-thuat-neu-gap": {
+  "t": "<b>Technical issues</b> — if something goes wrong while using the system, briefly describe what you were doing, any error message shown, and the device you're using.",
+  "h": "bd4a69d1"
+ },
+ "lienhe.website": {
+  "t": "Website",
+  "h": "2e8a57cc"
  },
  "luangiai.an-la-so": {
   "t": "▾ Hide chart",
@@ -19419,6 +21543,106 @@
   "t": "View someone else",
   "h": "a058d2f4"
  },
+ "nguon.bo-du-lieu-mo": {
+  "t": "Open datasets",
+  "h": "edc59291"
+ },
+ "nguon.cac-nguon-du-lieu-co-thu": {
+  "t": "The data, classical texts and open datasets Minh Bao Zi Wei Dou Shu uses, with their licenses and attribution.",
+  "h": "0a800241"
+ },
+ "nguon.chung-toi-cung-khong-goi-bat": {
+  "t": "Nor do we call any part of the system “scientific”, “validated” or “based on statistics from N people”. It is a framework for reading a chart, not a controlled measurement instrument.",
+  "h": "b44c3d70"
+ },
+ "nguon.chung-toi-dung-bo-du-lieu": {
+  "t": "We use this dataset as a <b>yardstick</b> for career-field suggestions: each occupational group has a work-characteristics profile, and that profile is the reference point for comparison. The dataset is <b>not</b> used as a displayed catalog — the list of careers shown to readers is a table we built ourselves for the Vietnamese context.",
+  "h": "cb4e0e46"
+ },
+ "nguon.chung-toi-dung-du-lieu-nao": {
+  "t": "What data we use, where it comes from, and under what license.",
+  "h": "530e37c8"
+ },
+ "nguon.co-thu-va-tai-lieu-menh": {
+  "t": "Classical texts and destiny-reading references",
+  "h": "23dd5204"
+ },
+ "nguon.dieu-chung-toi-khong-lam": {
+  "t": "What we don't do",
+  "h": "d21049b1"
+ },
+ "nguon.do-so-lao-dong-hoa-ky": {
+  "t": "Sponsored by the U.S. Department of Labor, Employment and Training Administration (USDOL/ETA). License <a href=\"https://creativecommons.org/licenses/by/4.0/\" rel=\"license noopener\" target=\"_blank\">CC BY 4.0</a>.",
+  "h": "09a551ba"
+ },
+ "nguon.dung-de-doi-chieu-phan-luan": {
+  "t": "Used to cross-check the interpretation of star qualities and star combinations, especially in sections about career tendencies.",
+  "h": "47c53c54"
+ },
+ "nguon.ghi-ro-de-khong-gay-hieu": {
+  "t": "<b>To avoid any misunderstanding:</b> O*NET is a reference data source, <b>not</b> a partner, sponsor or endorser of Minh Bao Zi Wei Dou Shu. All interpretations, all adaptations into other languages and every conclusion on the site are ours, and ours alone to answer for.",
+  "h": "76f83d0f"
+ },
+ "nguon.khong-muc-nao-tren-trang-duoc": {
+  "t": "Nothing on the site was built by copying another author's interpretive wording. The written content — personality descriptions, career fields, advice — is written by us. Where we rely on classical texts, we quote them verbatim and say it is a quotation; where something is the site's own reference framework, we say that too.",
+  "h": "541a3011"
+ },
+ "nguon.khong-phai-moi-phan-tren-trang": {
+  "t": "Not everything on the site comes straight from the classics. Many scoring scales, classification frameworks and ways of combining data (for example, how career fit is scored, the framework for reading a child's temperament, how functional groups are arranged…) are <b>methods researched and built by Minh Bao Zi Wei Dou Shu's own team of specialists</b>, not copied from elsewhere. In every tool that uses them, we state that this is the site's own reference framework — not the verbatim classical method — so readers can tell what the ancients said from what we interpret. We do not publish the details of how these scales were built.",
+  "h": "2b715abc"
+ },
+ "nguon.mot-so-cong-cu-ky-mon": {
+  "t": "Some tools (Qi Men Dun Jia, the Huang Li almanac, Da Liu Ren, BaZi, Western astrology charts, calendar and solar-term conversion) use open-source calculation libraries under the <a href=\"https://opensource.org/licenses/MIT\" rel=\"license noopener\" target=\"_blank\">MIT</a> license. The MIT license does not require public attribution on the product — only that the copyright notice be kept in copies of the software itself — so we don't name the specific packages here, to avoid revealing technical details to competitors.",
+  "h": "d0bcac41"
+ },
+ "nguon.nguon-chinh-cho-phep-an-sao": {
+  "t": "The main source for star placement, the interpretation of the twelve palaces, chart patterns and the functions of the Career Palace. Every quotation shown on the site is taken verbatim from it.",
+  "h": "d895afbc"
+ },
+ "nguon.nguon-du-lieu-ghi-cong": {
+  "t": "Data sources &amp; attribution",
+  "h": "a92c482f"
+ },
+ "nguon.nguon-du-lieu-ghi-cong-tu": {
+  "t": "Data Sources & Attribution | Minh Bao Zi Wei Dou Shu",
+  "h": "95039fbb"
+ },
+ "nguon.nguon-du-lieu-ghi-cong-tu-bnyf": {
+  "t": "Data Sources & Attribution — Minh Bao Zi Wei Dou Shu",
+  "h": "942593da"
+ },
+ "nguon.o-net-database": {
+  "t": "O*NET Database",
+  "h": "ae039102"
+ },
+ "nguon.phuong-phap-do-tu-vi-minh": {
+  "t": "Methods built in-house by Minh Bao Zi Wei Dou Shu",
+  "h": "b2161377"
+ },
+ "nguon.thu-vien-ma-nguon-mo": {
+  "t": "Open-source libraries",
+  "h": "e8b10d2e"
+ },
+ "nguon.trang-nay-liet-ke-nhung-nguon": {
+  "t": "This page lists the sources the system uses for its calculations, along with their licenses. We keep it public for two reasons: some sources' licenses require attribution, and readers have a right to know what a conclusion is built on.",
+  "h": "23879e75"
+ },
+ "nguon.trung-chau-phai-luc-thap-tinh": {
+  "t": "Zhongzhou School — Sixty Star Systems",
+  "h": "b80b8a1f"
+ },
+ "nguon.tu-vi-dau-so-tan-bien": {
+  "t": "Zi Wei Dou Shu: A New Compilation",
+  "h": "34e57a47"
+ },
+ "nguon.van-dang-thai-thu-lang-tai": {
+  "t": "Van Dang Thai Thu Lang · reference",
+  "h": "c40a58cf"
+ },
+ "nguon.vuong-dinh-chi-tai-lieu-tham": {
+  "t": "Wang Ting Zhi · reference",
+  "h": "f0de146d"
+ },
  "nhtg.anh-chi-gui-toi-may-chu": {
   "t": "The photo is only sent to the server for analysis and isn't stored there. Shoot straight on, in good light — the system zooms in on the eye area automatically.",
   "h": "65e7d1ba"
@@ -19739,6 +21963,18 @@
   "t": "E.g. What do I need to realize during this period?",
   "h": "fba02ed0"
  },
+ "paysuc.dang-xac-nhan-thanh-toan": {
+  "t": "Confirming your payment...",
+  "h": "d4f224cd"
+ },
+ "paysuc.vui-long-cho-trong-giay-lat": {
+  "t": "Please wait a moment",
+  "h": "f2af1ae9"
+ },
+ "paysuc.xac-nhan-thanh-toan-tu-vi": {
+  "t": "Payment confirmation — Minh Bao Zi Wei Dou Shu",
+  "h": "b7b66e97"
+ },
  "phongthuy.1-ban-menh-thong-tin-phong": {
   "t": "<span class=\"pt-num\">1</span> Your Destiny Element &amp; Room Details",
   "h": "862309d1"
@@ -19990,6 +22226,170 @@
  "phongthuy.xem-ban-mau": {
   "t": "View sample →",
   "h": "ba3671b1"
+ },
+ "ppx.10-chuyen-gia-tu-vi-tham": {
+  "t": "<b>10+</b><span>Zi Wei specialists involved in review</span>",
+  "h": "a8396ff8"
+ },
+ "ppx.2-000-quy-tac-luan-giai": {
+  "t": "<b>2,000+</b><span>tested reading rules</span>",
+  "h": "2bea45aa"
+ },
+ "ppx.270-000-ho-so-nhan-vat": {
+  "t": "<b>270,000+</b><span>real-person records (from AstroDataBank)</span>",
+  "h": "249ccdc9"
+ },
+ "ppx.5-buoc-tao-nen-moi-ban": {
+  "t": "The 5 steps behind every reading: building the chart, checking against real cases, specialist verification, model calibration, and putting it into words.",
+  "h": "8a0c1f4a"
+ },
+ "ppx.a-global-astrology-database": {
+  "t": "A global astrology database",
+  "h": "fc9b2e72"
+ },
+ "ppx.buoc-1-tu-ngay-gio-sinh": {
+  "t": "Step 1: from the birth date and time, build a Zi Wei chart by the classical method, then turn it into structured data (palaces, stars, positions, Four Transformations, relationships)",
+  "h": "a7e27eb8"
+ },
+ "ppx.buoc-2-luan-giai-so-khai": {
+  "t": "Step 2: the preliminary reading is checked against verified real data from AstroDataBank, rating each chart pattern as fitting / inaccurate / off",
+  "h": "8debaf16"
+ },
+ "ppx.buoc-3-nhom-chuyen-gia-thao": {
+  "t": "Step 3: the specialist team discusses, evaluates and challenges the comparison results, then reaches a reviewed conclusion — rules are accepted, adjusted or dropped",
+  "h": "2c4e81c3"
+ },
+ "ppx.buoc-4-huan-luyen-va-cap": {
+  "t": "Step 4: the model is continuously trained and updated — a loop of training, testing & evaluation and improvement — until there is a complete reading model ready for use",
+  "h": "45f6ed84"
+ },
+ "ppx.buoc-5-llm-chuyen-doi-ket": {
+  "t": "Step 5: an LLM turns the model's results into natural language, explaining them clearly and personally, producing the complete reading shown to the user",
+  "h": "d5b4c8b7"
+ },
+ "ppx.cac-quy-tac-da-duoc-chuyen": {
+  "t": "Rules reviewed by specialists are fed back into the model for further training. The system keeps testing on new real charts (out-of-sample) and repeats the improvement loop until accuracy is optimal.",
+  "h": "d91af071"
+ },
+ "ppx.cach-he-thong-hoat-dong": {
+  "t": "How the system works",
+  "h": "ef8b9152"
+ },
+ "ppx.cach-he-thong-hoat-dong-tu": {
+  "t": "How the System Works — Zi Wei Verification | Minh Bao Zi Wei Dou Shu",
+  "h": "3dffc874"
+ },
+ "ppx.cach-he-thong-hoat-dong-tu-e5d1": {
+  "t": "How the System Works — Zi Wei Verification",
+  "h": "2384f4b7"
+ },
+ "ppx.chi-nhung-ket-luan-da-duoc": {
+  "t": "Only conclusions that have been verified.",
+  "h": "34eb8158"
+ },
+ "ppx.dien-giai-ket-qua-thanh-loi": {
+  "t": "Explaining the results in natural language",
+  "h": "97ea4d62"
+ },
+ "ppx.do-la-cach-chung-toi-tao": {
+  "t": "That's how we produce readings that are well-grounded, transparent and trustworthy.",
+  "h": "168afdad"
+ },
+ "ppx.doi-chieu-voi-du-lieu-thuc": {
+  "t": "Checking against verified real data",
+  "h": "539cfe91"
+ },
+ "ppx.he-thong-su-dung-hon-270": {
+  "t": "The system uses more than 270,000 <b>verified</b> birth records from <b>AstroDataBank</b>, combined with biographical data and life events of people across many fields: politics, science, the arts, business, ...",
+  "h": "c3cee5bc"
+ },
+ "ppx.hieu-chinh-va-toi-uu-mo": {
+  "t": "Final model calibration and optimization",
+  "h": "5af8fc01"
+ },
+ "ppx.input-bo-quy-tac-da-tham": {
+  "t": "<span>Input: the reviewed rule set</span><span class=\"out\">Output: a complete reading model</span>",
+  "h": "93067baf"
+ },
+ "ppx.input-ket-qua-doi-chieu-output": {
+  "t": "<span>Input: comparison results</span><span class=\"out\">Output: a specialist-reviewed rule set</span>",
+  "h": "d4af0fe2"
+ },
+ "ppx.input-ket-qua-tu-mo-hinh": {
+  "t": "<span>Input: the model's results</span><span class=\"out\">Output: a complete reading</span>",
+  "h": "b6d766a4"
+ },
+ "ppx.input-luan-giai-so-khai-du": {
+  "t": "<span>Input: preliminary reading + real-life data</span><span class=\"out\">Output: accuracy assessment, errors found, suggested improvements</span>",
+  "h": "1c5a4557"
+ },
+ "ppx.input-ngay-gio-sinh-co-thu": {
+  "t": "<span>Input: birth date and time + classical Zi Wei texts and references</span><span class=\"out\">Output: chart + preliminary reading rule set</span>",
+  "h": "f3dd6403"
+ },
+ "ppx.ket-hop-du-lieu-co-phap": {
+  "t": "<span class=\"ic\" data-icon=\"shield-check\"></span>Data – classical method – specialists – AI, combined",
+  "h": "a6c14499"
+ },
+ "ppx.ket-qua-sau-doi-chieu-duoc": {
+  "t": "The comparison results go to a specialist team of researchers, Zi Wei practitioners and esoteric scholars, who discuss, evaluate and conclude how reliable each reading rule is.",
+  "h": "b5c2296f"
+ },
+ "ppx.ket-qua-tu-mo-hinh-duoc": {
+  "t": "The model's results are put into natural, easy-to-understand language by an LLM (a large language AI), personalized to each chart so users can grasp and apply them. The AI does not reason on its own — it only rephrases results already determined by the model.",
+  "h": "7b7eac5a"
+ },
+ "ppx.khong-cam-doan-khong-suy-luan": {
+  "t": "No guesswork. No arbitrary inference.",
+  "h": "1faeab3a"
+ },
+ "ppx.kiem-chung-boi-chuyen-gia": {
+  "t": "Verified by specialists",
+  "h": "10ee351e"
+ },
+ "ppx.lap-la-so-va-xay-dung": {
+  "t": "Building the chart and a preliminary reading model",
+  "h": "8b5789c7"
+ },
+ "ppx.lien-tuc-cap-nhat-va-cai": {
+  "t": "<b>Continuous</b><span>model updates and improvements</span>",
+  "h": "b810dcc9"
+ },
+ "ppx.luan-giai-so-khai-duoc-doi": {
+  "t": "The preliminary reading is checked against the real-life data of people in the database, to assess the accuracy of each chart pattern, pinpoint deviations and test ways of combining them.",
+  "h": "ed45b0df"
+ },
+ "ppx.mot-luan-giai-dang-tin-cay": {
+  "t": "A trustworthy reading is built from real data and a multi-layered verification process. Below are the 5 steps behind every reading on Minh Bao Zi Wei Dou Shu.",
+  "h": "45694c20"
+ },
+ "ppx.mot-luan-giai-dang-tin-cay-ss0b": {
+  "t": "A trustworthy reading is built from real data and a multi-layered verification process — the 5 steps behind every reading on Minh Bao Zi Wei Dou Shu.",
+  "h": "5c0f6569"
+ },
+ "ppx.muon-thay-he-thong-nay-hoat": {
+  "t": "Want to see how this system works with your chart?",
+  "h": "afe4354a"
+ },
+ "ppx.nguon-du-lieu-270-000-ho": {
+  "t": "<span class=\"pm-source-eyebrow\">Data source</span><b>270,000+</b><span>verified real-person records</span>",
+  "h": "303ab3fd"
+ },
+ "ppx.quay-lai-trang-chu": {
+  "t": "← Back to home",
+  "h": "11355810"
+ },
+ "ppx.tu-thong-tin-ngay-gio-sinh": {
+  "t": "From your birth date and time, the system builds a Zi Wei chart by the classical method and draws on Zi Wei and esoteric texts and references to interpret and explain each element of the chart.",
+  "h": "845dbbf5"
+ },
+ "ppx.tu-vi-nghiem-chung": {
+  "t": "<span class=\"ic\" data-icon=\"sparkles\"></span>Zi Wei Verification",
+  "h": "4ad3d92e"
+ },
+ "ppx.xem-la-so-cua-ban": {
+  "t": "See your chart →",
+  "h": "a6169a07"
  },
  "privacy.1-thong-tin-chung-toi-thu": {
   "t": "1. Information we collect",
@@ -20255,6 +22655,154 @@
   "t": "<a href=\"/resources.html\">← Back to the Document Library</a>",
   "h": "99e834b4"
  },
+ "sanpham.1-tu-vi-minh-bao-cung": {
+  "t": "1. What Minh Bao Zi Wei Dou Shu offers",
+  "h": "ddb304e7"
+ },
+ "sanpham.2-cach-tinh-phi-he-thong": {
+  "t": "2. How pricing works — credits",
+  "h": "75e2a0e9"
+ },
+ "sanpham.3-mua-luong-hinh-thuc-thanh": {
+  "t": "3. Buying credits &amp; payment methods",
+  "h": "59dbc44c"
+ },
+ "sanpham.4-hoan-tien": {
+  "t": "4. Refunds",
+  "h": "9500f12f"
+ },
+ "sanpham.5-lien-he": {
+  "t": "5. Contact",
+  "h": "f583579d"
+ },
+ "sanpham.cac-nhom-dich-vu-chinh": {
+  "t": "Main service groups:",
+  "h": "6873de28"
+ },
+ "sanpham.cau-hoi-ve-san-pham-dich": {
+  "t": "For questions about our products, services or prices, please reach us through the <a href=\"/contact.html\">Contact</a> page.",
+  "h": "c9b2038c"
+ },
+ "sanpham.chon-ngay-dat-ten-chon-ngay": {
+  "t": "<strong>Date selection, naming</strong> — auspicious dates for a given task, baby naming, business naming",
+  "h": "7bd24940"
+ },
+ "sanpham.danh-muc-day-du-va-cap": {
+  "t": "The full, up-to-date catalog is always on the <a href=\"/cong-cu.html\">Tools</a> page.",
+  "h": "ed8fd601"
+ },
+ "sanpham.dich-vu": {
+  "t": "Service",
+  "h": "2c509399"
+ },
+ "sanpham.dich-vu-tinh-phi-theo-luong": {
+  "t": "Services are paid for in <strong>credits</strong>: top up once and use them on every current tool and on tools launched later. Credits <strong>never expire</strong> and are <strong>not a subscription</strong> — they are deducted only when you actually use them, once per result.",
+  "h": "86d16de4"
+ },
+ "sanpham.do-tinh-chat-so-cua-dich": {
+  "t": "Because the service is digital, results are unlocked right after payment, so <strong>no refunds apply</strong> once a result has been displayed, except where a technical error prevented you from receiving it. Full details in the <a href=\"/dieu-khoan-dich-vu.html#thanh-toan-va-hoan-tien\">\"Payment and refunds\"</a> section of the Terms of Service.",
+  "h": "58bace1c"
+ },
+ "sanpham.gia": {
+  "t": "Price",
+  "h": "71efef06"
+ },
+ "sanpham.gia-doc-truc-tiep-tu-he": {
+  "t": "Prices are read live from the system and may change. Full price list for every tool: see the <a href=\"/cong-cu.html\">Tools</a> page.",
+  "h": "307fe224"
+ },
+ "sanpham.gia-tham-khao-mot-so-dich": {
+  "t": "Reference prices for some popular services:",
+  "h": "24342e2e"
+ },
+ "sanpham.huong-dan-tung-buoc-tu-dang": {
+  "t": "Step-by-step guide — from creating an account to using a tool: see the <a href=\"/huong-dan-thanh-toan.html\">Payment Guide</a> page.",
+  "h": "fe6dd621"
+ },
+ "sanpham.luan-giai-la-so-day-du": {
+  "t": "Full Chart Reading (24 parts)",
+  "h": "bd642f37"
+ },
+ "sanpham.luong": {
+  "t": "<span class=\"credits-val\"><span data-tvp-price=\"laso\">…</span> credits</span>",
+  "h": "821dcba7"
+ },
+ "sanpham.luong-211d": {
+  "t": "<span class=\"credits-val\"><span data-tvp-price=\"phong-thuy\">…</span> credits</span>",
+  "h": "c1b9463c"
+ },
+ "sanpham.luong-duoc-ban-theo-cac-goi": {
+  "t": "Credits are sold in top-up packs on the <a href=\"/topup.html\">Top up credits</a> page — larger packs give a better price per credit. Pay in USD via PayPal or Visa/Mastercard (no PayPal account needed).",
+  "h": "9bcde6e3"
+ },
+ "sanpham.luong-tuy0": {
+  "t": "<span class=\"credits-val\"><span data-tvp-price=\"xem-tuoi\">…</span> credits</span>",
+  "h": "bbfec03e"
+ },
+ "sanpham.luong-w5we": {
+  "t": "<span class=\"credits-val\"><span data-tvp-price=\"xem-lam-an\">…</span> credits</span>",
+  "h": "3d0b4f93"
+ },
+ "sanpham.luong-y747": {
+  "t": "<span class=\"credits-val\"><span data-tvp-price=\"tu-binh\">…</span> credits</span>",
+  "h": "baa134d9"
+ },
+ "sanpham.noi-dung-luan-giai-mang-tinh": {
+  "t": "Readings are cultural and scholarly reference material, <strong>not</strong> financial, medical or legal advice. See the <a href=\"/mien-tru-trach-nhiem.html\" style=\"color:#5a4000;text-decoration:underline\">Disclaimer</a> page for details.",
+  "h": "8a879070"
+ },
+ "sanpham.phong-thuy-noi-that": {
+  "t": "Interior Feng Shui",
+  "h": "3f80b53f"
+ },
+ "sanpham.phong-thuy-xem-tuong-phong-thuy": {
+  "t": "<strong>Feng Shui &amp; Physiognomy</strong> — interior feng shui, Eight Mansions house direction, face reading, signature reading",
+  "h": "e3aa719d"
+ },
+ "sanpham.san-pham": {
+  "t": "Products",
+  "h": "982197dc"
+ },
+ "sanpham.san-pham-dich-vu": {
+  "t": "Products &amp; Services",
+  "h": "5af2d451"
+ },
+ "sanpham.san-pham-dich-vu-tu-vi": {
+  "t": "Products &amp; Services — Minh Bao Zi Wei Dou Shu",
+  "h": "95bd5738"
+ },
+ "sanpham.tu-binh-bat-tu": {
+  "t": "Zi Ping BaZi",
+  "h": "6ade52e9"
+ },
+ "sanpham.tu-binh-bat-tu-lap-tru": {
+  "t": "<strong>Zi Ping BaZi</strong> — set up the four pillars, read through the five elements",
+  "h": "4c4e3cc3"
+ },
+ "sanpham.tu-vi-dau-so-an-sao": {
+  "t": "<strong>Zi Wei Dou Shu</strong> — chart construction, the full Chart Reading (24 parts), yearly/monthly/daily luck, personality portrait",
+  "h": "f2ef7494"
+ },
+ "sanpham.tu-vi-minh-bao-cung-cap": {
+  "t": "What Minh Bao Zi Wei Dou Shu offers and how pricing works — credits: top up once, use on every tool, no expiry.",
+  "h": "2e334f2c"
+ },
+ "sanpham.tu-vi-minh-bao-tuviminhbao-com": {
+  "t": "Minh Bao Zi Wei Dou Shu (tuviminhbao.com) is a platform for looking up and interpreting Eastern destiny systems according to classical methods, based on the birth date and time you provide. Everything is delivered online through the website — nothing to install.",
+  "h": "31b96dd9"
+ },
+ "sanpham.xem-tuoi-hop-xem-tuoi-vo": {
+  "t": "<strong>Compatibility</strong> — marriage compatibility, business compatibility, parent–child compatibility",
+  "h": "2ca9430c"
+ },
+ "sanpham.xem-tuoi-lam-an": {
+  "t": "Business Compatibility",
+  "h": "5f5ba4e2"
+ },
+ "sanpham.xem-tuoi-vo-chong": {
+  "t": "Marriage Compatibility",
+  "h": "f3e7b1ed"
+ },
  "sc.2-nhan-ket-qua": {
   "t": "<span class=\"wss-n\">2</span><span class=\"wss-l\">Get your reading</span>",
   "h": "b0b2f830"
@@ -20342,6 +22890,378 @@
  "sc.xem-tuoi-sinh-con-tu-vi": {
   "t": "Child Birth-Year Compatibility — Minh Bao Zi Wei Dou Shu",
   "h": "23026bbb"
+ },
+ "taikhoan.add-mcp-server-chon-streamable-http": {
+  "t": "<strong>Add MCP server</strong> → choose <strong>Streamable HTTP</strong>.",
+  "h": "f63db93e"
+ },
+ "taikhoan.bam-add-custom-connector": {
+  "t": "Click <strong>Add custom connector</strong>.",
+  "h": "f171eae6"
+ },
+ "taikhoan.bam-nut-chia-se-o-goc": {
+  "t": "Tap the <strong>\"Share\"</strong> button at the bottom of any result page to get a link — send it to someone or post it on Facebook/Zalo/WhatsApp. What you've shared and its view count show up here.",
+  "h": "d3fc4566"
+ },
+ "taikhoan.bao-cao": {
+  "t": "<span data-icon=\"file-text\"></span><span class=\"ml-tx\">Reports</span><span class=\"ml-go\">→</span>",
+  "h": "30fcaff2"
+ },
+ "taikhoan.bao-mat": {
+  "t": "<span data-icon=\"lock\"></span> Security",
+  "h": "a32a24fb"
+ },
+ "taikhoan.bat-settings-connectors-developer-mode": {
+  "t": "Turn on <strong>Settings → Connectors → Developer mode</strong>.",
+  "h": "5ddc655e"
+ },
+ "taikhoan.cai-dat": {
+  "t": "<span class=\"tab-ic\" data-icon=\"settings\"></span> Settings",
+  "h": "de9c2df8"
+ },
+ "taikhoan.chat-voi-bot-bang-dung-vi": {
+  "t": "Chat with the bot using this same credit wallet",
+  "h": "c6fcc4a8"
+ },
+ "taikhoan.chia-se-lich-su": {
+  "t": "<span data-icon=\"share-2\" style=\"width:15px;height:15px;vertical-align:-2px;color:var(--tx-gold)\"></span> Shares — History",
+  "h": "fc051dae"
+ },
+ "taikhoan.chon-nen-sang-hoac-toi-cho": {
+  "t": "Choose a light or dark background for all of Minh Bao Zi Wei Dou Shu — applies instantly and is remembered next time.",
+  "h": "ac29b196"
+ },
+ "taikhoan.chua-ket-noi": {
+  "t": "Not connected",
+  "h": "a6c7297d"
+ },
+ "taikhoan.claude-chatgpt-gemini-grok": {
+  "t": "Claude · ChatGPT · Gemini · Grok",
+  "h": "bbad7d3a"
+ },
+ "taikhoan.cua-ban": {
+  "t": "Yours",
+  "h": "4ae2197a"
+ },
+ "taikhoan.da-dung-thang-nay-0-luong": {
+  "t": "<span>Used this month</span> <span id=\"monthlyUsageLabel\">0 credits</span>",
+  "h": "3be2cf3d"
+ },
+ "taikhoan.da-ket-noi": {
+  "t": "Connected",
+  "h": "5c4300f9"
+ },
+ "taikhoan.da-moi-duoc-thuong-30-ngay": {
+  "t": "<span>Rewarded invites (last 30 days)</span> <span id=\"refProgressLabel\">—</span>",
+  "h": "15ce0d55"
+ },
+ "taikhoan.da-san-sang": {
+  "t": "● Ready",
+  "h": "4a6360a8"
+ },
+ "taikhoan.dan-duong-ket-noi-o-tren": {
+  "t": "Paste the connection link above into the URL field → <strong>Add</strong>.",
+  "h": "63f3a9b6"
+ },
+ "taikhoan.dan-duong-ket-noi-o-tren-6lkt": {
+  "t": "Paste the connection link above → save.",
+  "h": "5c24e4aa"
+ },
+ "taikhoan.dan-duong-ket-noi-o-tren-bdph": {
+  "t": "Paste the connection link above. Nothing else to configure — the key is already in the link.",
+  "h": "8957fdf6"
+ },
+ "taikhoan.dang-kiem-tra": {
+  "t": "<span class=\"conn-status\"><span class=\"ic\" data-icon=\"hourglass\"></span> Checking…</span>",
+  "h": "88fb5296"
+ },
+ "taikhoan.dang-kiem-tra-akb9": {
+  "t": "Checking…",
+  "h": "05a0307a"
+ },
+ "taikhoan.dang-nhap-dang-ky": {
+  "t": "Sign In / Sign Up",
+  "h": "8df57bec"
+ },
+ "taikhoan.dang-nhap-de-xem-ho-so": {
+  "t": "Sign in to see your profile",
+  "h": "a6bad53c"
+ },
+ "taikhoan.dang-tai": {
+  "t": "Loading...",
+  "h": "3d8a48b7"
+ },
+ "taikhoan.dang-xuat": {
+  "t": "Sign Out",
+  "h": "adff9c76"
+ },
+ "taikhoan.doi-mat-khau": {
+  "t": "Change password",
+  "h": "d4e1de23"
+ },
+ "taikhoan.doi-mat-khau-9m0f": {
+  "t": "Change Password",
+  "h": "6e8da8ff"
+ },
+ "taikhoan.dung-tu-vi-minh-bao-o": {
+  "t": "Use Minh Bao Zi Wei Dou Shu wherever you chat — Ask the Master right inside the chat assistant you already use, or in Telegram · WhatsApp · Messenger, all on one credit wallet.",
+  "h": "2c9f35b9"
+ },
+ "taikhoan.duong-ket-noi-rieng-cua-ban": {
+  "t": "Your personal connection link",
+  "h": "8dbee506"
+ },
+ "taikhoan.gemini-grok-tro-ly-khac": {
+  "t": "Gemini / Grok / other assistants",
+  "h": "f0e6a5a3"
+ },
+ "taikhoan.giao-dien": {
+  "t": "<span data-icon=\"sun\"></span> Appearance",
+  "h": "ad9cf22d"
+ },
+ "taikhoan.giao-dien-e4yw": {
+  "t": "Appearance",
+  "h": "705b4237"
+ },
+ "taikhoan.gop-y": {
+  "t": "<span data-icon=\"inbox\"></span> Feedback",
+  "h": "fa000453"
+ },
+ "taikhoan.ho-so-vi-luong-ket-noi": {
+  "t": "<b>Profile</b><span>Credit wallet · Connections · Settings</span>",
+  "h": "61d17307"
+ },
+ "taikhoan.ho-tro-dang-nhap-qua-google": {
+  "t": "Sign in with <strong>Google</strong>, <strong>Facebook</strong> or email.",
+  "h": "b8ce549c"
+ },
+ "taikhoan.hoi-thay-trong-tro-ly-chat": {
+  "t": "Ask the Master in your chat assistant <span class=\"conn-badge\">New</span>",
+  "h": "11fcd343"
+ },
+ "taikhoan.huy-lien-ket": {
+  "t": "Unlink",
+  "h": "5f50b732"
+ },
+ "taikhoan.kenh-lien-lac": {
+  "t": "<span data-icon=\"message-circle\" style=\"width:15px;height:15px;vertical-align:-2px;color:var(--tx-gold)\"></span> Messaging channels",
+  "h": "aa753fc7"
+ },
+ "taikhoan.ket-noi": {
+  "t": "<span class=\"tab-ic\" data-icon=\"link\"></span> Connections",
+  "h": "5ba3bb0d"
+ },
+ "taikhoan.ket-noi-vao-chatgpt": {
+  "t": "Connect to ChatGPT",
+  "h": "20d3bbf9"
+ },
+ "taikhoan.ket-noi-vao-claude": {
+  "t": "Connect to Claude",
+  "h": "f03eaded"
+ },
+ "taikhoan.ket-noi-xong-thi-hoi-the": {
+  "t": "<span data-icon=\"lightbulb\" style=\"width:14px;height:14px;vertical-align:-2px\"></span> Connected — now how do I ask?",
+  "h": "c918e147"
+ },
+ "taikhoan.khoi-hanh": {
+  "t": "<span data-icon=\"trophy\" style=\"width:15px;height:15px;vertical-align:-2px;color:var(--tx-gold)\"></span> Getting Started",
+  "h": "60535802"
+ },
+ "taikhoan.khong-can-bam-gi-cu-chat": {
+  "t": "No buttons needed — just chat normally and the system calls the tools itself. Remember to",
+  "h": "cd1a05b2"
+ },
+ "taikhoan.khong-het-han": {
+  "t": "Never expires",
+  "h": "b4fef21a"
+ },
+ "taikhoan.la-so-da-luu": {
+  "t": "<span data-icon=\"folder\"></span><span class=\"ml-tx\">Saved charts</span><span class=\"ml-go\">→</span>",
+  "h": "6739d4ef"
+ },
+ "taikhoan.lap-la-so-tu-vi-cho": {
+  "t": "\"Draw up a Zi Wei chart for a man born 9 May 1984 at 1:45 a.m.\"",
+  "h": "4b2026e7"
+ },
+ "taikhoan.lich-su-giao-dich": {
+  "t": "Transaction History",
+  "h": "99e8eb90"
+ },
+ "taikhoan.lien-ket-messenger": {
+  "t": "Link Messenger",
+  "h": "99c405ee"
+ },
+ "taikhoan.lien-ket-telegram": {
+  "t": "Link Telegram",
+  "h": "e4c7777f"
+ },
+ "taikhoan.lien-ket-whatsapp": {
+  "t": "Link WhatsApp",
+  "h": "007375bb"
+ },
+ "taikhoan.lien-ket-zalo": {
+  "t": "Link Zalo",
+  "h": "73727376"
+ },
+ "taikhoan.luan-giai-chi-tiet-la-so": {
+  "t": "\"Give me a detailed reading of my chart\"",
+  "h": "daab7a26"
+ },
+ "taikhoan.luot-hoi-thay": {
+  "t": "<span data-icon=\"message-circle\"></span><span class=\"ml-tx\">Ask the Master history</span><span class=\"ml-go\">→</span>",
+  "h": "2603dd9c"
+ },
+ "taikhoan.luu-ten": {
+  "t": "Save Name",
+  "h": "19fd43c9"
+ },
+ "taikhoan.mat-khau-moi": {
+  "t": "New password",
+  "h": "4267a600"
+ },
+ "taikhoan.mo-settings-connectors-claude-desktop-ho": {
+  "t": "Open <strong>Settings → Connectors</strong> (Claude Desktop or claude.ai).",
+  "h": "b7a053cb"
+ },
+ "taikhoan.moi-ban-nhan-them-luong": {
+  "t": "Invite Friends — Earn More Credits",
+  "h": "c87d6753"
+ },
+ "taikhoan.nam-2027-cua-toi-van-han": {
+  "t": "\"How does 2027 look for me? What about March?\"",
+  "h": "2c70ccfb"
+ },
+ "taikhoan.nap-luong": {
+  "t": "<span data-icon=\"wallet\" style=\"width:16px;height:16px\"></span> Top up credits",
+  "h": "2fb3641a"
+ },
+ "taikhoan.nap-luong-o-day-nhan-bot": {
+  "t": "Top up here, then just message the Telegram bot — same wallet.",
+  "h": "b2be6c64"
+ },
+ "taikhoan.nap-luong-o-day-nhan-bot-1xta": {
+  "t": "Top up here, then just message the WhatsApp bot — same wallet.",
+  "h": "76114b7e"
+ },
+ "taikhoan.nap-luong-o-day-nhan-bot-x2oh": {
+  "t": "Top up here, then just message the Facebook Messenger bot — same wallet.",
+  "h": "e8af5d50"
+ },
+ "taikhoan.nap-luong-o-day-nhan-zalo": {
+  "t": "Top up here, then just message the Minh Bao Zi Wei Dou Shu Zalo OA — same wallet.",
+  "h": "f86646c2"
+ },
+ "taikhoan.nguoi-dung": {
+  "t": "User",
+  "h": "06f23b4d"
+ },
+ "taikhoan.nhap-lai-mat-khau": {
+  "t": "Re-enter password",
+  "h": "4ff37e70"
+ },
+ "taikhoan.nhap-mat-khau-moi": {
+  "t": "Enter a new password",
+  "h": "62b70346"
+ },
+ "taikhoan.nhap-ten-cua-ban": {
+  "t": "Enter your name",
+  "h": "5e6b745a"
+ },
+ "taikhoan.noi-du-ngay-gio-gioi-tinh": {
+  "t": "give the full birth date, time and gender",
+  "h": "19c46e88"
+ },
+ "taikhoan.quan-ly-vi-luong-nhan-them": {
+  "t": "Manage your credit wallet, earn more credits, connect chat channels and adjust account settings.",
+  "h": "6233b736"
+ },
+ "taikhoan.quan-trong-trong-khung-chat-bam": {
+  "t": "<strong>IMPORTANT:</strong> in the chat box, click the tools button (<strong>+</strong>) → <strong>Tool access</strong> → choose <strong>\"Tools already loaded\"</strong>. The default, \"Load tools when needed\", leaves Claude unable to see the tools, so it makes up the chart. Turn it on once and later chats keep it.",
+  "h": "916eda3a"
+ },
+ "taikhoan.sang": {
+  "t": "<span data-icon=\"sun\" style=\"width:14px;height:14px;vertical-align:-2px\"></span> Light",
+  "h": "910fdb50"
+ },
+ "taikhoan.sao-that-sat-o-cung-menh": {
+  "t": "\"What does Qi Sha in the Life Palace mean?\"",
+  "h": "5d996c81"
+ },
+ "taikhoan.so-du-luong": {
+  "t": "Credit Balance",
+  "h": "2a573b63"
+ },
+ "taikhoan.tai-khoan-dang-nhap-qua-oauth": {
+  "t": "Accounts signed in via OAuth don't use a password.",
+  "h": "4cbe60f1"
+ },
+ "taikhoan.tai-khoan-tu-vi-minh-bao": {
+  "t": "Account — Minh Bao Zi Wei Dou Shu",
+  "h": "0ec3e09f"
+ },
+ "taikhoan.tao-duong-ket-noi": {
+  "t": "Create connection link",
+  "h": "1ea224f1"
+ },
+ "taikhoan.tao-mot-duong-ket-noi-rieng": {
+  "t": "Create a personal connection link and paste it into your chat assistant. Then ask straight out — \"draw up a chart for a man born 9 May 1984 in the Chou hour\", \"how does 2027 look?\" — and the system pulls <strong>exact figures from the engine</strong> at tuviminhbao.com, nothing made up.",
+  "h": "d3398742"
+ },
+ "taikhoan.tat-ca-loai-giao-dich": {
+  "t": "All transaction types",
+  "h": "32529f70"
+ },
+ "taikhoan.ten-hien-thi": {
+  "t": "Display name",
+  "h": "1e9d85d8"
+ },
+ "taikhoan.thong-tin": {
+  "t": "<span data-icon=\"user\"></span> Info",
+  "h": "ff941fc8"
+ },
+ "taikhoan.thong-tin-ca-nhan": {
+  "t": "Personal Information",
+  "h": "5de3e5eb"
+ },
+ "taikhoan.thu-hoi-tao-key-moi": {
+  "t": "Revoke &amp; create a new key",
+  "h": "8fec8bbc"
+ },
+ "taikhoan.tim-muc-them-mcp-server-custom": {
+  "t": "Find where to add an <strong>MCP server</strong> / <strong>custom connector</strong> (Streamable HTTP).",
+  "h": "07a00e26"
+ },
+ "taikhoan.tim-theo-noi-dung": {
+  "t": "Search by details…",
+  "h": "ad472d5e"
+ },
+ "taikhoan.toi": {
+  "t": "<span data-icon=\"moon\" style=\"width:14px;height:14px;vertical-align:-2px\"></span> Dark",
+  "h": "f4040249"
+ },
+ "taikhoan.tong-da-moi-0-da-nhan": {
+  "t": "Total invited: <strong id=\"refTotalCount\" style=\"color:var(--heading)\">0</strong> · Earned: <strong id=\"refEarnedCount\" style=\"color:var(--tx-gold)\">0</strong> credits",
+  "h": "1aae41a3"
+ },
+ "taikhoan.vi-du": {
+  "t": ". For example:",
+  "h": "4622a94a"
+ },
+ "taikhoan.vi-luong": {
+  "t": "<span class=\"tab-ic\" data-icon=\"wallet\"></span> Credit wallet",
+  "h": "397cf5a3"
+ },
+ "taikhoan.vo-chong-tuoi-1984-va-1986": {
+  "t": "\"Are a 1984-born and a 1986-born couple a good match?\"",
+  "h": "3cbf661e"
+ },
+ "taikhoan.xac-nhan-mat-khau": {
+  "t": "Confirm password",
+  "h": "7386c6b1"
+ },
+ "taikhoan.xong-hoi-claude-lap-la-so": {
+  "t": "Done! Ask Claude \"draw up a chart for a man born 9 May 1984 in the Chou hour\" and it calls the Minh Bao Zi Wei Dou Shu tool by itself.",
+  "h": "88358e38"
  },
  "tailieu.bai-viet-khong-ton-tai-hoac": {
   "t": "This article doesn’t exist or has been removed.",
@@ -20710,6 +23630,38 @@
  "thansohoc.tra-loi-thay-o-khung-chat": {
   "t": "Reply to the Master in the chat box to build your numerology chart — all you need is your date of birth and full name.",
   "h": "8268b781"
+ },
+ "thay.15-thay-luan-giai-cua-tu": {
+  "t": "The 15 masters behind Minh Bao Zi Wei Dou Shu readings — each with their own specialty and voice.",
+  "h": "619ab125"
+ },
+ "thay.cac-thay-15-thay-luan-giai": {
+  "t": "<b>The Masters</b><span>15 masters — each with their own specialty and voice</span>",
+  "h": "0d633e5a"
+ },
+ "thay.cac-thay-tu-vi-minh-bao": {
+  "t": "The Masters — Minh Bao Zi Wei Dou Shu",
+  "h": "ad96cac8"
+ },
+ "thay.khong-tim-thay-thay-nao-khop": {
+  "t": "No master matches your search.",
+  "h": "ed5cffeb"
+ },
+ "thay.tim-thay-theo-ten-hoac-chuyen": {
+  "t": "Search masters by name or specialty…",
+  "h": "cb98738e"
+ },
+ "thaycct.cac-thay": {
+  "t": "← The Masters",
+  "h": "4e97c621"
+ },
+ "thaycct.thay-chuyen-mon-cong-cu-va": {
+  "t": "<b id=\"tmTitle\">Master</b><span>Specialty, tools and how to start a conversation</span>",
+  "h": "817a3aa5"
+ },
+ "thaycct.thay-tu-vi-minh-bao": {
+  "t": "Master — Minh Bao Zi Wei Dou Shu",
+  "h": "9f2d3044"
  },
  "thtg.1-ghi-am-giong-noi": {
   "t": "<span class=\"wss-n\">1</span><span class=\"wss-l\">Record your voice</span>",
@@ -21147,6 +24099,26 @@
   "t": "Am I charged again for viewing a result a second time?",
   "h": "64b49a22"
  },
+ "trochuyen.chua-co-hoi-thoai-nao-bam": {
+  "t": "No conversations yet.<br>Tap \"New question\" above, or open any tool and ask the Master.",
+  "h": "9f9eecfb"
+ },
+ "trochuyen.hoi-moi-bat-dau-mot-cau": {
+  "t": "<span class=\"tc-plus\">+</span> <span><b>New question</b><span>Start a question — the system picks the right tool for you</span></span>",
+  "h": "bb8d13e7"
+ },
+ "trochuyen.hoi-thay-moi-cuoc-hoi-thay": {
+  "t": "<b>Ask the Master</b><span>Every conversation with the Masters, from every tool</span>",
+  "h": "f8fc50f0"
+ },
+ "trochuyen.hoi-thay-tu-vi-minh-bao": {
+  "t": "Ask the Master — Minh Bao Zi Wei Dou Shu",
+  "h": "ddbd279c"
+ },
+ "trochuyen.toan-bo-cac-cuoc-hoi-thay": {
+  "t": "All your conversations with the Masters — reopen any of them, or start a new question.",
+  "h": "f799c12a"
+ },
  "tuonghop.ban-luan-giai-mau-tai-pdf": {
   "t": "<span class=\"sc-ic\" data-icon=\"file-text\"></span> <span class=\"sc-txt\"><b>Sample reading</b><span>Download the full Marriage Compatibility PDF of a sample chart to preview the real content.</span></span> <a class=\"sc-btn\" href=\"/tai-mau/mau-xem-tuoi.pdf\" target=\"_blank\" rel=\"noopener\">Download PDF →</a>",
   "h": "17b7eecd"
@@ -21258,5 +24230,85 @@
  "vanhan.xem-van-han-mien-phi": {
   "t": "<span class=\"bg-label\"><span class=\"ic\" data-icon=\"calendar\"></span><b id=\"btnGoLabel\">See your outlook →</b></span> <small>Free</small>",
   "h": "3895d3c5"
+ },
+ "xlg.gio-sinh-duong-lich": {
+  "t": "Birth time (solar calendar)",
+  "h": "eefa6274"
+ },
+ "xlg.gioi-tinh": {
+  "t": "Gender",
+  "h": "80bbce55"
+ },
+ "xlg.gioi-tinh-nam": {
+  "t": "Male",
+  "h": "b580ba1b"
+ },
+ "xlg.ho-ten-khong-bat-buoc": {
+  "t": "Full name <span class=\"opt\">(optional)</span>",
+  "h": "87ce95fd"
+ },
+ "xlg.khong-nho-chinh-xac-chon-gio": {
+  "t": "Not sure of the exact time? Pick the closest one — you can change it later.",
+  "h": "21f75046"
+ },
+ "xlg.la-so-12-cung-day-du": {
+  "t": "<span class=\"ic\" data-icon=\"bar-chart-3\"></span><span><b>12-palace chart</b> with all major stars, minor stars and Four Transformations</span>",
+  "h": "b0b67e2b"
+ },
+ "xlg.luan-giai-la-so-tu-vi": {
+  "t": "Zi Wei Dou Shu chart reading by birth date and time — Minh Bao",
+  "h": "ee3ea368"
+ },
+ "xlg.luan-giai-la-so-tu-vi-jv0q": {
+  "t": "Zi Wei Dou Shu chart reading by birth date and time",
+  "h": "cd522af6"
+ },
+ "xlg.luan-rieng-tung-cung-diem-manh": {
+  "t": "<span class=\"ic\" data-icon=\"star\"></span><span><b>A reading for each palace</b>, strengths and weaknesses, and pointers for this year</span>",
+  "h": "60d3c68b"
+ },
+ "xlg.minh-bao": {
+  "t": "Minh Bao",
+  "h": "e4158660"
+ },
+ "xlg.ngay": {
+  "t": "Day",
+  "h": "368c4575"
+ },
+ "xlg.nhap-ngay-gio-sinh-he-thong": {
+  "t": "Enter your birth date and time; the system places the stars, builds your 12-palace chart and reads it by the classical method. Preview right away, no sign-up needed.",
+  "h": "7c5ecf1e"
+ },
+ "xlg.nhap-ngay-gio-sinh-xem-truoc": {
+  "t": "Enter your birth date and time to preview your 12-palace Zi Wei chart and overview for free. Pay only when you open the full 13-part reading.",
+  "h": "38c4a34f"
+ },
+ "xlg.thang": {
+  "t": "Month",
+  "h": "0e2b3099"
+ },
+ "xlg.thanh-toan-bang-chuyen-khoan-qr": {
+  "t": "Pay with PayPal or an international card.",
+  "h": "84f70dc9"
+ },
+ "xlg.tong-quan-cuoc-doi-tinh-cach": {
+  "t": "<span class=\"ic\" data-icon=\"file-text\"></span><span><b>Life overview</b>: personality, career, love, money</span>",
+  "h": "57dcca8b"
+ },
+ "xlg.vui-long-chon-du-ngay-thang": {
+  "t": "Please choose your birth day, month, year and time.",
+  "h": "67e1d40f"
+ },
+ "xlg.xem-ban-luan-giai-mau-pdf": {
+  "t": "<a class=\"mini\" href=\"/tai-mau/mau-luan-giai-la-so.pdf\" target=\"_blank\" rel=\"noopener\"> <span class=\"ic\" data-icon=\"file-text\"></span> <span><b>See a sample reading (PDF, in Vietnamese)</b>The real content of a sample chart — read it before you decide</span> </a> <a class=\"mini\" href=\"/app/thay\"> <span class=\"ic\" data-icon=\"book-open\"></span> <span><b>Minh Bao's 15 Masters</b>Readings based on Zi Wei Dou Shu: A New Compilation and other classical editions</span> </a>",
+  "h": "e8c2bc01"
+ },
+ "xlg.xem-la-so-mien-phi": {
+  "t": "See my chart free →",
+  "h": "97bce6ab"
+ },
+ "xlg.xem-truoc-mien-phi-mo-ban": {
+  "t": "Preview <b>free</b>. Full 13-part reading: <b><span data-lp-vnd>…</span></b>",
+  "h": "741a332d"
  }
 }

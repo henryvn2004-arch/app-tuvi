@@ -6,7 +6,21 @@
   "zh-tw",
   "zh-cn"
  ],
+ "/about": [
+  "en",
+  "ja",
+  "ko",
+  "zh-tw",
+  "zh-cn"
+ ],
  "/app": [
+  "en",
+  "ja",
+  "ko",
+  "zh-tw",
+  "zh-cn"
+ ],
+ "/app-thay-chi-tiet.html": [
   "en",
   "ja",
   "ko",
@@ -21,6 +35,13 @@
   "zh-cn"
  ],
  "/app/ban-lam-viec": [
+  "en",
+  "ja",
+  "ko",
+  "zh-tw",
+  "zh-cn"
+ ],
+ "/app/bao-cao": [
   "en",
   "ja",
   "ko",
@@ -76,6 +97,20 @@
   "zh-tw",
   "zh-cn"
  ],
+ "/app/combo-laso-tubinh": [
+  "en",
+  "ja",
+  "ko",
+  "zh-tw",
+  "zh-cn"
+ ],
+ "/app/combo-tron-bo": [
+  "en",
+  "ja",
+  "ko",
+  "zh-tw",
+  "zh-cn"
+ ],
  "/app/cong-cu": [
   "en",
   "ja",
@@ -112,6 +147,13 @@
   "zh-cn"
  ],
  "/app/gio-sinh": [
+  "en",
+  "ja",
+  "ko",
+  "zh-tw",
+  "zh-cn"
+ ],
+ "/app/ho-so": [
   "en",
   "ja",
   "ko",
@@ -258,6 +300,20 @@
   "zh-tw",
   "zh-cn"
  ],
+ "/app/thay": [
+  "en",
+  "ja",
+  "ko",
+  "zh-tw",
+  "zh-cn"
+ ],
+ "/app/tro-chuyen": [
+  "en",
+  "ja",
+  "ko",
+  "zh-tw",
+  "zh-cn"
+ ],
  "/app/van-han-nam": [
   "en",
   "ja",
@@ -286,7 +342,28 @@
   "zh-tw",
   "zh-cn"
  ],
+ "/contact": [
+  "en",
+  "ja",
+  "ko",
+  "zh-tw",
+  "zh-cn"
+ ],
  "/dieu-khoan-dich-vu.html": [
+  "en",
+  "ja",
+  "ko",
+  "zh-tw",
+  "zh-cn"
+ ],
+ "/faqs.html": [
+  "en",
+  "ja",
+  "ko",
+  "zh-tw",
+  "zh-cn"
+ ],
+ "/huong-dan-thanh-toan.html": [
   "en",
   "ja",
   "ko",
@@ -314,6 +391,27 @@
   "zh-tw",
   "zh-cn"
  ],
+ "/nguon-du-lieu.html": [
+  "en",
+  "ja",
+  "ko",
+  "zh-tw",
+  "zh-cn"
+ ],
+ "/payment-success": [
+  "en",
+  "ja",
+  "ko",
+  "zh-tw",
+  "zh-cn"
+ ],
+ "/phuong-phap": [
+  "en",
+  "ja",
+  "ko",
+  "zh-tw",
+  "zh-cn"
+ ],
  "/resources": [
   "en",
   "ja",
@@ -328,7 +426,21 @@
   "zh-tw",
   "zh-cn"
  ],
+ "/san-pham-dich-vu.html": [
+  "en",
+  "ja",
+  "ko",
+  "zh-tw",
+  "zh-cn"
+ ],
  "/tai-lieu.html": [
+  "en",
+  "ja",
+  "ko",
+  "zh-tw",
+  "zh-cn"
+ ],
+ "/xem/luan-giai": [
   "en",
   "ja",
   "ko",

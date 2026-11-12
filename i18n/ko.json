@@ -1,4 +1,392 @@
 {
+ "about.1-nen-tang-du-lieu-thuc": {
+  "t": "1. 실증 데이터 기반",
+  "h": "06f1cf11"
+ },
+ "about.2-he-thong-hoa-co-phap": {
+  "t": "2. 고법의 체계화",
+  "h": "c85d8fdb"
+ },
+ "about.3-mo-hinh-hoa-va-kiem": {
+  "t": "3. 모델화와 검증",
+  "h": "1d0efb46"
+ },
+ "about.4-dien-giai-bang-he-thong": {
+  "t": "4. 언어 시스템을 통한 해설",
+  "h": "00f2b090"
+ },
+ "about.5-hieu-chinh-boi-chuyen-gia": {
+  "t": "5. 전문가의 보정",
+  "h": "ca3a8140"
+ },
+ "about.bat-ky-he-thong-luan-giai": {
+  "t": "아무리 공들여 만든 풀이 시스템이라도 반드시 일정한 한계가 있습니다.",
+  "h": "0e8a20f5"
+ },
+ "about.biet-menh-khong-phai-de-pho": {
+  "t": "명을 아는 것은 운명에 몸을 맡기기 위해서가 아니라, 때에 순응하고 불리함을 피하며 가능성을 살리기 위해서입니다.",
+  "h": "aefd2bae"
+ },
+ "about.cac-chuyen-gia-nghien-cuu-tu": {
+  "t": "자미두수를 연구하는 전문가",
+  "h": "6d130b45"
+ },
+ "about.cac-hoc-gia-va-nha-nghien": {
+  "t": "역사, 동양 철학 등 관련 분야의 학자와 연구자",
+  "h": "9593da42"
+ },
+ "about.cac-ket-qua-luan-giai-nen": {
+  "t": "풀이 결과는 최종 결론이라기보다 근거 있는 참고 자료로 보아야 합니다.",
+  "h": "cd55943a"
+ },
+ "about.cac-kinh-dien-ve-tu-vi": {
+  "t": "자미두수 고전에는 여러 이본이 있고 해석도 완전히 일치하지 않으므로, 체계화에는 필연적으로 선택과 기준 설정이 따릅니다.",
+  "h": "1b957db9"
+ },
+ "about.cac-mo-hinh-duoc-xay-dung": {
+  "t": "명반과 현실 사이의 관계를 찾아내기 위한 모델을 구축",
+  "h": "5de73c5a"
+ },
+ "about.cac-nguyen-ly-va-cau-truc": {
+  "t": "전통 자미두수의 원리와 구조",
+  "h": "a25d74ee"
+ },
+ "about.cac-quy-tac-duoc-dieu-chinh": {
+  "t": "현실과의 부합 정도에 따라 규칙을 조정",
+  "h": "4ceb5ffc"
+ },
+ "about.cac-thay-va-nguoi-thuc-hanh": {
+  "t": "오랫동안 자미두수와 현학을 해 온 선생님과 실천가",
+  "h": "01aafa8a"
+ },
+ "about.cach-xay-dung-he-thong-luan": {
+  "t": "풀이 시스템을 만드는 방법",
+  "h": "b8c3ccad"
+ },
+ "about.chung-toi-xay-dung-he-thong": {
+  "t": "저희는 다음을 바탕으로 시스템을 만듭니다:",
+  "h": "eeb432ac"
+ },
+ "about.cong-nghe-duoc-su-dung-o": {
+  "t": "여기서 기술을 쓰는 목적은:",
+  "h": "93bb9357"
+ },
+ "about.dam-bao-tinh-can-bang-giua": {
+  "t": "이론과 실천의 균형을 지킨다",
+  "h": "01471d41"
+ },
+ "about.dieu-quan-trong-la": {
+  "t": "중요한 것은:",
+  "h": "0d9b396c"
+ },
+ "about.do-do-phuong-phap-ma-chung": {
+  "t": "그래서 저희가 추구하는 방법은 전통 원칙의 체계화와 기록된 실제 사례와의 대조를 결합하는 것입니다. 기술은 연구를 돕는 도구일 뿐, 사람의 판단을 대신하지 않습니다.",
+  "h": "8fb84663"
+ },
+ "about.doi-chieu-voi-cac-dien-bien": {
+  "t": "그들의 삶에서 실제로 일어난 일과 대조",
+  "h": "e59344b7"
+ },
+ "about.du-lieu-ngay-gio-sinh-cua": {
+  "t": "27만 명 이상의 생년월일시 데이터",
+  "h": "b1e54c19"
+ },
+ "about.du-lieu-nguyen-ly-mo-hinh": {
+  "t": "데이터 → 원리 → 모델 → 검증 → 해설 → 보정 — 여러 겹의 과정을 거쳐, 각 풀이가 논리적일 뿐 아니라 현실과 대조할 수 있게 합니다.",
+  "h": "47a0b07e"
+ },
+ "about.gia-tri-cua-tu-vi-dau": {
+  "t": "자미두수의 가치는 절대적으로 예언하는 데 있지 않고, 사람이 자신을 더 깊이 이해하도록 실마리를 열어 주는 데 있습니다.",
+  "h": "37d2ea4c"
+ },
+ "about.giam-sai-lech-do-yeu-to": {
+  "t": "주관으로 인한 치우침을 줄인다",
+  "h": "dd267c7a"
+ },
+ "about.gioi-han-cua-he-thong": {
+  "t": "시스템의 한계",
+  "h": "7fa9c9a0"
+ },
+ "about.gioi-thieu-phuong-phap-tinh-than": {
+  "t": "소개 — 방법과 정신 | 명보 자미두수",
+  "h": "6455ef7c"
+ },
+ "about.gioi-thieu-tu-vi-minh-bao": {
+  "t": "명보 자미두수 소개 — 방법과 정신",
+  "h": "6eee8cba"
+ },
+ "about.giu-vung-tinh-than-cua-co": {
+  "t": "고법의 정신을 지킨다",
+  "h": "9e74633e"
+ },
+ "about.han-che-cac-dien-giai-cuc": {
+  "t": "극단적이거나 근거가 부족한 해석을 줄인다",
+  "h": "7537c280"
+ },
+ "about.he-thong-an-sao-tu-vi": {
+  "t": "고법에 따른 자미두수 명반 작성과 깊이 있는 풀이. 명보 자미두수의 풀이 방법과 원칙을 알아보세요.",
+  "h": "4a00d1c0"
+ },
+ "about.he-thong-khong-tu-suy-doan": {
+  "t": "시스템이 스스로 논점을 추측하지 않습니다",
+  "h": "e89edab4"
+ },
+ "about.he-thong-luan-giai-tai-tu": {
+  "t": "명보 자미두수의 풀이 시스템은 고학의 기반, 실증 데이터, 현대 기술을 결합하는 방향으로 만들어졌으며, 일관성과 검증 가능성, 실생활에서의 쓸모를 확보하는 것을 목표로 합니다.",
+  "h": "6d5da226"
+ },
+ "about.he-thong-ngon-ngu-duoc-su": {
+  "t": "언어 시스템을 써서 내용을 명확하고 이해하기 쉬우며 실제로 쓸모 있게 해설",
+  "h": "2caad752"
+ },
+ "about.ket-hop-giua-ly-thuyet-va": {
+  "t": "이론과 실천의 결합",
+  "h": "c0fb9eab"
+ },
+ "about.ket-hop-voi-co-so-du": {
+  "t": "AstroDataBank의 국제 데이터베이스와 결합",
+  "h": "cbdd4e16"
+ },
+ "about.ket-qua-duoc-doi-chieu-nguoc": {
+  "t": "결과를 기존 데이터와 거꾸로 대조",
+  "h": "24c827a1"
+ },
+ "about.khong-gay-hoang-mang": {
+  "t": "불안을 조장하지 않는다",
+  "h": "e0832f25"
+ },
+ "about.khong-phan-xet": {
+  "t": "판단하지 않는다",
+  "h": "b0409d0a"
+ },
+ "about.khong-tuyet-doi-hoa": {
+  "t": "절대화하지 않는다",
+  "h": "4df88785"
+ },
+ "about.kiem-nghiem-lai-cac-nguyen-ly": {
+  "t": "고학의 원리를 실제 데이터로 다시 검증",
+  "h": "b2f40cd9"
+ },
+ "about.la-so-chi-phan-anh-nhung": {
+  "t": "명반은 일어날 수 있는 경향을 비출 뿐, 바꿀 수 없는 정해진 운명이 아닙니다.",
+  "h": "2f15ed93"
+ },
+ "about.lien-he": {
+  "t": "문의",
+  "h": "603522f1"
+ },
+ "about.lien-tuc-hieu-chinh": {
+  "t": "끊임없이 보정한다",
+  "h": "45ab3f13"
+ },
+ "about.loai-bo-cac-yeu-to-mang": {
+  "t": "감에 의존하거나 근거 없는 요소를 걸러 낸다",
+  "h": "e9b79749"
+ },
+ "about.ma-chi-dien-giai-lai-cac": {
+  "t": "미리 확정된 결과를 다시 풀어 설명할 뿐입니다",
+  "h": "101c64d5"
+ },
+ "about.mo-dau": {
+  "t": "들어가며",
+  "h": "44717b8f"
+ },
+ "about.mo-rong-quy-mo-kiem-nghiem": {
+  "t": "검증 규모를 넓힌다",
+  "h": "ab8a2f59"
+ },
+ "about.moi-mo-hinh-luan-giai-duoc": {
+  "t": "모든 풀이 모델은 쌓인 데이터와 실제 피드백을 바탕으로 다시 점검하고 검증합니다.",
+  "h": "4f3e7b8d"
+ },
+ "about.moi-nhan-dinh-deu-nham-giup": {
+  "t": "모든 판단은 보는 사람이 자기 상황을 더 잘 이해하고 알맞은 선택을 하도록 돕기 위한 것입니다.",
+  "h": "6a29f2d0"
+ },
+ "about.moi-y-kien-trao-doi-gop": {
+  "t": "풀이 내용, 연구 방법, 시스템 이용에 관한 의견, 제안, 질문이 있으시면 언제든 연락해 주세요.",
+  "h": "0b3d271b"
+ },
+ "about.mot-so-thanh-vien-theo-duoi": {
+  "t": "명리 풀이를 본업으로 하는 구성원도 있고, 다양한 전문 분야 출신이지만 오랜 시간 진지하게 연구하고 실천해 온 구성원도 있습니다.",
+  "h": "a852a127"
+ },
+ "about.muc-tieu-chung-cua-nhom-khong": {
+  "t": "팀의 공동 목표는 절대적인 결론을 내리는 것이 아니라, 근거 있고 검증되었으며 실생활에 쓸 수 있는 풀이 시스템을 만드는 것입니다.",
+  "h": "81a815ce"
+ },
+ "about.muc-tieu-la-chuyen-tu-cac": {
+  "t": "목표는 고전 속에 흩어진 지식을 구조적이고 일관되며 검증 가능한 풀이 시스템으로 옮기는 것입니다.",
+  "h": "fbf9c61c"
+ },
+ "about.nguyen-tac": {
+  "t": "원칙",
+  "h": "17807d55"
+ },
+ "about.nguyen-tac-luan-giai": {
+  "t": "풀이의 원칙",
+  "h": "23987592"
+ },
+ "about.nhan-dien-cac-mo-hinh-lap": {
+  "t": "명반 구조와 인생의 흐름 사이에 반복되는 패턴을 찾아낸다",
+  "h": "d2f81c8f"
+ },
+ "about.nhieu-thanh-vien-da-co-kinh": {
+  "t": "많은 구성원이 이 이론 체계가 발전하고 활발히 전해져 온 중국과 홍콩에서 자미두수와 현학의 여러 유파를 배우고 접한 경험이 있습니다.",
+  "h": "3b355fa3"
+ },
+ "about.nhom-nghien-cuu": {
+  "t": "연구팀",
+  "h": "91d9432b"
+ },
+ "about.nhung-nguoi-co-kinh-nghiem-thuc": {
+  "t": "현학 분야에서 실천 경험이 있는 사람들",
+  "h": "e3fc3042"
+ },
+ "about.nhung-nguoi-lam-viec-trong-moi": {
+  "t": "대학 강사와 연구자를 포함해 학계에서 일하는 사람들",
+  "h": "4e7bc04a"
+ },
+ "about.noi-dung-duoc-trinh-bay-theo": {
+  "t": "일반적인 설명 대신 개인의 상황에 맞춰 내용을 제시",
+  "h": "997e3c47"
+ },
+ "about.o-nuoc-ta-viec-nghien-cuu": {
+  "t": "베트남에서는 자미두수 연구가 오래전부터 이어져 왔습니다. 그렇기에 저희는 기본 원리로 돌아가 신중하고 체계적으로 살펴볼 필요가 있다고 봅니다.",
+  "h": "8b0850cc"
+ },
+ "about.phan-hoi-trong-vong-24-48": {
+  "t": "영업일 기준 24~48시간 내 답변",
+  "h": "ff250e5f"
+ },
+ "about.phuong-phap": {
+  "t": "방법",
+  "h": "4f7ecd74"
+ },
+ "about.phuong-phap-luan": {
+  "t": "방법론",
+  "h": "2c2e64e2"
+ },
+ "about.qua-trinh-nay-cho-phep": {
+  "t": "이 과정을 통해:",
+  "h": "e87bc961"
+ },
+ "about.quan-diem": {
+  "t": "관점",
+  "h": "b9aa2091"
+ },
+ "about.quy-trinh-nay-giup": {
+  "t": "이 절차는:",
+  "h": "196d0c1e"
+ },
+ "about.sai-lech-co-the-phat-sinh": {
+  "t": "오차는 입력 데이터에서 생길 수 있습니다 — 부정확한 출생 시각이나 전통마다 다른 별 배치 방식 등입니다.",
+  "h": "bfa633e6"
+ },
+ "about.sau-khi-xac-dinh-duoc-cau": {
+  "t": "구조와 주요 논점이 정해진 뒤:",
+  "h": "8b98ad49"
+ },
+ "about.su-bien-chuyen-cua-doi-nguoi": {
+  "t": "인생의 변화는 결국 여러 요인이 얽힌 결과이며, 그 안에는 각자의 선택과 행동도 들어 있습니다. 자미두수를 연구하고 활용하는 데 의미가 있다면, 그것은 인생의 갈림길에 선 사람이 조금 더 깨어 있도록 돕는 데 있습니다.",
+  "h": "2d06614d"
+ },
+ "about.su-da-dang-ve-nen-tang": {
+  "t": "배경이 다양하기에 팀은:",
+  "h": "ff2c1cfd"
+ },
+ "about.tang-tinh-nhat-quan-trong-luan": {
+  "t": "풀이의 일관성을 높인다",
+  "h": "66a7712a"
+ },
+ "about.thanh-phan-nhom-bao-gom": {
+  "t": "팀 구성:",
+  "h": "62092e20"
+ },
+ "about.thanh-that-ma-noi": {
+  "t": "솔직히 말하면",
+  "h": "b765edeb"
+ },
+ "about.theo-truyen-thong-luu-truyen-mon": {
+  "t": "전해 내려오는 바에 따르면, 이 학문은 송나라의 깊은 학식을 지닌 이학자 희이자 진단(陳摶)이 처음 세웠습니다. 그 뒤 여러 세대에 걸쳐 학자들이 보완하고 해석하며 체계화하여, 자미두수는 질서 있고 일관된 학문이 되었습니다.",
+  "h": "6de49b2f"
+ },
+ "about.tiep-can-van-de-tu-nhieu": {
+  "t": "여러 시각에서 문제에 접근한다",
+  "h": "db146275"
+ },
+ "about.toan-bo-he-thong-duoc-ra": {
+  "t": "시스템 전체는 다음과 같은 협력 팀이 점검하고 보정합니다:",
+  "h": "9ed0fc71"
+ },
+ "about.toan-bo-logic-luan-giai-duoc": {
+  "t": "풀이의 논리는 모두 다음을 바탕으로 합니다:",
+  "h": "b742fa01"
+ },
+ "about.tranh-su-phien-dien-trong-qua": {
+  "t": "체계화와 풀이 과정에서 편향을 피한다",
+  "h": "f4dc0a94"
+ },
+ "about.trao-doi-gop-y": {
+  "t": "상담과 의견",
+  "h": "f6890a8e"
+ },
+ "about.tren-nen-tang-du-lieu-va": {
+  "t": "체계화된 데이터와 고법을 바탕으로:",
+  "h": "d691aa6d"
+ },
+ "about.tri-tue-nhan-tao-chi-xu": {
+  "t": "인공지능은 주어진 데이터와 규칙을 바탕으로만 처리할 수 있습니다. 그 범위를 벗어나는 일에는 여전히 사람의 숙고가 필요합니다.",
+  "h": "32a7ac28"
+ },
+ "about.tu-vi-dau-so": {
+  "t": "紫微斗數 · 자미두수",
+  "h": "33616a8e"
+ },
+ "about.tu-vi-dau-so-hemc": {
+  "t": "자미두수",
+  "h": "cdc48904"
+ },
+ "about.tu-vi-dau-so-la-mot": {
+  "t": "자미두수는 동양의 고학 가운데 하나로, 정해진 운명의 틀 안에서 사람의 일생이 앞뒤로 어떻게 흘러가는지 어느 정도 살펴볼 수 있게 해 줍니다. 자미두수를 배우는 것은 나를 알고, 또 남을 알기 위해서입니다.",
+  "h": "176262d0"
+ },
+ "about.tu-vi-la-cong-cu-quan": {
+  "t": "자미두수는 관찰과 분석의 도구이지, 사람의 품격을 재는 잣대나 사람을 판단하는 근거가 아닙니다.",
+  "h": "317bf0cc"
+ },
+ "about.tu-vi-minh-bao-duoc-phat": {
+  "t": "명보 자미두수는 독립 연구팀이 개발했습니다. 배경과 걸어온 길은 다르지만 동양 명리학에 깊은 관심을 함께하는 사람들이 모였습니다.",
+  "h": "81fe0d3c"
+ },
+ "about.tu-vi-minh-bao-la-he": {
+  "t": "명보 자미두수는 고법에 따른 자미두수 명반 작성과 풀이 시스템입니다. 시스템의 방법, 원칙, 정신을 알아보세요.",
+  "h": "2f6ab085"
+ },
+ "about.ve-chung-toi": {
+  "t": "저희에 대하여",
+  "h": "e96992fa"
+ },
+ "about.ve-phuong-phap-tinh-than-va": {
+  "t": "명보 자미두수 풀이 시스템의 방법, 정신, 그리고 한계에 대하여",
+  "h": "2a8ba5a3"
+ },
+ "about.viec-chuan-hoa-cac-cach-cuc": {
+  "t": "격국, 규칙, 판단 순서의 표준화",
+  "h": "0ef7ac43"
+ },
+ "about.viec-luan-giai-tu-vi-dau": {
+  "t": "자미두수 풀이는 저희 소견으로는 먼저 고전을 토대로 삼고, 그다음에 현실의 변화를 살펴야 합니다. 원리를 떠나 감에만 기대면 독단에 빠지기 쉽고, 반대로 문자에만 얽매여 실증을 따지지 않으면 경직을 피하기 어렵습니다.",
+  "h": "86255e75"
+ },
+ "about.xac-dinh-cac-giai-doan-bien": {
+  "t": "시간에 따른 변동 시기를 파악한다",
+  "h": "e0adca76"
+ },
+ "about.y-nghia-cua-tu-vi": {
+  "t": "자미두수의 의미",
+  "h": "835e8685"
+ },
  "bandosao.10-hanh-tinh-vi-tri": {
   "t": "<span class=\"hp-ic\" data-icon=\"sun\"></span><span>행성 10개<br>위치</span>",
   "h": "86d502e2"
@@ -194,6 +582,42 @@
  "banlamviec.vat-pham-nen-them": {
   "t": "<span class=\"ic\" data-icon=\"store\"></span> 추가하면 좋은 물건",
   "h": "b07795fe"
+ },
+ "baocao.bao-cao-moi-ban-luan-ban": {
+  "t": "<b>리포트</b><span>지금까지 연 모든 풀이 — 다시 봐도 냥이 들지 않습니다</span>",
+  "h": "03ea853c"
+ },
+ "baocao.bao-cao-tu-vi-minh-bao": {
+  "t": "리포트 — 명보 자미두수",
+  "h": "424869c8"
+ },
+ "baocao.cap-nhat": {
+  "t": "업데이트",
+  "h": "8f92d966"
+ },
+ "baocao.chua-co-bao-cao-nao-ket": {
+  "t": "아직 리포트가 없습니다.<br>어느 도구에서 본 결과든(미리 보기 포함) 자동으로 여기에 저장됩니다.",
+  "h": "8daa85e0"
+ },
+ "baocao.dang-nhap-dang-ky": {
+  "t": "로그인 / 가입",
+  "h": "2bcf279e"
+ },
+ "baocao.dang-nhap-de-xem-cac-bao": {
+  "t": "로그인하면 가지고 있는 리포트를 볼 수 있습니다.",
+  "h": "4afe4408"
+ },
+ "baocao.ten": {
+  "t": "이름",
+  "h": "e826b62a"
+ },
+ "baocao.tim-bao-cao": {
+  "t": "리포트 검색",
+  "h": "dac215a4"
+ },
+ "baocao.tim-theo-ten-cong-cu": {
+  "t": "이름, 도구로 검색…",
+  "h": "86f221f0"
  },
  "battu.1-nhap-thong-tin": {
   "t": "<span class=\"wss-n\">1</span><span class=\"wss-l\">정보 입력</span>",
@@ -718,6 +1142,82 @@
  "cn.thang-ca-nha-nen-de-y": {
   "t": "온 가족이 눈여겨볼 달",
   "h": "e66184b3"
+ },
+ "combolt.combo-luan-giai-tu-binh-mua": {
+  "t": "<b>세트: 명반 풀이 + 사주</b><span>두 가지 전체판 풀이를 한 번에, 따로 사는 것보다 저렴하게</span>",
+  "h": "af0cc437"
+ },
+ "combolt.combo-luan-giai-tu-binh-tu": {
+  "t": "명반 풀이 + 사주 세트 — 명보 자미두수",
+  "h": "0df54f90"
+ },
+ "combolt.da-mo-khoa-ca-hai-ban": {
+  "t": "두 풀이의 잠금이 모두 해제되었습니다",
+  "h": "91f94c21"
+ },
+ "combolt.luong": {
+  "t": "<span data-tvp-price=\"combo-laso-tubinh\">…</span>냥",
+  "h": "8fbbb057"
+ },
+ "combolt.mua-tron-luan-giai-tu-vi": {
+  "t": "자미두수 13부 풀이와 자평 사주를 한 번에 구매하세요. 따로 사는 것보다 저렴합니다.",
+  "h": "05aa9b4c"
+ },
+ "combolt.xem-luan-giai-tu-vi-xem": {
+  "t": "<a href=\"/app/luan-giai\" id=\"cbLinkLaso\">자미두수 풀이 보기 →</a> <a href=\"/app/bat-tu\" id=\"cbLinkTuBinh\">자평 사주 보기 →</a>",
+  "h": "4bf08a19"
+ },
+ "combotb.chu-trinh-cuoc-doi-9-chang": {
+  "t": "✦ <b>인생 사이클</b> — 대운 9단계, 인생의 정점과 바닥",
+  "h": "af10818a"
+ },
+ "combotb.combo": {
+  "t": "紫微明寶 · 세트",
+  "h": "da13096a"
+ },
+ "combotb.combo-tron-bo-4-tool-mua": {
+  "t": "<b>세트: 도구 4종 전체</b><span>네 가지 풀이를 한 번에, 따로 사는 것보다 저렴하게</span>",
+  "h": "c20edb9c"
+ },
+ "combotb.combo-tron-bo-4-tool-tu": {
+  "t": "도구 4종 전체 세트 — 명보 자미두수",
+  "h": "e2aba5d5"
+ },
+ "combotb.da-mo-khoa-ca-4-ban": {
+  "t": "네 가지 풀이의 잠금이 모두 해제되었습니다",
+  "h": "809c0f7b"
+ },
+ "combotb.dang-tai-gia": {
+  "t": "요금을 불러오는 중…",
+  "h": "d6a0be25"
+ },
+ "combotb.luan-giai-tu-vi-tron-13": {
+  "t": "✦ <b>자미두수 풀이</b> — 13부 전체, 십이궁 + 총론",
+  "h": "adbc495f"
+ },
+ "combotb.luong": {
+  "t": "<span data-tvp-price=\"combo-tron-bo\">…</span>냥",
+  "h": "9b9ca891"
+ },
+ "combotb.mua-combo": {
+  "t": "세트 구매 →",
+  "h": "7eaa5de2"
+ },
+ "combotb.mua-tron-luan-giai-tu-vi": {
+  "t": "자미두수 풀이, 자평 사주, 인생 사이클, 연간 운세를 한 번에 구매하세요. 따로 사는 것보다 저렴합니다.",
+  "h": "8103dab5"
+ },
+ "combotb.tu-binh-bat-tu-nhat-can": {
+  "t": "✦ <b>자평 사주팔자</b> — 일간, 용신, 격국, 대운",
+  "h": "67131116"
+ },
+ "combotb.van-han-nam-12-thang-toi": {
+  "t": "✦ <b>연간 운세</b> — 오늘부터 앞으로 12개월",
+  "h": "4dba2179"
+ },
+ "combotb.xem-luan-giai-tu-vi-xem": {
+  "t": "<a href=\"/app/luan-giai\" id=\"cbLinkLaso\">자미두수 풀이 보기 →</a> <a href=\"/app/bat-tu\" id=\"cbLinkTuBinh\">자평 사주 보기 →</a> <a href=\"/app/chu-trinh-cuoc-doi\" id=\"cbLinkCtcd\">인생 사이클 보기 →</a> <a href=\"/app/van-han-nam\" id=\"cbLinkVhn\">연간 운세 보기 →</a>",
+  "h": "8849b82c"
  },
  "congcu.3-ngay-toi": {
   "t": "앞으로 3일",
@@ -1491,6 +1991,450 @@
   "t": "<span class=\"bg-label\"><span class=\"ic\" data-icon=\"sparkles\"></span><b id=\"btnGoLabel\">인연 보기 →</b></span> <small>비용 <span class=\"vnd\" data-tvp-price-vnd=\"duyen-no-tien-kiep\"></span> <span class=\"cb-sub\">(<span data-tvp-price=\"duyen-no-tien-kiep\">…</span> 냥)</span></small>",
   "h": "990649b6"
  },
+ "faqs.1-chuyen-khoan-ngan-hang-vnd": {
+  "t": "<strong>(1) 베트남 동(VND) 계좌이체</strong>(베트남 국내용) — payOS를 통해 베트남 은행 앱으로 QR 코드를 스캔하면 냥이 자동으로 지갑에 들어옵니다.",
+  "h": "e24f0f9d"
+ },
+ "faqs.2-paypal-the-quoc-te-nhan": {
+  "t": "<strong>(2) PayPal / 해외 카드</strong> — Visa, Mastercard, JCB 사용 가능. PayPal 창에서 \"Pay with Debit or Credit Card\"를 고르면 PayPal 계정 없이도 카드로 결제할 수 있습니다.",
+  "h": "1c2327ba"
+ },
+ "faqs.ai-dung-sau-he-thong-nay": {
+  "t": "이 시스템은 누가 만들었나요? <span class=\"icon\">+</span>",
+  "h": "cbc0edbf"
+ },
+ "faqs.anh-huong-den-toan-bo-luan": {
+  "t": "풀이 전체에 영향을 준다",
+  "h": "ec484c31"
+ },
+ "faqs.ban-co-the-gui-phan-hoi": {
+  "t": "<a href=\"/contact.html\">문의 페이지</a>로 의견을 보내 주시면 시스템 개선에 반영합니다.",
+  "h": "5c411910"
+ },
+ "faqs.ban-nen-xem-luan-giai-nhu": {
+  "t": "풀이는 이렇게 보시면 됩니다:",
+  "h": "55e40baf"
+ },
+ "faqs.ban-than": {
+  "t": "자기 자신",
+  "h": "b2d3973b"
+ },
+ "faqs.cac-cong-cu-phan-tich-van": {
+  "t": "시기별 운세를 분석하는 도구",
+  "h": "8bbb8706"
+ },
+ "faqs.cac-giai-doan-trong-cuoc-doi": {
+  "t": "인생의 여러 단계",
+  "h": "6c24f2a6"
+ },
+ "faqs.cac-nguyen-ly-co-hoc-duoc": {
+  "t": "고학의 원리를 감에만 기대지 않고 데이터로 검증합니다. 그래서 결과에 더 근거가 있지만, 여전히 가치 있는 참고 자료로 보아야 합니다. 대조 과정의 자세한 내용은 <a href=\"/phuong-phap\">시스템 작동 방식</a>에서, 신뢰도에 관한 다른 질문은 <a href=\"/van-dap/do-tin-cay\">문답 — 신뢰도</a>에서 볼 수 있습니다.",
+  "h": "78384f09"
+ },
+ "faqs.cac-noi-dung-nghien-cuu-va": {
+  "t": "연구 콘텐츠와 활용 안내서",
+  "h": "b8acb1ad"
+ },
+ "faqs.cau-hoi-thuong-gap-q-a": {
+  "t": "자주 묻는 질문(Q&amp;A) — 명보 자미두수",
+  "h": "c5f5cedb"
+ },
+ "faqs.cau-hoi-thuong-gap-q-a-q5rv": {
+  "t": "자주 묻는 질문(Q&A) — 명보 자미두수",
+  "h": "6090dd15"
+ },
+ "faqs.cau-truc-la-so-co-tinh": {
+  "t": "명반 구조의 체계성",
+  "h": "657db941"
+ },
+ "faqs.chi-phi-bao-gom": {
+  "t": "비용에는 다음이 포함됩니다:",
+  "h": "b91ae52a"
+ },
+ "faqs.co-he-thong-duoc-cai-thien": {
+  "t": "네. 시스템은 다음을 바탕으로 계속 개선됩니다:",
+  "h": "1e990dc4"
+ },
+ "faqs.co-hoan-tien-khong": {
+  "t": "환불이 되나요? <span class=\"icon\">+</span>",
+  "h": "b6d3b591"
+ },
+ "faqs.co-nhung-cach-thanh-toan-nao": {
+  "t": "결제 방법은 무엇이 있나요? <span class=\"icon\">+</span>",
+  "h": "ed0165ac"
+ },
+ "faqs.co-phap": {
+  "t": "고법",
+  "h": "2f658ba5"
+ },
+ "faqs.cong-cu-tra-cuu-doi-chieu": {
+  "t": "명리를 조회하고 대조하는 도구",
+  "h": "0a4b7d02"
+ },
+ "faqs.day-co-phai-chi-la-website": {
+  "t": "그냥 자미두수 보는 사이트인가요? <span class=\"icon\">+</span>",
+  "h": "9af05020"
+ },
+ "faqs.day-la-cau-hoi-ve-he": {
+  "t": "여기는 시스템과 거래에 관한 질문입니다. 결혼, 재물, 일, 운세 등 자신의 명반이 궁금하다면 <a href=\"/van-dap\">자미두수 문답</a>을 보세요.",
+  "h": "79a010b3"
+ },
+ "faqs.dien-giai-noi-dung": {
+  "t": "내용 해설",
+  "h": "324af67f"
+ },
+ "faqs.dieu-nay-co-the-do": {
+  "t": "다음과 같은 이유일 수 있습니다:",
+  "h": "90c41523"
+ },
+ "faqs.dieu-nay-den-tu": {
+  "t": "그 이유는 다음과 같습니다:",
+  "h": "8448adbc"
+ },
+ "faqs.do-tinh-chat-la-ket-qua": {
+  "t": "디지털 결과물의 특성상 결과가 표시된 뒤에는 <a href=\"/dieu-khoan-dich-vu.html#thanh-toan-va-hoan-tien\">환불하지 않습니다</a>. 결제는 됐는데 결과를 받지 못하는 등 거래 오류가 있으면 바로 <a href=\"/contact.html\">연락</a>해 주세요. 확인 후 처리해 드립니다.",
+  "h": "2a30361f"
+ },
+ "faqs.doi-chieu-voi-cac-dien-bien": {
+  "t": "인생에서 실제로 일어난 일과 대조",
+  "h": "6a063fc7"
+ },
+ "faqs.doi-chieu-voi-du-lieu-thuc": {
+  "t": "실제 데이터와 대조",
+  "h": "94bad6e5"
+ },
+ "faqs.du-lieu-moi": {
+  "t": "새로운 데이터",
+  "h": "d2983792"
+ },
+ "faqs.du-lieu-ngay-gio-sinh-cua": {
+  "t": "실존 인물 27만 명 이상의 생년월일시 데이터",
+  "h": "234d93e8"
+ },
+ "faqs.du-lieu-thuc-te-giup-xac": {
+  "t": "실제 데이터로 패턴을 찾아낸다",
+  "h": "9f6ebf01"
+ },
+ "faqs.duy-tri-ha-tang-cong-nghe": {
+  "t": "기술 인프라 유지",
+  "h": "7d34730c"
+ },
+ "faqs.giai-dap-ve-he-thong-luan": {
+  "t": "풀이 시스템, 정확도, 냥과 결제에 관한 답변.",
+  "h": "b23b0625"
+ },
+ "faqs.giai-dap-ve-he-thong-luan-4j0m": {
+  "t": "명보 자미두수 풀이 시스템에 관한 답변 — 작동 방식, 정확도, 그리고 냥·결제·환불에 관한 질문.",
+  "h": "c5884acb"
+ },
+ "faqs.giai-dap-ve-he-thong-luan-cptq": {
+  "t": "명보 자미두수 풀이 시스템에 관한 답변 — 작동 방식, 정확도, 뒤에 있는 연구팀, 그리고 냥·결제·환불에 관한 질문.",
+  "h": "29c93c9e"
+ },
+ "faqs.giao-dich-luong-thanh-toan": {
+  "t": "거래 · 냥 · 결제",
+  "h": "6de5f2ee"
+ },
+ "faqs.gio-sinh-la-yeu-to-quan": {
+  "t": "출생 시각은 자미두수에서 중요한 요소입니다. 작은 오차라도:",
+  "h": "638bef44"
+ },
+ "faqs.he-thong-chi-dung-de": {
+  "t": "시스템이 하는 일은:",
+  "h": "9b5aa25a"
+ },
+ "faqs.he-thong-co-duoc-cap-nhat": {
+  "t": "시스템은 업데이트되나요? <span class=\"icon\">+</span>",
+  "h": "d573dfc9"
+ },
+ "faqs.he-thong-co-tu-bia-noi": {
+  "t": "시스템이 내용을 \"지어내지\"는 않나요? <span class=\"icon\">+</span>",
+  "h": "9163335f"
+ },
+ "faqs.he-thong-dien-giai-noi-dung": {
+  "t": "시스템이 내용을 해설",
+  "h": "45f13e71"
+ },
+ "faqs.he-thong-dien-giai-theo-dung": {
+  "t": "시스템이 개인의 상황에 맞춰 해설",
+  "h": "f598cd0b"
+ },
+ "faqs.he-thong-giup-ban-hieu-ro": {
+  "t": "시스템은 다음을 더 잘 이해하도록 돕습니다:",
+  "h": "e0d167f6"
+ },
+ "faqs.he-thong-hoat-dong-nhu-the": {
+  "t": "시스템은 어떻게 작동하나요? <span class=\"icon\">+</span>",
+  "h": "879a3e4e"
+ },
+ "faqs.he-thong-khong-tu-doan-ma": {
+  "t": "시스템은 스스로 \"추측\"하지 않고, 이미 확정된 결론을 다시 풀어 설명할 뿐입니다. 5단계 전체 과정은 <a href=\"/phuong-phap\">자미두수 검증</a>에서 보세요.",
+  "h": "4480c36f"
+ },
+ "faqs.hieu-chinh-boi-chuyen-gia": {
+  "t": "전문가의 보정",
+  "h": "10b36d86"
+ },
+ "faqs.hieu-chinh-noi-dung-lien-tuc": {
+  "t": "내용을 계속 보정",
+  "h": "69973443"
+ },
+ "faqs.ket-hop-voi-phuong-phap-va": {
+  "t": "현대의 방법과 기술을 결합",
+  "h": "9ecf21e0"
+ },
+ "faqs.kha-nang": {
+  "t": "가능성",
+  "h": "550f7b6b"
+ },
+ "faqs.khac-biet-trong-truong-phai": {
+  "t": "유파 간의 차이",
+  "h": "28a67aec"
+ },
+ "faqs.khong": {
+  "t": "아니요.",
+  "h": "f102a5bb"
+ },
+ "faqs.khong-co-he-thong-nao-co": {
+  "t": "절대적인 결론을 낼 수 있는 시스템은 없습니다.",
+  "h": "bb36c938"
+ },
+ "faqs.khong-luong-duoc-luu-vinh-vien": {
+  "t": "아니요. 냥은 계정에 영구히 보관되며 언제든 쓸 수 있습니다.",
+  "h": "ed0f9e73"
+ },
+ "faqs.khong-moi-la-so-hay-ket": {
+  "t": "아니요. 각 명반이나 결과는 처음 풀이할 때 한 번만 냥이 차감됩니다. 그 뒤로는 몇 번을 다시 봐도 무료입니다.",
+  "h": "75165ddc"
+ },
+ "faqs.khong-nen-phu-thuoc-hoan-toan": {
+  "t": "결과에 전적으로 의존해서는 안 됩니다.",
+  "h": "cb04372e"
+ },
+ "faqs.khong-tu-vi-minh-bao-la": {
+  "t": "아니요. 명보 자미두수는 여러 연구·풀이 도구로 이루어진 시스템이며, 자미두수는 그 중심이 되는 한 부분입니다.",
+  "h": "6d75d055"
+ },
+ "faqs.la-so-phan-anh": {
+  "t": "명반이 비추는 것:",
+  "h": "784be23d"
+ },
+ "faqs.lam-ro-luan-diem": {
+  "t": "논점을 명확히 한다",
+  "h": "6e34e839"
+ },
+ "faqs.lam-sao-de-nap-luong": {
+  "t": "냥은 어떻게 충전하나요? <span class=\"icon\">+</span>",
+  "h": "73577e49"
+ },
+ "faqs.lam-thay-doi-vi-tri-sao": {
+  "t": "별의 위치가 바뀐다",
+  "h": "9ecafe04"
+ },
+ "faqs.lay-kinh-dien-lam-nen-tang": {
+  "t": "고전을 토대로 삼는다",
+  "h": "a47b04f6"
+ },
+ "faqs.lay-thuc-chung-lam-tieu-chuan": {
+  "t": "실증을 기준으로 삼는다",
+  "h": "d1df793c"
+ },
+ "faqs.logic-luan-giai-da-duoc-xay": {
+  "t": "풀이의 논리는 미리 다음을 바탕으로 만들어져 있습니다:",
+  "h": "6084cf0a"
+ },
+ "faqs.luong-co-het-han-khong": {
+  "t": "냥에 유효기간이 있나요? <span class=\"icon\">+</span>",
+  "h": "05ce0b06"
+ },
+ "faqs.luong-la-don-vi-dung-de": {
+  "t": "냥은 명보 자미두수에서 심화 풀이 도구의 잠금을 해제하는 단위입니다. 한 번 충전하면 모든 도구에 쓸 수 있어, 기능마다 따로 살 필요가 없습니다.",
+  "h": "fe222fa9"
+ },
+ "faqs.luong-la-gi": {
+  "t": "냥이 무엇인가요? <span class=\"icon\">+</span>",
+  "h": "af09a5b2"
+ },
+ "faqs.moi-lan-mo-lai-ket-qua": {
+  "t": "예전 결과를 다시 열 때마다 냥이 차감되나요? <span class=\"icon\">+</span>",
+  "h": "8d7c06a5"
+ },
+ "faqs.mot-cong-cu-ho-tro-quyet": {
+  "t": "결정을 돕는 도구",
+  "h": "b3fa5457"
+ },
+ "faqs.mot-goc-nhin-co-he-thong": {
+  "t": "체계적인 시각",
+  "h": "b79d8456"
+ },
+ "faqs.mot-nguon-tham-khao-co-co": {
+  "t": "근거 있는 참고 자료",
+  "h": "5a51df4e"
+ },
+ "faqs.muc-tieu-khong-chi-la-xem": {
+  "t": "목표는 단지 \"점을 보는\" 것이 아니라, 명리를 이해하고 실생활에 활용하도록 돕는 도구 생태계를 만드는 것입니다.",
+  "h": "90ed16bd"
+ },
+ "faqs.neu-khong-chac-chan-ban-nen": {
+  "t": "확실하지 않다면 결과를 더 참고 수준으로만 활용하세요.",
+  "h": "e402d31b"
+ },
+ "faqs.neu-toi-thay-noi-dung-chua": {
+  "t": "내용이 맞지 않는다고 느끼면 어떻게 하나요? <span class=\"icon\">+</span>",
+  "h": "8818d326"
+ },
+ "faqs.ngoai-ra-nen-tang-con-bao": {
+  "t": "이 밖에 플랫폼에는 다음도 있습니다:",
+  "h": "c98ec9b0"
+ },
+ "faqs.nhom-bao-gom-cac-hoc-gia": {
+  "t": "팀에는 자미두수 학자와 연구자, 그리고 많은 명반을 실제로 풀이해 온 경험자들이 있습니다. 학술에서 실천까지 저마다 다른 시각을 지녔지만, 명리를 진지하게 이해하고 체계화한다는 목표를 함께합니다. 자세한 내용은 <a href=\"/about.html\">소개</a> 페이지를 보세요.",
+  "h": "fd39d8c1"
+ },
+ "faqs.nhung-ket-qua-cuoi-cung-van": {
+  "t": "하지만 최종 결과는 여전히 각자의 행동과 선택에 달려 있습니다.",
+  "h": "8d1d8452"
+ },
+ "faqs.nhung-xu-huong-co-the-xay": {
+  "t": "일어날 수 있는 경향",
+  "h": "e3dbdcb7"
+ },
+ "faqs.noi-dung-luan-giai-co-thuc": {
+  "t": "풀이 내용은 정말 정확한가요? <span class=\"icon\">+</span>",
+  "h": "08936df9"
+ },
+ "faqs.phan-hoi-nguoi-dung": {
+  "t": "사용자 피드백",
+  "h": "fe75cdef"
+ },
+ "faqs.phan-tich-cau-truc-theo-nguyen": {
+  "t": "자미두수 원리에 따라 구조를 분석",
+  "h": "3b937e5e"
+ },
+ "faqs.phat-trien-he-thong-luan-giai": {
+  "t": "풀이 시스템 개발",
+  "h": "cb9ef15b"
+ },
+ "faqs.phi-dich-vu-giup-dam-bao": {
+  "t": "이용료는 시스템의 품질과 진지한 투자를 뒷받침합니다.",
+  "h": "19322883"
+ },
+ "faqs.qua-trinh-kiem-nghiem-thuc-te": {
+  "t": "실제 검증 과정",
+  "h": "de20f584"
+ },
+ "faqs.quy-tac-da-kiem-nghiem": {
+  "t": "검증된 규칙",
+  "h": "bfadc1f0"
+ },
+ "faqs.quy-trinh-luan-giai-gom-nhieu": {
+  "t": "풀이 과정은 여러 단계로 이루어집니다:",
+  "h": "dc04d724"
+ },
+ "faqs.sai-gio-sinh": {
+  "t": "출생 시각 오류",
+  "h": "740a22eb"
+ },
+ "faqs.su-dung-la-ket-qua-cua": {
+  "t": "\"맞는다\"는 것은 방법의 결과이지, 우연한 추측이 아닙니다.",
+  "h": "517839bc"
+ },
+ "faqs.tai-sao-noi-dung-doc-giong": {
+  "t": "왜 내용이 \"나와 똑같이\" 읽히나요? <span class=\"icon\">+</span>",
+  "h": "f5983ec4"
+ },
+ "faqs.thanh-toan-xong-ma-chua-thay": {
+  "t": "결제했는데 지갑에 냥이 안 들어왔나요? <span class=\"icon\">+</span>",
+  "h": "eab1cb35"
+ },
+ "faqs.thoi-diem": {
+  "t": "시점",
+  "h": "020b0562"
+ },
+ "faqs.thu-lam-moi-trang-f5-hoac": {
+  "t": "페이지를 새로고침(F5)하거나 <a href=\"/app/ho-so\">프로필</a> → '냥 지갑' 탭에서 잔액을 다시 확인하세요. 1~2분이 지나도 보이지 않으면 거래 번호(PayPal 또는 payOS)와 함께 <a href=\"/contact.html\">문의 페이지</a>로 연락해 주세요.",
+  "h": "226c73c9"
+ },
+ "faqs.toan-bo-noi-dung-luan-giai": {
+  "t": "그 도구의 심화 풀이 전체 — 당신의 명반과 상황에 맞춰 쓰인 내용 — 와 무제한 다시 보기, 그리고 도구가 지원하면 다운로드까지.",
+  "h": "f4f821fa"
+ },
+ "faqs.toi-co-the-thay-doi-van": {
+  "t": "운명을 바꿀 수 있나요? <span class=\"icon\">+</span>",
+  "h": "5dfa0b85"
+ },
+ "faqs.toi-nen-su-dung-ket-qua": {
+  "t": "결과를 어떻게 활용해야 하나요? <span class=\"icon\">+</span>",
+  "h": "01d8b923"
+ },
+ "faqs.tra-phi-xong-toi-nhan-duoc": {
+  "t": "결제하면 무엇을 받나요? <span class=\"icon\">+</span>",
+  "h": "7bfad677"
+ },
+ "faqs.tu-vi-khong-phai-la-su": {
+  "t": "자미두수는 절대적인 정해진 운명이 아닙니다.",
+  "h": "cbd47d29"
+ },
+ "faqs.tu-vi-minh-bao-duoc-xay": {
+  "t": "명보 자미두수는 다음 방향을 가진 명리 연구팀이 만들었습니다:",
+  "h": "6fb267dd"
+ },
+ "faqs.tu-vi-minh-bao-la-gi": {
+  "t": "명보 자미두수는 무엇인가요? <span class=\"icon\">+</span>",
+  "h": "7085b3b2"
+ },
+ "faqs.tu-vi-minh-bao-la-he": {
+  "t": "명보 자미두수는 동양의 고학, 실제 데이터, 현대 기술을 결합한 개인 맞춤형 풀이 시스템입니다.",
+  "h": "253a2e07"
+ },
+ "faqs.tuy-nhien-tu-vi-minh-bao": {
+  "t": "다만 명보 자미두수는 다음 위에 세워졌습니다:",
+  "h": "3adb9017"
+ },
+ "faqs.vao-ho-so-tab-vi-luong": {
+  "t": "<a href=\"/app/ho-so\">프로필</a> → '냥 지갑' 탭에서 현재 잔액과 냥 충전·차감의 전체 기록을 볼 수 있습니다.",
+  "h": "1b550c61"
+ },
+ "faqs.vao-trang-nap-luong-chon-mot": {
+  "t": "<a href=\"/topup.html\">냥 충전</a> 페이지에서 알맞은 패키지를 골라 결제하세요. 거래가 성공하면 바로 냥이 지갑에 더해집니다.",
+  "h": "a8423928"
+ },
+ "faqs.ve-he-thong": {
+  "t": "시스템에 대하여",
+  "h": "f81106ca"
+ },
+ "faqs.vi-sao-phai-nhap-chinh-xac": {
+  "t": "왜 출생 시각을 정확히 입력해야 하나요? <span class=\"icon\">+</span>",
+  "h": "28f58ae2"
+ },
+ "faqs.vi-sao-phai-tra-phi-de": {
+  "t": "왜 전체를 보려면 요금을 내야 하나요? <span class=\"icon\">+</span>",
+  "h": "9fa7926b"
+ },
+ "faqs.xay-dung-la-so-tu-ngay": {
+  "t": "생년월일시로 명반을 세운다",
+  "h": "82018c4e"
+ },
+ "faqs.xay-dung-va-xu-ly-du": {
+  "t": "대규모 데이터 구축과 처리",
+  "h": "5b3550e6"
+ },
+ "faqs.xem-lai-lich-su-giao-dich": {
+  "t": "거래 내역은 어디서 보나요? <span class=\"icon\">+</span>",
+  "h": "c1de6029"
+ },
+ "faqs.xem-them": {
+  "t": "더 보기",
+  "h": "55d48a8e"
+ },
+ "faqs.xu-huong": {
+  "t": "경향",
+  "h": "7964ab99"
+ },
+ "faqs.yeu-to-ca-nhan-chua-duoc": {
+  "t": "개인적 요소가 충분히 반영되지 않았다",
+  "h": "4fbc118f"
+ },
  "giosinh.12-la-so-kha-nghi": {
   "t": "후보 명반<br>12개",
   "h": "6b8b7bde"
@@ -1646,6 +2590,114 @@
  "giosinh.xep-hang-do-khop": {
   "t": "일치도<br>순위",
   "h": "a6655e79"
+ },
+ "hdtt.cach-hoat-dong": {
+  "t": "이용 방법",
+  "h": "8ad7f762"
+ },
+ "hdtt.cau-hoi-thuong-gap": {
+  "t": "자주 묻는 질문",
+  "h": "ef0eb919"
+ },
+ "hdtt.chi-phi": {
+  "t": "비용",
+  "h": "3c453110"
+ },
+ "hdtt.chon-goi-nap-luong": {
+  "t": "냥 충전 패키지 고르기",
+  "h": "a8809b21"
+ },
+ "hdtt.cong-cu": {
+  "t": "도구",
+  "h": "6029ffef"
+ },
+ "hdtt.dang-ky-tai-khoan-mien-phi": {
+  "t": "무료 계정 가입",
+  "h": "dc9cfb39"
+ },
+ "hdtt.gia-doc-truc-tiep-tu-he": {
+  "t": "요금은 시스템에서 바로 읽어 오며 바뀔 수 있습니다. 전체 패키지는 <a href=\"/topup.html\">냥 충전</a> 페이지에서 보세요.",
+  "h": "40462886"
+ },
+ "hdtt.he-thong-luong-nap-1-lan": {
+  "t": "냥(크레딧) · 한 번 충전으로 모든 도구 · 만료 없음 · 최종 업데이트: 2026년 9월",
+  "h": "393b8272"
+ },
+ "hdtt.ho-tro": {
+  "t": "지원",
+  "h": "01dbe5e4"
+ },
+ "hdtt.huong-dan-nap-luong-va-su": {
+  "t": "냥 충전과 명보 자미두수 이용 안내 — 한 번 충전하면 모든 도구에 쓸 수 있고 만료되지 않습니다.",
+  "h": "24909177"
+ },
+ "hdtt.huong-dan-thanh-toan": {
+  "t": "결제 안내",
+  "h": "52fb0da5"
+ },
+ "hdtt.huong-dan-thanh-toan-tu-vi": {
+  "t": "결제 안내 — 명보 자미두수",
+  "h": "68863047"
+ },
+ "hdtt.luan-giai-la-so-24-phan": {
+  "t": "<span class=\"ic\" data-icon=\"sparkles\"></span> 명반 풀이(24부)",
+  "h": "5f257ac9"
+ },
+ "hdtt.luong-co-het-han-khong-khong": {
+  "t": "<strong>냥에 유효기간이 있나요?</strong><br> 아니요. 냥은 절대 만료되지 않습니다.",
+  "h": "fa64598b"
+ },
+ "hdtt.moi-ket-qua-chi-tru-luong": {
+  "t": "✓ 결과 하나당 냥은 <strong>한 번만</strong> 차감됩니다. 프로필 페이지에서 언제든 무료로 다시 볼 수 있습니다.",
+  "h": "70edf1aa"
+ },
+ "hdtt.nap-xong-luong-nhung-chua-thay": {
+  "t": "<strong>충전했는데 계정에 냥이 보이지 않나요?</strong><br> 페이지를 새로고침(F5)하거나 <a href=\"/app/ho-so\">프로필</a> → <strong>냥 지갑</strong> 탭에서 확인하세요. 그래도 보이지 않으면 거래 번호와 함께 <a href=\"/contact.html\">문의 페이지</a>로 연락해 주세요.",
+  "h": "2751c285"
+ },
+ "hdtt.neu-gap-bat-ky-van-de": {
+  "t": "결제에 문제가 생기면, 이중 청구를 피하기 위해 다시 결제하기 전에 먼저 연락해 주세요.",
+  "h": "be148f9d"
+ },
+ "hdtt.nhan-dang-nhap-o-goc-tren": {
+  "t": "오른쪽 위의 <strong>로그인</strong>을 누르세요. Google, Facebook 또는 이메일/비밀번호로 이용할 수 있습니다. 계정에 잔액과 이용 기록이 저장됩니다.",
+  "h": "74382ed3"
+ },
+ "hdtt.quy-doi": {
+  "t": "환산",
+  "h": "7fedefea"
+ },
+ "hdtt.sau-khi-nap-xong-quay-lai": {
+  "t": "충전이 끝나면 원하는 도구로 돌아가 <strong>잠금 해제</strong>를 누르세요. 냥이 즉시 자동 차감됩니다 — 리디렉션이나 확인 대기가 없습니다.",
+  "h": "68a4a3c2"
+ },
+ "hdtt.su-dung-cong-cu": {
+  "t": "도구 사용하기",
+  "h": "db5111aa"
+ },
+ "hdtt.toi-co-the-chuyen-luong-cho": {
+  "t": "<strong>냥을 다른 사람에게 넘길 수 있나요?</strong><br> 아니요. 냥은 개인 계정에 묶여 있어 양도할 수 없습니다.",
+  "h": "8fa6a001"
+ },
+ "hdtt.toi-co-the-dung-luong-cho": {
+  "t": "<strong>냥을 여러 도구에 쓸 수 있나요?</strong><br> 네. 한 번 충전으로 명반, 부부 궁합, 사업 궁합, 그리고 앞으로 나올 모든 도구에 쓸 수 있습니다.",
+  "h": "efdd8796"
+ },
+ "hdtt.toi-co-the-thanh-toan-bang": {
+  "t": "<strong>PayPal 계정 없이 카드로 결제할 수 있나요?</strong><br> 네. 냥 충전 페이지에서 <strong>Visa / Mastercard 카드</strong>를 고르면 PayPal이 카드 입력 양식을 바로 엽니다. PayPal 로그인은 필요 없습니다.",
+  "h": "07387ee6"
+ },
+ "hdtt.vao-trang-nap-luong-va-chon": {
+  "t": "<a href=\"/topup.html\"><strong>냥 충전</strong></a> 페이지에서 아래 패키지 중 하나를 고르세요. <strong>PayPal</strong> 또는 <strong>Visa / Mastercard 카드</strong>(PayPal 계정 불필요)로 <strong>미국 달러</strong> 결제하면 냥이 자동으로 계정에 들어옵니다.",
+  "h": "0cf8596a"
+ },
+ "hdtt.xem-tuoi-lam-an": {
+  "t": "<span class=\"ic\" data-icon=\"briefcase\"></span> 사업 궁합 보기",
+  "h": "d5dec0bd"
+ },
+ "hdtt.xem-tuoi-vo-chong": {
+  "t": "<span class=\"ic\" data-icon=\"heart-handshake\"></span> 부부 궁합 보기",
+  "h": "177d20f4"
  },
  "hnt.2-xem-truoc": {
   "t": "<span class=\"wss-n\">2</span><span class=\"wss-l\">미리보기</span>",
@@ -2538,6 +3590,82 @@
  "js.auth.vui-long-dien-email-va-mat": {
   "t": "이메일과 비밀번호를 입력해 주세요.",
   "h": "d84b9abd"
+ },
+ "js.baocao.bao-cao": {
+  "t": "리포트",
+  "h": "7013ca8b"
+ },
+ "js.baocao.bao-cao-nay-trong": {
+  "t": "이 리포트는 비어 있습니다.",
+  "h": "173edc16"
+ },
+ "js.baocao.chua-gui-duoc-thu-lai-sau": {
+  "t": "보내지 못했습니다. 잠시 후 다시 시도해 주세요.",
+  "h": "22c4f6e1"
+ },
+ "js.baocao.chua-mo-duoc-bao-cao-thu": {
+  "t": "리포트를 열지 못했습니다. 잠시 후 다시 시도해 주세요.",
+  "h": "881dfbd0"
+ },
+ "js.baocao.chua-tai-duoc-danh-sach-bao": {
+  "t": "리포트 목록을 불러오지 못했습니다. 페이지를 새로고침해 주세요.",
+  "h": "ebdf3123"
+ },
+ "js.baocao.da-gui-vao-email": {
+  "t": "✓ 이메일로 보냈습니다",
+  "h": "9a79e18c"
+ },
+ "js.baocao.da-gui-vao-zalo": {
+  "t": "✓ Zalo로 보냈습니다",
+  "h": "8b84b9e9"
+ },
+ "js.baocao.dang-gui": {
+  "t": "보내는 중…",
+  "h": "f04c8be3"
+ },
+ "js.baocao.dang-mo-bao-cao": {
+  "t": "리포트를 여는 중…",
+  "h": "401bc684"
+ },
+ "js.baocao.gio-truoc": {
+  "t": " 시간 전",
+  "h": "ce828227"
+ },
+ "js.baocao.gui-lai-chua-thanh-cong": {
+  "t": "다시 보내지 못했습니다: ",
+  "h": "b6ab8dbd"
+ },
+ "js.baocao.gui-lai-loi": {
+  "t": "다시 보내기 오류: ",
+  "h": "1364cea5"
+ },
+ "js.baocao.gui-loi": {
+  "t": "전송 오류: ",
+  "h": "485901a2"
+ },
+ "js.baocao.gui-pdf": {
+  "t": "PDF 보내기",
+  "h": "c2a33934"
+ },
+ "js.baocao.gui-ve-zalo": {
+  "t": "Zalo로 보내기",
+  "h": "3ae6f411"
+ },
+ "js.baocao.loi-khong-ro": {
+  "t": "알 수 없는 오류",
+  "h": "33ea1001"
+ },
+ "js.baocao.ngay-truoc": {
+  "t": " 일 전",
+  "h": "92423d27"
+ },
+ "js.baocao.phut-truoc": {
+  "t": " 분 전",
+  "h": "b1017a2c"
+ },
+ "js.baocao.thu-lai-sau-it-phut": {
+  "t": ". 잠시 후 다시 시도해 주세요.",
+  "h": "0795401e"
  },
  "js.battu.10-luan-ky-giup-toi": {
   "t": "/10)’ — 자세히 풀이해 주세요",
@@ -3646,6 +4774,50 @@
  "js.cns.trung-ca": {
   "t": "<b>생일과 태어난 시각이 모두</b> 같은 사람이 있습니다. 명반이 똑같이 나옵니다.",
   "h": "3272dba6"
+ },
+ "js.combo.cham-tran": {
+  "t": "체험 이용 한도에 도달했습니다.",
+  "h": "2fdb2e1a"
+ },
+ "js.combo.dang-tinh": {
+  "t": "계산 중…",
+  "h": "76a9d5f0"
+ },
+ "js.combo.dang-xu-ly": {
+  "t": "처리 중…",
+  "h": "a2e96c58"
+ },
+ "js.combo.het-phien": {
+  "t": "로그인 세션이 만료되었습니다. 다시 로그인해 주세요.",
+  "h": "aba6739e"
+ },
+ "js.combo.khong-du-luong": {
+  "t": "냥이 부족합니다 — 충전해 주세요.",
+  "h": "1d9e17da"
+ },
+ "js.combo.khong-dung-khung": {
+  "t": "연간 운세의 틀을 만들지 못했습니다. 다시 시도해 주세요.",
+  "h": "07f0a83f"
+ },
+ "js.combo.loi": {
+  "t": "오류: ",
+  "h": "471c0087"
+ },
+ "js.combo.loi-ket-noi": {
+  "t": "연결 오류: ",
+  "h": "46e34d76"
+ },
+ "js.combo.ngoai-pham-vi": {
+  "t": "지원 범위(1900–2100년)를 벗어난 생년월일입니다.",
+  "h": "5e5d6ef9"
+ },
+ "js.combo.nhap-du-ngay": {
+  "t": "태어난 일, 월, 연도를 모두 입력해 주세요.",
+  "h": "075a6b15"
+ },
+ "js.combo.thu-lai": {
+  "t": "다시 시도해 주세요.",
+  "h": "2f1d18ee"
  },
  "js.congcutr.chua-xep-vao-nhom-nao": {
   "t": "아직 분류되지 않음",
@@ -5427,6 +6599,26 @@
   "t": "후보 12개 시각 보기",
   "h": "3cd9aabf"
  },
+ "js.hdtt.goi-cao-cap": {
+  "t": "프리미엄",
+  "h": "12f26fd0"
+ },
+ "js.hdtt.goi-khoi-dau": {
+  "t": "스타터",
+  "h": "fd7bbfc8"
+ },
+ "js.hdtt.goi-n": {
+  "t": "패키지 {n}",
+  "h": "dde5589f"
+ },
+ "js.hdtt.goi-pho-thong": {
+  "t": "스탠다드",
+  "h": "01d0c63f"
+ },
+ "js.hdtt.n-luong": {
+  "t": "{n}냥",
+  "h": "c4904a65"
+ },
  "js.hnt.ba-huong-dang-cho-con-thu": {
   "t": "해 볼 만한 세 가지 방향과 연령에 맞는 구체적인 활동",
   "h": "b8c61ec7"
@@ -6582,6 +7774,10 @@
  "js.lasochart.tuoi-al": {
   "t": "{n}세 (음력 기준)",
   "h": "cd4bc076"
+ },
+ "js.lienhe.gui-email": {
+  "t": "이메일 보내기",
+  "h": "5901b176"
  },
  "js.loading.45-60": {
   "t": "약 45~60초",
@@ -9198,6 +10394,74 @@
  "js.oracle.xem-xet-dau-la-nhung-dieu": {
   "t": "삶에서 균형이 깨진 곳이 어디인지 살펴보세요. 일/휴식, 주기/받기, 행동/성찰 — 다시 맞춰 보세요.",
   "h": "64dee7e0"
+ },
+ "js.paysuc.cam-on": {
+  "t": "명보 자미두수를 이용해 주셔서 감사합니다.<br>냥으로 명반 풀이와 궁합을 볼 수 있습니다.",
+  "h": "25108a9b"
+ },
+ "js.paysuc.co-loi": {
+  "t": "오류가 발생했습니다",
+  "h": "f2ebd14e"
+ },
+ "js.paysuc.cong-credits": {
+  "t": "+{n}냥",
+  "h": "2b2cc385"
+ },
+ "js.paysuc.dang-quay-lai": {
+  "t": "잠금 해제를 이어서 하러 돌아가는 중…",
+  "h": "018f2e01"
+ },
+ "js.paysuc.hoac-dung-ngay": {
+  "t": "또는 바로 사용하기",
+  "h": "53432ef3"
+ },
+ "js.paysuc.lien-he-ho-tro": {
+  "t": "고객 지원 문의",
+  "h": "554c1a63"
+ },
+ "js.paysuc.loi-ket-noi": {
+  "t": "연결 오류입니다. 잠시 후 다시 시도해 주세요.",
+  "h": "8d18d14b"
+ },
+ "js.paysuc.luan-giai-la-so": {
+  "t": "명반 풀이",
+  "h": "72f1fa6d"
+ },
+ "js.paysuc.nap-thanh-cong": {
+  "t": "충전이 완료되었습니다!",
+  "h": "897b5556"
+ },
+ "js.paysuc.nap-them": {
+  "t": "냥 더 충전하기",
+  "h": "70a597bd"
+ },
+ "js.paysuc.quay-lai-nap": {
+  "t": "← 충전으로 돌아가기",
+  "h": "477330f2"
+ },
+ "js.paysuc.so-du": {
+  "t": "현재 잔액: {n}냥",
+  "h": "0ed1f309"
+ },
+ "js.paysuc.that-bai": {
+  "t": "결제에 실패했습니다. 고객 지원에 문의해 주세요.",
+  "h": "bddbcf89"
+ },
+ "js.paysuc.thieu-thong-tin": {
+  "t": "결제 정보가 부족합니다. 고객 지원에 문의해 주세요.",
+  "h": "1309e497"
+ },
+ "js.paysuc.xem-tai-khoan": {
+  "t": "계정 보기 →",
+  "h": "0ad98c44"
+ },
+ "js.paysuc.xem-tuoi-lam-an": {
+  "t": "사업 궁합 보기",
+  "h": "5f5ba4e2"
+ },
+ "js.paysuc.xem-tuoi-vo-chong": {
+  "t": "부부 궁합 보기",
+  "h": "f3e7b1ed"
  },
  "js.paywall.bam-mo-la-tra-tien-va": {
   "t": " · 열면 바로 결제되고 곧바로 읽을 수 있어요, ",
@@ -13875,6 +15139,466 @@
   "t": "Zalo",
   "h": "53b71aec"
  },
+ "js.taikhoan.ban-chua-chia-se-luot-nao": {
+  "t": "아직 공유한 내역이 없습니다.",
+  "h": "4be43058"
+ },
+ "js.taikhoan.ban-chua-gui-gop-y-nao": {
+  "t": "아직 보낸 의견이 없습니다.",
+  "h": "ed1ab4a7"
+ },
+ "js.taikhoan.ban-da-dung-het-luot-moi": {
+  "t": "지난 30일 동안 보상받는 초대 <strong>{n}</strong>회를 모두 사용했습니다 — ",
+  "h": "fbab17bd"
+ },
+ "js.taikhoan.ban-muon-noi-gi": {
+  "t": "어떤 말씀을 하고 싶으신가요?",
+  "h": "7a12a7f9"
+ },
+ "js.taikhoan.ban-tu-them": {
+  "t": "직접 추가",
+  "h": "39ff4ca3"
+ },
+ "js.taikhoan.buoc-xong": {
+  "t": "{a}/{b} 단계",
+  "h": "ab8c9cf8"
+ },
+ "js.taikhoan.cap-luong-quan-tri": {
+  "t": "냥 지급(관리자)",
+  "h": "24c9d12a"
+ },
+ "js.taikhoan.chua-co-giao-dich-nao": {
+  "t": "아직 거래가 없습니다.",
+  "h": "eca9ffd5"
+ },
+ "js.taikhoan.chua-dung": {
+  "t": " 맞지 않음",
+  "h": "ddd914ee"
+ },
+ "js.taikhoan.chua-lien-ket": {
+  "t": "연결되지 않음.",
+  "h": "e0fe1693"
+ },
+ "js.taikhoan.da-chep": {
+  "t": "복사했습니다 ✓",
+  "h": "846252e0"
+ },
+ "js.taikhoan.da-copy": {
+  "t": "✓ 복사했습니다",
+  "h": "86409906"
+ },
+ "js.taikhoan.da-doi-mat-khau-thanh-cong": {
+  "t": "✓ 비밀번호를 변경했습니다.",
+  "h": "b0be11cd"
+ },
+ "js.taikhoan.da-hoan-tat-luong": {
+  "t": "✓ 완료 — +{n}냥이 지갑에 들어왔습니다.",
+  "h": "7974b68b"
+ },
+ "js.taikhoan.da-lien-ket-bot-messenger-dung": {
+  "t": "✓ 연결됨 — Messenger 봇이 이 냥 지갑을 함께 씁니다.",
+  "h": "ead6c730"
+ },
+ "js.taikhoan.da-lien-ket-bot-telegram-dung": {
+  "t": "✓ 연결됨 — Telegram 봇이 이 냥 지갑을 함께 씁니다.",
+  "h": "6f58b63f"
+ },
+ "js.taikhoan.da-lien-ket-bot-whatsapp-dung": {
+  "t": "✓ 연결됨 — WhatsApp 봇이 이 냥 지갑을 함께 씁니다.",
+  "h": "882115d7"
+ },
+ "js.taikhoan.da-lien-ket-bot-zalo-dung": {
+  "t": "✓ 연결됨 — Zalo 봇이 이 냥 지갑을 함께 씁니다.",
+  "h": "deed0e79"
+ },
+ "js.taikhoan.da-luu-ten-hien-thi": {
+  "t": "✓ 표시 이름을 저장했습니다.",
+  "h": "48253036"
+ },
+ "js.taikhoan.da-mo-messenger-bam-bat-dau": {
+  "t": " Messenger를 열었습니다 — \"Get Started\"를 누르거나 메시지를 1개 보내 완료한 뒤 페이지를 새로고침하세요.",
+  "h": "e353366d"
+ },
+ "js.taikhoan.da-mo-telegram-bam-bat-dau": {
+  "t": " Telegram을 열었습니다 — 봇에서 \"Start\"를 눌러 완료한 뒤 페이지를 새로고침하세요.",
+  "h": "4d2c8d09"
+ },
+ "js.taikhoan.da-mo-whatsapp-bam-gui-tin": {
+  "t": " WhatsApp을 열었습니다 — 미리 작성된 메시지를 보내 완료한 뒤 페이지를 새로고침하세요.",
+  "h": "c9e07106"
+ },
+ "js.taikhoan.da-nhan-cam-on-ban-trang": {
+  "t": "접수했습니다 — 감사합니다. 처리 상태는 바로 아래에 표시됩니다.",
+  "h": "a25f2423"
+ },
+ "js.taikhoan.dang-gui": {
+  "t": "보내는 중…",
+  "h": "f04c8be3"
+ },
+ "js.taikhoan.dang-nhap-de-xem-ho-so": {
+  "t": "로그인하면 프로필을 볼 수 있습니다.",
+  "h": "1bfe72cf"
+ },
+ "js.taikhoan.dang-tai": {
+  "t": "불러오는 중…",
+  "h": "577a1d59"
+ },
+ "js.taikhoan.dang-tao": {
+  "t": "만드는 중…",
+  "h": "47662404"
+ },
+ "js.taikhoan.dang-tao-lien-ket": {
+  "t": "연결 링크를 만드는 중…",
+  "h": "c32c93b3"
+ },
+ "js.taikhoan.dang-tao-ma": {
+  "t": "코드를 만드는 중…",
+  "h": "a761e1d7"
+ },
+ "js.taikhoan.day-la-hop-thu-toi-thang": {
+  "t": "이곳은 운영자에게 바로 가는 우편함입니다 — 선생님께 묻는 곳이 아닙니다. ",
+  "h": "4eeaf74a"
+ },
+ "js.taikhoan.doi-mat-khau-that-bai": {
+  "t": "✗ 비밀번호를 변경하지 못했습니다.",
+  "h": "85e611bb"
+ },
+ "js.taikhoan.dung": {
+  "t": " 맞음",
+  "h": "552da34c"
+ },
+ "js.taikhoan.fb-bug": {
+  "t": "기술 오류",
+  "h": "ac755291"
+ },
+ "js.taikhoan.fb-da-nhan": {
+  "t": "접수됨",
+  "h": "efb7534b"
+ },
+ "js.taikhoan.fb-da-xem": {
+  "t": "확인함",
+  "h": "f9809904"
+ },
+ "js.taikhoan.fb-da-xu-ly": {
+  "t": "처리 완료",
+  "h": "500a2314"
+ },
+ "js.taikhoan.fb-dang-xu-ly": {
+  "t": "처리 중",
+  "h": "39fc9334"
+ },
+ "js.taikhoan.fb-noi-dung": {
+  "t": "풀이 내용",
+  "h": "535d1e57"
+ },
+ "js.taikhoan.fb-placeholder": {
+  "t": "구체적일수록 고치기 쉽습니다. 예: &quot;1990년생 명반 풀이에서 재운 항목이 대운 항목과 반대로 말한다&quot;가 &quot;풀이가 별로다&quot;보다 훨씬 낫습니다.",
+  "h": "e9db4ac9"
+ },
+ "js.taikhoan.fb-thanh-toan": {
+  "t": "결제 · 냥",
+  "h": "8987b413"
+ },
+ "js.taikhoan.fb-tinh-nang": {
+  "t": "기능 제안",
+  "h": "f6ecc4b0"
+ },
+ "js.taikhoan.giu-toi-da-muc": {
+  "t": "최대 {n}개까지 보관 — 넘으면 선생님이 가장 오래된 항목부터 지웁니다.",
+  "h": "1ca9d45e"
+ },
+ "js.taikhoan.gop-y-da-gui": {
+  "t": "보낸 의견",
+  "h": "edc5809d"
+ },
+ "js.taikhoan.gui-gop-y-ka3h": {
+  "t": "의견 보내기",
+  "h": "9e3497a6"
+ },
+ "js.taikhoan.gui-gop-y-tieu-de": {
+  "t": "의견 보내기",
+  "h": "dc7d7429"
+ },
+ "js.taikhoan.hien-thi-giao-dich": {
+  "t": "{a}–{b}번째 표시 / 전체 {n}건 거래",
+  "h": "7ab97fcf"
+ },
+ "js.taikhoan.hoac": {
+  "t": "또는",
+  "h": "2797f4b3"
+ },
+ "js.taikhoan.hoi-dap-tu-tu-vi-minh": {
+  "t": "명보 자미두수의 답변",
+  "h": "dd209967"
+ },
+ "js.taikhoan.hoi-thay": {
+  "t": "선생님께 묻기",
+  "h": "c9ffbbaf"
+ },
+ "js.taikhoan.huong-dan-thanh-toan": {
+  "t": "결제 안내",
+  "h": "53371141"
+ },
+ "js.taikhoan.huy": {
+  "t": "취소",
+  "h": "33639e92"
+ },
+ "js.taikhoan.huy-lien-ket-messenger-bot-se": {
+  "t": "Messenger 연결을 해제할까요? 봇이 더 이상 당신의 냥 지갑을 쓰지 못합니다.",
+  "h": "e19d5555"
+ },
+ "js.taikhoan.huy-lien-ket-telegram-bot-se": {
+  "t": "Telegram 연결을 해제할까요? 봇이 더 이상 당신의 냥 지갑을 쓰지 못합니다.",
+  "h": "6c158247"
+ },
+ "js.taikhoan.huy-lien-ket-whatsapp-bot-se": {
+  "t": "WhatsApp 연결을 해제할까요? 봇이 더 이상 당신의 냥 지갑을 쓰지 못합니다.",
+  "h": "31f159a4"
+ },
+ "js.taikhoan.huy-lien-ket-zalo-bot-se": {
+  "t": "Zalo 연결을 해제할까요? 봇이 더 이상 당신의 냥 지갑을 쓰지 못합니다.",
+  "h": "a3a4a628"
+ },
+ "js.taikhoan.ket-qua": {
+  "t": "결과",
+  "h": "c9f95514"
+ },
+ "js.taikhoan.khac": {
+  "t": "기타",
+  "h": "5b8a28ab"
+ },
+ "js.taikhoan.khi-ho-nap-luong-lan-dau": {
+  "t": "그 사람이 처음 냥을 충전하면 두 사람 모두 <strong>30냥</strong>을 더 받습니다.",
+  "h": "201f2475"
+ },
+ "js.taikhoan.khong-co-giao-dich-khop-bo": {
+  "t": "필터에 맞는 거래가 없습니다.",
+  "h": "b78b80e3"
+ },
+ "js.taikhoan.khong-doc-duoc-ho-so-thu": {
+  "t": "프로필을 불러오지 못했습니다. 페이지를 새로고침해 주세요.",
+  "h": "ac5f4991"
+ },
+ "js.taikhoan.khong-doc-duoc-lich-su": {
+  "t": "기록을 불러오지 못했습니다.",
+  "h": "c7ccf5f8"
+ },
+ "js.taikhoan.khong-doc-duoc-tien-do-thu": {
+  "t": "진행 상황을 불러오지 못했습니다. 페이지를 새로고침해 주세요.",
+  "h": "873418be"
+ },
+ "js.taikhoan.khong-gui-duoc-xin-thu-lai": {
+  "t": "보내지 못했습니다. 다시 시도해 주세요.",
+  "h": "c29e25ae"
+ },
+ "js.taikhoan.khong-tai-duoc-danh-sach-gop": {
+  "t": "의견 목록을 불러오지 못했습니다.",
+  "h": "56f9aa7c"
+ },
+ "js.taikhoan.khong-tai-duoc-trang-thai-lien": {
+  "t": "연결 상태를 불러오지 못했습니다.",
+  "h": "d42a2701"
+ },
+ "js.taikhoan.khong-tao-duoc-key-thu-lai": {
+  "t": "키를 만들지 못했습니다. 잠시 후 다시 시도해 주세요.",
+  "h": "d5bedd90"
+ },
+ "js.taikhoan.khong-tao-duoc-lien-ket-thu": {
+  "t": "연결 링크를 만들지 못했습니다. 잠시 후 다시 시도해 주세요.",
+  "h": "095112a9"
+ },
+ "js.taikhoan.khong-the-tai-lich-su": {
+  "t": "기록을 불러올 수 없습니다.",
+  "h": "034a35a9"
+ },
+ "js.taikhoan.khong-thuc-hien-duoc": {
+  "t": "실행하지 못했습니다.",
+  "h": "ec9f72a3"
+ },
+ "js.taikhoan.lien-he": {
+  "t": "문의",
+  "h": "603522f1"
+ },
+ "js.taikhoan.lien-ket-messenger": {
+  "t": "Messenger 연결",
+  "h": "99c405ee"
+ },
+ "js.taikhoan.lien-ket-telegram": {
+  "t": "Telegram 연결",
+  "h": "e4c7777f"
+ },
+ "js.taikhoan.lien-ket-whatsapp": {
+  "t": "WhatsApp 연결",
+  "h": "007375bb"
+ },
+ "js.taikhoan.lien-ket-zalo": {
+  "t": "Zalo 연결",
+  "h": "73727376"
+ },
+ "js.taikhoan.loi-mang": {
+  "t": "네트워크 오류.",
+  "h": "8fe8f313"
+ },
+ "js.taikhoan.loi-mang-thu-lai-sau-nhe": {
+  "t": "네트워크 오류입니다. 잠시 후 다시 시도해 주세요.",
+  "h": "e09e98e7"
+ },
+ "js.taikhoan.loi-mang-xin-thu-lai": {
+  "t": "네트워크 오류 — 다시 시도해 주세요.",
+  "h": "1464653a"
+ },
+ "js.taikhoan.luan-giai-la-so": {
+  "t": "명반 풀이",
+  "h": "72f1fa6d"
+ },
+ "js.taikhoan.luong-khi-xong-ca-n": {
+  "t": "{b}개를 모두 마치면 +{n}냥",
+  "h": "6a55c9a9"
+ },
+ "js.taikhoan.luot-moi-se-mo-lai-dan": {
+  "t": "초대 횟수는 각 사람의 30일이 지날 때마다 차례로 다시 열립니다.",
+  "h": "3ce174a5"
+ },
+ "js.taikhoan.luu": {
+  "t": "저장",
+  "h": "a306970e"
+ },
+ "js.taikhoan.luu-that-bai-thu-lai": {
+  "t": "✗ 저장하지 못했습니다. 다시 시도해 주세요.",
+  "h": "0543df5d"
+ },
+ "js.taikhoan.mat-khau-khong-khop": {
+  "t": "비밀번호가 일치하지 않습니다.",
+  "h": "782aade8"
+ },
+ "js.taikhoan.mat-khau-toi-thieu-6-ky": {
+  "t": "비밀번호는 6자 이상이어야 합니다.",
+  "h": "56257bc3"
+ },
+ "js.taikhoan.moi-nguoi-dang-ky-thuong": {
+  "t": "당신의 링크로 가입한 사람 1명당: 계정을 만드는 즉시 <strong>+{n}냥</strong>이 당신의 지갑에 들어옵니다. ",
+  "h": "a78b2e10"
+ },
+ "js.taikhoan.moi-y-kien-ve-noi-dung": {
+  "t": "풀이 내용, 기술 오류, 냥 요금, 원하는 기능에 관한 어떤 의견이든 ",
+  "h": "76ce940d"
+ },
+ "js.taikhoan.n-luong": {
+  "t": "{n}냥",
+  "h": "c4904a65"
+ },
+ "js.taikhoan.n-luong-thuong": {
+  "t": "{n}냥",
+  "h": "4c7471c6"
+ },
+ "js.taikhoan.n-luot-xem": {
+  "t": "조회 {n}회",
+  "h": "b99dc30e"
+ },
+ "js.taikhoan.nap-luong": {
+  "t": "냥 충전",
+  "h": "b70a5d1d"
+ },
+ "js.taikhoan.nap-thuong": {
+  "t": "충전 / 보상",
+  "h": "1f6352ba"
+ },
+ "js.taikhoan.neu-chua-tu-lien-ket": {
+  "t": " 자동으로 연결되지 않으면 다음 메시지를 보내세요: /link {t}",
+  "h": "4271bec8"
+ },
+ "js.taikhoan.nguoi-dung": {
+  "t": "사용자",
+  "h": "06f23b4d"
+ },
+ "js.taikhoan.nhan-cho-oa-zalo": {
+  "t": " Zalo의 명보 자미두수 OA에 다음 한 줄을 그대로 보내고(코드 유효 15분) 페이지를 새로고침하세요: <code>/link {t}</code>",
+  "h": "1cbb362f"
+ },
+ "js.taikhoan.noi-dung-gop-y-ve": {
+  "t": "의견 주제",
+  "h": "b744e759"
+ },
+ "js.taikhoan.sao-chep": {
+  "t": "복사",
+  "h": "09a1db3e"
+ },
+ "js.taikhoan.su-dung": {
+  "t": "사용",
+  "h": "a6ee0e07"
+ },
+ "js.taikhoan.sua": {
+  "t": "수정",
+  "h": "0963749f"
+ },
+ "js.taikhoan.tao-duong-ket-noi": {
+  "t": "연결 링크 만들기",
+  "h": "1ea224f1"
+ },
+ "js.taikhoan.tat-ca-loai-giao-dich": {
+  "t": "모든 거래 유형",
+  "h": "32529f70"
+ },
+ "js.taikhoan.thanh-vien-tu": {
+  "t": "{d}부터 회원",
+  "h": "43b4abd6"
+ },
+ "js.taikhoan.thay-chua-ghi-lai": {
+  "t": "선생님이 아직 당신에 대해 기록한 것이 없습니다.<br>몇 번 대화하다 보면 선생님이 기억할 만한 것을 알아서 기억합니다.",
+  "h": "9f324126"
+ },
+ "js.taikhoan.thay-tu-ghi": {
+  "t": "선생님이 기록",
+  "h": "4a9b5be3"
+ },
+ "js.taikhoan.thoi-gian-loai-noi-dung-so": {
+  "t": "<th>#</th><th>시간</th><th>유형</th><th>내용</th><th>수량</th><th>거래 번호</th>",
+  "h": "a6125b8d"
+ },
+ "js.taikhoan.thu-hoi-key-hien-tai-ket": {
+  "t": "현재 키를 회수할까요? 이전 키를 쓰는 연결은 멈춥니다 — 바로 새 키가 발급됩니다.",
+  "h": "92016734"
+ },
+ "js.taikhoan.trang-thiet-bi-ban-dang-dung": {
+  "t": " 사용 중인 페이지와 기기 정보가 오류 추적을 위해 자동으로 첨부됩니다 — 따로 설명하지 않아도 됩니다. ",
+  "h": "62db43d2"
+ },
+ "js.taikhoan.viec-gap-ve-thanh-toan-xem": {
+  "t": "결제 관련 급한 일은:",
+  "h": "ba40de24"
+ },
+ "js.taikhoan.viet-dai-hon-mot-chut-nhe": {
+  "t": "조금만 더 길게 써 주세요.",
+  "h": "42a09878"
+ },
+ "js.taikhoan.viet-giup-vai-dong-de-chung": {
+  "t": "저희가 이해할 수 있도록 몇 줄 적어 주세요.",
+  "h": "d9864f5c"
+ },
+ "js.taikhoan.viet-vao-day-chung-toi-doc": {
+  "t": "여기에 써 주세요. 모두 읽고 이 페이지에서 바로 답합니다.",
+  "h": "d8eb64da"
+ },
+ "js.taikhoan.vua-cong-luong": {
+  "t": "✓ <b>+{n}냥</b>을 지갑에 더했습니다.",
+  "h": "32cba2ec"
+ },
+ "js.taikhoan.xem-tuoi-lam-an": {
+  "t": "사업 궁합 보기",
+  "h": "5f5ba4e2"
+ },
+ "js.taikhoan.xem-tuoi-vo-chong": {
+  "t": "부부 궁합 보기",
+  "h": "f3e7b1ed"
+ },
+ "js.taikhoan.xoa": {
+  "t": "삭제",
+  "h": "82339c0a"
+ },
+ "js.taikhoan.xoa-dieu-nay-khoi-ho-so": {
+  "t": "이 항목을 프로필에서 지울까요? 선생님이 완전히 잊게 됩니다.",
+  "h": "d35cee4f"
+ },
  "js.tailieu.cat-cach-cuc": {
   "t": "격국",
   "h": "760d1ac9"
@@ -16167,6 +17891,206 @@
   "t": "<button type=\"button\" class=\"chat-hl-cta\" id=\"tshOpenSheet\">13가지 수 전체 보기 →</button></div></div>",
   "h": "f89bb371"
  },
+ "js.thay.disc-bac-minh": {
+  "t": "관상",
+  "h": "ae8ee50b"
+ },
+ "js.thay.disc-co-nguyet": {
+  "t": "자미두수 기본과 풀이",
+  "h": "582cc3fc"
+ },
+ "js.thay.disc-dau-nam": {
+  "t": "연애와 결혼",
+  "h": "03de9681"
+ },
+ "js.thay.disc-dieu-khong": {
+  "t": "일과 재물",
+  "h": "5866572a"
+ },
+ "js.thay.disc-huyen-khong": {
+  "t": "풍수",
+  "h": "181a3d4e"
+ },
+ "js.thay.disc-linh-co": {
+  "t": "주역과 매화역수",
+  "h": "deb6aa38"
+ },
+ "js.thay.disc-linh-son": {
+  "t": "경쟁하는 일과 인맥",
+  "h": "074cb601"
+ },
+ "js.thay.disc-ngoc-tinh": {
+  "t": "궁합과 인연",
+  "h": "bf736fe8"
+ },
+ "js.thay.disc-nhat-nguyen": {
+  "t": "단기 운세와 택일",
+  "h": "4649ae54"
+ },
+ "js.thay.disc-tam-kinh": {
+  "t": "사주와 기문둔갑",
+  "h": "f8e8d286"
+ },
+ "js.thay.disc-thai-hu": {
+  "t": "빠른 답, 되묻기",
+  "h": "2b657843"
+ },
+ "js.thay.disc-thanh-hu": {
+  "t": "타로와 수비학",
+  "h": "bf665759"
+ },
+ "js.thay.disc-thien-an": {
+  "t": "작명과 자녀 교육",
+  "h": "049ae929"
+ },
+ "js.thay.disc-tinh-quang": {
+  "t": "서양 점성술",
+  "h": "d690a059"
+ },
+ "js.thay.disc-tu-nguyen": {
+  "t": "대운과 인생 사이클",
+  "h": "8dfa0970"
+ },
+ "js.thay.greet-bac-minh": {
+  "t": "북명이다. 사진을 보내거나 얼굴 생김새, 걸음걸이를 말로 들려 다오 — 관상을 봐 주마.",
+  "h": "c8d61d46"
+ },
+ "js.thay.greet-co-nguyet": {
+  "t": "나는 고월이다. 태어난 날과 시를 알려 다오. 명반을 세우고 너와 함께 뿌리부터 꼼꼼히 살펴보마.",
+  "h": "0167331e"
+ },
+ "js.thay.greet-dau-nam": {
+  "t": "두남이다. 연애 이야기라면 망설이지 말고 솔직히 털어놓아라 — 직설적으로 말하겠지만, 언제나 너를 위해서다.",
+  "h": "ecce6c42"
+ },
+ "js.thay.greet-dieu-khong": {
+  "t": "묘공이다. 돈과 일 이야기라면 돌려 말하지 않고 빠르게 핵심만 말하마.",
+  "h": "8d902959"
+ },
+ "js.thay.greet-huyen-khong": {
+  "t": "현공이다. 네가 지금 사는 공간이 너와 맞는지 한번 보자.",
+  "h": "95554030"
+ },
+ "js.thay.greet-linh-co": {
+  "t": "영기다. 망설여지는 일이 있다면 괘를 하나 뽑아라 — 내가 괘를 읽어 주마.",
+  "h": "7b0cb4da"
+ },
+ "js.thay.greet-linh-son": {
+  "t": "영산이다. 너의 인간관계를 보고, 누구를 곁에 두고 누구를 놓아야 할지 살펴보마.",
+  "h": "da3eb08e"
+ },
+ "js.thay.greet-ngoc-tinh": {
+  "t": "옥성이다. 두 사람의 인연을 전혀 다른 이야기 하나로 들려주마.",
+  "h": "63614772"
+ },
+ "js.thay.greet-nhat-nguyen": {
+  "t": "일원이다. 급한 일이면 바로 물어라 — 잊어버리기 전에 시기를 짚어 주마.",
+  "h": "c7694458"
+ },
+ "js.thay.greet-tam-kinh": {
+  "t": "심경이다. 태어난 시를 알려 다오. 사주와 기문둔갑 둘 다로 보고, 둘이 함께 가리키는 것을 말해 주마.",
+  "h": "b8879f89"
+ },
+ "js.thay.greet-thai-hu": {
+  "t": "태허다. 답하기 전에 하나 되묻겠다 — 정말 네게 필요한 것을 묻고 있다고 확신하느냐?",
+  "h": "85a85832"
+ },
+ "js.thay.greet-thanh-hu": {
+  "t": "청허야! 카드를 한 장 뽑든지 행운의 숫자를 묻든지, 같이 보자.",
+  "h": "61e37793"
+ },
+ "js.thay.greet-thien-an": {
+  "t": "천은이다. 자녀 일이든 이름 일이든 — 편히 물어라, 차근차근 답해 주마.",
+  "h": "80ff291c"
+ },
+ "js.thay.greet-tinh-quang": {
+  "t": "성광이다. 서양 천문의 방식으로 명반을 본다 — 어디서부터 시작하고 싶으냐?",
+  "h": "50328bf9"
+ },
+ "js.thay.greet-tu-nguyen": {
+  "t": "자원이다. 대운 이야기라면 돌려 말하지 마라 — 명반을 내놓아라, 한마디로 정해 주마.",
+  "h": "5910c96c"
+ },
+ "js.thay.tag-bac-minh": {
+  "t": "볼 줄 아는 이에게 얼굴은 아무것도 숨기지 못한다.",
+  "h": "dedb2c1b"
+ },
+ "js.thay.tag-co-nguyet": {
+  "t": "가지를 논하기 전에 뿌리부터 꼼꼼히 본다.",
+  "h": "c13f4553"
+ },
+ "js.thay.tag-dau-nam": {
+  "t": "듣기 거북한 진실이라도, 너는 들어야 한다.",
+  "h": "b0888693"
+ },
+ "js.thay.tag-dieu-khong": {
+  "t": "바로 이 자리에서 재능을 낭비하고 있다.",
+  "h": "c8ebbbce"
+ },
+ "js.thay.tag-huyen-khong": {
+  "t": "집의 방향이 어긋나면, 사는 사람은 이유도 모른 채 지친다.",
+  "h": "71c8a862"
+ },
+ "js.thay.tag-linh-co": {
+  "t": "괘 하나, 이미지 하나, 답 하나.",
+  "h": "d0c7ad43"
+ },
+ "js.thay.tag-linh-son": {
+  "t": "누가 너를 돕고 누가 발목을 잡는지 — 명반을 보면 안다.",
+  "h": "fb8e84e7"
+ },
+ "js.thay.tag-ngoc-tinh": {
+  "t": "네가 생각지도 못한 것에 빗대어 보여 주마.",
+  "h": "d4381ff1"
+ },
+ "js.thay.tag-nhat-nguyen": {
+  "t": "얼마나 남았냐고? 바로 카운트다운해 주마.",
+  "h": "f8d8a373"
+ },
+ "js.thay.tag-tam-kinh": {
+  "t": "세 체계를 맞대어 보아 겹치는 지점을 찾는다.",
+  "h": "0d0249f0"
+ },
+ "js.thay.tag-thai-hu": {
+  "t": "문제는 네가 생각하는 곳에 있지 않다.",
+  "h": "915233ed"
+ },
+ "js.thay.tag-thanh-hu": {
+  "t": "한 장 뽑아서, 네가 정말 듣고 싶은 게 뭔지 보자.",
+  "h": "c2a5a989"
+ },
+ "js.thay.tag-thien-an": {
+  "t": "말은 적어도, 한마디 한마디에 숙고가 담겨 있다.",
+  "h": "a23f6db3"
+ },
+ "js.thay.tag-tinh-quang": {
+  "t": "하늘 전체를 보고 한 사람을 이해한다.",
+  "h": "9913b826"
+ },
+ "js.thay.tag-tu-nguyen": {
+  "t": "한마디로 끝낸다 — 덧붙이는 설명은 없다.",
+  "h": "cfa2af4b"
+ },
+ "js.thaycct.chua-dung-ten-cong-cu": {
+  "t": "{ten} 선생님이 맡은 도구는 아직 없습니다 — '선생님께 묻기'로 바로 질문할 수 있습니다.",
+  "h": "fda6df93"
+ },
+ "js.thaycct.cong-cu-thay-dung-ten": {
+  "t": "{ten} 선생님이 맡은 도구",
+  "h": "657398c9"
+ },
+ "js.thaycct.hoi-thay-ten": {
+  "t": "{ten} 선생님께 묻기",
+  "h": "e23cca0d"
+ },
+ "js.thaycct.khong-tim-thay-thay-nay": {
+  "t": "이 선생님을 찾을 수 없습니다.",
+  "h": "d044e6e1"
+ },
+ "js.thaycct.tieu-de-duoi": {
+  "t": " — 명보 자미두수",
+  "h": "ef7f10f4"
+ },
  "js.thtg.am-luong": {
   "t": "음량",
   "h": "71662f1b"
@@ -17259,6 +19183,94 @@
   "t": "기록 보기",
   "h": "21a19fb0"
  },
+ "js.trochuyen.gio-truoc": {
+  "t": "{n}시간 전",
+  "h": "19a19d72"
+ },
+ "js.trochuyen.ngay-truoc": {
+  "t": "{n}일 전",
+  "h": "21fad5cc"
+ },
+ "js.trochuyen.phut-truoc": {
+  "t": "{n}분 전",
+  "h": "f63d5687"
+ },
+ "js.trochuyen.tool-bat-trach": {
+  "t": "팔택 방위",
+  "h": "a9176f82"
+ },
+ "js.trochuyen.tool-bat-tu": {
+  "t": "사주 명식",
+  "h": "8959032f"
+ },
+ "js.trochuyen.tool-chon-ngay": {
+  "t": "길일 선택",
+  "h": "bac69f03"
+ },
+ "js.trochuyen.tool-dat-ten": {
+  "t": "아기 작명",
+  "h": "8debaf02"
+ },
+ "js.trochuyen.tool-dat-ten-dn": {
+  "t": "사업체 작명",
+  "h": "86ab8b27"
+ },
+ "js.trochuyen.tool-kim-lau": {
+  "t": "금루와 삼재",
+  "h": "541e773b"
+ },
+ "js.trochuyen.tool-kinh-dich": {
+  "t": "주역",
+  "h": "9e1c199b"
+ },
+ "js.trochuyen.tool-la-so": {
+  "t": "자미두수 명반",
+  "h": "d6fada77"
+ },
+ "js.trochuyen.tool-luan-giai": {
+  "t": "자미두수 풀이",
+  "h": "19e52bc9"
+ },
+ "js.trochuyen.tool-nap-am": {
+  "t": "납음 오행",
+  "h": "0de9a4ee"
+ },
+ "js.trochuyen.tool-ngu-hanh-ten": {
+  "t": "이름 오행",
+  "h": "9b92ea0c"
+ },
+ "js.trochuyen.tool-phong-thuy": {
+  "t": "풍수",
+  "h": "06ec3c82"
+ },
+ "js.trochuyen.tool-sinh-con": {
+  "t": "출산 띠 궁합",
+  "h": "2e015092"
+ },
+ "js.trochuyen.tool-than-so-hoc": {
+  "t": "수비학",
+  "h": "686db34b"
+ },
+ "js.trochuyen.tool-tuong-hop": {
+  "t": "띠 궁합",
+  "h": "e9fd3f4c"
+ },
+ "js.trochuyen.tool-xem-lam-an": {
+  "t": "사업 궁합 보기",
+  "h": "791a32dc"
+ },
+ "js.trochuyen.tool-xem-tuoi": {
+  "t": "부부 궁합 보기",
+  "h": "d6d67d5c"
+ },
+ "js.trochuyen.tool-xem-tuong": {
+  "t": "관상",
+  "h": "7460a628"
+ },
+ "js.trochuyen.vua-xong": {
+  "t": "방금",
+  "h": "d1a7c7fa"
+ },
  "js.tuviform.ca-nhan": {
   "t": "개인 정보",
   "h": "bbe1cce8"
@@ -18107,6 +20119,34 @@
   "t": "두 띠가 맞는지 빠르게 확인해요. 출생 연도만 있으면 바로 답이 나와요 — 깊이 보기 전의 간단한 확인이에요.",
   "h": "ee011392"
  },
+ "js.xlg.chon-gio": {
+  "t": "시각 선택",
+  "h": "c10b0d98"
+ },
+ "js.xlg.gio": {
+  "t": "{h}시",
+  "h": "68dda372"
+ },
+ "js.xlg.gio-chi": {
+  "t": "{h}시 ({chi}시)",
+  "h": "349b413b"
+ },
+ "js.xlg.nam": {
+  "t": "연도",
+  "h": "98926c7e"
+ },
+ "js.xlg.ngay": {
+  "t": "일",
+  "h": "368c4575"
+ },
+ "js.xlg.thang": {
+  "t": "월",
+  "h": "0e2b3099"
+ },
+ "js.xlg.thang-n": {
+  "t": "{n}월",
+  "h": "4dd9659f"
+ },
  "kimlau.bang-tra-20-nam-toi": {
   "t": "향후 20년<br>조회표",
   "h": "ded0c033"
@@ -18438,6 +20478,90 @@
  "laso.tu-vi-minh-bao": {
   "t": "명보 자미두수",
   "h": "33336b26"
+ },
+ "lienhe.24-48-gio": {
+  "t": "24~48시간",
+  "h": "dbc9b8ce"
+ },
+ "lienhe.an-sao-va-luan-giai-truc": {
+  "t": "홈페이지에서 바로 명반을 세우고 풀이를 볼 수 있습니다",
+  "h": "df0989a0"
+ },
+ "lienhe.cau-hoi-ve-luan-giai-la": {
+  "t": "<b>명반 풀이에 관한 질문</b> — 결과의 어느 부분을 더 알고 싶은지, 무엇이 이해되지 않거나 납득되지 않았는지 구체적으로 적어 주세요.",
+  "h": "814a0c60"
+ },
+ "lienhe.chung-toi-tran-trong-moi-phan": {
+  "t": "모든 의견을 소중히 여기며, 가능한 한 답변드리겠습니다",
+  "h": "2f5ea451"
+ },
+ "lienhe.de-chung-toi-co-the-ho": {
+  "t": "더 나은 도움을 드리기 위해",
+  "h": "6a75128e"
+ },
+ "lienhe.gop-y-ve-phuong-phap-neu": {
+  "t": "<b>방법에 대한 의견</b> — 별 배치나 판단 방식에서 개선할 점을 발견하셨다면, 가능하면 근거와 함께 구체적인 의견을 꼭 들려주세요.",
+  "h": "429de005"
+ },
+ "lienhe.hop-tac-nghien-cuu-chung-toi": {
+  "t": "<b>연구 협력</b> — 학문적인 자세로 자미두수를 연구하고 검증하는 데 관심 있는 분들께 언제나 열려 있습니다.",
+  "h": "2f2bc8e0"
+ },
+ "lienhe.huong-dan-lien-he": {
+  "t": "문의 안내",
+  "h": "dfd0a511"
+ },
+ "lienhe.kenh-lien-he-chinh-phan-hoi": {
+  "t": "주요 연락 창구 — 영업일 기준 24~48시간 내 답변",
+  "h": "cb8ce6fa"
+ },
+ "lienhe.lien-he-tu-vi-minh-bao": {
+  "t": "문의 — 명보 자미두수",
+  "h": "6036fce9"
+ },
+ "lienhe.lien-he-voi-tu-vi-minh": {
+  "t": "명보 자미두수에 문의하기 — 명리를 알고 때에 순응하며 나아가다.",
+  "h": "1a5c4e42"
+ },
+ "lienhe.moi-y-kien-trao-doi-gop": {
+  "t": "풀이 내용, 연구 방법, 시스템 이용에 관한 모든 의견과 제안, 질문을 기쁘게 받습니다.",
+  "h": "0a0f0110"
+ },
+ "lienhe.nhung-y-kien-dong-gop-xac": {
+  "t": "타당한 의견은 시스템을 다듬는 데 도움이 될 뿐 아니라, 자미두수 연구에서 아직 의문으로 남은 문제들을 밝히는 데에도 보탬이 됩니다.",
+  "h": "9d745b63"
+ },
+ "lienhe.thoi-gian-phan-hoi": {
+  "t": "답변 시간",
+  "h": "b2537f52"
+ },
+ "lienhe.thu-dien-tu": {
+  "t": "이메일",
+  "h": "472b2949"
+ },
+ "lienhe.trao-doi-gop-y-cau-hoi": {
+  "t": "상담 · 의견 · 질문",
+  "h": "2e532773"
+ },
+ "lienhe.tri-menh-ly-thuan-the-hanh": {
+  "t": "명리를 알고 때에 순응하며 나아가다. 고법에 따른 자미두수와 풀이.",
+  "h": "677cab94"
+ },
+ "lienhe.trong-cac-ngay-lam-viec-nhung": {
+  "t": "영업일 기준. 타당한 의견은 시스템 개선 과정에 반영됩니다.",
+  "h": "2458c959"
+ },
+ "lienhe.tu-vi-minh-bao-la-so": {
+  "t": "명보 자미두수 – 정확한 자미두수 명반",
+  "h": "6f4cabbc"
+ },
+ "lienhe.van-de-ky-thuat-neu-gap": {
+  "t": "<b>기술 문제</b> — 시스템 사용 중 문제가 생기면 하던 작업, 나타난 오류 메시지(있다면), 사용 중인 기기를 간단히 적어 주세요.",
+  "h": "bd4a69d1"
+ },
+ "lienhe.website": {
+  "t": "웹사이트",
+  "h": "2e8a57cc"
  },
  "luangiai.an-la-so": {
   "t": "▾ 명반 숨기기",
@@ -19419,6 +21543,106 @@
   "t": "다른 사람 보기",
   "h": "a058d2f4"
  },
+ "nguon.bo-du-lieu-mo": {
+  "t": "공개 데이터셋",
+  "h": "edc59291"
+ },
+ "nguon.cac-nguon-du-lieu-co-thu": {
+  "t": "명보 자미두수가 사용하는 데이터, 고서, 공개 데이터셋과 각각의 라이선스 및 출처 표기.",
+  "h": "0a800241"
+ },
+ "nguon.chung-toi-cung-khong-goi-bat": {
+  "t": "또한 시스템의 어떤 부분도 '과학적', '검증됨', 'N명 통계 기반'이라고 부르지 않습니다. 이것은 명반을 읽는 하나의 틀이지, 대조군을 갖춘 측정 도구가 아닙니다.",
+  "h": "b44c3d70"
+ },
+ "nguon.chung-toi-dung-bo-du-lieu": {
+  "t": "이 데이터셋은 직업 분야 제안의 <b>잣대</b>로 사용합니다. 직업군마다 업무 특성 프로필이 있고, 그 프로필이 대조의 기준이 됩니다. 데이터셋을 표시용 목록으로 쓰지는 <b>않습니다</b> — 독자에게 보여 주는 직업 목록은 베트남 상황에 맞게 저희가 직접 만든 표입니다.",
+  "h": "cb4e0e46"
+ },
+ "nguon.chung-toi-dung-du-lieu-nao": {
+  "t": "어떤 데이터를, 어디서, 어떤 라이선스로 쓰는지.",
+  "h": "530e37c8"
+ },
+ "nguon.co-thu-va-tai-lieu-menh": {
+  "t": "고서와 명리 자료",
+  "h": "23dd5204"
+ },
+ "nguon.dieu-chung-toi-khong-lam": {
+  "t": "저희가 하지 않는 것",
+  "h": "d21049b1"
+ },
+ "nguon.do-so-lao-dong-hoa-ky": {
+  "t": "미국 노동부 고용훈련국(USDOL/ETA) 후원. 라이선스 <a href=\"https://creativecommons.org/licenses/by/4.0/\" rel=\"license noopener\" target=\"_blank\">CC BY 4.0</a>.",
+  "h": "09a551ba"
+ },
+ "nguon.dung-de-doi-chieu-phan-luan": {
+  "t": "별의 성질과 별 조합에 대한 해석을 대조하는 데 쓰며, 특히 직업 성향을 다루는 항목에서 사용합니다.",
+  "h": "47c53c54"
+ },
+ "nguon.ghi-ro-de-khong-gay-hieu": {
+  "t": "<b>오해가 없도록 밝혀 둡니다:</b> O*NET은 참조용 데이터 출처이며, 명보 자미두수의 협력사·후원자·보증 기관이 <b>아닙니다</b>. 모든 해석, 언어로의 옮김, 페이지의 모든 결론은 저희의 것이며 책임도 저희에게만 있습니다.",
+  "h": "76f83d0f"
+ },
+ "nguon.khong-muc-nao-tren-trang-duoc": {
+  "t": "페이지의 어떤 항목도 다른 저자의 해설 문장을 베껴 만든 것이 아닙니다. 인물 유형, 직업 분야, 조언 같은 글은 저희가 썼습니다. 고서에 근거한 곳은 원문을 인용하고 인용임을 밝히며, 사이트 자체 기준인 곳 역시 그렇게 밝힙니다.",
+  "h": "541a3011"
+ },
+ "nguon.khong-phai-moi-phan-tren-trang": {
+  "t": "페이지의 모든 내용이 고서에서 그대로 가져온 것은 아닙니다. 여러 채점 척도, 분류 틀, 데이터 묶는 방식(예: 직업 적합도 채점 방법, 아이 기질을 읽는 틀, 직능군 분류 방식 등)은 <b>명보 자미두수 전문가 팀이 연구하고 구축한 고유한 방법</b>이며, 다른 곳에서 베낀 것이 아닙니다. 이 부분을 쓰는 도구마다 그것이 사이트 자체 기준이지 고법의 원문이 아님을 밝혀, 어디가 옛사람의 말이고 어디가 저희의 해석인지 독자가 구분할 수 있게 합니다. 이 척도들을 만든 방법의 세부는 공개하지 않습니다.",
+  "h": "2b715abc"
+ },
+ "nguon.mot-so-cong-cu-ky-mon": {
+  "t": "일부 도구(기문둔갑, 황력, 대육임, 사주, 서양 점성술 별자리 차트, 역법과 절기 환산)는 <a href=\"https://opensource.org/licenses/MIT\" rel=\"license noopener\" target=\"_blank\">MIT</a> 라이선스의 오픈소스 계산 라이브러리를 사용합니다. MIT 라이선스는 제품에 공개적인 출처 표기를 요구하지 않고 소프트웨어 사본 안에 저작권 고지를 그대로 두는 것만 요구하므로, 경쟁사에 기술적 세부가 드러나지 않도록 여기서는 구체적인 패키지 이름을 밝히지 않습니다.",
+  "h": "d0bcac41"
+ },
+ "nguon.nguon-chinh-cho-phep-an-sao": {
+  "t": "별 배치, 십이궁 해석, 격국, 관록궁의 직능에 대한 주된 출처입니다. 페이지에 나오는 인용은 모두 여기서 원문 그대로 가져왔습니다.",
+  "h": "d895afbc"
+ },
+ "nguon.nguon-du-lieu-ghi-cong": {
+  "t": "데이터 출처와 표기",
+  "h": "a92c482f"
+ },
+ "nguon.nguon-du-lieu-ghi-cong-tu": {
+  "t": "데이터 출처와 표기 | 명보 자미두수",
+  "h": "95039fbb"
+ },
+ "nguon.nguon-du-lieu-ghi-cong-tu-bnyf": {
+  "t": "데이터 출처와 표기 — 명보 자미두수",
+  "h": "942593da"
+ },
+ "nguon.o-net-database": {
+  "t": "O*NET Database",
+  "h": "ae039102"
+ },
+ "nguon.phuong-phap-do-tu-vi-minh": {
+  "t": "명보 자미두수가 직접 구축한 방법",
+  "h": "b2161377"
+ },
+ "nguon.thu-vien-ma-nguon-mo": {
+  "t": "오픈소스 라이브러리",
+  "h": "e8b10d2e"
+ },
+ "nguon.trang-nay-liet-ke-nhung-nguon": {
+  "t": "이 페이지는 시스템이 계산에 쓰는 출처와 해당 라이선스를 정리한 것입니다. 공개하는 이유는 두 가지입니다. 일부 출처는 라이선스상 출처 표기를 요구하고, 독자에게는 어떤 결론이 무엇을 바탕으로 세워졌는지 알 권리가 있기 때문입니다.",
+  "h": "23879e75"
+ },
+ "nguon.trung-chau-phai-luc-thap-tinh": {
+  "t": "중주파 — 육십성계",
+  "h": "b80b8a1f"
+ },
+ "nguon.tu-vi-dau-so-tan-bien": {
+  "t": "자미두수신편",
+  "h": "34e57a47"
+ },
+ "nguon.van-dang-thai-thu-lang-tai": {
+  "t": "운등태차랑 · 참고 자료",
+  "h": "c40a58cf"
+ },
+ "nguon.vuong-dinh-chi-tai-lieu-tham": {
+  "t": "왕정지 · 참고 자료",
+  "h": "f0de146d"
+ },
  "nhtg.anh-chi-gui-toi-may-chu": {
   "t": "이미지는 분석을 위해 서버로만 보내고, 서버에 저장하지 않아요. 정면에서 밝은 곳에서 찍어 주세요 — 시스템이 눈 부위를 자동으로 확대해요.",
   "h": "65e7d1ba"
@@ -19739,6 +21963,18 @@
   "t": "예: 이 시기에 제가 알아차려야 할 것은 무엇일까요?",
   "h": "fba02ed0"
  },
+ "paysuc.dang-xac-nhan-thanh-toan": {
+  "t": "결제를 확인하는 중...",
+  "h": "d4f224cd"
+ },
+ "paysuc.vui-long-cho-trong-giay-lat": {
+  "t": "잠시만 기다려 주세요",
+  "h": "f2af1ae9"
+ },
+ "paysuc.xac-nhan-thanh-toan-tu-vi": {
+  "t": "결제 확인 — 명보 자미두수",
+  "h": "b7b66e97"
+ },
  "phongthuy.1-ban-menh-thong-tin-phong": {
   "t": "<span class=\"pt-num\">1</span> 본명 &amp; 방 정보",
   "h": "862309d1"
@@ -19990,6 +22226,170 @@
  "phongthuy.xem-ban-mau": {
   "t": "샘플 보기 →",
   "h": "ba3671b1"
+ },
+ "ppx.10-chuyen-gia-tu-vi-tham": {
+  "t": "<b>10+</b><span>명의 자미두수 전문가가 심사에 참여</span>",
+  "h": "a8396ff8"
+ },
+ "ppx.2-000-quy-tac-luan-giai": {
+  "t": "<b>2,000+</b><span>개의 검증된 풀이 규칙</span>",
+  "h": "2bea45aa"
+ },
+ "ppx.270-000-ho-so-nhan-vat": {
+  "t": "<b>270,000+</b><span>건의 실존 인물 기록(AstroDataBank)</span>",
+  "h": "249ccdc9"
+ },
+ "ppx.5-buoc-tao-nen-moi-ban": {
+  "t": "각 풀이를 만드는 5단계: 명반 작성, 실증 대조, 전문가 검증, 모델 보정, 말로 풀어 설명.",
+  "h": "8a0c1f4a"
+ },
+ "ppx.a-global-astrology-database": {
+  "t": "세계적인 점성술 데이터베이스",
+  "h": "fc9b2e72"
+ },
+ "ppx.buoc-1-tu-ngay-gio-sinh": {
+  "t": "1단계: 생년월일시로 고법에 따라 자미두수 명반을 세우고, 구조화된 데이터(궁, 별, 위치, 사화, 관계)로 변환",
+  "h": "a7e27eb8"
+ },
+ "ppx.buoc-2-luan-giai-so-khai": {
+  "t": "2단계: 초기 풀이를 AstroDataBank의 검증된 실제 데이터와 대조해, 격국마다 부합 / 부정확 / 어긋남을 평가",
+  "h": "8debaf16"
+ },
+ "ppx.buoc-3-nhom-chuyen-gia-thao": {
+  "t": "3단계: 전문가 팀이 대조 결과를 토론·평가·반박하고 심사 후 결론을 냄 — 규칙을 채택, 조정 또는 제외",
+  "h": "2c4e81c3"
+ },
+ "ppx.buoc-4-huan-luyen-va-cap": {
+  "t": "4단계: 모델을 계속 학습·갱신 — 학습, 시험과 평가, 개선을 반복해 실제로 쓸 수 있는 완성된 풀이 모델로",
+  "h": "45f6ed84"
+ },
+ "ppx.buoc-5-llm-chuyen-doi-ket": {
+  "t": "5단계: LLM이 모델 결과를 자연어로 바꾸어 명확하고 개인화된 해설로 만들고, 완성된 풀이를 사용자에게 보여 줌",
+  "h": "d5b4c8b7"
+ },
+ "ppx.cac-quy-tac-da-duoc-chuyen": {
+  "t": "전문가 심사를 거친 규칙은 다시 모델로 들어가 학습이 이어집니다. 시스템은 새로운 실제 명반(표본 외)으로 계속 시험하고, 최적의 정확도에 이를 때까지 개선 주기를 반복합니다.",
+  "h": "d91af071"
+ },
+ "ppx.cach-he-thong-hoat-dong": {
+  "t": "시스템 작동 방식",
+  "h": "ef8b9152"
+ },
+ "ppx.cach-he-thong-hoat-dong-tu": {
+  "t": "시스템 작동 방식 — 자미두수 검증 | 명보 자미두수",
+  "h": "3dffc874"
+ },
+ "ppx.cach-he-thong-hoat-dong-tu-e5d1": {
+  "t": "시스템 작동 방식 — 자미두수 검증",
+  "h": "2384f4b7"
+ },
+ "ppx.chi-nhung-ket-luan-da-duoc": {
+  "t": "검증된 결론만.",
+  "h": "34eb8158"
+ },
+ "ppx.dien-giai-ket-qua-thanh-loi": {
+  "t": "결과를 자연스러운 말로 해설",
+  "h": "97ea4d62"
+ },
+ "ppx.do-la-cach-chung-toi-tao": {
+  "t": "이렇게 저희는 근거 있고 투명하며 믿을 수 있는 풀이를 만듭니다.",
+  "h": "168afdad"
+ },
+ "ppx.doi-chieu-voi-du-lieu-thuc": {
+  "t": "검증된 실제 데이터와 대조",
+  "h": "539cfe91"
+ },
+ "ppx.he-thong-su-dung-hon-270": {
+  "t": "시스템은 <b>AstroDataBank</b>의 <b>검증된</b> 출생 기록 27만 건 이상을 쓰며, 정치·과학·예술·비즈니스 등 여러 분야 인물의 전기와 인생 사건 데이터와 결합합니다.",
+  "h": "c3cee5bc"
+ },
+ "ppx.hieu-chinh-va-toi-uu-mo": {
+  "t": "최종 모델 보정과 최적화",
+  "h": "5af8fc01"
+ },
+ "ppx.input-bo-quy-tac-da-tham": {
+  "t": "<span>입력: 심사된 규칙 세트</span><span class=\"out\">출력: 완성된 풀이 모델</span>",
+  "h": "93067baf"
+ },
+ "ppx.input-ket-qua-doi-chieu-output": {
+  "t": "<span>입력: 대조 결과</span><span class=\"out\">출력: 전문가가 심사한 규칙 세트</span>",
+  "h": "d4af0fe2"
+ },
+ "ppx.input-ket-qua-tu-mo-hinh": {
+  "t": "<span>입력: 모델의 결과</span><span class=\"out\">출력: 완성된 풀이</span>",
+  "h": "b6d766a4"
+ },
+ "ppx.input-luan-giai-so-khai-du": {
+  "t": "<span>입력: 초기 풀이 + 실제 인생 데이터</span><span class=\"out\">출력: 정확도 평가, 오류 발견, 개선 제안</span>",
+  "h": "1c5a4557"
+ },
+ "ppx.input-ngay-gio-sinh-co-thu": {
+  "t": "<span>입력: 생년월일시 + 자미두수 고서·자료</span><span class=\"out\">출력: 명반 + 초기 풀이 규칙 세트</span>",
+  "h": "f3dd6403"
+ },
+ "ppx.ket-hop-du-lieu-co-phap": {
+  "t": "<span class=\"ic\" data-icon=\"shield-check\"></span>데이터 – 고법 – 전문가 – AI의 결합",
+  "h": "a6c14499"
+ },
+ "ppx.ket-qua-sau-doi-chieu-duoc": {
+  "t": "대조 후 결과는 연구자, 자미두수가, 현학가로 이루어진 전문가 팀에 보내져, 각 풀이 규칙의 신뢰도를 토론·평가하고 결론짓습니다.",
+  "h": "b5c2296f"
+ },
+ "ppx.ket-qua-tu-mo-hinh-duoc": {
+  "t": "모델의 결과는 LLM(대규모 언어 AI)을 통해 명반마다 맞춘 자연스럽고 이해하기 쉬운 말로 해설되어, 사용자가 쉽게 접하고 활용할 수 있게 합니다. AI는 스스로 추론하지 않고, 모델이 확정한 결과를 다시 표현할 뿐입니다.",
+  "h": "7b7eac5a"
+ },
+ "ppx.khong-cam-doan-khong-suy-luan": {
+  "t": "감으로 판단하지 않는다. 함부로 추론하지 않는다.",
+  "h": "1faeab3a"
+ },
+ "ppx.kiem-chung-boi-chuyen-gia": {
+  "t": "전문가 검증",
+  "h": "10ee351e"
+ },
+ "ppx.lap-la-so-va-xay-dung": {
+  "t": "명반 작성과 초기 풀이 모델 구축",
+  "h": "8b5789c7"
+ },
+ "ppx.lien-tuc-cap-nhat-va-cai": {
+  "t": "<b>지속적으로</b><span>모델을 갱신·개선</span>",
+  "h": "b810dcc9"
+ },
+ "ppx.luan-giai-so-khai-duoc-doi": {
+  "t": "초기 풀이를 데이터베이스 속 인물들의 실제 인생 데이터와 대조해, 격국마다 정확도를 평가하고 어긋남을 찾아내며 결합 방법을 시험합니다.",
+  "h": "ed45b0df"
+ },
+ "ppx.mot-luan-giai-dang-tin-cay": {
+  "t": "믿을 수 있는 풀이는 실제 데이터와 여러 겹의 검증 과정으로 만들어집니다. 아래는 명보 자미두수의 각 풀이를 만드는 5단계입니다.",
+  "h": "45694c20"
+ },
+ "ppx.mot-luan-giai-dang-tin-cay-ss0b": {
+  "t": "믿을 수 있는 풀이는 실제 데이터와 여러 겹의 검증 과정으로 만들어집니다 — 명보 자미두수의 각 풀이를 만드는 5단계.",
+  "h": "5c0f6569"
+ },
+ "ppx.muon-thay-he-thong-nay-hoat": {
+  "t": "이 시스템이 당신의 명반으로 어떻게 작동하는지 보고 싶나요?",
+  "h": "afe4354a"
+ },
+ "ppx.nguon-du-lieu-270-000-ho": {
+  "t": "<span class=\"pm-source-eyebrow\">데이터 출처</span><b>270,000+</b><span>건의 검증된 실존 인물 기록</span>",
+  "h": "303ab3fd"
+ },
+ "ppx.quay-lai-trang-chu": {
+  "t": "← 홈으로 돌아가기",
+  "h": "11355810"
+ },
+ "ppx.tu-thong-tin-ngay-gio-sinh": {
+  "t": "생년월일시 정보로 시스템이 고법에 따라 자미두수 명반을 세우고, 자미두수·현학 서적과 자료를 바탕으로 명반의 요소들을 풀이·해설합니다.",
+  "h": "845dbbf5"
+ },
+ "ppx.tu-vi-nghiem-chung": {
+  "t": "<span class=\"ic\" data-icon=\"sparkles\"></span>자미두수 검증",
+  "h": "4ad3d92e"
+ },
+ "ppx.xem-la-so-cua-ban": {
+  "t": "내 명반 보기 →",
+  "h": "a6169a07"
  },
  "privacy.1-thong-tin-chung-toi-thu": {
   "t": "1. 수집하는 정보",
@@ -20255,6 +22655,154 @@
   "t": "<a href=\"/resources.html\">← 자료실로 돌아가기</a>",
   "h": "99e834b4"
  },
+ "sanpham.1-tu-vi-minh-bao-cung": {
+  "t": "1. 명보 자미두수가 제공하는 서비스",
+  "h": "ddb304e7"
+ },
+ "sanpham.2-cach-tinh-phi-he-thong": {
+  "t": "2. 요금 방식 — 냥(크레딧)",
+  "h": "75e2a0e9"
+ },
+ "sanpham.3-mua-luong-hinh-thuc-thanh": {
+  "t": "3. 냥 구매와 결제 방법",
+  "h": "59dbc44c"
+ },
+ "sanpham.4-hoan-tien": {
+  "t": "4. 환불",
+  "h": "9500f12f"
+ },
+ "sanpham.5-lien-he": {
+  "t": "5. 문의",
+  "h": "f583579d"
+ },
+ "sanpham.cac-nhom-dich-vu-chinh": {
+  "t": "주요 서비스:",
+  "h": "6873de28"
+ },
+ "sanpham.cau-hoi-ve-san-pham-dich": {
+  "t": "상품, 서비스, 요금에 관한 질문은 <a href=\"/contact.html\">문의</a> 페이지로 연락해 주세요.",
+  "h": "c9b2038c"
+ },
+ "sanpham.chon-ngay-dat-ten-chon-ngay": {
+  "t": "<strong>택일·작명</strong> — 용도별 길일 선택, 아기 작명, 사업체 작명",
+  "h": "7bd24940"
+ },
+ "sanpham.danh-muc-day-du-va-cap": {
+  "t": "최신 전체 목록은 언제나 <a href=\"/cong-cu.html\">도구</a> 페이지에서 볼 수 있습니다.",
+  "h": "ed8fd601"
+ },
+ "sanpham.dich-vu": {
+  "t": "서비스",
+  "h": "2c509399"
+ },
+ "sanpham.dich-vu-tinh-phi-theo-luong": {
+  "t": "서비스 요금은 <strong>냥</strong>(크레딧)으로 냅니다. 한 번 충전하면 현재의 모든 도구와 앞으로 나올 도구에 쓸 수 있습니다. 충전한 냥은 <strong>만료되지 않으며</strong> <strong>구독 방식도 아닙니다</strong> — 실제로 쓸 때만 차감되고, 결과 하나당 한 번만 차감됩니다.",
+  "h": "86d16de4"
+ },
+ "sanpham.do-tinh-chat-so-cua-dich": {
+  "t": "디지털 서비스의 특성상 결과는 결제 직후 바로 열리므로, 결과가 표시된 뒤에는 <strong>환불이 적용되지 않습니다</strong>. 단, 기술적 오류로 결과를 받지 못한 경우는 예외입니다. 자세한 내용은 이용약관의 <a href=\"/dieu-khoan-dich-vu.html#thanh-toan-va-hoan-tien\">'결제와 환불'</a> 항목을 보세요.",
+  "h": "58bace1c"
+ },
+ "sanpham.gia": {
+  "t": "요금",
+  "h": "71efef06"
+ },
+ "sanpham.gia-doc-truc-tiep-tu-he": {
+  "t": "요금은 시스템에서 바로 읽어 오며 바뀔 수 있습니다. 전체 도구 요금표는 <a href=\"/cong-cu.html\">도구</a> 페이지에서 보세요.",
+  "h": "307fe224"
+ },
+ "sanpham.gia-tham-khao-mot-so-dich": {
+  "t": "주요 서비스 참고 요금:",
+  "h": "24342e2e"
+ },
+ "sanpham.huong-dan-tung-buoc-tu-dang": {
+  "t": "계정 가입부터 도구 사용까지 단계별 안내는 <a href=\"/huong-dan-thanh-toan.html\">결제 안내</a> 페이지를 보세요.",
+  "h": "fe6dd621"
+ },
+ "sanpham.luan-giai-la-so-day-du": {
+  "t": "명반 풀이 전체판(24부)",
+  "h": "bd642f37"
+ },
+ "sanpham.luong": {
+  "t": "<span class=\"credits-val\"><span data-tvp-price=\"laso\">…</span>냥</span>",
+  "h": "821dcba7"
+ },
+ "sanpham.luong-211d": {
+  "t": "<span class=\"credits-val\"><span data-tvp-price=\"phong-thuy\">…</span>냥</span>",
+  "h": "c1b9463c"
+ },
+ "sanpham.luong-duoc-ban-theo-cac-goi": {
+  "t": "냥은 <a href=\"/topup.html\">냥 충전</a> 페이지의 충전 패키지로 판매합니다. 큰 패키지일수록 1냥당 단가가 유리합니다. 결제는 PayPal 또는 Visa/Mastercard 카드(PayPal 계정 불필요)로 미국 달러로 합니다.",
+  "h": "9bcde6e3"
+ },
+ "sanpham.luong-tuy0": {
+  "t": "<span class=\"credits-val\"><span data-tvp-price=\"xem-tuoi\">…</span>냥</span>",
+  "h": "bbfec03e"
+ },
+ "sanpham.luong-w5we": {
+  "t": "<span class=\"credits-val\"><span data-tvp-price=\"xem-lam-an\">…</span>냥</span>",
+  "h": "3d0b4f93"
+ },
+ "sanpham.luong-y747": {
+  "t": "<span class=\"credits-val\"><span data-tvp-price=\"tu-binh\">…</span>냥</span>",
+  "h": "baa134d9"
+ },
+ "sanpham.noi-dung-luan-giai-mang-tinh": {
+  "t": "풀이 내용은 문화적·학술적 참고용이며, 금융·의료·법률 자문이 <strong>아닙니다</strong>. 자세한 내용은 <a href=\"/mien-tru-trach-nhiem.html\" style=\"color:#5a4000;text-decoration:underline\">면책 고지</a> 페이지를 보세요.",
+  "h": "8a879070"
+ },
+ "sanpham.phong-thuy-noi-that": {
+  "t": "인테리어 풍수",
+  "h": "3f80b53f"
+ },
+ "sanpham.phong-thuy-xem-tuong-phong-thuy": {
+  "t": "<strong>풍수·관상</strong> — 인테리어 풍수, 팔택 집 방향, 얼굴 관상, 서명 보기(필상)",
+  "h": "e3aa719d"
+ },
+ "sanpham.san-pham": {
+  "t": "상품",
+  "h": "982197dc"
+ },
+ "sanpham.san-pham-dich-vu": {
+  "t": "상품과 서비스",
+  "h": "5af2d451"
+ },
+ "sanpham.san-pham-dich-vu-tu-vi": {
+  "t": "상품과 서비스 — 명보 자미두수",
+  "h": "95bd5738"
+ },
+ "sanpham.tu-binh-bat-tu": {
+  "t": "자평 사주팔자",
+  "h": "6ade52e9"
+ },
+ "sanpham.tu-binh-bat-tu-lap-tru": {
+  "t": "<strong>자평 사주팔자</strong> — 사주를 세우고 오행으로 풀이",
+  "h": "4c4e3cc3"
+ },
+ "sanpham.tu-vi-dau-so-an-sao": {
+  "t": "<strong>자미두수</strong> — 명반 작성, 명반 풀이 전체판(24부), 연·월·일별 운세, 성격 초상",
+  "h": "f2ef7494"
+ },
+ "sanpham.tu-vi-minh-bao-cung-cap": {
+  "t": "명보 자미두수가 제공하는 서비스와 요금 방식 — 냥(크레딧)을 한 번 충전하면 모든 도구에 쓸 수 있고 만료되지 않습니다.",
+  "h": "2e334f2c"
+ },
+ "sanpham.tu-vi-minh-bao-tuviminhbao-com": {
+  "t": "명보 자미두수(tuviminhbao.com)는 사용자가 입력한 생년월일시를 바탕으로 고법에 따라 동양 명리를 조회하고 풀이하는 플랫폼입니다. 모든 서비스는 웹사이트에서 온라인으로 제공되며 프로그램 설치가 필요 없습니다.",
+  "h": "31b96dd9"
+ },
+ "sanpham.xem-tuoi-hop-xem-tuoi-vo": {
+  "t": "<strong>궁합</strong> — 부부 궁합, 사업 궁합, 자녀 궁합",
+  "h": "2ca9430c"
+ },
+ "sanpham.xem-tuoi-lam-an": {
+  "t": "사업 궁합 보기",
+  "h": "5f5ba4e2"
+ },
+ "sanpham.xem-tuoi-vo-chong": {
+  "t": "부부 궁합 보기",
+  "h": "f3e7b1ed"
+ },
  "sc.2-nhan-ket-qua": {
   "t": "<span class=\"wss-n\">2</span><span class=\"wss-l\">결과 받기</span>",
   "h": "b0b2f830"
@@ -20342,6 +22890,378 @@
  "sc.xem-tuoi-sinh-con-tu-vi": {
   "t": "자녀 출산 띠 보기 — 명보 자미두수",
   "h": "23026bbb"
+ },
+ "taikhoan.add-mcp-server-chon-streamable-http": {
+  "t": "<strong>Add MCP server</strong> → <strong>Streamable HTTP</strong> 선택.",
+  "h": "f63db93e"
+ },
+ "taikhoan.bam-add-custom-connector": {
+  "t": "<strong>Add custom connector</strong>를 누릅니다.",
+  "h": "f171eae6"
+ },
+ "taikhoan.bam-nut-chia-se-o-goc": {
+  "t": "어느 결과 페이지에서든 아래쪽의 <strong>\"공유\"</strong> 버튼을 누르면 링크를 받을 수 있습니다 — 누군가에게 보내거나 Facebook/Zalo/WhatsApp에 올리세요. 공유한 내역과 조회 수가 여기에 표시됩니다.",
+  "h": "d3fc4566"
+ },
+ "taikhoan.bao-cao": {
+  "t": "<span data-icon=\"file-text\"></span><span class=\"ml-tx\">리포트</span><span class=\"ml-go\">→</span>",
+  "h": "30fcaff2"
+ },
+ "taikhoan.bao-mat": {
+  "t": "<span data-icon=\"lock\"></span> 보안",
+  "h": "a32a24fb"
+ },
+ "taikhoan.bat-settings-connectors-developer-mode": {
+  "t": "<strong>Settings → Connectors → Developer mode</strong>를 켭니다.",
+  "h": "5ddc655e"
+ },
+ "taikhoan.cai-dat": {
+  "t": "<span class=\"tab-ic\" data-icon=\"settings\"></span> 설정",
+  "h": "de9c2df8"
+ },
+ "taikhoan.chat-voi-bot-bang-dung-vi": {
+  "t": "이 냥 지갑 그대로 봇과 채팅",
+  "h": "c6fcc4a8"
+ },
+ "taikhoan.chia-se-lich-su": {
+  "t": "<span data-icon=\"share-2\" style=\"width:15px;height:15px;vertical-align:-2px;color:var(--tx-gold)\"></span> 공유 — 기록",
+  "h": "fc051dae"
+ },
+ "taikhoan.chon-nen-sang-hoac-toi-cho": {
+  "t": "명보 자미두수 전체의 밝은/어두운 배경을 고르세요 — 바로 적용되고 다음에도 기억합니다.",
+  "h": "ac29b196"
+ },
+ "taikhoan.chua-ket-noi": {
+  "t": "연결 안 됨",
+  "h": "a6c7297d"
+ },
+ "taikhoan.claude-chatgpt-gemini-grok": {
+  "t": "Claude · ChatGPT · Gemini · Grok",
+  "h": "bbad7d3a"
+ },
+ "taikhoan.cua-ban": {
+  "t": "내",
+  "h": "4ae2197a"
+ },
+ "taikhoan.da-dung-thang-nay-0-luong": {
+  "t": "<span>이번 달 사용</span> <span id=\"monthlyUsageLabel\">0냥</span>",
+  "h": "3be2cf3d"
+ },
+ "taikhoan.da-ket-noi": {
+  "t": "연결됨",
+  "h": "5c4300f9"
+ },
+ "taikhoan.da-moi-duoc-thuong-30-ngay": {
+  "t": "<span>보상받은 초대(지난 30일)</span> <span id=\"refProgressLabel\">—</span>",
+  "h": "15ce0d55"
+ },
+ "taikhoan.da-san-sang": {
+  "t": "● 준비됨",
+  "h": "4a6360a8"
+ },
+ "taikhoan.dan-duong-ket-noi-o-tren": {
+  "t": "위의 연결 링크를 URL 칸에 붙여넣기 → <strong>Add</strong>.",
+  "h": "63f3a9b6"
+ },
+ "taikhoan.dan-duong-ket-noi-o-tren-6lkt": {
+  "t": "위의 연결 링크를 붙여넣기 → 저장.",
+  "h": "5c24e4aa"
+ },
+ "taikhoan.dan-duong-ket-noi-o-tren-bdph": {
+  "t": "위의 연결 링크를 붙여넣으세요. 다른 설정은 필요 없습니다 — 키가 링크 안에 들어 있습니다.",
+  "h": "8957fdf6"
+ },
+ "taikhoan.dang-kiem-tra": {
+  "t": "<span class=\"conn-status\"><span class=\"ic\" data-icon=\"hourglass\"></span> 확인 중…</span>",
+  "h": "88fb5296"
+ },
+ "taikhoan.dang-kiem-tra-akb9": {
+  "t": "확인 중…",
+  "h": "05a0307a"
+ },
+ "taikhoan.dang-nhap-dang-ky": {
+  "t": "로그인 / 가입",
+  "h": "8df57bec"
+ },
+ "taikhoan.dang-nhap-de-xem-ho-so": {
+  "t": "로그인하고 프로필 보기",
+  "h": "a6bad53c"
+ },
+ "taikhoan.dang-tai": {
+  "t": "불러오는 중...",
+  "h": "3d8a48b7"
+ },
+ "taikhoan.dang-xuat": {
+  "t": "로그아웃",
+  "h": "adff9c76"
+ },
+ "taikhoan.doi-mat-khau": {
+  "t": "비밀번호 변경",
+  "h": "d4e1de23"
+ },
+ "taikhoan.doi-mat-khau-9m0f": {
+  "t": "비밀번호 변경",
+  "h": "6e8da8ff"
+ },
+ "taikhoan.dung-tu-vi-minh-bao-o": {
+  "t": "채팅하는 어디서나 명보 자미두수를 — 늘 쓰는 채팅 어시스턴트 안에서도, Telegram · WhatsApp · Messenger에서도 선생님께 물어보세요. 모두 같은 냥 지갑으로.",
+  "h": "2c9f35b9"
+ },
+ "taikhoan.duong-ket-noi-rieng-cua-ban": {
+  "t": "나만의 연결 링크",
+  "h": "8dbee506"
+ },
+ "taikhoan.gemini-grok-tro-ly-khac": {
+  "t": "Gemini / Grok / 기타 어시스턴트",
+  "h": "f0e6a5a3"
+ },
+ "taikhoan.giao-dien": {
+  "t": "<span data-icon=\"sun\"></span> 화면",
+  "h": "ad9cf22d"
+ },
+ "taikhoan.giao-dien-e4yw": {
+  "t": "화면",
+  "h": "705b4237"
+ },
+ "taikhoan.gop-y": {
+  "t": "<span data-icon=\"inbox\"></span> 의견",
+  "h": "fa000453"
+ },
+ "taikhoan.ho-so-vi-luong-ket-noi": {
+  "t": "<b>프로필</b><span>냥 지갑 · 연결 · 설정</span>",
+  "h": "61d17307"
+ },
+ "taikhoan.ho-tro-dang-nhap-qua-google": {
+  "t": "<strong>Google</strong>, <strong>Facebook</strong> 또는 이메일로 로그인할 수 있습니다.",
+  "h": "b8ce549c"
+ },
+ "taikhoan.hoi-thay-trong-tro-ly-chat": {
+  "t": "채팅 어시스턴트에서 선생님께 묻기 <span class=\"conn-badge\">신규</span>",
+  "h": "11fcd343"
+ },
+ "taikhoan.huy-lien-ket": {
+  "t": "연결 해제",
+  "h": "5f50b732"
+ },
+ "taikhoan.kenh-lien-lac": {
+  "t": "<span data-icon=\"message-circle\" style=\"width:15px;height:15px;vertical-align:-2px;color:var(--tx-gold)\"></span> 연락 채널",
+  "h": "aa753fc7"
+ },
+ "taikhoan.ket-noi": {
+  "t": "<span class=\"tab-ic\" data-icon=\"link\"></span> 연결",
+  "h": "5ba3bb0d"
+ },
+ "taikhoan.ket-noi-vao-chatgpt": {
+  "t": "ChatGPT에 연결",
+  "h": "20d3bbf9"
+ },
+ "taikhoan.ket-noi-vao-claude": {
+  "t": "Claude에 연결",
+  "h": "f03eaded"
+ },
+ "taikhoan.ket-noi-xong-thi-hoi-the": {
+  "t": "<span data-icon=\"lightbulb\" style=\"width:14px;height:14px;vertical-align:-2px\"></span> 연결한 뒤에는 어떻게 물어보나요?",
+  "h": "c918e147"
+ },
+ "taikhoan.khoi-hanh": {
+  "t": "<span data-icon=\"trophy\" style=\"width:15px;height:15px;vertical-align:-2px;color:var(--tx-gold)\"></span> 첫걸음",
+  "h": "60535802"
+ },
+ "taikhoan.khong-can-bam-gi-cu-chat": {
+  "t": "아무것도 누를 필요 없습니다 — 평소처럼 채팅하면 시스템이 알아서 도구를 부릅니다. 꼭",
+  "h": "cd1a05b2"
+ },
+ "taikhoan.khong-het-han": {
+  "t": "만료 없음",
+  "h": "b4fef21a"
+ },
+ "taikhoan.la-so-da-luu": {
+  "t": "<span data-icon=\"folder\"></span><span class=\"ml-tx\">저장한 명반</span><span class=\"ml-go\">→</span>",
+  "h": "6739d4ef"
+ },
+ "taikhoan.lap-la-so-tu-vi-cho": {
+  "t": "\"1984년 5월 9일 새벽 1시 45분생 남성의 자미두수 명반을 세워 줘\"",
+  "h": "4b2026e7"
+ },
+ "taikhoan.lich-su-giao-dich": {
+  "t": "거래 내역",
+  "h": "99e8eb90"
+ },
+ "taikhoan.lien-ket-messenger": {
+  "t": "Messenger 연결",
+  "h": "99c405ee"
+ },
+ "taikhoan.lien-ket-telegram": {
+  "t": "Telegram 연결",
+  "h": "e4c7777f"
+ },
+ "taikhoan.lien-ket-whatsapp": {
+  "t": "WhatsApp 연결",
+  "h": "007375bb"
+ },
+ "taikhoan.lien-ket-zalo": {
+  "t": "Zalo 연결",
+  "h": "73727376"
+ },
+ "taikhoan.luan-giai-chi-tiet-la-so": {
+  "t": "\"내 명반을 자세히 풀이해 줘\"",
+  "h": "daab7a26"
+ },
+ "taikhoan.luot-hoi-thay": {
+  "t": "<span data-icon=\"message-circle\"></span><span class=\"ml-tx\">선생님께 물은 기록</span><span class=\"ml-go\">→</span>",
+  "h": "2603dd9c"
+ },
+ "taikhoan.luu-ten": {
+  "t": "이름 저장",
+  "h": "19fd43c9"
+ },
+ "taikhoan.mat-khau-moi": {
+  "t": "새 비밀번호",
+  "h": "4267a600"
+ },
+ "taikhoan.mo-settings-connectors-claude-desktop-ho": {
+  "t": "<strong>Settings → Connectors</strong>를 엽니다(Claude Desktop 또는 claude.ai).",
+  "h": "b7a053cb"
+ },
+ "taikhoan.moi-ban-nhan-them-luong": {
+  "t": "친구 초대 — 냥 더 받기",
+  "h": "c87d6753"
+ },
+ "taikhoan.nam-2027-cua-toi-van-han": {
+  "t": "\"내 2027년 운세는 어때? 3월은?\"",
+  "h": "2c70ccfb"
+ },
+ "taikhoan.nap-luong": {
+  "t": "<span data-icon=\"wallet\" style=\"width:16px;height:16px\"></span> 냥 충전",
+  "h": "2fb3641a"
+ },
+ "taikhoan.nap-luong-o-day-nhan-bot": {
+  "t": "여기서 냥을 충전하면 Telegram 봇에 메시지만 보내도 같은 지갑으로 바로 쓸 수 있습니다.",
+  "h": "b2be6c64"
+ },
+ "taikhoan.nap-luong-o-day-nhan-bot-1xta": {
+  "t": "여기서 냥을 충전하면 WhatsApp 봇에 메시지만 보내도 같은 지갑으로 바로 쓸 수 있습니다.",
+  "h": "76114b7e"
+ },
+ "taikhoan.nap-luong-o-day-nhan-bot-x2oh": {
+  "t": "여기서 냥을 충전하면 Facebook Messenger 봇에 메시지만 보내도 같은 지갑으로 바로 쓸 수 있습니다.",
+  "h": "e8af5d50"
+ },
+ "taikhoan.nap-luong-o-day-nhan-zalo": {
+  "t": "여기서 냥을 충전하면 Zalo OA 명보 자미두수에 메시지만 보내도 같은 지갑으로 바로 쓸 수 있습니다.",
+  "h": "f86646c2"
+ },
+ "taikhoan.nguoi-dung": {
+  "t": "사용자",
+  "h": "06f23b4d"
+ },
+ "taikhoan.nhap-lai-mat-khau": {
+  "t": "비밀번호 다시 입력",
+  "h": "4ff37e70"
+ },
+ "taikhoan.nhap-mat-khau-moi": {
+  "t": "새 비밀번호 입력",
+  "h": "62b70346"
+ },
+ "taikhoan.nhap-ten-cua-ban": {
+  "t": "이름을 입력하세요",
+  "h": "5e6b745a"
+ },
+ "taikhoan.noi-du-ngay-gio-gioi-tinh": {
+  "t": "생년월일, 시각, 성별을 모두 말하기",
+  "h": "19c46e88"
+ },
+ "taikhoan.quan-ly-vi-luong-nhan-them": {
+  "t": "냥 지갑 관리, 냥 더 받기, 채팅 채널 연결, 계정 설정.",
+  "h": "6233b736"
+ },
+ "taikhoan.quan-trong-trong-khung-chat-bam": {
+  "t": "<strong>중요:</strong> 채팅 창에서 도구 버튼(<strong>+</strong>) → <strong>Tool access</strong> → <strong>\"Tools already loaded\"</strong>를 고르세요. 기본값 \"Load tools when needed\"이면 Claude가 도구를 못 보고 명반을 지어냅니다. 한 번 켜면 이후 채팅에서도 유지됩니다.",
+  "h": "916eda3a"
+ },
+ "taikhoan.sang": {
+  "t": "<span data-icon=\"sun\" style=\"width:14px;height:14px;vertical-align:-2px\"></span> 밝게",
+  "h": "910fdb50"
+ },
+ "taikhoan.sao-that-sat-o-cung-menh": {
+  "t": "\"명궁의 칠살은 무슨 뜻이야?\"",
+  "h": "5d996c81"
+ },
+ "taikhoan.so-du-luong": {
+  "t": "냥 잔액",
+  "h": "2a573b63"
+ },
+ "taikhoan.tai-khoan-dang-nhap-qua-oauth": {
+  "t": "OAuth로 로그인한 계정은 비밀번호를 쓰지 않습니다.",
+  "h": "4cbe60f1"
+ },
+ "taikhoan.tai-khoan-tu-vi-minh-bao": {
+  "t": "계정 — 명보 자미두수",
+  "h": "0ec3e09f"
+ },
+ "taikhoan.tao-duong-ket-noi": {
+  "t": "연결 링크 만들기",
+  "h": "1ea224f1"
+ },
+ "taikhoan.tao-mot-duong-ket-noi-rieng": {
+  "t": "전용 연결 링크를 만들어 채팅 어시스턴트에 붙여넣으세요. 그다음 \"1984년 5월 9일 축시생 남성의 명반을 세워 줘\", \"2027년 운세는?\"처럼 바로 물으면 됩니다 — tuviminhbao.com의 <strong>엔진에서 정확한</strong> 수치를 가져오며 지어내지 않습니다.",
+  "h": "d3398742"
+ },
+ "taikhoan.tat-ca-loai-giao-dich": {
+  "t": "모든 거래 유형",
+  "h": "32529f70"
+ },
+ "taikhoan.ten-hien-thi": {
+  "t": "표시 이름",
+  "h": "1e9d85d8"
+ },
+ "taikhoan.thong-tin": {
+  "t": "<span data-icon=\"user\"></span> 정보",
+  "h": "ff941fc8"
+ },
+ "taikhoan.thong-tin-ca-nhan": {
+  "t": "개인 정보",
+  "h": "5de3e5eb"
+ },
+ "taikhoan.thu-hoi-tao-key-moi": {
+  "t": "회수 후 새 키 만들기",
+  "h": "8fec8bbc"
+ },
+ "taikhoan.tim-muc-them-mcp-server-custom": {
+  "t": "<strong>MCP server</strong> / <strong>custom connector</strong>(Streamable HTTP)를 추가하는 항목을 찾으세요.",
+  "h": "07a00e26"
+ },
+ "taikhoan.tim-theo-noi-dung": {
+  "t": "내용으로 검색…",
+  "h": "ad472d5e"
+ },
+ "taikhoan.toi": {
+  "t": "<span data-icon=\"moon\" style=\"width:14px;height:14px;vertical-align:-2px\"></span> 어둡게",
+  "h": "f4040249"
+ },
+ "taikhoan.tong-da-moi-0-da-nhan": {
+  "t": "총 초대: <strong id=\"refTotalCount\" style=\"color:var(--heading)\">0</strong> · 받은 보상: <strong id=\"refEarnedCount\" style=\"color:var(--tx-gold)\">0</strong>냥",
+  "h": "1aae41a3"
+ },
+ "taikhoan.vi-du": {
+  "t": ". 예:",
+  "h": "4622a94a"
+ },
+ "taikhoan.vi-luong": {
+  "t": "<span class=\"tab-ic\" data-icon=\"wallet\"></span> 냥 지갑",
+  "h": "397cf5a3"
+ },
+ "taikhoan.vo-chong-tuoi-1984-va-1986": {
+  "t": "\"1984년생과 1986년생 부부는 잘 맞아?\"",
+  "h": "3cbf661e"
+ },
+ "taikhoan.xac-nhan-mat-khau": {
+  "t": "비밀번호 확인",
+  "h": "7386c6b1"
+ },
+ "taikhoan.xong-hoi-claude-lap-la-so": {
+  "t": "완료! Claude에게 \"1984년 5월 9일 축시생 남성의 명반을 세워 줘\"라고 물으면 명보 자미두수 도구를 알아서 부릅니다.",
+  "h": "88358e38"
  },
  "tailieu.bai-viet-khong-ton-tai-hoac": {
   "t": "글이 없거나 삭제되었어요.",
@@ -20710,6 +23630,38 @@
  "thansohoc.tra-loi-thay-o-khung-chat": {
   "t": "채팅창에서 선생님께 답하며 수비학 차트를 만들어 보세요 — 생년월일과 이름만 있으면 돼요.",
   "h": "8268b781"
+ },
+ "thay.15-thay-luan-giai-cua-tu": {
+  "t": "명보 자미두수의 풀이를 맡은 15명의 선생님 — 저마다 전문 분야도, 풀이의 목소리도 다릅니다.",
+  "h": "619ab125"
+ },
+ "thay.cac-thay-15-thay-luan-giai": {
+  "t": "<b>선생님들</b><span>풀이를 맡은 15명의 선생님 — 저마다 전문 분야와 목소리가 다릅니다</span>",
+  "h": "0d633e5a"
+ },
+ "thay.cac-thay-tu-vi-minh-bao": {
+  "t": "선생님들 — 명보 자미두수",
+  "h": "ad96cac8"
+ },
+ "thay.khong-tim-thay-thay-nao-khop": {
+  "t": "일치하는 선생님이 없습니다.",
+  "h": "ed5cffeb"
+ },
+ "thay.tim-thay-theo-ten-hoac-chuyen": {
+  "t": "이름이나 전문 분야로 선생님 찾기…",
+  "h": "cb98738e"
+ },
+ "thaycct.cac-thay": {
+  "t": "← 선생님들",
+  "h": "4e97c621"
+ },
+ "thaycct.thay-chuyen-mon-cong-cu-va": {
+  "t": "<b id=\"tmTitle\">선생님</b><span>전문 분야, 도구, 대화 시작하기</span>",
+  "h": "817a3aa5"
+ },
+ "thaycct.thay-tu-vi-minh-bao": {
+  "t": "선생님 — 명보 자미두수",
+  "h": "9f2d3044"
  },
  "thtg.1-ghi-am-giong-noi": {
   "t": "<span class=\"wss-n\">1</span><span class=\"wss-l\">목소리 녹음</span>",
@@ -21147,6 +24099,26 @@
   "t": "결과를 다시 볼 때 냥이 또 차감되나요?",
   "h": "64b49a22"
  },
+ "trochuyen.chua-co-hoi-thoai-nao-bam": {
+  "t": "아직 대화가 없습니다.<br>위의 '새로 묻기'를 누르거나, 아무 도구나 열어 선생님께 물어보세요.",
+  "h": "9f9eecfb"
+ },
+ "trochuyen.hoi-moi-bat-dau-mot-cau": {
+  "t": "<span class=\"tc-plus\">+</span> <span><b>새로 묻기</b><span>질문을 시작하세요 — 시스템이 알맞은 도구를 고릅니다</span></span>",
+  "h": "bb8d13e7"
+ },
+ "trochuyen.hoi-thay-moi-cuoc-hoi-thay": {
+  "t": "<b>선생님께 묻기</b><span>모든 도구에서 나눈 선생님과의 대화를 한곳에</span>",
+  "h": "f8fc50f0"
+ },
+ "trochuyen.hoi-thay-tu-vi-minh-bao": {
+  "t": "선생님께 묻기 — 명보 자미두수",
+  "h": "ddbd279c"
+ },
+ "trochuyen.toan-bo-cac-cuoc-hoi-thay": {
+  "t": "선생님과 나눈 모든 대화 — 언제든 다시 열거나, 새 질문을 시작하세요.",
+  "h": "f799c12a"
+ },
  "tuonghop.ban-luan-giai-mau-tai-pdf": {
   "t": "<span class=\"sc-ic\" data-icon=\"file-text\"></span> <span class=\"sc-txt\"><b>풀이 샘플</b><span>샘플 명반의 부부 궁합 전체 PDF를 내려받아 실제 내용을 미리 확인해 보세요.</span></span> <a class=\"sc-btn\" href=\"/tai-mau/mau-xem-tuoi.pdf\" target=\"_blank\" rel=\"noopener\">PDF 받기 →</a>",
   "h": "17b7eecd"
@@ -21258,5 +24230,85 @@
  "vanhan.xem-van-han-mien-phi": {
   "t": "<span class=\"bg-label\"><span class=\"ic\" data-icon=\"calendar\"></span><b id=\"btnGoLabel\">운세 보기 →</b></span> <small>무료</small>",
   "h": "3895d3c5"
+ },
+ "xlg.gio-sinh-duong-lich": {
+  "t": "출생 시각(양력)",
+  "h": "eefa6274"
+ },
+ "xlg.gioi-tinh": {
+  "t": "성별",
+  "h": "80bbce55"
+ },
+ "xlg.gioi-tinh-nam": {
+  "t": "남성",
+  "h": "b580ba1b"
+ },
+ "xlg.ho-ten-khong-bat-buoc": {
+  "t": "이름 <span class=\"opt\">(선택)</span>",
+  "h": "87ce95fd"
+ },
+ "xlg.khong-nho-chinh-xac-chon-gio": {
+  "t": "정확히 기억나지 않나요? 가장 가까운 시각을 고르면 나중에 고칠 수 있습니다.",
+  "h": "21f75046"
+ },
+ "xlg.la-so-12-cung-day-du": {
+  "t": "<span class=\"ic\" data-icon=\"bar-chart-3\"></span><span><b>십이궁 명반</b> — 주성, 보조성, 사화까지 모두</span>",
+  "h": "b0b67e2b"
+ },
+ "xlg.luan-giai-la-so-tu-vi": {
+  "t": "생년월일시로 보는 자미두수 명반 풀이 — 명보",
+  "h": "ee3ea368"
+ },
+ "xlg.luan-giai-la-so-tu-vi-jv0q": {
+  "t": "생년월일시로 보는 자미두수 명반 풀이",
+  "h": "cd522af6"
+ },
+ "xlg.luan-rieng-tung-cung-diem-manh": {
+  "t": "<span class=\"ic\" data-icon=\"star\"></span><span><b>궁별 개별 풀이</b>, 강점과 약점, 올해를 위한 제안</span>",
+  "h": "60d3c68b"
+ },
+ "xlg.minh-bao": {
+  "t": "명보",
+  "h": "e4158660"
+ },
+ "xlg.ngay": {
+  "t": "일",
+  "h": "368c4575"
+ },
+ "xlg.nhap-ngay-gio-sinh-he-thong": {
+  "t": "생년월일시를 입력하면 시스템이 별을 배치해 십이궁 명반을 세우고 고법에 따라 풀이합니다. 가입 없이 바로 미리 볼 수 있습니다.",
+  "h": "7c5ecf1e"
+ },
+ "xlg.nhap-ngay-gio-sinh-xem-truoc": {
+  "t": "생년월일시를 입력하고 십이궁 자미두수 명반과 총론을 무료로 미리 보세요. 13부 전체판을 열 때만 결제합니다.",
+  "h": "38c4a34f"
+ },
+ "xlg.thang": {
+  "t": "월",
+  "h": "0e2b3099"
+ },
+ "xlg.thanh-toan-bang-chuyen-khoan-qr": {
+  "t": "결제는 PayPal 또는 해외 카드로 할 수 있습니다.",
+  "h": "84f70dc9"
+ },
+ "xlg.tong-quan-cuoc-doi-tinh-cach": {
+  "t": "<span class=\"ic\" data-icon=\"file-text\"></span><span><b>인생 총론</b>: 성격, 일, 연애, 재물</span>",
+  "h": "57dcca8b"
+ },
+ "xlg.vui-long-chon-du-ngay-thang": {
+  "t": "태어난 일, 월, 연도와 시각을 모두 골라 주세요.",
+  "h": "67e1d40f"
+ },
+ "xlg.xem-ban-luan-giai-mau-pdf": {
+  "t": "<a class=\"mini\" href=\"/tai-mau/mau-luan-giai-la-so.pdf\" target=\"_blank\" rel=\"noopener\"> <span class=\"ic\" data-icon=\"file-text\"></span> <span><b>풀이 샘플 보기(PDF·베트남어)</b>실제 샘플 명반의 내용 — 결정하기 전에 읽어 보세요</span> </a> <a class=\"mini\" href=\"/app/thay\"> <span class=\"ic\" data-icon=\"book-open\"></span> <span><b>명보의 15명 선생님</b>『자미두수신편』과 고법의 여러 판본에 따라 풀이</span> </a>",
+  "h": "e8c2bc01"
+ },
+ "xlg.xem-la-so-mien-phi": {
+  "t": "무료로 명반 보기 →",
+  "h": "97bce6ab"
+ },
+ "xlg.xem-truoc-mien-phi-mo-ban": {
+  "t": "미리 보기는 <b>무료</b>. 13부 전체판: <b><span data-lp-vnd>…</span></b>",
+  "h": "741a332d"
  }
 }
