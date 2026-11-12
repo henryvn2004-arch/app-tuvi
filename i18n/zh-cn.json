@@ -807,6 +807,86 @@
   "t": "公司办公室",
   "h": "d678c2d6"
  },
+ "dali.an-uong": {
+  "t": "<span class=\"ic\" data-icon=\"leaf\"></span> 饮食",
+  "h": "a8b06b78"
+ },
+ "dali.anh-da-mat": {
+  "t": "<span class=\"ic\" data-icon=\"camera\"></span> 脸部肌肤照片",
+  "h": "d3d3689b"
+ },
+ "dali.anh-sang-tu-nhien-khong-filter": {
+  "t": "自然光 · 不加滤镜 · 近距离拍清楚<br>JPG/PNG，最大 5MB",
+  "h": "13e0d13e"
+ },
+ "dali.chup-noi-co-anh-sang-tu": {
+  "t": "<span class=\"tip-badge\"><span class=\"ic\" data-icon=\"lightbulb\"></span> 在有自然光的地方拍摄</span> <span class=\"tip-badge\"><span class=\"ic\" data-icon=\"x-circle\"></span> 不要使用闪光灯</span> <span class=\"tip-badge\"><span class=\"ic\" data-icon=\"smile\"></span> 洗净素颜</span>",
+  "h": "5c098d4e"
+ },
+ "dali.da-lieu-toan-dien": {
+  "t": "全面肤质分析",
+  "h": "91cdb627"
+ },
+ "dali.da-lieu-toan-dien-chup-anh": {
+  "t": "<b>全面肤质分析</b><span>拍摄脸部肌肤——中医、西医与五行古法</span>",
+  "h": "72690cfa"
+ },
+ "dali.da-lieu-tu-vi-minh-bao": {
+  "t": "皮肤——明宝紫微斗数",
+  "h": "a3b8548f"
+ },
+ "dali.da-xuong-cap-ma-cu-do": {
+  "t": "皮肤变差了却总是怪年纪，但真正的问题，可能出在您从没仔细看过的地方。上传一张脸部肌肤照片，在花钱买新保养品之前，先获得客观的分析。",
+  "h": "78702e4b"
+ },
+ "dali.day-la-tu-van-tham-khao": {
+  "t": "<span class=\"ic\" data-icon=\"alert-triangle\"></span> 这是结合中西医的参考建议，不能取代皮肤科医师的诊断与治疗。若有严重的皮肤状况，请咨询专业人员。",
+  "h": "b51f96df"
+ },
+ "dali.dong-y": {
+  "t": "<span class=\"ic\" data-icon=\"scale\"></span> 中医",
+  "h": "dd81a951"
+ },
+ "dali.luan-giai-dong-y": {
+  "t": "<span class=\"ic\" data-icon=\"scale\"></span> 中医解读",
+  "h": "fd58cfd1"
+ },
+ "dali.luu-y-theo-ban-menh": {
+  "t": "<strong>✦ 依本命的注意事项</strong> <span id=\"luuYText\">—</span>",
+  "h": "d6e60118"
+ },
+ "dali.my-pham": {
+  "t": "<span class=\"ic\" data-icon=\"sparkles\"></span> 保养品",
+  "h": "3d3cb659"
+ },
+ "dali.my-pham-routine": {
+  "t": "<span class=\"ic\" data-icon=\"sparkles\"></span> 保养品与保养流程",
+  "h": "bf4abdec"
+ },
+ "dali.nam-sinh-tuy-chon-tu-van": {
+  "t": "出生年（选填——依本命提供建议）",
+  "h": "2abf3e72"
+ },
+ "dali.phan-tich-da-mat-ket-hop": {
+  "t": "分析脸部肌肤——结合中医、西医与五行古法。依本命提供饮食、保养品与护肤建议。",
+  "h": "c9ffa0cc"
+ },
+ "dali.phan-tich-da-toan-dien-luong": {
+  "t": "<span class=\"ic\" data-icon=\"leaf\"></span> 全面分析肌肤——<span data-tvp-price=\"da-lieu-ai\">…</span> 两",
+  "h": "b46628df"
+ },
+ "dali.tai-len-mot-tam-anh-da": {
+  "t": "请上传一张未化妆、脸部肌肤清晰的照片。系统会分析照片上各部位肌肤的状况。您会得到肌肤评估、中医解读，以及适合的食疗与保养品建议。",
+  "h": "5a19c79c"
+ },
+ "dali.thuc-duong-an-uong": {
+  "t": "<span class=\"ic\" data-icon=\"leaf\"></span> 食疗与饮食",
+  "h": "9ce2b777"
+ },
+ "dali.tuong-hoc-da-mat-phuong-dong": {
+  "t": "东方脸部肌肤相学认为，皮肤状态在某种程度上反映体内的健康，并与现代皮肤科学的观察互相对照。这种结合中西医的方式，把皮肤视为需要追踪的指针，而不只凭美感来评断。",
+  "h": "466d834a"
+ },
  "dient.anh-chi-gui-toi-may-chu": {
   "t": "图片仅发送至服务器进行分析，不会保存在服务器上。请正面拍摄、光线充足、不要遮住脸，结果最准确。",
   "h": "b68f127c"
@@ -2586,6 +2666,142 @@
  "js.congcutr.xep-theo-mon-tu-vi-tu": {
   "t": "依术数分类：紫微斗数、八字、相学、风水…",
   "h": "cf4f8ecc"
+ },
+ "js.dali.buoi-sang": {
+  "t": "早晨",
+  "h": "d95d88da"
+ },
+ "js.dali.buoi-toi": {
+  "t": "夜晚",
+  "h": "adcf496a"
+ },
+ "js.dali.chip-dong-y": {
+  "t": "中医上该如何改善？",
+  "h": "e84646cb"
+ },
+ "js.dali.chip-san-pham": {
+  "t": "应该先使用哪项产品？",
+  "h": "c4d20f9a"
+ },
+ "js.dali.chip-vi-sao": {
+  "t": "为什么我的皮肤属于这种类型？",
+  "h": "92ad930f"
+ },
+ "js.dali.da-dau": {
+  "t": "油性肌肤",
+  "h": "2e16ebef"
+ },
+ "js.dali.da-hon-hop": {
+  "t": "混合性肌肤",
+  "h": "68410286"
+ },
+ "js.dali.da-kho": {
+  "t": "干性肌肤",
+  "h": "6dcefb2d"
+ },
+ "js.dali.da-nhay-cam": {
+  "t": "敏感性肌肤",
+  "h": "336f6fce"
+ },
+ "js.dali.da-thuong": {
+  "t": "一般肤质",
+  "h": "830c17ab"
+ },
+ "js.dali.greeting": {
+  "t": "皮肤分析结果：**{d}**{m}。想多问中医、饮食还是保养品？",
+  "h": "edab53d9"
+ },
+ "js.dali.hanh-n": {
+  "t": "{h}行",
+  "h": "3e50daab"
+ },
+ "js.dali.ing-nen-dung": {
+  "t": "建议使用的成分",
+  "h": "35fd5e5b"
+ },
+ "js.dali.ing-nen-tranh": {
+  "t": "建议避开的成分",
+  "h": "c6f4ec17"
+ },
+ "js.dali.label": {
+  "t": "皮肤——{d}",
+  "h": "8fcf6fa4"
+ },
+ "js.dali.lbl-anh-huong-menh": {
+  "t": "本命的影响",
+  "h": "28408328"
+ },
+ "js.dali.lbl-can-bang": {
+  "t": "阴阳平衡",
+  "h": "716d7b88"
+ },
+ "js.dali.lbl-ly-giai": {
+  "t": "中医解读",
+  "h": "58af6bfb"
+ },
+ "js.dali.lbl-tang-phu": {
+  "t": "相关脏腑",
+  "h": "288ab910"
+ },
+ "js.dali.loi-e": {
+  "t": "错误：{e}",
+  "h": "a7267203"
+ },
+ "js.dali.loi-phan-tich": {
+  "t": "分析错误",
+  "h": "3e06a99e"
+ },
+ "js.dali.menh-n": {
+  "t": "本命 {h}",
+  "h": "e46cbb3b"
+ },
+ "js.dali.nen-an": {
+  "t": "适合吃",
+  "h": "b29db199"
+ },
+ "js.dali.nen-tranh": {
+  "t": "建议避开",
+  "h": "41d7ed06"
+ },
+ "js.dali.nuoc-uong": {
+  "t": "饮品与药草茶",
+  "h": "706a3d71"
+ },
+ "js.dali.share-loai-da": {
+  "t": "肤质：{d}{m}",
+  "h": "928754ce"
+ },
+ "js.dali.share-title": {
+  "t": "我的皮肤分析结果",
+  "h": "7e7757f7"
+ },
+ "js.dali.step-dong-y": {
+  "t": "中医：解读脏腑与本命",
+  "h": "8122b336"
+ },
+ "js.dali.step-my-pham": {
+  "t": "建议保养品与保养流程",
+  "h": "0014c3fb"
+ },
+ "js.dali.step-tay-y": {
+  "t": "西医：辨识肤质与状态",
+  "h": "c11ccb03"
+ },
+ "js.dali.step-thuc-duong": {
+  "t": "拟定食疗饮食计划",
+  "h": "99292ce2"
+ },
+ "js.dali.tang-phu-lien-quan": {
+  "t": "相关脏腑、依本命的皮肤倾向，以及从图片进行的皮肤分析（肤质、状态、程度），收录于深度分析中。",
+  "h": "d1caef52"
+ },
+ "js.dali.thuc-duong-theo-menh": {
+  "t": "依本命的食疗",
+  "h": "7187b22e"
+ },
+ "js.dali.vui-long-thu-lai": {
+  "t": "请再试一次。",
+  "h": "2f1d18ee"
  },
  "js.dient.anh-qua-lon-toi-da-5mb": {
   "t": "图片过大（最大 5MB）。",

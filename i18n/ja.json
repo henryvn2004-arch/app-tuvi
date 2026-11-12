@@ -807,6 +807,86 @@
   "t": "会社のオフィス",
   "h": "d678c2d6"
  },
+ "dali.an-uong": {
+  "t": "<span class=\"ic\" data-icon=\"leaf\"></span> 食事",
+  "h": "a8b06b78"
+ },
+ "dali.anh-da-mat": {
+  "t": "<span class=\"ic\" data-icon=\"camera\"></span> 顔の肌の画像",
+  "h": "d3d3689b"
+ },
+ "dali.anh-sang-tu-nhien-khong-filter": {
+  "t": "自然光 · フィルターなし · 近くではっきり撮影<br>JPG/PNG、最大5MB",
+  "h": "13e0d13e"
+ },
+ "dali.chup-noi-co-anh-sang-tu": {
+  "t": "<span class=\"tip-badge\"><span class=\"ic\" data-icon=\"lightbulb\"></span> 自然光のある場所で撮影</span> <span class=\"tip-badge\"><span class=\"ic\" data-icon=\"x-circle\"></span> フラッシュは使わない</span> <span class=\"tip-badge\"><span class=\"ic\" data-icon=\"smile\"></span> 洗顔後のすっぴん</span>",
+  "h": "5c098d4e"
+ },
+ "dali.da-lieu-toan-dien": {
+  "t": "肌の総合鑑定",
+  "h": "91cdb627"
+ },
+ "dali.da-lieu-toan-dien-chup-anh": {
+  "t": "<b>肌の総合鑑定</b><span>顔の肌を撮影 — 漢方、西洋医学、五行の古法</span>",
+  "h": "72690cfa"
+ },
+ "dali.da-lieu-tu-vi-minh-bao": {
+  "t": "肌診断 — 明宝紫微斗数",
+  "h": "a3b8548f"
+ },
+ "dali.da-xuong-cap-ma-cu-do": {
+  "t": "肌が衰えても年齢のせいにしてしまうけれど、本当の問題は、まだじっくり見たことのない場所にあるのかもしれません。顔の肌の画像を1枚アップロードして、新しいコスメにお金をかける前に客観的な分析を受け取りましょう。",
+  "h": "78702e4b"
+ },
+ "dali.day-la-tu-van-tham-khao": {
+  "t": "<span class=\"ic\" data-icon=\"alert-triangle\"></span> これは漢方と西洋医学を組み合わせた参考アドバイスであり、皮膚科医の診断・治療に代わるものではありません。深刻な肌トラブルがある場合は、専門家にご相談ください。",
+  "h": "b51f96df"
+ },
+ "dali.dong-y": {
+  "t": "<span class=\"ic\" data-icon=\"scale\"></span> 漢方",
+  "h": "dd81a951"
+ },
+ "dali.luan-giai-dong-y": {
+  "t": "<span class=\"ic\" data-icon=\"scale\"></span> 漢方の見立て",
+  "h": "fd58cfd1"
+ },
+ "dali.luu-y-theo-ban-menh": {
+  "t": "<strong>✦ 本命に応じた注意点</strong> <span id=\"luuYText\">—</span>",
+  "h": "d6e60118"
+ },
+ "dali.my-pham": {
+  "t": "<span class=\"ic\" data-icon=\"sparkles\"></span> コスメ",
+  "h": "3d3cb659"
+ },
+ "dali.my-pham-routine": {
+  "t": "<span class=\"ic\" data-icon=\"sparkles\"></span> コスメとルーティン",
+  "h": "bf4abdec"
+ },
+ "dali.nam-sinh-tuy-chon-tu-van": {
+  "t": "生まれ年（任意 — 本命に合わせたアドバイス）",
+  "h": "2abf3e72"
+ },
+ "dali.phan-tich-da-mat-ket-hop": {
+  "t": "顔の肌を分析 — 漢方、西洋医学、五行の古法を組み合わせます。本命に合わせた食事、コスメ、スキンケアのアドバイス。",
+  "h": "c9ffa0cc"
+ },
+ "dali.phan-tich-da-toan-dien-luong": {
+  "t": "<span class=\"ic\" data-icon=\"leaf\"></span> 肌を総合分析 — <span data-tvp-price=\"da-lieu-ai\">…</span> 両",
+  "h": "b46628df"
+ },
+ "dali.tai-len-mot-tam-anh-da": {
+  "t": "メイクをしていない、顔の肌がはっきり写った画像を1枚アップロードしてください。システムが画像上の肌の各部位の状態を分析します。肌の評価、漢方による見立て、合う薬膳とコスメの提案が届きます。",
+  "h": "5a19c79c"
+ },
+ "dali.thuc-duong-an-uong": {
+  "t": "<span class=\"ic\" data-icon=\"leaf\"></span> 薬膳と食事",
+  "h": "9ce2b777"
+ },
+ "dali.tuong-hoc-da-mat-phuong-dong": {
+  "t": "東洋の顔の肌の相学では、肌の状態は体の内側の健康をある程度映すと考え、現代皮膚科学の観察とも照らし合わせます。漢方と西洋医学を組み合わせたこのアプローチは、肌を見た目の美しさだけで判断せず、経過を見るべき手がかりとして捉えます。",
+  "h": "466d834a"
+ },
  "dient.anh-chi-gui-toi-may-chu": {
   "t": "画像は分析のためにサーバーへ送るだけで、サーバーには保存しません。正面から、十分な明るさで、顔を隠さずに撮影すると最も正確な結果が得られます。",
   "h": "b68f127c"
@@ -2586,6 +2666,142 @@
  "js.congcutr.xep-theo-mon-tu-vi-tu": {
   "t": "術別に並べています:紫微斗数、四柱推命、人相占い、風水…",
   "h": "cf4f8ecc"
+ },
+ "js.dali.buoi-sang": {
+  "t": "朝",
+  "h": "d95d88da"
+ },
+ "js.dali.buoi-toi": {
+  "t": "夜",
+  "h": "adcf496a"
+ },
+ "js.dali.chip-dong-y": {
+  "t": "漢方ではどう改善しますか？",
+  "h": "e84646cb"
+ },
+ "js.dali.chip-san-pham": {
+  "t": "どの製品から使うべきですか？",
+  "h": "c4d20f9a"
+ },
+ "js.dali.chip-vi-sao": {
+  "t": "なぜ私の肌はこのタイプなのですか？",
+  "h": "92ad930f"
+ },
+ "js.dali.da-dau": {
+  "t": "脂性肌",
+  "h": "2e16ebef"
+ },
+ "js.dali.da-hon-hop": {
+  "t": "混合肌",
+  "h": "68410286"
+ },
+ "js.dali.da-kho": {
+  "t": "乾燥肌",
+  "h": "6dcefb2d"
+ },
+ "js.dali.da-nhay-cam": {
+  "t": "敏感肌",
+  "h": "336f6fce"
+ },
+ "js.dali.da-thuong": {
+  "t": "普通肌",
+  "h": "830c17ab"
+ },
+ "js.dali.greeting": {
+  "t": "肌の分析結果: **{d}**{m}。漢方・食事・コスメのうち、ほかに知りたいことはありますか？",
+  "h": "edab53d9"
+ },
+ "js.dali.hanh-n": {
+  "t": "{h}の行",
+  "h": "3e50daab"
+ },
+ "js.dali.ing-nen-dung": {
+  "t": "おすすめの成分",
+  "h": "35fd5e5b"
+ },
+ "js.dali.ing-nen-tranh": {
+  "t": "避けたい成分",
+  "h": "c6f4ec17"
+ },
+ "js.dali.label": {
+  "t": "肌診断 — {d}",
+  "h": "8fcf6fa4"
+ },
+ "js.dali.lbl-anh-huong-menh": {
+  "t": "本命の影響",
+  "h": "28408328"
+ },
+ "js.dali.lbl-can-bang": {
+  "t": "陰陽のバランス",
+  "h": "716d7b88"
+ },
+ "js.dali.lbl-ly-giai": {
+  "t": "漢方の見立て",
+  "h": "58af6bfb"
+ },
+ "js.dali.lbl-tang-phu": {
+  "t": "関連する臓腑",
+  "h": "288ab910"
+ },
+ "js.dali.loi-e": {
+  "t": "エラー: {e}",
+  "h": "a7267203"
+ },
+ "js.dali.loi-phan-tich": {
+  "t": "分析エラー",
+  "h": "3e06a99e"
+ },
+ "js.dali.menh-n": {
+  "t": "本命 {h}",
+  "h": "e46cbb3b"
+ },
+ "js.dali.nen-an": {
+  "t": "食べるとよいもの",
+  "h": "b29db199"
+ },
+ "js.dali.nen-tranh": {
+  "t": "避けたいもの",
+  "h": "41d7ed06"
+ },
+ "js.dali.nuoc-uong": {
+  "t": "飲み物と薬草茶",
+  "h": "706a3d71"
+ },
+ "js.dali.share-loai-da": {
+  "t": "肌タイプ: {d}{m}",
+  "h": "928754ce"
+ },
+ "js.dali.share-title": {
+  "t": "私の肌診断の結果",
+  "h": "7e7757f7"
+ },
+ "js.dali.step-dong-y": {
+  "t": "漢方: 臓腑と本命を読み解く",
+  "h": "8122b336"
+ },
+ "js.dali.step-my-pham": {
+  "t": "コスメとルーティンを提案",
+  "h": "0014c3fb"
+ },
+ "js.dali.step-tay-y": {
+  "t": "西洋医学: 肌タイプと状態を判定",
+  "h": "c11ccb03"
+ },
+ "js.dali.step-thuc-duong": {
+  "t": "薬膳の食事プランを作成",
+  "h": "99292ce2"
+ },
+ "js.dali.tang-phu-lien-quan": {
+  "t": "関連する臓腑、本命に応じた肌の傾向、画像からの肌分析（肌タイプ・状態・程度）は、詳細分析に含まれています。",
+  "h": "d1caef52"
+ },
+ "js.dali.thuc-duong-theo-menh": {
+  "t": "本命に合わせた薬膳",
+  "h": "7187b22e"
+ },
+ "js.dali.vui-long-thu-lai": {
+  "t": "もう一度お試しください。",
+  "h": "2f1d18ee"
  },
  "js.dient.anh-qua-lon-toi-da-5mb": {
   "t": "画像が大きすぎます（最大5MB）。",

@@ -985,7 +985,7 @@ Quy tắc:
 - Lồng ghép Đông y (ngũ tạng, âm dương, hành) VÀ Tây y (vitamin, peptide, SPF...) tự nhiên
 - Chỉ trả về JSON`;
 
-async function handleDaLieuAI(body) {
+async function handleDaLieuAI(body, locale = 'vi') {
   const { image, mediaType = 'image/jpeg', namSinh, faceMeasurements } = body;
   if (!image) return Response.json({ error: 'Thiếu dữ liệu ảnh.' }, { status: 400 });
   if (image.length > 7 * 1024 * 1024) return Response.json({ error: 'Ảnh quá lớn (tối đa ~5MB).' }, { status: 400 });
@@ -1014,7 +1014,10 @@ Phần an_uong cũng phải tính đến mệnh ${menhHanh} (VD: mệnh Hỏa c�
     text = await llmText({
       luanGiai: true,
       system: SP_DA_LIEU + menhContext,
-      prompt: 'Phân tích tình trạng da trong ảnh và trả về JSON tư vấn holistic đầy đủ 4 phần.',
+      // Ngôn ngữ ở USER (json:true giữ nguyên khoá/enum). `loai_da` là enum Việt mà trang tra icon + bản dịch theo đúng chuỗi
+      // đó ⇒ ép giữ nguyên văn; các giá trị chữ còn lại viết bằng ngôn ngữ đích. vi → chuỗi cũ từng byte.
+      prompt: withLang('Phân tích tình trạng da trong ảnh và trả về JSON tư vấn holistic đầy đủ 4 phần.', locale, [], { json: true })
+        + (locale === 'vi' ? '' : '\n\n[loai_da: chép NGUYÊN VĂN tiếng Việt đúng một trong năm giá trị "da dầu" / "da khô" / "da hỗn hợp" / "da thường" / "da nhạy cảm" — KHÔNG dịch (trang tra theo đúng chuỗi này). Mọi giá trị chữ khác viết bằng ngôn ngữ đã chỉ định.]'),
       images: [{ data: image, mediaType }],
       maxTokens: 2000,
     });
@@ -1495,7 +1498,7 @@ async function runPost(request) {
     if (action === 'wardrobe-delete') return await handleWardrobeDelete(request, body);
     if (action === 'personal-color') return await handlePersonalColor(body, requestLocale(request));
     if (action === 'personal-color-tryon') return await handlePersonalColorTryon(body);
-    if (action === 'da-lieu-ai') return await handleDaLieuAI(body);
+    if (action === 'da-lieu-ai') return await handleDaLieuAI(body, requestLocale(request));
     if (action === 'trang-diem-phan-tich') return await handleTrangDiemPhanTich(body, requestLocale(request));
     if (action === 'trang-diem-tryon') return await handleTrangDiemTryon(body);
 

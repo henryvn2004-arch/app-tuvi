@@ -534,6 +534,45 @@
    "shell"
   ]
  },
+ "/app/da-lieu-ai": {
+  "file": "app-da-lieu-ai.html",
+  "keys": [
+   "banlamviec.phan-tich-lai",
+   "battu.1-nhap-thong-tin",
+   "battu.gioi-thieu",
+   "battu.hoi",
+   "dali.an-uong",
+   "dali.anh-da-mat",
+   "dali.anh-sang-tu-nhien-khong-filter",
+   "dali.chup-noi-co-anh-sang-tu",
+   "dali.da-lieu-toan-dien",
+   "dali.da-lieu-toan-dien-chup-anh",
+   "dali.da-lieu-tu-vi-minh-bao",
+   "dali.da-xuong-cap-ma-cu-do",
+   "dali.day-la-tu-van-tham-khao",
+   "dali.dong-y",
+   "dali.luan-giai-dong-y",
+   "dali.luu-y-theo-ban-menh",
+   "dali.my-pham",
+   "dali.my-pham-routine",
+   "dali.nam-sinh-tuy-chon-tu-van",
+   "dali.phan-tich-da-mat-ket-hop",
+   "dali.phan-tich-da-toan-dien-luong",
+   "dali.tai-len-mot-tam-anh-da",
+   "dali.thuc-duong-an-uong",
+   "dali.tuong-hoc-da-mat-phuong-dong",
+   "laso.nu",
+   "pcol.chup-hoac-chon-anh-khuon-mat",
+   "phongthuy.doi-anh",
+   "phongthuy.gioi-tinh",
+   "phongthuy.vd-1990",
+   "thtg.2-thanh-toan",
+   "thtg.3-nhan-ket-qua"
+  ],
+  "js": [
+   "shell"
+  ]
+ },
  "/app/dien-tuong": {
   "file": "app-dien-tuong.html",
   "keys": [

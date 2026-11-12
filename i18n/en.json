@@ -807,6 +807,86 @@
   "t": "Company office",
   "h": "d678c2d6"
  },
+ "dali.an-uong": {
+  "t": "<span class=\"ic\" data-icon=\"leaf\"></span> Diet",
+  "h": "a8b06b78"
+ },
+ "dali.anh-da-mat": {
+  "t": "<span class=\"ic\" data-icon=\"camera\"></span> Facial Skin Photo",
+  "h": "d3d3689b"
+ },
+ "dali.anh-sang-tu-nhien-khong-filter": {
+  "t": "Natural light · No filter · Shoot close and clear<br>JPG/PNG, 5MB max",
+  "h": "13e0d13e"
+ },
+ "dali.chup-noi-co-anh-sang-tu": {
+  "t": "<span class=\"tip-badge\"><span class=\"ic\" data-icon=\"lightbulb\"></span> Shoot where there is natural light</span> <span class=\"tip-badge\"><span class=\"ic\" data-icon=\"x-circle\"></span> Don’t use flash</span> <span class=\"tip-badge\"><span class=\"ic\" data-icon=\"smile\"></span> Clean, makeup-free face</span>",
+  "h": "5c098d4e"
+ },
+ "dali.da-lieu-toan-dien": {
+  "t": "Complete Skin Reading",
+  "h": "91cdb627"
+ },
+ "dali.da-lieu-toan-dien-chup-anh": {
+  "t": "<b>Complete Skin Reading</b><span>Photograph your facial skin — TCM, Western medicine and the Five Elements method</span>",
+  "h": "72690cfa"
+ },
+ "dali.da-lieu-tu-vi-minh-bao": {
+  "t": "Skin — Minh Bao Zi Wei Dou Shu",
+  "h": "a3b8548f"
+ },
+ "dali.da-xuong-cap-ma-cu-do": {
+  "t": "Your skin is declining and you keep blaming age, while the real problem may lie where you’ve never looked closely. Upload one facial skin photo and get an objective analysis before spending money on new skincare.",
+  "h": "78702e4b"
+ },
+ "dali.day-la-tu-van-tham-khao": {
+  "t": "<span class=\"ic\" data-icon=\"alert-triangle\"></span> This is reference advice combining Eastern and Western medicine; it does not replace a dermatologist’s diagnosis and treatment. If you have a serious skin condition, please consult a specialist.",
+  "h": "b51f96df"
+ },
+ "dali.dong-y": {
+  "t": "<span class=\"ic\" data-icon=\"scale\"></span> TCM",
+  "h": "dd81a951"
+ },
+ "dali.luan-giai-dong-y": {
+  "t": "<span class=\"ic\" data-icon=\"scale\"></span> TCM Interpretation",
+  "h": "fd58cfd1"
+ },
+ "dali.luu-y-theo-ban-menh": {
+  "t": "<strong>✦ Notes for Your Birth Element</strong> <span id=\"luuYText\">—</span>",
+  "h": "d6e60118"
+ },
+ "dali.my-pham": {
+  "t": "<span class=\"ic\" data-icon=\"sparkles\"></span> Skincare",
+  "h": "3d3cb659"
+ },
+ "dali.my-pham-routine": {
+  "t": "<span class=\"ic\" data-icon=\"sparkles\"></span> Skincare & Routine",
+  "h": "bf4abdec"
+ },
+ "dali.nam-sinh-tuy-chon-tu-van": {
+  "t": "Birth year (optional — advice by birth element)",
+  "h": "2abf3e72"
+ },
+ "dali.phan-tich-da-mat-ket-hop": {
+  "t": "Facial skin analysis — combining TCM, Western medicine and the Five Elements method. Advice on diet, cosmetics and skin care by birth element.",
+  "h": "c9ffa0cc"
+ },
+ "dali.phan-tich-da-toan-dien-luong": {
+  "t": "<span class=\"ic\" data-icon=\"leaf\"></span> Analyze My Skin — <span data-tvp-price=\"da-lieu-ai\">…</span> credits",
+  "h": "b46628df"
+ },
+ "dali.tai-len-mot-tam-anh-da": {
+  "t": "Upload one clear photo of your facial skin without makeup. The system analyzes the condition of each area of skin in the photo. You get a skin assessment, a TCM interpretation and suitable dietary-therapy and skincare suggestions.",
+  "h": "5a19c79c"
+ },
+ "dali.thuc-duong-an-uong": {
+  "t": "<span class=\"ic\" data-icon=\"leaf\"></span> Dietary Therapy & Diet",
+  "h": "9ce2b777"
+ },
+ "dali.tuong-hoc-da-mat-phuong-dong": {
+  "t": "Eastern facial-skin physiognomy holds that the condition of the skin reflects, to some degree, the health within, and cross-checks it with the observations of modern dermatology. This approach, combining Eastern and Western medicine, treats the skin as an indicator to monitor rather than judging it by aesthetic impression alone.",
+  "h": "466d834a"
+ },
  "dient.anh-chi-gui-toi-may-chu": {
   "t": "The photo is only sent to the server for analysis and isn't stored there. Shoot straight on, in good light, with nothing covering your face for the most accurate result.",
   "h": "b68f127c"
@@ -2586,6 +2666,142 @@
  "js.congcutr.xep-theo-mon-tu-vi-tu": {
   "t": "Sorted by discipline: Zi Wei Dou Shu, BaZi, Face Reading, Feng Shui…",
   "h": "cf4f8ecc"
+ },
+ "js.dali.buoi-sang": {
+  "t": "Morning",
+  "h": "d95d88da"
+ },
+ "js.dali.buoi-toi": {
+  "t": "Evening",
+  "h": "adcf496a"
+ },
+ "js.dali.chip-dong-y": {
+  "t": "How can I improve it according to traditional Chinese medicine?",
+  "h": "e84646cb"
+ },
+ "js.dali.chip-san-pham": {
+  "t": "Which products should I use first?",
+  "h": "c4d20f9a"
+ },
+ "js.dali.chip-vi-sao": {
+  "t": "Why is my skin this type?",
+  "h": "92ad930f"
+ },
+ "js.dali.da-dau": {
+  "t": "oily skin",
+  "h": "2e16ebef"
+ },
+ "js.dali.da-hon-hop": {
+  "t": "combination skin",
+  "h": "68410286"
+ },
+ "js.dali.da-kho": {
+  "t": "dry skin",
+  "h": "6dcefb2d"
+ },
+ "js.dali.da-nhay-cam": {
+  "t": "sensitive skin",
+  "h": "336f6fce"
+ },
+ "js.dali.da-thuong": {
+  "t": "normal skin",
+  "h": "830c17ab"
+ },
+ "js.dali.greeting": {
+  "t": "Your skin analysis result: **{d}**{m}. Would you like to ask more about traditional Chinese medicine, diet or skincare products?",
+  "h": "edab53d9"
+ },
+ "js.dali.hanh-n": {
+  "t": "{h} element",
+  "h": "3e50daab"
+ },
+ "js.dali.ing-nen-dung": {
+  "t": "Ingredients to Use",
+  "h": "35fd5e5b"
+ },
+ "js.dali.ing-nen-tranh": {
+  "t": "Ingredients to Avoid",
+  "h": "c6f4ec17"
+ },
+ "js.dali.label": {
+  "t": "Skin — {d}",
+  "h": "8fcf6fa4"
+ },
+ "js.dali.lbl-anh-huong-menh": {
+  "t": "Influence of Your Birth Element",
+  "h": "28408328"
+ },
+ "js.dali.lbl-can-bang": {
+  "t": "Yin–Yang Balance",
+  "h": "716d7b88"
+ },
+ "js.dali.lbl-ly-giai": {
+  "t": "TCM Interpretation",
+  "h": "58af6bfb"
+ },
+ "js.dali.lbl-tang-phu": {
+  "t": "Related Zang-Fu Organs",
+  "h": "288ab910"
+ },
+ "js.dali.loi-e": {
+  "t": "Error: {e}",
+  "h": "a7267203"
+ },
+ "js.dali.loi-phan-tich": {
+  "t": "Analysis error",
+  "h": "3e06a99e"
+ },
+ "js.dali.menh-n": {
+  "t": "Birth element {h}",
+  "h": "e46cbb3b"
+ },
+ "js.dali.nen-an": {
+  "t": "Foods to Eat",
+  "h": "b29db199"
+ },
+ "js.dali.nen-tranh": {
+  "t": "Foods to Avoid",
+  "h": "41d7ed06"
+ },
+ "js.dali.nuoc-uong": {
+  "t": "Drinks & Herbal Teas",
+  "h": "706a3d71"
+ },
+ "js.dali.share-loai-da": {
+  "t": "Skin type: {d}{m}",
+  "h": "928754ce"
+ },
+ "js.dali.share-title": {
+  "t": "My skin reading result",
+  "h": "7e7757f7"
+ },
+ "js.dali.step-dong-y": {
+  "t": "TCM: reading the zang-fu organs & birth element",
+  "h": "8122b336"
+ },
+ "js.dali.step-my-pham": {
+  "t": "Suggesting skincare & a routine",
+  "h": "0014c3fb"
+ },
+ "js.dali.step-tay-y": {
+  "t": "Western medicine: identifying skin type & condition",
+  "h": "c11ccb03"
+ },
+ "js.dali.step-thuc-duong": {
+  "t": "Planning a dietary-therapy meal plan",
+  "h": "99292ce2"
+ },
+ "js.dali.tang-phu-lien-quan": {
+  "t": "The related zang-fu organs, skin tendencies by birth element, and the skin analysis from the photo (skin type, condition, severity) are in the in-depth analysis.",
+  "h": "d1caef52"
+ },
+ "js.dali.thuc-duong-theo-menh": {
+  "t": "Dietary Therapy for Your Birth Element",
+  "h": "7187b22e"
+ },
+ "js.dali.vui-long-thu-lai": {
+  "t": "Please try again.",
+  "h": "2f1d18ee"
  },
  "js.dient.anh-qua-lon-toi-da-5mb": {
   "t": "The image is too large (5MB max).",

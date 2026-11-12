@@ -807,6 +807,86 @@
   "t": "회사 사무실",
   "h": "d678c2d6"
  },
+ "dali.an-uong": {
+  "t": "<span class=\"ic\" data-icon=\"leaf\"></span> 식단",
+  "h": "a8b06b78"
+ },
+ "dali.anh-da-mat": {
+  "t": "<span class=\"ic\" data-icon=\"camera\"></span> 얼굴 피부 사진",
+  "h": "d3d3689b"
+ },
+ "dali.anh-sang-tu-nhien-khong-filter": {
+  "t": "자연광 · 필터 없이 · 가까이서 또렷하게<br>JPG/PNG 최대 5MB",
+  "h": "13e0d13e"
+ },
+ "dali.chup-noi-co-anh-sang-tu": {
+  "t": "<span class=\"tip-badge\"><span class=\"ic\" data-icon=\"lightbulb\"></span> 자연광이 있는 곳에서 촬영</span> <span class=\"tip-badge\"><span class=\"ic\" data-icon=\"x-circle\"></span> 플래시는 쓰지 않기</span> <span class=\"tip-badge\"><span class=\"ic\" data-icon=\"smile\"></span> 세안 후 민낯</span>",
+  "h": "5c098d4e"
+ },
+ "dali.da-lieu-toan-dien": {
+  "t": "종합 피부 분석",
+  "h": "91cdb627"
+ },
+ "dali.da-lieu-toan-dien-chup-anh": {
+  "t": "<b>종합 피부 분석</b><span>얼굴 피부를 촬영 — 한의학, 서양의학, 오행 고법</span>",
+  "h": "72690cfa"
+ },
+ "dali.da-lieu-tu-vi-minh-bao": {
+  "t": "피부 분석 — 명보 자미두수",
+  "h": "a3b8548f"
+ },
+ "dali.da-xuong-cap-ma-cu-do": {
+  "t": "피부가 나빠졌는데 나이 탓만 하고 있지만, 진짜 문제는 아직 자세히 살펴본 적 없는 곳에 있을 수 있어요. 얼굴 피부 사진을 한 장 올리고, 새 화장품에 돈을 쓰기 전에 객관적인 분석을 받아 보세요.",
+  "h": "78702e4b"
+ },
+ "dali.day-la-tu-van-tham-khao": {
+  "t": "<span class=\"ic\" data-icon=\"alert-triangle\"></span> 한의학과 서양의학을 결합한 참고용 조언이며, 피부과 전문의의 진단과 치료를 대신하지 않아요. 심각한 피부 문제가 있다면 전문가와 상담해 주세요.",
+  "h": "b51f96df"
+ },
+ "dali.dong-y": {
+  "t": "<span class=\"ic\" data-icon=\"scale\"></span> 한의학",
+  "h": "dd81a951"
+ },
+ "dali.luan-giai-dong-y": {
+  "t": "<span class=\"ic\" data-icon=\"scale\"></span> 한의학 풀이",
+  "h": "fd58cfd1"
+ },
+ "dali.luu-y-theo-ban-menh": {
+  "t": "<strong>✦ 본명에 따른 유의점</strong> <span id=\"luuYText\">—</span>",
+  "h": "d6e60118"
+ },
+ "dali.my-pham": {
+  "t": "<span class=\"ic\" data-icon=\"sparkles\"></span> 화장품",
+  "h": "3d3cb659"
+ },
+ "dali.my-pham-routine": {
+  "t": "<span class=\"ic\" data-icon=\"sparkles\"></span> 화장품과 루틴",
+  "h": "bf4abdec"
+ },
+ "dali.nam-sinh-tuy-chon-tu-van": {
+  "t": "출생 연도 (선택 — 본명에 맞춘 조언)",
+  "h": "2abf3e72"
+ },
+ "dali.phan-tich-da-mat-ket-hop": {
+  "t": "얼굴 피부를 분석해요 — 한의학, 서양의학, 오행 고법을 결합해요. 본명에 맞춘 식단, 화장품, 스킨케어 조언.",
+  "h": "c9ffa0cc"
+ },
+ "dali.phan-tich-da-toan-dien-luong": {
+  "t": "<span class=\"ic\" data-icon=\"leaf\"></span> 피부 종합 분석 — <span data-tvp-price=\"da-lieu-ai\">…</span> 냥",
+  "h": "b46628df"
+ },
+ "dali.tai-len-mot-tam-anh-da": {
+  "t": "화장을 하지 않은, 얼굴 피부가 또렷이 보이는 사진을 한 장 올려 주세요. 시스템이 사진 속 피부 각 부위의 상태를 분석해요. 피부 평가, 한의학 풀이, 어울리는 식이요법과 화장품 추천을 받아 보세요.",
+  "h": "5a19c79c"
+ },
+ "dali.thuc-duong-an-uong": {
+  "t": "<span class=\"ic\" data-icon=\"leaf\"></span> 식이요법과 식단",
+  "h": "9ce2b777"
+ },
+ "dali.tuong-hoc-da-mat-phuong-dong": {
+  "t": "동양 얼굴 피부 상학은 피부 상태가 몸 안의 건강을 어느 정도 반영한다고 보고, 현대 피부과학의 관찰과 함께 대조해요. 한의학과 서양의학을 결합한 이 접근은 피부를 미적 감각만으로 평가하지 않고, 지켜봐야 할 지표로 바라봐요.",
+  "h": "466d834a"
+ },
  "dient.anh-chi-gui-toi-may-chu": {
   "t": "이미지는 분석을 위해 서버로만 보내고, 서버에 저장하지 않아요. 정면에서 밝은 곳에서, 얼굴을 가리지 않고 찍어야 가장 정확한 결과를 얻을 수 있어요.",
   "h": "b68f127c"
@@ -2586,6 +2666,142 @@
  "js.congcutr.xep-theo-mon-tu-vi-tu": {
   "t": "분야별로 정렬: 자미두수, 사주, 관상, 풍수…",
   "h": "cf4f8ecc"
+ },
+ "js.dali.buoi-sang": {
+  "t": "아침",
+  "h": "d95d88da"
+ },
+ "js.dali.buoi-toi": {
+  "t": "저녁",
+  "h": "adcf496a"
+ },
+ "js.dali.chip-dong-y": {
+  "t": "한의학으로 개선하는 방법은요?",
+  "h": "e84646cb"
+ },
+ "js.dali.chip-san-pham": {
+  "t": "어떤 제품부터 써야 할까요?",
+  "h": "c4d20f9a"
+ },
+ "js.dali.chip-vi-sao": {
+  "t": "왜 내 피부는 이 유형인가요?",
+  "h": "92ad930f"
+ },
+ "js.dali.da-dau": {
+  "t": "지성 피부",
+  "h": "2e16ebef"
+ },
+ "js.dali.da-hon-hop": {
+  "t": "복합성 피부",
+  "h": "68410286"
+ },
+ "js.dali.da-kho": {
+  "t": "건성 피부",
+  "h": "6dcefb2d"
+ },
+ "js.dali.da-nhay-cam": {
+  "t": "민감성 피부",
+  "h": "336f6fce"
+ },
+ "js.dali.da-thuong": {
+  "t": "보통 피부",
+  "h": "830c17ab"
+ },
+ "js.dali.greeting": {
+  "t": "피부 분석 결과: **{d}**{m}. 한의학, 식단, 화장품 중 무엇이 더 궁금하세요?",
+  "h": "edab53d9"
+ },
+ "js.dali.hanh-n": {
+  "t": "{h} 행",
+  "h": "3e50daab"
+ },
+ "js.dali.ing-nen-dung": {
+  "t": "추천 성분",
+  "h": "35fd5e5b"
+ },
+ "js.dali.ing-nen-tranh": {
+  "t": "피해야 할 성분",
+  "h": "c6f4ec17"
+ },
+ "js.dali.label": {
+  "t": "피부 분석 — {d}",
+  "h": "8fcf6fa4"
+ },
+ "js.dali.lbl-anh-huong-menh": {
+  "t": "본명의 영향",
+  "h": "28408328"
+ },
+ "js.dali.lbl-can-bang": {
+  "t": "음양 균형",
+  "h": "716d7b88"
+ },
+ "js.dali.lbl-ly-giai": {
+  "t": "한의학 풀이",
+  "h": "58af6bfb"
+ },
+ "js.dali.lbl-tang-phu": {
+  "t": "관련 장부",
+  "h": "288ab910"
+ },
+ "js.dali.loi-e": {
+  "t": "오류: {e}",
+  "h": "a7267203"
+ },
+ "js.dali.loi-phan-tich": {
+  "t": "분석 오류",
+  "h": "3e06a99e"
+ },
+ "js.dali.menh-n": {
+  "t": "본명 {h}",
+  "h": "e46cbb3b"
+ },
+ "js.dali.nen-an": {
+  "t": "먹으면 좋은 것",
+  "h": "b29db199"
+ },
+ "js.dali.nen-tranh": {
+  "t": "피해야 할 것",
+  "h": "41d7ed06"
+ },
+ "js.dali.nuoc-uong": {
+  "t": "음료와 약초차",
+  "h": "706a3d71"
+ },
+ "js.dali.share-loai-da": {
+  "t": "피부 타입: {d}{m}",
+  "h": "928754ce"
+ },
+ "js.dali.share-title": {
+  "t": "나의 피부 분석 결과",
+  "h": "7e7757f7"
+ },
+ "js.dali.step-dong-y": {
+  "t": "한의학: 장부와 본명 풀이",
+  "h": "8122b336"
+ },
+ "js.dali.step-my-pham": {
+  "t": "화장품과 루틴 추천",
+  "h": "0014c3fb"
+ },
+ "js.dali.step-tay-y": {
+  "t": "서양의학: 피부 타입과 상태 파악",
+  "h": "c11ccb03"
+ },
+ "js.dali.step-thuc-duong": {
+  "t": "식이요법 식단 짜기",
+  "h": "99292ce2"
+ },
+ "js.dali.tang-phu-lien-quan": {
+  "t": "관련 장부, 본명에 따른 피부 경향, 이미지를 통한 피부 분석(피부 타입·상태·정도)은 심층 분석에 들어 있어요.",
+  "h": "d1caef52"
+ },
+ "js.dali.thuc-duong-theo-menh": {
+  "t": "본명에 맞춘 식이요법",
+  "h": "7187b22e"
+ },
+ "js.dali.vui-long-thu-lai": {
+  "t": "다시 시도해 주세요.",
+  "h": "2f1d18ee"
  },
  "js.dient.anh-qua-lon-toi-da-5mb": {
   "t": "이미지가 너무 커요(최대 5MB).",
