@@ -163,12 +163,15 @@
 // khong lat som luc boot, va vung ket qua khong tran o ca cot artifact 420px lan man 393px.
 window.SHELL_CHATFIRST=true;
 window.SHELL_INTRO={key:'sinh-con'};</script>
-<script src="/tools-shared/xem-tuoi-sinh-con.js?v=1"></script>
+<script src="/tools-shared/glossary.js?v=4"></script>
+<script src="/tools-shared/xem-tuoi-sinh-con.js?v=2"></script>
 <script src="/auth.js?v=9"></script>
   <script src="/nav.js?v=49" data-icons-only></script>
 <script src="/shell.js?v=150"></script>
 <script>
 function esc(s){return String(s==null?'':s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
+// Hiển thị: tên can chi/nạp âm/hành qua glossary (vi trả nguyên); HANH_COLOR/ HTML class giữ chữ Việt.
+function _g(kind,v){return typeof _tvmbG==='function'&&v?_tvmbG(kind,v):v;}
 var HANH_COLOR={'Mộc':'var(--green)','Hỏa':'var(--red)','Thổ':'var(--gold-soft)','Kim':'#8a8a8a','Thủy':'var(--blue)'};
 
 // Ô giữa dùng CHUNG module /tools-shared/xem-tuoi-sinh-con.js với trang standalone.
@@ -183,8 +186,8 @@ function doSinhCon(){
   wsStepsSet(2); // Nhận kết quả — miễn phí, không có bước Thanh toán
   try{
     var iBo=r.previewBo,iMe=r.previewMe;
-    function ccCard(who,i){ return '<div class="cc-card"><div class="who">'+esc(who)+'</div><div class="cc">'+esc(i.canChi)+'</div><div class="na" style="--hanh:'+HANH_COLOR[i.hanh]+'">'+esc(i.napAm)+' · <b>'+esc(i.hanh)+'</b></div></div>'; }
-    document.getElementById('ccRow').innerHTML=ccCard('Bố',iBo)+ccCard('Mẹ',iMe);
+    function ccCard(who,i){ return '<div class="cc-card"><div class="who">'+esc(who)+'</div><div class="cc">'+esc(_g('canchi',i.canChi))+'</div><div class="na" style="--hanh:'+HANH_COLOR[i.hanh]+'">'+esc(_g('napam',i.napAm))+' · <b>'+esc(_g('hanh',i.hanh))+'</b></div></div>'; }
+    document.getElementById('ccRow').innerHTML=ccCard(_tvmbT('js.sc.bo','Bố'),iBo)+ccCard(_tvmbT('js.sc.me','Mẹ'),iMe);
     document.getElementById('yearTableBody').innerHTML=r.tableRowsHTML;
     document.getElementById('topRecommend').innerHTML=r.topRecommendHTML;
     document.getElementById('resultTitle').textContent=r.resultTitle;
@@ -195,8 +198,8 @@ function doSinhCon(){
     Shell.setContext({
       scenario:{type:'xem-tuoi-sinh-con',data:{namBo:namBo,namMe:namMe}},
       label:'Sinh con · bố '+iBo.canChi+' × mẹ '+iMe.canChi,
-      greeting:'Đã chấm hợp/xung địa chi 15 năm tới (bố **'+esc(iBo.canChi)+'** · mẹ **'+esc(iMe.canChi)+'**). Năm thuận nhất: **'+esc(r.data.namTot)+'**. Bạn muốn tôi tư vấn gì trước?',
-      chips:['Năm nào tốt nhất để sinh con?','Vì sao năm đó hợp cả bố lẫn mẹ?','Năm nào nên tránh sinh con?','Con tuổi gì hợp với bố mẹ nhất?']
+      greeting:_tvmbT('js.sc.da-cham-hop-xung-dia-chi', 'Đã chấm hợp/xung địa chi 15 năm tới (bố **{bo}** · mẹ **{me}**). Năm thuận nhất: **{tot}**. Bạn muốn tôi tư vấn gì trước?', {bo:esc(_g('canchi',iBo.canChi)), me:esc(_g('canchi',iMe.canChi)), tot:esc(r.data.namTot)}),
+      chips:[_tvmbT('js.sc.nam-nao-tot-nhat-de-sinh','Năm nào tốt nhất để sinh con?'),_tvmbT('js.sc.vi-sao-nam-do-hop-ca','Vì sao năm đó hợp cả bố lẫn mẹ?'),_tvmbT('js.sc.nam-nao-nen-tranh-sinh-con','Năm nào nên tránh sinh con?'),_tvmbT('js.sc.con-tuoi-gi-hop-voi','Con tuổi gì hợp với bố mẹ nhất?')]
     });
     var _scLines=['Xem tuổi sinh con · bố '+iBo.canChi+' ('+iBo.napAm+', '+iBo.hanh+') · mẹ '+iMe.canChi+' ('+iMe.napAm+', '+iMe.hanh+')'];
     _scLines.push(r.resultTitle);
@@ -204,7 +207,7 @@ function doSinhCon(){
     Shell.setShareable({ kind:'text', toolId:'sinh-con', title:'Xem tuổi sinh con · bố '+iBo.canChi+' × mẹ '+iMe.canChi, text:_scLines.join('\n') });
     document.querySelectorAll('#resPanel [data-ask]').forEach(function(el){ el.addEventListener('click',function(){ Shell.ask(el.getAttribute('data-ask')); }); });
   }catch(e){
-    document.getElementById('ccRow').innerHTML='<div class="laso-error">Lỗi: '+esc(e.message)+'</div>';
+    document.getElementById('ccRow').innerHTML='<div class="laso-error">'+_tvmbT('js.sc.loi','Lỗi: ')+esc(e.message)+'</div>';
     document.getElementById('birthPanel').style.display='none';
     document.getElementById('resPanel').style.display='block';
     document.getElementById('btnEdit').style.display='';

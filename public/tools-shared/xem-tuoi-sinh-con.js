@@ -30,6 +30,13 @@
     }
   }
 
+  // Chữ HIỂN THỊ: module dùng chung với trang standalone không nạp auth.js ⇒ lùi về chữ Việt.
+  function _t(k, d, v) {
+    if (typeof _tvmbT === 'function') return _tvmbT(k, d, v);
+    return v ? String(d).replace(/\{(\w+)\}/g, function (x, n) { return v[n] !== undefined ? v[n] : x; }) : d;
+  }
+  function _g(kind, v) { return typeof _tvmbG === 'function' && v ? _tvmbG(kind, v) : v; }
+
   function getInfo(year) {
     if (!year || isNaN(year)) return null;
     const pos = ((year - 1924) % 60 + 60) % 60;
@@ -63,48 +70,48 @@
     // Bố
     if (_isLucHop(chiIdx, chiBoIdx)) {
       score += 3;
-      reasons.push('Lục Hợp với bố ✓');
+      reasons.push(_t('js.sc.luc-hop-voi-bo', 'Lục Hợp với bố ✓'));
     } else if (_isTamHop(chiIdx, chiBoIdx)) {
       score += 2;
-      reasons.push('Tam Hợp với bố');
+      reasons.push(_t('js.sc.tam-hop-voi-bo', 'Tam Hợp với bố'));
     } else if (_isLucXung(chiIdx, chiBoIdx)) {
       score -= 3;
-      reasons.push('Lục Xung với bố ✗');
+      reasons.push(_t('js.sc.luc-xung-voi-bo', 'Lục Xung với bố ✗'));
     } else if (_isTamHinh(chiIdx, chiBoIdx)) {
       score -= 2;
-      reasons.push('Tam Hình với bố');
+      reasons.push(_t('js.sc.tam-hinh-voi-bo', 'Tam Hình với bố'));
     }
 
     // Mẹ
     if (_isLucHop(chiIdx, chiMeIdx)) {
       score += 3;
-      reasons.push('Lục Hợp với mẹ ✓');
+      reasons.push(_t('js.sc.luc-hop-voi-me', 'Lục Hợp với mẹ ✓'));
     } else if (_isTamHop(chiIdx, chiMeIdx)) {
       score += 2;
-      reasons.push('Tam Hợp với mẹ');
+      reasons.push(_t('js.sc.tam-hop-voi-me', 'Tam Hợp với mẹ'));
     } else if (_isLucXung(chiIdx, chiMeIdx)) {
       score -= 3;
-      reasons.push('Lục Xung với mẹ ✗');
+      reasons.push(_t('js.sc.luc-xung-voi-me', 'Lục Xung với mẹ ✗'));
     } else if (_isTamHinh(chiIdx, chiMeIdx)) {
       score -= 2;
-      reasons.push('Tam Hình với mẹ');
+      reasons.push(_t('js.sc.tam-hinh-voi-me', 'Tam Hình với mẹ'));
     }
 
     return { score, reasons };
   }
 
   function _ratingLabel(score) {
-    if (score >= 5) return { label: 'Rất Thuận ★★★', cls: 'label-great', dots: 3, dotCls: 'dot-on-great' };
-    if (score >= 2) return { label: 'Thuận ★★', cls: 'label-good', dots: 2, dotCls: 'dot-on-good' };
-    if (score >= 0) return { label: 'Bình Thường ★', cls: 'label-ok', dots: 1, dotCls: 'dot-on-ok' };
-    return { label: 'Cần Lưu Ý', cls: 'label-bad', dots: 0, dotCls: 'dot-on-bad' };
+    if (score >= 5) return { label: _t('js.sc.rat-thuan', 'Rất Thuận ★★★'), cls: 'label-great', dots: 3, dotCls: 'dot-on-great' };
+    if (score >= 2) return { label: _t('js.sc.thuan', 'Thuận ★★'), cls: 'label-good', dots: 2, dotCls: 'dot-on-good' };
+    if (score >= 0) return { label: _t('js.sc.binh-thuong', 'Bình Thường ★'), cls: 'label-ok', dots: 1, dotCls: 'dot-on-ok' };
+    return { label: _t('js.sc.can-luu-y', 'Cần Lưu Ý'), cls: 'label-bad', dots: 0, dotCls: 'dot-on-bad' };
   }
 
   // ── Chấm 15 năm từ năm sinh bố + mẹ ──
   function compute(namBo, namMe, curYear) {
     const iB = getInfo(namBo),
       iM = getInfo(namMe);
-    if (!iB || !iM) return { ok: false, error: 'Vui lòng nhập năm sinh bố và mẹ hợp lệ.' };
+    if (!iB || !iM) return { ok: false, error: _t('js.sc.vui-long-nhap-nam-sinh', 'Vui lòng nhập năm sinh bố và mẹ hợp lệ.') };
 
     const currentYear = curYear || vnYear();
     const rows = [];
@@ -126,10 +133,10 @@
           .join('');
         return `<tr class="${isTop ? 'top-year' : ''}">
       <td class="year-num">${r.year}${isTop ? '<span style="color:#c9a84c;margin-left:4px">★</span>' : ''}</td>
-      <td class="can-chi-cell">${r.info.canChi}</td>
-      <td><span class="hanh-badge hb-${r.info.hanh}">${r.info.hanh}</span></td>
+      <td class="can-chi-cell">${_g('canchi', r.info.canChi)}</td>
+      <td><span class="hanh-badge hb-${r.info.hanh}">${_g('hanh', r.info.hanh)}</span></td>
       <td><div class="score-bar">${dotsHtml}<span class="${r.rating.cls}" style="margin-left:6px">${r.rating.label}</span></div></td>
-      <td class="reason-cell">${r.reasons.length ? r.reasons.join(' · ') : 'Trung tính'}</td>
+      <td class="reason-cell">${r.reasons.length ? r.reasons.join(' · ') : _t('js.sc.trung-tinh', 'Trung tính')}</td>
     </tr>`;
       })
       .join('');
@@ -137,13 +144,13 @@
     const top3 = [...rows].sort((a, b) => b.score - a.score).slice(0, 3);
     const topRecommendHTML = `
     <div style="background:#f0faf4;border:1px solid #b7e4c7;border-radius:8px;padding:12px 16px;margin-bottom:4px">
-      <div style="font-size:12px;font-weight:600;color:#1E6B3C;margin-bottom:8px">🌟 Năm Thuận Nhất (Top 3)</div>
+      <div style="font-size:12px;font-weight:600;color:#1E6B3C;margin-bottom:8px">🌟 ${_t('js.sc.nam-thuan-nhat-top-3', 'Năm Thuận Nhất (Top 3)')}</div>
       <div style="display:flex;flex-wrap:wrap;gap:10px">
-        ${top3.map((r, i) => `<span style="background:#fff;border:1px solid #b7e4c7;border-radius:6px;padding:4px 12px;font-size:13px;font-weight:700;color:var(--navy)">${i + 1}. ${r.year} — ${r.info.canChi} (${r.info.hanh})</span>`).join('')}
+        ${top3.map((r, i) => `<span style="background:#fff;border:1px solid #b7e4c7;border-radius:6px;padding:4px 12px;font-size:13px;font-weight:700;color:var(--navy)">${i + 1}. ${r.year} — ${_g('canchi', r.info.canChi)} (${r.info.hanh})</span>`).join('')}
       </div>
     </div>`;
 
-    const resultTitle = 'Kết Quả ' + currentYear + ' – ' + (currentYear + 14);
+    const resultTitle = _t('js.sc.ket-qua-a-b', 'Kết Quả {a} – {b}', { a: currentYear, b: currentYear + 14 });
 
     return {
       ok: true,
