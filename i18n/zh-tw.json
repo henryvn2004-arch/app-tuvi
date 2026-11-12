@@ -1,4 +1,200 @@
 {
+ "bandosao.10-hanh-tinh-vi-tri": {
+  "t": "<span class=\"hp-ic\" data-icon=\"sun\"></span><span>10 顆行星<br>位置</span>",
+  "h": "86d502e2"
+ },
+ "bandosao.4-truc-chinh": {
+  "t": "<span class=\"hp-ic\" data-icon=\"compass\"></span><span>4 條<br>主軸</span>",
+  "h": "4f00b7ee"
+ },
+ "bandosao.ban-do-sao-luc-sinh": {
+  "t": "出生星盤",
+  "h": "2c2ee68e"
+ },
+ "bandosao.ban-do-sao-luc-sinh-chiem": {
+  "t": "<b>出生星盤</b><span>西洋占星——上升星座、12 宮位、相位</span>",
+  "h": "4d91be0c"
+ },
+ "bandosao.ban-do-sao-luc-sinh-tu": {
+  "t": "出生星盤 — 明寶紫微斗數",
+  "h": "622509ef"
+ },
+ "bandosao.banh-xe-ve-theo-quy-uoc": {
+  "t": "星盤輪依標準慣例繪製：<b>上升星座位於左側</b>，各星座依逆時針方向排列。藍線為和諧相位，紅線為緊張相位——只畫出強相位，全部畫出來會雜亂難讀。<br><b>這不是紫微斗數。</b>兩門學問都用「宮」和「宅」二字，但指的是完全不同的東西——請不要拿它與您的紫微命盤對照。",
+  "h": "079a6d70"
+ },
+ "bandosao.chiem-tinh-hoc-phuong-tay-western": {
+  "t": "西洋占星學（Western Astrology）是依據出生時刻各行星與黃道星座的位置來解讀的體系，把天空劃分為 12 個宮位，分別對應生活的各個領域。星盤（natal chart）是解讀一個人性格與傾向的核心工具。",
+  "h": "87d59586"
+ },
+ "bandosao.goc-chieu-noi-bat": {
+  "t": "<span class=\"hp-ic\" data-icon=\"share-2\"></span><span>重點<br>相位</span>",
+  "h": "1d194367"
+ },
+ "bandosao.hoi-thay-doc-ban-do-nay": {
+  "t": "✦ 請老師解讀這張星盤",
+  "h": "c3a04d9b"
+ },
+ "bandosao.kinh-do": {
+  "t": "經度",
+  "h": "565ba07f"
+ },
+ "bandosao.lap-ban-do-mien-phi": {
+  "t": "<span class=\"bg-label\"><span class=\"ic\" data-icon=\"sun\"></span><b id=\"btnGoLabel\">排出星盤 →</b></span> <small>免費</small>",
+  "h": "f8344846"
+ },
+ "bandosao.lap-ban-do-sao-luc-sinh": {
+  "t": "依西洋占星排出出生星盤——上升星座、12 宮位、10 顆行星位置與各項相位。可下載星盤圖與他人分享。",
+  "h": "472e68d9"
+ },
+ "bandosao.moi-nguoi-sinh-ra-duoi-mot": {
+  "t": "每個人都誕生在不同的天空下——您出生那一刻的 12 宮位，訴說著怎樣的您？依那個時刻排出星盤，免費查看並保存。",
+  "h": "f4ee8f99"
+ },
+ "bandosao.mui-gio": {
+  "t": "時區",
+  "h": "4a92729d"
+ },
+ "bandosao.ngay-gio-va-noi-sinh": {
+  "t": "出生日期、時間與地點",
+  "h": "d8855e46"
+ },
+ "bandosao.nhap-chinh-xac-ngay-gio-va": {
+  "t": "請準確輸入出生日期、時間與地點。您將取得 4 條主軸、行星位置、重點相位，以及元素平衡表。",
+  "h": "e74ddddc"
+ },
+ "bandosao.noi-sinh": {
+  "t": "出生地",
+  "h": "39348136"
+ },
+ "bandosao.tai-anh-ban-do": {
+  "t": "⬇ 下載星盤圖",
+  "h": "9684a65c"
+ },
+ "bandosao.vi-do": {
+  "t": "緯度",
+  "h": "b9ec9d20"
+ },
+ "banlamviec.1-ban-menh-thong-tin": {
+  "t": "<span class=\"pt-num\">1</span> 本命與資料",
+  "h": "b18e5a9a"
+ },
+ "banlamviec.2-chup-tai-anh": {
+  "t": "<span class=\"pt-num\">2</span> 拍攝／上傳照片",
+  "h": "76342e73"
+ },
+ "banlamviec.anh-vat-dung-nhan-dien": {
+  "t": "<span class=\"ic\" data-icon=\"camera\"></span> 照片與辨識物品",
+  "h": "ac137c18"
+ },
+ "banlamviec.chup-anh-goc-lam-viec-he": {
+  "t": "拍下您的工作角落——系統依八宅風水分析座位方位，並提出符合本命的佈置建議，提升工作效率。",
+  "h": "bc883f29"
+ },
+ "banlamviec.chup-anh-goc-lam-viec-sau": {
+  "t": "填寫出生年份、性別與窗戶朝向後，拍下工作角落。取得調整前後的風水分數，以及具體的調整建議。",
+  "h": "66e5f508"
+ },
+ "banlamviec.de-xuat-dieu-chinh": {
+  "t": "<span class=\"hp-ic\" data-icon=\"settings\"></span><span>調整<br>建議</span>",
+  "h": "a3bfd761"
+ },
+ "banlamviec.de-xuat-dieu-chinh-t30o": {
+  "t": "<span class=\"ic\" data-icon=\"settings\"></span> 調整建議",
+  "h": "355adcff"
+ },
+ "banlamviec.diem-phong-thuy-truoc-sau": {
+  "t": "<span class=\"hp-ic\" data-icon=\"bar-chart-3\"></span><span>風水分數<br>調整前後</span>",
+  "h": "e7ecbd9a"
+ },
+ "banlamviec.he-thong-render-lai-goc-lam": {
+  "t": "系統依本命五行色與最佳佈置，重新渲染您的工作角落。",
+  "h": "04cb62e4"
+ },
+ "banlamviec.hoc-tap-on-thi": {
+  "t": "讀書／備考",
+  "h": "5fc56198"
+ },
+ "banlamviec.huong-cua-so-chinh-hoac-nguon": {
+  "t": "主要窗戶或自然光源的朝向",
+  "h": "69065acc"
+ },
+ "banlamviec.huong-cua-so-nguon-sang-chinh": {
+  "t": "窗戶／主要光源朝向",
+  "h": "e48392ba"
+ },
+ "banlamviec.huong-ngoi-lam-viec": {
+  "t": "<span class=\"hp-ic\" data-icon=\"briefcase\"></span><span>工作<br>座位方位</span>",
+  "h": "43706670"
+ },
+ "banlamviec.huong-ngoi-lam-viec-dflu": {
+  "t": "<span class=\"ic\" data-icon=\"briefcase\"></span> 工作座位方位",
+  "h": "3adddca8"
+ },
+ "banlamviec.lam-viec-van-phong": {
+  "t": "辦公室工作",
+  "h": "65734b65"
+ },
+ "banlamviec.meo-tang-tap-trung-theo-phong": {
+  "t": "<span class=\"ic\" data-icon=\"circle-dot\"></span> 風水專注力提升小技巧",
+  "h": "5b3cfa07"
+ },
+ "banlamviec.moi-luot-luong": {
+  "t": "<span class=\"vnd\" data-tvp-price-vnd=\"ban-lam-viec\"></span> 每次 <span class=\"cb-sub\">(<span data-tvp-price=\"ban-lam-viec\">…</span> 兩)</span>",
+  "h": "56800ac5"
+ },
+ "banlamviec.muc-dich-su-dung": {
+  "t": "使用目的",
+  "h": "0ae5f77a"
+ },
+ "banlamviec.ngoi-ca-ngay-o-mot-goc": {
+  "t": "整天坐在桌子一角，工作卻停滯不前、靈感漸漸枯竭——有時問題不在能力，而在您坐的方式。拍下一張工作角落的照片，系統會指出究竟是哪裡擋住了運勢。",
+  "h": "7995fd82"
+ },
+ "banlamviec.phan-tich-lai": {
+  "t": "← 重新分析",
+  "h": "86451f19"
+ },
+ "banlamviec.phan-tich-ngay-ton-luong": {
+  "t": "<span class=\"bg-label\"><span class=\"ic\" data-icon=\"monitor\"></span><b id=\"btnAnalyzeLabel\">立即分析 →</b></span> <small>需 <span class=\"vnd\" data-tvp-price-vnd=\"ban-lam-viec\"></span> <span class=\"cb-sub\">(<span data-tvp-price=\"ban-lam-viec\">…</span> 兩)</span></small>",
+  "h": "3409c62a"
+ },
+ "banlamviec.phong-thuy-ban-lam-viec": {
+  "t": "辦公桌風水",
+  "h": "2f08993f"
+ },
+ "banlamviec.phong-thuy-ban-lam-viec-chup": {
+  "t": "<b>辦公桌風水</b><span>拍下工作角落——系統依八宅為座位方位評分</span>",
+  "h": "398222d6"
+ },
+ "banlamviec.phong-thuy-ban-lam-viec-tu": {
+  "t": "辦公桌風水 — 明寶紫微斗數",
+  "h": "70ec68b0"
+ },
+ "banlamviec.render-khong-gian-lam-viec-luong": {
+  "t": "<span class=\"ic\" data-icon=\"monitor\"></span> 渲染工作空間 <span style=\"font-size:10px;background:var(--gold-lt);color:var(--tx-blue);padding:2px 8px;border-radius:10px;font-weight:600\"><span data-tvp-price=\"phong-thuy-render\">…</span> 兩</span>",
+  "h": "f066b43e"
+ },
+ "banlamviec.render-khong-gian-theo-phong-thuy": {
+  "t": "<span class=\"ic\" data-icon=\"sparkles\"></span> 依風水渲染空間",
+  "h": "9896cb61"
+ },
+ "banlamviec.sang-tao-thiet-ke": {
+  "t": "創作／設計",
+  "h": "9fd559b0"
+ },
+ "banlamviec.tai-anh": {
+  "t": "<span class=\"ic\" data-icon=\"chevron-down\"></span> 下載圖片",
+  "h": "73878385"
+ },
+ "banlamviec.vat-dung-nhan-dien": {
+  "t": "辨識物品",
+  "h": "de9de137"
+ },
+ "banlamviec.vat-pham-nen-them": {
+  "t": "<span class=\"ic\" data-icon=\"store\"></span> 建議添置的物品",
+  "h": "b07795fe"
+ },
  "battu.1-nhap-thong-tin": {
   "t": "<span class=\"wss-n\">1</span><span class=\"wss-l\">輸入資料</span>",
   "h": "487c9507"
@@ -102,6 +298,78 @@
  "battu.viet-rieng-cho-tu-tru-nay": {
   "t": "依子平古法為這組四柱量身撰寫——共 16 個部分：格局、十神、大運、流年。",
   "h": "f54c0d01"
+ },
+ "boibai.1-la-thong-diep-hom-nay": {
+  "t": "1 張 — 今日訊息",
+  "h": "f2ebf342"
+ },
+ "boibai.2-nhan-ket-qua": {
+  "t": "<span class=\"wss-n\">2</span><span class=\"wss-l\">取得結果</span>",
+  "h": "b0b2f830"
+ },
+ "boibai.3-la-tinh-trang-thach-thuc": {
+  "t": "3 張 — 現況 · 挑戰 · 結果",
+  "h": "a2b3d188"
+ },
+ "boibai.5-la-trai-bai-ngu-hanh": {
+  "t": "5 張 — 五行牌陣",
+  "h": "d39d67bd"
+ },
+ "boibai.boi-bai-tay": {
+  "t": "撲克牌占卜",
+  "h": "4a54dbba"
+ },
+ "boibai.boi-bai-tay-rut-bai-52": {
+  "t": "<b>撲克牌占卜</b><span>抽 52 張牌——感情 · 事業 · 財運——免費</span>",
+  "h": "8beef430"
+ },
+ "boibai.boi-bai-tay-truyen-thong-dung": {
+  "t": "傳統撲克牌占卜使用一般的 52 張撲克牌，而非專用的塔羅牌，在許多西方國家乃至越南的民間文化中十分流行。每張牌依花色與點數被賦予各自的涵義，用來預測接下來的走向。",
+  "h": "7e2a1c46"
+ },
+ "boibai.boi-bai-tay-tu-vi-minh": {
+  "t": "撲克牌占卜 — 明寶紫微斗數",
+  "h": "0d1548c3"
+ },
+ "boibai.cau-hoi-tuy-chon": {
+  "t": "問題（選填）",
+  "h": "66f517b4"
+ },
+ "boibai.chon-kieu-rut-bai": {
+  "t": "選擇抽牌方式",
+  "h": "5215cc5a"
+ },
+ "boibai.chon-kieu-trai-1-3-hay": {
+  "t": "選擇牌陣（1、3 或 5 張）——系統隨機抽牌，並依感情、事業與財運逐張解讀。",
+  "h": "b47db074"
+ },
+ "boibai.khong-can-hieu-het-78-la": {
+  "t": "不必搞懂全部 78 張牌，只要心中有一個縈繞不去的問題就夠了。憑直覺抽一張牌，獲得簡短的占語——就像從前外婆、媽媽那樣輕鬆自在的卜牌時光。",
+  "h": "2487c895"
+ },
+ "boibai.loi-boi-dan-gian": {
+  "t": "<span class=\"hp-ic\" data-icon=\"compass\"></span><span>民間<br>占法</span>",
+  "h": "d309e0a7"
+ },
+ "boibai.rut-1-3-hay-5-la": {
+  "t": "<span class=\"hp-ic\" data-icon=\"spade\"></span><span>抽 1、3<br>或 5 張</span>",
+  "h": "658be253"
+ },
+ "boibai.rut-bai-tay-52-la-ngay": {
+  "t": "在明寶紫微斗數直接抽 52 張撲克牌——1、3 或 5 張牌陣，依感情 · 事業 · 財運解讀。",
+  "h": "1dff4433"
+ },
+ "boibai.tinh-cam-su-nghiep-tai-chinh": {
+  "t": "<span class=\"hp-ic\" data-icon=\"heart\"></span><span>感情、<br>事業、財運</span>",
+  "h": "397044b2"
+ },
+ "boibai.vd-tinh-hinh-tai-chinh-cua": {
+  "t": "例：我接下來一段時間的財運如何？",
+  "h": "0d4f2217"
+ },
+ "boibai.xao-bai-rut": {
+  "t": "<span class=\"bg-label\"><span class=\"ic\" data-icon=\"spade\"></span><b id=\"drawBtnLabel\">洗牌並抽牌</b></span>",
+  "h": "e53dcebd"
  },
  "chat.ke-chuyen-cua-ban-minh-bao": {
   "t": "說說您的故事，明寶團隊會從 15 位老師中請出最合適的一位為您解讀：紫微斗數命盤、八字、合婚、取名、擇日。",
@@ -242,6 +510,138 @@
  "congcu.ve-hom-nay": {
   "t": "← 回到今天",
   "h": "24faf89e"
+ },
+ "congcutr.50-cong-cu-menh-ly-dung": {
+  "t": "50 項命理工具——單獨使用",
+  "h": "8731ad3c"
+ },
+ "congcutr.50-cong-cu-menh-ly-tu": {
+  "t": "50 項命理工具 — 明寶紫微斗數",
+  "h": "b35a67a8"
+ },
+ "congcutr.chon-ngay": {
+  "t": "擇日",
+  "h": "353d66a6"
+ },
+ "congcutr.cong-cu": {
+  "t": "工具",
+  "h": "a601efbf"
+ },
+ "congcutr.cong-cu-chuyen-sau": {
+  "t": "專業工具",
+  "h": "10f6e3a0"
+ },
+ "congcutr.dang-tai-cong-cu": {
+  "t": "<span class=\"ic\" data-icon=\"hourglass\"></span> 工具載入中...",
+  "h": "1078fac1"
+ },
+ "congcutr.dat-ten": {
+  "t": "命名",
+  "h": "ca2c4ea5"
+ },
+ "congcutr.khi-ban-hoi-thay-thay-da": {
+  "t": "當您<a href=\"/app\" style=\"color:var(--gold-bright);font-weight:600\">問老師</a>時，老師已經能依您的提問呼叫其中大部分工具。您也可以直接選擇個別工具：命盤解讀、八字、面相、風水、命名、擇日、卜牌……",
+  "h": "48d6d014"
+ },
+ "congcutr.khong-can-biet-bo-mon-nao": {
+  "t": "不必知道是哪一門學問——選擇您正在煩惱的事就好。",
+  "h": "6723d4c3"
+ },
+ "congcutr.lam-dep": {
+  "t": "美容",
+  "h": "a4c8d630"
+ },
+ "congcutr.mien-phi": {
+  "t": "免費 <span class=\"tab-count\" id=\"freeCount\">…</span>",
+  "h": "eb8f87ac"
+ },
+ "congcutr.theo-bo-mon": {
+  "t": "依學問分類",
+  "h": "84683625"
+ },
+ "congcutr.toi-dang-lo-chuyen-gi": {
+  "t": "我正在煩惱什麼",
+  "h": "648df752"
+ },
+ "congcutr.tu-binh": {
+  "t": "八字",
+  "h": "66c4edf1"
+ },
+ "congcutr.tu-vi": {
+  "t": "紫微",
+  "h": "f49901f4"
+ },
+ "cuahang.anh-khu-vuc-vat-dung-nhan": {
+  "t": "<span class=\"ic\" data-icon=\"camera\"></span> 照片與辨識區域／物品",
+  "h": "dcd1e25d"
+ },
+ "cuahang.buon-ban-e-am-nhan-vien": {
+  "t": "生意冷清、員工進進出出不斷——有時原因就出在空間的佈置，而不是市場。拍下店面或辦公室的照片，取得直指財運受阻之處的分析。",
+  "h": "fa001aee"
+ },
+ "cuahang.chup-anh-cua-hang-hoac-van": {
+  "t": "拍下店面或辦公室——系統依八宅分析收銀台、大門、保險箱與陳列區的風水佈置，以優化財運。",
+  "h": "c0796110"
+ },
+ "cuahang.chup-anh-khong-gian-sau-khi": {
+  "t": "填寫出生年份、性別、經營類型與大門朝向後，拍下空間照片。取得調整前後的風水分數與調整建議。",
+  "h": "178623cb"
+ },
+ "cuahang.cua-hang-kinh-doanh": {
+  "t": "營業店面",
+  "h": "c7a324c6"
+ },
+ "cuahang.he-thong-render-lai-khong-gian": {
+  "t": "系統依本命五行色與最佳佈置，重新渲染營業空間，以招來財運。",
+  "h": "63dda3e0"
+ },
+ "cuahang.khu-vuc-vat-dung-nhan-dien": {
+  "t": "辨識區域／物品",
+  "h": "1d9eab0f"
+ },
+ "cuahang.loai-khong-gian": {
+  "t": "空間類型",
+  "h": "b0b069bf"
+ },
+ "cuahang.meo-kich-hoat-tai-loc": {
+  "t": "<span class=\"hp-ic\" data-icon=\"dollar-sign\"></span><span>啟動<br>財運小技巧</span>",
+  "h": "86d89378"
+ },
+ "cuahang.meo-kich-hoat-tai-loc-gfzc": {
+  "t": "<span class=\"ic\" data-icon=\"dollar-sign\"></span> 啟動財運小技巧",
+  "h": "aa02e0bc"
+ },
+ "cuahang.moi-luot-luong": {
+  "t": "<span class=\"vnd\" data-tvp-price-vnd=\"cua-hang-phong-thuy\"></span> 每次 <span class=\"cb-sub\">(<span data-tvp-price=\"cua-hang-phong-thuy\">…</span> 兩)</span>",
+  "h": "faf2fd2d"
+ },
+ "cuahang.nha-hang-quan-an": {
+  "t": "餐廳／小吃店",
+  "h": "d0defd73"
+ },
+ "cuahang.phan-tich-ngay-ton-luong": {
+  "t": "<span class=\"bg-label\"><span class=\"ic\" data-icon=\"store\"></span><b id=\"btnAnalyzeLabel\">立即分析 →</b></span> <small>需 <span class=\"vnd\" data-tvp-price-vnd=\"cua-hang-phong-thuy\"></span> <span class=\"cb-sub\">(<span data-tvp-price=\"cua-hang-phong-thuy\">…</span> 兩)</span></small>",
+  "h": "a1939278"
+ },
+ "cuahang.phong-thuy-cua-hang-van-phong": {
+  "t": "店面與辦公室風水 — 明寶紫微斗數",
+  "h": "fbde3673"
+ },
+ "cuahang.phong-thuy-cua-hang-van-phong-ayc9": {
+  "t": "<b>店面與辦公室風水</b><span>拍下店面、辦公室——系統依八宅為收銀台、大門的佈置評分</span>",
+  "h": "d462466b"
+ },
+ "cuahang.phong-thuy-cua-hang-van-phong-yqxb": {
+  "t": "店面與辦公室風水",
+  "h": "0ff0d09e"
+ },
+ "cuahang.render-khong-gian-kinh-doanh-luong": {
+  "t": "<span class=\"ic\" data-icon=\"store\"></span> 渲染營業空間 <span style=\"font-size:10px;background:var(--gold-lt);color:var(--tx-blue);padding:2px 8px;border-radius:10px;font-weight:600\"><span data-tvp-price=\"phong-thuy-render\">…</span> 兩</span>",
+  "h": "4e52cc64"
+ },
+ "cuahang.van-phong-cong-ty": {
+  "t": "公司辦公室",
+  "h": "d678c2d6"
  },
  "disclaimer.1-tinh-chat-tham-khao": {
   "t": "1. 僅供參考",
@@ -1182,6 +1582,426 @@
  "js.battu.tuoi": {
   "t": " 歲",
   "h": "2e261bf5"
+ },
+ "js.boibai.4-chat-bai-nghia-la-gi": {
+  "t": "4 種花色各代表什麼？",
+  "h": "793f6bd3"
+ },
+ "js.boibai.anh-huong-tu-moi-truong-xung": {
+  "t": "來自周遭環境的影響",
+  "h": "511b93e0"
+ },
+ "js.boibai.at": {
+  "t": "A",
+  "h": "ec2d5348"
+ },
+ "js.boibai.ban-muon-hoi-them-ve-la": {
+  "t": "**。想進一步詢問哪一張牌呢？",
+  "h": "436f4393"
+ },
+ "js.boibai.bay": {
+  "t": "7",
+  "h": "ecfd1f8b"
+ },
+ "js.boibai.ben-ngoai": {
+  "t": "外在",
+  "h": "483f7fd9"
+ },
+ "js.boibai.ben-trong": {
+  "t": "內在",
+  "h": "474e3314"
+ },
+ "js.boibai.bich": {
+  "t": "黑桃",
+  "h": "9cf21ff5"
+ },
+ "js.boibai.bien-dong-tai-chinh-rui-ro": {
+  "t": "財務有波動與風險。重大開銷的決定要謹慎。",
+  "h": "61f58a28"
+ },
+ "js.boibai.boi": {
+  "t": "J",
+  "h": "003cb90e"
+ },
+ "js.boibai.boi-bai-tay": {
+  "t": "撲克牌占卜 — ",
+  "h": "741dfabd"
+ },
+ "js.boibai.boi-bai-tay-khac-tarot-ra": {
+  "t": "撲克牌占卜和塔羅有什麼不同？",
+  "h": "199a6ae6"
+ },
+ "js.boibai.bon": {
+  "t": "4",
+  "h": "8c0bddbf"
+ },
+ "js.boibai.cau-hoi-cua-ban": {
+  "t": "您的問題：\"",
+  "h": "660c481c"
+ },
+ "js.boibai.chia-se-chi-phi-hoac-dau": {
+  "t": "分攤費用或共同投資。避免獨自做財務決定。",
+  "h": "dec106bc"
+ },
+ "js.boibai.chin": {
+  "t": "9",
+  "h": "c8fe0b37"
+ },
+ "js.boibai.chu-ky-tai-chinh-hoan-chinh": {
+  "t": "財務週期圓滿——可能是還清債務、完成投資，或是合約結束。",
+  "h": "30a6c7c2"
+ },
+ "js.boibai.co": {
+  "t": "紅心",
+  "h": "aefc1852"
+ },
+ "js.boibai.co-hoi-bat-ngo-hoac-can": {
+  "t": "意外的機會，或需要憑直覺做決定。相信您的預感。",
+  "h": "b8deed93"
+ },
+ "js.boibai.co-mau-thuan-hoac-thach-thuc": {
+  "t": "感情中有矛盾或挑戰。需要坦率溝通來化解。",
+  "h": "95b8227d"
+ },
+ "js.boibai.dam": {
+  "t": "Q",
+  "h": "1798971f"
+ },
+ "js.boibai.dang-xao-bai": {
+  "t": "洗牌中...",
+  "h": "033fb9a0"
+ },
+ "js.boibai.dieu-da-anh-huong-den-hien": {
+  "t": "已經影響到現在的事",
+  "h": "c28631f9"
+ },
+ "js.boibai.dieu-dang-can-tro-hoac-thu": {
+  "t": "正在阻礙或考驗您的事",
+  "h": "d4c2adc6"
+ },
+ "js.boibai.dong-nghiep-tre-hoac-nhan-vien": {
+  "t": "年輕的同事或新進員工。也可能是來自更年輕者的機會。",
+  "h": "2bb04297"
+ },
+ "js.boibai.du-an-hoac-giai-doan-cong": {
+  "t": "專案或工作階段圓滿完成。為新的挑戰與機會做好準備。",
+  "h": "619626f4"
+ },
+ "js.boibai.du-an-moi-hoac-co-hoi": {
+  "t": "新專案或重大的職涯機會即將到來。現在是開始新事物的時機。",
+  "h": "dba9df01"
+ },
+ "js.boibai.du-an-sang-tao-dang-trien": {
+  "t": "創意專案正在推進。與社群和人脈連結，擴大機會。",
+  "h": "196ea54f"
+ },
+ "js.boibai.duality-doi-tac-can-bang-hop": {
+  "t": "二元性、夥伴、平衡、合作。兩個人或兩股力量正影響著局勢。",
+  "h": "53711b0b"
+ },
+ "js.boibai.duoc-dong-nghiep-va-cap-tren": {
+  "t": "獲得同事與上司的支持。工作環境和諧。",
+  "h": "2f2d4f44"
+ },
+ "js.boibai.gan-hoan-thanh-mot-giai-doan": {
+  "t": "一個階段即將完成。在進入下一章之前，需要先記取重要的教訓。",
+  "h": "438e9dbe"
+ },
+ "js.boibai.gia": {
+  "t": "K",
+  "h": "9d31d28a"
+ },
+ "js.boibai.giai-doan-kho-khan-hoac-canh": {
+  "t": "處於艱難或競爭激烈的階段。需要更能適應、更有彈性。",
+  "h": "28710428"
+ },
+ "js.boibai.hai-hoa-ho-tro-trach-nhiem": {
+  "t": "和諧、支持、責任、平衡。6 是愛與責任的數字。",
+  "h": "6a77c6d9"
+ },
+ "js.boibai.hoan-chinh-chu-ky-ket-thuc": {
+  "t": "圓滿、週期結束、全新開始。10 是圓滿之點，也為下一個週期做準備。",
+  "h": "c6171d63"
+ },
+ "js.boibai.hoan-thanh-tri-tue-nhan-dao": {
+  "t": "完成、智慧、人道、課題。9 已接近終點——但旅程尚未結束。",
+  "h": "92ed3dc8"
+ },
+ "js.boibai.hop-tac-va-lam-viec-nhom": {
+  "t": "合作與團隊工作比任何時候都重要。成功需要有人同行。",
+  "h": "e9952166"
+ },
+ "js.boibai.huong-di-co-the-neu-tiep": {
+  "t": "若持續下去可能的走向",
+  "h": "6efe93d8"
+ },
+ "js.boibai.ket-qua": {
+  "t": "結果",
+  "h": "75ff233d"
+ },
+ "js.boibai.ket-qua-boi-bai-tay-cua": {
+  "t": "我的撲克牌占卜結果",
+  "h": "92e4c094"
+ },
+ "js.boibai.khoi-dau-manh-me-co-hoi": {
+  "t": "強勢的開端、重大機會、至高的力量。A 是最強的一張牌——代表純粹的力量與無限的潛能。",
+  "h": "e95b57b1"
+ },
+ "js.boibai.la": {
+  "t": " 張",
+  "h": "f115358e"
+ },
+ "js.boibai.la-dau-tien-ban-rut-duoc": {
+  "t": "您抽到的第一張牌是：**",
+  "h": "644c4dff"
+ },
+ "js.boibai.lbl-chat-bai": {
+  "t": "花色",
+  "h": "1322f86f"
+ },
+ "js.boibai.lbl-su-nghiep": {
+  "t": "事業",
+  "h": "31bd53c9"
+ },
+ "js.boibai.lbl-tai-chinh": {
+  "t": "財運",
+  "h": "bdb2ffa6"
+ },
+ "js.boibai.lbl-tinh-cam": {
+  "t": "感情",
+  "h": "39234ecc"
+ },
+ "js.boibai.luan-giai-tung-la": {
+  "t": "逐張解讀",
+  "h": "c811697f"
+ },
+ "js.boibai.moi-quan-he-da-truong-thanh": {
+  "t": "關係已經成熟而深厚。現在是回顧並鞏固已建立之事的時候。",
+  "h": "9bb7ede1"
+ },
+ "js.boibai.moi-quan-he-hai-chieu-dang": {
+  "t": "雙向的關係正在發展。需要雙方的平衡與共識。",
+  "h": "1dfa37ee"
+ },
+ "js.boibai.moi-quan-he-hai-hoa-va": {
+  "t": "關係和諧而穩定。雙方正在良好地互相支持。",
+  "h": "6930eb7b"
+ },
+ "js.boibai.moi-quan-he-on-dinh-va": {
+  "t": "關係穩定而安全。現在是建立長久承諾的時候。",
+  "h": "112b37d3"
+ },
+ "js.boibai.mot-giai-doan-trong-tinh-cam": {
+  "t": "感情中的一個階段即將結束，迎來更美好的新階段。",
+  "h": "7362f723"
+ },
+ "js.boibai.muoi": {
+  "t": "10",
+  "h": "6f2ebecd"
+ },
+ "js.boibai.nam": {
+  "t": "5",
+  "h": "98926c7e"
+ },
+ "js.boibai.nang-luong-va-thong-diep-chinh": {
+  "t": "今日的能量與主要訊息",
+  "h": "90d4de48"
+ },
+ "js.boibai.nen-hoi-cau-hoi-kieu-gi": {
+  "t": "抽牌時該問什麼樣的問題？",
+  "h": "f6e87d8f"
+ },
+ "js.boibai.nguoi-co-kinh-nghiem-tai-chinh": {
+  "t": "有財務經驗的人，或重要的顧問。現在適合諮詢專家。",
+  "h": "6a671d97"
+ },
+ "js.boibai.nguoi-co-quyen-luc-truong-thanh": {
+  "t": "有權力、成熟、權威、領導力的人。K 代表領導者或有影響力的人。",
+  "h": "6b6fa839"
+ },
+ "js.boibai.nguoi-dan-ong-quan-trong-hoac": {
+  "t": "感情中重要的男性，或領導的能量。穩定而成熟。",
+  "h": "22f7ec13"
+ },
+ "js.boibai.nguoi-moi-vao-cuoc-song-hoac": {
+  "t": "新進入生活中的人，或關於感情的消息。可能是對您有好感的人。",
+  "h": "b48125b4"
+ },
+ "js.boibai.nguoi-phu-nu-anh-huong-den": {
+  "t": "影響事業的女性。需要運用直覺與溝通技巧。",
+  "h": "89780eb7"
+ },
+ "js.boibai.nguoi-phu-nu-lien-quan-den": {
+  "t": "與財務決定相關的女性。投資時可倚靠直覺。",
+  "h": "c17b0849"
+ },
+ "js.boibai.nguoi-phu-nu-quan-trong-trong": {
+  "t": "感情中重要的女性。或是您需要展現更多敏感與關懷。",
+  "h": "3fe5079f"
+ },
+ "js.boibai.nguoi-phu-nu-truc-giac-sang": {
+  "t": "女性、直覺、創造力、照顧。Q 代表一位女性或陰柔的能量。",
+  "h": "74204343"
+ },
+ "js.boibai.nguoi-tre-tuoi-nang-luong-tuoi": {
+  "t": "年輕人、嶄新的能量、訊息、信使。J 代表一位年輕人或新消息。",
+  "h": "6544e9d4"
+ },
+ "js.boibai.nhep": {
+  "t": "梅花",
+  "h": "1f47da68"
+ },
+ "js.boibai.on-dinh-cong-viec-nhung-co": {
+  "t": "工作穩定，但可能缺乏樂趣。專注於培養技能與打好基礎。",
+  "h": "47192d51"
+ },
+ "js.boibai.on-dinh-nen-tang-an-toan": {
+  "t": "穩定、基礎、安全、秩序。四個角穩固——擴張之前要先打好基礎。",
+  "h": "e9bff49c"
+ },
+ "js.boibai.phat-trien-sang-tao-bieu-dat": {
+  "t": "成長、創造、表達、社群。三角形——局勢的三個面向正在運作。",
+  "h": "4ccfdbfb"
+ },
+ "js.boibai.qua-khu": {
+  "t": "過去",
+  "h": "75e794ae"
+ },
+ "js.boibai.quyen-luc-suc-manh-thanh-tich": {
+  "t": "權力、力量、成就、重生。8 是力量與繁榮的數字。",
+  "h": "4fd9bfc8"
+ },
+ "js.boibai.ro": {
+  "t": "方塊",
+  "h": "2c83f6bf"
+ },
+ "js.boibai.sau": {
+  "t": "6",
+  "h": "8d7feaa0"
+ },
+ "js.boibai.sep-hoac-nguoi-co-quyen-luc": {
+  "t": "上司或有權勢者的影響。展現成熟穩重與領導能力。",
+  "h": "421d1273"
+ },
+ "js.boibai.suc-manh-va-dam-me-trong": {
+  "t": "感情中有力量與熱情。關係正處於強烈而深刻的階段。",
+  "h": "697e4d28"
+ },
+ "js.boibai.suit-c": {
+  "t": "事業、行動與成長",
+  "h": "e33ce278"
+ },
+ "js.boibai.suit-d": {
+  "t": "物質、金錢與實際價值",
+  "h": "7667e511"
+ },
+ "js.boibai.suit-h": {
+  "t": "感情、情緒與人際關係",
+  "h": "4eb5d8b6"
+ },
+ "js.boibai.suit-s": {
+  "t": "挑戰、智慧與衝突",
+  "h": "68ec16dc"
+ },
+ "js.boibai.suy-nghi-va-cam-xuc-cua": {
+  "t": "您的想法與情緒",
+  "h": "4cc72970"
+ },
+ "js.boibai.tai-chinh-manh-va-co-tiem": {
+  "t": "財務強健，具有很大的成長潛力。現在是更大膽投資的時候。",
+  "h": "a9f7c989"
+ },
+ "js.boibai.tai-chinh-on-dinh-khong-nhieu": {
+  "t": "財務穩定，沒有太多波動。現在是儲蓄與累積的時候。",
+  "h": "4b335a36"
+ },
+ "js.boibai.tai-chinh-tot-co-the-chia": {
+  "t": "財務良好，可與他人分享。現在是投資於長遠意義之事的時候。",
+  "h": "19e7c7ca"
+ },
+ "js.boibai.tai-loc-bat-ngo-dau-tu": {
+  "t": "意外之財，投資獲利豐厚。良好的財務機會正在出現。",
+  "h": "cc2ba266"
+ },
+ "js.boibai.tam": {
+  "t": "8",
+  "h": "0e3fc5e2"
+ },
+ "js.boibai.tang-truong-tai-chinh-dan-dan": {
+  "t": "財務逐步成長。投資於長期的發展。",
+  "h": "8389a057"
+ },
+ "js.boibai.thach-thuc": {
+  "t": "挑戰",
+  "h": "1576629b"
+ },
+ "js.boibai.thanh-tich-va-duoc-cong-nhan": {
+  "t": "成就與肯定。現在是展現能力、重拾掌控權的時候。",
+  "h": "3bfdc1a3"
+ },
+ "js.boibai.thay-doi-xung-dot-thu-thach": {
+  "t": "變動、衝突、考驗、不穩定。5 是劇變與挑戰的數字。",
+  "h": "14c74c71"
+ },
+ "js.boibai.thong-diep": {
+  "t": "訊息",
+  "h": "8d4fe659"
+ },
+ "js.boibai.thu-nhap-on-dinh-va-can": {
+  "t": "收入穩定，收支平衡良好。可以給予他人財務上的支持。",
+  "h": "2904cf24"
+ },
+ "js.boibai.tin-tuc-ve-tai-chinh-dang": {
+  "t": "財務方面的消息即將到來。年輕人可能影響您的財務。",
+  "h": "58e4e140"
+ },
+ "js.boibai.tinh-cam-co-yeu-to-bi": {
+  "t": "感情中帶有神祕或不明朗的成分。請傾聽愛情中的直覺。",
+  "h": "83f22bbf"
+ },
+ "js.boibai.tinh-cam-dang-phat-trien-tot": {
+  "t": "感情發展順利。可能有第三方參與——媒人、共同的朋友。",
+  "h": "acbf5cf4"
+ },
+ "js.boibai.tinh-huong-hien-tai-cua-ban": {
+  "t": "您目前的處境",
+  "h": "5f1dc385"
+ },
+ "js.boibai.tinh-trang": {
+  "t": "現況",
+  "h": "5a46503e"
+ },
+ "js.boibai.tinh-yeu-moi-va-nong-nhiet": {
+  "t": "新的熱戀，或現有關係的重生。感情方面的絕佳機會。",
+  "h": "a8fda462"
+ },
+ "js.boibai.trong-tam-cua-tinh-huong": {
+  "t": "局勢的核心",
+  "h": "e2f497fe"
+ },
+ "js.boibai.truc-giac-bi-an-chiem-nghiem": {
+  "t": "直覺、神祕、沉思、幸運。7 是直覺與好運的數字。",
+  "h": "13e59cc8"
+ },
+ "js.boibai.trung-tam": {
+  "t": "核心",
+  "h": "26bda5d2"
+ },
+ "js.boibai.tuong-lai": {
+  "t": "未來",
+  "h": "b4320a2d"
+ },
+ "js.boibai.van-may-bat-ngo-co-the": {
+  "t": "可能有意外的好運降臨。但對冒險的投資也要小心。",
+  "h": "2cd63148"
+ },
+ "js.boibai.xao-bai-rut-lai": {
+  "t": "重新洗牌並抽牌",
+  "h": "19371614"
+ },
+ "js.boibai.xu-huong-sap-xay-ra": {
+  "t": "即將發生的趨勢",
+  "h": "6e5a1980"
  },
  "js.chat.chao": {
   "t": "您好 ",
@@ -2446,6 +3266,1142 @@
  "js.nav.xem-tuong-qua-anh": {
   "t": "照片看面相",
   "h": "24c4d64e"
+ },
+ "js.oracle.ai-dang-ho-tro-ban-ma": {
+  "t": "是誰在支持您，而您還沒表達感激？您的生活中有沒有您可以去滋養的人？",
+  "h": "96542020"
+ },
+ "js.oracle.am": {
+  "t": "陰",
+  "h": "99492f1a"
+ },
+ "js.oracle.am-cuc-tac-duong-duong-cuc": {
+  "t": "陰極生陽，陽極生陰。當一切到達巔峰，轉化便必然開始。不要害怕改變——那是您正活著、正成長的證明。",
+  "h": "6675aca5"
+ },
+ "js.oracle.am-duong": {
+  "t": "陰陽",
+  "h": "5cbdb898"
+ },
+ "js.oracle.anh-huong": {
+  "t": "影響",
+  "h": "551b0c68"
+ },
+ "js.oracle.anh-sang": {
+  "t": "光明",
+  "h": "ea1d6630"
+ },
+ "js.oracle.back-1": {
+  "t": "東方",
+  "h": "1de99eec"
+ },
+ "js.oracle.back-2": {
+  "t": "智慧",
+  "h": "5841c633"
+ },
+ "js.oracle.ban-co-dang-co-qua-khong": {
+  "t": "您是不是太用力了？試著放下，看看不勉強時自然會發生什麼。",
+  "h": "ca702c46"
+ },
+ "js.oracle.ban-co-dang-di-qua-mot": {
+  "t": "您是不是偏向了某一邊？請找到中間的路——不極端，也不鬆懈。",
+  "h": "ea3c5624"
+ },
+ "js.oracle.ban-muon-chiem-nghiem-sau-hon": {
+  "t": "**。您想更深入思考哪方面的事呢？",
+  "h": "0700ae70"
+ },
+ "js.oracle.ban-than": {
+  "t": "自身",
+  "h": "b2d3973b"
+ },
+ "js.oracle.bat-ngo": {
+  "t": "意外",
+  "h": "5ae13239"
+ },
+ "js.oracle.bat-quai": {
+  "t": "八卦",
+  "h": "943c4778"
+ },
+ "js.oracle.ben-bi": {
+  "t": "堅韌",
+  "h": "a108e917"
+ },
+ "js.oracle.ben-vung": {
+  "t": "持久",
+  "h": "c7cb7a59"
+ },
+ "js.oracle.bien-doi": {
+  "t": "蛻變",
+  "h": "68315cd4"
+ },
+ "js.oracle.biet-du": {
+  "t": "知足",
+  "h": "1781df4c"
+ },
+ "js.oracle.biet-on": {
+  "t": "感恩",
+  "h": "21f87639"
+ },
+ "js.oracle.binh-minh": {
+  "t": "黎明",
+  "h": "04166e56"
+ },
+ "js.oracle.buong-bo": {
+  "t": "放下",
+  "h": "eefa92c2"
+ },
+ "js.oracle.but-pha": {
+  "t": "突破",
+  "h": "9cf4ad3e"
+ },
+ "js.oracle.can-bang": {
+  "t": "平衡",
+  "h": "9fe59d4b"
+ },
+ "js.oracle.can-bang-mg6a": {
+  "t": "平衡",
+  "h": "3fe37e41"
+ },
+ "js.oracle.can-nui": {
+  "t": "艮——山",
+  "h": "9904522e"
+ },
+ "js.oracle.can-troi": {
+  "t": "乾——天",
+  "h": "7d4e516f"
+ },
+ "js.oracle.cat-bo": {
+  "t": "割捨",
+  "h": "f4f3edd1"
+ },
+ "js.oracle.cau-hoi-cua-ban": {
+  "t": "您的問題：\"",
+  "h": "660c481c"
+ },
+ "js.oracle.cay-lon-bat-dau-tu-hat": {
+  "t": "大樹始於一粒小小的種子。耐心與堅持是關鍵。您正在建立的東西也許暫時還看不見，卻每一天都在默默成長。",
+  "h": "2ac55d7b"
+ },
+ "js.oracle.chan-sam": {
+  "t": "震——雷",
+  "h": "7c1c107e"
+ },
+ "js.oracle.chia-se": {
+  "t": "分享",
+  "h": "1cb95080"
+ },
+ "js.oracle.chieu-sau": {
+  "t": "深度",
+  "h": "e865c387"
+ },
+ "js.oracle.chu-ky": {
+  "t": "週期",
+  "h": "ebc184a9"
+ },
+ "js.oracle.chu-ky-moi": {
+  "t": "新週期",
+  "h": "de8db018"
+ },
+ "js.oracle.chuyen-hoa": {
+  "t": "轉化",
+  "h": "ed3d0950"
+ },
+ "js.oracle.chuyen-hoa-gpz3": {
+  "t": "轉化",
+  "h": "c4b88b2f"
+ },
+ "js.oracle.co-hoi": {
+  "t": "機會",
+  "h": "da02f76b"
+ },
+ "js.oracle.con-duong-giua-khong-qua-cung": {
+  "t": "中間之道——不過剛、不過柔；不過緊、不過鬆。中道不是平庸，而是在對立兩極之間的精妙平衡。",
+  "h": "455b601b"
+ },
+ "js.oracle.cung-ran": {
+  "t": "剛強",
+  "h": "e9c3a1fd"
+ },
+ "js.oracle.dam-me": {
+  "t": "熱情",
+  "h": "60bf63eb"
+ },
+ "js.oracle.dan-dau": {
+  "t": "領先",
+  "h": "9cff38f8"
+ },
+ "js.oracle.dan-ho": {
+  "t": "寅虎",
+  "h": "0ba40037"
+ },
+ "js.oracle.dang-dinh-tam": {
+  "t": "靜心中...",
+  "h": "da9206ab"
+ },
+ "js.oracle.danh-thoi-gian-hoc-hoi-va": {
+  "t": "花時間學習與沉思。您在尋找的答案在深處，而不在表面。",
+  "h": "dd475149"
+ },
+ "js.oracle.danh-thoi-gian-mot-minh-lang": {
+  "t": "留一些時間給自己。傾聽直覺。此刻不要逼自己一定要發光——讓能量自然累積。",
+  "h": "0e43dd03"
+ },
+ "js.oracle.dat": {
+  "t": "地",
+  "h": "df7404fb"
+ },
+ "js.oracle.dau-la-nen-tang-trong-cuoc": {
+  "t": "您生活中的根基是什麼？家庭、健康、財務——在擴張之前，先把這些鞏固好。",
+  "h": "550ab2e3"
+ },
+ "js.oracle.dau-tu-vao-cac-moi-quan": {
+  "t": "投入於人際關係與創造。此刻您的優勢是溫和與情感，而不是強硬的力量。",
+  "h": "e0d2bef5"
+ },
+ "js.oracle.day-khong-phai-luc-lieu-linh": {
+  "t": "現在不是冒險的時候。請謹慎、仔細評估，並憑直覺度過這段考驗期。",
+  "h": "bd217cbf"
+ },
+ "js.oracle.day-la-luc-hanh-dong-chia": {
+  "t": "現在是行動的時候。分享想法、帶領、創造。您的能量正處於巔峰——請明智地運用它。",
+  "h": "4049c172"
+ },
+ "js.oracle.day-la-luc-hanh-dong-dut": {
+  "t": "現在是果斷行動的時候。您已經準備充分了——相信自己的力量，邁出腳步。",
+  "h": "b2641f22"
+ },
+ "js.oracle.day-la-luc-tang-toc-dung": {
+  "t": "現在是加速的時候。不要讓小小的阻礙拖住您——帶著熱情向前邁進。",
+  "h": "396d7ee9"
+ },
+ "js.oracle.day-la-thoi-diem-de-quan": {
+  "t": "這是觀察的時機，不是急著行動的時候。原因正在播下；結果會在適當的時候到來。",
+  "h": "c8d7fe99"
+ },
+ "js.oracle.day-la-thoi-diem-vang-nhung": {
+  "t": "這是黃金時機。停滯的專案可以重新啟動，出現裂痕的關係可以修復。",
+  "h": "5a1e9cfb"
+ },
+ "js.oracle.di-chuyen": {
+  "t": "移動",
+  "h": "df434ae0"
+ },
+ "js.oracle.dia-chi": {
+  "t": "地支",
+  "h": "9a9221c6"
+ },
+ "js.oracle.dia-chi-dan-ho-dung-manh": {
+  "t": "地支寅——虎，勇猛而果決，黎明正在露出曙光。強大的能量正在崛起。大膽行動，但要有計畫——如同老虎在沒有把握勝利時不會出擊。",
+  "h": "1bd2174b"
+ },
+ "js.oracle.dia-chi-mui-de-on-hoa": {
+  "t": "地支未——羊，溫和、藝術、情感深厚。這是溫柔、創意與愛的能量。現在是滋養人際關係與創意專案的時候。",
+  "h": "4c0a6a31"
+ },
+ "js.oracle.dia-chi-ngo-ngua-tu-do": {
+  "t": "地支午——馬，自由、速度、熱情與激情。這是移動、改變與不斷向前的能量。",
+  "h": "91fef169"
+ },
+ "js.oracle.dia-chi-thin-nam-rong-khi": {
+  "t": "地支辰——龍年，氣勢磅礴，天地相交。強大蛻變的能量正在現身。這是突破的時機，而不是安穩的時候。",
+  "h": "16c18514"
+ },
+ "js.oracle.dia-chi-ty-nua-dem-diem": {
+  "t": "地支子——子夜，新週期的起點，陰極生陽。最深的黑暗中蘊藏著最強的生機。您正處於一個週期的終點，也是新週期的開端。",
+  "h": "a1e4ef73"
+ },
+ "js.oracle.dieu-an-sau-can-chu-y": {
+  "t": "潛藏而需要留意的事",
+  "h": "de8671a7"
+ },
+ "js.oracle.dieu-chinh": {
+  "t": "調整",
+  "h": "37c5bf6b"
+ },
+ "js.oracle.dieu-dang-phat-trien-va-can": {
+  "t": "正在成長、需要滋養的事",
+  "h": "b095817e"
+ },
+ "js.oracle.dieu-gi-can-duoc-loai-bo": {
+  "t": "什麼需要從您的生活中移除？有什麼艱難的決定正在等著您？現在是該果斷的時候。",
+  "h": "178dea6c"
+ },
+ "js.oracle.dieu-gi-dang-nay-mam-trong": {
+  "t": "您的生活中正在萌芽什麼？請為它創造成長的條件——不要急。",
+  "h": "1492c6da"
+ },
+ "js.oracle.dieu-gi-dang-xay-ra-tu": {
+  "t": "您的生活中正自然發生什麼事？順著那股流向走，而不是逆流而游。",
+  "h": "2292cc68"
+ },
+ "js.oracle.dieu-gi-trong-cuoc-song-cua": {
+  "t": "您生活中有什麼正處於頂點、即將轉化？請做好心理準備，迎接這必然的改變。",
+  "h": "a6188d40"
+ },
+ "js.oracle.dieu-vu-tru-muon-ban-biet": {
+  "t": "宇宙此刻想讓您知道的事",
+  "h": "40685257"
+ },
+ "js.oracle.dinh-cao": {
+  "t": "巔峰",
+  "h": "524c5d21"
+ },
+ "js.oracle.dinh-tam-rut-lai": {
+  "t": "靜心並重新抽牌",
+  "h": "09656849"
+ },
+ "js.oracle.doai-ho": {
+  "t": "兌——澤",
+  "h": "7eddb4b0"
+ },
+ "js.oracle.doi-lap": {
+  "t": "對立",
+  "h": "a8f8c625"
+ },
+ "js.oracle.dong-chay": {
+  "t": "流動",
+  "h": "045724a4"
+ },
+ "js.oracle.dung-hoa": {
+  "t": "調和",
+  "h": "d56be20d"
+ },
+ "js.oracle.dung-lai": {
+  "t": "停下",
+  "h": "d8d8b916"
+ },
+ "js.oracle.dung-lai-va-dem-nhung-dieu": {
+  "t": "停下來，數一數您所擁有的美好。幸福並非來自擁有更多，而是來自珍惜已有。",
+  "h": "ac526a81"
+ },
+ "js.oracle.dung-lai-va-quan-sat-khong": {
+  "t": "停下來觀察。並非每個行動此刻都有必要。有時按兵不動是最明智的一步。",
+  "h": "b61e007a"
+ },
+ "js.oracle.dung-manh": {
+  "t": "勇猛",
+  "h": "035952f2"
+ },
+ "js.oracle.dung-ngan-ngai-di-truoc-con": {
+  "t": "不要猶豫，勇敢走在前面。還沒有人走過的路不代表是錯的——有時那正是屬於您的路。",
+  "h": "97c9dd64"
+ },
+ "js.oracle.dung-so-khoang-toi-nay-no": {
+  "t": "不要害怕這片黑暗——它是新黎明的前奏。在靜默中播下種子，耐心等待春天。",
+  "h": "ac09f152"
+ },
+ "js.oracle.dung-so-tieng-sam-no-den": {
+  "t": "不要害怕雷聲——它是為了喚醒而來。經歷衝擊之後，請自問：有什麼需要改變？",
+  "h": "42c2bfa9"
+ },
+ "js.oracle.duong": {
+  "t": "陽",
+  "h": "0efa2ecf"
+ },
+ "js.oracle.duong-thuan": {
+  "t": "純陽",
+  "h": "862ecac8"
+ },
+ "js.oracle.duyen": {
+  "t": "緣",
+  "h": "98a81ff8"
+ },
+ "js.oracle.giao-tiep": {
+  "t": "溝通",
+  "h": "5e5bd903"
+ },
+ "js.oracle.giap-la-can-dau-tien-khoi": {
+  "t": "甲是天干之首——開端、先驅，剛強如大樹。這是強勁開端的時刻。您被召喚成為先驅者。",
+  "h": "806e3471"
+ },
+ "js.oracle.giap-moc": {
+  "t": "甲木",
+  "h": "9536a92b"
+ },
+ "js.oracle.gieo-hat": {
+  "t": "播種",
+  "h": "badd83e5"
+ },
+ "js.oracle.hai-hoa": {
+  "t": "和諧",
+  "h": "deffa707"
+ },
+ "js.oracle.hanh-dong": {
+  "t": "行動",
+  "h": "8e9fdd28"
+ },
+ "js.oracle.hanh-dong-nhu-mot-nha-lanh": {
+  "t": "像領導者一樣行動。您有願景——分享它，並帶領他人跟隨。",
+  "h": "891328c8"
+ },
+ "js.oracle.hanh-hoa-mang-nang-luong-cua": {
+  "t": "火行帶著熱情、熱忱與光明的能量。您心中的火焰正在燃燒——讓它發光，但別讓它燒掉重要的東西。",
+  "h": "76fa246e"
+ },
+ "js.oracle.hanh-kim-sac-ben-quyet-doan": {
+  "t": "金行——鋒利、果決、精緻而有價值。如同劍刃需要鍛造，您需要割捨不必要的，留下真正有價值的。",
+  "h": "d59eadcd"
+ },
+ "js.oracle.hanh-moc-dai-dien-cho-su": {
+  "t": "木行象徵生長、柔韌與希望。如同幼苗從地面竄出，您心中有新的東西正在萌芽。以耐心與光明滋養它。",
+  "h": "ec58fdd5"
+ },
+ "js.oracle.hanh-moc-vuon": {
+  "t": "木行向上",
+  "h": "14cebce8"
+ },
+ "js.oracle.hanh-phuc": {
+  "t": "幸福",
+  "h": "68d680dc"
+ },
+ "js.oracle.hanh-tho-la-nen-tang-cua": {
+  "t": "土行是萬物的根基——穩定、可靠、滋養。現在是打好穩固基礎、而不是急著往高處竄的時候。持久比速度更重要。",
+  "h": "6022cf50"
+ },
+ "js.oracle.hanh-thuy-sau": {
+  "t": "水行深邃",
+  "h": "eb619381"
+ },
+ "js.oracle.hanh-thuy-thich-nghi-tham-sau": {
+  "t": "水行——適應、深邃、智慧與直覺。水順著地形流動，而不與之對抗。真正的智慧是知道何時該奔流、何時該沉澱。",
+  "h": "f66a0a05"
+ },
+ "js.oracle.hao-hung": {
+  "t": "豪邁",
+  "h": "d3338937"
+ },
+ "js.oracle.hay-chu-y-den-nhung-gi": {
+  "t": "請留意正在變得清晰的事物。相信在真理之光照耀下您所看見的。",
+  "h": "e631bdf2"
+ },
+ "js.oracle.hay-danh-thoi-gian-tu-van": {
+  "t": "花點時間自問：真正驅動您的是什麼？您正在逃避什麼？對自己的真相，是最大的禮物。",
+  "h": "1ec9491c"
+ },
+ "js.oracle.hay-kien-tri-va-nhe-nhang": {
+  "t": "請堅持而溫和。持久的影響力來自一貫性，而不是強迫的力量。",
+  "h": "8b9fe544"
+ },
+ "js.oracle.hay-la-nguoi-ho-tro-khong": {
+  "t": "此刻請做支持者，而不是帶頭者。滋養周圍的事物與人——那才是真正的力量。",
+  "h": "b183fc76"
+ },
+ "js.oracle.hay-tao-bao-hon-binh-thuong": {
+  "t": "比平常更大膽一些。辰帶著偉大蛻變的能量——不要錯過突破的機會。",
+  "h": "a4ce94fe"
+ },
+ "js.oracle.hien-tai": {
+  "t": "當下",
+  "h": "d77bf3af"
+ },
+ "js.oracle.hieu-minh": {
+  "t": "認識自己",
+  "h": "bd697c0a"
+ },
+ "js.oracle.ho-tro": {
+  "t": "支持",
+  "h": "ed2a55ae"
+ },
+ "js.oracle.hoa-nang-luong": {
+  "t": "火——能量",
+  "h": "af736f0b"
+ },
+ "js.oracle.hoa-nhiet-huyet": {
+  "t": "火——熱血",
+  "h": "b3665961"
+ },
+ "js.oracle.hoan-canh-va-dieu-kien-hien": {
+  "t": "目前的處境與條件",
+  "h": "d4bd1b9d"
+ },
+ "js.oracle.hoc-hoi": {
+  "t": "學習",
+  "h": "7e024951"
+ },
+ "js.oracle.huong-dan-thuc-hanh": {
+  "t": "實踐指引：",
+  "h": "8b4d8530"
+ },
+ "js.oracle.huong-di-va-ket-qua-neu": {
+  "t": "若持續下去的走向與結果",
+  "h": "ce2aa255"
+ },
+ "js.oracle.hy-vong": {
+  "t": "希望",
+  "h": "5dddc812"
+ },
+ "js.oracle.ket-noi": {
+  "t": "連結",
+  "h": "62b5a5f2"
+ },
+ "js.oracle.ket-noi-voi-nguoi-khac-chia": {
+  "t": "與他人連結。分享您正在經歷的事。真誠的話語能創造珍貴的連結。",
+  "h": "762b09a5"
+ },
+ "js.oracle.ket-qua-oracle-cua-toi": {
+  "t": "我的神諭卡結果",
+  "h": "817f308b"
+ },
+ "js.oracle.kham-nuoc": {
+  "t": "坎——水",
+  "h": "14eadf3a"
+ },
+ "js.oracle.khi-nam-hanh-van-hanh-hai": {
+  "t": "當五行運行和諧，萬物繁盛。您正處於生活中各項元素都平衡的時期——把握這段順遂的時光向前邁進。",
+  "h": "9fa440dd"
+ },
+ "js.oracle.khoi-dau": {
+  "t": "開端",
+  "h": "cdb621fc"
+ },
+ "js.oracle.khoi-nguyen": {
+  "t": "起源",
+  "h": "bd887944"
+ },
+ "js.oracle.khon-dat": {
+  "t": "坤——地",
+  "h": "3b414625"
+ },
+ "js.oracle.khon-ngoan": {
+  "t": "睿智",
+  "h": "97a452bf"
+ },
+ "js.oracle.khong-cuc-doan": {
+  "t": "不極端",
+  "h": "f2d069e4"
+ },
+ "js.oracle.kiem-soat": {
+  "t": "掌控",
+  "h": "6d5dbb4e"
+ },
+ "js.oracle.kien-dinh": {
+  "t": "堅定",
+  "h": "965a37b0"
+ },
+ "js.oracle.kien-nhan": {
+  "t": "耐心",
+  "h": "c3a00bf7"
+ },
+ "js.oracle.kien-tri": {
+  "t": "堅持",
+  "h": "7856333a"
+ },
+ "js.oracle.kim-hien-tai": {
+  "t": "金——當下",
+  "h": "7ab65825"
+ },
+ "js.oracle.kim-khac-moc-moc-khac-tho": {
+  "t": "金剋木，木剋土……相剋不是破壞，而是為了維持平衡所必要的制衡。您的生活中有些事正在考驗您——請把它看作成長的機會。",
+  "h": "26d13882"
+ },
+ "js.oracle.kim-quyet-doan": {
+  "t": "金——果決",
+  "h": "954fe85f"
+ },
+ "js.oracle.lang-nghe-truc-giac-sau-sac": {
+  "t": "傾聽您內心深處的直覺。不要與當前的潮流對抗——請適應它，並找到屬於自己的路。",
+  "h": "f2864da6"
+ },
+ "js.oracle.lanh-dao": {
+  "t": "領導",
+  "h": "d9b13441"
+ },
+ "js.oracle.linh-hoat": {
+  "t": "靈活",
+  "h": "233a204d"
+ },
+ "js.oracle.luu-nien": {
+  "t": "流年",
+  "h": "f246e000"
+ },
+ "js.oracle.ly-lua": {
+  "t": "離——火",
+  "h": "03e7b319"
+ },
+ "js.oracle.mem-mong": {
+  "t": "柔和",
+  "h": "9c2a0232"
+ },
+ "js.oracle.minh-triet": {
+  "t": "智慧",
+  "h": "6222b2a7"
+ },
+ "js.oracle.minh-triet-tung-la": {
+  "t": "逐張智慧",
+  "h": "7afc1deb"
+ },
+ "js.oracle.moc-sinh-truong": {
+  "t": "木——生長",
+  "h": "68bf8fc0"
+ },
+ "js.oracle.moc-tang-truong": {
+  "t": "木——成長",
+  "h": "76b45bc1"
+ },
+ "js.oracle.mui-de": {
+  "t": "未羊",
+  "h": "19351a0a"
+ },
+ "js.oracle.nang-luong": {
+  "t": "能量",
+  "h": "f2c82118"
+ },
+ "js.oracle.nang-luong-am-tiep-nhan-noi": {
+  "t": "陰的能量——接納、內省、休息、滋養。這是沉澱、收斂、充電的時候。多做不如深聽。",
+  "h": "147c7327"
+ },
+ "js.oracle.nang-luong-can-kich-hoat": {
+  "t": "需要啟動的能量",
+  "h": "66c656bb"
+ },
+ "js.oracle.nang-luong-duong-toa-ra-hanh": {
+  "t": "陽的能量——外放、行動、創造、表現。這是力量與展現的時刻。您心中的光，想與世界分享。",
+  "h": "82d51591"
+ },
+ "js.oracle.nay-mam": {
+  "t": "萌芽",
+  "h": "d3bad34d"
+ },
+ "js.oracle.nen-hoi-oracle-cau-hoi-kieu": {
+  "t": "問神諭卡該問什麼樣的問題？",
+  "h": "8a001fd9"
+ },
+ "js.oracle.nen-tang": {
+  "t": "根基",
+  "h": "4676be0d"
+ },
+ "js.oracle.nen-tang-can-cung-co": {
+  "t": "需要鞏固的根基",
+  "h": "12191113"
+ },
+ "js.oracle.nghi-ngoi": {
+  "t": "休息",
+  "h": "674b9610"
+ },
+ "js.oracle.nghiep": {
+  "t": "業",
+  "h": "bc44635e"
+ },
+ "js.oracle.ngo-ma": {
+  "t": "午馬",
+  "h": "3e1b3c1e"
+ },
+ "js.oracle.ngu-hanh": {
+  "t": "五行",
+  "h": "68ac2473"
+ },
+ "js.oracle.ngu-hanh-hoa": {
+  "t": "五行和",
+  "h": "9181728e"
+ },
+ "js.oracle.ngu-hanh-trong-oracle-nghia-la": {
+  "t": "神諭卡中的五行是什麼意思？",
+  "h": "c3180463"
+ },
+ "js.oracle.nguon-goc": {
+  "t": "根源",
+  "h": "b071d309"
+ },
+ "js.oracle.nguy-hiem": {
+  "t": "險境",
+  "h": "9ab8bc5b"
+ },
+ "js.oracle.nguyen-nhan-goc-re-cua-tinh": {
+  "t": "這個處境的根本原因",
+  "h": "be5bb52a"
+ },
+ "js.oracle.nham-la-can-thuy-duong-manh": {
+  "t": "壬是陽水之干——如大江般強大，有野心也有智慧。您的力量在於預測、規劃與靈活適應的能力。",
+  "h": "855b4d25"
+ },
+ "js.oracle.nham-thuy": {
+  "t": "壬水",
+  "h": "b32b0718"
+ },
+ "js.oracle.nhan": {
+  "t": "因",
+  "h": "74d8e663"
+ },
+ "js.oracle.nhan-nao-qua-ay-hat-giong": {
+  "t": "種什麼因，得什麼果——播下什麼種子，就結什麼果實。您今天所經歷的，是過去所播種的結果；而您今天的行動，正在為未來播種。",
+  "h": "fcafa76e"
+ },
+ "js.oracle.nhan-qua": {
+  "t": "因果",
+  "h": "563d7385"
+ },
+ "js.oracle.nhan-qua-jhdj": {
+  "t": "因果",
+  "h": "ff35f868"
+ },
+ "js.oracle.nhan-thuc": {
+  "t": "覺察",
+  "h": "38f5078e"
+ },
+ "js.oracle.nhe-nhang": {
+  "t": "輕柔",
+  "h": "74e48410"
+ },
+ "js.oracle.nhiet-huyet": {
+  "t": "熱血",
+  "h": "d5f61be3"
+ },
+ "js.oracle.nhiet-huyet-la-mon-qua-nhung": {
+  "t": "熱血是一份禮物，但需要掌控。請有意識地運用您的熱情，而不是衝動行事。",
+  "h": "5b47b77d"
+ },
+ "js.oracle.nhin-lai-nhung-nguyen-nhan-dan": {
+  "t": "回顧導致當前處境的原因。今天的哪個行動，會創造出您想要的未來？",
+  "h": "89bb212b"
+ },
+ "js.oracle.nhin-nhan-lai-tinh-huong-tu": {
+  "t": "從對立的角度重新看待這個處境。您正在否認的，也許正是最重要的功課。",
+  "h": "ef03df70"
+ },
+ "js.oracle.nhin-xa-hon-tinh-huong-truoc": {
+  "t": "把眼光放得比眼前的處境更遠。您有能力看見別人看不到的——請運用這份洞察。",
+  "h": "4fd97731"
+ },
+ "js.oracle.nhu-thuan": {
+  "t": "柔順",
+  "h": "3d89cfeb"
+ },
+ "js.oracle.niem-vui": {
+  "t": "喜悅",
+  "h": "86cf7ad6"
+ },
+ "js.oracle.noi-tam": {
+  "t": "內在",
+  "h": "22b1e894"
+ },
+ "js.oracle.nuoc-mem-nhung-thang-da-cung": {
+  "t": "水柔而能勝堅石。水的力量不在於壓迫，而在於堅持與靈活。有時前進的最好方式是讓路。",
+  "h": "636f00ee"
+ },
+ "js.oracle.nuoc-sau-khong-song-lon-tri": {
+  "t": "靜水流深。真正的智慧往往是安靜的。現在是走進深處的時候——研究、沉思、探索內心，而不是向外表演。",
+  "h": "d83a954b"
+ },
+ "js.oracle.nuoi-duong": {
+  "t": "滋養",
+  "h": "5f526834"
+ },
+ "js.oracle.on-dinh": {
+  "t": "穩定",
+  "h": "a3b55fa0"
+ },
+ "js.oracle.on-hoa": {
+  "t": "溫和",
+  "h": "f607b321"
+ },
+ "js.oracle.oracle-khac-tarot-o-diem-nao": {
+  "t": "神諭卡和塔羅有什麼不同？",
+  "h": "6de59274"
+ },
+ "js.oracle.oracle-phuong-dong": {
+  "t": "東方神諭卡 — ",
+  "h": "19829bd3"
+ },
+ "js.oracle.phat-trien": {
+  "t": "發展",
+  "h": "522a7db6"
+ },
+ "js.oracle.phon-thinh": {
+  "t": "繁盛",
+  "h": "8dd97f93"
+ },
+ "js.oracle.qua": {
+  "t": "果",
+  "h": "40985001"
+ },
+ "js.oracle.quan-sat": {
+  "t": "觀察",
+  "h": "edd08b70"
+ },
+ "js.oracle.que-can-nui-su-dung-lai": {
+  "t": "艮卦——山，止息與堅定。知道何時該停，是大智慧。現在是暫停、不再前進的時候——留在當下，看清楚再邁出下一步。",
+  "h": "4c8fa05f"
+ },
+ "js.oracle.que-can-troi-duong-thuan-suc": {
+  "t": "乾卦——天，純陽，創造之力。引領與創造的能量強烈現身。現在是帶路、開創，並展現您最強意志的時候。",
+  "h": "68b09f57"
+ },
+ "js.oracle.que-chan-sam-set-su-thuc": {
+  "t": "震卦——雷，驟然覺醒。雷聲喚醒沉睡。可能有突發的事件，或一個突然改變您看法的領悟。",
+  "h": "c1a608f2"
+ },
+ "js.oracle.que-doai-ho-niem-vui-va": {
+  "t": "兌卦——澤，喜悅與溝通。歡樂、連結與表達的能量。分享喜悅，喜悅加倍；分擔悲傷，悲傷減半——現在是連結的時候。",
+  "h": "e4aeee98"
+ },
+ "js.oracle.que-kham-nuoc-nguy-hiem-va": {
+  "t": "坎卦——水，險阻與深度。您正在穿越深而險的水域。需要智慧、謹慎，並相信自己有能力度過。",
+  "h": "691e7eea"
+ },
+ "js.oracle.que-khon-dat-am-thuan-su": {
+  "t": "坤卦——地，純陰，接納與滋養。現在是支持、服務，並滋養正在成長之事的時候。大地的力量，在於能承載並養育萬物。",
+  "h": "71ae1c19"
+ },
+ "js.oracle.que-ly-lua-su-sang-to": {
+  "t": "離卦——火，光明與美。覺察之光正在照亮。有些事被釐清了——一個真相、一個想法，或一個人，正在您的生活中發光。",
+  "h": "cc0d2c7e"
+ },
+ "js.oracle.que-ton-gio-su-tham-dan": {
+  "t": "巽卦——風，漸進滲透與堅持。風不以強力摧毀，而以堅持滲入每個角落。您的影響力正溫和而持久地擴散。",
+  "h": "0785a3e6"
+ },
+ "js.oracle.quyet-doan": {
+  "t": "果決",
+  "h": "5cbca4c7"
+ },
+ "js.oracle.sac-ben": {
+  "t": "鋒利",
+  "h": "8aea464b"
+ },
+ "js.oracle.sam-set": {
+  "t": "雷霆",
+  "h": "e0e0f079"
+ },
+ "js.oracle.sang-tao": {
+  "t": "創造",
+  "h": "d4aba4d3"
+ },
+ "js.oracle.sang-to": {
+  "t": "清明",
+  "h": "3250527f"
+ },
+ "js.oracle.sinh-truong": {
+  "t": "生長",
+  "h": "cde6988e"
+ },
+ "js.oracle.suc-manh-khong-phai-la-chien": {
+  "t": "力量不是單方面的勝利——而是在對立的力量之間維持平衡的能力。您被召喚去重新找回自己的中心。",
+  "h": "4f824f6f"
+ },
+ "js.oracle.tam-nhin": {
+  "t": "願景",
+  "h": "d1753f25"
+ },
+ "js.oracle.tao-bao": {
+  "t": "大膽",
+  "h": "2a1e2d46"
+ },
+ "js.oracle.thach-thuc": {
+  "t": "挑戰",
+  "h": "737adff9"
+ },
+ "js.oracle.thach-thuc-ban-dang-doi-mat": {
+  "t": "您所面對的挑戰，是為了制衡並平衡生活的另一個面向。不要抗拒，請從中學習。",
+  "h": "2ec1c0ff"
+ },
+ "js.oracle.thai-cuc": {
+  "t": "太極",
+  "h": "eea5e24c"
+ },
+ "js.oracle.tham-dan": {
+  "t": "漸滲",
+  "h": "7fff6148"
+ },
+ "js.oracle.tham-sau": {
+  "t": "深邃",
+  "h": "8ffd9297"
+ },
+ "js.oracle.tham-vong": {
+  "t": "野心",
+  "h": "9b13396e"
+ },
+ "js.oracle.than-trong": {
+  "t": "審慎",
+  "h": "0dea416d"
+ },
+ "js.oracle.thay-doi": {
+  "t": "改變",
+  "h": "2d141c14"
+ },
+ "js.oracle.thay-vi-bam-viu-hay-day": {
+  "t": "與其緊抓不放或推開，不如觀察並完整體驗當下這一刻。這是關於放下的功課。",
+  "h": "4733a001"
+ },
+ "js.oracle.thay-vi-doi-dau-truc-tiep": {
+  "t": "與其正面對抗，不如尋找更圓融的方式。靈活不是軟弱——而是智慧。",
+  "h": "38bcd462"
+ },
+ "js.oracle.the": {
+  "t": " 張",
+  "h": "aa64c8d5"
+ },
+ "js.oracle.the-dau-tien-ban-rut-duoc": {
+  "t": "您抽到的第一張牌是：**",
+  "h": "7451613d"
+ },
+ "js.oracle.the-hien": {
+  "t": "展現",
+  "h": "72f7bd18"
+ },
+ "js.oracle.thich-nghi": {
+  "t": "適應",
+  "h": "b539346c"
+ },
+ "js.oracle.thien-can": {
+  "t": "天干",
+  "h": "4202f65e"
+ },
+ "js.oracle.thin-long": {
+  "t": "辰龍",
+  "h": "551c2185"
+ },
+ "js.oracle.tho-nen-tang": {
+  "t": "土——根基",
+  "h": "73dabd49"
+ },
+ "js.oracle.tho-vung-chac": {
+  "t": "土——穩固",
+  "h": "784c3257"
+ },
+ "js.oracle.thoi-co": {
+  "t": "時機",
+  "h": "f5ccdc48"
+ },
+ "js.oracle.thoi-diem-vang": {
+  "t": "黃金時機",
+  "h": "cb5085fe"
+ },
+ "js.oracle.thoi-tiet": {
+  "t": "天時",
+  "h": "a517b7a2"
+ },
+ "js.oracle.thong-diep": {
+  "t": "訊息",
+  "h": "8d4fe659"
+ },
+ "js.oracle.thuan-le": {
+  "t": "順理",
+  "h": "88d51987"
+ },
+ "js.oracle.thuan-the": {
+  "t": "順勢",
+  "h": "6b992670"
+ },
+ "js.oracle.thuan-the-5ik6": {
+  "t": "順勢",
+  "h": "b226424c"
+ },
+ "js.oracle.thuan-thien-gia-ton-nghich-thien": {
+  "t": "順天者存，逆天者亡——順應天理者存續，違逆天理者消亡。不要違抗自然而必然之事。請設法與局勢合作，而不是與之對抗。",
+  "h": "266ea183"
+ },
+ "js.oracle.thuc-tinh": {
+  "t": "覺醒",
+  "h": "0c40657d"
+ },
+ "js.oracle.thuy-chieu-sau": {
+  "t": "水——深邃",
+  "h": "30b87c44"
+ },
+ "js.oracle.thuy-sinh-moc-moc-sinh-hoa": {
+  "t": "水生木，木生火……相互扶持是宇宙的本質。您正在接受他人的支持，或被召喚成為某個人的滋養之源。",
+  "h": "95bfe0f9"
+ },
+ "js.oracle.thuy-tri-tue": {
+  "t": "水——智慧",
+  "h": "e4931a4f"
+ },
+ "js.oracle.tiem-nang": {
+  "t": "潛能",
+  "h": "dbd5fc81"
+ },
+ "js.oracle.tien-phong": {
+  "t": "先驅",
+  "h": "7da37b6c"
+ },
+ "js.oracle.tiep-nhan": {
+  "t": "接納",
+  "h": "7d1e28b5"
+ },
+ "js.oracle.tim-hieu-van-khi-nam-nay": {
+  "t": "了解您今年的運勢。順應時勢行動，不要違逆命運的流向。",
+  "h": "6b1162c4"
+ },
+ "js.oracle.tin-tuong": {
+  "t": "信任",
+  "h": "8f76c3a5"
+ },
+ "js.oracle.tin-tuong-vao-qua-trinh-nhung": {
+  "t": "相信這個過程。您默默的努力正在累積。不要只因為還沒立刻看到結果就放棄。",
+  "h": "c4346208"
+ },
+ "js.oracle.tinh-cam": {
+  "t": "情感",
+  "h": "ba217ecf"
+ },
+ "js.oracle.tinh-lang": {
+  "t": "寧靜",
+  "h": "50214643"
+ },
+ "js.oracle.tinh-te": {
+  "t": "精緻",
+  "h": "9045cd81"
+ },
+ "js.oracle.toa-sang": {
+  "t": "發光",
+  "h": "ae22fb49"
+ },
+ "js.oracle.toc-do": {
+  "t": "速度",
+  "h": "7c10386d"
+ },
+ "js.oracle.ton-gio": {
+  "t": "巽——風",
+  "h": "bfd2d8e9"
+ },
+ "js.oracle.trach-nhiem": {
+  "t": "責任",
+  "h": "08440470"
+ },
+ "js.oracle.tran-trong": {
+  "t": "珍惜",
+  "h": "54a3e6b3"
+ },
+ "js.oracle.trang-thai-thuc-te-bay-gio": {
+  "t": "此刻的真實狀態",
+  "h": "093b5811"
+ },
+ "js.oracle.tri-an": {
+  "t": "感念",
+  "h": "7eb696b3"
+ },
+ "js.oracle.tri-nhan-gia-tri-tu-tri": {
+  "t": "知人者智，自知者明——了解別人是智慧，了解自己是明。最高的理解，是理解自己——自己的優點、弱點、動力，以及真正的恐懼。",
+  "h": "3a84272e"
+ },
+ "js.oracle.tri-tuc": {
+  "t": "知足",
+  "h": "39cd778d"
+ },
+ "js.oracle.tri-tuc-biet-du-thi-thuong": {
+  "t": "知足常樂。並非擁有最多的人最幸福。懂得珍惜所有的人，才是真正富有的人。",
+  "h": "60fe6429"
+ },
+ "js.oracle.tri-tue": {
+  "t": "智慧",
+  "h": "74e5d83d"
+ },
+ "js.oracle.triet-ly": {
+  "t": "哲理",
+  "h": "b7552b71"
+ },
+ "js.oracle.troi": {
+  "t": "天",
+  "h": "02698dc1"
+ },
+ "js.oracle.tron-ven": {
+  "t": "圓滿",
+  "h": "ae612b97"
+ },
+ "js.oracle.truc-giac": {
+  "t": "直覺",
+  "h": "d86f73b7"
+ },
+ "js.oracle.trung-dao": {
+  "t": "中道",
+  "h": "61aa8015"
+ },
+ "js.oracle.trung-tam": {
+  "t": "中心",
+  "h": "a776588a"
+ },
+ "js.oracle.truong-thanh": {
+  "t": "成熟",
+  "h": "bbe03f16"
+ },
+ "js.oracle.tu-do": {
+  "t": "自由",
+  "h": "40d06bcd"
+ },
+ "js.oracle.tu-nhan-thuc": {
+  "t": "自我覺察",
+  "h": "300c9c9a"
+ },
+ "js.oracle.tu-nhien": {
+  "t": "自然",
+  "h": "a16adcc3"
+ },
+ "js.oracle.tu-thai-cuc-sinh-luong-nghi": {
+  "t": "太極生兩儀——由一生二，再生萬物。您正站在新週期的起點。所有潛能都處於靜止之中，等待成熟的時機。",
+  "h": "9beef9b2"
+ },
+ "js.oracle.tu-tri": {
+  "t": "自知",
+  "h": "cd9d3b04"
+ },
+ "js.oracle.tuong-khac": {
+  "t": "相剋",
+  "h": "04eb5bcd"
+ },
+ "js.oracle.tuong-sinh": {
+  "t": "相生",
+  "h": "b29d50a2"
+ },
+ "js.oracle.tuong-sinh-4int": {
+  "t": "相生",
+  "h": "1aad018d"
+ },
+ "js.oracle.ty-khoi-nguyen": {
+  "t": "子——起源",
+  "h": "f14c8865"
+ },
+ "js.oracle.van-luu-nien-van-khi-cua": {
+  "t": "流年運——當年的運勢正強烈影響著每一個決定。行動之前，請先看整體的運程。順勢而為最為明智。",
+  "h": "8824729d"
+ },
+ "js.oracle.van-trinh": {
+  "t": "運程",
+  "h": "5c07d84c"
+ },
+ "js.oracle.van-trinh-37gw": {
+  "t": "運程",
+  "h": "cd32c605"
+ },
+ "js.oracle.van-vat-deu-vo-thuong-khong": {
+  "t": "萬物皆無常——沒有什麼會永遠存在，無論是痛苦或幸福。讓您受苦的事終將過去；讓您歡喜的事也會改變。請全然活在這一刻。",
+  "h": "4e0d90c3"
+ },
+ "js.oracle.van-vat-ton-tai-trong-su": {
+  "t": "萬物存在於對立的和諧之中。您以為黑暗的事物裡蘊藏著光明的種子；耀眼的事物內也懷著黑暗的核心。不要抗拒對立——在其中尋找平衡。",
+  "h": "34a745bc"
+ },
+ "js.oracle.ve-dep": {
+  "t": "美",
+  "h": "784d2dc0"
+ },
+ "js.oracle.vo-thuong": {
+  "t": "無常",
+  "h": "8673ae43"
+ },
+ "js.oracle.vo-thuong-6avc": {
+  "t": "無常",
+  "h": "8030e2f3"
+ },
+ "js.oracle.vo-vi": {
+  "t": "無為",
+  "h": "cc46980f"
+ },
+ "js.oracle.vo-vi-4qy7": {
+  "t": "無為",
+  "h": "c4848930"
+ },
+ "js.oracle.vo-vi-nhi-vo-bat-vi": {
+  "t": "無為而無不為——什麼都不做，卻沒有什麼做不成。自然而然地行動，不強求，順應事物的本然之理。這是最高等的力量。",
+  "h": "b8307c9c"
+ },
+ "js.oracle.vuot-qua": {
+  "t": "度過",
+  "h": "624f1384"
+ },
+ "js.oracle.xem-xet-dau-la-nhung-dieu": {
+  "t": "檢視生活中哪些事失去了平衡。工作／休息、付出／接受、行動／反思——重新調整。",
+  "h": "64dee7e0"
  },
  "js.paywall.bam-mo-la-tra-tien-va": {
   "t": " · 點開即付款並立即閱讀，",
@@ -6747,6 +8703,2138 @@
   "t": "Zalo",
   "h": "53b71aec"
  },
+ "js.tarot.ac-mong": {
+  "t": "惡夢",
+  "h": "c6b4b890"
+ },
+ "js.tarot.ac-quy": {
+  "t": "惡魔",
+  "h": "3871fef7"
+ },
+ "js.tarot.am-anh": {
+  "t": "執念",
+  "h": "a2b0d974"
+ },
+ "js.tarot.an-mung": {
+  "t": "慶祝",
+  "h": "149e420c"
+ },
+ "js.tarot.an-mung-hai-hoa-thu-gian": {
+  "t": "慶祝、和諧、放鬆、穩定。是慶賀成就的時刻。穩固的基礎已經建立。",
+  "h": "2b23f082"
+ },
+ "js.tarot.an-si": {
+  "t": "隱者",
+  "h": "c6f75858"
+ },
+ "js.tarot.an-toan": {
+  "t": "安全",
+  "h": "77c4a7f5"
+ },
+ "js.tarot.ao-giac": {
+  "t": "幻覺",
+  "h": "03762cc0"
+ },
+ "js.tarot.ao-giac-so-hai-tiem-thuc": {
+  "t": "幻覺、恐懼、潛意識、夢境。事情並非都如表面所見。請小心黑暗中隱藏的事物。",
+  "h": "5fdc79a4"
+ },
+ "js.tarot.ao-tuong": {
+  "t": "幻想",
+  "h": "ba847935"
+ },
+ "js.tarot.ao-tuong-lua-chon-giac-mo": {
+  "t": "幻想、選擇、夢想、想像。選項太多令人不知所措。小心別困在幻想裡。",
+  "h": "b8107cdd"
+ },
+ "js.tarot.ap-luc": {
+  "t": "壓力",
+  "h": "dad3b1e8"
+ },
+ "js.tarot.at": {
+  "t": "A",
+  "h": "ec2d5348"
+ },
+ "js.tarot.at-coc": {
+  "t": "聖杯王牌",
+  "h": "148af279"
+ },
+ "js.tarot.at-gay": {
+  "t": "權杖王牌",
+  "h": "3c649b95"
+ },
+ "js.tarot.at-kiem": {
+  "t": "寶劍王牌",
+  "h": "8d22ebb2"
+ },
+ "js.tarot.at-tien": {
+  "t": "錢幣王牌",
+  "h": "2dbb31f2"
+ },
+ "js.tarot.ba": {
+  "t": "三",
+  "h": "2fd22ce6"
+ },
+ "js.tarot.ba-coc": {
+  "t": "聖杯三",
+  "h": "a6a7d0d5"
+ },
+ "js.tarot.ba-gay": {
+  "t": "權杖三",
+  "h": "197ca1a7"
+ },
+ "js.tarot.ba-kiem": {
+  "t": "寶劍三",
+  "h": "09c132fc"
+ },
+ "js.tarot.ba-tien": {
+  "t": "錢幣三",
+  "h": "2c28d00d"
+ },
+ "js.tarot.bai-hoc": {
+  "t": "課題",
+  "h": "c52de730"
+ },
+ "js.tarot.ban-muon-toi-luan-theo-huong": {
+  "t": "。您希望我朝哪個方向解讀呢？",
+  "h": "954f8120"
+ },
+ "js.tarot.ban-than": {
+  "t": "自身",
+  "h": "5124062f"
+ },
+ "js.tarot.banh-xe-so-phan": {
+  "t": "命運之輪",
+  "h": "d004b9c6"
+ },
+ "js.tarot.bao-ton": {
+  "t": "保存",
+  "h": "ca5b8c76"
+ },
+ "js.tarot.bao-ton-on-dinh-an-toan": {
+  "t": "保存、穩定、安全、掌控。正緊抓著資源不放——有時有必要，但別變得吝嗇。",
+  "h": "57f23fc4"
+ },
+ "js.tarot.bao-ve": {
+  "t": "保護",
+  "h": "184f46c3"
+ },
+ "js.tarot.bat-an": {
+  "t": "不安",
+  "h": "fbc5a654"
+ },
+ "js.tarot.bat-cong-thieu-trach-nhiem-tranh": {
+  "t": "不公、缺乏責任感、逃避後果。正在逃避責任，或正遭受不公平的對待。",
+  "h": "e024c351"
+ },
+ "js.tarot.bat-dong": {
+  "t": "分歧",
+  "h": "e7229cd1"
+ },
+ "js.tarot.bat-hoa-lua-chon-sai-mat": {
+  "t": "不和、選擇錯誤、失衡。可能是基於錯誤的理由做選擇，或在迴避一個重要的決定。",
+  "h": "a6e61673"
+ },
+ "js.tarot.bat-ngo": {
+  "t": "意外",
+  "h": "5ae13239"
+ },
+ "js.tarot.bay": {
+  "t": "7",
+  "h": "ecfd1f8b"
+ },
+ "js.tarot.bay-coc": {
+  "t": "聖杯七",
+  "h": "b56771dd"
+ },
+ "js.tarot.bay-gay": {
+  "t": "權杖七",
+  "h": "0c3ce9af"
+ },
+ "js.tarot.bay-kiem": {
+  "t": "寶劍七",
+  "h": "0f2da0ef"
+ },
+ "js.tarot.bay-tien": {
+  "t": "錢幣七",
+  "h": "6c2ed05f"
+ },
+ "js.tarot.be-tac": {
+  "t": "僵局",
+  "h": "f0eccc13"
+ },
+ "js.tarot.be-tac-pha-vo-thong-tin": {
+  "t": "僵局被打破、訊息浮現、艱難的選擇。終於必須面對一直在逃避的現實。",
+  "h": "3ebb6325"
+ },
+ "js.tarot.be-tac-tranh-ne-khong-quyet": {
+  "t": "僵局、迴避、無法決定、脆弱的平衡。蒙住眼睛不看真相，以此逃避一個艱難的決定。",
+  "h": "294a6db6"
+ },
+ "js.tarot.ben-vung": {
+  "t": "持久",
+  "h": "c7cb7a59"
+ },
+ "js.tarot.bi-an": {
+  "t": "神祕",
+  "h": "bb6b7014"
+ },
+ "js.tarot.bi-an-lon": {
+  "t": "大阿爾克那",
+  "h": "8998484c"
+ },
+ "js.tarot.bi-mat-bi-che-giau-ngat": {
+  "t": "被隱藏的祕密、與自己斷了連結、忽略直覺。正忽視來自內心的重要徵兆。",
+  "h": "79207b16"
+ },
+ "js.tarot.bi-quan-tam-thoi-thieu-nang": {
+  "t": "暫時的悲觀、缺乏能量、自我懷疑。光明仍在那裡——只需走出陰影。",
+  "h": "8ddc44ce"
+ },
+ "js.tarot.binh-an": {
+  "t": "平安",
+  "h": "426b7fa1"
+ },
+ "js.tarot.binh-minh": {
+  "t": "黎明",
+  "h": "04166e56"
+ },
+ "js.tarot.binh-yen": {
+  "t": "平靜",
+  "h": "b702d55e"
+ },
+ "js.tarot.bo-qua-co-hoi": {
+  "t": "錯失機會",
+  "h": "fb1813f7"
+ },
+ "js.tarot.boc-dong-cam-xuc-khong-thuc": {
+  "t": "情緒衝動、不切實際、欺騙。讓情緒過度主導，或被盲目的浪漫蒙蔽。",
+  "h": "ff709375"
+ },
+ "js.tarot.boc-dong-hung-han-xung-dot": {
+  "t": "衝動、好鬥、不必要的衝突。行動過快，造成了不希望的後果。",
+  "h": "38b6b637"
+ },
+ "js.tarot.bon": {
+  "t": "4",
+  "h": "8c0bddbf"
+ },
+ "js.tarot.bon-coc": {
+  "t": "聖杯四",
+  "h": "20cc28aa"
+ },
+ "js.tarot.bon-gay": {
+  "t": "權杖四",
+  "h": "d940d4cf"
+ },
+ "js.tarot.bon-kiem": {
+  "t": "寶劍四",
+  "h": "9cc70cc4"
+ },
+ "js.tarot.bon-tien": {
+  "t": "錢幣四",
+  "h": "23371d80"
+ },
+ "js.tarot.bong-toi": {
+  "t": "黑暗",
+  "h": "0fdbc741"
+ },
+ "js.tarot.buoc-ngoat": {
+  "t": "轉捩點",
+  "h": "df3f3579"
+ },
+ "js.tarot.buong-binh-cham-chap-khong-co": {
+  "t": "固執、遲緩、沒有成果。困在習慣裡，拒絕適應。",
+  "h": "2be1dd89"
+ },
+ "js.tarot.buong-bo": {
+  "t": "放下",
+  "h": "eefa92c2"
+ },
+ "js.tarot.cach-ban-nhin-nhan-tinh-huong": {
+  "t": "您看待這個處境的方式",
+  "h": "f3db0f8c"
+ },
+ "js.tarot.cai-chet": {
+  "t": "死神",
+  "h": "c72e5c2a"
+ },
+ "js.tarot.cam-hung": {
+  "t": "靈感",
+  "h": "9571e2f8"
+ },
+ "js.tarot.cam-hung-moi-tiem-nang-sang": {
+  "t": "新的靈感、創造潛能、充滿熱情的開端。一個新專案或創意想法的種子正在萌芽。",
+  "h": "a3558583"
+ },
+ "js.tarot.cam-xuc": {
+  "t": "情緒",
+  "h": "5d160d22"
+ },
+ "js.tarot.cam-xuc-bi-chan-trai-tim": {
+  "t": "情緒被堵住、心門緊閉、愛被拒絕。在付出或接受愛上有困難。",
+  "h": "ce6a324d"
+ },
+ "js.tarot.cam-xuc-that-thuong-nhay-cam": {
+  "t": "情緒起伏不定、過度敏感、流言。訊息不可靠，或情緒太容易被牽動。",
+  "h": "eae67a95"
+ },
+ "js.tarot.can-bang": {
+  "t": "平衡",
+  "h": "9fe59d4b"
+ },
+ "js.tarot.can-bang-cam-xuc": {
+  "t": "情緒平衡",
+  "h": "d1123271"
+ },
+ "js.tarot.can-bang-kien-nhan-muc-dich": {
+  "t": "平衡、耐心、目標、和諧。走中庸之路，調和生活中對立的元素。",
+  "h": "0f7a1692"
+ },
+ "js.tarot.can-bang-thich-nghi-quan-ly": {
+  "t": "平衡、適應、時間管理。同時要兼顧許多事——需要彈性才能保持平衡。",
+  "h": "c8675dc0"
+ },
+ "js.tarot.can-dam": {
+  "t": "勇氣",
+  "h": "799eb640"
+ },
+ "js.tarot.can-dam-kien-nhan-long-trac": {
+  "t": "勇氣、耐心、慈悲、內在的自制。真正的力量來自內在，來自善良與耐心，而不是蠻力。",
+  "h": "243edf07"
+ },
+ "js.tarot.cang-thang": {
+  "t": "緊繃",
+  "h": "124a70ce"
+ },
+ "js.tarot.canh-giac": {
+  "t": "警覺",
+  "h": "75f07413"
+ },
+ "js.tarot.canh-tranh": {
+  "t": "競爭",
+  "h": "5eddba97"
+ },
+ "js.tarot.cau-hoi-cua-ban": {
+  "t": "您的問題：\"",
+  "h": "660c481c"
+ },
+ "js.tarot.cau-truc": {
+  "t": "結構",
+  "h": "0677e00b"
+ },
+ "js.tarot.cham-chi": {
+  "t": "勤奮",
+  "h": "7cfb6b94"
+ },
+ "js.tarot.cham-chi-dang-tin-kien-nhan": {
+  "t": "勤奮、可靠、有耐心、講究方法。慢而穩，相信過程，不輕言放棄。",
+  "h": "e614eac7"
+ },
+ "js.tarot.cham-chi-hoc-ky-nang-ti": {
+  "t": "勤奮、學習技能、一絲不苟、對工作的承諾。正以高度專注學習並精進技能。",
+  "h": "f7742fc6"
+ },
+ "js.tarot.cham-soc": {
+  "t": "照顧",
+  "h": "1fcae77e"
+ },
+ "js.tarot.cham-tre-hon-loan-thieu-kien": {
+  "t": "延誤、混亂、缺乏耐心。計畫被拖延，或資訊一片混亂。",
+  "h": "1d87d16c"
+ },
+ "js.tarot.chia-se": {
+  "t": "分享",
+  "h": "1cb95080"
+ },
+ "js.tarot.chien-luoc": {
+  "t": "策略",
+  "h": "a4477df9"
+ },
+ "js.tarot.chien-thang": {
+  "t": "勝利",
+  "h": "d91cbf56"
+ },
+ "js.tarot.chin": {
+  "t": "9",
+  "h": "c8fe0b37"
+ },
+ "js.tarot.chin-coc": {
+  "t": "聖杯九",
+  "h": "27c377f0"
+ },
+ "js.tarot.chin-gay": {
+  "t": "權杖九",
+  "h": "f9f17651"
+ },
+ "js.tarot.chin-kiem": {
+  "t": "寶劍九",
+  "h": "5e9ffb53"
+ },
+ "js.tarot.chin-tien": {
+  "t": "錢幣九",
+  "h": "0958d1a3"
+ },
+ "js.tarot.cho-di-nhan-lay-quao-phuc": {
+  "t": "給予、接受、祝福、交換。付出與接受之間取得了平衡。慷慨正在閃耀。",
+  "h": "ddc315a1"
+ },
+ "js.tarot.cho-doi": {
+  "t": "等待",
+  "h": "d35e8462"
+ },
+ "js.tarot.choang-ngop": {
+  "t": "不知所措",
+  "h": "f66e5ee6"
+ },
+ "js.tarot.chu-ky": {
+  "t": "週期",
+  "h": "ebc184a9"
+ },
+ "js.tarot.chu-ky-ket-thuc": {
+  "t": "週期結束",
+  "h": "6610c6f1"
+ },
+ "js.tarot.chua-hoan-chinh-thieu-ket-thuc": {
+  "t": "尚未完整、缺少結尾、拖延。已接近終點，但向前邁進之前還有事情沒有解決。",
+  "h": "91cc393b"
+ },
+ "js.tarot.chua-lanh": {
+  "t": "療癒",
+  "h": "a6742d20"
+ },
+ "js.tarot.chuan-muc": {
+  "t": "規範",
+  "h": "f3a38140"
+ },
+ "js.tarot.chuyen-doi": {
+  "t": "轉換",
+  "h": "b2ee87ff"
+ },
+ "js.tarot.chuyen-doi-roi-di-tien-ve": {
+  "t": "轉換、離開、向前走、更加平靜。離開困境，走向平靜。",
+  "h": "26e94e72"
+ },
+ "js.tarot.chuyen-dong": {
+  "t": "移動",
+  "h": "71a27fe6"
+ },
+ "js.tarot.chuyen-hoa": {
+  "t": "轉化",
+  "h": "c4b88b2f"
+ },
+ "js.tarot.co-don": {
+  "t": "孤單",
+  "h": "db8cff43"
+ },
+ "js.tarot.co-hoi": {
+  "t": "機會",
+  "h": "da02f76b"
+ },
+ "js.tarot.co-hoi-bi-bo-lo-thieu": {
+  "t": "錯失機會、缺乏財務規劃、浪費。機會是有的，卻沒有被妥善把握。",
+  "h": "0cb3876a"
+ },
+ "js.tarot.co-hoi-moi-hoc-hoi-thuc": {
+  "t": "新機會、實務學習、專注、金錢方面的消息。對實際事務抱持好學的精神。",
+  "h": "1a94fa49"
+ },
+ "js.tarot.co-hoi-moi-ve-tai-chinh": {
+  "t": "財務上的新機會、繁榮、穩定、物質基礎。繁榮與物質穩定的種子。",
+  "h": "79c8a314"
+ },
+ "js.tarot.co-lap-co-don-khong-mong": {
+  "t": "孤立、不想要的孤單、逃避社交。把自己關起來，或錯過了與他人有意義的連結。",
+  "h": "c3a3ce89"
+ },
+ "js.tarot.co-xe": {
+  "t": "戰車",
+  "h": "72d5cdd1"
+ },
+ "js.tarot.coc-nuoc": {
+  "t": "聖杯 ♦ 水",
+  "h": "bd8c22ad"
+ },
+ "js.tarot.cong-bang": {
+  "t": "公平",
+  "h": "53a179d6"
+ },
+ "js.tarot.cong-bang-su-that-nhan-qua": {
+  "t": "公平、真相、因果、法律。每個行為都有後果。平衡與公正將得到恢復。",
+  "h": "a47c3677"
+ },
+ "js.tarot.cong-dong": {
+  "t": "社群",
+  "h": "a0164a17"
+ },
+ "js.tarot.cong-ly": {
+  "t": "正義",
+  "h": "da42b3eb"
+ },
+ "js.tarot.cong-nhan": {
+  "t": "肯定",
+  "h": "881d0ab6"
+ },
+ "js.tarot.cung-nhac-giao-dieu-pha-vo": {
+  "t": "僵化、教條、打破規則。正在挑戰傳統價值，或被他人的期待所束縛。",
+  "h": "921246d8"
+ },
+ "js.tarot.da-nhiem": {
+  "t": "一心多用",
+  "h": "033ec2c3"
+ },
+ "js.tarot.dam-me": {
+  "t": "熱情",
+  "h": "60bf63eb"
+ },
+ "js.tarot.dang-tin": {
+  "t": "可靠",
+  "h": "7a063188"
+ },
+ "js.tarot.dang-xao-bai": {
+  "t": "洗牌中...",
+  "h": "033fb9a0"
+ },
+ "js.tarot.danh-gia": {
+  "t": "評估",
+  "h": "d0170783"
+ },
+ "js.tarot.danh-gia-kien-nhan-dau-tu": {
+  "t": "評估、耐心、長期投資、等待成果。正在等待播下的種子發芽——需要耐心。",
+  "h": "26d0fe8d"
+ },
+ "js.tarot.danh-gia-lai": {
+  "t": "重新評估",
+  "h": "9c307658"
+ },
+ "js.tarot.dao-duc": {
+  "t": "道德",
+  "h": "8b9a81eb"
+ },
+ "js.tarot.dau-buon": {
+  "t": "哀傷",
+  "h": "e39a2dbc"
+ },
+ "js.tarot.dau-buon-tu-choi-noi-dau": {
+  "t": "哀傷、拒絕、痛苦、心碎。痛苦與創傷是療癒過程的一部分。",
+  "h": "62b7289d"
+ },
+ "js.tarot.dau-tranh": {
+  "t": "奮鬥",
+  "h": "825f819b"
+ },
+ "js.tarot.dau-tu": {
+  "t": "投資",
+  "h": "2b64c568"
+ },
+ "js.tarot.di-san": {
+  "t": "傳承",
+  "h": "e7b22b5e"
+ },
+ "js.tarot.dieu-dang-can-tro-hay-thach": {
+  "t": "正在阻礙或考驗您的事",
+  "h": "13130a2b"
+ },
+ "js.tarot.dieu-do": {
+  "t": "節制",
+  "h": "98818c96"
+ },
+ "js.tarot.dieu-do-v85g": {
+  "t": "節制",
+  "h": "ab4d0c9e"
+ },
+ "js.tarot.dieu-gi-do-vua-qua-anh": {
+  "t": "剛過去、影響著當前處境的事",
+  "h": "040ee16c"
+ },
+ "js.tarot.dieu-sap-xay-ra-trong-thoi": {
+  "t": "短期內即將發生的事",
+  "h": "6072c9be"
+ },
+ "js.tarot.dieu-tot-nhat-co-the-dat": {
+  "t": "最好能達成的結果",
+  "h": "ed7cbcf1"
+ },
+ "js.tarot.do-vo": {
+  "t": "崩塌",
+  "h": "cbe2ec05"
+ },
+ "js.tarot.doanh-nghiep": {
+  "t": "事業經營",
+  "h": "42d66217"
+ },
+ "js.tarot.doc-doan-boc-dong-ky-vong": {
+  "t": "專斷、衝動、期望過高。以強迫而非啟發的方式領導。",
+  "h": "cf6413f9"
+ },
+ "js.tarot.doc-doan-kiem-soat-qua-muc": {
+  "t": "專斷、過度控制、缺乏彈性。以不當方式運用權力，或被他人控制。",
+  "h": "cabba9ca"
+ },
+ "js.tarot.doc-doan-lam-dung-quyen-luc": {
+  "t": "專斷、濫用權力、操弄。運用智慧來控制，而不是引導。",
+  "h": "3b7907f5"
+ },
+ "js.tarot.doc-lap": {
+  "t": "獨立",
+  "h": "404a2001"
+ },
+ "js.tarot.doc-lap-sac-ben-truc-tiep": {
+  "t": "獨立、敏銳、直接、經驗。聰明而直接的人，判斷不被情緒蒙蔽。",
+  "h": "f42549a0"
+ },
+ "js.tarot.doc-lap-tai-chinh-tu-tuc": {
+  "t": "財務獨立、自給自足、優渥、圓滿。已達到穩定與自主。享受勞動的成果。",
+  "h": "3fc7e095"
+ },
+ "js.tarot.dot-pha": {
+  "t": "突破",
+  "h": "121fffd9"
+ },
+ "js.tarot.dung-cam": {
+  "t": "勇敢",
+  "h": "84c15aad"
+ },
+ "js.tarot.ganh-nang": {
+  "t": "重擔",
+  "h": "30a55453"
+ },
+ "js.tarot.ganh-nang-trach-nhiem-qua-muc": {
+  "t": "重擔、責任過重、壓力。正承受太多。需要放下不再必要的東西。",
+  "h": "4123f0d7"
+ },
+ "js.tarot.gay-lua": {
+  "t": "權杖 ♦ 火",
+  "h": "0a933fcd"
+ },
+ "js.tarot.gia-dinh": {
+  "t": "家庭",
+  "h": "bf9b33dc"
+ },
+ "js.tarot.giac-mo": {
+  "t": "夢想",
+  "h": "cd70581d"
+ },
+ "js.tarot.giai-phong-thoat-khoi-rang-buoc": {
+  "t": "解放、擺脫束縛、覺察。開始意識到並斬斷不健康的牽絆。",
+  "h": "7495bee8"
+ },
+ "js.tarot.giao-duc": {
+  "t": "教育",
+  "h": "59c0feb9"
+ },
+ "js.tarot.giao-hoang": {
+  "t": "教皇",
+  "h": "62969d47"
+ },
+ "js.tarot.giau-co": {
+  "t": "富足",
+  "h": "e81892ac"
+ },
+ "js.tarot.giau-co-di-san-hanh-phuc": {
+  "t": "富足、傳承、家庭幸福、物質圓滿。與家人及後代共享的長久繁榮。",
+  "h": "dbc78694"
+ },
+ "js.tarot.goc-nhin-moi": {
+  "t": "新視角",
+  "h": "fcb22fff"
+ },
+ "js.tarot.hai": {
+  "t": "二",
+  "h": "916c7bfc"
+ },
+ "js.tarot.hai-coc": {
+  "t": "聖杯二",
+  "h": "ca8b937f"
+ },
+ "js.tarot.hai-gay": {
+  "t": "權杖二",
+  "h": "343b9500"
+ },
+ "js.tarot.hai-hoa": {
+  "t": "和諧",
+  "h": "deffa707"
+ },
+ "js.tarot.hai-kiem": {
+  "t": "寶劍二",
+  "h": "0781f893"
+ },
+ "js.tarot.hai-long": {
+  "t": "滿足",
+  "h": "525c3ad0"
+ },
+ "js.tarot.hai-tien": {
+  "t": "錢幣二",
+  "h": "48417e91"
+ },
+ "js.tarot.han-che": {
+  "t": "限制",
+  "h": "0fb75911"
+ },
+ "js.tarot.hanh-dong": {
+  "t": "行動",
+  "h": "8e9fdd28"
+ },
+ "js.tarot.hanh-phuc": {
+  "t": "幸福",
+  "h": "68d680dc"
+ },
+ "js.tarot.hanh-phuc-gia-dinh": {
+  "t": "家庭幸福",
+  "h": "9bbe6e27"
+ },
+ "js.tarot.hanh-phuc-gia-dinh-hai-hoa": {
+  "t": "家庭幸福、和諧、長久的滿足。感情關係中真正的幸福與圓滿。",
+  "h": "f3ecb4d8"
+ },
+ "js.tarot.hao-phong": {
+  "t": "慷慨",
+  "h": "ed42ce8c"
+ },
+ "js.tarot.hao-phong-buong-bo-mo-cua": {
+  "t": "慷慨、放下、為豐盛打開大門。開始鬆開對物質的執著。",
+  "h": "9df21f91"
+ },
+ "js.tarot.hh": {
+  "t": "皇后",
+  "h": "fc5d4b91"
+ },
+ "js.tarot.hien-tai": {
+  "t": "現在",
+  "h": "cd16704d"
+ },
+ "js.tarot.hoa-giai-hoi-han-giai-quyet": {
+  "t": "和解、悔意、化解衝突。正從錯誤中學習並尋求補救。",
+  "h": "99209079"
+ },
+ "js.tarot.hoa-hop": {
+  "t": "融洽",
+  "h": "6c6047bd"
+ },
+ "js.tarot.hoai-niem": {
+  "t": "懷舊",
+  "h": "ed7fb958"
+ },
+ "js.tarot.hoai-niem-tuoi-tho-ky-niem": {
+  "t": "懷舊、童年、回憶、美好的記憶。帶著情感回望過去。與內在小孩連結。",
+  "h": "e654cb98"
+ },
+ "js.tarot.hoan-chinh": {
+  "t": "圓滿",
+  "h": "2ebc0bff"
+ },
+ "js.tarot.hoan-chinh-thanh-tich-hoi-nhap": {
+  "t": "圓滿、成就、整合、旅程終點。週期已經完成。是慶祝成就並為新旅程做準備的時刻。",
+  "h": "eb501df8"
+ },
+ "js.tarot.hoang-de": {
+  "t": "皇帝",
+  "h": "358b3e7f"
+ },
+ "js.tarot.hoang-hau": {
+  "t": "皇后",
+  "h": "744dea49"
+ },
+ "js.tarot.hoang-hau-coc": {
+  "t": "聖杯王后",
+  "h": "dc461129"
+ },
+ "js.tarot.hoang-hau-gay": {
+  "t": "權杖王后",
+  "h": "992e6e16"
+ },
+ "js.tarot.hoang-hau-kiem": {
+  "t": "寶劍王后",
+  "h": "a86a3815"
+ },
+ "js.tarot.hoang-hau-tien": {
+  "t": "錢幣王后",
+  "h": "0fb40181"
+ },
+ "js.tarot.hoc-hoi": {
+  "t": "學習",
+  "h": "7e024951"
+ },
+ "js.tarot.hoi-nhap": {
+  "t": "融入",
+  "h": "9569d251"
+ },
+ "js.tarot.hoi-tiec": {
+  "t": "悔恨",
+  "h": "08252707"
+ },
+ "js.tarot.hon-loan": {
+  "t": "混亂",
+  "h": "9e13eef7"
+ },
+ "js.tarot.hon-loan-dot-ngot-do-vo": {
+  "t": "突如其來的混亂、崩塌、啟示、覺醒。突然的衝擊打碎了舊結構。痛苦，卻是建造更好事物所必須。",
+  "h": "5afd0921"
+ },
+ "js.tarot.hon-loan-thieu-ro-rang-noi": {
+  "t": "混亂、不清晰、謊言。思考被情緒或錯誤的資訊蒙蔽。",
+  "h": "db763267"
+ },
+ "js.tarot.hop-tac": {
+  "t": "合作",
+  "h": "d934a7d7"
+ },
+ "js.tarot.hy-vong": {
+  "t": "希望",
+  "h": "5dddc812"
+ },
+ "js.tarot.hy-vong-cam-hung-binh-an": {
+  "t": "希望、靈感、平安、更新。黑暗過後就是光明。是療癒並相信未來的時刻。",
+  "h": "cf44e5ec"
+ },
+ "js.tarot.hy-vong-lo-so": {
+  "t": "希望與恐懼",
+  "h": "c01fa9b0"
+ },
+ "js.tarot.hy-vong-sau-nhat-hoac-noi": {
+  "t": "您最深的希望，或最深的恐懼",
+  "h": "a3d49660"
+ },
+ "js.tarot.ke-hoach": {
+  "t": "計畫",
+  "h": "2bc4293e"
+ },
+ "js.tarot.ke-hoach-tuong-lai-quyet-dinh": {
+  "t": "未來的規劃、決定、向前邁進。站在十字路口，面前是廣闊的世界。是規劃並選擇方向的時刻。",
+  "h": "b56dcb55"
+ },
+ "js.tarot.ke-kho": {
+  "t": "愚者",
+  "h": "e6fdc14b"
+ },
+ "js.tarot.ke-treo-nguoc": {
+  "t": "倒吊人",
+  "h": "a41b6340"
+ },
+ "js.tarot.ket-noi": {
+  "t": "連結",
+  "h": "62b5a5f2"
+ },
+ "js.tarot.ket-qua": {
+  "t": "結果",
+  "h": "75ff233d"
+ },
+ "js.tarot.ket-qua-co-kha-nang-xay": {
+  "t": "最有可能發生的結果",
+  "h": "ffb4563c"
+ },
+ "js.tarot.ket-qua-tarot-cua-toi": {
+  "t": "我的塔羅牌結果",
+  "h": "50690c7b"
+ },
+ "js.tarot.ket-thuc": {
+  "t": "結束",
+  "h": "9c1ae4f5"
+ },
+ "js.tarot.ket-thuc-chuyen-hoa-thay-doi": {
+  "t": "結束、轉化、必然的改變、新的開始。這不是肉體的死亡——而是一個階段的結束與新事物的重生。",
+  "h": "fc08fee1"
+ },
+ "js.tarot.ket-thuc-dau-don-mat-mat": {
+  "t": "痛苦的結束、失去、背叛，但已是終點。最黑暗的週期已走到盡頭——從這裡只會向上。",
+  "h": "477ee7fc"
+ },
+ "js.tarot.keu-goi": {
+  "t": "召喚",
+  "h": "9ca505de"
+ },
+ "js.tarot.kha-nang-tot-nhat": {
+  "t": "最佳可能",
+  "h": "6cd09562"
+ },
+ "js.tarot.khai-thi": {
+  "t": "啟示",
+  "h": "5fc23362"
+ },
+ "js.tarot.kham-pha": {
+  "t": "探索",
+  "h": "2dcfd93c"
+ },
+ "js.tarot.kham-pha-nhiet-tinh-y-tuong": {
+  "t": "探索、熱情、新點子、自由。年輕而渴望的能量。準備好探索新的領域。",
+  "h": "8ffe2051"
+ },
+ "js.tarot.khang-cu-roi-di-khong-tien": {
+  "t": "抗拒離開、無法前進、走回頭路。知道需要改變，卻無法離開舊的處境。",
+  "h": "97c48b6b"
+ },
+ "js.tarot.khang-cu-thay-doi-tri-tre": {
+  "t": "抗拒改變、停滯、害怕結束。緊抓著已不再對您有益的事物。",
+  "h": "6fc778d3"
+ },
+ "js.tarot.kho-khan": {
+  "t": "困難",
+  "h": "20912ebe"
+ },
+ "js.tarot.kho-khan-tai-chinh-bat-an": {
+  "t": "財務困難、不安、孤單、逆境。正經歷艱難的階段——但只要願意尋求，幫助始終存在。",
+  "h": "367e49e0"
+ },
+ "js.tarot.khoi-dau": {
+  "t": "開端",
+  "h": "cdb621fc"
+ },
+ "js.tarot.khoi-dau-moi-tu-do-tinh": {
+  "t": "全新的開始、自由、冒險精神、無限潛能。帶著信任與敞開的心踏上新旅程。這是無限可能的時刻。",
+  "h": "aef33b0d"
+ },
+ "js.tarot.khong-nghi-ngoi-duoc-ap-luc": {
+  "t": "無法休息、壓力、害怕停下來。被逼進動彈不得的狀態，卻又必須行動。",
+  "h": "0aca59aa"
+ },
+ "js.tarot.khong-quyet-dinh": {
+  "t": "無法決定",
+  "h": "f77206a9"
+ },
+ "js.tarot.khong-tu-bo": {
+  "t": "不放棄",
+  "h": "fcf2cf24"
+ },
+ "js.tarot.kiem-gio": {
+  "t": "寶劍 ♦ 風",
+  "h": "02106a2b"
+ },
+ "js.tarot.kiem-soat": {
+  "t": "掌控",
+  "h": "6d5dbb4e"
+ },
+ "js.tarot.kien-cuong": {
+  "t": "堅韌",
+  "h": "4fe1df3c"
+ },
+ "js.tarot.kien-cuong-khang-cu-bao-ve": {
+  "t": "堅韌、抵抗、保護自己。已歷經許多考驗卻仍然屹立。謹慎，但不放棄。",
+  "h": "e7ae2385"
+ },
+ "js.tarot.kien-dinh": {
+  "t": "堅定",
+  "h": "965a37b0"
+ },
+ "js.tarot.kien-nhan": {
+  "t": "耐心",
+  "h": "c3a00bf7"
+ },
+ "js.tarot.kiet-suc-buong-binh-tu-choi": {
+  "t": "精疲力竭、固執、拒絕接受幫助。過度防衛，或在漫長戰鬥後耗盡了力氣。",
+  "h": "a7fb4147"
+ },
+ "js.tarot.kiet-suc-tu-bo-ap-dao": {
+  "t": "精疲力竭、放棄、被壓垮。覺得四面受敵，難以守住自己的立場。",
+  "h": "1ed60bd8"
+ },
+ "js.tarot.kieu-ngao-ganh-ti-bat-an": {
+  "t": "傲慢、嫉妒、不安。在自信的外殼下隱藏著不確定。",
+  "h": "fc973000"
+ },
+ "js.tarot.kinh-nghiem": {
+  "t": "經驗",
+  "h": "f21e5d31"
+ },
+ "js.tarot.ky-luat": {
+  "t": "紀律",
+  "h": "c07b7fba"
+ },
+ "js.tarot.ky-nang": {
+  "t": "技能",
+  "h": "e66fff1c"
+ },
+ "js.tarot.ky-niem": {
+  "t": "回憶",
+  "h": "fc45b5c5"
+ },
+ "js.tarot.ky-si": {
+  "t": "騎士",
+  "h": "0951da5c"
+ },
+ "js.tarot.ky-si-coc": {
+  "t": "聖杯騎士",
+  "h": "26ae7686"
+ },
+ "js.tarot.ky-si-gay": {
+  "t": "權杖騎士",
+  "h": "78f1830f"
+ },
+ "js.tarot.ky-si-kiem": {
+  "t": "寶劍騎士",
+  "h": "81efef45"
+ },
+ "js.tarot.ky-si-tien": {
+  "t": "錢幣騎士",
+  "h": "eed86e10"
+ },
+ "js.tarot.la": {
+  "t": " 張",
+  "h": "f115358e"
+ },
+ "js.tarot.la-bai-nguoc-nghia-la-gi": {
+  "t": "逆位牌是什麼意思？",
+  "h": "4f75a731"
+ },
+ "js.tarot.la-dau-tien-ban-rut-duoc": {
+  "t": "您抽到的第一張牌是：**",
+  "h": "644c4dff"
+ },
+ "js.tarot.lac-quan": {
+  "t": "樂觀",
+  "h": "b7cee972"
+ },
+ "js.tarot.lam-viec-nhom-hop-tac-ky": {
+  "t": "團隊合作、協作、技能、打好基礎。一起努力創造出長久有價值的東西。",
+  "h": "c240df16"
+ },
+ "js.tarot.lang-man": {
+  "t": "浪漫",
+  "h": "8e85c1fd"
+ },
+ "js.tarot.lang-man-quyen-ru-tri-tuong": {
+  "t": "浪漫、魅力、想像力、追隨內心。一位浪漫而愛作夢的人正在到來。",
+  "h": "197f33e5"
+ },
+ "js.tarot.lanh-dao": {
+  "t": "領導",
+  "h": "d9b13441"
+ },
+ "js.tarot.lanh-dao-tam-nhin-doanh-nghiep": {
+  "t": "願景型領導、事業、榮譽、果決。以願景與靈感領導。在事業與領導上成功。",
+  "h": "c4abed99"
+ },
+ "js.tarot.lanh-lung-chua-ngoa-co-don": {
+  "t": "冷漠、尖刻、孤獨。正用銳利的智慧攻擊他人，或藉此掩飾痛苦。",
+  "h": "cb790c2c"
+ },
+ "js.tarot.lien-minh": {
+  "t": "結盟",
+  "h": "ea62092f"
+ },
+ "js.tarot.lien-minh-hop-tac-moi-quan": {
+  "t": "結盟、合作、關係、彼此吸引。兩人之間深刻而平衡的連結。",
+  "h": "50e0a848"
+ },
+ "js.tarot.lieu-linh-thieu-suy-nghi-bat": {
+  "t": "魯莽輕率、粗心、錯失機會。過度猶豫，或相反地毫無計畫就行動。",
+  "h": "962580b5"
+ },
+ "js.tarot.linh-hoat": {
+  "t": "靈活",
+  "h": "233a204d"
+ },
+ "js.tarot.lo-lang": {
+  "t": "焦慮",
+  "h": "c941251c"
+ },
+ "js.tarot.lo-lang-ac-mong-tuyet-vong": {
+  "t": "焦慮、惡夢、絕望、精神緊繃。焦慮正在掌控生活——大部分恐懼其實比現實更糟。",
+  "h": "abdb94a9"
+ },
+ "js.tarot.loi-cuon": {
+  "t": "迷人",
+  "h": "d68c5e41"
+ },
+ "js.tarot.long-tot": {
+  "t": "善良",
+  "h": "c6b5d498"
+ },
+ "js.tarot.long-trac-an-truc-giac-chua": {
+  "t": "慈悲、直覺、療癒、深刻的情感。一位心地善良、直覺敏銳的人。",
+  "h": "f9195382"
+ },
+ "js.tarot.lua-chon": {
+  "t": "選擇",
+  "h": "e8f6699f"
+ },
+ "js.tarot.lua-doi": {
+  "t": "欺騙",
+  "h": "d7dfe6f0"
+ },
+ "js.tarot.lua-doi-muu-meo-chien-luoc": {
+  "t": "欺騙、計謀、策略、迴避。在目前的處境中需要圓滑並講究策略。",
+  "h": "8efb4cd1"
+ },
+ "js.tarot.luan-giai-tung-la": {
+  "t": "逐張解讀",
+  "h": "c811697f"
+ },
+ "js.tarot.major-arcana-khac-minor-arcana-the": {
+  "t": "大阿爾克那和小阿爾克那有什麼不同？",
+  "h": "de30c37d"
+ },
+ "js.tarot.mat-can-bang-thai-qua-thieu": {
+  "t": "失衡、過度、缺乏耐心。做得太多或太少，生活中缺少節制。",
+  "h": "3fa51f62"
+ },
+ "js.tarot.mat-ket-noi-mat-can-bang": {
+  "t": "失去連結、失衡、不協調。關係出現問題，或缺乏彼此尊重。",
+  "h": "b72f2abf"
+ },
+ "js.tarot.mat-kiem-soat-cang-thang-tai": {
+  "t": "失控、財務吃緊、缺乏條理。想做的事太多，一切開始崩落。",
+  "h": "3a7b876d"
+ },
+ "js.tarot.mat-mat": {
+  "t": "失去",
+  "h": "084a6741"
+ },
+ "js.tarot.mat-mat-hoi-tiec-dau-buon": {
+  "t": "失去、悔恨、哀傷、專注於負面。哀嘆失去的，卻沒看見仍然擁有的。",
+  "h": "ced3b574"
+ },
+ "js.tarot.mat-mat-tai-san-rac-roi": {
+  "t": "財產損失、家庭麻煩、抵押。與家庭或遺產有關的財務風險。",
+  "h": "8ff6f9c1"
+ },
+ "js.tarot.mat-trang": {
+  "t": "月亮",
+  "h": "1c9bc170"
+ },
+ "js.tarot.mat-troi": {
+  "t": "太陽",
+  "h": "5593c0c1"
+ },
+ "js.tarot.mau-thuan-gia-dinh-thieu-cong": {
+  "t": "家庭矛盾、缺乏社群、慶典延期。家中或親近的圈子裡出現麻煩。",
+  "h": "ca840a54"
+ },
+ "js.tarot.mo-mong": {
+  "t": "夢幻",
+  "h": "be0655e3"
+ },
+ "js.tarot.mo-rong": {
+  "t": "擴展",
+  "h": "d91c6264"
+ },
+ "js.tarot.mo-rong-tam-nhin-xa-co": {
+  "t": "擴展、遠見、機會正在到來。已播下的計畫開始結果。帶著自信眺望地平線。",
+  "h": "f091f769"
+ },
+ "js.tarot.moi-truong": {
+  "t": "環境",
+  "h": "8a3461c1"
+ },
+ "js.tarot.mu-quang": {
+  "t": "盲目",
+  "h": "efd5bf7d"
+ },
+ "js.tarot.muoi": {
+  "t": "10",
+  "h": "6f2ebecd"
+ },
+ "js.tarot.muoi-coc": {
+  "t": "聖杯十",
+  "h": "007f04a2"
+ },
+ "js.tarot.muoi-gay": {
+  "t": "權杖十",
+  "h": "5e9e3e2e"
+ },
+ "js.tarot.muoi-kiem": {
+  "t": "寶劍十",
+  "h": "eb24cbee"
+ },
+ "js.tarot.muoi-tien": {
+  "t": "錢幣十",
+  "h": "629f7264"
+ },
+ "js.tarot.muu-meo": {
+  "t": "計謀",
+  "h": "db19d7b9"
+ },
+ "js.tarot.nam": {
+  "t": "5",
+  "h": "98926c7e"
+ },
+ "js.tarot.nam-coc": {
+  "t": "聖杯五",
+  "h": "47d0be16"
+ },
+ "js.tarot.nam-gay": {
+  "t": "權杖五",
+  "h": "635ee3cc"
+ },
+ "js.tarot.nam-kiem": {
+  "t": "寶劍五",
+  "h": "1bddc805"
+ },
+ "js.tarot.nam-tien": {
+  "t": "錢幣五",
+  "h": "519fa35d"
+ },
+ "js.tarot.nang-luong-dam-me-phieu-luu": {
+  "t": "能量、熱情、冒險、大膽的行動。帶著熱忱與決心向前衝。是果斷行動的時刻。",
+  "h": "c1ddcbe2"
+ },
+ "js.tarot.nang-luong-va-thong-diep-chinh": {
+  "t": "針對您的問題的能量與主要訊息",
+  "h": "db896f24"
+ },
+ "js.tarot.nap-nang-luong": {
+  "t": "充電",
+  "h": "bd1960f0"
+ },
+ "js.tarot.nen-hoi-tarot-cau-hoi-kieu": {
+  "t": "問塔羅該問什麼樣的問題？",
+  "h": "a40f1c85"
+ },
+ "js.tarot.nen-tang": {
+  "t": "根基",
+  "h": "4676be0d"
+ },
+ "js.tarot.nen-tang-va-nhung-gi-da": {
+  "t": "基礎，以及導致目前處境的原因",
+  "h": "d78b97c9"
+ },
+ "js.tarot.nen-tang-xa-hon-cua-tinh": {
+  "t": "這個處境更遙遠的根基",
+  "h": "9b5f190e"
+ },
+ "js.tarot.nga-man-khong-duoc-cong-nhan": {
+  "t": "傲慢、未被肯定、缺乏自信。成功沒有被看見，或是讓成功使您變得自大。",
+  "h": "86d6ca8c"
+ },
+ "js.tarot.nghi-ngoi": {
+  "t": "休息",
+  "h": "674b9610"
+ },
+ "js.tarot.nghi-ngoi-thu-gian-phuc-hoi": {
+  "t": "休息、放鬆、恢復、冥想。需要時間復原，為即將到來的事做好準備。",
+  "h": "bf54a20e"
+ },
+ "js.tarot.nghich-canh": {
+  "t": "逆境",
+  "h": "9c12da1a"
+ },
+ "js.tarot.ngoai-giao": {
+  "t": "外交",
+  "h": "3fd7aa56"
+ },
+ "js.tarot.ngoi-sao": {
+  "t": "星星",
+  "h": "b7e41981"
+ },
+ "js.tarot.nguoc": {
+  "t": " (逆位)",
+  "h": "c924d203"
+ },
+ "js.tarot.nguoc-2": {
+  "t": "逆位",
+  "h": "5865440a"
+ },
+ "js.tarot.nguoc-wrh9": {
+  "t": "↕ 逆位",
+  "h": "e3f3b5df"
+ },
+ "js.tarot.nguoi-me-nuoi-duong-thuc-te": {
+  "t": "滋養的母親、務實、富足、家務。在照顧他人的同時，也建立物質上的穩定。",
+  "h": "56a867ec"
+ },
+ "js.tarot.nguoi-yeu": {
+  "t": "戀人",
+  "h": "711c866b"
+ },
+ "js.tarot.nhan-hau": {
+  "t": "仁厚",
+  "h": "fd0bda7a"
+ },
+ "js.tarot.nhan-qua": {
+  "t": "因果",
+  "h": "ff35f868"
+ },
+ "js.tarot.nhay-cam": {
+  "t": "敏感",
+  "h": "7aefeb15"
+ },
+ "js.tarot.nhiet-huyet": {
+  "t": "熱血",
+  "h": "d5f61be3"
+ },
+ "js.tarot.nhiet-tinh": {
+  "t": "熱忱",
+  "h": "8ef7ed53"
+ },
+ "js.tarot.nhung-nguoi-va-nang-luong-xung": {
+  "t": "您周遭的人與能量",
+  "h": "ea9c4c71"
+ },
+ "js.tarot.niem-vui": {
+  "t": "喜悅",
+  "h": "86cf7ad6"
+ },
+ "js.tarot.niem-vui-thanh-cong-suc-song": {
+  "t": "喜悅、成功、活力、樂觀。光明照進每個陰暗的角落。是幸福、清晰與成功的時期。",
+  "h": "a10de419"
+ },
+ "js.tarot.no-nan-long-tot-gia-tao": {
+  "t": "債務、虛假的善意、不平等的權力。附帶條件的慷慨，或出於錯誤目的的交換。",
+  "h": "d421f276"
+ },
+ "js.tarot.noi-so-duoc-giai-phong-su": {
+  "t": "恐懼獲得釋放、真相被揭露、頭腦清明。逐漸看穿幻象，找到真相。",
+  "h": "8e952f0b"
+ },
+ "js.tarot.noi-tam": {
+  "t": "內在",
+  "h": "22b1e894"
+ },
+ "js.tarot.noi-tam-co-don-co-y": {
+  "t": "內省、有意義的孤獨、探求真理、內在指引。退隱沉思、尋求內在清明的時期。",
+  "h": "11e70a2d"
+ },
+ "js.tarot.nong-voi-hung-hang-lieu-linh": {
+  "t": "急躁、好鬥、魯莽輕率。行動太快，沒有事先規劃。",
+  "h": "0a3cef78"
+ },
+ "js.tarot.nu-tinh": {
+  "t": "陰柔",
+  "h": "3d37d12c"
+ },
+ "js.tarot.nu-tinh-phong-phu-nuoi-duong": {
+  "t": "陰柔、豐盛、滋養、創造、自然。是繁衍與成長的時期。愛與關懷的能量正在閃耀。",
+  "h": "e08487cb"
+ },
+ "js.tarot.nu-tu-te": {
+  "t": "女祭司",
+  "h": "d7a0a7b2"
+ },
+ "js.tarot.nuoi-duong": {
+  "t": "滋養",
+  "h": "5f526834"
+ },
+ "js.tarot.on-dinh": {
+  "t": "穩定",
+  "h": "a3b55fa0"
+ },
+ "js.tarot.phan-anh-danh-gia-su-thuc": {
+  "t": "反思、評估、覺醒、寬恕。一個階段即將結束，而您受到召喚。是檢視過去、邁向更高層次的時刻。",
+  "h": "708013a1"
+ },
+ "js.tarot.phan-quyet": {
+  "t": "裁決",
+  "h": "3563d651"
+ },
+ "js.tarot.phan-xet": {
+  "t": "審判",
+  "h": "860b3d6a"
+ },
+ "js.tarot.phap-su": {
+  "t": "魔術師",
+  "h": "6bfbec68"
+ },
+ "js.tarot.phieu-luu": {
+  "t": "冒險",
+  "h": "a6fbde5c"
+ },
+ "js.tarot.phong-phu": {
+  "t": "豐盛",
+  "h": "5163c0e2"
+ },
+ "js.tarot.phong-thu": {
+  "t": "防禦",
+  "h": "fb43f1c0"
+ },
+ "js.tarot.phong-thu-ben-vung-kien-dinh": {
+  "t": "防禦、持久、堅定、為自己的位置而戰。必須在外界的壓力與挑戰面前站穩腳跟。",
+  "h": "d1354a64"
+ },
+ "js.tarot.phu-thuoc-cam-xuc-bat-an": {
+  "t": "情緒依賴、不安、承接他人的情緒。被他人的情緒捲入，或失去內心的平衡。",
+  "h": "f021531e"
+ },
+ "js.tarot.phu-thuoc-sang-tao-bi-chan": {
+  "t": "依賴、創造力受阻、缺乏自我照顧。可能付出太多卻沒有回報，或忽略了自己。",
+  "h": "12809afb"
+ },
+ "js.tarot.phu-thuoc-tai-chinh-that-bai": {
+  "t": "財務依賴、專案失敗、短期。尚未達到想要的自主，或是花費過度。",
+  "h": "01d543bd"
+ },
+ "js.tarot.phu-thuoc-thieu-su-can-bang": {
+  "t": "依賴、缺乏平衡、疏忽工作。在照顧他人與照顧自己之間失去了平衡。",
+  "h": "88362997"
+ },
+ "js.tarot.phuc-hoi": {
+  "t": "恢復",
+  "h": "0d10e44d"
+ },
+ "js.tarot.phuc-hoi-khong-the-tranh-khoi": {
+  "t": "復原、無可避免、抗拒結局。拒絕接受無可避免的結束。",
+  "h": "c46ceb23"
+ },
+ "js.tarot.phuc-hoi-tai-chinh-cai-thien": {
+  "t": "財務復原、改善、接受幫助。正逐步走出艱難時期。",
+  "h": "9d043f7d"
+ },
+ "js.tarot.phuc-hoi-tu-lo-lang-nhan": {
+  "t": "從焦慮中復原、認清恐懼、尋求幫助。在一段焦慮的時期之後，漸漸找到平靜。",
+  "h": "247a9b66"
+ },
+ "js.tarot.phuong-phap": {
+  "t": "方法",
+  "h": "4f7ecd74"
+ },
+ "js.tarot.qua-khu": {
+  "t": "過去",
+  "h": "75e794ae"
+ },
+ "js.tarot.qua-khu-gan": {
+  "t": "近期過去",
+  "h": "0baf0401"
+ },
+ "js.tarot.qua-khu-xa": {
+  "t": "遠期過去",
+  "h": "699e8c97"
+ },
+ "js.tarot.qua-tai": {
+  "t": "超載",
+  "h": "f57b3191"
+ },
+ "js.tarot.quyen-luc": {
+  "t": "權力",
+  "h": "78028efc"
+ },
+ "js.tarot.quyen-ru": {
+  "t": "魅惑",
+  "h": "15281d2f"
+ },
+ "js.tarot.quyet-dinh": {
+  "t": "決定",
+  "h": "9d2b5881"
+ },
+ "js.tarot.quyet-doan": {
+  "t": "果決",
+  "h": "5cbca4c7"
+ },
+ "js.tarot.quyet-tam": {
+  "t": "決心",
+  "h": "4c971f00"
+ },
+ "js.tarot.ran-nut-gia-dinh-mau-thuan": {
+  "t": "家庭出現裂痕、矛盾、不和。家中或親近的關係裡有緊張。",
+  "h": "19e7f95b"
+ },
+ "js.tarot.rang-buoc": {
+  "t": "束縛",
+  "h": "236d5168"
+ },
+ "js.tarot.rang-buoc-vat-chat-am-anh": {
+  "t": "束縛、物質、執念、內心的陰影。被某樣東西綁住——金錢、有毒的關係，或壞習慣。意識到束縛是擺脫的第一步。",
+  "h": "2cc0b28d"
+ },
+ "js.tarot.ro-rang": {
+  "t": "清晰",
+  "h": "587b2a48"
+ },
+ "js.tarot.ro-rang-su-that-dot-pha": {
+  "t": "清晰、真相、突破、智慧。全新的覺察與敏銳的思考。是斬斷曖昧不明的時刻。",
+  "h": "671fa7df"
+ },
+ "js.tarot.roi-di": {
+  "t": "離開",
+  "h": "f9788f93"
+ },
+ "js.tarot.rut-lui": {
+  "t": "退隱",
+  "h": "76180c8c"
+ },
+ "js.tarot.sac-ben": {
+  "t": "敏銳",
+  "h": "8aea464b"
+ },
+ "js.tarot.sang-suot": {
+  "t": "明智",
+  "h": "0e82a022"
+ },
+ "js.tarot.sang-tao": {
+  "t": "創造",
+  "h": "d4aba4d3"
+ },
+ "js.tarot.sang-trong": {
+  "t": "優渥",
+  "h": "10b54509"
+ },
+ "js.tarot.sau": {
+  "t": "6",
+  "h": "8d7feaa0"
+ },
+ "js.tarot.sau-coc": {
+  "t": "聖杯六",
+  "h": "a10d544c"
+ },
+ "js.tarot.sau-gay": {
+  "t": "權杖六",
+  "h": "edcb5340"
+ },
+ "js.tarot.sau-kiem": {
+  "t": "寶劍六",
+  "h": "cb249633"
+ },
+ "js.tarot.sau-tien": {
+  "t": "錢幣六",
+  "h": "9923dba5"
+ },
+ "js.tarot.so-hai": {
+  "t": "恐懼",
+  "h": "d33e3545"
+ },
+ "js.tarot.so-thay-doi-ke-hoach-te": {
+  "t": "害怕改變、計畫不佳、缺乏遠見。猶豫不決，不敢踏出舒適圈。",
+  "h": "0f7546f6"
+ },
+ "js.tarot.so-tu-bo-tri-tre-so": {
+  "t": "害怕放棄、停滯、害怕改變。知道該離開，卻不敢邁出腳步。",
+  "h": "5dd509cc"
+ },
+ "js.tarot.song-trong-qua-khu-thieu-truong": {
+  "t": "活在過去、不夠成熟、受困。因為太眷戀過去，無法向前走。",
+  "h": "362e484d"
+ },
+ "js.tarot.su-ro-rang-sau-hon-loan": {
+  "t": "混亂之後的清明、明智的選擇、務實。開始看清楚，並做出務實的決定。",
+  "h": "170ee602"
+ },
+ "js.tarot.su-that": {
+  "t": "真相",
+  "h": "5a83f94e"
+ },
+ "js.tarot.su-thinh-vuong-kinh-doanh-lanh": {
+  "t": "繁榮、事業、領導、穩定。已建立穩固的物質基礎，並以智慧領導。",
+  "h": "6ecfeeda"
+ },
+ "js.tarot.su-tri-hoan-thieu-dong-luc": {
+  "t": "拖延、缺乏動力、能量受阻。想法尚未成熟，或缺乏讓它成長的環境。",
+  "h": "aa1e2bfa"
+ },
+ "js.tarot.suc-manh": {
+  "t": "力量",
+  "h": "d80962d4"
+ },
+ "js.tarot.suc-song": {
+  "t": "活力",
+  "h": "631e6cca"
+ },
+ "js.tarot.suy-ngam": {
+  "t": "沉思",
+  "h": "7fae55bc"
+ },
+ "js.tarot.suy-nghi-noi-tam-tho-o": {
+  "t": "內心思索、冷漠、重新評估、厭倦。沉溺於思考，而忽略了就在眼前的機會。",
+  "h": "aeb70685"
+ },
+ "js.tarot.tai-chinh": {
+  "t": "財務",
+  "h": "d82a9c42"
+ },
+ "js.tarot.tai-nang": {
+  "t": "才能",
+  "h": "808a29da"
+ },
+ "js.tarot.tai-sinh": {
+  "t": "重生",
+  "h": "ccee4311"
+ },
+ "js.tarot.tam": {
+  "t": "8",
+  "h": "0e3fc5e2"
+ },
+ "js.tarot.tam-coc": {
+  "t": "聖杯八",
+  "h": "1b70bf71"
+ },
+ "js.tarot.tam-dung": {
+  "t": "暫停",
+  "h": "b8d3bf31"
+ },
+ "js.tarot.tam-dung-buong-bo-hien-te": {
+  "t": "暫停、放下、犧牲、新視角。有時需要停下來，從另一個角度看事情。放下控制，才能獲得啟發。",
+  "h": "03ce458d"
+ },
+ "js.tarot.tam-gay": {
+  "t": "權杖八",
+  "h": "6154b794"
+ },
+ "js.tarot.tam-kiem": {
+  "t": "寶劍八",
+  "h": "05881e39"
+ },
+ "js.tarot.tam-linh": {
+  "t": "靈性",
+  "h": "51457a59"
+ },
+ "js.tarot.tam-nhin": {
+  "t": "願景",
+  "h": "d1753f25"
+ },
+ "js.tarot.tam-nhin-xa": {
+  "t": "遠見",
+  "h": "5d4e5e07"
+ },
+ "js.tarot.tam-tien": {
+  "t": "錢幣八",
+  "h": "6bd07c8a"
+ },
+ "js.tarot.tao-bao": {
+  "t": "大膽",
+  "h": "2a1e2d46"
+ },
+ "js.tarot.tap-trung": {
+  "t": "專注",
+  "h": "b94e8d2e"
+ },
+ "js.tarot.tarot-78-la": {
+  "t": "塔羅牌 78 張 — ",
+  "h": "b98544b5"
+ },
+ "js.tarot.tha-thu": {
+  "t": "寬恕",
+  "h": "ae62fb04"
+ },
+ "js.tarot.tha-thu-chua-lanh-tien-len": {
+  "t": "寬恕、療癒、向前走。正逐漸從傷痛中療癒，並找到前進的路。",
+  "h": "dfd5bdf9"
+ },
+ "js.tarot.thach-thuc": {
+  "t": "挑戰",
+  "h": "1576629b"
+ },
+ "js.tarot.thai-qua-co-don-xung-dot": {
+  "t": "過度、孤單、群體衝突。慶祝被濫用，或朋友圈中有緊張。",
+  "h": "ac2121aa"
+ },
+ "js.tarot.tham-lam-tham-nhung-quan-ly": {
+  "t": "貪婪、腐敗、管理不善、保守。以不正當的方式運用金錢與權力。",
+  "h": "a745fc02"
+ },
+ "js.tarot.tham-lam-vat-chat-hoa-hanh": {
+  "t": "貪婪、把幸福物質化、不知足。在錯誤的地方尋找幸福。",
+  "h": "6bba52ee"
+ },
+ "js.tarot.tham-quyen-cau-truc-on-dinh": {
+  "t": "權威、結構、穩定、紀律。是建立穩固基礎的時刻。以負責任的方式領導並掌控局勢。",
+  "h": "e03fdb94"
+ },
+ "js.tarot.tham-quyen-tri-tue-su-that": {
+  "t": "智慧的權威、真相、道德、明智的決定。思路清晰，裁斷公正。",
+  "h": "d1105b27"
+ },
+ "js.tarot.tham-vong": {
+  "t": "野心",
+  "h": "9b13396e"
+ },
+ "js.tarot.tham-vong-hanh-dong-quyet-doan": {
+  "t": "野心、果斷的行動、直率、勇敢。以鋼鐵般的決心奔向目標。",
+  "h": "11fb3744"
+ },
+ "js.tarot.than-trong": {
+  "t": "審慎",
+  "h": "0dea416d"
+ },
+ "js.tarot.thang-than": {
+  "t": "坦率",
+  "h": "3560d613"
+ },
+ "js.tarot.thanh-cong": {
+  "t": "成功",
+  "h": "9a7d7037"
+ },
+ "js.tarot.thanh-cong-cong-nhan-tu-tin": {
+  "t": "成功、肯定、自信、進步。努力正獲得應得的肯定。考驗之後的勝利。",
+  "h": "3dc242cc"
+ },
+ "js.tarot.thanh-qua": {
+  "t": "成果",
+  "h": "eb776d8a"
+ },
+ "js.tarot.thanh-tich": {
+  "t": "成就",
+  "h": "161a6d3d"
+ },
+ "js.tarot.thao-tung-cam-xuc-bat-on": {
+  "t": "情緒操弄、不穩定、冷淡。正利用情緒智慧去操控他人。",
+  "h": "8df4cf27"
+ },
+ "js.tarot.thao-tung-lang-phi-tai-nang": {
+  "t": "操弄、浪費才能、缺乏專注。可能把技能用錯了目的，或尚未充分發揮潛能。",
+  "h": "c967a375"
+ },
+ "js.tarot.thap": {
+  "t": "塔",
+  "h": "6e2e87a4"
+ },
+ "js.tarot.thay-doi": {
+  "t": "改變",
+  "h": "2d141c14"
+ },
+ "js.tarot.the-gioi": {
+  "t": "世界",
+  "h": "745f6b4c"
+ },
+ "js.tarot.the-hien": {
+  "t": "展現",
+  "h": "72f7bd18"
+ },
+ "js.tarot.theo-duoi": {
+  "t": "追求",
+  "h": "c4f35d3e"
+ },
+ "js.tarot.thich-nghi": {
+  "t": "適應",
+  "h": "b539346c"
+ },
+ "js.tarot.thien-dinh": {
+  "t": "冥想",
+  "h": "8a78e661"
+ },
+ "js.tarot.thieu-dong-doi-tranh-cai-that": {
+  "t": "缺乏隊友、爭吵、失望。無法與他人合作，或沒有得到肯定。",
+  "h": "501f503a"
+ },
+ "js.tarot.thieu-huong-dan-bon-chon-tri": {
+  "t": "缺乏指引、焦躁、拖延。有很多想法，卻缺少執行計畫。",
+  "h": "99904068"
+ },
+ "js.tarot.thieu-ket-qua-tu-cong-suc": {
+  "t": "努力沒有成果、完美主義、品質欠佳的工作。勤奮工作卻缺乏方向。",
+  "h": "b328b3a2"
+ },
+ "js.tarot.thieu-kiem-soat-hung-hang-that": {
+  "t": "失控、好鬥、失敗。被拉往不同方向，或把力氣用錯了地方。",
+  "h": "61b69e80"
+ },
+ "js.tarot.thieu-tam-nhin-dai-han-sot": {
+  "t": "缺乏長遠眼光、急躁、投資虧損。失去耐心，或投資在錯誤的方向。",
+  "h": "e6cc92fc"
+ },
+ "js.tarot.thieu-tap-trung-tri-hoan-thieu": {
+  "t": "缺乏專注、拖延、缺少實務技能。有心學習，卻沒有耐心去實行。",
+  "h": "197ae51b"
+ },
+ "js.tarot.thinh-vuong": {
+  "t": "繁榮",
+  "h": "ece9d2e5"
+ },
+ "js.tarot.thinh-vuong-lau-dai": {
+  "t": "長久的繁榮",
+  "h": "c7da13b7"
+ },
+ "js.tarot.tho-lo-thieu-ke-hoach-noi": {
+  "t": "粗魯、缺乏規劃、說得多做得少。以負面方式運用聰明才智，或缺乏深度。",
+  "h": "cd7f8613"
+ },
+ "js.tarot.tho-o": {
+  "t": "冷漠",
+  "h": "545d78bc"
+ },
+ "js.tarot.thoa-man": {
+  "t": "滿足",
+  "h": "0a34c2ee"
+ },
+ "js.tarot.thoat-khoi-tho-o-chon-loc": {
+  "t": "擺脫冷漠、判斷力改善、新的動力。開始走出被動的狀態。",
+  "h": "f67e381b"
+ },
+ "js.tarot.thong-diep": {
+  "t": "訊息",
+  "h": "8d4fe659"
+ },
+ "js.tarot.thong-diep-sang-tao-truc-giac": {
+  "t": "創意訊息、直覺、敏感、情感方面的消息。一位年輕人或新消息可能出乎意料地到來。",
+  "h": "15b23002"
+ },
+ "js.tarot.thong-thai": {
+  "t": "通達",
+  "h": "df8e25a9"
+ },
+ "js.tarot.thong-thai-cam-xuc-ngoai-giao": {
+  "t": "情緒通達、外交手腕、平衡、慈悲。在掌控情緒的同時保有悲憫之心。",
+  "h": "b1ee2010"
+ },
+ "js.tarot.thong-tin": {
+  "t": "資訊",
+  "h": "64650334"
+ },
+ "js.tarot.thu-thach": {
+  "t": "考驗",
+  "h": "aebbdd59"
+ },
+ "js.tarot.thuc-te": {
+  "t": "務實",
+  "h": "1d81710c"
+ },
+ "js.tarot.thuc-tinh": {
+  "t": "覺醒",
+  "h": "0c40657d"
+ },
+ "js.tarot.ti-mi": {
+  "t": "細緻",
+  "h": "be630e98"
+ },
+ "js.tarot.tiem-nang": {
+  "t": "潛能",
+  "h": "dbd5fc81"
+ },
+ "js.tarot.tiem-thuc": {
+  "t": "潛意識",
+  "h": "2d4df558"
+ },
+ "js.tarot.tien-dat": {
+  "t": "錢幣 ♦ 土",
+  "h": "9b5d4c8a"
+ },
+ "js.tarot.tien-len": {
+  "t": "前進",
+  "h": "3e908eaa"
+ },
+ "js.tarot.tien-ve-phia-truoc": {
+  "t": "向前邁進",
+  "h": "9486d87a"
+ },
+ "js.tarot.tien-ve-phia-truoc-chap-nhan": {
+  "t": "向前邁進、接受、寬恕。逐漸療癒，並設法從傷痛中走出來。",
+  "h": "cb1f58c7"
+ },
+ "js.tarot.tim-kiem": {
+  "t": "尋找",
+  "h": "66719286"
+ },
+ "js.tarot.tim-kiem-binh-yen": {
+  "t": "尋求平靜",
+  "h": "47825495"
+ },
+ "js.tarot.tim-kiem-giup-do": {
+  "t": "尋求協助",
+  "h": "e138acbd"
+ },
+ "js.tarot.tin-tuc": {
+  "t": "消息",
+  "h": "93140ca7"
+ },
+ "js.tarot.tinh-ban": {
+  "t": "友誼",
+  "h": "41eb6d65"
+ },
+ "js.tarot.tinh-ban-cong-dong-an-mung": {
+  "t": "友誼、社群、慶祝、創造。與朋友和親人共享的喜悅。是聚會與紀念的時光。",
+  "h": "1f1b297c"
+ },
+ "js.tarot.tinh-cam": {
+  "t": "感情",
+  "h": "ba217ecf"
+ },
+ "js.tarot.tinh-huong": {
+  "t": "處境",
+  "h": "9e767856"
+ },
+ "js.tarot.tinh-trang-hien-tai-va-nhung": {
+  "t": "目前的狀況，以及正影響您的事",
+  "h": "b1c09dac"
+ },
+ "js.tarot.tinh-yeu": {
+  "t": "愛情",
+  "h": "5f2ccd9a"
+ },
+ "js.tarot.tinh-yeu-moi": {
+  "t": "新戀情",
+  "h": "70f3b668"
+ },
+ "js.tarot.tinh-yeu-moi-truc-giac-tam": {
+  "t": "新戀情、直覺、靈性、情感的開端。心門敞開，迎接新的愛與連結。",
+  "h": "333849cc"
+ },
+ "js.tarot.tinh-yeu-su-lua-chon-su": {
+  "t": "愛情、選擇、和諧、個人價值。一個重要的抉擇即將到來。靈魂的連結，以及建立在共同價值上的結盟。",
+  "h": "e307c6d0"
+ },
+ "js.tarot.to-mo": {
+  "t": "好奇",
+  "h": "bbc1f746"
+ },
+ "js.tarot.to-mo-canh-giac-thong-tin": {
+  "t": "好奇、警覺、新資訊、敏銳的思維。不斷追求真相與學習的精神。",
+  "h": "e42ff752"
+ },
+ "js.tarot.toc-do": {
+  "t": "速度",
+  "h": "7c10386d"
+ },
+ "js.tarot.toc-do-hanh-dong-nhanh-tin": {
+  "t": "速度、迅速行動、消息、移動。一切進展得很快。消息即將到來，事件接連發生。",
+  "h": "e6358054"
+ },
+ "js.tarot.ton-giao": {
+  "t": "宗教",
+  "h": "b04622fb"
+ },
+ "js.tarot.ton-thuong": {
+  "t": "傷痛",
+  "h": "d7085c3c"
+ },
+ "js.tarot.tra-lai-vat-bi-lay-thu": {
+  "t": "歸還奪走之物、坦承、重新思考策略。開始誠實面對不正當的行為。",
+  "h": "c6f8c830"
+ },
+ "js.tarot.trac-an": {
+  "t": "悲憫",
+  "h": "3b6fa709"
+ },
+ "js.tarot.trach-nhiem": {
+  "t": "責任",
+  "h": "08440470"
+ },
+ "js.tarot.trang": {
+  "t": "侍者",
+  "h": "aec1223a"
+ },
+ "js.tarot.trang-coc": {
+  "t": "聖杯侍者",
+  "h": "52198a86"
+ },
+ "js.tarot.trang-gay": {
+  "t": "權杖侍者",
+  "h": "bb414379"
+ },
+ "js.tarot.trang-kiem": {
+  "t": "寶劍侍者",
+  "h": "5a38e4b4"
+ },
+ "js.tarot.trang-tien": {
+  "t": "錢幣侍者",
+  "h": "264034c3"
+ },
+ "js.tarot.tranh-ne": {
+  "t": "迴避",
+  "h": "fba37afe"
+ },
+ "js.tarot.tranh-ne-tham-hoa-so-thay": {
+  "t": "躲避災難、害怕改變、拖延無可避免之事。正在躲避必要的崩塌。",
+  "h": "c9a22149"
+ },
+ "js.tarot.tranh-ne-xung-dot-cang-thang": {
+  "t": "迴避衝突、內在緊繃、化解分歧。設法讓大家朝同一個方向前進。",
+  "h": "4cd04360"
+ },
+ "js.tarot.tri-hoan-khang-cu-hy-sinh": {
+  "t": "拖延、抗拒、白白犧牲。拒絕放下那個正在拖住您的事物。",
+  "h": "55121ec0"
+ },
+ "js.tarot.tri-hoan-thieu-tam-nhin-co": {
+  "t": "拖延、缺乏遠見、錯失機會。計畫沒有照預期進展。",
+  "h": "a8c26f77"
+ },
+ "js.tarot.tri-tue": {
+  "t": "智慧",
+  "h": "74e5d83d"
+ },
+ "js.tarot.truc-giac": {
+  "t": "直覺",
+  "h": "d86f73b7"
+ },
+ "js.tarot.truc-giac-bi-an-noi-tam": {
+  "t": "直覺、神祕、內在、潛意識。傾聽內心的聲音。有些事尚未揭曉——請耐心觀察。",
+  "h": "bc44b4c5"
+ },
+ "js.tarot.truc-tiep": {
+  "t": "直接",
+  "h": "f69379c3"
+ },
+ "js.tarot.trung-tam-tinh-huong-hay-cau": {
+  "t": "核心——當前的處境或問題",
+  "h": "62ec7b89"
+ },
+ "js.tarot.trut-bo-ganh-nang-uy-quyen": {
+  "t": "卸下重擔、授權、學習放手。開始意識到自己無法獨力承擔一切。",
+  "h": "ec3ae632"
+ },
+ "js.tarot.truyen-cam-hung": {
+  "t": "啟發人心",
+  "h": "9e80a3d8"
+ },
+ "js.tarot.truyen-thong": {
+  "t": "傳統",
+  "h": "fb8c81f2"
+ },
+ "js.tarot.truyen-thong-ton-giao-giao-duc": {
+  "t": "傳統、宗教、教育、社會規範。走既定的道路，向已被證明有效的事物尋求指引。",
+  "h": "eeac5404"
+ },
+ "js.tarot.tu-bi": {
+  "t": "慈悲",
+  "h": "f773751e"
+ },
+ "js.tarot.tu-bo": {
+  "t": "放棄",
+  "h": "bc937497"
+ },
+ "js.tarot.tu-bo-rut-lui-tim-kiem": {
+  "t": "放棄、退出、尋找更深一層的事。丟下已無法滿足需求的，去尋找更有意義的。",
+  "h": "51004f2c"
+ },
+ "js.tarot.tu-choi": {
+  "t": "拒絕",
+  "h": "63bbfd75"
+ },
+ "js.tarot.tu-do": {
+  "t": "自由",
+  "h": "40d06bcd"
+ },
+ "js.tarot.tu-duy-sac-ben": {
+  "t": "敏銳的思維",
+  "h": "5080b847"
+ },
+ "js.tarot.tu-giai-phong-doi-mat-noi": {
+  "t": "自我解放、面對恐懼、承擔責任。開始意識到自己有力量改變處境。",
+  "h": "30116140"
+ },
+ "js.tarot.tu-giam-cam": {
+  "t": "自我禁錮",
+  "h": "386df7bc"
+ },
+ "js.tarot.tu-phan-xet-qua-muc-nghi": {
+  "t": "過度自我批判、懷疑自己、忽略召喚。對自己過於苛刻，或尚未準備好聆聽覺醒的呼喚。",
+  "h": "9ac7344c"
+ },
+ "js.tarot.tu-phu": {
+  "t": "自負",
+  "h": "ca9735a0"
+ },
+ "js.tarot.tu-tin": {
+  "t": "自信",
+  "h": "1edc09c5"
+ },
+ "js.tarot.tu-tin-can-dam-xac-dinh": {
+  "t": "自信、勇氣、堅定、社交能量。有魅力又熱忱，啟發周遭的人。",
+  "h": "2445f38f"
+ },
+ "js.tarot.tu-tuc": {
+  "t": "自足",
+  "h": "50a0014f"
+ },
+ "js.tarot.tu-tung": {
+  "t": "困頓",
+  "h": "44a685c7"
+ },
+ "js.tarot.tu-tung-han-che-nan-nhan": {
+  "t": "困頓、受限、受害者心態、自我禁錮。覺得被困住，但其實束縛只是心中的幻象。",
+  "h": "c5d3f7c9"
+ },
+ "js.tarot.tuoi-moi": {
+  "t": "嶄新",
+  "h": "9ad03710"
+ },
+ "js.tarot.tuoi-tho": {
+  "t": "童年",
+  "h": "65383d48"
+ },
+ "js.tarot.tuong-lai": {
+  "t": "未來",
+  "h": "b4320a2d"
+ },
+ "js.tarot.tuong-lai-gan": {
+  "t": "近期未來",
+  "h": "5a972b1d"
+ },
+ "js.tarot.uoc-muon": {
+  "t": "心願",
+  "h": "ca8a3669"
+ },
+ "js.tarot.uoc-muon-thanh-hien-thuc-hai": {
+  "t": "心願成真、滿足、幸福、繁榮。這是「許願牌」——您所期盼的事正在靠近。",
+  "h": "202199b4"
+ },
+ "js.tarot.van-may": {
+  "t": "好運",
+  "h": "b9ac0b07"
+ },
+ "js.tarot.van-may-thay-doi-chu-ky": {
+  "t": "好運、改變、週期、轉捩點。命運之輪正朝好的方向轉動。擁抱改變，因為生命總是循環不息。",
+  "h": "238da932"
+ },
+ "js.tarot.van-xui-khang-cu-thay-doi": {
+  "t": "厄運、抗拒改變、負面循環。正在對抗無可避免的改變，或被困在舊的迴圈裡。",
+  "h": "eb1fe56a"
+ },
+ "js.tarot.vat-chat": {
+  "t": "物質",
+  "h": "d31a5059"
+ },
+ "js.tarot.vo-vong-mat-niem-tin-that": {
+  "t": "絕望、失去信心、失望。難以相信未來，或覺得與靈感的源頭斷了連結。",
+  "h": "52a9be30"
+ },
+ "js.tarot.vua": {
+  "t": "國王",
+  "h": "1268a594"
+ },
+ "js.tarot.vua-coc": {
+  "t": "聖杯國王",
+  "h": "dbaf99fc"
+ },
+ "js.tarot.vua-gay": {
+  "t": "權杖國王",
+  "h": "0fd5c56d"
+ },
+ "js.tarot.vua-kiem": {
+  "t": "寶劍國王",
+  "h": "2232e669"
+ },
+ "js.tarot.vua-tien": {
+  "t": "錢幣國王",
+  "h": "54b72ab9"
+ },
+ "js.tarot.xao-bai-rut-lai": {
+  "t": "重新洗牌並抽牌",
+  "h": "19371614"
+ },
+ "js.tarot.xay-dung": {
+  "t": "建設",
+  "h": "c5183426"
+ },
+ "js.tarot.xu-huong-va-ket-qua-co": {
+  "t": "若持續這個方向，可能的趨勢與結果",
+  "h": "1c913af9"
+ },
+ "js.tarot.xung-dot": {
+  "t": "衝突",
+  "h": "2c2f103d"
+ },
+ "js.tarot.xung-dot-canh-tranh-bat-dong": {
+  "t": "衝突、競爭、分歧、挑戰。每個人都有自己的意見。良性的競爭，或暫時的混亂。",
+  "h": "d7b743df"
+ },
+ "js.tarot.xung-dot-mat-mat-danh-du": {
+  "t": "衝突、名譽受損、自負、失敗。付出過高代價才贏，或捲入不值得的戰鬥。",
+  "h": "6f5226a0"
+ },
+ "js.tarot.xuoi": {
+  "t": "↑ 正位",
+  "h": "3386e148"
+ },
+ "js.tarot.xuoi-2": {
+  "t": "正位",
+  "h": "bff3bb5a"
+ },
+ "js.tarot.y-chi": {
+  "t": "意志",
+  "h": "0a979548"
+ },
+ "js.tarot.y-chi-kiem-soat-chien-thang": {
+  "t": "意志、掌控、勝利、決心。堅定地向前邁進。憑藉個人意志與紀律獲勝。",
+  "h": "8a707981"
+ },
+ "js.tarot.y-chi-tap-trung-tai-nang": {
+  "t": "意志、專注、才能、資源。您已有足夠的工具來實現目標。是行動並展現能力的時刻。",
+  "h": "ca9d3481"
+ },
+ "js.tarot.y-nghia": {
+  "t": "涵義",
+  "h": "1206aa20"
+ },
+ "js.tarot.yeu-duoi-tu-nghi-ngo-thieu": {
+  "t": "軟弱、自我懷疑、缺乏勇氣。讓恐懼主宰，或相反地殘酷地運用力量。",
+  "h": "543f7227"
+ },
  "js.topup.aria-label-thanh-toan": {
   "t": " aria-label=\"付款 ",
   "h": "3d7d89ae"
@@ -8067,6 +12155,82 @@
   "t": "例如：這次換工作好嗎？",
   "h": "ec1b3e52"
  },
+ "menhkho.12-cung": {
+  "t": "12 宮",
+  "h": "2e6bdef9"
+ },
+ "menhkho.1960-canh-ty-1961-tan-suu": {
+  "t": "<a href=\"/menh-kho/1960\" class=\"year-pill\"><span class=\"yr\">1960</span><span class=\"cc\">庚子</span></a> <a href=\"/menh-kho/1961\" class=\"year-pill\"><span class=\"yr\">1961</span><span class=\"cc\">辛丑</span></a> <a href=\"/menh-kho/1962\" class=\"year-pill\"><span class=\"yr\">1962</span><span class=\"cc\">壬寅</span></a> <a href=\"/menh-kho/1963\" class=\"year-pill\"><span class=\"yr\">1963</span><span class=\"cc\">癸卯</span></a> <a href=\"/menh-kho/1964\" class=\"year-pill\"><span class=\"yr\">1964</span><span class=\"cc\">甲辰</span></a> <a href=\"/menh-kho/1965\" class=\"year-pill\"><span class=\"yr\">1965</span><span class=\"cc\">乙巳</span></a> <a href=\"/menh-kho/1966\" class=\"year-pill\"><span class=\"yr\">1966</span><span class=\"cc\">丙午</span></a> <a href=\"/menh-kho/1967\" class=\"year-pill\"><span class=\"yr\">1967</span><span class=\"cc\">丁未</span></a> <a href=\"/menh-kho/1968\" class=\"year-pill\"><span class=\"yr\">1968</span><span class=\"cc\">戊申</span></a> <a href=\"/menh-kho/1969\" class=\"year-pill\"><span class=\"yr\">1969</span><span class=\"cc\">己酉</span></a>",
+  "h": "f5165269"
+ },
+ "menhkho.1970-canh-tuat-1971-tan-hoi": {
+  "t": "<a href=\"/menh-kho/1970\" class=\"year-pill\"><span class=\"yr\">1970</span><span class=\"cc\">庚戌</span></a> <a href=\"/menh-kho/1971\" class=\"year-pill\"><span class=\"yr\">1971</span><span class=\"cc\">辛亥</span></a> <a href=\"/menh-kho/1972\" class=\"year-pill\"><span class=\"yr\">1972</span><span class=\"cc\">壬子</span></a> <a href=\"/menh-kho/1973\" class=\"year-pill\"><span class=\"yr\">1973</span><span class=\"cc\">癸丑</span></a> <a href=\"/menh-kho/1974\" class=\"year-pill\"><span class=\"yr\">1974</span><span class=\"cc\">甲寅</span></a> <a href=\"/menh-kho/1975\" class=\"year-pill popular\"><span class=\"yr\">1975</span><span class=\"cc\">乙卯</span></a> <a href=\"/menh-kho/1976\" class=\"year-pill popular\"><span class=\"yr\">1976</span><span class=\"cc\">丙辰</span></a> <a href=\"/menh-kho/1977\" class=\"year-pill popular\"><span class=\"yr\">1977</span><span class=\"cc\">丁巳</span></a> <a href=\"/menh-kho/1978\" class=\"year-pill popular\"><span class=\"yr\">1978</span><span class=\"cc\">戊午</span></a> <a href=\"/menh-kho/1979\" class=\"year-pill popular\"><span class=\"yr\">1979</span><span class=\"cc\">己未</span></a>",
+  "h": "5f663681"
+ },
+ "menhkho.1980-canh-than-1981-tan-dau": {
+  "t": "<a href=\"/menh-kho/1980\" class=\"year-pill popular\"><span class=\"yr\">1980</span><span class=\"cc\">庚申</span></a> <a href=\"/menh-kho/1981\" class=\"year-pill popular\"><span class=\"yr\">1981</span><span class=\"cc\">辛酉</span></a> <a href=\"/menh-kho/1982\" class=\"year-pill popular\"><span class=\"yr\">1982</span><span class=\"cc\">壬戌</span></a> <a href=\"/menh-kho/1983\" class=\"year-pill popular\"><span class=\"yr\">1983</span><span class=\"cc\">癸亥</span></a> <a href=\"/menh-kho/1984\" class=\"year-pill popular\"><span class=\"yr\">1984</span><span class=\"cc\">甲子</span></a> <a href=\"/menh-kho/1985\" class=\"year-pill popular\"><span class=\"yr\">1985</span><span class=\"cc\">乙丑</span></a> <a href=\"/menh-kho/1986\" class=\"year-pill popular\"><span class=\"yr\">1986</span><span class=\"cc\">丙寅</span></a> <a href=\"/menh-kho/1987\" class=\"year-pill popular\"><span class=\"yr\">1987</span><span class=\"cc\">丁卯</span></a> <a href=\"/menh-kho/1988\" class=\"year-pill popular\"><span class=\"yr\">1988</span><span class=\"cc\">戊辰</span></a> <a href=\"/menh-kho/1989\" class=\"year-pill popular\"><span class=\"yr\">1989</span><span class=\"cc\">己巳</span></a>",
+  "h": "aa98c822"
+ },
+ "menhkho.1990-canh-ngo-1991-tan-mui": {
+  "t": "<a href=\"/menh-kho/1990\" class=\"year-pill popular\"><span class=\"yr\">1990</span><span class=\"cc\">庚午</span></a> <a href=\"/menh-kho/1991\" class=\"year-pill popular\"><span class=\"yr\">1991</span><span class=\"cc\">辛未</span></a> <a href=\"/menh-kho/1992\" class=\"year-pill popular\"><span class=\"yr\">1992</span><span class=\"cc\">壬申</span></a> <a href=\"/menh-kho/1993\" class=\"year-pill popular\"><span class=\"yr\">1993</span><span class=\"cc\">癸酉</span></a> <a href=\"/menh-kho/1994\" class=\"year-pill popular\"><span class=\"yr\">1994</span><span class=\"cc\">甲戌</span></a> <a href=\"/menh-kho/1995\" class=\"year-pill popular\"><span class=\"yr\">1995</span><span class=\"cc\">乙亥</span></a> <a href=\"/menh-kho/1996\" class=\"year-pill popular\"><span class=\"yr\">1996</span><span class=\"cc\">丙子</span></a> <a href=\"/menh-kho/1997\" class=\"year-pill popular\"><span class=\"yr\">1997</span><span class=\"cc\">丁丑</span></a> <a href=\"/menh-kho/1998\" class=\"year-pill popular\"><span class=\"yr\">1998</span><span class=\"cc\">戊寅</span></a> <a href=\"/menh-kho/1999\" class=\"year-pill popular\"><span class=\"yr\">1999</span><span class=\"cc\">己卯</span></a>",
+  "h": "0a2d40fe"
+ },
+ "menhkho.2000-canh-thin-2001-tan-ty": {
+  "t": "<a href=\"/menh-kho/2000\" class=\"year-pill popular\"><span class=\"yr\">2000</span><span class=\"cc\">庚辰</span></a> <a href=\"/menh-kho/2001\" class=\"year-pill\"><span class=\"yr\">2001</span><span class=\"cc\">辛巳</span></a> <a href=\"/menh-kho/2002\" class=\"year-pill\"><span class=\"yr\">2002</span><span class=\"cc\">壬午</span></a> <a href=\"/menh-kho/2003\" class=\"year-pill\"><span class=\"yr\">2003</span><span class=\"cc\">癸未</span></a> <a href=\"/menh-kho/2004\" class=\"year-pill\"><span class=\"yr\">2004</span><span class=\"cc\">甲申</span></a> <a href=\"/menh-kho/2005\" class=\"year-pill\"><span class=\"yr\">2005</span><span class=\"cc\">乙酉</span></a> <a href=\"/menh-kho/2006\" class=\"year-pill\"><span class=\"yr\">2006</span><span class=\"cc\">丙戌</span></a> <a href=\"/menh-kho/2007\" class=\"year-pill\"><span class=\"yr\">2007</span><span class=\"cc\">丁亥</span></a> <a href=\"/menh-kho/2008\" class=\"year-pill\"><span class=\"yr\">2008</span><span class=\"cc\">戊子</span></a> <a href=\"/menh-kho/2009\" class=\"year-pill\"><span class=\"yr\">2009</span><span class=\"cc\">己丑</span></a> <a href=\"/menh-kho/2010\" class=\"year-pill\"><span class=\"yr\">2010</span><span class=\"cc\">庚寅</span></a>",
+  "h": "7c037110"
+ },
+ "menhkho.2011-tan-mao-2012-nham-thin": {
+  "t": "<a href=\"/menh-kho/2011\" class=\"year-pill\"><span class=\"yr\">2011</span><span class=\"cc\">辛卯</span></a> <a href=\"/menh-kho/2012\" class=\"year-pill\"><span class=\"yr\">2012</span><span class=\"cc\">壬辰</span></a> <a href=\"/menh-kho/2013\" class=\"year-pill\"><span class=\"yr\">2013</span><span class=\"cc\">癸巳</span></a> <a href=\"/menh-kho/2014\" class=\"year-pill\"><span class=\"yr\">2014</span><span class=\"cc\">甲午</span></a> <a href=\"/menh-kho/2015\" class=\"year-pill\"><span class=\"yr\">2015</span><span class=\"cc\">乙未</span></a> <a href=\"/menh-kho/2016\" class=\"year-pill\"><span class=\"yr\">2016</span><span class=\"cc\">丙申</span></a> <a href=\"/menh-kho/2017\" class=\"year-pill\"><span class=\"yr\">2017</span><span class=\"cc\">丁酉</span></a> <a href=\"/menh-kho/2018\" class=\"year-pill\"><span class=\"yr\">2018</span><span class=\"cc\">戊戌</span></a> <a href=\"/menh-kho/2019\" class=\"year-pill\"><span class=\"yr\">2019</span><span class=\"cc\">己亥</span></a>",
+  "h": "118614a2"
+ },
+ "menhkho.2020-canh-ty-2021-tan-suu": {
+  "t": "<a href=\"/menh-kho/2020\" class=\"year-pill\"><span class=\"yr\">2020</span><span class=\"cc\">庚子</span></a> <a href=\"/menh-kho/2021\" class=\"year-pill\"><span class=\"yr\">2021</span><span class=\"cc\">辛丑</span></a> <a href=\"/menh-kho/2022\" class=\"year-pill\"><span class=\"yr\">2022</span><span class=\"cc\">壬寅</span></a> <a href=\"/menh-kho/2023\" class=\"year-pill\"><span class=\"yr\">2023</span><span class=\"cc\">癸卯</span></a> <a href=\"/menh-kho/2024\" class=\"year-pill\"><span class=\"yr\">2024</span><span class=\"cc\">甲辰</span></a> <a href=\"/menh-kho/2025\" class=\"year-pill\"><span class=\"yr\">2025</span><span class=\"cc\">乙巳</span></a> <a href=\"/menh-kho/2026\" class=\"year-pill\"><span class=\"yr\">2026</span><span class=\"cc\">丙午</span></a>",
+  "h": "f68fbce7"
+ },
+ "menhkho.4-buoc-don-gian-de-xem": {
+  "t": "4 個簡單步驟查看完整命盤——無需建立帳號。",
+  "h": "7312382e"
+ },
+ "menhkho.575-000-la-so-tu-vi": {
+  "t": "575,000+ 張紫微命盤，涵蓋 1960–2026 年。依古法解析 12 宮、格局、大運、小運。",
+  "h": "148f146d"
+ },
+ "menhkho.an-sao-co-phap": {
+  "t": "古法安星",
+  "h": "30aade6f"
+ },
+ "menhkho.an-sao-co-phap-tuan-theo": {
+  "t": "古法安星遵循宋代以來的傳統規則——沒有任何調整或額外創新。現代方法有時會新增星曜或更動安星方式。明寶紫微斗數純用古法，以確保一致性與傳統。",
+  "h": "ac291cdf"
+ },
+ "menhkho.an-sao-theo-co-phap-khac": {
+  "t": "古法安星與現代方法有何不同？",
+  "h": "4dd93138"
+ },
+ "menhkho.ban-do-12-cung-cach-cuc": {
+  "t": "12 宮命盤、格局、大運、2027 年小運，立即呈現。",
+  "h": "6e07f34b"
+ },
+ "menhkho.cac-sao-chinh-tu-vi-thien": {
+  "t": "主星（紫微、天府、廉貞⋯⋯）依農曆生日安星；輔星依月、時安星；四化（祿、權、科、忌）依年干安星——為每個時辰造出獨一無二的星曜組合。",
+  "h": "8cfbecd2"
+ },
+ "menhkho.cach-cuc-dac-biet": {
+  "t": "特殊格局",
+  "h": "6d499784"
+ },
+ "menhkho.cach-cuc-la-su-phoi-hop": {
+  "t": "格局是星曜之間的特殊搭配，造就不同的命運：紫府同宮、日月同梁、殺破狼⋯⋯每種格局都有各自的涵義與影響。",
+  "h": "58eb0956"
+ },
+ "menhkho.cach-tra-cuu-la-so-tu": {
+  "t": "如何查詢紫微命盤",
+  "h": "7dc6b796"
+ },
+ "menhkho.cau-hoi-thuong-gap": {
+  "t": "常見問題",
+  "h": "ef0eb919"
+ },
  "menhkho.cc-at-dau": {
   "t": "乙酉",
   "h": "9842b7e9"
@@ -8307,6 +12471,198 @@
   "t": "辛巳",
   "h": "46b9d5af"
  },
+ "menhkho.chon-gio-gioi-tinh": {
+  "t": "選擇時辰與性別",
+  "h": "6ec7d44d"
+ },
+ "menhkho.chon-gio-sinh-ty-suu-dan": {
+  "t": "選擇出生時辰（子、丑、寅⋯⋯亥）與性別（男／女）。",
+  "h": "b6ca5d50"
+ },
+ "menhkho.chon-nam-sinh": {
+  "t": "選擇出生年份",
+  "h": "994161b3"
+ },
+ "menhkho.chon-nam-sinh-1960-2026": {
+  "t": "選擇出生年份（1960–2026）",
+  "h": "e41f285a"
+ },
+ "menhkho.chon-ngay-thang": {
+  "t": "選擇月日",
+  "h": "f500cd1c"
+ },
+ "menhkho.click-vao-nam-sinh-duong-lich": {
+  "t": "點選上方查詢表中的國曆出生年份（1960–2026）。",
+  "h": "6d7f1050"
+ },
+ "menhkho.cung-menh-la-cung-quan-trong": {
+  "t": "命宮是紫微命盤中最重要的宮位，反映性格、外貌與整體命運。命宮由出生時辰與農曆出生月份決定，再對照年干來確定主星。每顆主星各有不同的特質。",
+  "h": "e6d8d285"
+ },
+ "menhkho.cung-menh-la-gi": {
+  "t": "命宮是什麼？",
+  "h": "8fe0a543"
+ },
+ "menhkho.dai-van-la-chu-ky-10": {
+  "t": "大運是 10 年一輪、依序走過 12 宮的週期。小運則是大運之中每一年的運勢。這兩層運勢決定人生中的順逆時機。",
+  "h": "d7196ebc"
+ },
+ "menhkho.dai-van-la-giai-doan-van": {
+  "t": "大運是持續 10 年的運勢階段，依序走過 12 宮。小運是落在大運之中的逐年運勢。兩層運勢結合，決定人生中的順遂時機與挑戰。",
+  "h": "6b40dcf7"
+ },
+ "menhkho.dai-van-tieu-van": {
+  "t": "大運與小運",
+  "h": "cd7afeb6"
+ },
+ "menhkho.dai-van-va-tieu-van-la": {
+  "t": "大運與小運是什麼？",
+  "h": "0c4ed332"
+ },
+ "menhkho.gio-sinh": {
+  "t": "出生時辰",
+  "h": "2d0aa7eb"
+ },
+ "menhkho.gio-sinh-quyet-dinh-cung-menh": {
+  "t": "出生時辰決定命宮與身宮——命盤的兩大根基宮位。同一天出生、時辰不同，命宮會完全不同，主星、格局與運勢也都不同。共有 12 個時辰（子、丑、寅、卯、辰、巳、午、未、申、酉、戌、亥），每個時辰長 2 小時。",
+  "h": "257166f6"
+ },
+ "menhkho.hoac-tra-lich-ngay-tot-2020": {
+  "t": "或查詢<a href=\"/ngay-tot\" style=\"color:#d4c060;text-decoration:underline\">2020–2036 吉日曆</a>——8,500 個依古法選出的好日子頁面，適用於婚嫁、動土、開幕。",
+  "h": "55cf40a8"
+ },
+ "menhkho.huong-dan": {
+  "t": "使用說明",
+  "h": "e7c42639"
+ },
+ "menhkho.kho-luu-tru-tra-cuu": {
+  "t": "命庫 · 典藏 · 查詢",
+  "h": "1ba1dae2"
+ },
+ "menhkho.kien-thuc": {
+  "t": "知識",
+  "h": "b09dc5b0"
+ },
+ "menhkho.la-so-duoc-tinh-san-theo": {
+  "t": "1960 至 2026 年各個出生日期的命盤，已依古法預先計算完成。選擇出生年份即可開始查詢。",
+  "h": "f6cf77a0"
+ },
+ "menhkho.la-so-tu-vi-chia-thanh": {
+  "t": "紫微命盤分為 12 宮：命宮、父母宮、福德宮、田宅宮、官祿宮、僕役宮、遷移宮、疾厄宮、財帛宮、子女宮、夫妻宮、兄弟宮。每一宮主管人生的一個領域。",
+  "h": "a2ce3ef4"
+ },
+ "menhkho.la-so-tu-vi-dau-so": {
+  "t": "什麼是紫微斗數命盤？",
+  "h": "b1c2516e"
+ },
+ "menhkho.la-so-tu-vi-dau-so-ulj5": {
+  "t": "紫微斗數命盤是依農曆出生年、月、日、時所排出的命理圖。命盤有 12 宮，星曜依古法安入，據此推斷性格、事業、感情與逐年運勢。",
+  "h": "454320e8"
+ },
+ "menhkho.menh-kho-chua-575-000-la": {
+  "t": "命庫收錄 575,000+ 張預先計算好的命盤，涵蓋 1960 至 2026 年的各個出生日期（67 年 × 365 天 × 12 時辰 × 2 種性別）。每張命盤都依古法安星，並解析 12 宮、格局、大運與 2027 年小運。",
+  "h": "9d51d3f0"
+ },
+ "menhkho.menh-kho-co-bao-nhieu-la": {
+  "t": "命庫有多少張命盤？",
+  "h": "c61020ae"
+ },
+ "menhkho.menh-kho-tra-cuu-la-so": {
+  "t": "命庫——依出生年份查詢紫微斗數命盤 | 明寶紫微斗數",
+  "h": "a3812551"
+ },
+ "menhkho.menh-kho-tra-cuu-la-so-25gy": {
+  "t": "命庫——查詢紫微斗數命盤",
+  "h": "b767449b"
+ },
+ "menhkho.menh-kho-tra-cuu-la-so-5d9p": {
+  "t": "命庫——查詢<br><em>紫微斗數命盤</em>",
+  "h": "4de8fd05"
+ },
+ "menhkho.moi-nam-co-day-du-365": {
+  "t": "每年完整涵蓋 365 天 × 12 個時辰 × 男與女 ＝ 8,760 張命盤。",
+  "h": "cec0232c"
+ },
+ "menhkho.muon-nhan-luan-giai-chuyen-sau": {
+  "t": "想要深入解讀嗎？",
+  "h": "fb3939f2"
+ },
+ "menhkho.nhap-ngay-gio-sinh-de-nhan": {
+  "t": "輸入出生日期與時辰，取得完整 24 項分析——性格、事業、感情、2027 年運勢。",
+  "h": "8d39d980"
+ },
+ "menhkho.nhung-cau-hoi-pho-bien-ve": {
+  "t": "關於紫微斗數與命庫的常見問題。",
+  "h": "9548bc77"
+ },
+ "menhkho.phan-luan-giai": {
+  "t": "解讀內容",
+  "h": "d8df6bfc"
+ },
+ "menhkho.tai-sao-gio-sinh-quan-trong": {
+  "t": "為什麼出生時辰在紫微斗數中很重要？",
+  "h": "fdf177c9"
+ },
+ "menhkho.thap-nien-1960": {
+  "t": "1960 年代",
+  "h": "33c1a5a3"
+ },
+ "menhkho.thap-nien-1970": {
+  "t": "1970 年代",
+  "h": "7afcb27c"
+ },
+ "menhkho.thap-nien-1980-pho-bien-nhat": {
+  "t": "1980 年代——最熱門",
+  "h": "96be036e"
+ },
+ "menhkho.thap-nien-1990-pho-bien-nhat": {
+  "t": "1990 年代——最熱門",
+  "h": "09308f62"
+ },
+ "menhkho.thap-nien-2000": {
+  "t": "2000 年代",
+  "h": "bf0a97c8"
+ },
+ "menhkho.thap-nien-2010": {
+  "t": "2010 年代",
+  "h": "1eda10c4"
+ },
+ "menhkho.thap-nien-2020": {
+  "t": "2020 年代",
+  "h": "dcf667d2"
+ },
+ "menhkho.tra-cuu-la-so": {
+  "t": "查詢命盤",
+  "h": "f0bbe872"
+ },
+ "menhkho.tra-cuu-la-so-tu-vi": {
+  "t": "依 1960–2026 年出生年份查詢紫微斗數命盤。依古法完整解析 12 宮、格局、大運、小運。575,000+ 張命盤隨時可查。",
+  "h": "490b342b"
+ },
+ "menhkho.trang-chu-menh-kho": {
+  "t": "<a href=\"/\">首頁</a><span>›</span> <span>命庫</span>",
+  "h": "ca56af70"
+ },
+ "menhkho.tren-trang-nam-sinh-click-vao": {
+  "t": "在出生年份頁面中，點選 12 個月曆內的國曆月日。",
+  "h": "cd9fc291"
+ },
+ "menhkho.tu-vi-dau-so-khoa-menh": {
+  "t": "紫微斗數——古法命理學",
+  "h": "79695a52"
+ },
+ "menhkho.tu-vi-dau-so-la-he": {
+  "t": "紫微斗數是源自宋代的命理學體系，已傳承逾 1,000 年。",
+  "h": "c536dfdb"
+ },
+ "menhkho.xem-la-so-day-du": {
+  "t": "查看完整命盤",
+  "h": "b6fb07d5"
+ },
+ "menhkho.xem-la-so-luan-giai": {
+  "t": "查看命盤與解讀 →",
+  "h": "95889730"
+ },
  "napam.1-nhap-nam-sinh": {
   "t": "<span class=\"wss-n\">1</span><span class=\"wss-l\">輸入出生年</span>",
   "h": "ecce406c"
@@ -8374,6 +12730,330 @@
  "napam.tuoi-hop-ky": {
   "t": "<span class=\"hp-ic\" data-icon=\"users\"></span><span>相合、相剋<br>的生肖</span>",
   "h": "9a664cc3"
+ },
+ "oracle.1-chon-kieu-rut": {
+  "t": "<span class=\"wss-n\">1</span><span class=\"wss-l\">選擇抽牌方式</span>",
+  "h": "36067a21"
+ },
+ "oracle.1-la-thong-diep-hien-tai": {
+  "t": "<span class=\"ic\" data-icon=\"sparkles\"></span> 1 張 — 當下訊息",
+  "h": "726e8adf"
+ },
+ "oracle.2-nhan-thong-diep": {
+  "t": "<span class=\"wss-n\">2</span><span class=\"wss-l\">接收訊息</span>",
+  "h": "25e0a2ec"
+ },
+ "oracle.3-la-nhan-duyen-qua": {
+  "t": "<span class=\"ic\" data-icon=\"sparkles\"></span> 3 張 — 因 · 緣 · 果",
+  "h": "9e43bc49"
+ },
+ "oracle.5-la-ngu-hanh-cuoc-doi": {
+  "t": "<span class=\"ic\" data-icon=\"sparkles\"></span> 5 張 — 人生五行",
+  "h": "1d191df9"
+ },
+ "oracle.am-duong-ngu-hanh-va-bat": {
+  "t": "陰陽、五行與八卦是古代東方哲學的三大基礎學說，描述萬物運行與平衡的規律。易經、風水等許多術數，都是建立在這些根本概念之上。",
+  "h": "833f5e18"
+ },
+ "oracle.cau-hoi-hoac-chu-de-muon": {
+  "t": "想要沉澱思考的問題或主題（選填）",
+  "h": "c328ff62"
+ },
+ "oracle.chon-kieu-rut-1-3-hay": {
+  "t": "選擇抽牌方式（1、3 或 5 張）——系統隨機抽牌，為每張牌提供訊息與實踐指引。",
+  "h": "806df5fc"
+ },
+ "oracle.dinh-tam-rut-bai": {
+  "t": "<span class=\"bg-label\"><span class=\"ic\" data-icon=\"sparkles\"></span><b id=\"drawBtnLabel\">靜心並抽牌</b></span>",
+  "h": "d210cb2f"
+ },
+ "oracle.doi-khi-khong-can-mot-cau": {
+  "t": "有時候不需要一個具體的答案，只需要片刻停下來、讓呼吸慢一點。抽一張蘊含陰陽、五行、八卦哲理的牌，獲得一段讓心靜下來的簡短建議。",
+  "h": "e0cc111c"
+ },
+ "oracle.huong-dan-thuc-hanh": {
+  "t": "<span class=\"hp-ic\" data-icon=\"lightbulb\"></span><span>實踐<br>指引</span>",
+  "h": "c5fe62e9"
+ },
+ "oracle.oracle-phuong-dong": {
+  "t": "東方神諭卡",
+  "h": "1146fb81"
+ },
+ "oracle.oracle-phuong-dong-rut-the-minh": {
+  "t": "<b>東方神諭卡</b><span>抽取智慧卡 陰陽 · 五行 · 八卦——免費</span>",
+  "h": "541241f2"
+ },
+ "oracle.oracle-phuong-dong-tu-vi-minh": {
+  "t": "東方神諭卡 — 明寶紫微斗數",
+  "h": "1d867bec"
+ },
+ "oracle.rut-1-3-hay-5-la": {
+  "t": "<span class=\"hp-ic\" data-icon=\"sparkles\"></span><span>抽 1、3<br>或 5 張</span>",
+  "h": "527946ce"
+ },
+ "oracle.rut-the-oracle-40-la-theo": {
+  "t": "在明寶紫微斗數抽取依東方哲學——陰陽、五行、八卦、天干地支——而成的 40 張神諭卡。",
+  "h": "83cb33e6"
+ },
+ "oracle.triet-ly-phuong-dong": {
+  "t": "<span class=\"hp-ic\" data-icon=\"aperture\"></span><span>東方<br>哲理</span>",
+  "h": "5b82c97f"
+ },
+ "oracle.vd-toi-can-nhan-ra-dieu": {
+  "t": "例：這個階段我需要看清什麼？",
+  "h": "fba02ed0"
+ },
+ "phongthuy.1-ban-menh-thong-tin-phong": {
+  "t": "<span class=\"pt-num\">1</span> 本命與房間資料",
+  "h": "862309d1"
+ },
+ "phongthuy.2-chup-tai-anh-phong": {
+  "t": "<span class=\"pt-num\">2</span> 拍攝／上傳房間照片",
+  "h": "7d2e0fac"
+ },
+ "phongthuy.2-thanh-toan": {
+  "t": "<span class=\"wss-n\">2</span><span class=\"wss-l\">付款</span>",
+  "h": "67c0b759"
+ },
+ "phongthuy.3-nhan-ket-qua": {
+  "t": "<span class=\"wss-n\">3</span><span class=\"wss-l\">取得結果</span>",
+  "h": "5b1e84a0"
+ },
+ "phongthuy.anh-goc": {
+  "t": "原圖",
+  "h": "d0cb0ec3"
+ },
+ "phongthuy.anh-phong-do-vat-nhan-dien": {
+  "t": "<span class=\"ic\" data-icon=\"camera\"></span> 房間照片與辨識物品",
+  "h": "9eb00bf0"
+ },
+ "phongthuy.bac-north": {
+  "t": "北（North）",
+  "h": "ca46f9fa"
+ },
+ "phongthuy.bat-trach-la-mot-truong-phai": {
+  "t": "八宅是傳統風水的一個流派，將住宅依 8 個方位對應八卦，再與屋主的命卦對照，判定方位與位置的吉凶。<i>《八宅明鏡》</i>是系統化整理這套方法的古籍之一。",
+  "h": "daa2d3d2"
+ },
+ "phongthuy.cai-thien": {
+  "t": "改善",
+  "h": "1eff6742"
+ },
+ "phongthuy.chon-anh": {
+  "t": "選擇照片",
+  "h": "2656c1bc"
+ },
+ "phongthuy.chua-muon-khai-thong-tin-anh": {
+  "t": "<b>還不想填資料、上傳照片？</b><span>您可以先看看範例，預先體驗。</span>",
+  "h": "71c6551d"
+ },
+ "phongthuy.chup-anh-can-phong-sau-khi": {
+  "t": "填寫出生年份、性別與大門朝向後，拍下房間照片。取得調整前後的風水分數、佈置建議，以及建議添置的物品。",
+  "h": "6923766a"
+ },
+ "phongthuy.chup-anh-phong-he-thong-phan": {
+  "t": "拍下房間照片，系統依八宅風水分析——調整前後分數、佈置圖、建議與房間渲染圖。",
+  "h": "4d18ac04"
+ },
+ "phongthuy.de-xuat-bo-tri": {
+  "t": "<span class=\"ic\" data-icon=\"settings\"></span> 佈置建議",
+  "h": "6f5bcc32"
+ },
+ "phongthuy.diem-phong-thuy-truoc-sau": {
+  "t": "<span class=\"ic\" data-icon=\"bar-chart-3\"></span> 調整前後風水分數",
+  "h": "79bb8fe6"
+ },
+ "phongthuy.diem-truoc-sau": {
+  "t": "<span class=\"hp-ic\" data-icon=\"bar-chart-3\"></span><span>分數<br>調整前後</span>",
+  "h": "c676882b"
+ },
+ "phongthuy.do-vat-phat-hien": {
+  "t": "偵測到的物品",
+  "h": "58ad237d"
+ },
+ "phongthuy.doi-anh": {
+  "t": "✕ 更換照片",
+  "h": "304a1319"
+ },
+ "phongthuy.dong-bac": {
+  "t": "東北",
+  "h": "9690921a"
+ },
+ "phongthuy.dong-east": {
+  "t": "東（East）",
+  "h": "8779753d"
+ },
+ "phongthuy.dong-nam": {
+  "t": "東南",
+  "h": "dd71e07a"
+ },
+ "phongthuy.gioi-tinh": {
+  "t": "性別",
+  "h": "80bbce55"
+ },
+ "phongthuy.he-thong-se-render-lai-anh": {
+  "t": "系統將依五行色彩與最佳風水佈置，重新渲染您的房間照片。",
+  "h": "40c4c8a9"
+ },
+ "phongthuy.hien-tai": {
+  "t": "目前",
+  "h": "cd16704d"
+ },
+ "phongthuy.hien-tai-bhng": {
+  "t": "⬛ 目前",
+  "h": "b1e26461"
+ },
+ "phongthuy.huong-cua-chinh-huong-ve": {
+  "t": "大門朝向",
+  "h": "9d976c7f"
+ },
+ "phongthuy.huong-nhin-ra-khi-dung-trong": {
+  "t": "站在房間內向外看的朝向",
+  "h": "f3f5bfa6"
+ },
+ "phongthuy.jpg-png-heic-toi-da-20mb": {
+  "t": "JPG、PNG、HEIC · 最大 20MB",
+  "h": "6ec18858"
+ },
+ "phongthuy.keo-tha-anh-vao-day": {
+  "t": "將照片拖曳到這裡",
+  "h": "abbea49b"
+ },
+ "phongthuy.loai-phong": {
+  "t": "房間類型",
+  "h": "19905334"
+ },
+ "phongthuy.loi-khuyen-tong-the": {
+  "t": "<span class=\"ic\" data-icon=\"message-circle\"></span> 整體建議",
+  "h": "a0211411"
+ },
+ "phongthuy.luoi-3-3-theo-la-ban": {
+  "t": "依羅盤排列的 3×3 九宮格 · 南在上 · 北在下",
+  "h": "a01fb977"
+ },
+ "phongthuy.moi-luot-luong": {
+  "t": "<span class=\"vnd\" data-tvp-price-vnd=\"phong-thuy\"></span> 每次 <span class=\"cb-sub\">(<span data-tvp-price=\"phong-thuy\">…</span> 兩)</span>",
+  "h": "6c5c7ccf"
+ },
+ "phongthuy.mot-can-phong-bo-tri-sai": {
+  "t": "風水佈置不當的房間，可能在屋主毫不知情的情況下悄悄阻擋運勢。拍下房間的照片，取得依八宅算出的調整前後分數，以及具體的佈置建議。",
+  "h": "63e03f4e"
+ },
+ "phongthuy.nam-sinh-duong-lich": {
+  "t": "出生年份（國曆）",
+  "h": "9f8721e0"
+ },
+ "phongthuy.nam-south": {
+  "t": "南（South）",
+  "h": "d3c7e97a"
+ },
+ "phongthuy.phan-tich-phong-khac": {
+  "t": "← 分析其他房間",
+  "h": "b726d63b"
+ },
+ "phongthuy.phan-tich-phong-thuy-ton-luong": {
+  "t": "<span class=\"bg-label\"><span class=\"ic\" data-icon=\"compass\"></span><b id=\"btnAnalyzeLabel\">分析風水</b></span> <small>需 <span class=\"vnd\" data-tvp-price-vnd=\"phong-thuy\"></span> <span class=\"cb-sub\">(<span data-tvp-price=\"phong-thuy\">…</span> 兩)</span></small>",
+  "h": "ae2d9767"
+ },
+ "phongthuy.phong-khach": {
+  "t": "客廳",
+  "h": "17fb3f11"
+ },
+ "phongthuy.phong-lam-viec": {
+  "t": "書房／工作室",
+  "h": "956c0ca5"
+ },
+ "phongthuy.phong-ngu": {
+  "t": "臥室",
+  "h": "d9ac5522"
+ },
+ "phongthuy.phong-thuy-noi-that": {
+  "t": "室內風水",
+  "h": "3f80b53f"
+ },
+ "phongthuy.phong-thuy-noi-that-chup-anh": {
+  "t": "<b>室內風水</b><span>拍下房間照片——系統依八宅評分並提出佈置建議</span>",
+  "h": "4912ddf0"
+ },
+ "phongthuy.phong-thuy-noi-that-tu-vi": {
+  "t": "室內風水 — 明寶紫微斗數",
+  "h": "15015a61"
+ },
+ "phongthuy.render-lai": {
+  "t": "<span class=\"ic\" data-icon=\"rotate-cw\"></span> 重新渲染",
+  "h": "ccd807df"
+ },
+ "phongthuy.render-phong-phong-thuy-luong": {
+  "t": "<span class=\"ic\" data-icon=\"home\"></span> 風水房間渲染圖 <span style=\"font-size:10px;background:var(--gold-lt);color:var(--tx-blue);padding:2px 8px;border-radius:10px;font-weight:600\"><span data-tvp-price=\"phong-thuy-render\">…</span> 兩</span>",
+  "h": "7b1e15ef"
+ },
+ "phongthuy.render-phong-theo-phong-thuy": {
+  "t": "<span class=\"hp-ic\" data-icon=\"camera\"></span><span>依風水<br>渲染房間</span>",
+  "h": "9a5c6021"
+ },
+ "phongthuy.render-phong-theo-phong-thuy-j6h6": {
+  "t": "<span class=\"ic\" data-icon=\"sparkles\"></span> 依風水渲染房間",
+  "h": "c1c514e3"
+ },
+ "phongthuy.sau-dieu-chinh": {
+  "t": "調整後",
+  "h": "0b773985"
+ },
+ "phongthuy.sau-dieu-chinh-uuro": {
+  "t": "<span class=\"ic\" data-icon=\"check-circle\"></span> 調整後",
+  "h": "b79d8310"
+ },
+ "phongthuy.sau-phong-thuy": {
+  "t": "風水調整後",
+  "h": "c9afd5a7"
+ },
+ "phongthuy.so-do-bo-tri-de-xuat": {
+  "t": "<span class=\"hp-ic\" data-icon=\"layout-grid\"></span><span>建議<br>佈置圖</span>",
+  "h": "c2aa6f34"
+ },
+ "phongthuy.so-do-bo-tri-truoc-sau": {
+  "t": "<span class=\"ic\" data-icon=\"compass\"></span> 調整前／後佈置圖",
+  "h": "c618db7f"
+ },
+ "phongthuy.tai-anh": {
+  "t": "⬇ 下載圖片",
+  "h": "c7a30ee2"
+ },
+ "phongthuy.tay-bac": {
+  "t": "西北",
+  "h": "0b1f47fd"
+ },
+ "phongthuy.tay-nam": {
+  "t": "西南",
+  "h": "c0484c26"
+ },
+ "phongthuy.tay-west": {
+  "t": "西（West）",
+  "h": "5a60b5ba"
+ },
+ "phongthuy.tot": {
+  "t": "<span class=\"g\">✓ 吉：</span> <span id=\"guaGood\"></span>",
+  "h": "60f5b1ca"
+ },
+ "phongthuy.truoc": {
+  "t": "調整前",
+  "h": "42b0ca5a"
+ },
+ "phongthuy.vat-pham-phong-thuy-nen-them": {
+  "t": "<span class=\"ic\" data-icon=\"store\"></span> 建議添置的風水物品",
+  "h": "f4b05d3b"
+ },
+ "phongthuy.vd-1990": {
+  "t": "例：1990",
+  "h": "c6e18d35"
+ },
+ "phongthuy.xau": {
+  "t": "<span class=\"b\">✗ 凶：</span> <span id=\"guaBad\"></span>",
+  "h": "a5cae0c2"
+ },
+ "phongthuy.xem-ban-mau": {
+  "t": "查看範例 →",
+  "h": "ba3671b1"
  },
  "privacy.1-thong-tin-chung-toi-thu": {
   "t": "1. 我們蒐集的資料",
@@ -8559,6 +13239,190 @@
   "t": "確認付款狀態並提供結果",
   "h": "84a1b3b2"
  },
+ "resources.hon-200-tai-lieu-hoc-thuat": {
+  "t": "逾 200 份紫微斗數學術文獻——越南文與中文。免費提供研究社群使用。",
+  "h": "2cf5c307"
+ },
+ "resources.kho-tai-lieu-hoc-thuat-suu": {
+  "t": "蒐集自多方來源的學術文獻庫——越南文與中文。免費分享給紫微研究與學習社群。",
+  "h": "6d5a5887"
+ },
+ "resources.kho-tai-lieu-hoc-thuat-tu": {
+  "t": "紫微斗數學術文獻庫——逾 200 本越南文與中文的紫微書籍，從古典到現代。免費下載。",
+  "h": "61519361"
+ },
+ "resources.sap-xep-theo-thu-tu-a": {
+  "t": "依 A–Z 順序排列。點選書名即可下載（若有連結）。",
+  "h": "9e746762"
+ },
+ "resources.tai-lieu-tieng-trung": {
+  "t": "中文文獻",
+  "h": "53560984"
+ },
+ "resources.tai-lieu-tieng-viet": {
+  "t": "越南文文獻",
+  "h": "a170a3bc"
+ },
+ "resources.tai-lieu-tu-vi-dau-so": {
+  "t": "紫微斗數文獻",
+  "h": "b6fe8eaa"
+ },
+ "resources.thu-vien": {
+  "t": "圖書館",
+  "h": "4d885bf7"
+ },
+ "resources.thu-vien-tai-lieu-tu-vi": {
+  "t": "紫微文獻圖書館 — 明寶紫微斗數",
+  "h": "23d7aa3b"
+ },
+ "resources.tieng-trung": {
+  "t": "<span class=\"ic-inline\" data-icon-emoji=\"📕\" style=\"display:inline-flex;width:1em;height:1em;vertical-align:-2px;color:#7C6942\">📕</span> 中文 <span id=\"count-trung\"></span>",
+  "h": "1368d2d7"
+ },
+ "resources.tieng-viet": {
+  "t": "<span class=\"ic-inline\" data-icon-emoji=\"📗\" style=\"display:inline-flex;width:1em;height:1em;vertical-align:-2px;color:#7C6942\">📗</span> 越南文 <span id=\"count-viet\"></span>",
+  "h": "b49a73b7"
+ },
+ "resources.tim-ten-sach-hoac-tac-gia": {
+  "t": "搜尋書名或作者...",
+  "h": "c8ffd8aa"
+ },
+ "resources.tong-cong": {
+  "t": "總計",
+  "h": "6c4fa8bc"
+ },
+ "sachdetail.dang-tai": {
+  "t": "載入中...",
+  "h": "3d8a48b7"
+ },
+ "sachdetail.khong-tim-thay-tai-lieu": {
+  "t": "找不到文獻",
+  "h": "ffd74f40"
+ },
+ "sachdetail.tai-lieu-khong-ton-tai-hoac": {
+  "t": "該文獻不存在，或正在更新中。",
+  "h": "ed1b9993"
+ },
+ "sachdetail.tai-xuong": {
+  "t": "下載",
+  "h": "ca78e23a"
+ },
+ "sachdetail.trang-chu-tai-lieu-dang-tai": {
+  "t": "<a href=\"/\">首頁</a> <span>›</span> <a href=\"/resources.html\">文獻</a> <span>›</span> <span id=\"bc-title\">載入中...</span>",
+  "h": "f2687a46"
+ },
+ "sachdetail.ve-thu-vien": {
+  "t": "← 回圖書館",
+  "h": "943a73f4"
+ },
+ "sachdetail.ve-thu-vien-tai-lieu": {
+  "t": "<a href=\"/resources.html\">← 回文獻圖書館</a>",
+  "h": "99e834b4"
+ },
+ "tailieu.bai-viet-khong-ton-tai-hoac": {
+  "t": "文章不存在，或已被刪除。",
+  "h": "718123d0"
+ },
+ "tailieu.bai-viet-lien-quan": {
+  "t": "相關文章",
+  "h": "afd3c7f7"
+ },
+ "tailieu.dang-tai-bai-viet": {
+  "t": "文章載入中...",
+  "h": "6f3c1901"
+ },
+ "tailieu.khong-tim-thay-bai-viet": {
+  "t": "找不到文章",
+  "h": "914536b7"
+ },
+ "tailieu.tai-lieu-hoc-thuat-ve-tu": {
+  "t": "紫微斗數學術文獻 — 明寶紫微斗數",
+  "h": "f2581c1f"
+ },
+ "tailieu.tai-lieu-hoc-thuat-ve-tu-fish": {
+  "t": "紫微斗數學術文獻",
+  "h": "9e9a296b"
+ },
+ "tailieu.tai-lieu-tu-vi-tu-vi": {
+  "t": "紫微文獻 — 明寶紫微斗數",
+  "h": "45b310bf"
+ },
+ "tailieu.trang-chu-tai-lieu-dang-tai": {
+  "t": "<a href=\"/\">首頁</a> <span>›</span> <a href=\"/resources.html\">文獻</a> <span>›</span> <span id=\"breadcrumb-title\">載入中...</span>",
+  "h": "79e309ba"
+ },
+ "tailieu.ve-tai-lieu": {
+  "t": "← 回文獻",
+  "h": "0d77cc3d"
+ },
+ "tarot.1-la-thong-diep-hom-nay": {
+  "t": "<span class=\"ic\" data-icon=\"sparkles\"></span> 1 張 — 今日訊息",
+  "h": "ccc434dd"
+ },
+ "tarot.3-la-qua-khu-hien-tai": {
+  "t": "<span class=\"ic\" data-icon=\"sparkles\"></span> 3 張 — 過去 · 現在 · 未來",
+  "h": "880a5e95"
+ },
+ "tarot.cau-hoi-tuy-chon-nghi-trong": {
+  "t": "問題（選填——可在心裡默想，或寫在這裡）",
+  "h": "1e7d5e62"
+ },
+ "tarot.celtic-cross-10-la": {
+  "t": "<span class=\"ic\" data-icon=\"sparkles\"></span> 凱爾特十字 — 10 張",
+  "h": "377006eb"
+ },
+ "tarot.chon-kieu-trai-1-3-hay": {
+  "t": "選擇牌陣（1、3 或 10 張），隨機抽牌，逐張解讀正位或逆位——貼合您的問題。",
+  "h": "042a47ab"
+ },
+ "tarot.chon-kieu-trai-bai": {
+  "t": "選擇牌陣",
+  "h": "0d50f92b"
+ },
+ "tarot.doi-khi-chi-can-mot-la": {
+  "t": "有時只需要一張牌，就能更看清自己正在猶豫的事。選擇牌陣、輸入心中縈繞的問題，立刻獲得清楚的正位／逆位解讀。",
+  "h": "a7f0500b"
+ },
+ "tarot.luan-theo-cau-hoi-cua-ban": {
+  "t": "<span class=\"hp-ic\" data-icon=\"message-circle\"></span><span>依您的問題<br>解讀</span>",
+  "h": "85a815e9"
+ },
+ "tarot.rut-bai-tarot-78-la-ngay": {
+  "t": "在明寶紫微斗數直接抽 78 張塔羅牌——1 張、3 張或凱爾特十字 10 張牌陣，附正位／逆位的涵義。",
+  "h": "6902f0c6"
+ },
+ "tarot.tarot-78-la": {
+  "t": "塔羅牌 78 張",
+  "h": "0454df6e"
+ },
+ "tarot.tarot-78-la-rut-bai-trai": {
+  "t": "<b>塔羅牌 78 張</b><span>抽牌、1 張 / 3 張 / 凱爾特十字牌陣——免費</span>",
+  "h": "a74872de"
+ },
+ "tarot.tarot-78-la-tu-vi-minh": {
+  "t": "塔羅牌 78 張 — 明寶紫微斗數",
+  "h": "e9e2dbdf"
+ },
+ "tarot.tarot-la-bo-bai-78-la": {
+  "t": "塔羅是一副共 78 張的牌，包含 22 張大阿爾克那（Major Arcana）與 56 張小阿爾克那（Minor Arcana），15 世紀出現於歐洲，後來廣泛用於自我省思與占卜。每張牌都有各自的象徵，正位與逆位的解讀各不相同。",
+  "h": "6a9eabe4"
+ },
+ "tarot.trai-1-3-hay-10-la": {
+  "t": "<span class=\"hp-ic\" data-icon=\"wallet-cards\"></span><span>1、3<br>或 10 張牌陣</span>",
+  "h": "4355e693"
+ },
+ "tarot.vd-tinh-trang-su-nghiep-cua": {
+  "t": "例：我目前的事業狀況如何？",
+  "h": "69397559"
+ },
+ "tarot.xao-bai-rut": {
+  "t": "<span class=\"bg-label\"><span class=\"ic\" data-icon=\"wallet-cards\"></span><b id=\"drawBtnLabel\">洗牌並抽牌</b></span>",
+  "h": "f40097d9"
+ },
+ "tarot.xuoi-hay-nguoc-nghia": {
+  "t": "<span class=\"hp-ic\" data-icon=\"sparkles\"></span><span>正位或<br>逆位的涵義</span>",
+  "h": "3097eb49"
+ },
  "terms.1-tinh-chat-dich-vu": {
   "t": "1. 服務性質",
   "h": "7fb94895"
@@ -8742,6 +13606,86 @@
  "terms.voi-luong-da-nap-nhung-chua": {
   "t": "對於已儲值但尚未使用的兩，您可提出申請，由我們依個案審酌",
   "h": "f410ec3e"
+ },
+ "thansohoc.13-chi-so-pythagoras": {
+  "t": "<span class=\"hp-ic\" data-icon=\"hash\"></span><span>13 項<br>畢達哥拉斯指數</span>",
+  "h": "a752e4f5"
+ },
+ "thansohoc.duong-doi-dinh-menh": {
+  "t": "<span class=\"hp-ic\" data-icon=\"compass\"></span><span>生命之路、<br>命運數</span>",
+  "h": "49ec5008"
+ },
+ "thansohoc.ho-ten-day-du": {
+  "t": "完整姓名",
+  "h": "2c78151b"
+ },
+ "thansohoc.hoi-thay-luan-sau-than-so": {
+  "t": "✦ 請老師深入解讀生命靈數",
+  "h": "7193c825"
+ },
+ "thansohoc.nam": {
+  "t": "年",
+  "h": "98926c7e"
+ },
+ "thansohoc.nam-ca-nhan-dinh-cao": {
+  "t": "<span class=\"hp-ic\" data-icon=\"calendar\"></span><span>個人年、<br>人生高峰</span>",
+  "h": "63129b89"
+ },
+ "thansohoc.ngay": {
+  "t": "日",
+  "h": "368c4575"
+ },
+ "thansohoc.ngay-sinh-cua-ban-an-chua": {
+  "t": "您的出生日期蘊含 13 個專屬數字——從生命之路到當前的個人年——訴說您如何思考、如何抉擇。立即查看，更了解自己。",
+  "h": "91c3a41a"
+ },
+ "thansohoc.ngay-sinh-ten-day-du": {
+  "t": "出生日期與完整姓名",
+  "h": "787e2b10"
+ },
+ "thansohoc.nguyen-van-an": {
+  "t": "例：Chen Da Wen",
+  "h": "dad5c28b"
+ },
+ "thansohoc.nhap-ngay-sinh-va-ho-ten": {
+  "t": "輸入出生日期與完整姓名。系統依畢達哥拉斯體系計算——生命之路、命運數、靈魂數、使命數與當前的個人年。",
+  "h": "a57588c8"
+ },
+ "thansohoc.nhap-ten-khai-sinh-day-du": {
+  "t": "請以<b>羅馬拼音（英文字母）</b>輸入出生證明上的完整姓名。有無越南語聲調符號皆可，結果相同。",
+  "h": "073972bc"
+ },
+ "thansohoc.than-so-hoc": {
+  "t": "生命靈數",
+  "h": "686db34b"
+ },
+ "thansohoc.than-so-hoc-13-chi-so": {
+  "t": "<b>生命靈數</b><span>畢達哥拉斯體系的 13 項指數</span>",
+  "h": "5d5b6737"
+ },
+ "thansohoc.than-so-hoc-numerology-theo-truong": {
+  "t": "畢達哥拉斯學派的生命靈數（Numerology）把出生日期與姓名中的數字，換算成各自具有特殊意義的指數，例如生命之路或人生高峰。這個學派源自古希臘數學家畢達哥拉斯關於數字與宇宙之間關聯的思想。",
+  "h": "29150586"
+ },
+ "thansohoc.than-so-hoc-tu-vi-minh": {
+  "t": "生命靈數 — 明寶紫微斗數",
+  "h": "c3a04aa3"
+ },
+ "thansohoc.thang": {
+  "t": "月",
+  "h": "0e2b3099"
+ },
+ "thansohoc.tinh-13-chi-so-than-so": {
+  "t": "計算 13 項生命靈數指數：生命之路、命運數、靈魂數、使命數、生日數、態度數、成熟數、出生日期圖、業力債、個人年、人生高峰與挑戰、適合的職業、職涯黃金三角。可請老師深入解讀。",
+  "h": "8b46eb91"
+ },
+ "thansohoc.tinh-than-so-mien-phi": {
+  "t": "<span class=\"bg-label\"><span class=\"ic\" data-icon=\"hash\"></span><b id=\"btnGoLabel\">計算生命靈數 →</b></span> <small>免費</small>",
+  "h": "b57b912e"
+ },
+ "thansohoc.tra-loi-thay-o-khung-chat": {
+  "t": "在對話框回答老師，即可排出生命靈數圖——只需要出生日期與姓名。",
+  "h": "8268b781"
  },
  "topup.ban-dang-mo-khoa": {
   "t": "您正在解鎖…",

@@ -8771,6 +8771,10 @@
   "t": "Ace of Pentacles",
   "h": "2dbb31f2"
  },
+ "js.tarot.ba": {
+  "t": "Three",
+  "h": "2fd22ce6"
+ },
  "js.tarot.ba-coc": {
   "t": "Three of Cups",
   "h": "a6a7d0d5"
@@ -9335,6 +9339,10 @@
   "t": "New perspective",
   "h": "fcb22fff"
  },
+ "js.tarot.hai": {
+  "t": "Two",
+  "h": "916c7bfc"
+ },
  "js.tarot.hai-coc": {
   "t": "Two of Cups",
   "h": "ca8b937f"
@@ -9386,6 +9394,10 @@
  "js.tarot.hao-phong-buong-bo-mo-cua": {
   "t": "Generosity, letting go, opening the door to abundance. You are beginning to release your attachment to material things.",
   "h": "9df21f91"
+ },
+ "js.tarot.hh": {
+  "t": "Queen",
+  "h": "fc5d4b91"
  },
  "js.tarot.hien-tai": {
   "t": "Present",
@@ -10571,6 +10583,10 @@
   "t": "Responsibility",
   "h": "08440470"
  },
+ "js.tarot.trang": {
+  "t": "Page",
+  "h": "aec1223a"
+ },
  "js.tarot.trang-coc": {
   "t": "Page of Cups",
   "h": "52198a86"
@@ -10746,6 +10762,10 @@
  "js.tarot.vo-vong-mat-niem-tin-that": {
   "t": "Hopelessness, loss of faith, disappointment. You are struggling to trust the future or feel disconnected from inspiration.",
   "h": "52a9be30"
+ },
+ "js.tarot.vua": {
+  "t": "King",
+  "h": "1268a594"
  },
  "js.tarot.vua-coc": {
   "t": "King of Cups",
@@ -13624,7 +13644,7 @@
   "h": "787e2b10"
  },
  "thansohoc.nguyen-van-an": {
-  "t": "Nguyen Van An",
+  "t": "e.g. John Smith",
   "h": "dad5c28b"
  },
  "thansohoc.nhap-ngay-sinh-va-ho-ten": {
@@ -13632,7 +13652,7 @@
   "h": "a57588c8"
  },
  "thansohoc.nhap-ten-khai-sinh-day-du": {
-  "t": "Enter your full birth name — <b>with or without diacritics, the result is the same</b>.",
+  "t": "Enter your full birth name <b>in Latin letters</b> — with or without diacritics, the result is the same.",
   "h": "073972bc"
  },
  "thansohoc.than-so-hoc": {
