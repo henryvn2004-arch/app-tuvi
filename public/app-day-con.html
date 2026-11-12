@@ -3,8 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Dạy Con Theo Lá Số — Tử Vi Minh Bảo</title>
-<meta name="description" content="Nhập lá số của con — nhận cách con tiếp thu, cách ra bài để con chịu làm, kiểu kỷ luật phản tác dụng, và chỗ cha mẹ với con hay va nhau.">
+<title data-i18n="daycon.day-con-theo-la-so-tu">Dạy Con Theo Lá Số — Tử Vi Minh Bảo</title>
+<meta data-i18n-attr="content:daycon.nhap-la-so-cua-con-nhan" name="description" content="Nhập lá số của con — nhận cách con tiếp thu, cách ra bài để con chịu làm, kiểu kỷ luật phản tác dụng, và chỗ cha mẹ với con hay va nhau.">
 <link rel="icon" type="image/webp" href="/seal.webp">
 <link rel="preload" href="/fonts/noto-serif-latin-400.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="/fonts/noto-serif-vietnamese-400.woff2" as="font" type="font/woff2" crossorigin>
@@ -177,10 +177,10 @@ body.chat-first-live .hd-grid{grid-template-columns:1fr}
   <main class="ws" id="ws">
     <div class="ws-top">
       <button class="btn mobile-only" onclick="document.getElementById('shell-sidebar').classList.toggle('open');window.shellSyncBackdrop&&shellSyncBackdrop()" aria-label="Menu">☰</button>
-      <div class="ws-title"><b>Dạy Con Theo Lá Số</b><span>Đứa này cần thúc hay cần để yên</span></div>
+      <div data-i18n="daycon.day-con-theo-la-so-dua" class="ws-title"><b>Dạy Con Theo Lá Số</b><span>Đứa này cần thúc hay cần để yên</span></div>
       <div class="ws-actions">
-        <button class="btn" id="btnEdit" onclick="showForm()" style="display:none">Xem Bé Khác</button>
-        <button class="btn mobile-only" onclick="Shell.openRail()">✦ Hỏi</button>
+        <button data-i18n="daycon.xem-be-khac" class="btn" id="btnEdit" onclick="showForm()" style="display:none">Xem Bé Khác</button>
+        <button data-i18n="battu.hoi" class="btn mobile-only" onclick="Shell.openRail()">✦ Hỏi</button>
       </div>
     </div>
     <div class="ws-body">
@@ -194,15 +194,15 @@ body.chat-first-live .hd-grid{grid-template-columns:1fr}
         <img class="intro-avatar" src="/tool-avatars/day-con.webp" alt="" onerror="this.remove()">
         <div class="intro-body">
           <div class="intro-text">
-            <div class="intro-t">Dạy Con Theo Lá Số</div>
-            <div class="intro-d">Cùng một cách dạy, có đứa trẻ tiến bộ rõ rệt, có đứa lại càng dạy càng xa cách — vì mỗi đứa trẻ tiếp thu một kiểu khác nhau. Đọc từ lá số của con để biết cách nào đang phản tác dụng.</div>
+            <div data-i18n="daycon.day-con-theo-la-so" class="intro-t">Dạy Con Theo Lá Số</div>
+            <div data-i18n="daycon.cung-mot-cach-day-co-dua" class="intro-d">Cùng một cách dạy, có đứa trẻ tiến bộ rõ rệt, có đứa lại càng dạy càng xa cách — vì mỗi đứa trẻ tiếp thu một kiểu khác nhau. Đọc từ lá số của con để biết cách nào đang phản tác dụng.</div>
             <div id="introSrc"></div>
           </div>
         </div>
         <div class="hero-pills">
-          <div class="hero-pill"><span class="hp-ic" data-icon="scale"></span><span>5 trục<br>tính khí</span></div>
-          <div class="hero-pill"><span class="hp-ic" data-icon="star"></span><span>8 chất<br>năng khiếu</span></div>
-          <div class="hero-pill"><span class="hp-ic" data-icon="compass"></span><span>Định hướng<br>cách dạy</span></div>
+          <div data-i18n="daycon.5-truc-tinh-khi" class="hero-pill"><span class="hp-ic" data-icon="scale"></span><span>5 trục<br>tính khí</span></div>
+          <div data-i18n="daycon.8-chat-nang-khieu" class="hero-pill"><span class="hp-ic" data-icon="star"></span><span>8 chất<br>năng khiếu</span></div>
+          <div data-i18n="daycon.dinh-huong-cach-day" class="hero-pill"><span class="hp-ic" data-icon="compass"></span><span>Định hướng<br>cách dạy</span></div>
         </div>
       </div></div>
       <div class="ws-main-col">
@@ -211,25 +211,25 @@ body.chat-first-live .hd-grid{grid-template-columns:1fr}
            đã đổi trong code cũ (analyze/_runAnonPreview/_renderLockWall/
            _doGenerate/showForm). -->
       <div class="ws-steps" id="wsSteps">
-        <div class="wss-step active"><span class="wss-n">1</span><span class="wss-l">Nhập thông tin</span></div>
-        <div class="wss-step"><span class="wss-n">2</span><span class="wss-l">Xem trước chân dung con</span></div>
-        <div class="wss-step"><span class="wss-n">3</span><span class="wss-l">Thanh toán</span></div>
-        <div class="wss-step"><span class="wss-n">4</span><span class="wss-l">Nhận kết quả</span></div>
+        <div data-i18n="battu.1-nhap-thong-tin" class="wss-step active"><span class="wss-n">1</span><span class="wss-l">Nhập thông tin</span></div>
+        <div data-i18n="daycon.2-xem-truoc-chan-dung-con" class="wss-step"><span class="wss-n">2</span><span class="wss-l">Xem trước chân dung con</span></div>
+        <div data-i18n="battu.3-thanh-toan" class="wss-step"><span class="wss-n">3</span><span class="wss-l">Thanh toán</span></div>
+        <div data-i18n="battu.4-nhan-ket-qua" class="wss-step"><span class="wss-n">4</span><span class="wss-l">Nhận kết quả</span></div>
       </div>
       <div class="form-card" id="birthPanel" style="display:none">
-        <div class="fc-head"><span class="fc-ic" data-icon="baby"></span><h2>Ngày sinh của con</h2></div>
-        <p class="sub">Chọn điều đang lo, nhập ngày giờ sinh của con. Nhận cách dạy phù hợp và việc nên làm từ tối nay.</p>
+        <div class="fc-head"><span class="fc-ic" data-icon="baby"></span><h2 data-i18n="daycon.ngay-sinh-cua-con">Ngày sinh của con</h2></div>
+        <p data-i18n="daycon.chon-dieu-dang-lo-nhap-ngay" class="sub">Chọn điều đang lo, nhập ngày giờ sinh của con. Nhận cách dạy phù hợp và việc nên làm từ tối nay.</p>
 
         <div class="frow dc-lo">
           <div class="fg" style="flex:1">
-            <label for="moiLo">Điều bạn đang lo</label>
+            <label data-i18n="daycon.dieu-ban-dang-lo" for="moiLo">Điều bạn đang lo</label>
             <select id="moiLo" onchange="onMoiLoChange()">
-              <option value="hoc-hanh">Học hành sa sút, ngồi vào bàn không nổi</option>
-              <option value="buong-binh">Bướng, cãi lại, nói không nghe</option>
-              <option value="nhut-nhat">Rụt rè, ngại đám đông, ít bạn</option>
-              <option value="chon-duong">Sắp phải chọn trường / chọn ngành</option>
-              <option value="khong-noi-chuyen">Con không chịu nói chuyện với mình nữa</option>
-              <option value="hieu-them" selected>Không có gì gấp, chỉ muốn hiểu con hơn</option>
+              <option data-i18n="daycon.hoc-hanh-sa-sut-ngoi-vao" value="hoc-hanh">Học hành sa sút, ngồi vào bàn không nổi</option>
+              <option data-i18n="daycon.buong-cai-lai-noi-khong-nghe" value="buong-binh">Bướng, cãi lại, nói không nghe</option>
+              <option data-i18n="daycon.rut-re-ngai-dam-dong-it" value="nhut-nhat">Rụt rè, ngại đám đông, ít bạn</option>
+              <option data-i18n="daycon.sap-phai-chon-truong-chon-nganh" value="chon-duong">Sắp phải chọn trường / chọn ngành</option>
+              <option data-i18n="daycon.con-khong-chiu-noi-chuyen-voi" value="khong-noi-chuyen">Con không chịu nói chuyện với mình nữa</option>
+              <option data-i18n="daycon.khong-co-gi-gap-chi-muon" value="hieu-them" selected>Không có gì gấp, chỉ muốn hiểu con hơn</option>
             </select>
           </div>
         </div>
@@ -241,9 +241,9 @@ body.chat-first-live .hd-grid{grid-template-columns:1fr}
         <div id="formHost" data-uc-noseed></div>
 
         <details class="dc-self" id="selfWrap">
-          <summary id="selfSummary">Thêm lá số của bạn — cha hoặc mẹ (không bắt buộc)</summary>
+          <summary data-i18n="daycon.them-la-so-cua-ban-cha" id="selfSummary">Thêm lá số của bạn — cha hoặc mẹ (không bắt buộc)</summary>
           <div class="inner">
-            <p class="hint">Có lá số của bạn thì bản luận có thêm mục <b>“Hai bên với nhau”</b> — chỗ cha mẹ và con hay va, và cách giảm va. Bỏ trống vẫn xem được đầy đủ phần còn lại.</p>
+            <p data-i18n="daycon.co-la-so-cua-ban-thi" class="hint">Có lá số của bạn thì bản luận có thêm mục <b>“Hai bên với nhau”</b> — chỗ cha mẹ và con hay va, và cách giảm va. Bỏ trống vẫn xem được đầy đủ phần còn lại.</p>
             <div id="formHostSelf"></div>
           </div>
         </details>
@@ -252,9 +252,9 @@ body.chat-first-live .hd-grid{grid-template-columns:1fr}
           <div class="cb-l">
             <span class="cb-ic" data-icon="wallet"></span>
             <div>
-              <div class="cb-title">Chi phí sử dụng</div>
-              <div class="cb-amt"><span class="vnd" data-tvp-price-vnd="day-con"></span> mỗi lượt <span class="cb-sub">(<span data-tvp-price="day-con">…</span> Lượng)</span></div>
-              <div class="cb-pay">
+              <div data-i18n="battu.chi-phi-su-dung" class="cb-title">Chi phí sử dụng</div>
+              <div data-i18n="daycon.moi-luot-luong" class="cb-amt"><span class="vnd" data-tvp-price-vnd="day-con"></span> mỗi lượt <span class="cb-sub">(<span data-tvp-price="day-con">…</span> Lượng)</span></div>
+              <div data-i18n="luangiai.chuyen-khoan-qua-qr-ngan-hang" class="cb-pay">
                 <span><span class="ic" data-icon="qr-code"></span> Chuyển khoản (qua QR ngân hàng)</span>
                 <span><span class="ic" data-icon="credit-card"></span> PayPal / Thẻ quốc tế</span>
               </div>
@@ -262,11 +262,11 @@ body.chat-first-live .hd-grid{grid-template-columns:1fr}
           </div>
           <div class="cb-r">
             <span class="cb-ic" data-icon="gift"></span>
-            <div class="cb-r-txt">Mua gói để nhận nhiều ưu đãi hơn.<br><a href="/topup.html">Xem các gói ngay →</a></div>
+            <div data-i18n="luangiai.mua-goi-de-nhan-nhieu-uu" class="cb-r-txt">Mua gói để nhận nhiều ưu đãi hơn.<br><a href="/topup.html">Xem các gói ngay →</a></div>
           </div>
         </div>
         <div class="frow" style="margin-bottom:0;margin-top:14px">
-          <button class="btn-go" id="btnGo" onclick="analyze()">
+          <button data-i18n="daycon.xem-cach-day-con-ton-luong" class="btn-go" id="btnGo" onclick="analyze()">
             <span class="bg-label"><span class="ic" data-icon="baby"></span><b>Xem Cách Dạy Con →</b></span>
             <small>Tốn <span class="vnd" data-tvp-price-vnd="day-con"></span> <span class="cb-sub">(<span data-tvp-price="day-con">…</span> Lượng)</span></small>
           </button>
@@ -275,16 +275,16 @@ body.chat-first-live .hd-grid{grid-template-columns:1fr}
       </div>
       <div class="ws-intake-hint" id="wsIntakeHint">
         <span class="ic" data-icon="message-circle"></span>
-        <p>Trả lời thầy ở khung chat để cho biết điều bạn đang lo và ngày sinh của con.</p>
+        <p data-i18n="daycon.tra-loi-thay-o-khung-chat">Trả lời thầy ở khung chat để cho biết điều bạn đang lo và ngày sinh của con.</p>
       </div>
       </div>
       <div class="ws-side-col">
       <div class="ws-promo">
-        <div class="wsp-eyebrow"><span class="wsp-ic" data-icon="book-open"></span><span>Giới thiệu</span></div>
-        <div class="wsp-title">Dạy Con Theo Lá Số</div>
-        <p class="wsp-desc">Tử Vi Đẩu Số là một môn mệnh lý cổ truyền Trung Hoa, lập lá số theo giờ sinh âm lịch với 12 cung và hệ thống chính tinh, phụ tinh chiếu mệnh. Môn học được hệ thống hoá qua nhiều đời, phổ biến tại Việt Nam qua bản dịch <i>Tử Vi Đẩu Số Tân Biên</i> của Vân Đằng Thái Thứ Lang.</p>
+        <div data-i18n="battu.gioi-thieu" class="wsp-eyebrow"><span class="wsp-ic" data-icon="book-open"></span><span>Giới thiệu</span></div>
+        <div data-i18n="daycon.day-con-theo-la-so" class="wsp-title">Dạy Con Theo Lá Số</div>
+        <p data-i18n="luangiai.tu-vi-dau-so-la-mot" class="wsp-desc">Tử Vi Đẩu Số là một môn mệnh lý cổ truyền Trung Hoa, lập lá số theo giờ sinh âm lịch với 12 cung và hệ thống chính tinh, phụ tinh chiếu mệnh. Môn học được hệ thống hoá qua nhiều đời, phổ biến tại Việt Nam qua bản dịch <i>Tử Vi Đẩu Số Tân Biên</i> của Vân Đằng Thái Thứ Lang.</p>
       </div>
-      <div class="samp-cta">
+      <div data-i18n="daycon.ban-luan-giai-mau-tai-pdf" class="samp-cta">
         <span class="sc-ic" data-icon="file-text"></span>
         <span class="sc-txt"><b>Bản luận giải mẫu</b><span>Tải PDF Dạy Con Theo Lá Số đầy đủ của một lá số mẫu để xem trước nội dung thật.</span></span>
         <a class="sc-btn" href="/tai-mau/mau-day-con.pdf" target="_blank" rel="noopener">Tải PDF →</a>
@@ -295,7 +295,7 @@ body.chat-first-live .hd-grid{grid-template-columns:1fr}
 
       <div id="resPanel" data-ws-result style="display:none">
         <div class="res-block">
-          <div class="res-block-header"><span class="res-block-title">Con Là Người Thế Nào</span></div>
+          <div data-i18n="daycon.con-la-nguoi-the-nao" class="res-block-header"><span class="res-block-title">Con Là Người Thế Nào</span></div>
           <div class="res-block-body">
             <div id="loading"><div id="loadingSteps"></div></div>
             <div id="card" style="display:none">
@@ -306,7 +306,7 @@ body.chat-first-live .hd-grid{grid-template-columns:1fr}
                 <div class="dc-badges" id="dcBadges"></div>
                 <div class="dc-birth" id="birthLine" style="display:none"></div>
               </div>
-              <div class="dc-sub">Dấu hiệu nhận ra ở nhà</div>
+              <div data-i18n="daycon.dau-hieu-nhan-ra-o-nha" class="dc-sub">Dấu hiệu nhận ra ở nhà</div>
               <div class="dc-chips" id="dauHieuChips"></div>
               <!-- Không lặp lại nhãn "Con là người thế nào": tiêu đề khối ngay
                    phía trên đã nói đúng câu đó, in hai lần đọc thành lộn xộn. -->
@@ -329,46 +329,46 @@ body.chat-first-live .hd-grid{grid-template-columns:1fr}
         <div id="dcLockHost" style="display:none;margin-bottom:16px"></div>
 
         <!-- ── ĐO ĐƯỢC GÌ ─────────────────────────────────────────────── -->
-        <div class="dc-sec" id="secDo" style="display:none"><b>Đo được gì</b><i></i></div>
+        <div data-i18n="daycon.do-duoc-gi" class="dc-sec" id="secDo" style="display:none"><b>Đo được gì</b><i></i></div>
 
         <div class="res-block" id="trucBlock" style="display:none">
-          <div class="res-block-header"><span class="res-block-title">Năm Trục Tính Khí</span></div>
+          <div data-i18n="daycon.nam-truc-tinh-khi" class="res-block-header"><span class="res-block-title">Năm Trục Tính Khí</span></div>
           <div class="res-block-body">
             <div class="tr-list" id="trucList"></div>
-            <p class="fw-note"><b>5 là mức giữa</b> của hàng nghìn lá số trẻ em, không phải “được 5 trên 10”. Dải xám là vùng con dùng được cả hai kiểu. Hai đầu trục đều có giá trị.</p>
+            <p data-i18n="daycon.5-la-muc-giua-cua-hang" class="fw-note"><b>5 là mức giữa</b> của hàng nghìn lá số trẻ em, không phải “được 5 trên 10”. Dải xám là vùng con dùng được cả hai kiểu. Hai đầu trục đều có giá trị.</p>
           </div>
         </div>
 
         <div class="res-block" id="khieuBlock" style="display:none">
-          <div class="res-block-header"><span class="res-block-title">Tám Chất Năng Khiếu</span></div>
+          <div data-i18n="daycon.tam-chat-nang-khieu" class="res-block-header"><span class="res-block-title">Tám Chất Năng Khiếu</span></div>
           <div class="res-block-body">
             <div class="kh-wrap" id="khieuChart"></div>
             <p class="dc-para" id="chatNoi" style="display:none;margin-top:14px"></p>
             <div class="kh-cards" id="khieuCards"></div>
-            <p class="fw-note">Vượt vạch đứt là chất <b>đáng cho thử</b>, không phải năng khiếu đã xác nhận. Đối chiếu với dấu hiệu ở nhà — không khớp thì tin mắt mình.</p>
+            <p data-i18n="daycon.vuot-vach-dut-la-chat-dang" class="fw-note">Vượt vạch đứt là chất <b>đáng cho thử</b>, không phải năng khiếu đã xác nhận. Đối chiếu với dấu hiệu ở nhà — không khớp thì tin mắt mình.</p>
           </div>
         </div>
 
         <!-- ── NÊN LÀM GÌ ─────────────────────────────────────────────── -->
-        <div class="dc-sec" id="secLam" style="display:none"><b>Nên làm gì</b><i></i></div>
+        <div data-i18n="daycon.nen-lam-gi" class="dc-sec" id="secLam" style="display:none"><b>Nên làm gì</b><i></i></div>
 
         <div class="res-block" id="loBlock" style="display:none">
-          <div class="res-block-header"><span class="res-block-title" id="loTitle">Điều Bạn Đang Lo</span></div>
+          <div data-i18n="daycon.dieu-ban-dang-lo-pjp3" class="res-block-header"><span class="res-block-title" id="loTitle">Điều Bạn Đang Lo</span></div>
           <div class="res-block-body"><p class="dc-para" id="loLang"></p></div>
         </div>
 
         <div class="res-block" id="dhBlock" style="display:none">
-          <div class="res-block-header"><span class="res-block-title">Định Hướng</span></div>
+          <div data-i18n="daycon.dinh-huong" class="res-block-header"><span class="res-block-title">Định Hướng</span></div>
           <div class="res-block-body">
             <p class="dc-para" id="dinhHuong"></p>
-            <p class="fw-note">Đây là <b>kiểu môi trường học</b> hợp với con — cố ý không chốt ngành hay nghề.</p>
+            <p data-i18n="daycon.day-la-kieu-moi-truong-hoc" class="fw-note">Đây là <b>kiểu môi trường học</b> hợp với con — cố ý không chốt ngành hay nghề.</p>
           </div>
         </div>
 
         <!-- Gộp bảng 6 thẻ + đoạn văn "vào con bằng cách nào": trước là HAI khối
              nói cùng một việc nằm cạnh nhau, đọc thành lặp. -->
         <div class="res-block" id="howCardsBlock" style="display:none">
-          <div class="res-block-header"><span class="res-block-title">Cách Dạy Con Này</span></div>
+          <div data-i18n="daycon.cach-day-con-nay" class="res-block-header"><span class="res-block-title">Cách Dạy Con Này</span></div>
           <div class="res-block-body">
             <div class="dc-how" id="howCards"></div>
             <p class="dc-para" id="vaoBangGi" style="display:none;margin-top:15px"></p>
@@ -377,40 +377,40 @@ body.chat-first-live .hd-grid{grid-template-columns:1fr}
         </div>
 
         <div class="res-block" id="doBlock" style="display:none">
-          <div class="res-block-header"><span class="res-block-title">Làm Gì Từ Tối Nay</span></div>
+          <div data-i18n="daycon.lam-gi-tu-toi-nay" class="res-block-header"><span class="res-block-title">Làm Gì Từ Tối Nay</span></div>
           <div class="res-block-body">
             <div class="dc-two">
-              <div class="dc-col yes"><h4>Nên</h4><div id="nenLam"></div></div>
-              <div class="dc-col no"><h4>Thôi</h4><div id="tranhLam"></div></div>
+              <div class="dc-col yes"><h4 data-i18n="daycon.nen">Nên</h4><div id="nenLam"></div></div>
+              <div class="dc-col no"><h4 data-i18n="daycon.thoi">Thôi</h4><div id="tranhLam"></div></div>
             </div>
           </div>
         </div>
 
         <div class="res-block" id="hdBlock" style="display:none">
-          <div class="res-block-header"><span class="res-block-title">Hoạt Động Nên Cho Con Thử</span></div>
+          <div data-i18n="daycon.hoat-dong-nen-cho-con-thu" class="res-block-header"><span class="res-block-title">Hoạt Động Nên Cho Con Thử</span></div>
           <div class="res-block-body">
             <p class="dc-para" id="hdBand" style="font-size:12.5px;color:#5a5145"></p>
             <p class="dc-para" id="hoatDongVi" style="display:none"></p>
             <div class="kh-cards" id="hdList"></div>
             <div class="kh-card" id="hdFormat" style="margin-top:12px"></div>
-            <p class="fw-note">Gợi ý để thử, không phải chỉ định — cổ thư nói về chất người, nó không biết câu lạc bộ nào đang mở ở chỗ bạn. Cho con thử một buổi rồi nhìn phản ứng thật.</p>
+            <p data-i18n="daycon.goi-y-de-thu-khong-phai" class="fw-note">Gợi ý để thử, không phải chỉ định — cổ thư nói về chất người, nó không biết câu lạc bộ nào đang mở ở chỗ bạn. Cho con thử một buổi rồi nhìn phản ứng thật.</p>
           </div>
         </div>
 
         <!-- ── BỐI CẢNH ───────────────────────────────────────────────── -->
-        <div class="dc-sec" id="secNen" style="display:none"><b>Bối cảnh</b><i></i></div>
+        <div data-i18n="daycon.boi-canh" class="dc-sec" id="secNen" style="display:none"><b>Bối cảnh</b><i></i></div>
 
         <div class="res-block" id="changBlock" style="display:none">
-          <div class="res-block-header"><span class="res-block-title">Các Chặng Đi Học</span></div>
+          <div data-i18n="daycon.cac-chang-di-hoc" class="res-block-header"><span class="res-block-title">Các Chặng Đi Học</span></div>
           <div class="res-block-body">
             <div class="dc-chang" id="changList"></div>
             <p class="dc-para" id="changNay" style="margin-top:13px;display:none"></p>
-            <p style="font-size:11.5px;color:#7a705f;line-height:1.7;margin-top:9px">Điểm ở đây là mức <b>thuận / nghịch của quãng</b>, không phải điểm học lực và không phải điểm của đứa trẻ.</p>
+            <p data-i18n="daycon.diem-o-day-la-muc-thuan" style="font-size:11.5px;color:#7a705f;line-height:1.7;margin-top:9px">Điểm ở đây là mức <b>thuận / nghịch của quãng</b>, không phải điểm học lực và không phải điểm của đứa trẻ.</p>
           </div>
         </div>
 
         <div class="res-block" id="withBlock" style="display:none">
-          <div class="res-block-header"><span class="res-block-title">Hai Bên Với Nhau</span></div>
+          <div data-i18n="daycon.hai-ben-voi-nhau" class="res-block-header"><span class="res-block-title">Hai Bên Với Nhau</span></div>
           <div class="res-block-body">
             <p class="dc-para" id="voiChaMe"></p>
             <div class="dc-chips" id="voiChips"></div>
@@ -418,7 +418,7 @@ body.chat-first-live .hd-grid{grid-template-columns:1fr}
         </div>
 
         <div class="res-block" id="basisBlock" style="display:none">
-          <div class="res-block-header"><span class="res-block-title">Cơ Sở Trong Lá Số</span></div>
+          <div data-i18n="daycon.co-so-trong-la-so" class="res-block-header"><span class="res-block-title">Cơ Sở Trong Lá Số</span></div>
           <div class="res-block-body">
             <div class="dc-coso" id="coSoDoc" style="display:none"></div>
             <ul class="dc-basis-list" id="basisList"></ul>
@@ -433,7 +433,7 @@ body.chat-first-live .hd-grid{grid-template-columns:1fr}
              nhớ nhất. Nay câu chốt có tiêu đề riêng và đứng SAU phần cơ sở, để
              bản đọc kết bằng câu dùng được chứ không kết bằng bảng tra. -->
         <div class="res-block" id="endBlock" style="display:none">
-          <div class="res-block-header"><span class="res-block-title">Nếu Chỉ Nhớ Một Câu</span></div>
+          <div data-i18n="daycon.neu-chi-nho-mot-cau" class="res-block-header"><span class="res-block-title">Nếu Chỉ Nhớ Một Câu</span></div>
           <div class="res-block-body">
             <div class="fb-card fb-trungtinh" id="motCau"></div>
           </div>
@@ -441,12 +441,12 @@ body.chat-first-live .hd-grid{grid-template-columns:1fr}
 
         <!-- W1 — tường "đã tính thử": phần trên đã chạy THẬT và miễn phí. -->
         <div class="res-block" id="lockBlock" style="display:none">
-          <div class="res-block-header"><span class="res-block-title">Phần Luận Chưa Mở</span></div>
+          <div data-i18n="daycon.phan-luan-chua-mo" class="res-block-header"><span class="res-block-title">Phần Luận Chưa Mở</span></div>
           <div class="res-block-body" id="lockHost" data-tvp-lock style="padding-top:6px"></div>
         </div>
 
         <div class="res-block tvmb-src-note" data-share-skip style="background:#FBF3DE;border-color:#e8d9b0">
-          <div class="res-block-body" style="font-size:12.5px;line-height:1.68;color:#5a5145">
+          <div data-i18n="daycon.ban-nay-phac-hoa-tu-cac" class="res-block-body" style="font-size:12.5px;line-height:1.68;color:#5a5145">
             <span class="ic" data-icon="lightbulb"></span> Bản này phác hoạ từ các dữ liệu trong lá số Tử Vi, kết hợp kinh nghiệm nghiên cứu của tiền nhân để lại. Phần <b>cách dạy</b> là quy chiếu của trang, không phải chữ trong cổ thư. Mang tính tham khảo.<br><br>
             <span class="ic" data-icon="scale"></span> Đây là khung <b>hiểu để dạy cho đúng người</b>. Đứa trẻ chưa trưởng thành và không có mặt ở đây, nên bản luận cố ý <b>không đoán đỗ trượt, không chốt nghề, không đọc sức khoẻ hay chuyện tình duyên</b> của con. Tính khí gốc không tốt cũng không xấu — chỉ hợp hoặc không hợp cách người lớn đang làm.<br><br>
             <span class="ic" data-icon="book-open"></span> <b>Nguồn:</b> Cung Mệnh, Phúc Đức, Phụ Mẫu… lập theo <i>Tử Vi Đẩu Số Tân Biên</i> (Vân Đằng Thái Thứ Lang). Khung 5 trục · 8 chất và cách dạy theo kiểu là phương pháp riêng do <b>đội ngũ chuyên gia Tử Vi Minh Bảo</b> xây dựng. <a href="/nguon-du-lieu.html" target="_blank" rel="noopener" style="color:#9A7B3A">Xem đầy đủ nguồn dữ liệu →</a>
@@ -454,7 +454,7 @@ body.chat-first-live .hd-grid{grid-template-columns:1fr}
         </div>
 
         <div class="res-block" id="histBlock" style="display:none">
-          <div class="res-block-header"><span class="res-block-title">Đã Xem Trước Đó</span></div>
+          <div data-i18n="daycon.da-xem-truoc-do" class="res-block-header"><span class="res-block-title">Đã Xem Trước Đó</span></div>
           <div class="res-block-body"><div id="histList"></div></div>
         </div>
 
