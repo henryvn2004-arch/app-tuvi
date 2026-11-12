@@ -7,16 +7,26 @@
    API: LucNhamTool.compute(ngay,thang,nam,gioChi).
    ============================================================ */
 (function () {
+  // Chữ HIỂN THỊ qua I18n.tv + glossary (trang /<locale>/); vi / trang không nạp ⇒ chữ Việt nguyên.
+  function _tv(key, vi, vars) {
+    var I = window.I18n;
+    if (I && I.tv) return I.tv(key, vi, vars);
+    return vars ? vi.replace(/\{(\w+)\}/g, function (x, n) { return vars[n] !== undefined ? vars[n] : x; }) : vi;
+  }
+  function _g(kind, v) {
+    var g = window.TuviGlossary;
+    return g && v ? g.t(kind, v) : v;
+  }
   var CHI = ['Tý', 'Sửu', 'Dần', 'Mão', 'Thìn', 'Tỵ', 'Ngọ', 'Mùi', 'Thân', 'Dậu', 'Tuất', 'Hợi'];
   var GIO_TIME = ['23–01h', '01–03h', '03–05h', '05–07h', '07–09h', '09–11h', '11–13h', '13–15h', '15–17h', '17–19h', '19–21h', '21–23h'];
 
   function compute(ngay, thang, nam, gioChi) {
     ngay = parseInt(ngay); thang = parseInt(thang); nam = parseInt(nam); gioChi = parseInt(gioChi) || 0;
-    if (!ngay || ngay < 1 || ngay > 31 || !thang || !nam) return { ok: false, error: 'Vui lòng nhập ngày tháng năm.' };
+    if (!ngay || ngay < 1 || ngay > 31 || !thang || !nam) return { ok: false, error: _tv('js.shellui.ln-nhap-ngay-thang-nam', 'Vui lòng nhập ngày tháng năm.') };
     // Kiểm ngày không tồn tại (vd 31/2) ở đây — `/api/liuren` lập khóa theo
     // đúng ngày này, gửi ngày sai thì khóa cũng sai mà không ai báo.
     if (new Date(nam, thang - 1, ngay).getDate() !== ngay) {
-      return { ok: false, error: 'Tháng ' + thang + '/' + nam + ' không có ngày ' + ngay + ' — vui lòng chọn lại.' };
+      return { ok: false, error: _tv('js.shellui.hd-thang-khong-co-ngay', 'Tháng {m}/{y} không có ngày {d} — vui lòng chọn lại.', { m: thang, y: nam, d: ngay }) };
     }
     // 🔴 `titleText`/`data.ngayDL`/`data.gio` dưới đây KHÔNG dùng can-chi ngày
     // hay vị trí thần tướng — phần đó (khóa Lục Nhâm thật) do `/api/liuren`
@@ -26,7 +36,7 @@
     // VERIFY ĐƯỢC (xem đầu `dai-luc-nham.js`), nên đã bỏ hẳn, không sửa mò.
     return {
       ok: true,
-      titleText: 'Ngày ' + ngay + '/' + thang + '/' + nam + ' — Giờ ' + CHI[gioChi] + ' (' + GIO_TIME[gioChi] + ')',
+      titleText: _tv('js.shellui.ln-title', 'Ngày {date} — Giờ {chi} ({time})', { date: ngay + '/' + thang + '/' + nam, chi: _g('chi', CHI[gioChi]), time: GIO_TIME[gioChi] }),
       data: { ngayDL: ngay + '/' + thang + '/' + nam, gio: CHI[gioChi] + ' (' + GIO_TIME[gioChi] + ')' }
     };
   }

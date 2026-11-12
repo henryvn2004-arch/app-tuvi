@@ -13,6 +13,16 @@
    khóa. Mất mạng thì nói mất mạng.
    ============================================================ */
 (function () {
+  // Chữ HIỂN THỊ qua I18n.tv + glossary (trang /<locale>/); vi / trang không nạp ⇒ chữ Việt nguyên.
+  function _tv(key, vi, vars) {
+    var I = window.I18n;
+    if (I && I.tv) return I.tv(key, vi, vars);
+    return vars ? vi.replace(/\{(\w+)\}/g, function (x, n) { return vars[n] !== undefined ? vars[n] : x; }) : vi;
+  }
+  function _g(kind, v) {
+    var g = window.TuviGlossary;
+    return g && v ? g.t(kind, v) : v;
+  }
   function esc(s) {
     return String(s == null ? '' : s).replace(/[&<>"']/g, function (c) {
       return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c];
@@ -63,76 +73,74 @@
   function html(k) {
     var o = [];
     o.push(
-      '<div class="lnk-row"><span>Ngày <b>' + esc(k.canChi.ngay) + '</b></span>' +
-      '<span>Giờ <b>' + esc(k.canChi.gio) + '</b></span>' +
-      '<span>Tháng <b>' + esc(k.canChi.thang) + '</b></span>' +
+      '<div class="lnk-row"><span>' + _tv('js.shellui.dln-ngay-b', 'Ngày <b>{v}</b>', { v: esc(_g('canchi', k.canChi.ngay)) }) + '</span>' +
+      '<span>' + _tv('js.shellui.dln-gio-b', 'Giờ <b>{v}</b>', { v: esc(_g('canchi', k.canChi.gio)) }) + '</span>' +
+      '<span>' + _tv('js.shellui.dln-thang-b', 'Tháng <b>{v}</b>', { v: esc(_g('canchi', k.canChi.thang)) }) + '</span>' +
       '<span><b>' + esc(k.truDem) + '</b></span></div>'
     );
     o.push(
-      '<div class="lnk-row"><span>Nguyệt tướng <b>' + esc(k.nguyetTuong) +
-      '</b> gia lên giờ chiêm <b>' + esc(k.chiemThoi) + '</b></span>' +
-      '<span>Quý Nhân <b>' + esc(k.quyNhan.thienBan) + '</b> trên <b>' + esc(k.quyNhan.diaBan) + '</b></span>' +
-      '<span>Tuần Không <b>' + esc(k.tuanKhong.join(', ')) + '</b></span></div>'
+      '<div class="lnk-row"><span>' + _tv('js.shellui.dln-nguyet-tuong', 'Nguyệt tướng <b>{nt}</b> gia lên giờ chiêm <b>{ct}</b>', { nt: esc(k.nguyetTuong), ct: esc(_g('chi', k.chiemThoi)) }) + '</span>' +
+      '<span>' + _tv('js.shellui.dln-quy-nhan', 'Quý Nhân <b>{tb}</b> trên <b>{db}</b>', { tb: esc(_g('chi', k.quyNhan.thienBan)), db: esc(_g('chi', k.quyNhan.diaBan)) }) + '</span>' +
+      '<span>' + _tv('js.shellui.dln-tuan-khong', 'Tuần Không <b>{v}</b>', { v: esc(k.tuanKhong.map(function (c) { return _g('chi', c); }).join(', ')) }) + '</span></div>'
     );
 
     // ── tứ khóa ──
-    o.push('<div class="lnk-h">Tứ khóa</div><div class="lnk-grid">');
+    o.push('<div class="lnk-h">' + _tv('js.shellui.dln-tu-khoa', 'Tứ khóa') + '</div><div class="lnk-grid">');
     k.tuKhoa.forEach(function (x) {
       o.push(
-        '<div class="lnk-cell ' + x.muc + '"><b>' + esc(x.tren) + ' / ' + esc(x.duoi) + '</b>' +
+        '<div class="lnk-cell ' + x.muc + '"><b>' + esc(_g('chi', x.tren)) + ' / ' + esc(_g('chi', x.duoi)) + '</b>' +
         '<span>' + esc(x.ten) + ' · ' + esc(x.tuong) + '<br>' + esc(x.quanHe) + '</span></div>'
       );
     });
     o.push('</div>');
 
     // ── tam truyền ──
-    o.push('<div class="lnk-h">Tam truyền</div><div class="lnk-tt">');
+    o.push('<div class="lnk-h">' + _tv('js.shellui.dln-tam-truyen', 'Tam truyền') + '</div><div class="lnk-tt">');
     k.tamTruyen.forEach(function (x) {
       o.push(
         '<div class="lnk-cell ' + x.muc + '" style="text-align:left">' +
         '<div class="st">' + esc(x.ten) + '</div>' +
-        '<div class="ch">' + esc(x.chi) + ' · ' + esc(x.tuong) + '</div>' +
-        '<div class="mt">Hành ' + esc(x.hanh) + ' — ' + esc(x.vuongSuy) +
-        (x.tuanKhong ? ' · <b>rơi Tuần Không</b>' : '') +
-        '<br>Với can ngày: ' + esc(x.quanHeCanNgay) + '</div></div>'
+        '<div class="ch">' + esc(_g('chi', x.chi)) + ' · ' + esc(x.tuong) + '</div>' +
+        '<div class="mt">' + _tv('js.shellui.dln-hanh-vuong-suy', 'Hành {h} — {vs}', { h: esc(_g('hanh', x.hanh)), vs: esc(x.vuongSuy) }) +
+        (x.tuanKhong ? ' · <b>' + _tv('js.shellui.dln-roi-tuan-khong', 'rơi Tuần Không') + '</b>' : '') +
+        '<br>' + _tv('js.shellui.dln-voi-can-ngay', 'Với can ngày: {v}', { v: esc(x.quanHeCanNgay) }) + '</div></div>'
       );
     });
     o.push('</div>');
 
-    o.push('<div class="lnk-h">Phép thủ truyền</div>');
+    o.push('<div class="lnk-h">' + _tv('js.shellui.dln-phep-thu-truyen', 'Phép thủ truyền') + '</div>');
     o.push('<div class="lnk-row"><span><b>' + esc(k.phap.ten) + '</b> — ' + esc(k.phap.nghia) + '</span></div>');
     o.push('<div class="lnk-row"><span><b>' + esc(k.dangTruyen.ten) + '</b> — ' + esc(k.dangTruyen.nghia) + '</span></div>');
 
     if (k.khoaThe && k.khoaThe.length) {
-      o.push('<div class="lnk-h">Khóa thể</div><div>' +
+      o.push('<div class="lnk-h">' + _tv('js.shellui.dln-khoa-the', 'Khóa thể') + '</div><div>' +
         k.khoaThe.map(function (t) { return chip(t, 'binh'); }).join('') + '</div>');
     }
     if (k.thanSat && k.thanSat.length) {
-      o.push('<div class="lnk-h">Thần sát</div><div>' +
+      o.push('<div class="lnk-h">' + _tv('js.shellui.dln-than-sat', 'Thần sát') + '</div><div>' +
         k.thanSat.map(function (s) { return chip(s.ten, s.muc); }).join('') + '</div>');
     }
 
     // ── thiên địa bàn ──
-    o.push('<div class="lnk-h">Thiên bàn gia địa bàn</div><div class="lnk-grid">');
+    o.push('<div class="lnk-h">' + _tv('js.shellui.dln-thien-ban-gia-dia-ban', 'Thiên bàn gia địa bàn') + '</div><div class="lnk-grid">');
     k.thienBan.forEach(function (x) {
       o.push(
-        '<div class="lnk-cell ' + x.muc + '"><b>' + esc(x.thien) + '</b>' +
-        '<span>trên ' + esc(x.dia) + '<br>' + esc(x.tuong) + '</span></div>'
+        '<div class="lnk-cell ' + x.muc + '"><b>' + esc(_g('chi', x.thien)) + '</b>' +
+        '<span>' + _tv('js.shellui.dln-tren', 'trên {v}', { v: esc(_g('chi', x.dia)) }) + '<br>' + esc(x.tuong) + '</span></div>'
       );
     });
     o.push('</div>');
-    o.push('<div class="lnk-note">Nguyệt tướng gia lên giờ chiêm để quay thiên bàn; 12 thiên tướng an theo vị Quý Nhân của can ngày (ngày dùng Quý Nhân ban ngày, đêm dùng Quý Nhân ban đêm).</div>');
+    o.push('<div class="lnk-note">' + _tv('js.shellui.dln-note', 'Nguyệt tướng gia lên giờ chiêm để quay thiên bàn; 12 thiên tướng an theo vị Quý Nhân của can ngày (ngày dùng Quý Nhân ban ngày, đêm dùng Quý Nhân ban đêm).') + '</div>');
     return o.join('');
   }
 
   /** Lập rồi vẽ vào `el`. Trả Promise<payload|null>. */
   function ve(el, khi) {
     if (!el) return Promise.resolve(null);
-    el.innerHTML = '<div class="lnk-msg">Đang lập khóa Lục Nhâm…</div>';
+    el.innerHTML = '<div class="lnk-msg">' + _tv('js.shellui.dln-dang-lap', 'Đang lập khóa Lục Nhâm…') + '</div>';
     return lap(khi).then(function (j) {
       if (!j) {
-        el.innerHTML = '<div class="lnk-msg">Chưa lập được khóa lúc này — vui lòng thử lại. ' +
-          '(Khóa Lục Nhâm phải lập ở máy chủ vì cần nguyệt tướng theo tiết khí thật.)</div>';
+        el.innerHTML = '<div class="lnk-msg">' + _tv('js.shellui.dln-chua-lap-duoc', 'Chưa lập được khóa lúc này — vui lòng thử lại. (Khóa Lục Nhâm phải lập ở máy chủ vì cần nguyệt tướng theo tiết khí thật.)') + '</div>';
         return null;
       }
       el.innerHTML = html(j.khoa);

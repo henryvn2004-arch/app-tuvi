@@ -140,12 +140,13 @@
 // khong lat som luc boot, va vung ket qua khong tran o ca cot artifact 420px lan man 393px.
 window.SHELL_CHATFIRST=true;
 window.SHELL_INTRO={key:'luc-nham'};</script>
-<script src="/tools-shared/luc-nham.js?v=4"></script>
-<script src="/tools-shared/dai-luc-nham.js?v=1"></script>
+<script src="/tools-shared/luc-nham.js?v=5"></script>
+<script src="/tools-shared/dai-luc-nham.js?v=2"></script>
 <script src="/auth.js?v=9"></script>
   <script src="/nav.js?v=49" data-icons-only></script>
 <script src="/shell.js?v=150"></script>
 <script src="/tools-shared/shell-soft-nav.js?v=49"></script>
+<script src="/tools-shared/glossary.js?v=4"></script>
 <script>
 // Ô giữa dùng CHUNG /tools-shared/luc-nham.js với /tools/luc-nham.html.
 // `luc-nham.js` nay CHỈ kiểm ngày + dựng tiêu đề. Phần thần tướng lấy từ
@@ -189,10 +190,9 @@ function calculate(){
     // format ở `j.rail` không tách lại được tên thiên tướng một cách đáng tin.
     Shell.setContext({
       scenario:{type:'luc-nham',data:Object.assign({ngayDL:r.data.ngayDL,gio:r.data.gio,khoa:k},j.rail)},
-      label:'Lục Nhâm · '+k.canChi.ngay+' giờ '+k.canChi.gio,
-      greeting:'Đã lập khóa **Đại Lục Nhâm** — ngày '+k.canChi.ngay+', giờ '+k.canChi.gio+', '+k.truDem+
-               '. Thủ truyền theo phép **'+k.phap.ten+'**, sơ truyền **'+so.chi+' · '+so.tuong+'**. Bạn muốn hỏi việc gì?',
-      chips:['Việc này thành hay bại?','Bao giờ có kết quả?','Nên tiến hay nên lui?','Tam truyền nói gì về diễn tiến?']
+      label:_tvmbT('js.lucnham.label','Lục Nhâm · {ngay} giờ {gio}',{ngay:_tvmbG('canchi',k.canChi.ngay),gio:_tvmbG('canchi',k.canChi.gio)}),
+      greeting:_tvmbT('js.lucnham.greeting','Đã lập khóa **Đại Lục Nhâm** — ngày {ngay}, giờ {gio}, {tdem}. Thủ truyền theo phép **{phap}**, sơ truyền **{chi} · {tuong}**. Bạn muốn hỏi việc gì?',{ngay:_tvmbG('canchi',k.canChi.ngay),gio:_tvmbG('canchi',k.canChi.gio),tdem:k.truDem,phap:k.phap.ten,chi:_tvmbG('chi',so.chi),tuong:so.tuong}),
+      chips:[_tvmbT('js.lucnham.chip1','Việc này thành hay bại?'),_tvmbT('js.lucnham.chip2','Bao giờ có kết quả?'),_tvmbT('js.lucnham.chip3','Nên tiến hay nên lui?'),_tvmbT('js.lucnham.chip4','Tam truyền nói gì về diễn tiến?')]
     });
     Shell.setShareable({
       kind:'text', toolId:'luc-nham',
