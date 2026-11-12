@@ -3,8 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Lá Số Người Khác — Tử Vi Minh Bảo</title>
-<meta name="description" content="Nhập lá số sếp, đồng nghiệp, cấp dưới hay người thân — nhận bản cẩm nang ứng xử: họ vận hành thế nào, nên nói gì, tránh nói gì, lúc nào nên đưa việc lớn tới.">
+<title data-i18n="nguoikhac.la-so-nguoi-khac-tu-vi">Lá Số Người Khác — Tử Vi Minh Bảo</title>
+<meta data-i18n-attr="content:nguoikhac.nhap-la-so-sep-dong-nghiep" name="description" content="Nhập lá số sếp, đồng nghiệp, cấp dưới hay người thân — nhận bản cẩm nang ứng xử: họ vận hành thế nào, nên nói gì, tránh nói gì, lúc nào nên đưa việc lớn tới.">
 <link rel="icon" type="image/webp" href="/seal.webp">
 <link rel="preload" href="/fonts/noto-serif-latin-400.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="/fonts/noto-serif-vietnamese-400.woff2" as="font" type="font/woff2" crossorigin>
@@ -77,10 +77,10 @@ body.chat-first-live .nk-two{grid-template-columns:1fr}
   <main class="ws" id="ws">
     <div class="ws-top">
       <button class="btn mobile-only" onclick="document.getElementById('shell-sidebar').classList.toggle('open');window.shellSyncBackdrop&&shellSyncBackdrop()" aria-label="Menu">☰</button>
-      <div class="ws-title"><b>Lá Số Người Khác</b><span>Cẩm nang ứng xử với đúng một người</span></div>
+      <div data-i18n="nguoikhac.la-so-nguoi-khac-cam-nang" class="ws-title"><b>Lá Số Người Khác</b><span>Cẩm nang ứng xử với đúng một người</span></div>
       <div class="ws-actions">
-        <button class="btn" id="btnEdit" onclick="showForm()" style="display:none">Xem Người Khác</button>
-        <button class="btn mobile-only" onclick="Shell.openRail()">✦ Hỏi</button>
+        <button data-i18n="nguoikhac.xem-nguoi-khac" class="btn" id="btnEdit" onclick="showForm()" style="display:none">Xem Người Khác</button>
+        <button data-i18n="battu.hoi" class="btn mobile-only" onclick="Shell.openRail()">✦ Hỏi</button>
       </div>
     </div>
     <div class="ws-body">
@@ -94,15 +94,15 @@ body.chat-first-live .nk-two{grid-template-columns:1fr}
         <img class="intro-avatar" src="/tool-avatars/nguoi-khac.webp" alt="" onerror="this.remove()">
         <div class="intro-body">
           <div class="intro-text">
-            <div class="intro-t">Lá Số Người Khác</div>
-            <div class="intro-d">Hiểu sai một người quan trọng — sếp, đối tác, người yêu — thường là gốc rễ của những va chạm không đáng có. Nhập ngày giờ sinh của họ, nhận cẩm nang nên nói gì, nên tránh gì.</div>
+            <div data-i18n="nguoikhac.la-so-nguoi-khac" class="intro-t">Lá Số Người Khác</div>
+            <div data-i18n="nguoikhac.hieu-sai-mot-nguoi-quan-trong" class="intro-d">Hiểu sai một người quan trọng — sếp, đối tác, người yêu — thường là gốc rễ của những va chạm không đáng có. Nhập ngày giờ sinh của họ, nhận cẩm nang nên nói gì, nên tránh gì.</div>
             <div id="introSrc"></div>
           </div>
         </div>
         <div class="hero-pills">
-          <div class="hero-pill"><span class="hp-ic" data-icon="scroll-text"></span><span>Cẩm nang<br>ứng xử</span></div>
-          <div class="hero-pill"><span class="hp-ic" data-icon="message-circle"></span><span>Nên nói gì<br>tránh nói gì</span></div>
-          <div class="hero-pill"><span class="hp-ic" data-icon="hourglass"></span><span>Lúc nào nên<br>đưa việc lớn</span></div>
+          <div data-i18n="nguoikhac.cam-nang-ung-xu" class="hero-pill"><span class="hp-ic" data-icon="scroll-text"></span><span>Cẩm nang<br>ứng xử</span></div>
+          <div data-i18n="nguoikhac.nen-noi-gi-tranh-noi-gi" class="hero-pill"><span class="hp-ic" data-icon="message-circle"></span><span>Nên nói gì<br>tránh nói gì</span></div>
+          <div data-i18n="nguoikhac.luc-nao-nen-dua-viec-lon" class="hero-pill"><span class="hp-ic" data-icon="hourglass"></span><span>Lúc nào nên<br>đưa việc lớn</span></div>
         </div>
       </div></div>
       <div class="ws-main-col">
@@ -111,27 +111,27 @@ body.chat-first-live .nk-two{grid-template-columns:1fr}
            (cuối file), gọi tại analyze()/_runAnonPreview/_renderLockWall/
            _doGenerate/showForm. -->
       <div class="ws-steps" id="wsSteps">
-        <div class="wss-step active"><span class="wss-n">1</span><span class="wss-l">Nhập thông tin</span></div>
-        <div class="wss-step"><span class="wss-n">2</span><span class="wss-l">Xem trước cẩm nang</span></div>
-        <div class="wss-step"><span class="wss-n">3</span><span class="wss-l">Thanh toán</span></div>
-        <div class="wss-step"><span class="wss-n">4</span><span class="wss-l">Nhận kết quả</span></div>
+        <div data-i18n="battu.1-nhap-thong-tin" class="wss-step active"><span class="wss-n">1</span><span class="wss-l">Nhập thông tin</span></div>
+        <div data-i18n="nguoikhac.2-xem-truoc-cam-nang" class="wss-step"><span class="wss-n">2</span><span class="wss-l">Xem trước cẩm nang</span></div>
+        <div data-i18n="battu.3-thanh-toan" class="wss-step"><span class="wss-n">3</span><span class="wss-l">Thanh toán</span></div>
+        <div data-i18n="battu.4-nhan-ket-qua" class="wss-step"><span class="wss-n">4</span><span class="wss-l">Nhận kết quả</span></div>
       </div>
       <div class="form-card" id="birthPanel" style="display:none">
-        <div class="fc-head"><span class="fc-ic" data-icon="user"></span><h2>Ngày sinh của người bạn muốn hiểu</h2></div>
-        <p class="sub">Nhập ngày giờ sinh người đó, mối quan hệ và việc bạn đang cần làm với họ để phân tích lá số theo đúng việc bạn nêu.</p>
+        <div class="fc-head"><span class="fc-ic" data-icon="user"></span><h2 data-i18n="nguoikhac.ngay-sinh-cua-nguoi-ban-muon">Ngày sinh của người bạn muốn hiểu</h2></div>
+        <p data-i18n="nguoikhac.nhap-ngay-gio-sinh-nguoi-do" class="sub">Nhập ngày giờ sinh người đó, mối quan hệ và việc bạn đang cần làm với họ để phân tích lá số theo đúng việc bạn nêu.</p>
 
         <div class="frow nk-qh">
           <div class="fg" style="flex:1">
-            <label for="quanHe">Người này là</label>
+            <label data-i18n="nguoikhac.nguoi-nay-la" for="quanHe">Người này là</label>
             <select id="quanHe" onchange="onQuanHeChange()">
-              <option value="sep">Sếp / cấp trên</option>
-              <option value="dong-nghiep">Đồng nghiệp ngang hàng</option>
-              <option value="cap-duoi">Cấp dưới / người mình quản</option>
-              <option value="doi-tac">Đối tác / khách hàng</option>
-              <option value="cha-me">Cha mẹ / người lớn trong nhà</option>
-              <option value="con-cai">Con cái</option>
-              <option value="ban-doi">Vợ / chồng / người yêu</option>
-              <option value="ban-be">Bạn bè</option>
+              <option data-i18n="nguoikhac.sep-cap-tren" value="sep">Sếp / cấp trên</option>
+              <option data-i18n="nguoikhac.dong-nghiep-ngang-hang" value="dong-nghiep">Đồng nghiệp ngang hàng</option>
+              <option data-i18n="nguoikhac.cap-duoi-nguoi-minh-quan" value="cap-duoi">Cấp dưới / người mình quản</option>
+              <option data-i18n="nguoikhac.doi-tac-khach-hang" value="doi-tac">Đối tác / khách hàng</option>
+              <option data-i18n="nguoikhac.cha-me-nguoi-lon-trong-nha" value="cha-me">Cha mẹ / người lớn trong nhà</option>
+              <option data-i18n="nguoikhac.con-cai" value="con-cai">Con cái</option>
+              <option data-i18n="nguoikhac.vo-chong-nguoi-yeu" value="ban-doi">Vợ / chồng / người yêu</option>
+              <option data-i18n="nguoikhac.ban-be" value="ban-be">Bạn bè</option>
             </select>
           </div>
         </div>
@@ -142,7 +142,7 @@ body.chat-first-live .nk-two{grid-template-columns:1fr}
              xem chú thích `VIEC_CAN_LAM` trong lib/engine/nguoi-khac.ts. -->
         <div class="frow nk-qh">
           <div class="fg" style="flex:1">
-            <label for="viecCanLam">Bạn đang cần làm gì với người này</label>
+            <label data-i18n="nguoikhac.ban-dang-can-lam-gi-voi" for="viecCanLam">Bạn đang cần làm gì với người này</label>
             <select id="viecCanLam" onchange="onViecChange()"></select>
           </div>
         </div>
@@ -155,9 +155,9 @@ body.chat-first-live .nk-two{grid-template-columns:1fr}
         <div id="formHost" data-uc-noseed></div>
 
         <details class="nk-self" id="selfWrap">
-          <summary id="selfSummary">Đối chiếu thêm với lá số của bạn (không bắt buộc)</summary>
+          <summary data-i18n="nguoikhac.doi-chieu-them-voi-la-so" id="selfSummary">Đối chiếu thêm với lá số của bạn (không bắt buộc)</summary>
           <div class="inner">
-            <p class="hint">Có lá số của bạn thì bản luận có thêm mục <b>“Người này với bạn”</b> — chỗ hai bên dễ va và chỗ bù được cho nhau. Bỏ trống cũng xem được đầy đủ phần còn lại.</p>
+            <p data-i18n="nguoikhac.co-la-so-cua-ban-thi" class="hint">Có lá số của bạn thì bản luận có thêm mục <b>“Người này với bạn”</b> — chỗ hai bên dễ va và chỗ bù được cho nhau. Bỏ trống cũng xem được đầy đủ phần còn lại.</p>
             <div id="formHostSelf"></div>
           </div>
         </details>
@@ -166,9 +166,9 @@ body.chat-first-live .nk-two{grid-template-columns:1fr}
           <div class="cb-l">
             <span class="cb-ic" data-icon="wallet"></span>
             <div>
-              <div class="cb-title">Chi phí sử dụng</div>
-              <div class="cb-amt"><span class="vnd" data-tvp-price-vnd="nguoi-khac"></span> mỗi lượt <span class="cb-sub">(<span data-tvp-price="nguoi-khac">…</span> Lượng)</span></div>
-              <div class="cb-pay">
+              <div data-i18n="battu.chi-phi-su-dung" class="cb-title">Chi phí sử dụng</div>
+              <div data-i18n="nguoikhac.moi-luot-luong" class="cb-amt"><span class="vnd" data-tvp-price-vnd="nguoi-khac"></span> mỗi lượt <span class="cb-sub">(<span data-tvp-price="nguoi-khac">…</span> Lượng)</span></div>
+              <div data-i18n="luangiai.chuyen-khoan-qua-qr-ngan-hang" class="cb-pay">
                 <span><span class="ic" data-icon="qr-code"></span> Chuyển khoản (qua QR ngân hàng)</span>
                 <span><span class="ic" data-icon="credit-card"></span> PayPal / Thẻ quốc tế</span>
               </div>
@@ -176,11 +176,11 @@ body.chat-first-live .nk-two{grid-template-columns:1fr}
           </div>
           <div class="cb-r">
             <span class="cb-ic" data-icon="gift"></span>
-            <div class="cb-r-txt">Mua gói để nhận nhiều ưu đãi hơn.<br><a href="/topup.html">Xem các gói ngay →</a></div>
+            <div data-i18n="luangiai.mua-goi-de-nhan-nhieu-uu" class="cb-r-txt">Mua gói để nhận nhiều ưu đãi hơn.<br><a href="/topup.html">Xem các gói ngay →</a></div>
           </div>
         </div>
         <div class="frow" style="margin-bottom:0">
-          <button class="btn-go" id="btnGo" onclick="analyze()">
+          <button data-i18n="nguoikhac.xem-cam-nang-ung-xu-ton" class="btn-go" id="btnGo" onclick="analyze()">
             <span class="bg-label"><span class="ic" data-icon="user"></span><b id="btnGoLabel">Xem Cẩm Nang Ứng Xử →</b></span>
             <small>Tốn <span class="vnd" data-tvp-price-vnd="nguoi-khac"></span> <span class="cb-sub">(<span data-tvp-price="nguoi-khac">…</span> Lượng)</span></small>
           </button>
@@ -189,16 +189,16 @@ body.chat-first-live .nk-two{grid-template-columns:1fr}
       </div>
       <div class="ws-intake-hint" id="wsIntakeHint">
         <span class="ic" data-icon="message-circle"></span>
-        <p>Trả lời thầy ở khung chat để cho biết người bạn muốn hiểu là ai và ngày sinh của họ.</p>
+        <p data-i18n="nguoikhac.tra-loi-thay-o-khung-chat">Trả lời thầy ở khung chat để cho biết người bạn muốn hiểu là ai và ngày sinh của họ.</p>
       </div>
       </div>
       <div class="ws-side-col">
       <div class="ws-promo">
-        <div class="wsp-eyebrow"><span class="wsp-ic" data-icon="book-open"></span><span>Giới thiệu</span></div>
-        <div class="wsp-title">Lá Số Người Khác</div>
-        <p class="wsp-desc">Tử Vi Đẩu Số là một môn mệnh lý cổ truyền Trung Hoa, lập lá số theo giờ sinh âm lịch với 12 cung và hệ thống chính tinh, phụ tinh chiếu mệnh. Môn học được hệ thống hoá qua nhiều đời, phổ biến tại Việt Nam qua bản dịch <i>Tử Vi Đẩu Số Tân Biên</i> của Vân Đằng Thái Thứ Lang.</p>
+        <div data-i18n="battu.gioi-thieu" class="wsp-eyebrow"><span class="wsp-ic" data-icon="book-open"></span><span>Giới thiệu</span></div>
+        <div data-i18n="nguoikhac.la-so-nguoi-khac" class="wsp-title">Lá Số Người Khác</div>
+        <p data-i18n="luangiai.tu-vi-dau-so-la-mot" class="wsp-desc">Tử Vi Đẩu Số là một môn mệnh lý cổ truyền Trung Hoa, lập lá số theo giờ sinh âm lịch với 12 cung và hệ thống chính tinh, phụ tinh chiếu mệnh. Môn học được hệ thống hoá qua nhiều đời, phổ biến tại Việt Nam qua bản dịch <i>Tử Vi Đẩu Số Tân Biên</i> của Vân Đằng Thái Thứ Lang.</p>
       </div>
-      <div class="samp-cta">
+      <div data-i18n="nguoikhac.ban-luan-giai-mau-tai-pdf" class="samp-cta">
         <span class="sc-ic" data-icon="file-text"></span>
         <span class="sc-txt"><b>Bản luận giải mẫu</b><span>Tải PDF Lá Số Người Khác đầy đủ của một lá số mẫu để xem trước nội dung thật.</span></span>
         <a class="sc-btn" href="/tai-mau/mau-nguoi-khac.pdf" target="_blank" rel="noopener">Tải PDF →</a>
@@ -209,7 +209,7 @@ body.chat-first-live .nk-two{grid-template-columns:1fr}
 
       <div id="resPanel" data-ws-result style="display:none">
         <div class="res-block">
-          <div class="res-block-header"><span class="res-block-title">Người Này Là Ai</span></div>
+          <div data-i18n="nguoikhac.nguoi-nay-la-ai" class="res-block-header"><span class="res-block-title">Người Này Là Ai</span></div>
           <div class="res-block-body">
             <div id="loading"><div id="loadingSteps"></div></div>
             <div id="card" style="display:none">
@@ -219,18 +219,18 @@ body.chat-first-live .nk-two{grid-template-columns:1fr}
                 <div class="nk-badges" id="nkBadges"></div>
                 <div class="nk-birth" id="birthLine" style="display:none"></div>
               </div>
-              <div class="nk-sub">Câu hỏi chạy ngầm trong đầu họ</div>
+              <div data-i18n="nguoikhac.cau-hoi-chay-ngam-trong-dau" class="nk-sub">Câu hỏi chạy ngầm trong đầu họ</div>
               <div class="nk-chips" id="cauHoiChips"></div>
               <!-- CHỈ hai đoạn miễn phí — hard paywall Pha 3 (xem
                    `PREVIEW_KEEP_PROSE` trong route.ts). `coiTrong` không còn
                    đứng ở đây, nó là khối khoá riêng (`coiTrongBlock`) bên dưới. -->
               <div id="proseTop" style="display:none">
                 <div id="tinhKhiWrap" style="display:none">
-                  <div class="nk-sub">Con người này vận hành thế nào</div>
+                  <div data-i18n="nguoikhac.con-nguoi-nay-van-hanh-the" class="nk-sub">Con người này vận hành thế nào</div>
                   <p class="nk-para" id="tinhKhi"></p>
                 </div>
                 <div id="chamNocWrap" style="display:none">
-                  <div class="nk-sub">Điều làm họ khó chịu</div>
+                  <div data-i18n="nguoikhac.dieu-lam-ho-kho-chiu" class="nk-sub">Điều làm họ khó chịu</div>
                   <p class="nk-para" id="chamNoc"></p>
                 </div>
               </div>
@@ -252,7 +252,7 @@ body.chat-first-live .nk-two{grid-template-columns:1fr}
              nó đứng làm MỘT khối khoá riêng — không còn vừa hiện vừa che giữa
              hai đoạn miễn phí như bản cũ. -->
         <div class="res-block" id="coiTrongBlock" style="display:none">
-          <div class="res-block-header"><span class="res-block-title">Điều Họ Coi Trọng</span></div>
+          <div data-i18n="nguoikhac.dieu-ho-coi-trong" class="res-block-header"><span class="res-block-title">Điều Họ Coi Trọng</span></div>
           <div class="res-block-body"><p class="nk-para" id="coiTrong"></p></div>
         </div>
 
@@ -264,22 +264,22 @@ body.chat-first-live .nk-two{grid-template-columns:1fr}
         <div id="nkLockHost" style="display:none;margin-bottom:16px"></div>
 
         <div class="res-block" id="sayBlock" style="display:none">
-          <div class="res-block-header"><span class="res-block-title">Nói Thế Nào</span></div>
+          <div data-i18n="nguoikhac.noi-the-nao" class="res-block-header"><span class="res-block-title">Nói Thế Nào</span></div>
           <div class="res-block-body">
             <div class="nk-two">
-              <div class="nk-col yes"><h4>Nên</h4><div id="nenNoi"></div></div>
-              <div class="nk-col no"><h4>Tránh</h4><div id="tranhNoi"></div></div>
+              <div class="nk-col yes"><h4 data-i18n="daycon.nen">Nên</h4><div id="nenNoi"></div></div>
+              <div class="nk-col no"><h4 data-i18n="nguoikhac.tranh">Tránh</h4><div id="tranhNoi"></div></div>
             </div>
           </div>
         </div>
 
         <div class="res-block" id="timeBlock" style="display:none">
-          <div class="res-block-header"><span class="res-block-title">Lúc Này Họ Đang Ở Đâu</span></div>
+          <div data-i18n="nguoikhac.luc-nay-ho-dang-o-dau" class="res-block-header"><span class="res-block-title">Lúc Này Họ Đang Ở Đâu</span></div>
           <div class="res-block-body"><p class="nk-para" id="thoiDiem"></p></div>
         </div>
 
         <div class="res-block" id="withBlock" style="display:none">
-          <div class="res-block-header"><span class="res-block-title">Người Này Với Bạn</span></div>
+          <div data-i18n="nguoikhac.nguoi-nay-voi-ban" class="res-block-header"><span class="res-block-title">Người Này Với Bạn</span></div>
           <div class="res-block-body">
             <p class="nk-para" id="voiBan"></p>
             <div class="nk-chips" id="voiBanChips"></div>
@@ -291,7 +291,7 @@ body.chat-first-live .nk-two{grid-template-columns:1fr}
              bằng chứng duy nhất người chưa trả tiền có để đánh giá tool. Bày
              mở, đặt trước tường. -->
         <div class="res-block" id="basisBlock" style="display:none">
-          <div class="res-block-header"><span class="res-block-title">Cơ Sở Trong Lá Số</span></div>
+          <div data-i18n="daycon.co-so-trong-la-so" class="res-block-header"><span class="res-block-title">Cơ Sở Trong Lá Số</span></div>
           <div class="res-block-body">
             <div class="nk-coso" id="coSoDoc" style="display:none"></div>
             <ul class="nk-basis-list" id="basisList"></ul>
@@ -306,7 +306,7 @@ body.chat-first-live .nk-two{grid-template-columns:1fr}
              nhớ nhất. Nay câu chốt có tiêu đề riêng và đứng SAU phần cơ sở, để
              bản đọc kết bằng câu dùng được chứ không kết bằng bảng tra. -->
         <div class="res-block" id="endBlock" style="display:none">
-          <div class="res-block-header"><span class="res-block-title">Nếu Chỉ Nhớ Một Câu</span></div>
+          <div data-i18n="daycon.neu-chi-nho-mot-cau" class="res-block-header"><span class="res-block-title">Nếu Chỉ Nhớ Một Câu</span></div>
           <div class="res-block-body">
             <div class="fb-card fb-trungtinh" id="motCau"></div>
           </div>
@@ -317,7 +317,7 @@ body.chat-first-live .nk-two{grid-template-columns:1fr}
              (thiếu Lượng) của paywall cũng rơi đúng vào đây thay vì nhảy lên
              cạnh nút chạy tool ở màn hình trước. -->
         <div class="res-block" id="lockBlock" style="display:none">
-          <div class="res-block-header"><span class="res-block-title">Phần Luận Chưa Mở</span></div>
+          <div data-i18n="daycon.phan-luan-chua-mo" class="res-block-header"><span class="res-block-title">Phần Luận Chưa Mở</span></div>
           <div class="res-block-body" id="lockHost" data-tvp-lock style="padding-top:6px"></div>
         </div>
 
@@ -325,14 +325,14 @@ body.chat-first-live .nk-two{grid-template-columns:1fr}
              chính nó buộc phải nhắc "sức khoẻ / tiền bạc riêng / hôn nhân" thì
              mới nói được là KHÔNG đọc mấy thứ đó. -->
         <div class="res-block" id="ethicsNote" style="background:#FBF3DE;border-color:#e8d9b0">
-          <div class="res-block-body" style="font-size:12.5px;line-height:1.68;color:#5a5145">
+          <div data-i18n="nguoikhac.ban-cam-nang-nay-phac-hoa" class="res-block-body" style="font-size:12.5px;line-height:1.68;color:#5a5145">
             <span class="ic" data-icon="lightbulb"></span> Bản cẩm nang này phác hoạ từ các dữ liệu trong lá số Tử Vi, kết hợp kinh nghiệm nghiên cứu của tiền nhân để lại. Mang tính tham khảo.<br><br>
             <span class="ic" data-icon="scale"></span> Đây là khung <b>hiểu để sống chung</b>, không phải để điều khiển ai. Người được xem không có mặt ở đây, nên bản luận cố ý <b>không đọc sức khoẻ, tiền bạc riêng hay chuyện hôn nhân</b> của họ. Tính cách không tốt cũng không xấu — chỉ hợp hoặc không hợp bối cảnh.
           </div>
         </div>
 
         <div class="res-block" id="histBlock" style="display:none">
-          <div class="res-block-header"><span class="res-block-title">Đã Xem Trước Đó</span></div>
+          <div data-i18n="daycon.da-xem-truoc-do" class="res-block-header"><span class="res-block-title">Đã Xem Trước Đó</span></div>
           <div class="res-block-body"><div id="histList"></div></div>
         </div>
 
