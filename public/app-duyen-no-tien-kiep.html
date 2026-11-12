@@ -619,7 +619,7 @@ function _showDummyPortraits(births) {
   host.style.display = 'block';
   var imgs = births.map(function (b) {
     return '<img src="' + TuviPaywall.dummyPortraitUrl(b.gender) + '" class="tpw-real-lock" ' +
-      'alt="Ảnh minh hoạ (mờ)" style="width:100px;height:150px;object-fit:cover;border-radius:10px">';
+      'alt="' + _tvmbT('js.duyenno.anh-minh-hoa-mo', 'Ảnh minh hoạ (mờ)') + '" style="width:100px;height:150px;object-fit:cover;border-radius:10px">';
   }).join('');
   host.innerHTML = TuviPaywall.lockBadge(_tvmbT('js.duyenno.buc-tranh-chung-minh-hoa', 'Bức tranh chung — minh hoạ')) +
     '<div style="display:flex;flex-wrap:wrap;gap:8px;margin-top:8px">' + imgs + '</div>' +

@@ -511,6 +511,110 @@
   "t": "이용약관 전문은 <a href=\"/dieu-khoan-dich-vu.html\">이용약관</a>(제2항 — 책임의 제한)에, 서비스 설명은 <a href=\"/san-pham-dich-vu.html\">상품 및 서비스</a> 페이지에 있습니다.",
   "h": "dc202339"
  },
+ "duyenno.2-thanh-toan": {
+  "t": "<span class=\"wss-n\">2</span><span class=\"wss-l\">결제</span>",
+  "h": "67c0b759"
+ },
+ "duyenno.3-nhan-ket-qua": {
+  "t": "<span class=\"wss-n\">3</span><span class=\"wss-l\">결과 받기</span>",
+  "h": "5b1e84a0"
+ },
+ "duyenno.ban-luan-giai-mau-tai-pdf": {
+  "t": "<span class=\"sc-ic\" data-icon=\"file-text\"></span> <span class=\"sc-txt\"><b>샘플 풀이서</b><span>샘플 명반으로 만든 「전생 인연」 전체 PDF를 내려받아 실제 내용을 미리 확인해 보세요.</span></span> <a class=\"sc-btn\" href=\"/tai-mau/mau-duyen-no-tien-kiep.pdf\" target=\"_blank\" rel=\"noopener\">PDF 받기 →</a>",
+  "h": "c48f94d9"
+ },
+ "duyenno.buc-tranh-ve-ca-nhom": {
+  "t": "<span class=\"hp-ic\" data-icon=\"image\"></span><span>모두를 담아<br>그린 그림 한 장</span>",
+  "h": "43567703"
+ },
+ "duyenno.cau-chuyen-4-hoi": {
+  "t": "<span class=\"hp-ic\" data-icon=\"book-open\"></span><span>4막으로 된<br>이야기</span>",
+  "h": "824bdaa8"
+ },
+ "duyenno.co-nhung-moi-quan-he-vua": {
+  "t": "처음 만났는데도 낯익게 느껴지는 관계, 미리 약속이라도 한 듯한 만남이 있어요. 두 사람의 명반을 맞춰 그 느낌 뒤에 있는 인연 이야기를 찾아보세요. 일러스트도 함께 드려요.",
+  "h": "370ab59d"
+ },
+ "duyenno.co-so-trong-la-so": {
+  "t": "명반상의 근거",
+  "h": "43f95044"
+ },
+ "duyenno.dang-ve-buc-tranh-khoang-45": {
+  "t": "그림을 그리는 중이에요…<br>(45~60초 정도)",
+  "h": "28b5d982"
+ },
+ "duyenno.duyen-no-tien-kiep": {
+  "t": "전생 인연",
+  "h": "c6b0ccb5"
+ },
+ "duyenno.duyen-no-tien-kiep-kiep-truoc": {
+  "t": "<b>전생 인연</b><span>전생에 이 사람들은 서로 어떤 사이였을까</span>",
+  "h": "89867b1c"
+ },
+ "duyenno.duyen-no-tien-kiep-tu-vi": {
+  "t": "전생 인연 — 명보 자미두수",
+  "h": "f1c11bb4"
+ },
+ "duyenno.gui-ket-qua-nay-cho-ho": {
+  "t": "이 결과를 그들에게 보내기 →",
+  "h": "69958b00"
+ },
+ "duyenno.hai-den-nam-la-so-kiep": {
+  "t": "2~5명의 명반으로 전생에 이 사람들이 서로 어떤 사이였는지 풀이해요. 인연의 종류는 고법에서 도출하고, 4막 이야기와 모두를 함께 그린 그림 한 장을 드려요.",
+  "h": "109c47c2"
+ },
+ "duyenno.lam-lai": {
+  "t": "다시 하기",
+  "h": "d3a72f2a"
+ },
+ "duyenno.loai-duyen-no-theo-co-phap": {
+  "t": "<span class=\"hp-ic\" data-icon=\"scroll-text\"></span><span>고법에 따른<br>인연의 종류</span>",
+  "h": "50fab9c4"
+ },
+ "duyenno.moi-duyen-4-hoi": {
+  "t": "<span class=\"res-block-title\">인연 이야기 — 4막</span>",
+  "h": "d1b7220b"
+ },
+ "duyenno.moi-duyen-kiep-truoc": {
+  "t": "<span class=\"res-block-title\">전생의 인연</span>",
+  "h": "5c0af936"
+ },
+ "duyenno.moi-duyen-va-cau-chuyen-phia": {
+  "t": "<span class=\"ic\" data-icon=\"lightbulb\"></span> 위의 인연과 이야기는 자미두수 명반들의 관계에 선인들이 남긴 연구 경험을 더해 그려낸 것이에요. 참고와 오락용으로만 봐 주세요.",
+  "h": "e81a1fdc"
+ },
+ "duyenno.moi-luot-luong": {
+  "t": "<span class=\"vnd\" data-tvp-price-vnd=\"duyen-no-tien-kiep\"></span> / 회 <span class=\"cb-sub\">(<span data-tvp-price=\"duyen-no-tien-kiep\">…</span> 냥)</span>",
+  "h": "19bc9353"
+ },
+ "duyenno.nhap-ho-ten-gioi-tinh-va": {
+  "t": "보고 싶은 사람들(2~5명)의 이름, 성별, 생년월일과 시간을 입력하면 일러스트가 곁들여진 인연 이야기를 만들어 드려요.",
+  "h": "f61856b4"
+ },
+ "duyenno.nhap-ngay-sinh-duong-lich": {
+  "t": "생년월일 입력 (양력)",
+  "h": "6983427a"
+ },
+ "duyenno.tai-anh-dang-story": {
+  "t": "⬇ 스토리용 이미지 저장",
+  "h": "2c46ee3c"
+ },
+ "duyenno.them-nguoi": {
+  "t": "+ 사람 추가",
+  "h": "79cf4ccf"
+ },
+ "duyenno.tra-loi-thay-o-khung-chat": {
+  "t": "채팅창에서 선생님께 한 사람씩 생년월일(2~5명)을 알려 주세요.",
+  "h": "672120ed"
+ },
+ "duyenno.tranh-duyen-no-tien-kiep": {
+  "t": "전생 인연 그림",
+  "h": "95122c03"
+ },
+ "duyenno.xem-duyen-no-ton-luong": {
+  "t": "<span class=\"bg-label\"><span class=\"ic\" data-icon=\"sparkles\"></span><b id=\"btnGoLabel\">인연 보기 →</b></span> <small>비용 <span class=\"vnd\" data-tvp-price-vnd=\"duyen-no-tien-kiep\"></span> <span class=\"cb-sub\">(<span data-tvp-price=\"duyen-no-tien-kiep\">…</span> 냥)</span></small>",
+  "h": "990649b6"
+ },
  "home.270-000-da-quoc-gia-da": {
   "t": "<span><span class=\"ic\" data-icon=\"file-text\"></span>270,000+</span> <span><span class=\"ic\" data-icon=\"globe\"></span>다국적</span> <span><span class=\"ic\" data-icon=\"check\"></span>검증 완료</span>",
   "h": "4d77621e"
@@ -1974,6 +2078,254 @@
  "js.daycon.xem-them": {
   "t": "<summary>명반 항목 ",
   "h": "c5afdcd1"
+ },
+ "js.duyenno.anh-dang-tai-co-the-hoi": {
+  "t": "이미지를 불러오는 중이에요. 다소 느릴 수 있어요 — 잠시 기다리시거나",
+  "h": "c4e9709b"
+ },
+ "js.duyenno.anh-minh-hoa-mo": {
+  "t": "예시 그림 (흐림)",
+  "h": "bb4bd552"
+ },
+ "js.duyenno.ban-co-muon-them-who": {
+  "t": "{who}을(를) 이야기에 추가할까요? (최대 {max}명)",
+  "h": "b57078f6"
+ },
+ "js.duyenno.ban-da-xem-duyen-no-cua": {
+  "t": "✓ 이 명반 그룹의 인연은 이미 봤어요 — 다시 열어도 냥이 차감되지 않아요",
+  "h": "60fbdfb0"
+ },
+ "js.duyenno.bo-nguoi-nay": {
+  "t": "이 사람 삭제",
+  "h": "690b6802"
+ },
+ "js.duyenno.buc-tranh-chung-minh-hoa": {
+  "t": "모두의 그림 — 예시",
+  "h": "0e03eaba"
+ },
+ "js.duyenno.cac-dau-hieu-con-lai-va": {
+  "t": " — 나머지 신호와 모든 사람 사이의 인연 전체 관계망은 전체 버전에 들어 있어요.",
+  "h": "c9821896"
+ },
+ "js.duyenno.cac-moi-duyen-trong-nhom": {
+  "t": "그룹 안의 인연들",
+  "h": "d40e26f3"
+ },
+ "js.duyenno.can-it-nhat-hai-la-so": {
+  "t": "명반이 최소 두 개 필요해요.",
+  "h": "4708eed7"
+ },
+ "js.duyenno.cho-thay-xin-thong-tin-cua-who": {
+  "t": "{who}의 정보를 알려 주세요.",
+  "h": "471d6f1e"
+ },
+ "js.duyenno.co-them-nguoi": {
+  "t": "네, 추가할게요 →",
+  "h": "ff2cea9c"
+ },
+ "js.duyenno.dang-dung-anh": {
+  "t": "이미지 만드는 중…",
+  "h": "7bce9760"
+ },
+ "js.duyenno.dang-ve-buc-tranh-ca-nhom": {
+  "t": "모두를 담은 그림을 그리는 중이에요…",
+  "h": "dcd60961"
+ },
+ "js.duyenno.dau-hieu-label": {
+  "t": "신호: {label}",
+  "h": "cae6f731"
+ },
+ "js.duyenno.doi-chieu-dia-chi-ngu-hanh": {
+  "t": "지지, 오행, 주성을 대조하는 중",
+  "h": "7e76a0f2"
+ },
+ "js.duyenno.du-n-nguoi-xem-ngay": {
+  "t": "{n}명으로 바로 볼게요.",
+  "h": "fcfd4d3d"
+ },
+ "js.duyenno.du-roi-xem-ngay": {
+  "t": "충분해요, 지금 볼게요 →",
+  "h": "d8de245d"
+ },
+ "js.duyenno.dung-tu-la-so": {
+  "t": "<b>명반을 바탕으로 작성</b><br>",
+  "h": "5de147a7"
+ },
+ "js.duyenno.duyen-no-tien-kiep": {
+  "t": "전생 인연",
+  "h": "c6b0ccb5"
+ },
+ "js.duyenno.duyen-no-tien-kiep-r7a2": {
+  "t": "전생 인연",
+  "h": "fc5445d2"
+ },
+ "js.duyenno.giua-a-va-b-gist": {
+  "t": "{a}와(과) {b} 사이: {gist} 4막 이야기와 모두를 담은 그림은 전체 버전에 들어 있어요.",
+  "h": "b21b2737"
+ },
+ "js.duyenno.gui-ket-qua-nay-cho-ca-nhom-names": {
+  "t": "이 결과를 그룹 전체({names})에게 보내 보세요 — 다들 자기 역할이 궁금해서 곧바로 자기 명반도 찾아보고 싶어 할 거예요.",
+  "h": "a9813a1c"
+ },
+ "js.duyenno.gui-ket-qua-nay-cho-name-xem": {
+  "t": "이 결과를 <b>{name}</b>에게 보내 보세요 — 궁금해서 곧바로 자기 명반도 찾아보고 싶어 할 거예요.",
+  "h": "a89262bb"
+ },
+ "js.duyenno.hai-nguoi-de-va-nhau-o": {
+  "t": "두 사람은 어디에서 부딪히기 쉬운가요?",
+  "h": "7d27557f"
+ },
+ "js.duyenno.khong-the-ket-noi-vui-long": {
+  "t": "연결할 수 없어요. 다시 시도해 주세요.",
+  "h": "bf0b6e7b"
+ },
+ "js.duyenno.khong-ve-duoc-buc-tranh-lan": {
+  "t": "이번에는 그림을 그리지 못했어요. 아래 이야기 부분은 그대로 모두 볼 수 있어요.",
+  "h": "8610db8b"
+ },
+ "js.duyenno.kiep-nay-gap-lai-thi-nen": {
+  "t": "이번 생에 다시 만났다면 거리를 어느 정도 두는 게 좋을까요?",
+  "h": "c7c61218"
+ },
+ "js.duyenno.la-so": {
+  "t": "명반: ",
+  "h": "2644d5f2"
+ },
+ "js.duyenno.la-so-vjrb": {
+  "t": " — 명반: ",
+  "h": "2a79724a"
+ },
+ "js.duyenno.lap-la-so-dung-nhan-vat": {
+  "t": "명반을 세우고 등장인물을 구성",
+  "h": "86c4f80f"
+ },
+ "js.duyenno.loai-duyen-label": {
+  "t": "인연의 종류: {label}",
+  "h": "943e47bf"
+ },
+ "js.duyenno.loi": {
+  "t": "오류 ",
+  "h": "1b80116b"
+ },
+ "js.duyenno.loi-8d72": {
+  "t": "오류: ",
+  "h": "471c0087"
+ },
+ "js.duyenno.loi-ket": {
+  "t": "맺음말",
+  "h": "319ac5e1"
+ },
+ "js.duyenno.luot-xem": {
+  "t": "열람",
+  "h": "980f8057"
+ },
+ "js.duyenno.mac-dinh-hai-nguoi-them-max": {
+  "t": "기본은 두 사람이에요. 최대 {max}명까지 추가할 수 있어요 — 그룹 전체가 하나의 이야기와 한 장의 그림에 담겨요.",
+  "h": "18e1432f"
+ },
+ "js.duyenno.mat-ket-noi-luc-tai-tranh": {
+  "t": "이미지를 불러오다 연결이 끊겼어요 — 다시 가져오는 중이에요…",
+  "h": "48d6deaf"
+ },
+ "js.duyenno.moi-duyen": {
+  "t": "인연",
+  "h": "eb37f74e"
+ },
+ "js.duyenno.moi-duyen-4-hoi": {
+  "t": "인연 이야기 — 4막",
+  "h": "982f3e5a"
+ },
+ "js.duyenno.moi-duyen-giua-names": {
+  "t": "**{names}**의 인연은 여기까지가 본문이에요. 더 묻고 싶은 게 있나요?",
+  "h": "ea285156"
+ },
+ "js.duyenno.nam": {
+  "t": "남",
+  "h": "b580ba1b"
+ },
+ "js.duyenno.name-la-nguoi-the-nao": {
+  "t": "{name}은(는) 어떤 사람인가요?",
+  "h": "03c43db7"
+ },
+ "js.duyenno.nguoi-ban-muon-xem-duyen-no": {
+  "t": "인연을 보고 싶은 사람",
+  "h": "0f74fdf8"
+ },
+ "js.duyenno.nguoi-thu-ba": {
+  "t": "세 번째 사람",
+  "h": "ed014d5c"
+ },
+ "js.duyenno.nguoi-thu-hai": {
+  "t": "두 번째 사람",
+  "h": "b330c7a6"
+ },
+ "js.duyenno.nguoi-thu-nam": {
+  "t": "다섯 번째 사람",
+  "h": "b2a0303b"
+ },
+ "js.duyenno.nguoi-thu-nhat": {
+  "t": "첫 번째 사람",
+  "h": "955e7151"
+ },
+ "js.duyenno.nguoi-thu-tu": {
+  "t": "네 번째 사람",
+  "h": "12dadc83"
+ },
+ "js.duyenno.nhan-vat-cua-ban": {
+  "t": "내 등장인물",
+  "h": "850ad819"
+ },
+ "js.duyenno.nu": {
+  "t": "여",
+  "h": "feb92ccd"
+ },
+ "js.duyenno.quet-ma-xem-duyen-no-cua": {
+  "t": "QR 코드를 스캔해 나의 인연 보기",
+  "h": "2d7c866a"
+ },
+ "js.duyenno.tai-lai": {
+  "t": "다시 불러오기",
+  "h": "16371241"
+ },
+ "js.duyenno.them-vao-nhom": {
+  "t": "그룹에 추가",
+  "h": "366d87cc"
+ },
+ "js.duyenno.them-who": {
+  "t": "{who} 추가 ✓",
+  "h": "6ed59d06"
+ },
+ "js.duyenno.thuong-la-ban": {
+  "t": "보통은 본인",
+  "h": "a9671f02"
+ },
+ "js.duyenno.toi-da-max-nguoi-mot-luot": {
+  "t": "한 번에 최대 {max}명까지예요.",
+  "h": "05bf983e"
+ },
+ "js.duyenno.trong-nhom-nay-ai-de-va": {
+  "t": "이 그룹에서 가장 부딪히기 쉬운 사람은 누구인가요?",
+  "h": "4deab4cd"
+ },
+ "js.duyenno.truc-cua-cau-chuyen": {
+  "t": "이야기의 중심축",
+  "h": "1b316be1"
+ },
+ "js.duyenno.truc-cua-cau-chuyen-j6j5": {
+  "t": " (이야기의 중심축)",
+  "h": "de7a2dcc"
+ },
+ "js.duyenno.vi-sao-lai-luan-ra-moi-duyen": {
+  "t": "왜 이런 인연이 읽히나요?",
+  "h": "1ac5d62d"
+ },
+ "js.duyenno.viet-cau-chuyen-moi-duyen": {
+  "t": "인연 이야기 작성",
+  "h": "980f94e2"
+ },
+ "js.duyenno.vui-long-nhap-day-du-ngay-who": {
+  "t": "{who}의 생년월일을 연·월·일까지 모두 입력해 주세요.",
+  "h": "5698e85d"
  },
  "js.home.3-buoc-dau-tien": {
   "t": "처음 3단계",
