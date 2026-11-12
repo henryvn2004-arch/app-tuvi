@@ -180,6 +180,7 @@ window.SHELL_INTRO={key:'dat-ten'};</script>
 <script src="/tools-shared/sample-hint.js?v=1"></script>
 <script src="/shell.js?v=150"></script>
 <script src="/tools-shared/shell-soft-nav.js?v=49"></script>
+<script src="/tools-shared/glossary.js?v=4"></script>
 <script>
 function esc(s){return String(s==null?'':s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
 var HANH_COLOR={'Mộc':'var(--green)','Hỏa':'var(--red)','Thổ':'var(--gold-soft)','Kim':'#8a8a8a','Thủy':'var(--blue)'};
@@ -193,15 +194,15 @@ function doDatTen(){
   var namCon=parseInt(document.getElementById('inpNamCon').value);
   var namBo=parseInt(document.getElementById('inpNamBo').value);
   var namMe=parseInt(document.getElementById('inpNamMe').value);
-  if(!ho||!namCon||!namBo||!namMe){ alert('Vui lòng nhập họ và năm sinh của con, bố, mẹ.'); return; }
+  if(!ho||!namCon||!namBo||!namMe){ alert(_tvmbT('js.datten.vui-long-nhap-ho','Vui lòng nhập họ và năm sinh của con, bố, mẹ.')); return; }
   btn.disabled=true;
   try{
     var iCon=CanChi.ccInfo(namCon),iBo=CanChi.ccInfo(namBo),iMe=CanChi.ccInfo(namMe);
-    var gtLabel=gt==='nu'?'Bé gái':'Bé trai';
-    document.getElementById('resHead').textContent='Nền can chi · ngũ hành '+ho+' — '+gtLabel;
-    function ccCard(who,i){ return '<div class="cc-card"><div class="who">'+esc(who)+'</div><div class="cc">'+esc(i.canChi)+'</div><div class="na" style="--hanh:'+HANH_COLOR[i.hanh]+'">'+esc(i.napAm)+' · <b>'+esc(i.hanh)+'</b></div></div>'; }
-    document.getElementById('ccRow').innerHTML=ccCard('Con ('+gtLabel+')',iCon)+ccCard('Bố',iBo)+ccCard('Mẹ',iMe);
-    document.getElementById('resNote').innerHTML='Mệnh con nạp âm <b>'+esc(iCon.napAm)+'</b> — hành <b>'+esc(iCon.hanh)+'</b>. Đặt tên nên chọn chữ có ngũ hành <b>tương sinh</b> cho con (hành <b>'+esc(_hanhSinhCho(iCon.hanh))+'</b> sinh <b>'+esc(iCon.hanh)+'</b>) hoặc <b>đồng hành</b> để bồi mệnh, tránh hành khắc. Hỏi Thầy để có danh sách tên cụ thể hợp cả con lẫn bố mẹ.';
+    var gtLabel=gt==='nu'?_tvmbT('js.datten.be-gai','Bé gái'):_tvmbT('js.datten.be-trai','Bé trai');
+    document.getElementById('resHead').textContent=_tvmbT('js.datten.res-head','Nền can chi · ngũ hành {ho} — {gt}',{ho:ho,gt:gtLabel});
+    function ccCard(who,i){ return '<div class="cc-card"><div class="who">'+esc(who)+'</div><div class="cc">'+esc(_tvmbG('canchi',i.canChi))+'</div><div class="na" style="--hanh:'+HANH_COLOR[i.hanh]+'">'+esc(_tvmbG('napam',i.napAm))+' · <b>'+esc(_tvmbG('hanh',i.hanh))+'</b></div></div>'; }
+    document.getElementById('ccRow').innerHTML=ccCard(_tvmbT('js.datten.con-gt','Con ({gt})',{gt:gtLabel}),iCon)+ccCard(_tvmbT('js.datten.bo','Bố'),iBo)+ccCard(_tvmbT('js.datten.me','Mẹ'),iMe);
+    document.getElementById('resNote').innerHTML=_tvmbT('js.datten.res-note','Mệnh con nạp âm <b>{na}</b> — hành <b>{h}</b>. Đặt tên nên chọn chữ có ngũ hành <b>tương sinh</b> cho con (hành <b>{hs}</b> sinh <b>{h}</b>) hoặc <b>đồng hành</b> để bồi mệnh, tránh hành khắc. Hỏi Thầy để có danh sách tên cụ thể hợp cả con lẫn bố mẹ.',{na:esc(_tvmbG('napam',iCon.napAm)),h:esc(_tvmbG('hanh',iCon.hanh)),hs:esc(_tvmbG('hanh',_hanhSinhCho(iCon.hanh)))});
     mountHook(iCon);
     // Globals cho khối "Gợi ý tên chuyên sâu AI" (gate+SSE, port từ tools/dat-ten-con.html)
     _dtHo=ho; _dtGt=gt; _dtNamCon=namCon; _dtInfoC=iCon; _dtInfoB=iBo; _dtInfoM=iMe;
@@ -213,9 +214,9 @@ function doDatTen(){
     if(window.SHELL_INTRO)Shell.dismissIntro(window.SHELL_INTRO.key);
     Shell.setContext({
       scenario:{type:'dat-ten-con',data:{ho:ho,gioiTinh:gt,namCon:namCon,namBo:namBo,namMe:namMe}},
-      label:'Đặt tên '+gtLabel+' họ '+ho+' · '+iCon.canChi,
-      greeting:'Nền mệnh của bé đã sẵn sàng (con **'+esc(iCon.canChi)+'** · '+esc(iCon.hanh)+'). Bạn muốn tôi gợi ý tên theo hướng nào?',
-      chips:['Gợi ý 12 tên hợp mệnh kèm ý nghĩa','Tên đệm nào hợp cho bé?','Con cần bổ ngũ hành gì?','Tên hợp cả tuổi bố và mẹ?']
+      label:_tvmbT('js.datten.label','Đặt tên {gt} họ {ho} · {cc}',{gt:gtLabel,ho:ho,cc:_tvmbG('canchi',iCon.canChi)}),
+      greeting:_tvmbT('js.datten.greeting','Nền mệnh của bé đã sẵn sàng (con **{cc}** · {h}). Bạn muốn tôi gợi ý tên theo hướng nào?',{cc:esc(_tvmbG('canchi',iCon.canChi)),h:esc(_tvmbG('hanh',iCon.hanh))}),
+      chips:[_tvmbT('js.datten.chip1','Gợi ý 12 tên hợp mệnh kèm ý nghĩa'),_tvmbT('js.datten.chip2','Tên đệm nào hợp cho bé?'),_tvmbT('js.datten.chip3','Con cần bổ ngũ hành gì?'),_tvmbT('js.datten.chip4','Tên hợp cả tuổi bố và mẹ?')]
     });
     var _dtLines=['Đặt tên '+gtLabel+' họ '+ho+' — nền mệnh con '+iCon.canChi+' ('+iCon.napAm+', '+iCon.hanh+')'];
     _dtLines.push('Bố: '+iBo.canChi+' ('+iBo.napAm+', '+iBo.hanh+') · Mẹ: '+iMe.canChi+' ('+iMe.napAm+', '+iMe.hanh+')');
@@ -223,7 +224,7 @@ function doDatTen(){
     Shell.setShareable({ kind:'text', toolId:'dat-ten', title:'Đặt tên '+gtLabel+' họ '+ho+' · '+iCon.canChi, text:_dtLines.join('\n') });
     document.querySelectorAll('#resPanel [data-ask]').forEach(function(el){ el.addEventListener('click',function(){ Shell.ask(el.getAttribute('data-ask')); }); });
   }catch(e){
-    document.getElementById('ccRow').innerHTML='<div class="laso-error">Lỗi: '+esc(e.message)+'</div>';
+    document.getElementById('ccRow').innerHTML='<div class="laso-error">'+_tvmbT('js.datten.loi-colon','Lỗi: ')+esc(e.message)+'</div>';
     document.getElementById('birthPanel').style.display='none';
     document.getElementById('resPanel').style.display='block';
     document.getElementById('btnEdit').style.display='';
@@ -296,17 +297,17 @@ TuviPaywall.fillPriceSlots(document).then(function(){ _fillVndSlots(document,'da
     if (!panel || document.getElementById('sampBar')) return;
     var bar = document.createElement('div');
     bar.className = 'samp-bar'; bar.id = 'sampBar';
-    bar.innerHTML = '<div class="sb-txt">Đây là <b>BẢN MẪU</b> minh hoạ (dữ liệu khác) — chưa phải kết quả của bạn.</div>' +
-      '<button type="button" id="sampBarClose">Nhập thông tin của tôi →</button>';
+    bar.innerHTML = '<div class="sb-txt">'+_tvmbT('js.chonngay.ban-mau-note','Đây là <b>BẢN MẪU</b> minh hoạ (dữ liệu khác) — chưa phải kết quả của bạn.')+'</div>' +
+      '<button type="button" id="sampBarClose">'+_tvmbT('js.chonngay.nhap-thong-tin-cua-toi','Nhập thông tin của tôi →')+'</button>';
     panel.insertBefore(bar, panel.firstChild);
     document.getElementById('sampBarClose').onclick = function () {
       var b = document.getElementById('sampBar'); if (b) b.remove();
       showForm();
-      var cta = document.getElementById('sampCta'); if (cta) cta.style.display = 'flex';
+      var cta = document.getElementById('sampCta'); if (cta && (!window.I18n || I18n.locale === 'vi')) cta.style.display = 'flex';
     };
   }
   window.SampleHint.open = function (btn) {
-    if (btn) { btn.disabled = true; btn.textContent = 'Đang mở…'; }
+    if (btn) { btn.disabled = true; btn.textContent = _tvmbT('js.chonngay.dang-mo','Đang mở…'); }
     var p = _cache ? Promise.resolve(_cache) : fetch(SAMPLE_URL).then(function (r) {
       if (!r.ok) throw new Error('HTTP ' + r.status);
       return r.json();
@@ -322,15 +323,17 @@ TuviPaywall.fillPriceSlots(document).then(function(){ _fillVndSlots(document,'da
       document.getElementById('dtResult').innerHTML = renderMarkdownDt(data.text);
       var cta = document.getElementById('sampCta'); if (cta) cta.style.display = 'none';
       _showSampleBar();
-      if (btn) { btn.disabled = false; btn.textContent = 'Xem bản mẫu →'; }
+      if (btn) { btn.disabled = false; btn.textContent = _tvmbT('js.chonngay.xem-ban-mau','Xem bản mẫu →'); }
     }).catch(function (e) {
-      if (btn) { btn.disabled = false; btn.textContent = 'Xem bản mẫu →'; }
+      if (btn) { btn.disabled = false; btn.textContent = _tvmbT('js.chonngay.xem-ban-mau','Xem bản mẫu →'); }
       if (window.console) console.error('sample:', e);
-      window.alert('Chưa mở được bản mẫu. Thử lại sau nhé.');
+      window.alert(_tvmbT('js.chonngay.chua-mo-duoc-ban-mau','Chưa mở được bản mẫu. Thử lại sau nhé.'));
     });
   };
   try {
-    if (!(window.Shell && Shell.autoRun && Shell.autoRun()) &&
+    // Bản mẫu là văn LLM đã lưu sẵn tiếng Việt ⇒ chỉ mời xem ở bản vi (xem app-chon-ngay.html).
+    if ((!window.I18n || I18n.locale === 'vi') &&
+        !(window.Shell && Shell.autoRun && Shell.autoRun()) &&
         !(window.Shell && Shell.getRememberedBirth && Shell.getRememberedBirth())) {
       var c = document.getElementById('sampCta'); if (c) c.style.display = 'flex';
     }
@@ -364,7 +367,7 @@ function renderMarkdownDt(md){
 }
 
 async function initiateDatTenChuyenSau(){
-  if(!_dtHo||!_dtInfoC){ alert('Vui lòng nhập thông tin trước.'); return; }
+  if(!_dtHo||!_dtInfoC){ alert(_tvmbT('js.chonngay.vui-long-nhap-thong-tin','Vui lòng nhập thông tin trước.')); return; }
   var slug=TuviPaywall.generateToolSlug('dat-ten-con-'+_dtHo.replace(/\s+/g,'-')+'-'+_dtNamCon);
   wsStepsSet(3); // Thanh toán — tường đã dựng, chờ mở khoá
   await TuviPaywall.requireCredits(slug, async function(){ await _doDatTenAI(); });
@@ -374,7 +377,7 @@ async function _doDatTenAI(){
   if(btn)btn.disabled=true;
   wsStepsSet(4); // Nhận kết quả — đã trả tiền, bắt đầu gợi ý tên chuyên sâu
   var el=document.getElementById('dtResult');
-  el.innerHTML='<div class="phan-empty">'+(window.iconHtml?window.iconHtml('sparkles'):'')+' Đang gợi ý tên con… thường mất 15–25 giây</div>';
+  el.innerHTML='<div class="phan-empty">'+(window.iconHtml?window.iconHtml('sparkles'):'')+' '+_tvmbT('js.datten.dang-goi-y','Đang gợi ý tên con… thường mất 15–25 giây')+'</div>';
   el.scrollIntoView({behavior:'smooth',block:'nearest'});
   try{
     var res=await fetch('/api/xem-tuoi?action=dat-ten-con',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({
@@ -383,7 +386,7 @@ async function _doDatTenAI(){
       canChiBo:_dtInfoB.canChi, napAmBo:_dtInfoB.napAm,
       canChiMe:_dtInfoM.canChi, napAmMe:_dtInfoM.napAm
     })});
-    if(!res.ok){ var d=await res.json().catch(function(){return {};}); throw new Error(d.error||'Lỗi '+res.status); }
+    if(!res.ok){ var d=await res.json().catch(function(){return {};}); throw new Error(d.error||_tvmbT('js.chonngay.loi-status','Lỗi {s}',{s:res.status})); }
     var reader=res.body.getReader(), dec=new TextDecoder(), full='', buf='';
     el.innerHTML='';
     while(true){
@@ -403,10 +406,10 @@ async function _doDatTenAI(){
         }catch(e){ if(e.message&&e.message.indexOf('JSON')<0)throw e; }
       }
     }
-    if(!full)throw new Error('Không nhận được kết quả.');
+    if(!full)throw new Error(_tvmbT('js.chonngay.khong-nhan-duoc-ket-qua','Không nhận được kết quả.'));
     el.innerHTML=renderMarkdownDt(full);
   }catch(e){
-    el.innerHTML='<div class="laso-error">Lỗi: '+esc(e.message||'Không thể kết nối. Vui lòng thử lại.')+'</div>';
+    el.innerHTML='<div class="laso-error">'+_tvmbT('js.datten.loi-colon','Lỗi: ')+esc(e.message||_tvmbT('js.chonngay.khong-the-ket-noi','Không thể kết nối. Vui lòng thử lại.'))+'</div>';
   }
   if(btn)btn.disabled=false;
 }
