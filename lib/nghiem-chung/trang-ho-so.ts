@@ -563,7 +563,7 @@ h1{font-size:24px}.score{grid-template-columns:1fr}.ls-grid{grid-template-column
 .laso-wrap{margin:6px 0 16px;--navy:#0F2A3D;--gold:#C8A96A;--blue:#1455A4;--text-lt:#666666}
 ${CJK_CSS[locale]}${ask.css}
 </style>
-<script src="/auth.js?v=9"></script>
+<script src="/auth.js?v=10"></script>
 </head><body>
 <div id="nav-ph" style="height:60px;background:#FBFAF6"></div>
 <script src="/track.js?v=8" defer></script><script src="/nav.js?v=49" defer></script>

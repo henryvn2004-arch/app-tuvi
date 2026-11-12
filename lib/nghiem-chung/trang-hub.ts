@@ -199,7 +199,7 @@ h1{font-family:var(--serif);font-size:32px;color:var(--navy);font-weight:600;lin
 .how a{color:var(--navy);font-weight:600}
 @media(max-width:700px){.bc,.wrap{padding-left:16px;padding-right:16px}h1{font-size:25px}.grid{grid-template-columns:1fr}}
 ${CJK_CSS[locale]}</style>
-<script src="/auth.js?v=9"></script>
+<script src="/auth.js?v=10"></script>
 </head><body>
 <div id="nav-ph" style="height:60px;background:#FBFAF6"></div>
 <script src="/track.js?v=8" defer></script><script src="/nav.js?v=49" defer></script>
