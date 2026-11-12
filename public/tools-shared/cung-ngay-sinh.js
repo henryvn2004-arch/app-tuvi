@@ -25,6 +25,13 @@
       'storage'` mà không nhớ: ngày sync Storage chạy lần đầu, thẻ Storage
       PHẢI hiện lại dòng ghi công, đây vẫn là ranh giới pháp lý. */
 (function (root) {
+  // i18n (docs/i18n/QUY-UOC.md): T(khoá, chữViệt, {biến}) · G = tên địa chi qua TuviGlossary — CHỈ để HIỂN THỊ.
+  var T = function (k, d, v) {
+    var I = root.I18n;
+    if (I && I.tv) return I.tv(k, d, v);
+    return v ? String(d).replace(/\{(\w+)\}/g, function (x, n) { return v[n] !== undefined ? v[n] : x; }) : d;
+  };
+  var G = function (kind, v) { var g = root.TuviGlossary; return g && v ? g.t(kind, v) : v; };
   var CHI_LABEL = {
     Tý: '23–01h', Sửu: '01–03h', Dần: '03–05h', Mão: '05–07h',
     Thìn: '07–09h', Tỵ: '09–11h', Ngọ: '11–13h', Mùi: '13–15h',
@@ -62,7 +69,7 @@
       ? '<a href="' + esc(it.anhTrang) + '" target="_blank" rel="noopener noreferrer nofollow">' +
         (chu || 'Wikimedia Commons') + '</a>'
       : chu;
-    return '<div class="cns-anh-nguon">Ảnh: ' + noi + '</div>';
+    return '<div class="cns-anh-nguon">' + T('js.cns.anh','Ảnh: {nguon}',{nguon:noi}) + '</div>';
   }
 
   function card(it) {
@@ -81,7 +88,7 @@
       ? '<img class="cns-anh" src="' + esc(it.anh) + '" alt="" data-cns-chu="' + initial + '">'
       : '<div class="cns-anh cns-chu">' + initial + '</div>';
 
-    var GIOITINH_LABEL = { nam: 'Nam', nu: 'Nữ' };
+    var GIOITINH_LABEL = { nam: T('js.cns.nam','Nam'), nu: T('js.cns.nu','Nữ') };
     var dong = [];
     var dong1 = [];
     if (it.nghe) dong1.push(esc(it.nghe));
@@ -93,16 +100,16 @@
     // người đọc mới hiểu vì sao ngày DƯƠNG lịch không trùng khít (đúng khiếu
     // nại: match theo âm lịch nhưng không hiện âm lịch ra).
     if (it.amLich) {
-      dong.push('<span class="cns-am">ÂL ' + it.amLich.ngay + '/' + it.amLich.thang + ' (' + esc(it.amLich.canChi) + ')</span>');
+      dong.push('<span class="cns-am">' + T('js.cns.al','ÂL {d}/{m} ({cc})',{d:it.amLich.ngay,m:it.amLich.thang,cc:esc(G('canchi', it.amLich.canChi))}) + '</span>');
     }
     if (it.gioSinh) {
-      dong.push('giờ sinh ' + esc(it.gioSinh) + (it.muiGio != null ? ' (' + tzText(it.muiGio) + ')' : ''));
+      dong.push(T('js.cns.gio-sinh','giờ sinh {gio}',{gio:esc(it.gioSinh) + (it.muiGio != null ? ' (' + tzText(it.muiGio) + ')' : '')}));
     }
     if (it.canhGio) {
       dong.push(
-        '<span class="cns-gio">giờ ' + esc(it.canhGio) +
-          (CHI_LABEL[it.canhGio] ? ' (' + CHI_LABEL[it.canhGio] + ' giờ VN)' : '') + '</span>' +
-          (it.doTinCayGio ? ' <span class="cns-rodden" title="Độ tin cậy giờ sinh theo thang Rodden">' + esc(it.doTinCayGio) + '</span>' : '')
+        '<span class="cns-gio">' + T('js.cns.gio-chi','giờ {chi}',{chi:esc(G('chi', it.canhGio))}) +
+          (CHI_LABEL[it.canhGio] ? ' (' + T('js.cns.khung-gio-vn','{khung} giờ VN',{khung:CHI_LABEL[it.canhGio]}) + ')' : '') + '</span>' +
+          (it.doTinCayGio ? ' <span class="cns-rodden" title="' + esc(T('js.cns.rodden','Độ tin cậy giờ sinh theo thang Rodden')) + '">' + esc(it.doTinCayGio) + '</span>' : '')
       );
     }
 
@@ -116,7 +123,7 @@
       '<div class="cns-ten">' + esc(it.ten) + '</div>' +
       '<div class="cns-meta">' + dong.join('<br>') + '</div>' +
       (it.lienKet
-        ? '<a class="cns-link" href="' + esc(it.lienKet) + '" target="_blank" rel="noopener noreferrer">Tìm hiểu thêm <span aria-hidden="true">→</span></a>'
+        ? '<a class="cns-link" href="' + esc(it.lienKet) + '" target="_blank" rel="noopener noreferrer">' + T('js.cns.tim-hieu','Tìm hiểu thêm') + ' <span aria-hidden="true">→</span></a>'
         : '') +
       ghiCong(it) +
       '</div></li>'
@@ -181,22 +188,19 @@
         // thẻ nói "trùng ngày âm lịch" thì phải có cái để so, nếu không câu
         // đó vô nghĩa với người không nhớ ngày âm của mình.
         var amBan = j.amLich
-          ? ' Ngày âm lịch của bạn: <b>' + j.amLich.ngayAL + '/' + j.amLich.thangAL +
-            ' (' + esc(j.amLich.canNam + j.amLich.chiNam) + ')</b>.'
+          ? ' ' + T('js.cns.am-ban','Ngày âm lịch của bạn: <b>{d}/{m} ({cc})</b>.',{d:j.amLich.ngayAL,m:j.amLich.thangAL,cc:esc(root.TuviGlossary && root.TuviGlossary.locale() !== 'vi' ? G('canchi', j.amLich.canNam + ' ' + j.amLich.chiNam) : j.amLich.canNam + j.amLich.chiNam)})
           : '';
         el.innerHTML =
           '<section class="cns">' +
-          '<h3><span class="ic" data-icon="users"></span> Ai Sinh Cùng Ngày Với Bạn</h3>' +
+          '<h3><span class="ic" data-icon="users"></span> ' + T('js.cns.ai-sinh','Ai Sinh Cùng Ngày Với Bạn') + '</h3>' +
           '<p class="cns-sub">' +
           (coVang
-            ? 'Có người <b>trùng cả ngày lẫn canh giờ sinh</b> với bạn — an sao ra đúng một lá số.'
-            : 'Những người nổi tiếng có ngày sinh trùng với bạn — xem nhãn trên mỗi thẻ để biết trùng theo ngày âm hay ngày dương lịch.') +
+            ? T('js.cns.trung-ca','Có người <b>trùng cả ngày lẫn canh giờ sinh</b> với bạn — an sao ra đúng một lá số.')
+            : T('js.cns.nguoi-noi-tieng','Những người nổi tiếng có ngày sinh trùng với bạn — xem nhãn trên mỗi thẻ để biết trùng theo ngày âm hay ngày dương lịch.')) +
           amBan +
           '</p>' +
           '<ul class="cns-list">' + j.items.map(card).join('') + '</ul>' +
-          '<p class="cns-ghi">Chỉ hiển thị dữ kiện ngày–giờ sinh, không luận giải về người khác. ' +
-          'Giờ sinh đã quy về múi giờ Việt Nam để so sánh. ' +
-          'Nguồn: Wikidata (CC0) · ảnh từ Wikimedia Commons (license ghi dưới từng ảnh) · giờ sinh từ Astro-Databank.</p>' +
+          '<p class="cns-ghi">' + T('js.cns.ghi','Chỉ hiển thị dữ kiện ngày–giờ sinh, không luận giải về người khác. Giờ sinh đã quy về múi giờ Việt Nam để so sánh. Nguồn: Wikidata (CC0) · ảnh từ Wikimedia Commons (license ghi dưới từng ảnh) · giờ sinh từ Astro-Databank.') + '</p>' +
           '</section>';
         // HTML dựng bằng innerHTML thì icon chưa được thay — mountIcons() chỉ tự
         // chạy MỘT lần lúc nav.js nạp.

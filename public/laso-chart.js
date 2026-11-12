@@ -52,7 +52,7 @@ function _tieuHanLabels(ring) {
     const top = r === 0 ? 25 : r === 3 ? 75 : r * 25 + 12.5;
     const tx = c === 0 ? IN : c === 3 ? OUT : '-50%';
     const ty = r === 0 ? IN : r === 3 ? OUT : '-50%';
-    return `<div class="v2-th" style="left:${x}%;top:${top}%;transform:translate(${tx},${ty})" title="Tiểu hạn năm ${CHI[y]} vào cung ${CHI[chi]}">${_lcG('chi', CHI[y], { short: true }).toUpperCase()}</div>`;
+    return `<div class="v2-th" style="left:${x}%;top:${top}%;transform:translate(${tx},${ty})" title="${_lcT('js.lasochart.tieu-han-title','Tiểu hạn năm {y} vào cung {c}',{y:_lcG('chi', CHI[y]), c:_lcG('chi', CHI[chi])})}">${_lcG('chi', CHI[y], { short: true }).toUpperCase()}</div>`;
   }).join('');
 }
 // Chú giải chân lá số — khuôn Thiên Lương. Màu lấy đúng class .sc-* đang tô sao.
@@ -71,6 +71,12 @@ function _legend() {
 // (sinh từ lib/i18n/glossary). Engine giữ tên Việt làm KHOÁ — mọi phép so/tra màu vẫn dùng s.ten gốc.
 // Trang 'vi' (hoặc chưa nạp glossary.js) trả NGUYÊN chuỗi vào ⇒ HTML y hệt trước.
 function _lcG(kind, vi, opts) { return window.TuviGlossary ? window.TuviGlossary.t(kind, vi, opts) : vi; }
+// Chữ khung (nhãn ô giữa, chú thích): _lcT(khoá, chữViệt, {biến}) — CHỈ để HIỂN THỊ. vi ⇒ y hệt chữ gốc.
+function _lcT(k, d, v) {
+  const I = window.I18n;
+  if (I && I.tv) return I.tv(k, d, v);
+  return v ? String(d).replace(/\{(\w+)\}/g, (x, n) => (v[n] !== undefined ? v[n] : x)) : d;
+}
 function _lcVi() { return !window.TuviGlossary || window.TuviGlossary.locale() === 'vi'; }
 const _LC_SAO = ['chinh', 'sao'];
 // Nạp âm ô giữa: vi giữ NGUYÊN chuỗi NAP_AM_FULL (kèm giải nghĩa Việt trong ngoặc); ngôn ngữ khác lấy tên (phần
@@ -118,7 +124,7 @@ function renderCungCell(p, dvTuoi, canNamIdx, isCurVan) {
   // viết tắt "L." để không lẫn với sao gốc cùng tên. Engine cũ chưa có → rỗng.
   const luuH = (p.luuStars || []).map(s => {
     const xau = !!s.xau; // engine đánh dấu (`danhGiaSaoLuu`) — không giữ danh sách ở đây
-    const tip = s.sao ? `${s.ten} (${s.sao}) — chỉ tác dụng trong năm xem` : `${s.ten} — chỉ tác dụng trong năm xem`;
+    const tip = s.sao ? _lcT('js.lasochart.luu-tip-sao','{ten} ({sao}) — chỉ tác dụng trong năm xem',{ten: _lcG(['sao', 'khai'], s.ten), sao: s.sao}) : _lcT('js.lasochart.luu-tip','{ten} — chỉ tác dụng trong năm xem',{ten: _lcG(['sao', 'khai'], s.ten)});
     return `<span class="v2-luu-item${xau ? ' luu-xau' : ''}" title="${esc(tip)}">${esc(_lcG(['sao', 'khai'], s.ten).replace(/^Lưu /, 'L.').toUpperCase())}</span>`;
   }).join('');
   // Khuôn Thiên Lương: can chi (màu hành của chi) + tên cung cùng một hàng; chân ô
@@ -144,26 +150,26 @@ function renderCenter(ls, fd) {
   // nên đổi sang chấm ● đơn sắc tô màu theo cùng ngưỡng.
   const DV_FLAG_COLOR = { '🟢': '#1E6B3C', '🟡': '#B8860B', '🔴': '#C0392B' };
   const dvScore = dvHT && dvHT.scoring
-    ? ' <span style="color:' + (DV_FLAG_COLOR[dvHT.scoring.flag] || '#333') + ';font-weight:700">● ' + dvHT.scoring.tong + 'đ</span>'
+    ? ' <span style="color:' + (DV_FLAG_COLOR[dvHT.scoring.flag] || '#333') + ';font-weight:700">● ' + _lcT('js.lasochart.diem', '{n}đ', { n: dvHT.scoring.tong }) + '</span>'
     : '';
   return `<div class="cung-center"><div class="center-la-so">
     <div class="center-title">✦ ${esc((fd.name || '—').toUpperCase())} ✦</div>
     <hr class="center-divider">
-    <div class="center-row"><span class="ic-inline" data-icon="calendar" data-icon-emoji="📅" style="display:inline-flex;width:1em;height:1em;vertical-align:-2px">📅</span> ${fd.dd}/${fd.mm}/${fd.yyyy} (Dương Lịch) · giờ ${esc(_lcG('chi', fd.gioChi || ''))}</div>
-    <div class="center-row"><span class="ic-inline" data-icon="calendar" data-icon-emoji="📅" style="display:inline-flex;width:1em;height:1em;vertical-align:-2px">📅</span> ${fd.amLich ? fd.amLich.day + '/' + fd.amLich.month + '/' + fd.amLich.year : ''} (Âm Lịch) · giờ ${esc(_lcG('chi', fd.gioChi || ''))}</div>
-    <div class="center-row"><span class="ic-inline" data-icon="cake" data-icon-emoji="🎂" style="display:inline-flex;width:1em;height:1em;vertical-align:-2px">🎂</span> ${ls.tuoiXem} tuổi (âm lịch)</div>
-    <div class="center-row"><span class="ic-inline" data-icon="user" data-icon-emoji="⚧" style="display:inline-flex;width:1em;height:1em;vertical-align:-2px">⚧</span> Giới tính: ${fd.gioitinh === 'nam' ? 'Nam' : 'Nữ'}</div>
-    ${fd.amDuongNam ? `<div class="center-row">${fd.amDuongNam === 'dương' ? 'Dương' : 'Âm'} ${fd.gioitinh === 'nam' ? 'Nam' : 'Nữ'} · Âm Dương ${(fd.amDuongNam === 'dương') === (fd.gioitinh === 'nam') ? 'Thuận Lý' : 'Nghịch Lý'}</div>` : ''}
+    <div class="center-row"><span class="ic-inline" data-icon="calendar" data-icon-emoji="📅" style="display:inline-flex;width:1em;height:1em;vertical-align:-2px">📅</span> ${_lcT('js.lasochart.duong-lich','{d}/{m}/{y} (Dương Lịch) · giờ {chi}',{d: fd.dd, m: fd.mm, y: fd.yyyy, chi: esc(_lcG('chi', fd.gioChi || ''))})}</div>
+    <div class="center-row"><span class="ic-inline" data-icon="calendar" data-icon-emoji="📅" style="display:inline-flex;width:1em;height:1em;vertical-align:-2px">📅</span> ${_lcT('js.lasochart.am-lich','{ngay} (Âm Lịch) · giờ {chi}',{ngay: fd.amLich ? fd.amLich.day + '/' + fd.amLich.month + '/' + fd.amLich.year : '', chi: esc(_lcG('chi', fd.gioChi || ''))})}</div>
+    <div class="center-row"><span class="ic-inline" data-icon="cake" data-icon-emoji="🎂" style="display:inline-flex;width:1em;height:1em;vertical-align:-2px">🎂</span> ${_lcT('js.lasochart.tuoi-al','{n} tuổi (âm lịch)',{n: ls.tuoiXem})}</div>
+    <div class="center-row"><span class="ic-inline" data-icon="user" data-icon-emoji="⚧" style="display:inline-flex;width:1em;height:1em;vertical-align:-2px">⚧</span> ${_lcT('js.lasochart.gioi-tinh','Giới tính: {gt}',{gt: fd.gioitinh === 'nam' ? _lcT('js.lasochart.nam','Nam') : _lcT('js.lasochart.nu','Nữ')})}</div>
+    ${fd.amDuongNam ? `<div class="center-row">${_lcT('js.lasochart.am-duong-nam','{ad} {gt} · Âm Dương {tl}',{ad: fd.amDuongNam === 'dương' ? _lcT('js.lasochart.duong','Dương') : _lcT('js.lasochart.am','Âm'), gt: fd.gioitinh === 'nam' ? _lcT('js.lasochart.nam','Nam') : _lcT('js.lasochart.nu','Nữ'), tl: (fd.amDuongNam === 'dương') === (fd.gioitinh === 'nam') ? _lcT('js.lasochart.thuan-ly','Thuận Lý') : _lcT('js.lasochart.nghich-ly','Nghịch Lý')})}</div>` : ''}
     <hr class="center-divider">
-    <div class="center-row">Năm: <b style="color:var(--navy)">${esc(_lcG('canchi', ls.canChiNam))}</b> &nbsp;·&nbsp; Mệnh: <b style="color:var(--navy)">${esc(_lcNapAm(ls))}</b></div>
-    <div class="center-row">Cục: <b style="color:var(--navy)">${esc(_lcG('cuc', ls.cuc || ''))}</b> &nbsp;·&nbsp; Mệnh: <b style="color:var(--navy)">${esc(_lcG('chi', ls.menhDC || ''))}</b> · Thân: <b style="color:var(--navy)">${esc(_lcG('chi', ls.thanDC || ''))}</b></div>
+    <div class="center-row">${_lcT('js.lasochart.nam-l','Năm:')} <b style="color:var(--navy)">${esc(_lcG('canchi', ls.canChiNam))}</b> &nbsp;·&nbsp; ${_lcT('js.lasochart.menh-l','Mệnh:')} <b style="color:var(--navy)">${esc(_lcNapAm(ls))}</b></div>
+    <div class="center-row">${_lcT('js.lasochart.cuc-l','Cục:')} <b style="color:var(--navy)">${esc(_lcG('cuc', ls.cuc || ''))}</b> &nbsp;·&nbsp; ${_lcT('js.lasochart.menh-l','Mệnh:')} <b style="color:var(--navy)">${esc(_lcG('chi', ls.menhDC || ''))}</b> · ${_lcT('js.lasochart.than-l','Thân:')} <b style="color:var(--navy)">${esc(_lcG('chi', ls.thanDC || ''))}</b></div>
     <hr class="center-divider">
-    <div class="center-row">Năm <b style="color:var(--blue)">${esc(_lcG('chi', ls.chiNamXem || ''))}</b> — Tuổi ${ls.tuoiXem}</div>
-    <div class="center-row">Đại vận: <b style="color:#1E6B3C">${esc((dvHT && _lcG('chi', dvHT.diaChi)) || '?')}</b> (${dvHT ? dvHT.tuoiStart : ''}–${dvHT ? dvHT.tuoiEnd : ''}t)${dvScore}</div>
-    <div class="center-row">Tiểu hạn: <b style="color:#1E6B3C">${esc((tvCung && _lcG('chi', tvCung.diaChi)) || '?')}</b> · ${esc(_lcG('cung', (tvCung && tvCung.cungName) || ''))}</div>
-    <div class="center-row">Lưu đại hạn: <b style="color:var(--gold)">${esc((ldh && _lcG('chi', ldh.diaChi)) || '?')}</b> · ${esc(_lcG('cung', (ldh && ldh.cungName) || ''))}</div>
+    <div class="center-row">${_lcT('js.lasochart.nam-xem-tuoi','Năm {chi} — Tuổi {n}',{chi: '<b style="color:var(--blue)">' + esc(_lcG('chi', ls.chiNamXem || '')) + '</b>', n: ls.tuoiXem})}</div>
+    <div class="center-row">${_lcT('js.lasochart.dai-van','Đại vận: {chi} ({a}–{b}t)',{chi: '<b style="color:#1E6B3C">' + esc((dvHT && _lcG('chi', dvHT.diaChi)) || '?') + '</b>', a: dvHT ? dvHT.tuoiStart : '', b: dvHT ? dvHT.tuoiEnd : ''})}${dvScore}</div>
+    <div class="center-row">${_lcT('js.lasochart.tieu-han','Tiểu hạn: {chi} · {cung}',{chi: '<b style="color:#1E6B3C">' + esc((tvCung && _lcG('chi', tvCung.diaChi)) || '?') + '</b>', cung: esc(_lcG('cung', (tvCung && tvCung.cungName) || ''))})}</div>
+    <div class="center-row">${_lcT('js.lasochart.luu-dai-han','Lưu đại hạn: {chi} · {cung}',{chi: '<b style="color:var(--gold)">' + esc((ldh && _lcG('chi', ldh.diaChi)) || '?') + '</b>', cung: esc(_lcG('cung', (ldh && ldh.cungName) || ''))})}</div>
     <hr class="center-divider">
-    <div class="center-row" style="font-size:10px;color:var(--text-lt)"><span class="ic-inline" data-icon="calendar-days" data-icon-emoji="🗓" style="display:inline-flex;width:1em;height:1em;vertical-align:-2px">🗓</span> Lập lá số: ${nowStr}</div>
+    <div class="center-row" style="font-size:10px;color:var(--text-lt)"><span class="ic-inline" data-icon="calendar-days" data-icon-emoji="🗓" style="display:inline-flex;width:1em;height:1em;vertical-align:-2px">🗓</span> ${_lcT('js.lasochart.lap-la-so','Lập lá số: {t}',{t: nowStr})}</div>
     <div class="center-row" style="font-size:10px;color:var(--text-lt)">© 2026 紫微明寶 | Tử Vi Minh Bảo</div>
   </div></div>`;
 }

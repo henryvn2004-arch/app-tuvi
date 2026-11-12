@@ -38,6 +38,12 @@
 // ============================================================
 
 (function () {
+  // i18n (docs/i18n/QUY-UOC.md): T(khoá, chữViệt, {biến}) — CHỈ để HIỂN THỊ.
+  var T = function (k, d, v) {
+    var I = window.I18n;
+    if (I && I.tv) return I.tv(k, d, v);
+    return v ? String(d).replace(/\{(\w+)\}/g, function (x, n) { return v[n] !== undefined ? v[n] : x; }) : d;
+  };
   var STYLE_ID = 'ai-loading-steps-style';
 
   // ── Lưới an toàn soft-nav ──────────────────────────────────────────
@@ -253,7 +259,7 @@
       // kiểu, và để không bao giờ in ra "khoảng 0 giây" vì làm tròn.
       perPartText: function () {
         var per = perPartSec();
-        return per ? 'khoảng ' + Math.max(1, Math.round(per)) + ' giây' : '';
+        return per ? T('js.loading.khoang-giay','khoảng {n} giây',{n:Math.max(1, Math.round(per))}) : '';
       },
       // `concurrency` (mặc định 1, tương thích ngược): chạy N phần song song thì
       // thời gian còn lại là theo LÔ — ceil(remaining/N) lô, không phải cộng dồn
@@ -265,9 +271,9 @@
         var c = concurrency > 0 ? concurrency : 1;
         var batches = Math.ceil(remaining / c);
         var s = per * batches;
-        if (s < 45) return 'còn khoảng ' + (Math.round(s / 5) * 5 || 5) + ' giây';
-        if (s < 90) return 'còn khoảng 1 phút';
-        return 'còn khoảng ' + Math.round(s / 60) + ' phút';
+        if (s < 45) return T('js.loading.con-giay','còn khoảng {n} giây',{n:Math.round(s / 5) * 5 || 5});
+        if (s < 90) return T('js.loading.con-1-phut','còn khoảng 1 phút');
+        return T('js.loading.con-phut','còn khoảng {n} phút',{n:Math.round(s / 60)});
       },
     };
   }
@@ -322,7 +328,7 @@
       var elEl = document.getElementById(el.id + '-elapsed');
       if (!elEl) return;
       var s = Math.round((Date.now() - startedAt) / 1000);
-      elEl.textContent = s < 3 ? '' : 'Đã chờ ' + s + ' giây…';
+      elEl.textContent = s < 3 ? '' : T('js.loading.da-cho-dots','Đã chờ {s} giây…',{s:s});
     }
 
     function start() {
@@ -403,13 +409,13 @@
     if (!el) return noop;
     ensureStyle();
     opts = opts || {};
-    var label = opts.label || 'Đang vẽ tranh…';
+    var label = opts.label || T('js.loading.dang-ve','Đang vẽ tranh…');
     // `expectSec: 0` = CHƯA ĐO ĐƯỢC thời lượng ⇒ không hứa gì, và bỏ luôn thanh
     // tiến trình. Thanh chạy theo một con số bịa còn tệ hơn không có thanh:
     // nó là một lời hứa, mà hứa hụt thì lần sau không ai tin nữa.
     var hasEta = opts.expectSec !== 0;
     var expect = opts.expectSec || 52;
-    var expectText = opts.expectText || 'khoảng 45–60 giây';
+    var expectText = opts.expectText || T('js.loading.45-60','khoảng 45–60 giây');
     var CALM_AFTER = 45; // giây — mốc trấn an khi không có ETA
     var useOrb = opts.orb !== false;
     var variant = opts.variant || 'a';
@@ -465,15 +471,15 @@
         ? override
         : hasEta
           ? s <= expect
-            ? 'Thường mất ' + expectText + ' · đã chờ ' + s + ' giây'
+            ? T('js.loading.thuong-mat','Thường mất {eta} · đã chờ {s} giây',{eta:expectText,s:s})
             // Quá hẹn thì ĐỔI LỜI chứ không đứng im: nói rõ vẫn đang chạy, để
             // người ta không đóng trang hay bấm lại (bấm lại = tốn thêm tiền).
-            : 'Lâu hơn thường lệ — vẫn đang vẽ, đừng đóng trang (đã chờ ' + s + ' giây)'
+            : T('js.loading.lau-hon','Lâu hơn thường lệ — vẫn đang vẽ, đừng đóng trang (đã chờ {s} giây)',{s:s})
           // Không có ETA: chỉ đếm giây, và trấn an khi đã lâu — không hứa
           // lúc nào xong vì chưa đo được.
           : s < CALM_AFTER
-            ? 'Đã chờ ' + s + ' giây'
-            : 'Vẫn đang chạy, đừng đóng trang (đã chờ ' + s + ' giây)';
+            ? T('js.loading.da-cho','Đã chờ {s} giây',{s:s})
+            : T('js.loading.van-chay','Vẫn đang chạy, đừng đóng trang (đã chờ {s} giây)',{s:s});
     }
 
     var controller = {

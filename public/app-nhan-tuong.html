@@ -3,8 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Nhãn Tướng — Tử Vi Minh Bảo</title>
-<meta name="description" content="Tải hoặc chụp ảnh mặt — hệ thống phân tích nhãn tướng (đôi mắt) theo Ma Y Thần Tướng, Liễu Trang Thần Tướng.">
+<title data-i18n="nhtg.nhan-tuong-tu-vi-minh-bao">Nhãn Tướng — Tử Vi Minh Bảo</title>
+<meta data-i18n-attr="content:nhtg.tai-hoac-chup-anh-mat-he" name="description" content="Tải hoặc chụp ảnh mặt — hệ thống phân tích nhãn tướng (đôi mắt) theo Ma Y Thần Tướng, Liễu Trang Thần Tướng.">
 <link rel="icon" type="image/webp" href="/seal.webp">
 <link rel="preload" href="/fonts/noto-serif-latin-400.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="/fonts/noto-serif-vietnamese-400.woff2" as="font" type="font/woff2" crossorigin>
@@ -65,9 +65,9 @@
   <main class="ws" id="ws">
     <div class="ws-top">
       <button class="btn mobile-only" onclick="document.getElementById('shell-sidebar').classList.toggle('open');window.shellSyncBackdrop&&shellSyncBackdrop()" aria-label="Menu">☰</button>
-      <div class="ws-title"><b>Nhãn Tướng</b><span>Xem tướng mắt theo cổ pháp — <span data-tvp-price="nhan-tuong">…</span> Lượng</span></div>
+      <div data-i18n="nhtg.nhan-tuong-xem-tuong-mat-theo" class="ws-title"><b>Nhãn Tướng</b><span>Xem tướng mắt theo cổ pháp — <span data-tvp-price="nhan-tuong">…</span> Lượng</span></div>
       <div class="ws-actions">
-        <button class="btn mobile-only" onclick="Shell.openRail()">✦ Hỏi</button>
+        <button data-i18n="battu.hoi" class="btn mobile-only" onclick="Shell.openRail()">✦ Hỏi</button>
       </div>
     </div>
     <div class="ws-body">
@@ -81,15 +81,15 @@
         <img class="intro-avatar" src="/tool-avatars/nhan-tuong.webp" alt="" onerror="this.remove()">
         <div class="intro-body">
           <div class="intro-text">
-            <div class="intro-t">Nhãn Tướng</div>
-            <div class="intro-d">Đôi mắt được xem là nơi lộ rõ nhất tâm tính một người theo tướng học cổ truyền. Tải ảnh khuôn mặt, nhận luận chi tiết hình dạng, ánh mắt, lông mày theo Liễu Trang Thần Tướng.</div>
+            <div data-i18n="nhtg.nhan-tuong" class="intro-t">Nhãn Tướng</div>
+            <div data-i18n="nhtg.doi-mat-duoc-xem-la-noi" class="intro-d">Đôi mắt được xem là nơi lộ rõ nhất tâm tính một người theo tướng học cổ truyền. Tải ảnh khuôn mặt, nhận luận chi tiết hình dạng, ánh mắt, lông mày theo Liễu Trang Thần Tướng.</div>
             <div id="introSrc"></div>
           </div>
         </div>
         <div class="hero-pills">
-          <div class="hero-pill"><span class="hp-ic" data-icon="camera"></span><span>Tải ảnh hoặc<br>chụp trực tiếp</span></div>
-          <div class="hero-pill"><span class="hp-ic" data-icon="eye"></span><span>Tự zoom<br>vào đôi mắt</span></div>
-          <div class="hero-pill"><span class="hp-ic" data-icon="scroll-text"></span><span>Luận theo<br>Liễu Trang Thần Tướng</span></div>
+          <div data-i18n="nhtg.tai-anh-hoac-chup-truc-tiep" class="hero-pill"><span class="hp-ic" data-icon="camera"></span><span>Tải ảnh hoặc<br>chụp trực tiếp</span></div>
+          <div data-i18n="nhtg.tu-zoom-vao-doi-mat" class="hero-pill"><span class="hp-ic" data-icon="eye"></span><span>Tự zoom<br>vào đôi mắt</span></div>
+          <div data-i18n="nhtg.luan-theo-lieu-trang-than-tuong" class="hero-pill"><span class="hp-ic" data-icon="scroll-text"></span><span>Luận theo<br>Liễu Trang Thần Tướng</span></div>
         </div>
       </div></div>
       <div class="ws-main-col">
@@ -97,40 +97,40 @@
            là gate credit rồi chạy thẳng), nên chỉ 3 bước. JS đổi bước ở
            `wsStepsSet` (cuối file), gọi tại analyze()/_doAnalyze/resetTool. -->
       <div class="ws-steps" id="wsSteps">
-        <div class="wss-step active"><span class="wss-n">1</span><span class="wss-l">Nhập thông tin</span></div>
-        <div class="wss-step"><span class="wss-n">2</span><span class="wss-l">Thanh toán</span></div>
-        <div class="wss-step"><span class="wss-n">3</span><span class="wss-l">Nhận kết quả</span></div>
+        <div data-i18n="battu.1-nhap-thong-tin" class="wss-step active"><span class="wss-n">1</span><span class="wss-l">Nhập thông tin</span></div>
+        <div data-i18n="thtg.2-thanh-toan" class="wss-step"><span class="wss-n">2</span><span class="wss-l">Thanh toán</span></div>
+        <div data-i18n="thtg.3-nhan-ket-qua" class="wss-step"><span class="wss-n">3</span><span class="wss-l">Nhận kết quả</span></div>
       </div>
       <div class="dt-card" id="inputCard">
-        <div class="fc-head"><span class="fc-ic" data-icon="eye"></span><h2>Tải ảnh khuôn mặt</h2></div>
-        <p class="sub">Tải một tấm ảnh rõ khuôn mặt, đặc biệt vùng mắt. Hệ thống phân tích theo cổ pháp Liễu Trang Thần Tướng, luận hình dạng mắt, ánh mắt, lông mày và tính cách.</p>
-        <div class="dt-privacy"><span class="ic" data-icon="lock"></span><div>Ảnh chỉ gửi tới máy chủ để phân tích, không lưu trên server. Chụp thẳng mặt, đủ sáng — hệ thống sẽ tự zoom vào vùng mắt.</div></div>
+        <div class="fc-head"><span class="fc-ic" data-icon="eye"></span><h2 data-i18n="nhtg.tai-anh-khuon-mat">Tải ảnh khuôn mặt</h2></div>
+        <p data-i18n="nhtg.tai-mot-tam-anh-ro-khuon" class="sub">Tải một tấm ảnh rõ khuôn mặt, đặc biệt vùng mắt. Hệ thống phân tích theo cổ pháp Liễu Trang Thần Tướng, luận hình dạng mắt, ánh mắt, lông mày và tính cách.</p>
+        <div class="dt-privacy"><span class="ic" data-icon="lock"></span><div data-i18n="nhtg.anh-chi-gui-toi-may-chu">Ảnh chỉ gửi tới máy chủ để phân tích, không lưu trên server. Chụp thẳng mặt, đủ sáng — hệ thống sẽ tự zoom vào vùng mắt.</div></div>
 
         <div class="dt-input-tabs">
-          <button class="dt-input-tab active" onclick="switchTab('upload',this)"><span class="ic" data-icon="folder"></span> Tải Ảnh Lên</button>
-          <button class="dt-input-tab" onclick="switchTab('camera',this)"><span class="ic" data-icon="camera"></span> Chụp Ảnh</button>
+          <button data-i18n="nhtg.tai-anh-len" class="dt-input-tab active" onclick="switchTab('upload',this)"><span class="ic" data-icon="folder"></span> Tải Ảnh Lên</button>
+          <button data-i18n="nhtg.chup-anh" class="dt-input-tab" onclick="switchTab('camera',this)"><span class="ic" data-icon="camera"></span> Chụp Ảnh</button>
         </div>
 
         <div class="dt-input-pane active" id="pane-upload">
           <div id="uploadArea" class="upload-area" ondragover="onDragOver(event)" ondragleave="onDragLeave(event)" ondrop="onDrop(event)">
             <input type="file" id="fileInput" accept="image/*" onchange="onFileSelect(event)">
             <span class="upload-icon"><span class="ic" data-icon="eye"></span></span>
-            <div class="upload-title">Kéo thả ảnh vào đây hoặc click để chọn</div>
-            <div class="upload-sub">JPG, PNG, WebP — tối đa 5MB · Chụp thẳng mặt, thấy rõ 2 mắt</div>
+            <div data-i18n="nhtg.keo-tha-anh-vao-day-hoac" class="upload-title">Kéo thả ảnh vào đây hoặc click để chọn</div>
+            <div data-i18n="nhtg.jpg-png-webp-toi-da-5mb" class="upload-sub">JPG, PNG, WebP — tối đa 5MB · Chụp thẳng mặt, thấy rõ 2 mắt</div>
           </div>
         </div>
 
         <div class="dt-input-pane" id="pane-camera">
           <div style="text-align:center;padding:12px 0 16px">
             <div id="preCamTips">
-              <button class="camera-btn" id="openCamBtn" onclick="openCamera()"><span class="ic" data-icon="camera"></span> Mở Camera</button>
+              <button data-i18n="nhtg.mo-camera" class="camera-btn" id="openCamBtn" onclick="openCamera()"><span class="ic" data-icon="camera"></span> Mở Camera</button>
             </div>
             <div id="camWrap" style="display:none;position:relative;width:280px;margin:0 auto">
               <video id="camVideo" style="width:280px;border-radius:12px;display:block" autoplay playsinline></video>
             </div>
             <div id="camBtns" style="display:none;margin-top:14px;gap:10px;justify-content:center;flex-wrap:wrap">
-              <button class="btn-go inline" onclick="capturePhoto()"><span class="ic" data-icon="camera"></span> Chụp</button>
-              <button class="btn-cancel" onclick="stopCamera()">✕ Huỷ</button>
+              <button data-i18n="nhtg.chup" class="btn-go inline" onclick="capturePhoto()"><span class="ic" data-icon="camera"></span> Chụp</button>
+              <button data-i18n="nhtg.huy" class="btn-cancel" onclick="stopCamera()">✕ Huỷ</button>
             </div>
             <canvas id="camCanvas" style="display:none"></canvas>
           </div>
@@ -138,16 +138,16 @@
 
         <div id="previewSection" style="display:none;text-align:center;margin:18px 0">
           <div class="preview-wrap">
-            <img id="previewImg" class="preview-img" alt="Ảnh đã chọn">
+            <img data-i18n-attr="alt:nhtg.anh-da-chon-oxp5" id="previewImg" class="preview-img" alt="Ảnh đã chọn">
             <canvas id="overlayCanvas" class="overlay-canvas"></canvas>
-            <div class="preview-badge">✓ Ảnh đã chọn</div>
-            <div class="mp-badge" id="mpBadge"><span class="ic" data-icon="eye"></span> Mắt đã xác định</div>
+            <div data-i18n="nhtg.anh-da-chon" class="preview-badge">✓ Ảnh đã chọn</div>
+            <div data-i18n="nhtg.mat-da-xac-dinh" class="mp-badge" id="mpBadge"><span class="ic" data-icon="eye"></span> Mắt đã xác định</div>
           </div>
           <div class="eye-panels" id="eyePanels" style="display:none">
-            <div class="eye-panel"><div class="eye-panel-label">Mắt trái</div><canvas id="eyeLeft" width="110" height="55"></canvas></div>
-            <div class="eye-panel"><div class="eye-panel-label">Mắt phải</div><canvas id="eyeRight" width="110" height="55"></canvas></div>
+            <div class="eye-panel"><div data-i18n="nhtg.mat-trai" class="eye-panel-label">Mắt trái</div><canvas id="eyeLeft" width="110" height="55"></canvas></div>
+            <div class="eye-panel"><div data-i18n="nhtg.mat-phai" class="eye-panel-label">Mắt phải</div><canvas id="eyeRight" width="110" height="55"></canvas></div>
           </div>
-          <button class="remove-btn" onclick="removePhoto()">✕ Xoá ảnh</button>
+          <button data-i18n="nhtg.xoa-anh" class="remove-btn" onclick="removePhoto()">✕ Xoá ảnh</button>
         </div>
 
         <div id="hookHost"></div>
@@ -156,9 +156,9 @@
           <div class="cb-l">
             <span class="cb-ic" data-icon="wallet"></span>
             <div>
-              <div class="cb-title">Chi phí sử dụng</div>
-              <div class="cb-amt"><span class="vnd" data-tvp-price-vnd="nhan-tuong"></span> mỗi lượt <span class="cb-sub">(<span data-tvp-price="nhan-tuong">…</span> Lượng)</span></div>
-              <div class="cb-pay">
+              <div data-i18n="battu.chi-phi-su-dung" class="cb-title">Chi phí sử dụng</div>
+              <div data-i18n="nhtg.moi-luot-luong" class="cb-amt"><span class="vnd" data-tvp-price-vnd="nhan-tuong"></span> mỗi lượt <span class="cb-sub">(<span data-tvp-price="nhan-tuong">…</span> Lượng)</span></div>
+              <div data-i18n="luangiai.chuyen-khoan-qua-qr-ngan-hang" class="cb-pay">
                 <span><span class="ic" data-icon="qr-code"></span> Chuyển khoản (qua QR ngân hàng)</span>
                 <span><span class="ic" data-icon="credit-card"></span> PayPal / Thẻ quốc tế</span>
               </div>
@@ -166,10 +166,10 @@
           </div>
           <div class="cb-r">
             <span class="cb-ic" data-icon="gift"></span>
-            <div class="cb-r-txt">Mua gói để nhận nhiều ưu đãi hơn.<br><a href="/topup.html">Xem các gói ngay →</a></div>
+            <div data-i18n="luangiai.mua-goi-de-nhan-nhieu-uu" class="cb-r-txt">Mua gói để nhận nhiều ưu đãi hơn.<br><a href="/topup.html">Xem các gói ngay →</a></div>
           </div>
         </div>
-        <button class="btn-go" id="analyzeBtn" onclick="analyze()" disabled>
+        <button data-i18n="nhtg.phan-tich-nhan-tuong-ton-luong" class="btn-go" id="analyzeBtn" onclick="analyze()" disabled>
           <span class="bg-label"><span class="ic" data-icon="eye"></span><b id="analyzeBtnLabel">Phân Tích Nhãn Tướng →</b></span>
           <small>Tốn <span class="vnd" data-tvp-price-vnd="nhan-tuong"></span> <span class="cb-sub">(<span data-tvp-price="nhan-tuong">…</span> Lượng)</span></small>
         </button>
@@ -178,25 +178,25 @@
       </div>
       <div class="ws-side-col">
       <div class="ws-promo">
-        <div class="wsp-eyebrow"><span class="wsp-ic" data-icon="book-open"></span><span>Giới thiệu</span></div>
-        <div class="wsp-title">Nhãn Tướng</div>
-        <p class="wsp-desc">Ma Y Thần Tướng là một trong những cổ thư nhân tướng học nổi tiếng nhất Trung Hoa, hệ thống hoá cách đọc tính cách và vận mệnh qua các bộ vị trên khuôn mặt như Tam Đình, Ngũ Quan. Liễu Trang Thần Tướng và Thủy Kính Tập là những cổ thư tướng học khác thường được đối chiếu cùng.</p>
+        <div data-i18n="battu.gioi-thieu" class="wsp-eyebrow"><span class="wsp-ic" data-icon="book-open"></span><span>Giới thiệu</span></div>
+        <div data-i18n="nhtg.nhan-tuong" class="wsp-title">Nhãn Tướng</div>
+        <p data-i18n="nhtg.ma-y-than-tuong-la-mot" class="wsp-desc">Ma Y Thần Tướng là một trong những cổ thư nhân tướng học nổi tiếng nhất Trung Hoa, hệ thống hoá cách đọc tính cách và vận mệnh qua các bộ vị trên khuôn mặt như Tam Đình, Ngũ Quan. Liễu Trang Thần Tướng và Thủy Kính Tập là những cổ thư tướng học khác thường được đối chiếu cùng.</p>
       </div>
       <div class="samp-cta" id="sampCta">
         <span class="sc-ic" data-icon="lightbulb"></span>
-        <span class="sc-txt"><b>Chưa muốn chụp ảnh?</b><span>Bạn có thể xem một bản mẫu để trải nghiệm trước.</span></span>
-        <button type="button" id="btnSample" data-sample-tool="nhan-tuong" onclick="SampleHint.open(this)">Xem bản mẫu →</button>
+        <span data-i18n="nhtg.chua-muon-chup-anh-ban-co" class="sc-txt"><b>Chưa muốn chụp ảnh?</b><span>Bạn có thể xem một bản mẫu để trải nghiệm trước.</span></span>
+        <button data-i18n="thtp.xem-ban-mau" type="button" id="btnSample" data-sample-tool="nhan-tuong" onclick="SampleHint.open(this)">Xem bản mẫu →</button>
       </div>
       <div id="shellRecent"></div>
       </div>
       </div>
 
       <div class="dt-card" id="resultCard" data-ws-result style="display:none;margin-top:16px">
-        <h2>Phân Tích Nhãn Tướng Học</h2>
-        <p class="sub">Ma Y Thần Tướng · Nhãn Pháp cổ pháp</p>
+        <h2 data-i18n="nhtg.phan-tich-nhan-tuong-hoc">Phân Tích Nhãn Tướng Học</h2>
+        <p data-i18n="nhtg.ma-y-than-tuong-nhan-phap" class="sub">Ma Y Thần Tướng · Nhãn Pháp cổ pháp</p>
         <div id="aiResult" class="dt-result"></div>
         <div style="text-align:center;margin-top:8px">
-          <button class="btn-cancel" onclick="resetTool()">Phân Tích Ảnh Khác</button>
+          <button data-i18n="nhtg.phan-tich-anh-khac" class="btn-cancel" onclick="resetTool()">Phân Tích Ảnh Khác</button>
         </div>
       </div>
     </div>
@@ -214,10 +214,10 @@ window.SHELL_CHATFIRST=true;
 window.SHELL_INTRO={key:'nhan-tuong'};</script>
 <script src="/auth.js?v=9"></script>
 <script src="/tuvi-paywall.js?v=44"></script>
-<script src="/tools-shared/hook-layer.js?v=7"></script>
+<script src="/tools-shared/hook-layer.js?v=8"></script>
 <script src="/tools-shared/fbcard-topic.js?v=2"></script>
   <script src="/nav.js?v=49" data-icons-only></script>
-<script src="/tools-shared/sample-hint.js?v=1"></script>
+<script src="/tools-shared/sample-hint.js?v=2"></script>
 <script src="/shell.js?v=150"></script>
 <script src="/tools-shared/shell-soft-nav.js?v=49"></script>
 <script>
@@ -357,19 +357,19 @@ function mountHook(lm, imgEl) {
   if (!host || !window.HookLayer) return;
   let title, body;
   if (_irisNote && _irisNote.includes('lệch lên')) {
-    title = 'Tròng mắt hơi lệch lên — có thể Tam Bạch Nhãn Hạ';
-    body = 'Đo trực tiếp từ ảnh bằng MediaPipe (vị trí tròng mắt so với mí trên/dưới). Ý nghĩa đầy đủ theo Ma Y Thần Tướng nằm trong bản phân tích chuyên sâu.';
+    title = _tvmbT('js.nhtg.trong-mat-hoi-lech-len-co', 'Tròng mắt hơi lệch lên — có thể Tam Bạch Nhãn Hạ');
+    body = _tvmbT('js.nhtg.do-truc-tiep-tu-anh-bang', 'Đo trực tiếp từ ảnh bằng MediaPipe (vị trí tròng mắt so với mí trên/dưới). Ý nghĩa đầy đủ theo Ma Y Thần Tướng nằm trong bản phân tích chuyên sâu.');
   } else if (_irisNote && _irisNote.includes('lệch xuống')) {
-    title = 'Tròng mắt hơi lệch xuống — có thể Tam Bạch Nhãn Thượng';
-    body = 'Đo trực tiếp từ ảnh bằng MediaPipe (vị trí tròng mắt so với mí trên/dưới). Ý nghĩa đầy đủ theo Ma Y Thần Tướng nằm trong bản phân tích chuyên sâu.';
+    title = _tvmbT('js.nhtg.trong-mat-hoi-lech-xuong-co', 'Tròng mắt hơi lệch xuống — có thể Tam Bạch Nhãn Thượng');
+    body = _tvmbT('js.nhtg.do-truc-tiep-tu-anh-bang', 'Đo trực tiếp từ ảnh bằng MediaPipe (vị trí tròng mắt so với mí trên/dưới). Ý nghĩa đầy đủ theo Ma Y Thần Tướng nằm trong bản phân tích chuyên sâu.');
   } else {
-    title = 'Vị trí tròng mắt: cân đối';
-    body = 'Đo trực tiếp từ ảnh bằng MediaPipe. Nhãn hình, thần khí và các chi tiết khác nằm trong bản phân tích chuyên sâu.';
+    title = _tvmbT('js.nhtg.vi-tri-trong-mat-can-doi', 'Vị trí tròng mắt: cân đối');
+    body = _tvmbT('js.nhtg.do-truc-tiep-tu-anh-bang-si1j', 'Đo trực tiếp từ ảnh bằng MediaPipe. Nhãn hình, thần khí và các chi tiết khác nằm trong bản phân tích chuyên sâu.');
   }
   const facts = [{ tone: 'neutral', title, body, source: 'engine · MediaPipe iris landmark' }];
   const angleFact = analyzeEyeAngleFact(lm, imgEl);
   if (angleFact) facts.push(angleFact);
-  const spec = { tool: 'nhan-tuong', toolLabel: 'Nhân Tướng', charts: [], facts: facts };
+  const spec = { tool: 'nhan-tuong', toolLabel: _tvmbT('js.nhtg.nhan-tuong', 'Nhân Tướng'), charts: [], facts: facts };
   window.HookLayer.run(host, spec);
 }
 
@@ -402,11 +402,11 @@ function analyzeEyeAngleFact(lm, imgEl) {
   const eyeLAngle = Math.atan2((p(lm[33],'y') - p(lm[133],'y')), (p(lm[133],'x') - p(lm[33],'x'))) * 180 / Math.PI;
   const eyeRAngle = Math.atan2((p(lm[263],'y') - p(lm[362],'y')), (p(lm[263],'x') - p(lm[362],'x'))) * 180 / Math.PI;
   const eyeAngle = (eyeLAngle + eyeRAngle) / 2;
-  const desc = eyeAngle > 2 ? 'đuôi mắt cong lên' : eyeAngle < -2 ? 'đuôi mắt xuôi' : 'ngang';
+  const desc = eyeAngle > 2 ? _tvmbT('js.nhtg.duoi-mat-cong-len', 'đuôi mắt cong lên') : eyeAngle < -2 ? _tvmbT('js.nhtg.duoi-mat-xuoi', 'đuôi mắt xuôi') : _tvmbT('js.nhtg.ngang', 'ngang');
   return {
     tone: 'neutral',
-    title: 'Góc đuôi mắt: ' + eyeAngle.toFixed(1) + '° (' + desc + ')',
-    body: 'Đo trực tiếp từ ảnh bằng MediaPipe. Ý nghĩa đầy đủ theo Ma Y Thần Tướng nằm trong bản phân tích chuyên sâu.',
+    title: _tvmbT('js.nhtg.goc-duoi-mat-a-d', 'Góc đuôi mắt: {a}° ({d})', { a: eyeAngle.toFixed(1), d: desc }),
+    body: _tvmbT('js.nhtg.do-truc-tiep-tu-anh-bang-ymai', 'Đo trực tiếp từ ảnh bằng MediaPipe. Ý nghĩa đầy đủ theo Ma Y Thần Tướng nằm trong bản phân tích chuyên sâu.'),
     source: 'engine · MediaPipe FaceMesh',
   };
 }
@@ -425,8 +425,8 @@ function onFileSelect(e) { const f=e.target.files[0]; if(f) processFile(f); }
 
 function processFile(file) {
   const err=document.getElementById('error-msg'); err.classList.remove('active');
-  if (!file.type.startsWith('image/')) { err.textContent='Vui lòng chọn file ảnh.'; err.classList.add('active'); err.scrollIntoView({block:'center',behavior:'smooth'}); return; }
-  if (file.size > 5*1024*1024) { err.textContent='Ảnh quá lớn (tối đa 5MB).'; err.classList.add('active'); err.scrollIntoView({block:'center',behavior:'smooth'}); return; }
+  if (!file.type.startsWith('image/')) { err.textContent=_tvmbT('js.nhtg.vui-long-chon-file-anh', 'Vui lòng chọn file ảnh.'); err.classList.add('active'); err.scrollIntoView({block:'center',behavior:'smooth'}); return; }
+  if (file.size > 5*1024*1024) { err.textContent=_tvmbT('js.nhtg.anh-qua-lon-toi-da-5mb', 'Ảnh quá lớn (tối đa 5MB).'); err.classList.add('active'); err.scrollIntoView({block:'center',behavior:'smooth'}); return; }
   const img = new Image();
   const ou = URL.createObjectURL(file);
   img.onload = () => {
@@ -439,7 +439,7 @@ function processFile(file) {
     _imageData=dataUrl.split(',')[1]; _mediaType='image/jpeg';
     showPreview(dataUrl);
   };
-  img.onerror = () => { URL.revokeObjectURL(ou); err.textContent='Không đọc được ảnh này — vui lòng chọn ảnh JPG hoặc PNG.'; err.classList.add('active'); err.scrollIntoView({block:'center',behavior:'smooth'}); };
+  img.onerror = () => { URL.revokeObjectURL(ou); err.textContent=_tvmbT('js.nhtg.khong-doc-duoc-anh-nay-vui', 'Không đọc được ảnh này — vui lòng chọn ảnh JPG hoặc PNG.'); err.classList.add('active'); err.scrollIntoView({block:'center',behavior:'smooth'}); };
   img.src=ou;
 }
 
@@ -463,7 +463,7 @@ function showPreview(dataUrl) {
       mountHook(lm, imgEl);
     } else {
       const err=document.getElementById('error-msg');
-      err.textContent='⚠ Không nhận diện được mặt rõ ràng. Vẫn có thể phân tích nhưng nên dùng ảnh thẳng mặt hơn.';
+      err.textContent=_tvmbT('js.nhtg.khong-nhan-dien-duoc-mat-ro', '⚠ Không nhận diện được mặt rõ ràng. Vẫn có thể phân tích nhưng nên dùng ảnh thẳng mặt hơn.');
       err.classList.add('active'); err.scrollIntoView({block:'center',behavior:'smooth'});
     }
   });
@@ -491,7 +491,7 @@ async function openCamera() {
     document.getElementById('camBtns').style.display='flex';
   } catch(e) {
     const err=document.getElementById('error-msg');
-    err.textContent='Không thể mở camera.'; err.classList.add('active'); err.scrollIntoView({block:'center',behavior:'smooth'});
+    err.textContent=_tvmbT('js.nhtg.khong-the-mo-camera', 'Không thể mở camera.'); err.classList.add('active'); err.scrollIntoView({block:'center',behavior:'smooth'});
   }
 }
 function capturePhoto() {
@@ -528,7 +528,7 @@ async function _doAnalyze() {
   document.getElementById('resultCard').style.display='block';
   wsStepsSet(3); // Nhận kết quả — đã trả tiền, bắt đầu phân tích nhãn tướng
   const aiResultEl = document.getElementById('aiResult');
-  aiResultEl.innerHTML='<div class="dt-loading"><span class="dt-loading-icon ic" data-icon="eye"></span><div class="dt-loading-text">Đang phân tích nhãn tướng...<br><span style="font-size:12px;opacity:.7">Thường mất 15–20 giây</span></div></div>';
+  aiResultEl.innerHTML='<div class="dt-loading"><span class="dt-loading-icon ic" data-icon="eye"></span><div class="dt-loading-text">' + _tvmbT('js.nhtg.dang-phan-tich-nhan-tuong', 'Đang phân tích nhãn tướng...') + '<br><span style="font-size:12px;opacity:.7">' + _tvmbT('js.nhtg.thuong-mat-15-20-giay', 'Thường mất 15–20 giây') + '</span></div></div>';
   window.mountIcons && window.mountIcons(aiResultEl);
   document.getElementById('resultCard').scrollIntoView({behavior:'smooth',block:'nearest'});
 
@@ -537,7 +537,7 @@ async function _doAnalyze() {
       method:'POST', headers:{'Content-Type':'application/json'},
       body:JSON.stringify({ image:_imageData, mediaType:_mediaType, action:'nhan-tuong', irisNote:_irisNote||null })
     });
-    if (!res.ok) { const d=await res.json().catch(()=>({})); throw new Error(d.error||'Lỗi '+res.status); }
+    if (!res.ok) { const d=await res.json().catch(()=>({})); throw new Error(d.error||_tvmbT('js.nhtg.loi-s', 'Lỗi {s}', { s: res.status })); }
 
     const reader=res.body.getReader(); const dec=new TextDecoder();
     let full='', buf='';
@@ -553,26 +553,26 @@ async function _doAnalyze() {
         try{ const j=JSON.parse(raw); if(j.err) throw new Error(j.err); if(j.t){ full+=j.t; el.innerHTML=renderMd(full); } }catch(e){ if(e.message&&!e.message.includes('JSON')) throw e; }
       }
     }
-    if(!full) throw new Error('Không có kết quả.');
+    if(!full) throw new Error(_tvmbT('js.nhtg.khong-co-ket-qua', 'Không có kết quả.'));
     el.innerHTML=renderMd(full);
     _saveTuongReading('nhan-tuong', full, _imageData, _mediaType);
     // Chia sẻ CHỈ text luận giải của AI — KHÔNG bao giờ đính kèm ảnh mắt thật
     // của user (riêng tư), dù ảnh đã tải lên để phân tích.
-    Shell.setShareable({ kind:'text', toolId:'nhan-tuong', title:'Nhãn Tướng của tôi', text:full });
+    Shell.setShareable({ kind:'text', toolId:'nhan-tuong', title:_tvmbT('js.nhtg.nhan-tuong-cua-toi', 'Nhãn Tướng của tôi'), text:full });
     // setContext() chỉ chạy TỚI ĐÂY — sau khi có kết quả thật (chat-first),
     // không còn gọi ở boot. Kết quả là văn xuôi SSE thuần, không có field
     // cấu trúc để trích số liệu nên greeting không bịa dữ kiện.
     if (window.SHELL_INTRO) Shell.dismissIntro(window.SHELL_INTRO.key);
     Shell.setContext({
-      label: 'Nhãn Tướng',
-      greeting: 'Đã phân tích xong nhãn tướng của bạn theo Liễu Trang Thần Tướng. Bạn muốn hỏi thêm điều gì?',
-      chips: ['Phượng nhãn là gì?', 'Tam Bạch Nhãn có ý nghĩa gì?', 'Ánh mắt nói lên điều gì?']
+      label: _tvmbT('js.nhtg.nhan-tuong-d6ph', 'Nhãn Tướng'),
+      greeting: _tvmbT('js.nhtg.da-phan-tich-xong-nhan-tuong', 'Đã phân tích xong nhãn tướng của bạn theo Liễu Trang Thần Tướng. Bạn muốn hỏi thêm điều gì?'),
+      chips: [_tvmbT('js.nhtg.phuong-nhan-la-gi', 'Phượng nhãn là gì?'), _tvmbT('js.nhtg.tam-bach-nhan-co-y-nghia', 'Tam Bạch Nhãn có ý nghĩa gì?'), _tvmbT('js.nhtg.anh-mat-noi-len-dieu-gi', 'Ánh mắt nói lên điều gì?')]
     });
   } catch(e){
     document.getElementById('aiResult').innerHTML='';
     document.getElementById('resultCard').style.display='none';
     const err=document.getElementById('error-msg');
-    err.textContent='Lỗi: '+(e.message||'Không thể kết nối.'); err.classList.add('active'); err.scrollIntoView({block:'center',behavior:'smooth'});
+    err.textContent=_tvmbT('js.nhtg.loi-e', 'Lỗi: {e}', { e: e.message||_tvmbT('js.nhtg.khong-the-ket-noi', 'Không thể kết nối.') }); err.classList.add('active'); err.scrollIntoView({block:'center',behavior:'smooth'});
   }
 }
 

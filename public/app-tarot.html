@@ -3,8 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Tarot 78 Lá — Tử Vi Minh Bảo</title>
-<meta name="description" content="Rút bài Tarot 78 lá ngay trên Tử Vi Minh Bảo — trải 1, 3 hoặc Celtic Cross 10 lá, ý nghĩa xuôi/ngược bằng tiếng Việt.">
+<title data-i18n="tarot.tarot-78-la-tu-vi-minh">Tarot 78 Lá — Tử Vi Minh Bảo</title>
+<meta data-i18n-attr="content:tarot.rut-bai-tarot-78-la-ngay" name="description" content="Rút bài Tarot 78 lá ngay trên Tử Vi Minh Bảo — trải 1, 3 hoặc Celtic Cross 10 lá, ý nghĩa xuôi/ngược bằng tiếng Việt.">
 <link rel="icon" type="image/webp" href="/seal.webp">
 <link rel="preload" href="/fonts/noto-serif-latin-400.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="/fonts/noto-serif-vietnamese-400.woff2" as="font" type="font/woff2" crossorigin>
@@ -89,9 +89,9 @@ body.chat-first-live .card-slot{min-width:70px}
   <main class="ws" id="ws">
     <div class="ws-top">
       <button class="btn mobile-only" onclick="document.getElementById('shell-sidebar').classList.toggle('open');window.shellSyncBackdrop&&shellSyncBackdrop()" aria-label="Menu">☰</button>
-      <div class="ws-title"><b>Tarot 78 Lá</b><span>Rút bài, trải 1 / 3 / Celtic Cross — miễn phí</span></div>
+      <div data-i18n="tarot.tarot-78-la-rut-bai-trai" class="ws-title"><b>Tarot 78 Lá</b><span>Rút bài, trải 1 / 3 / Celtic Cross — miễn phí</span></div>
       <div class="ws-actions">
-        <button class="btn mobile-only" onclick="Shell.openRail()">✦ Hỏi</button>
+        <button data-i18n="battu.hoi" class="btn mobile-only" onclick="Shell.openRail()">✦ Hỏi</button>
       </div>
     </div>
     <div class="ws-body">
@@ -105,15 +105,15 @@ body.chat-first-live .card-slot{min-width:70px}
         <img class="intro-avatar" src="/tool-avatars/tarot.webp" alt="" onerror="this.remove()">
         <div class="intro-body">
           <div class="intro-text">
-            <div class="intro-t">Tarot 78 Lá</div>
-            <div class="intro-d">Đôi khi chỉ cần một lá bài để nhìn rõ hơn điều mình đang phân vân. Chọn cách trải, gõ câu hỏi đang vướng trong đầu, nhận lời luận xuôi/ngược rõ ràng ngay.</div>
+            <div data-i18n="tarot.tarot-78-la" class="intro-t">Tarot 78 Lá</div>
+            <div data-i18n="tarot.doi-khi-chi-can-mot-la" class="intro-d">Đôi khi chỉ cần một lá bài để nhìn rõ hơn điều mình đang phân vân. Chọn cách trải, gõ câu hỏi đang vướng trong đầu, nhận lời luận xuôi/ngược rõ ràng ngay.</div>
             <div id="introSrc"></div>
           </div>
         </div>
         <div class="hero-pills">
-          <div class="hero-pill"><span class="hp-ic" data-icon="wallet-cards"></span><span>Trải 1, 3<br>hay 10 lá</span></div>
-          <div class="hero-pill"><span class="hp-ic" data-icon="sparkles"></span><span>Xuôi hay<br>ngược nghĩa</span></div>
-          <div class="hero-pill"><span class="hp-ic" data-icon="message-circle"></span><span>Luận theo<br>câu hỏi của bạn</span></div>
+          <div data-i18n="tarot.trai-1-3-hay-10-la" class="hero-pill"><span class="hp-ic" data-icon="wallet-cards"></span><span>Trải 1, 3<br>hay 10 lá</span></div>
+          <div data-i18n="tarot.xuoi-hay-nguoc-nghia" class="hero-pill"><span class="hp-ic" data-icon="sparkles"></span><span>Xuôi hay<br>ngược nghĩa</span></div>
+          <div data-i18n="tarot.luan-theo-cau-hoi-cua-ban" class="hero-pill"><span class="hp-ic" data-icon="message-circle"></span><span>Luận theo<br>câu hỏi của bạn</span></div>
         </div>
       </div></div>
       <!-- KHÔNG có `.ws-steps` ở trang này (khác pilot): tool rút bài không có
@@ -122,28 +122,28 @@ body.chat-first-live .card-slot{min-width:70px}
            "quay lại form" hay "thanh toán" để đánh dấu bước. -->
       <div class="ws-main-col">
       <div class="tr-card" id="inputCard">
-        <div class="fc-head"><span class="fc-ic" data-icon="wallet-cards"></span><h2>Chọn Kiểu Trải Bài</h2></div>
-        <p class="sub">Chọn kiểu trải (1, 3 hay 10 lá), rút bài ngẫu nhiên, trả luận giải từng lá — xuôi hay ngược — khớp đúng câu hỏi của bạn.</p>
+        <div class="fc-head"><span class="fc-ic" data-icon="wallet-cards"></span><h2 data-i18n="tarot.chon-kieu-trai-bai">Chọn Kiểu Trải Bài</h2></div>
+        <p data-i18n="tarot.chon-kieu-trai-1-3-hay" class="sub">Chọn kiểu trải (1, 3 hay 10 lá), rút bài ngẫu nhiên, trả luận giải từng lá — xuôi hay ngược — khớp đúng câu hỏi của bạn.</p>
         <div class="cost-box">
           <div class="cb-l">
             <span class="cb-ic" data-icon="wallet"></span>
             <div>
-              <div class="cb-title">Chi phí sử dụng</div>
+              <div data-i18n="battu.chi-phi-su-dung" class="cb-title">Chi phí sử dụng</div>
               <div class="cb-amt" data-tvp-price-label="tarot">…</div>
             </div>
           </div>
         </div>
         <div class="spread-btns">
-          <button class="spread-btn active" onclick="setSpread(1,this)"><span class="ic" data-icon="sparkles"></span> 1 Lá — Thông Điệp Hôm Nay</button>
-          <button class="spread-btn" onclick="setSpread(3,this)"><span class="ic" data-icon="sparkles"></span> 3 Lá — Quá Khứ · Hiện Tại · Tương Lai</button>
-          <button class="spread-btn" onclick="setSpread(10,this)"><span class="ic" data-icon="sparkles"></span> Celtic Cross — 10 Lá</button>
+          <button data-i18n="tarot.1-la-thong-diep-hom-nay" class="spread-btn active" onclick="setSpread(1,this)"><span class="ic" data-icon="sparkles"></span> 1 Lá — Thông Điệp Hôm Nay</button>
+          <button data-i18n="tarot.3-la-qua-khu-hien-tai" class="spread-btn" onclick="setSpread(3,this)"><span class="ic" data-icon="sparkles"></span> 3 Lá — Quá Khứ · Hiện Tại · Tương Lai</button>
+          <button data-i18n="tarot.celtic-cross-10-la" class="spread-btn" onclick="setSpread(10,this)"><span class="ic" data-icon="sparkles"></span> Celtic Cross — 10 Lá</button>
         </div>
         <div class="tr-q">
-          <label>Câu hỏi (tuỳ chọn — nghĩ trong tâm hoặc ghi ra đây)</label>
-          <input type="text" id="question" placeholder="VD: Tình trạng sự nghiệp của tôi hiện tại thế nào?" maxlength="120">
+          <label data-i18n="tarot.cau-hoi-tuy-chon-nghi-trong">Câu hỏi (tuỳ chọn — nghĩ trong tâm hoặc ghi ra đây)</label>
+          <input data-i18n-attr="placeholder:tarot.vd-tinh-trang-su-nghiep-cua" type="text" id="question" placeholder="VD: Tình trạng sự nghiệp của tôi hiện tại thế nào?" maxlength="120">
         </div>
         <div style="text-align:center">
-          <button class="btn-go" id="drawBtn" onclick="draw()">
+          <button data-i18n="tarot.xao-bai-rut" class="btn-go" id="drawBtn" onclick="draw()">
             <span class="bg-label"><span class="ic" data-icon="wallet-cards"></span><b id="drawBtnLabel">Xáo Bài &amp; Rút</b></span>
           </button>
         </div>
@@ -152,9 +152,9 @@ body.chat-first-live .card-slot{min-width:70px}
       </div>
       <div class="ws-side-col">
       <div class="ws-promo">
-        <div class="wsp-eyebrow"><span class="wsp-ic" data-icon="book-open"></span><span>Giới thiệu</span></div>
-        <div class="wsp-title">Tarot 78 Lá</div>
-        <p class="wsp-desc">Tarot là bộ bài 78 lá gồm 22 lá Ẩn Chính (Major Arcana) và 56 lá Ẩn Phụ (Minor Arcana), xuất hiện tại châu Âu từ thế kỷ 15 và về sau được dùng phổ biến cho mục đích chiêm nghiệm, bói toán. Mỗi lá mang một biểu tượng riêng, được luận nghĩa khác nhau tuỳ vị trí xuôi hay ngược.</p>
+        <div data-i18n="battu.gioi-thieu" class="wsp-eyebrow"><span class="wsp-ic" data-icon="book-open"></span><span>Giới thiệu</span></div>
+        <div data-i18n="tarot.tarot-78-la" class="wsp-title">Tarot 78 Lá</div>
+        <p data-i18n="tarot.tarot-la-bo-bai-78-la" class="wsp-desc">Tarot là bộ bài 78 lá gồm 22 lá Ẩn Chính (Major Arcana) và 56 lá Ẩn Phụ (Minor Arcana), xuất hiện tại châu Âu từ thế kỷ 15 và về sau được dùng phổ biến cho mục đích chiêm nghiệm, bói toán. Mỗi lá mang một biểu tượng riêng, được luận nghĩa khác nhau tuỳ vị trí xuôi hay ngược.</p>
       </div>
       <div id="shellRecent"></div>
       </div>
@@ -191,322 +191,322 @@ window.SHELL_INTRO={key:'tarot'};</script>
 // ══════════════════════════════════════════════════════════════════════
 var CARDS = [
 // ── MAJOR ARCANA (0–21) ─────────────────────────────────────
-{id:0,name:'Kẻ Khờ',en:'The Fool',type:'major',sym:'🌟',num:'0',
- up:'Khởi đầu mới, tự do, tinh thần phiêu lưu, tiềm năng vô hạn. Bước vào hành trình mới với lòng tin và trái tim rộng mở. Đây là thời điểm của những khả năng vô tận.',
- rev:'Liều lĩnh thiếu suy nghĩ, bất cẩn, bỏ lỡ cơ hội. Đang do dự quá mức hoặc ngược lại hành động mà không có kế hoạch.',
- kw:['Khởi đầu','Tự do','Phiêu lưu','Tiềm năng']},
-{id:1,name:'Pháp Sư',en:'The Magician',type:'major',sym:'⚡',num:'I',
- up:'Ý chí, tập trung, tài năng, nguồn lực. Bạn có đủ công cụ để thực hiện mục tiêu. Thời điểm hành động và thể hiện khả năng.',
- rev:'Thao túng, lãng phí tài năng, thiếu tập trung. Có thể đang sử dụng kỹ năng sai mục đích hoặc chưa phát huy hết tiềm năng.',
- kw:['Ý chí','Tài năng','Hành động','Thể hiện']},
-{id:2,name:'Nữ Tư Tế',en:'The High Priestess',type:'major',sym:'🌙',num:'II',
- up:'Trực giác, bí ẩn, nội tâm, tiềm thức. Lắng nghe tiếng nói bên trong. Có điều gì đó chưa được tiết lộ — hãy kiên nhẫn và quan sát.',
- rev:'Bí mật bị che giấu, ngắt kết nối với bản thân, bỏ qua trực giác. Đang bỏ qua những dấu hiệu quan trọng từ nội tâm.',
- kw:['Trực giác','Bí ẩn','Tiềm thức','Nội tâm']},
-{id:3,name:'Hoàng Hậu',en:'The Empress',type:'major',sym:'🌸',num:'III',
- up:'Nữ tính, phong phú, nuôi dưỡng, sáng tạo, thiên nhiên. Thời kỳ sinh sôi và phát triển. Năng lượng yêu thương và chăm sóc đang tỏa sáng.',
- rev:'Phụ thuộc, sáng tạo bị chặn, thiếu tự chăm sóc. Có thể đang cho đi quá nhiều mà không nhận lại, hoặc bỏ bê bản thân.',
- kw:['Nữ tính','Phong phú','Sáng tạo','Nuôi dưỡng']},
-{id:4,name:'Hoàng Đế',en:'The Emperor',type:'major',sym:'👑',num:'IV',
- up:'Thẩm quyền, cấu trúc, ổn định, kỷ luật. Thời điểm thiết lập nền tảng vững chắc. Lãnh đạo và kiểm soát tình huống một cách có trách nhiệm.',
- rev:'Độc đoán, kiểm soát quá mức, thiếu linh hoạt. Đang dùng quyền lực sai cách hoặc bị người khác kiểm soát.',
- kw:['Quyền lực','Cấu trúc','Lãnh đạo','Kỷ luật']},
-{id:5,name:'Giáo Hoàng',en:'The Hierophant',type:'major',sym:'⛪',num:'V',
- up:'Truyền thống, tôn giáo, giáo dục, chuẩn mực xã hội. Đi theo con đường đã được thiết lập, tìm kiếm sự hướng dẫn từ những gì đã được chứng minh.',
- rev:'Cứng nhắc, giáo điều, phá vỡ quy tắc. Đang thách thức các giá trị truyền thống hoặc bị ràng buộc bởi kỳ vọng của người khác.',
- kw:['Truyền thống','Giáo dục','Tôn giáo','Chuẩn mực']},
-{id:6,name:'Người Yêu',en:'The Lovers',type:'major',sym:'❤️',num:'VI',
- up:'Tình yêu, sự lựa chọn, sự hoà hợp, giá trị cá nhân. Một lựa chọn quan trọng đang đến. Sự kết nối tâm hồn và liên minh dựa trên giá trị chung.',
- rev:'Bất hoà, lựa chọn sai, mất cân bằng. Có thể đang lựa chọn dựa trên lý do sai hoặc tránh né một quyết định quan trọng.',
- kw:['Tình yêu','Lựa chọn','Hài hoà','Kết nối']},
-{id:7,name:'Cỗ Xe',en:'The Chariot',type:'major',sym:'🏆',num:'VII',
- up:'Ý chí, kiểm soát, chiến thắng, quyết tâm. Tiến về phía trước với sự kiên định. Chiến thắng nhờ vào ý chí và kỷ luật cá nhân.',
- rev:'Thiếu kiểm soát, hung hăng, thất bại. Đang bị kéo theo nhiều hướng khác nhau hoặc sử dụng sức lực sai cách.',
- kw:['Quyết tâm','Chiến thắng','Ý chí','Tiến về phía trước']},
-{id:8,name:'Sức Mạnh',en:'Strength',type:'major',sym:'🦁',num:'VIII',
- up:'Can đảm, kiên nhẫn, lòng trắc ẩn, kiểm soát nội tâm. Sức mạnh thực sự đến từ bên trong, từ lòng tốt và sự kiên nhẫn chứ không phải vũ lực.',
- rev:'Yếu đuối, tự nghi ngờ, thiếu can đảm. Đang để nỗi sợ chi phối hoặc ngược lại đang dùng sức mạnh một cách tàn nhẫn.',
- kw:['Can đảm','Kiên nhẫn','Nội tâm','Lòng tốt']},
-{id:9,name:'Ẩn Sĩ',en:'The Hermit',type:'major',sym:'🕯️',num:'IX',
- up:'Nội tâm, cô đơn có ý nghĩa, tìm kiếm sự thật, hướng dẫn nội tâm. Thời gian rút lui để suy ngẫm và tìm kiếm sự sáng suốt bên trong.',
- rev:'Cô lập, cô đơn không mong muốn, tránh né xã hội. Đang tự giam cầm hoặc bỏ lỡ sự kết nối có ý nghĩa với người khác.',
- kw:['Nội tâm','Suy ngẫm','Cô đơn','Sáng suốt']},
-{id:10,name:'Bánh Xe Số Phận',en:'Wheel of Fortune',type:'major',sym:'☸️',num:'X',
- up:'Vận may, thay đổi, chu kỳ, bước ngoặt. Bánh xe đang quay theo hướng tốt. Đón nhận sự thay đổi vì cuộc sống luôn vận động theo chu kỳ.',
- rev:'Vận xui, kháng cự thay đổi, chu kỳ tiêu cực. Đang chống lại những thay đổi không thể tránh khỏi hoặc bị mắc kẹt trong vòng lặp cũ.',
- kw:['Vận may','Thay đổi','Chu kỳ','Bước ngoặt']},
-{id:11,name:'Công Lý',en:'Justice',type:'major',sym:'⚖️',num:'XI',
- up:'Công bằng, sự thật, nhân quả, pháp luật. Mọi hành động đều có hậu quả. Sự cân bằng và công bằng sẽ được phục hồi.',
- rev:'Bất công, thiếu trách nhiệm, tránh né hậu quả. Đang né tránh trách nhiệm hoặc đang bị đối xử bất công.',
- kw:['Công bằng','Sự thật','Nhân quả','Cân bằng']},
-{id:12,name:'Kẻ Treo Ngược',en:'The Hanged Man',type:'major',sym:'🙃',num:'XII',
- up:'Tạm dừng, buông bỏ, hiến tế, góc nhìn mới. Đôi khi cần dừng lại để nhìn nhận mọi thứ từ góc độ khác. Buông bỏ kiểm soát để đạt được sự khai sáng.',
- rev:'Trì hoãn, kháng cự, hy sinh vô ích. Đang từ chối buông bỏ điều gì đó đang kìm hãm bạn.',
- kw:['Tạm dừng','Buông bỏ','Góc nhìn mới','Hy sinh']},
-{id:13,name:'Cái Chết',en:'Death',type:'major',sym:'🌑',num:'XIII',
- up:'Kết thúc, chuyển hoá, thay đổi tất yếu, khởi đầu mới. Không phải cái chết thể xác — đây là sự kết thúc của một giai đoạn và sự tái sinh của điều mới.',
- rev:'Kháng cự thay đổi, trì trệ, sợ hãi kết thúc. Đang bám víu vào điều không còn phục vụ bạn nữa.',
- kw:['Kết thúc','Chuyển hoá','Tái sinh','Thay đổi']},
-{id:14,name:'Điều Độ',en:'Temperance',type:'major',sym:'🌊',num:'XIV',
- up:'Cân bằng, kiên nhẫn, mục đích, hoà hợp. Đi theo con đường trung dung, hoà hợp các yếu tố đối lập trong cuộc sống.',
- rev:'Mất cân bằng, thái quá, thiếu kiên nhẫn. Đang làm quá nhiều hoặc quá ít, thiếu sự điều độ trong cuộc sống.',
- kw:['Cân bằng','Kiên nhẫn','Hoà hợp','Điều độ']},
-{id:15,name:'Ác Quỷ',en:'The Devil',type:'major',sym:'🔗',num:'XV',
- up:'Ràng buộc, vật chất, ám ảnh, bóng tối nội tâm. Đang bị ràng buộc bởi điều gì đó — tiền bạc, mối quan hệ độc hại, hay thói quen xấu. Nhận ra ràng buộc là bước đầu tiên để thoát khỏi.',
- rev:'Giải phóng, thoát khỏi ràng buộc, nhận thức. Bắt đầu nhận ra và cắt đứt những ràng buộc không lành mạnh.',
- kw:['Ràng buộc','Ám ảnh','Bóng tối','Vật chất']},
-{id:16,name:'Tháp',en:'The Tower',type:'major',sym:'⚡',num:'XVI',
- up:'Hỗn loạn đột ngột, đổ vỡ, khải thị, thức tỉnh. Một cú sốc đột ngột phá vỡ cấu trúc cũ. Đau đớn nhưng cần thiết để xây dựng điều tốt đẹp hơn.',
- rev:'Tránh né thảm họa, sợ thay đổi, trì hoãn không thể tránh khỏi. Đang né tránh sự sụp đổ cần thiết.',
- kw:['Đổ vỡ','Hỗn loạn','Thức tỉnh','Khải thị']},
-{id:17,name:'Ngôi Sao',en:'The Star',type:'major',sym:'⭐',num:'XVII',
- up:'Hy vọng, cảm hứng, bình an, đổi mới. Sau bóng tối là ánh sáng. Thời điểm chữa lành và tin tưởng vào tương lai.',
- rev:'Vô vọng, mất niềm tin, thất vọng. Đang gặp khó khăn trong việc tin tưởng vào tương lai hoặc cảm thấy mất kết nối với nguồn cảm hứng.',
- kw:['Hy vọng','Bình an','Chữa lành','Cảm hứng']},
-{id:18,name:'Mặt Trăng',en:'The Moon',type:'major',sym:'🌕',num:'XVIII',
- up:'Ảo giác, sợ hãi, tiềm thức, giấc mơ. Không phải mọi thứ đều như vẻ ngoài. Hãy cẩn thận với những gì đang ẩn giấu trong bóng tối.',
- rev:'Nỗi sợ được giải phóng, sự thật được tiết lộ, sáng suốt. Dần dần nhìn thấu qua ảo giác và tìm thấy sự thật.',
- kw:['Ảo giác','Tiềm thức','Sợ hãi','Giấc mơ']},
-{id:19,name:'Mặt Trời',en:'The Sun',type:'major',sym:'☀️',num:'XIX',
- up:'Niềm vui, thành công, sức sống, sự lạc quan. Ánh sáng rọi chiếu vào mọi góc tối. Thời kỳ hạnh phúc, rõ ràng và thành công.',
- rev:'Bi quan tạm thời, thiếu năng lượng, tự nghi ngờ. Ánh sáng vẫn ở đó — chỉ cần bước ra khỏi bóng tối.',
- kw:['Niềm vui','Thành công','Sức sống','Lạc quan']},
-{id:20,name:'Phán Xét',en:'Judgement',type:'major',sym:'📯',num:'XX',
- up:'Phản ánh, đánh giá, sự thức tỉnh, tha thứ. Một giai đoạn đang kết thúc và bạn được kêu gọi. Thời điểm để đánh giá quá khứ và bước lên tầm cao mới.',
- rev:'Tự phán xét quá mức, nghi ngờ bản thân, bỏ qua lời kêu gọi. Đang quá khắt khe với bản thân hoặc chưa sẵn sàng lắng nghe sự thức tỉnh.',
- kw:['Đánh giá','Thức tỉnh','Tha thứ','Kêu gọi']},
-{id:21,name:'Thế Giới',en:'The World',type:'major',sym:'🌍',num:'XXI',
- up:'Hoàn chỉnh, thành tích, hội nhập, hành trình kết thúc. Chu kỳ đã hoàn thành. Thời điểm ăn mừng thành tựu và chuẩn bị cho hành trình mới.',
- rev:'Chưa hoàn chỉnh, thiếu kết thúc, trì hoãn. Gần đến đích nhưng vẫn còn điều gì đó chưa được giải quyết trước khi tiến lên.',
- kw:['Hoàn chỉnh','Thành tích','Chu kỳ kết thúc','Hội nhập']},
+{id:0,name:_tvmbT('js.tarot.ke-kho', 'Kẻ Khờ'),en:'The Fool',type:'major',sym:'🌟',num:'0',
+ up:_tvmbT('js.tarot.khoi-dau-moi-tu-do-tinh', 'Khởi đầu mới, tự do, tinh thần phiêu lưu, tiềm năng vô hạn. Bước vào hành trình mới với lòng tin và trái tim rộng mở. Đây là thời điểm của những khả năng vô tận.'),
+ rev:_tvmbT('js.tarot.lieu-linh-thieu-suy-nghi-bat', 'Liều lĩnh thiếu suy nghĩ, bất cẩn, bỏ lỡ cơ hội. Đang do dự quá mức hoặc ngược lại hành động mà không có kế hoạch.'),
+ kw:[_tvmbT('js.tarot.khoi-dau', 'Khởi đầu'),_tvmbT('js.tarot.tu-do', 'Tự do'),_tvmbT('js.tarot.phieu-luu', 'Phiêu lưu'),_tvmbT('js.tarot.tiem-nang', 'Tiềm năng')]},
+{id:1,name:_tvmbT('js.tarot.phap-su', 'Pháp Sư'),en:'The Magician',type:'major',sym:'⚡',num:'I',
+ up:_tvmbT('js.tarot.y-chi-tap-trung-tai-nang', 'Ý chí, tập trung, tài năng, nguồn lực. Bạn có đủ công cụ để thực hiện mục tiêu. Thời điểm hành động và thể hiện khả năng.'),
+ rev:_tvmbT('js.tarot.thao-tung-lang-phi-tai-nang', 'Thao túng, lãng phí tài năng, thiếu tập trung. Có thể đang sử dụng kỹ năng sai mục đích hoặc chưa phát huy hết tiềm năng.'),
+ kw:[_tvmbT('js.tarot.y-chi', 'Ý chí'),_tvmbT('js.tarot.tai-nang', 'Tài năng'),_tvmbT('js.tarot.hanh-dong', 'Hành động'),_tvmbT('js.tarot.the-hien', 'Thể hiện')]},
+{id:2,name:_tvmbT('js.tarot.nu-tu-te', 'Nữ Tư Tế'),en:'The High Priestess',type:'major',sym:'🌙',num:'II',
+ up:_tvmbT('js.tarot.truc-giac-bi-an-noi-tam', 'Trực giác, bí ẩn, nội tâm, tiềm thức. Lắng nghe tiếng nói bên trong. Có điều gì đó chưa được tiết lộ — hãy kiên nhẫn và quan sát.'),
+ rev:_tvmbT('js.tarot.bi-mat-bi-che-giau-ngat', 'Bí mật bị che giấu, ngắt kết nối với bản thân, bỏ qua trực giác. Đang bỏ qua những dấu hiệu quan trọng từ nội tâm.'),
+ kw:[_tvmbT('js.tarot.truc-giac', 'Trực giác'),_tvmbT('js.tarot.bi-an', 'Bí ẩn'),_tvmbT('js.tarot.tiem-thuc', 'Tiềm thức'),_tvmbT('js.tarot.noi-tam', 'Nội tâm')]},
+{id:3,name:_tvmbT('js.tarot.hoang-hau', 'Hoàng Hậu'),en:'The Empress',type:'major',sym:'🌸',num:'III',
+ up:_tvmbT('js.tarot.nu-tinh-phong-phu-nuoi-duong', 'Nữ tính, phong phú, nuôi dưỡng, sáng tạo, thiên nhiên. Thời kỳ sinh sôi và phát triển. Năng lượng yêu thương và chăm sóc đang tỏa sáng.'),
+ rev:_tvmbT('js.tarot.phu-thuoc-sang-tao-bi-chan', 'Phụ thuộc, sáng tạo bị chặn, thiếu tự chăm sóc. Có thể đang cho đi quá nhiều mà không nhận lại, hoặc bỏ bê bản thân.'),
+ kw:[_tvmbT('js.tarot.nu-tinh', 'Nữ tính'),_tvmbT('js.tarot.phong-phu', 'Phong phú'),_tvmbT('js.tarot.sang-tao', 'Sáng tạo'),_tvmbT('js.tarot.nuoi-duong', 'Nuôi dưỡng')]},
+{id:4,name:_tvmbT('js.tarot.hoang-de', 'Hoàng Đế'),en:'The Emperor',type:'major',sym:'👑',num:'IV',
+ up:_tvmbT('js.tarot.tham-quyen-cau-truc-on-dinh', 'Thẩm quyền, cấu trúc, ổn định, kỷ luật. Thời điểm thiết lập nền tảng vững chắc. Lãnh đạo và kiểm soát tình huống một cách có trách nhiệm.'),
+ rev:_tvmbT('js.tarot.doc-doan-kiem-soat-qua-muc', 'Độc đoán, kiểm soát quá mức, thiếu linh hoạt. Đang dùng quyền lực sai cách hoặc bị người khác kiểm soát.'),
+ kw:[_tvmbT('js.tarot.quyen-luc', 'Quyền lực'),_tvmbT('js.tarot.cau-truc', 'Cấu trúc'),_tvmbT('js.tarot.lanh-dao', 'Lãnh đạo'),_tvmbT('js.tarot.ky-luat', 'Kỷ luật')]},
+{id:5,name:_tvmbT('js.tarot.giao-hoang', 'Giáo Hoàng'),en:'The Hierophant',type:'major',sym:'⛪',num:'V',
+ up:_tvmbT('js.tarot.truyen-thong-ton-giao-giao-duc', 'Truyền thống, tôn giáo, giáo dục, chuẩn mực xã hội. Đi theo con đường đã được thiết lập, tìm kiếm sự hướng dẫn từ những gì đã được chứng minh.'),
+ rev:_tvmbT('js.tarot.cung-nhac-giao-dieu-pha-vo', 'Cứng nhắc, giáo điều, phá vỡ quy tắc. Đang thách thức các giá trị truyền thống hoặc bị ràng buộc bởi kỳ vọng của người khác.'),
+ kw:[_tvmbT('js.tarot.truyen-thong', 'Truyền thống'),_tvmbT('js.tarot.giao-duc', 'Giáo dục'),_tvmbT('js.tarot.ton-giao', 'Tôn giáo'),_tvmbT('js.tarot.chuan-muc', 'Chuẩn mực')]},
+{id:6,name:_tvmbT('js.tarot.nguoi-yeu', 'Người Yêu'),en:'The Lovers',type:'major',sym:'❤️',num:'VI',
+ up:_tvmbT('js.tarot.tinh-yeu-su-lua-chon-su', 'Tình yêu, sự lựa chọn, sự hoà hợp, giá trị cá nhân. Một lựa chọn quan trọng đang đến. Sự kết nối tâm hồn và liên minh dựa trên giá trị chung.'),
+ rev:_tvmbT('js.tarot.bat-hoa-lua-chon-sai-mat', 'Bất hoà, lựa chọn sai, mất cân bằng. Có thể đang lựa chọn dựa trên lý do sai hoặc tránh né một quyết định quan trọng.'),
+ kw:[_tvmbT('js.tarot.tinh-yeu', 'Tình yêu'),_tvmbT('js.tarot.lua-chon', 'Lựa chọn'),_tvmbT('js.tarot.hai-hoa', 'Hài hoà'),_tvmbT('js.tarot.ket-noi', 'Kết nối')]},
+{id:7,name:_tvmbT('js.tarot.co-xe', 'Cỗ Xe'),en:'The Chariot',type:'major',sym:'🏆',num:'VII',
+ up:_tvmbT('js.tarot.y-chi-kiem-soat-chien-thang', 'Ý chí, kiểm soát, chiến thắng, quyết tâm. Tiến về phía trước với sự kiên định. Chiến thắng nhờ vào ý chí và kỷ luật cá nhân.'),
+ rev:_tvmbT('js.tarot.thieu-kiem-soat-hung-hang-that', 'Thiếu kiểm soát, hung hăng, thất bại. Đang bị kéo theo nhiều hướng khác nhau hoặc sử dụng sức lực sai cách.'),
+ kw:[_tvmbT('js.tarot.quyet-tam', 'Quyết tâm'),_tvmbT('js.tarot.chien-thang', 'Chiến thắng'),_tvmbT('js.tarot.y-chi', 'Ý chí'),_tvmbT('js.tarot.tien-ve-phia-truoc', 'Tiến về phía trước')]},
+{id:8,name:_tvmbT('js.tarot.suc-manh', 'Sức Mạnh'),en:'Strength',type:'major',sym:'🦁',num:'VIII',
+ up:_tvmbT('js.tarot.can-dam-kien-nhan-long-trac', 'Can đảm, kiên nhẫn, lòng trắc ẩn, kiểm soát nội tâm. Sức mạnh thực sự đến từ bên trong, từ lòng tốt và sự kiên nhẫn chứ không phải vũ lực.'),
+ rev:_tvmbT('js.tarot.yeu-duoi-tu-nghi-ngo-thieu', 'Yếu đuối, tự nghi ngờ, thiếu can đảm. Đang để nỗi sợ chi phối hoặc ngược lại đang dùng sức mạnh một cách tàn nhẫn.'),
+ kw:[_tvmbT('js.tarot.can-dam', 'Can đảm'),_tvmbT('js.tarot.kien-nhan', 'Kiên nhẫn'),_tvmbT('js.tarot.noi-tam', 'Nội tâm'),_tvmbT('js.tarot.long-tot', 'Lòng tốt')]},
+{id:9,name:_tvmbT('js.tarot.an-si', 'Ẩn Sĩ'),en:'The Hermit',type:'major',sym:'🕯️',num:'IX',
+ up:_tvmbT('js.tarot.noi-tam-co-don-co-y', 'Nội tâm, cô đơn có ý nghĩa, tìm kiếm sự thật, hướng dẫn nội tâm. Thời gian rút lui để suy ngẫm và tìm kiếm sự sáng suốt bên trong.'),
+ rev:_tvmbT('js.tarot.co-lap-co-don-khong-mong', 'Cô lập, cô đơn không mong muốn, tránh né xã hội. Đang tự giam cầm hoặc bỏ lỡ sự kết nối có ý nghĩa với người khác.'),
+ kw:[_tvmbT('js.tarot.noi-tam', 'Nội tâm'),_tvmbT('js.tarot.suy-ngam', 'Suy ngẫm'),_tvmbT('js.tarot.co-don', 'Cô đơn'),_tvmbT('js.tarot.sang-suot', 'Sáng suốt')]},
+{id:10,name:_tvmbT('js.tarot.banh-xe-so-phan', 'Bánh Xe Số Phận'),en:'Wheel of Fortune',type:'major',sym:'☸️',num:'X',
+ up:_tvmbT('js.tarot.van-may-thay-doi-chu-ky', 'Vận may, thay đổi, chu kỳ, bước ngoặt. Bánh xe đang quay theo hướng tốt. Đón nhận sự thay đổi vì cuộc sống luôn vận động theo chu kỳ.'),
+ rev:_tvmbT('js.tarot.van-xui-khang-cu-thay-doi', 'Vận xui, kháng cự thay đổi, chu kỳ tiêu cực. Đang chống lại những thay đổi không thể tránh khỏi hoặc bị mắc kẹt trong vòng lặp cũ.'),
+ kw:[_tvmbT('js.tarot.van-may', 'Vận may'),_tvmbT('js.tarot.thay-doi', 'Thay đổi'),_tvmbT('js.tarot.chu-ky', 'Chu kỳ'),_tvmbT('js.tarot.buoc-ngoat', 'Bước ngoặt')]},
+{id:11,name:_tvmbT('js.tarot.cong-ly', 'Công Lý'),en:'Justice',type:'major',sym:'⚖️',num:'XI',
+ up:_tvmbT('js.tarot.cong-bang-su-that-nhan-qua', 'Công bằng, sự thật, nhân quả, pháp luật. Mọi hành động đều có hậu quả. Sự cân bằng và công bằng sẽ được phục hồi.'),
+ rev:_tvmbT('js.tarot.bat-cong-thieu-trach-nhiem-tranh', 'Bất công, thiếu trách nhiệm, tránh né hậu quả. Đang né tránh trách nhiệm hoặc đang bị đối xử bất công.'),
+ kw:[_tvmbT('js.tarot.cong-bang', 'Công bằng'),_tvmbT('js.tarot.su-that', 'Sự thật'),_tvmbT('js.tarot.nhan-qua', 'Nhân quả'),_tvmbT('js.tarot.can-bang', 'Cân bằng')]},
+{id:12,name:_tvmbT('js.tarot.ke-treo-nguoc', 'Kẻ Treo Ngược'),en:'The Hanged Man',type:'major',sym:'🙃',num:'XII',
+ up:_tvmbT('js.tarot.tam-dung-buong-bo-hien-te', 'Tạm dừng, buông bỏ, hiến tế, góc nhìn mới. Đôi khi cần dừng lại để nhìn nhận mọi thứ từ góc độ khác. Buông bỏ kiểm soát để đạt được sự khai sáng.'),
+ rev:_tvmbT('js.tarot.tri-hoan-khang-cu-hy-sinh', 'Trì hoãn, kháng cự, hy sinh vô ích. Đang từ chối buông bỏ điều gì đó đang kìm hãm bạn.'),
+ kw:[_tvmbT('js.tarot.tam-dung', 'Tạm dừng'),_tvmbT('js.tarot.buong-bo', 'Buông bỏ'),_tvmbT('js.tarot.goc-nhin-moi', 'Góc nhìn mới'),'Hy sinh']},
+{id:13,name:_tvmbT('js.tarot.cai-chet', 'Cái Chết'),en:'Death',type:'major',sym:'🌑',num:'XIII',
+ up:_tvmbT('js.tarot.ket-thuc-chuyen-hoa-thay-doi', 'Kết thúc, chuyển hoá, thay đổi tất yếu, khởi đầu mới. Không phải cái chết thể xác — đây là sự kết thúc của một giai đoạn và sự tái sinh của điều mới.'),
+ rev:_tvmbT('js.tarot.khang-cu-thay-doi-tri-tre', 'Kháng cự thay đổi, trì trệ, sợ hãi kết thúc. Đang bám víu vào điều không còn phục vụ bạn nữa.'),
+ kw:[_tvmbT('js.tarot.ket-thuc', 'Kết thúc'),_tvmbT('js.tarot.chuyen-hoa', 'Chuyển hoá'),_tvmbT('js.tarot.tai-sinh', 'Tái sinh'),_tvmbT('js.tarot.thay-doi', 'Thay đổi')]},
+{id:14,name:_tvmbT('js.tarot.dieu-do', 'Điều Độ'),en:'Temperance',type:'major',sym:'🌊',num:'XIV',
+ up:_tvmbT('js.tarot.can-bang-kien-nhan-muc-dich', 'Cân bằng, kiên nhẫn, mục đích, hoà hợp. Đi theo con đường trung dung, hoà hợp các yếu tố đối lập trong cuộc sống.'),
+ rev:_tvmbT('js.tarot.mat-can-bang-thai-qua-thieu', 'Mất cân bằng, thái quá, thiếu kiên nhẫn. Đang làm quá nhiều hoặc quá ít, thiếu sự điều độ trong cuộc sống.'),
+ kw:[_tvmbT('js.tarot.can-bang', 'Cân bằng'),_tvmbT('js.tarot.kien-nhan', 'Kiên nhẫn'),_tvmbT('js.tarot.hoa-hop', 'Hoà hợp'),_tvmbT('js.tarot.dieu-do-v85g', 'Điều độ')]},
+{id:15,name:_tvmbT('js.tarot.ac-quy', 'Ác Quỷ'),en:'The Devil',type:'major',sym:'🔗',num:'XV',
+ up:_tvmbT('js.tarot.rang-buoc-vat-chat-am-anh', 'Ràng buộc, vật chất, ám ảnh, bóng tối nội tâm. Đang bị ràng buộc bởi điều gì đó — tiền bạc, mối quan hệ độc hại, hay thói quen xấu. Nhận ra ràng buộc là bước đầu tiên để thoát khỏi.'),
+ rev:_tvmbT('js.tarot.giai-phong-thoat-khoi-rang-buoc', 'Giải phóng, thoát khỏi ràng buộc, nhận thức. Bắt đầu nhận ra và cắt đứt những ràng buộc không lành mạnh.'),
+ kw:[_tvmbT('js.tarot.rang-buoc', 'Ràng buộc'),_tvmbT('js.tarot.am-anh', 'Ám ảnh'),_tvmbT('js.tarot.bong-toi', 'Bóng tối'),_tvmbT('js.tarot.vat-chat', 'Vật chất')]},
+{id:16,name:_tvmbT('js.tarot.thap', 'Tháp'),en:'The Tower',type:'major',sym:'⚡',num:'XVI',
+ up:_tvmbT('js.tarot.hon-loan-dot-ngot-do-vo', 'Hỗn loạn đột ngột, đổ vỡ, khải thị, thức tỉnh. Một cú sốc đột ngột phá vỡ cấu trúc cũ. Đau đớn nhưng cần thiết để xây dựng điều tốt đẹp hơn.'),
+ rev:_tvmbT('js.tarot.tranh-ne-tham-hoa-so-thay', 'Tránh né thảm họa, sợ thay đổi, trì hoãn không thể tránh khỏi. Đang né tránh sự sụp đổ cần thiết.'),
+ kw:[_tvmbT('js.tarot.do-vo', 'Đổ vỡ'),_tvmbT('js.tarot.hon-loan', 'Hỗn loạn'),_tvmbT('js.tarot.thuc-tinh', 'Thức tỉnh'),_tvmbT('js.tarot.khai-thi', 'Khải thị')]},
+{id:17,name:_tvmbT('js.tarot.ngoi-sao', 'Ngôi Sao'),en:'The Star',type:'major',sym:'⭐',num:'XVII',
+ up:_tvmbT('js.tarot.hy-vong-cam-hung-binh-an', 'Hy vọng, cảm hứng, bình an, đổi mới. Sau bóng tối là ánh sáng. Thời điểm chữa lành và tin tưởng vào tương lai.'),
+ rev:_tvmbT('js.tarot.vo-vong-mat-niem-tin-that', 'Vô vọng, mất niềm tin, thất vọng. Đang gặp khó khăn trong việc tin tưởng vào tương lai hoặc cảm thấy mất kết nối với nguồn cảm hứng.'),
+ kw:[_tvmbT('js.tarot.hy-vong', 'Hy vọng'),_tvmbT('js.tarot.binh-an', 'Bình an'),_tvmbT('js.tarot.chua-lanh', 'Chữa lành'),_tvmbT('js.tarot.cam-hung', 'Cảm hứng')]},
+{id:18,name:_tvmbT('js.tarot.mat-trang', 'Mặt Trăng'),en:'The Moon',type:'major',sym:'🌕',num:'XVIII',
+ up:_tvmbT('js.tarot.ao-giac-so-hai-tiem-thuc', 'Ảo giác, sợ hãi, tiềm thức, giấc mơ. Không phải mọi thứ đều như vẻ ngoài. Hãy cẩn thận với những gì đang ẩn giấu trong bóng tối.'),
+ rev:_tvmbT('js.tarot.noi-so-duoc-giai-phong-su', 'Nỗi sợ được giải phóng, sự thật được tiết lộ, sáng suốt. Dần dần nhìn thấu qua ảo giác và tìm thấy sự thật.'),
+ kw:[_tvmbT('js.tarot.ao-giac', 'Ảo giác'),_tvmbT('js.tarot.tiem-thuc', 'Tiềm thức'),_tvmbT('js.tarot.so-hai', 'Sợ hãi'),_tvmbT('js.tarot.giac-mo', 'Giấc mơ')]},
+{id:19,name:_tvmbT('js.tarot.mat-troi', 'Mặt Trời'),en:'The Sun',type:'major',sym:'☀️',num:'XIX',
+ up:_tvmbT('js.tarot.niem-vui-thanh-cong-suc-song', 'Niềm vui, thành công, sức sống, sự lạc quan. Ánh sáng rọi chiếu vào mọi góc tối. Thời kỳ hạnh phúc, rõ ràng và thành công.'),
+ rev:_tvmbT('js.tarot.bi-quan-tam-thoi-thieu-nang', 'Bi quan tạm thời, thiếu năng lượng, tự nghi ngờ. Ánh sáng vẫn ở đó — chỉ cần bước ra khỏi bóng tối.'),
+ kw:[_tvmbT('js.tarot.niem-vui', 'Niềm vui'),_tvmbT('js.tarot.thanh-cong', 'Thành công'),_tvmbT('js.tarot.suc-song', 'Sức sống'),_tvmbT('js.tarot.lac-quan', 'Lạc quan')]},
+{id:20,name:_tvmbT('js.tarot.phan-xet', 'Phán Xét'),en:'Judgement',type:'major',sym:'📯',num:'XX',
+ up:_tvmbT('js.tarot.phan-anh-danh-gia-su-thuc', 'Phản ánh, đánh giá, sự thức tỉnh, tha thứ. Một giai đoạn đang kết thúc và bạn được kêu gọi. Thời điểm để đánh giá quá khứ và bước lên tầm cao mới.'),
+ rev:_tvmbT('js.tarot.tu-phan-xet-qua-muc-nghi', 'Tự phán xét quá mức, nghi ngờ bản thân, bỏ qua lời kêu gọi. Đang quá khắt khe với bản thân hoặc chưa sẵn sàng lắng nghe sự thức tỉnh.'),
+ kw:[_tvmbT('js.tarot.danh-gia', 'Đánh giá'),_tvmbT('js.tarot.thuc-tinh', 'Thức tỉnh'),_tvmbT('js.tarot.tha-thu', 'Tha thứ'),_tvmbT('js.tarot.keu-goi', 'Kêu gọi')]},
+{id:21,name:_tvmbT('js.tarot.the-gioi', 'Thế Giới'),en:'The World',type:'major',sym:'🌍',num:'XXI',
+ up:_tvmbT('js.tarot.hoan-chinh-thanh-tich-hoi-nhap', 'Hoàn chỉnh, thành tích, hội nhập, hành trình kết thúc. Chu kỳ đã hoàn thành. Thời điểm ăn mừng thành tựu và chuẩn bị cho hành trình mới.'),
+ rev:_tvmbT('js.tarot.chua-hoan-chinh-thieu-ket-thuc', 'Chưa hoàn chỉnh, thiếu kết thúc, trì hoãn. Gần đến đích nhưng vẫn còn điều gì đó chưa được giải quyết trước khi tiến lên.'),
+ kw:[_tvmbT('js.tarot.hoan-chinh', 'Hoàn chỉnh'),_tvmbT('js.tarot.thanh-tich', 'Thành tích'),_tvmbT('js.tarot.chu-ky-ket-thuc', 'Chu kỳ kết thúc'),_tvmbT('js.tarot.hoi-nhap', 'Hội nhập')]},
 // ── MINOR ARCANA — WANDS (Gậy) ──────────────────────────────
-{id:22,name:'Át Gậy',en:'Ace of Wands',type:'wands',sym:'🔥',num:'Át',
- up:'Cảm hứng mới, tiềm năng sáng tạo, khởi đầu đầy nhiệt huyết. Hạt giống của một dự án mới hay ý tưởng sáng tạo đang nảy mầm.',
- rev:'Sự trì hoãn, thiếu động lực, năng lượng bị chặn. Ý tưởng chưa sẵn sàng hoặc thiếu môi trường để phát triển.',
- kw:['Cảm hứng','Sáng tạo','Nhiệt huyết','Khởi đầu']},
-{id:23,name:'Hai Gậy',en:'Two of Wands',type:'wands',sym:'🔥🔥',num:'Hai',
- up:'Kế hoạch tương lai, quyết định, tiến về phía trước. Đứng ở ngã tư với thế giới rộng lớn trước mặt. Thời điểm lập kế hoạch và lựa chọn hướng đi.',
- rev:'Sợ thay đổi, kế hoạch tệ, thiếu tầm nhìn. Đang do dự không dám bước ra khỏi vùng an toàn.',
- kw:['Kế hoạch','Tầm nhìn','Quyết định','Tiến lên']},
-{id:24,name:'Ba Gậy',en:'Three of Wands',type:'wands',sym:'⛵',num:'Ba',
- up:'Mở rộng, tầm nhìn xa, cơ hội đang đến. Những kế hoạch đã được gieo trồng đang bắt đầu kết trái. Nhìn về phía chân trời với sự tự tin.',
- rev:'Trì hoãn, thiếu tầm nhìn, cơ hội bị bỏ lỡ. Những kế hoạch không tiến triển như mong đợi.',
- kw:['Mở rộng','Cơ hội','Tầm nhìn xa','Thành quả']},
-{id:25,name:'Bốn Gậy',en:'Four of Wands',type:'wands',sym:'🎉',num:'Bốn',
- up:'Ăn mừng, hài hoà, thư giãn, ổn định. Thời điểm ăn mừng những thành tựu. Một nền tảng vững chắc đã được xây dựng.',
- rev:'Mâu thuẫn gia đình, thiếu cộng đồng, lễ kỷ niệm bị hoãn. Có rắc rối ở nhà hoặc trong cộng đồng gần gũi.',
- kw:['Ăn mừng','Hài hoà','Ổn định','Nền tảng']},
-{id:26,name:'Năm Gậy',en:'Five of Wands',type:'wands',sym:'⚔️',num:'Năm',
- up:'Xung đột, cạnh tranh, bất đồng, thử thách. Mọi người đều có ý kiến riêng. Cạnh tranh lành mạnh hoặc sự hỗn loạn tạm thời.',
- rev:'Tránh né xung đột, căng thẳng bên trong, giải quyết bất đồng. Tìm cách để mọi người cùng hướng về một phía.',
- kw:['Xung đột','Cạnh tranh','Bất đồng','Thử thách']},
-{id:27,name:'Sáu Gậy',en:'Six of Wands',type:'wands',sym:'🏅',num:'Sáu',
- up:'Thành công, công nhận, tự tin, sự tiến bộ. Đang nhận được sự công nhận xứng đáng cho những nỗ lực. Chiến thắng sau thử thách.',
- rev:'Ngã mạn, không được công nhận, thiếu tự tin. Thành công không được ghi nhận hoặc đang để thành công làm bạn kiêu ngạo.',
- kw:['Thành công','Công nhận','Tự tin','Chiến thắng']},
-{id:28,name:'Bảy Gậy',en:'Seven of Wands',type:'wands',sym:'🛡️',num:'Bảy',
- up:'Phòng thủ, bền vững, kiên định, đấu tranh cho vị trí. Phải đứng vững trước áp lực và thách thức từ bên ngoài.',
- rev:'Kiệt sức, từ bỏ, áp đảo. Cảm thấy bị tấn công từ nhiều phía và khó giữ vững lập trường.',
- kw:['Phòng thủ','Kiên định','Bền vững','Đấu tranh']},
-{id:29,name:'Tám Gậy',en:'Eight of Wands',type:'wands',sym:'💨',num:'Tám',
- up:'Tốc độ, hành động nhanh, tin tức, chuyển động. Mọi thứ đang di chuyển rất nhanh. Tin tức sắp đến, sự kiện đang diễn ra ồ ạt.',
- rev:'Chậm trễ, hỗn loạn, thiếu kiên nhẫn. Kế hoạch bị trì hoãn hoặc thông tin đang bị hỗn loạn.',
- kw:['Tốc độ','Hành động','Tin tức','Chuyển động']},
-{id:30,name:'Chín Gậy',en:'Nine of Wands',type:'wands',sym:'🩹',num:'Chín',
- up:'Kiên cường, kháng cự, bảo vệ bản thân. Đã trải qua nhiều thử thách nhưng vẫn đứng vững. Cẩn thận nhưng không từ bỏ.',
- rev:'Kiệt sức, bướng bỉnh, từ chối nhận giúp đỡ. Đang bảo vệ quá mức hoặc kiệt sức sau trận chiến dài.',
- kw:['Kiên cường','Bảo vệ','Không từ bỏ','Thận trọng']},
-{id:31,name:'Mười Gậy',en:'Ten of Wands',type:'wands',sym:'😓',num:'Mười',
- up:'Gánh nặng, trách nhiệm quá mức, áp lực. Đang gánh chịu quá nhiều. Cần đặt xuống những gì không còn cần thiết.',
- rev:'Trút bỏ gánh nặng, uỷ quyền, học buông bỏ. Đang bắt đầu nhận ra không thể ôm đồm tất cả một mình.',
- kw:['Gánh nặng','Trách nhiệm','Áp lực','Quá tải']},
-{id:32,name:'Trang Gậy',en:'Page of Wands',type:'wands',sym:'🌱',num:'Trang',
- up:'Khám phá, nhiệt tình, ý tưởng mới, tự do. Năng lượng trẻ trung và háo hức. Sẵn sàng khám phá lãnh thổ mới.',
- rev:'Thiếu hướng dẫn, bồn chồn, trì hoãn. Có nhiều ý tưởng nhưng thiếu kế hoạch thực hiện.',
- kw:['Khám phá','Nhiệt tình','Tươi mới','Tự do']},
-{id:33,name:'Kỵ Sĩ Gậy',en:'Knight of Wands',type:'wands',sym:'⚡',num:'Kỵ Sĩ',
- up:'Năng lượng, đam mê, phiêu lưu, hành động táo bạo. Lao về phía trước với nhiệt huyết và quyết tâm. Thời điểm hành động dứt khoát.',
- rev:'Nóng vội, hung hăng, liều lĩnh thiếu suy nghĩ. Đang hành động quá nhanh mà không lập kế hoạch.',
- kw:['Đam mê','Phiêu lưu','Táo bạo','Nhiệt huyết']},
-{id:34,name:'Hoàng Hậu Gậy',en:'Queen of Wands',type:'wands',sym:'🦁',num:'HH',
- up:'Tự tin, can đảm, xác định, năng lượng xã hội. Lôi cuốn và nhiệt tình, truyền cảm hứng cho người xung quanh.',
- rev:'Kiêu ngạo, ganh tị, bất an. Ẩn giấu sự không chắc chắn sau lớp vỏ tự tin.',
- kw:['Tự tin','Can đảm','Lôi cuốn','Truyền cảm hứng']},
-{id:35,name:'Vua Gậy',en:'King of Wands',type:'wands',sym:'👑',num:'Vua',
- up:'Lãnh đạo tầm nhìn, doanh nghiệp, danh dự, quyết đoán. Lãnh đạo bằng tầm nhìn và cảm hứng. Thành công trong kinh doanh và lãnh đạo.',
- rev:'Độc đoán, bốc đồng, kỳ vọng cao. Đang lãnh đạo theo kiểu ép buộc thay vì truyền cảm hứng.',
- kw:['Lãnh đạo','Tầm nhìn','Doanh nghiệp','Quyết đoán']},
+{id:22,name:_tvmbT('js.tarot.at-gay', 'Át Gậy'),en:'Ace of Wands',type:'wands',sym:'🔥',num:_tvmbT('js.tarot.at', 'Át'),
+ up:_tvmbT('js.tarot.cam-hung-moi-tiem-nang-sang', 'Cảm hứng mới, tiềm năng sáng tạo, khởi đầu đầy nhiệt huyết. Hạt giống của một dự án mới hay ý tưởng sáng tạo đang nảy mầm.'),
+ rev:_tvmbT('js.tarot.su-tri-hoan-thieu-dong-luc', 'Sự trì hoãn, thiếu động lực, năng lượng bị chặn. Ý tưởng chưa sẵn sàng hoặc thiếu môi trường để phát triển.'),
+ kw:[_tvmbT('js.tarot.cam-hung', 'Cảm hứng'),_tvmbT('js.tarot.sang-tao', 'Sáng tạo'),_tvmbT('js.tarot.nhiet-huyet', 'Nhiệt huyết'),_tvmbT('js.tarot.khoi-dau', 'Khởi đầu')]},
+{id:23,name:_tvmbT('js.tarot.hai-gay', 'Hai Gậy'),en:'Two of Wands',type:'wands',sym:'🔥🔥',num:_tvmbT('js.tarot.hai', 'Hai'),
+ up:_tvmbT('js.tarot.ke-hoach-tuong-lai-quyet-dinh', 'Kế hoạch tương lai, quyết định, tiến về phía trước. Đứng ở ngã tư với thế giới rộng lớn trước mặt. Thời điểm lập kế hoạch và lựa chọn hướng đi.'),
+ rev:_tvmbT('js.tarot.so-thay-doi-ke-hoach-te', 'Sợ thay đổi, kế hoạch tệ, thiếu tầm nhìn. Đang do dự không dám bước ra khỏi vùng an toàn.'),
+ kw:[_tvmbT('js.tarot.ke-hoach', 'Kế hoạch'),_tvmbT('js.tarot.tam-nhin', 'Tầm nhìn'),_tvmbT('js.tarot.quyet-dinh', 'Quyết định'),_tvmbT('js.tarot.tien-len', 'Tiến lên')]},
+{id:24,name:_tvmbT('js.tarot.ba-gay', 'Ba Gậy'),en:'Three of Wands',type:'wands',sym:'⛵',num:_tvmbT('js.tarot.ba', 'Ba'),
+ up:_tvmbT('js.tarot.mo-rong-tam-nhin-xa-co', 'Mở rộng, tầm nhìn xa, cơ hội đang đến. Những kế hoạch đã được gieo trồng đang bắt đầu kết trái. Nhìn về phía chân trời với sự tự tin.'),
+ rev:_tvmbT('js.tarot.tri-hoan-thieu-tam-nhin-co', 'Trì hoãn, thiếu tầm nhìn, cơ hội bị bỏ lỡ. Những kế hoạch không tiến triển như mong đợi.'),
+ kw:[_tvmbT('js.tarot.mo-rong', 'Mở rộng'),_tvmbT('js.tarot.co-hoi', 'Cơ hội'),_tvmbT('js.tarot.tam-nhin-xa', 'Tầm nhìn xa'),_tvmbT('js.tarot.thanh-qua', 'Thành quả')]},
+{id:25,name:_tvmbT('js.tarot.bon-gay', 'Bốn Gậy'),en:'Four of Wands',type:'wands',sym:'🎉',num:_tvmbT('js.tarot.bon', 'Bốn'),
+ up:_tvmbT('js.tarot.an-mung-hai-hoa-thu-gian', 'Ăn mừng, hài hoà, thư giãn, ổn định. Thời điểm ăn mừng những thành tựu. Một nền tảng vững chắc đã được xây dựng.'),
+ rev:_tvmbT('js.tarot.mau-thuan-gia-dinh-thieu-cong', 'Mâu thuẫn gia đình, thiếu cộng đồng, lễ kỷ niệm bị hoãn. Có rắc rối ở nhà hoặc trong cộng đồng gần gũi.'),
+ kw:[_tvmbT('js.tarot.an-mung', 'Ăn mừng'),_tvmbT('js.tarot.hai-hoa', 'Hài hoà'),_tvmbT('js.tarot.on-dinh', 'Ổn định'),_tvmbT('js.tarot.nen-tang', 'Nền tảng')]},
+{id:26,name:_tvmbT('js.tarot.nam-gay', 'Năm Gậy'),en:'Five of Wands',type:'wands',sym:'⚔️',num:_tvmbT('js.tarot.nam', 'Năm'),
+ up:_tvmbT('js.tarot.xung-dot-canh-tranh-bat-dong', 'Xung đột, cạnh tranh, bất đồng, thử thách. Mọi người đều có ý kiến riêng. Cạnh tranh lành mạnh hoặc sự hỗn loạn tạm thời.'),
+ rev:_tvmbT('js.tarot.tranh-ne-xung-dot-cang-thang', 'Tránh né xung đột, căng thẳng bên trong, giải quyết bất đồng. Tìm cách để mọi người cùng hướng về một phía.'),
+ kw:[_tvmbT('js.tarot.xung-dot', 'Xung đột'),_tvmbT('js.tarot.canh-tranh', 'Cạnh tranh'),_tvmbT('js.tarot.bat-dong', 'Bất đồng'),_tvmbT('js.tarot.thu-thach', 'Thử thách')]},
+{id:27,name:_tvmbT('js.tarot.sau-gay', 'Sáu Gậy'),en:'Six of Wands',type:'wands',sym:'🏅',num:_tvmbT('js.tarot.sau', 'Sáu'),
+ up:_tvmbT('js.tarot.thanh-cong-cong-nhan-tu-tin', 'Thành công, công nhận, tự tin, sự tiến bộ. Đang nhận được sự công nhận xứng đáng cho những nỗ lực. Chiến thắng sau thử thách.'),
+ rev:_tvmbT('js.tarot.nga-man-khong-duoc-cong-nhan', 'Ngã mạn, không được công nhận, thiếu tự tin. Thành công không được ghi nhận hoặc đang để thành công làm bạn kiêu ngạo.'),
+ kw:[_tvmbT('js.tarot.thanh-cong', 'Thành công'),_tvmbT('js.tarot.cong-nhan', 'Công nhận'),_tvmbT('js.tarot.tu-tin', 'Tự tin'),_tvmbT('js.tarot.chien-thang', 'Chiến thắng')]},
+{id:28,name:_tvmbT('js.tarot.bay-gay', 'Bảy Gậy'),en:'Seven of Wands',type:'wands',sym:'🛡️',num:_tvmbT('js.tarot.bay', 'Bảy'),
+ up:_tvmbT('js.tarot.phong-thu-ben-vung-kien-dinh', 'Phòng thủ, bền vững, kiên định, đấu tranh cho vị trí. Phải đứng vững trước áp lực và thách thức từ bên ngoài.'),
+ rev:_tvmbT('js.tarot.kiet-suc-tu-bo-ap-dao', 'Kiệt sức, từ bỏ, áp đảo. Cảm thấy bị tấn công từ nhiều phía và khó giữ vững lập trường.'),
+ kw:[_tvmbT('js.tarot.phong-thu', 'Phòng thủ'),_tvmbT('js.tarot.kien-dinh', 'Kiên định'),_tvmbT('js.tarot.ben-vung', 'Bền vững'),_tvmbT('js.tarot.dau-tranh', 'Đấu tranh')]},
+{id:29,name:_tvmbT('js.tarot.tam-gay', 'Tám Gậy'),en:'Eight of Wands',type:'wands',sym:'💨',num:_tvmbT('js.tarot.tam', 'Tám'),
+ up:_tvmbT('js.tarot.toc-do-hanh-dong-nhanh-tin', 'Tốc độ, hành động nhanh, tin tức, chuyển động. Mọi thứ đang di chuyển rất nhanh. Tin tức sắp đến, sự kiện đang diễn ra ồ ạt.'),
+ rev:_tvmbT('js.tarot.cham-tre-hon-loan-thieu-kien', 'Chậm trễ, hỗn loạn, thiếu kiên nhẫn. Kế hoạch bị trì hoãn hoặc thông tin đang bị hỗn loạn.'),
+ kw:[_tvmbT('js.tarot.toc-do', 'Tốc độ'),_tvmbT('js.tarot.hanh-dong', 'Hành động'),_tvmbT('js.tarot.tin-tuc', 'Tin tức'),_tvmbT('js.tarot.chuyen-dong', 'Chuyển động')]},
+{id:30,name:_tvmbT('js.tarot.chin-gay', 'Chín Gậy'),en:'Nine of Wands',type:'wands',sym:'🩹',num:_tvmbT('js.tarot.chin', 'Chín'),
+ up:_tvmbT('js.tarot.kien-cuong-khang-cu-bao-ve', 'Kiên cường, kháng cự, bảo vệ bản thân. Đã trải qua nhiều thử thách nhưng vẫn đứng vững. Cẩn thận nhưng không từ bỏ.'),
+ rev:_tvmbT('js.tarot.kiet-suc-buong-binh-tu-choi', 'Kiệt sức, bướng bỉnh, từ chối nhận giúp đỡ. Đang bảo vệ quá mức hoặc kiệt sức sau trận chiến dài.'),
+ kw:[_tvmbT('js.tarot.kien-cuong', 'Kiên cường'),_tvmbT('js.tarot.bao-ve', 'Bảo vệ'),_tvmbT('js.tarot.khong-tu-bo', 'Không từ bỏ'),_tvmbT('js.tarot.than-trong', 'Thận trọng')]},
+{id:31,name:_tvmbT('js.tarot.muoi-gay', 'Mười Gậy'),en:'Ten of Wands',type:'wands',sym:'😓',num:_tvmbT('js.tarot.muoi', 'Mười'),
+ up:_tvmbT('js.tarot.ganh-nang-trach-nhiem-qua-muc', 'Gánh nặng, trách nhiệm quá mức, áp lực. Đang gánh chịu quá nhiều. Cần đặt xuống những gì không còn cần thiết.'),
+ rev:_tvmbT('js.tarot.trut-bo-ganh-nang-uy-quyen', 'Trút bỏ gánh nặng, uỷ quyền, học buông bỏ. Đang bắt đầu nhận ra không thể ôm đồm tất cả một mình.'),
+ kw:[_tvmbT('js.tarot.ganh-nang', 'Gánh nặng'),_tvmbT('js.tarot.trach-nhiem', 'Trách nhiệm'),_tvmbT('js.tarot.ap-luc', 'Áp lực'),_tvmbT('js.tarot.qua-tai', 'Quá tải')]},
+{id:32,name:_tvmbT('js.tarot.trang-gay', 'Trang Gậy'),en:'Page of Wands',type:'wands',sym:'🌱',num:_tvmbT('js.tarot.trang', 'Trang'),
+ up:_tvmbT('js.tarot.kham-pha-nhiet-tinh-y-tuong', 'Khám phá, nhiệt tình, ý tưởng mới, tự do. Năng lượng trẻ trung và háo hức. Sẵn sàng khám phá lãnh thổ mới.'),
+ rev:_tvmbT('js.tarot.thieu-huong-dan-bon-chon-tri', 'Thiếu hướng dẫn, bồn chồn, trì hoãn. Có nhiều ý tưởng nhưng thiếu kế hoạch thực hiện.'),
+ kw:[_tvmbT('js.tarot.kham-pha', 'Khám phá'),_tvmbT('js.tarot.nhiet-tinh', 'Nhiệt tình'),_tvmbT('js.tarot.tuoi-moi', 'Tươi mới'),_tvmbT('js.tarot.tu-do', 'Tự do')]},
+{id:33,name:_tvmbT('js.tarot.ky-si-gay', 'Kỵ Sĩ Gậy'),en:'Knight of Wands',type:'wands',sym:'⚡',num:_tvmbT('js.tarot.ky-si', 'Kỵ Sĩ'),
+ up:_tvmbT('js.tarot.nang-luong-dam-me-phieu-luu', 'Năng lượng, đam mê, phiêu lưu, hành động táo bạo. Lao về phía trước với nhiệt huyết và quyết tâm. Thời điểm hành động dứt khoát.'),
+ rev:_tvmbT('js.tarot.nong-voi-hung-hang-lieu-linh', 'Nóng vội, hung hăng, liều lĩnh thiếu suy nghĩ. Đang hành động quá nhanh mà không lập kế hoạch.'),
+ kw:[_tvmbT('js.tarot.dam-me', 'Đam mê'),_tvmbT('js.tarot.phieu-luu', 'Phiêu lưu'),_tvmbT('js.tarot.tao-bao', 'Táo bạo'),_tvmbT('js.tarot.nhiet-huyet', 'Nhiệt huyết')]},
+{id:34,name:_tvmbT('js.tarot.hoang-hau-gay', 'Hoàng Hậu Gậy'),en:'Queen of Wands',type:'wands',sym:'🦁',num:_tvmbT('js.tarot.hh', 'HH'),
+ up:_tvmbT('js.tarot.tu-tin-can-dam-xac-dinh', 'Tự tin, can đảm, xác định, năng lượng xã hội. Lôi cuốn và nhiệt tình, truyền cảm hứng cho người xung quanh.'),
+ rev:_tvmbT('js.tarot.kieu-ngao-ganh-ti-bat-an', 'Kiêu ngạo, ganh tị, bất an. Ẩn giấu sự không chắc chắn sau lớp vỏ tự tin.'),
+ kw:[_tvmbT('js.tarot.tu-tin', 'Tự tin'),_tvmbT('js.tarot.can-dam', 'Can đảm'),_tvmbT('js.tarot.loi-cuon', 'Lôi cuốn'),_tvmbT('js.tarot.truyen-cam-hung', 'Truyền cảm hứng')]},
+{id:35,name:_tvmbT('js.tarot.vua-gay', 'Vua Gậy'),en:'King of Wands',type:'wands',sym:'👑',num:_tvmbT('js.tarot.vua', 'Vua'),
+ up:_tvmbT('js.tarot.lanh-dao-tam-nhin-doanh-nghiep', 'Lãnh đạo tầm nhìn, doanh nghiệp, danh dự, quyết đoán. Lãnh đạo bằng tầm nhìn và cảm hứng. Thành công trong kinh doanh và lãnh đạo.'),
+ rev:_tvmbT('js.tarot.doc-doan-boc-dong-ky-vong', 'Độc đoán, bốc đồng, kỳ vọng cao. Đang lãnh đạo theo kiểu ép buộc thay vì truyền cảm hứng.'),
+ kw:[_tvmbT('js.tarot.lanh-dao', 'Lãnh đạo'),_tvmbT('js.tarot.tam-nhin', 'Tầm nhìn'),_tvmbT('js.tarot.doanh-nghiep', 'Doanh nghiệp'),_tvmbT('js.tarot.quyet-doan', 'Quyết đoán')]},
 // ── CUPS (Cốc) ────────────────────────────────────────────────
-{id:36,name:'Át Cốc',en:'Ace of Cups',type:'cups',sym:'💧',num:'Át',
- up:'Tình yêu mới, trực giác, tâm linh, bắt đầu cảm xúc. Trái tim rộng mở để đón nhận tình yêu và kết nối mới.',
- rev:'Cảm xúc bị chặn, trái tim khép kín, tình yêu bị từ chối. Đang khó cho đi hay nhận lấy tình yêu.',
- kw:['Tình yêu mới','Cảm xúc','Trực giác','Tâm linh']},
-{id:37,name:'Hai Cốc',en:'Two of Cups',type:'cups',sym:'💑',num:'Hai',
- up:'Liên minh, hợp tác, mối quan hệ, thu hút lẫn nhau. Kết nối sâu sắc và cân bằng giữa hai người.',
- rev:'Mất kết nối, mất cân bằng, không hoà hợp. Mối quan hệ đang gặp vấn đề hoặc thiếu sự tôn trọng lẫn nhau.',
- kw:['Liên minh','Tình yêu','Hợp tác','Kết nối']},
-{id:38,name:'Ba Cốc',en:'Three of Cups',type:'cups',sym:'🥂',num:'Ba',
- up:'Tình bạn, cộng đồng, ăn mừng, sáng tạo. Niềm vui chia sẻ với bạn bè và người thân. Thời gian tụ họp và kỷ niệm.',
- rev:'Thái quá, cô đơn, xung đột nhóm. Sự ăn mừng đang bị lạm dụng hoặc có căng thẳng trong nhóm bạn.',
- kw:['Tình bạn','Ăn mừng','Cộng đồng','Chia sẻ']},
-{id:39,name:'Bốn Cốc',en:'Four of Cups',type:'cups',sym:'😑',num:'Bốn',
- up:'Suy nghĩ nội tâm, thờ ơ, đánh giá lại, chán ghét. Đang mải nghĩ và bỏ qua cơ hội đang ở ngay trước mặt.',
- rev:'Thoát khỏi thờ ơ, chọn lọc được cải thiện, động lực mới. Bắt đầu thoát ra khỏi trạng thái thụ động.',
- kw:['Thờ ơ','Nội tâm','Đánh giá lại','Bỏ qua cơ hội']},
-{id:40,name:'Năm Cốc',en:'Five of Cups',type:'cups',sym:'😢',num:'Năm',
- up:'Mất mát, hối tiếc, đau buồn, tập trung vào tiêu cực. Đang than thở về những gì đã mất mà không nhìn thấy những gì vẫn còn.',
- rev:'Tiến về phía trước, chấp nhận, tha thứ. Dần dần chữa lành và tìm cách tiến lên từ tổn thương.',
- kw:['Mất mát','Hối tiếc','Đau buồn','Chữa lành']},
-{id:41,name:'Sáu Cốc',en:'Six of Cups',type:'cups',sym:'🌷',num:'Sáu',
- up:'Hoài niệm, tuổi thơ, kỷ niệm, những ký ức tốt đẹp. Nhìn lại quá khứ với tình cảm. Kết nối với trẻ con nội tâm.',
- rev:'Sống trong quá khứ, thiếu trưởng thành, mắc kẹt. Đang không thể tiến về phía trước vì quá gắn bó với quá khứ.',
- kw:['Hoài niệm','Tuổi thơ','Kỷ niệm','Tình cảm']},
-{id:42,name:'Bảy Cốc',en:'Seven of Cups',type:'cups',sym:'🌈',num:'Bảy',
- up:'Ảo tưởng, lựa chọn, giấc mơ, tưởng tượng. Có quá nhiều lựa chọn gây choáng ngợp. Cẩn thận đừng mắc kẹt trong ảo tưởng.',
- rev:'Sự rõ ràng sau hỗn loạn, lựa chọn sáng suốt, thực tế. Đang bắt đầu nhìn rõ và đưa ra quyết định thực tế.',
- kw:['Ảo tưởng','Lựa chọn','Mơ mộng','Choáng ngợp']},
-{id:43,name:'Tám Cốc',en:'Eight of Cups',type:'cups',sym:'🚶',num:'Tám',
- up:'Từ bỏ, rút lui, tìm kiếm điều sâu sắc hơn. Bỏ lại điều đã không còn đáp ứng nhu cầu để tìm kiếm điều có ý nghĩa hơn.',
- rev:'Sợ từ bỏ, trì trệ, sợ thay đổi. Biết cần phải rời đi nhưng không dám bước ra.',
- kw:['Từ bỏ','Tìm kiếm','Ý nghĩa','Rút lui']},
-{id:44,name:'Chín Cốc',en:'Nine of Cups',type:'cups',sym:'😊',num:'Chín',
- up:'Ước muốn thành hiện thực, hài lòng, hạnh phúc, thịnh vượng. Lá bài "ước muốn" — điều bạn mong muốn đang đến gần.',
- rev:'Tham lam, vật chất hoá hạnh phúc, thiếu hài lòng. Tìm kiếm hạnh phúc ở sai chỗ.',
- kw:['Ước muốn','Hài lòng','Hạnh phúc','Thịnh vượng']},
-{id:45,name:'Mười Cốc',en:'Ten of Cups',type:'cups',sym:'🏡',num:'Mười',
- up:'Hạnh phúc gia đình, hài hoà, thoả mãn lâu dài. Hạnh phúc đích thực và sự hoàn chỉnh trong các mối quan hệ.',
- rev:'Rạn nứt gia đình, mâu thuẫn, bất hoà. Có căng thẳng ở nhà hay trong các mối quan hệ gần gũi.',
- kw:['Hạnh phúc gia đình','Hài hoà','Thoả mãn','Hoàn chỉnh']},
-{id:46,name:'Trang Cốc',en:'Page of Cups',type:'cups',sym:'🐟',num:'Trang',
- up:'Thông điệp sáng tạo, trực giác, nhạy cảm, tin tức cảm xúc. Một người trẻ hoặc tin tức mới có thể đến một cách bất ngờ.',
- rev:'Cảm xúc thất thường, nhạy cảm quá mức, tin đồn. Thông điệp không đáng tin hoặc đang xúc động quá dễ dàng.',
- kw:['Sáng tạo','Trực giác','Nhạy cảm','Bất ngờ']},
-{id:47,name:'Kỵ Sĩ Cốc',en:'Knight of Cups',type:'cups',sym:'🌊',num:'Kỵ Sĩ',
- up:'Lãng mạn, quyến rũ, trí tưởng tượng, theo đuổi trái tim. Người lãng mạn và mơ mộng đang đến.',
- rev:'Bốc đồng cảm xúc, không thực tế, lừa dối. Để cảm xúc chi phối quá mức hoặc bị sự lãng mạn mù quáng.',
- kw:['Lãng mạn','Quyến rũ','Theo đuổi','Mơ mộng']},
-{id:48,name:'Hoàng Hậu Cốc',en:'Queen of Cups',type:'cups',sym:'🔮',num:'HH',
- up:'Lòng trắc ẩn, trực giác, chữa lành, cảm xúc sâu sắc. Người có trái tim nhân hậu và trực giác mạnh.',
- rev:'Phụ thuộc cảm xúc, bất an, lấy cảm xúc của người khác. Đang bị cuốn vào cảm xúc của người khác hoặc mất đi sự cân bằng nội tâm.',
- kw:['Trắc ẩn','Trực giác','Chữa lành','Nhân hậu']},
-{id:49,name:'Vua Cốc',en:'King of Cups',type:'cups',sym:'🌊',num:'Vua',
- up:'Thông thái cảm xúc, ngoại giao, cân bằng, từ bi. Kiểm soát cảm xúc trong khi vẫn giữ được lòng trắc ẩn.',
- rev:'Thao túng cảm xúc, bất ổn, lạnh lùng. Đang dùng trí tuệ cảm xúc để thao túng người khác.',
- kw:['Cân bằng cảm xúc','Ngoại giao','Từ bi','Thông thái']},
+{id:36,name:_tvmbT('js.tarot.at-coc', 'Át Cốc'),en:'Ace of Cups',type:'cups',sym:'💧',num:_tvmbT('js.tarot.at', 'Át'),
+ up:_tvmbT('js.tarot.tinh-yeu-moi-truc-giac-tam', 'Tình yêu mới, trực giác, tâm linh, bắt đầu cảm xúc. Trái tim rộng mở để đón nhận tình yêu và kết nối mới.'),
+ rev:_tvmbT('js.tarot.cam-xuc-bi-chan-trai-tim', 'Cảm xúc bị chặn, trái tim khép kín, tình yêu bị từ chối. Đang khó cho đi hay nhận lấy tình yêu.'),
+ kw:[_tvmbT('js.tarot.tinh-yeu-moi', 'Tình yêu mới'),_tvmbT('js.tarot.cam-xuc', 'Cảm xúc'),_tvmbT('js.tarot.truc-giac', 'Trực giác'),_tvmbT('js.tarot.tam-linh', 'Tâm linh')]},
+{id:37,name:_tvmbT('js.tarot.hai-coc', 'Hai Cốc'),en:'Two of Cups',type:'cups',sym:'💑',num:_tvmbT('js.tarot.hai', 'Hai'),
+ up:_tvmbT('js.tarot.lien-minh-hop-tac-moi-quan', 'Liên minh, hợp tác, mối quan hệ, thu hút lẫn nhau. Kết nối sâu sắc và cân bằng giữa hai người.'),
+ rev:_tvmbT('js.tarot.mat-ket-noi-mat-can-bang', 'Mất kết nối, mất cân bằng, không hoà hợp. Mối quan hệ đang gặp vấn đề hoặc thiếu sự tôn trọng lẫn nhau.'),
+ kw:[_tvmbT('js.tarot.lien-minh', 'Liên minh'),_tvmbT('js.tarot.tinh-yeu', 'Tình yêu'),_tvmbT('js.tarot.hop-tac', 'Hợp tác'),_tvmbT('js.tarot.ket-noi', 'Kết nối')]},
+{id:38,name:_tvmbT('js.tarot.ba-coc', 'Ba Cốc'),en:'Three of Cups',type:'cups',sym:'🥂',num:_tvmbT('js.tarot.ba', 'Ba'),
+ up:_tvmbT('js.tarot.tinh-ban-cong-dong-an-mung', 'Tình bạn, cộng đồng, ăn mừng, sáng tạo. Niềm vui chia sẻ với bạn bè và người thân. Thời gian tụ họp và kỷ niệm.'),
+ rev:_tvmbT('js.tarot.thai-qua-co-don-xung-dot', 'Thái quá, cô đơn, xung đột nhóm. Sự ăn mừng đang bị lạm dụng hoặc có căng thẳng trong nhóm bạn.'),
+ kw:[_tvmbT('js.tarot.tinh-ban', 'Tình bạn'),_tvmbT('js.tarot.an-mung', 'Ăn mừng'),_tvmbT('js.tarot.cong-dong', 'Cộng đồng'),_tvmbT('js.tarot.chia-se', 'Chia sẻ')]},
+{id:39,name:_tvmbT('js.tarot.bon-coc', 'Bốn Cốc'),en:'Four of Cups',type:'cups',sym:'😑',num:_tvmbT('js.tarot.bon', 'Bốn'),
+ up:_tvmbT('js.tarot.suy-nghi-noi-tam-tho-o', 'Suy nghĩ nội tâm, thờ ơ, đánh giá lại, chán ghét. Đang mải nghĩ và bỏ qua cơ hội đang ở ngay trước mặt.'),
+ rev:_tvmbT('js.tarot.thoat-khoi-tho-o-chon-loc', 'Thoát khỏi thờ ơ, chọn lọc được cải thiện, động lực mới. Bắt đầu thoát ra khỏi trạng thái thụ động.'),
+ kw:[_tvmbT('js.tarot.tho-o', 'Thờ ơ'),_tvmbT('js.tarot.noi-tam', 'Nội tâm'),_tvmbT('js.tarot.danh-gia-lai', 'Đánh giá lại'),_tvmbT('js.tarot.bo-qua-co-hoi', 'Bỏ qua cơ hội')]},
+{id:40,name:_tvmbT('js.tarot.nam-coc', 'Năm Cốc'),en:'Five of Cups',type:'cups',sym:'😢',num:_tvmbT('js.tarot.nam', 'Năm'),
+ up:_tvmbT('js.tarot.mat-mat-hoi-tiec-dau-buon', 'Mất mát, hối tiếc, đau buồn, tập trung vào tiêu cực. Đang than thở về những gì đã mất mà không nhìn thấy những gì vẫn còn.'),
+ rev:_tvmbT('js.tarot.tien-ve-phia-truoc-chap-nhan', 'Tiến về phía trước, chấp nhận, tha thứ. Dần dần chữa lành và tìm cách tiến lên từ tổn thương.'),
+ kw:[_tvmbT('js.tarot.mat-mat', 'Mất mát'),_tvmbT('js.tarot.hoi-tiec', 'Hối tiếc'),_tvmbT('js.tarot.dau-buon', 'Đau buồn'),_tvmbT('js.tarot.chua-lanh', 'Chữa lành')]},
+{id:41,name:_tvmbT('js.tarot.sau-coc', 'Sáu Cốc'),en:'Six of Cups',type:'cups',sym:'🌷',num:_tvmbT('js.tarot.sau', 'Sáu'),
+ up:_tvmbT('js.tarot.hoai-niem-tuoi-tho-ky-niem', 'Hoài niệm, tuổi thơ, kỷ niệm, những ký ức tốt đẹp. Nhìn lại quá khứ với tình cảm. Kết nối với trẻ con nội tâm.'),
+ rev:_tvmbT('js.tarot.song-trong-qua-khu-thieu-truong', 'Sống trong quá khứ, thiếu trưởng thành, mắc kẹt. Đang không thể tiến về phía trước vì quá gắn bó với quá khứ.'),
+ kw:[_tvmbT('js.tarot.hoai-niem', 'Hoài niệm'),_tvmbT('js.tarot.tuoi-tho', 'Tuổi thơ'),_tvmbT('js.tarot.ky-niem', 'Kỷ niệm'),_tvmbT('js.tarot.tinh-cam', 'Tình cảm')]},
+{id:42,name:_tvmbT('js.tarot.bay-coc', 'Bảy Cốc'),en:'Seven of Cups',type:'cups',sym:'🌈',num:_tvmbT('js.tarot.bay', 'Bảy'),
+ up:_tvmbT('js.tarot.ao-tuong-lua-chon-giac-mo', 'Ảo tưởng, lựa chọn, giấc mơ, tưởng tượng. Có quá nhiều lựa chọn gây choáng ngợp. Cẩn thận đừng mắc kẹt trong ảo tưởng.'),
+ rev:_tvmbT('js.tarot.su-ro-rang-sau-hon-loan', 'Sự rõ ràng sau hỗn loạn, lựa chọn sáng suốt, thực tế. Đang bắt đầu nhìn rõ và đưa ra quyết định thực tế.'),
+ kw:[_tvmbT('js.tarot.ao-tuong', 'Ảo tưởng'),_tvmbT('js.tarot.lua-chon', 'Lựa chọn'),_tvmbT('js.tarot.mo-mong', 'Mơ mộng'),_tvmbT('js.tarot.choang-ngop', 'Choáng ngợp')]},
+{id:43,name:_tvmbT('js.tarot.tam-coc', 'Tám Cốc'),en:'Eight of Cups',type:'cups',sym:'🚶',num:_tvmbT('js.tarot.tam', 'Tám'),
+ up:_tvmbT('js.tarot.tu-bo-rut-lui-tim-kiem', 'Từ bỏ, rút lui, tìm kiếm điều sâu sắc hơn. Bỏ lại điều đã không còn đáp ứng nhu cầu để tìm kiếm điều có ý nghĩa hơn.'),
+ rev:_tvmbT('js.tarot.so-tu-bo-tri-tre-so', 'Sợ từ bỏ, trì trệ, sợ thay đổi. Biết cần phải rời đi nhưng không dám bước ra.'),
+ kw:[_tvmbT('js.tarot.tu-bo', 'Từ bỏ'),_tvmbT('js.tarot.tim-kiem', 'Tìm kiếm'),_tvmbT('js.tarot.y-nghia', 'Ý nghĩa'),_tvmbT('js.tarot.rut-lui', 'Rút lui')]},
+{id:44,name:_tvmbT('js.tarot.chin-coc', 'Chín Cốc'),en:'Nine of Cups',type:'cups',sym:'😊',num:_tvmbT('js.tarot.chin', 'Chín'),
+ up:_tvmbT('js.tarot.uoc-muon-thanh-hien-thuc-hai', 'Ước muốn thành hiện thực, hài lòng, hạnh phúc, thịnh vượng. Lá bài "ước muốn" — điều bạn mong muốn đang đến gần.'),
+ rev:_tvmbT('js.tarot.tham-lam-vat-chat-hoa-hanh', 'Tham lam, vật chất hoá hạnh phúc, thiếu hài lòng. Tìm kiếm hạnh phúc ở sai chỗ.'),
+ kw:[_tvmbT('js.tarot.uoc-muon', 'Ước muốn'),_tvmbT('js.tarot.hai-long', 'Hài lòng'),_tvmbT('js.tarot.hanh-phuc', 'Hạnh phúc'),_tvmbT('js.tarot.thinh-vuong', 'Thịnh vượng')]},
+{id:45,name:_tvmbT('js.tarot.muoi-coc', 'Mười Cốc'),en:'Ten of Cups',type:'cups',sym:'🏡',num:_tvmbT('js.tarot.muoi', 'Mười'),
+ up:_tvmbT('js.tarot.hanh-phuc-gia-dinh-hai-hoa', 'Hạnh phúc gia đình, hài hoà, thoả mãn lâu dài. Hạnh phúc đích thực và sự hoàn chỉnh trong các mối quan hệ.'),
+ rev:_tvmbT('js.tarot.ran-nut-gia-dinh-mau-thuan', 'Rạn nứt gia đình, mâu thuẫn, bất hoà. Có căng thẳng ở nhà hay trong các mối quan hệ gần gũi.'),
+ kw:[_tvmbT('js.tarot.hanh-phuc-gia-dinh', 'Hạnh phúc gia đình'),_tvmbT('js.tarot.hai-hoa', 'Hài hoà'),_tvmbT('js.tarot.thoa-man', 'Thoả mãn'),_tvmbT('js.tarot.hoan-chinh', 'Hoàn chỉnh')]},
+{id:46,name:_tvmbT('js.tarot.trang-coc', 'Trang Cốc'),en:'Page of Cups',type:'cups',sym:'🐟',num:_tvmbT('js.tarot.trang', 'Trang'),
+ up:_tvmbT('js.tarot.thong-diep-sang-tao-truc-giac', 'Thông điệp sáng tạo, trực giác, nhạy cảm, tin tức cảm xúc. Một người trẻ hoặc tin tức mới có thể đến một cách bất ngờ.'),
+ rev:_tvmbT('js.tarot.cam-xuc-that-thuong-nhay-cam', 'Cảm xúc thất thường, nhạy cảm quá mức, tin đồn. Thông điệp không đáng tin hoặc đang xúc động quá dễ dàng.'),
+ kw:[_tvmbT('js.tarot.sang-tao', 'Sáng tạo'),_tvmbT('js.tarot.truc-giac', 'Trực giác'),_tvmbT('js.tarot.nhay-cam', 'Nhạy cảm'),_tvmbT('js.tarot.bat-ngo', 'Bất ngờ')]},
+{id:47,name:_tvmbT('js.tarot.ky-si-coc', 'Kỵ Sĩ Cốc'),en:'Knight of Cups',type:'cups',sym:'🌊',num:_tvmbT('js.tarot.ky-si', 'Kỵ Sĩ'),
+ up:_tvmbT('js.tarot.lang-man-quyen-ru-tri-tuong', 'Lãng mạn, quyến rũ, trí tưởng tượng, theo đuổi trái tim. Người lãng mạn và mơ mộng đang đến.'),
+ rev:_tvmbT('js.tarot.boc-dong-cam-xuc-khong-thuc', 'Bốc đồng cảm xúc, không thực tế, lừa dối. Để cảm xúc chi phối quá mức hoặc bị sự lãng mạn mù quáng.'),
+ kw:[_tvmbT('js.tarot.lang-man', 'Lãng mạn'),_tvmbT('js.tarot.quyen-ru', 'Quyến rũ'),_tvmbT('js.tarot.theo-duoi', 'Theo đuổi'),_tvmbT('js.tarot.mo-mong', 'Mơ mộng')]},
+{id:48,name:_tvmbT('js.tarot.hoang-hau-coc', 'Hoàng Hậu Cốc'),en:'Queen of Cups',type:'cups',sym:'🔮',num:_tvmbT('js.tarot.hh', 'HH'),
+ up:_tvmbT('js.tarot.long-trac-an-truc-giac-chua', 'Lòng trắc ẩn, trực giác, chữa lành, cảm xúc sâu sắc. Người có trái tim nhân hậu và trực giác mạnh.'),
+ rev:_tvmbT('js.tarot.phu-thuoc-cam-xuc-bat-an', 'Phụ thuộc cảm xúc, bất an, lấy cảm xúc của người khác. Đang bị cuốn vào cảm xúc của người khác hoặc mất đi sự cân bằng nội tâm.'),
+ kw:[_tvmbT('js.tarot.trac-an', 'Trắc ẩn'),_tvmbT('js.tarot.truc-giac', 'Trực giác'),_tvmbT('js.tarot.chua-lanh', 'Chữa lành'),_tvmbT('js.tarot.nhan-hau', 'Nhân hậu')]},
+{id:49,name:_tvmbT('js.tarot.vua-coc', 'Vua Cốc'),en:'King of Cups',type:'cups',sym:'🌊',num:_tvmbT('js.tarot.vua', 'Vua'),
+ up:_tvmbT('js.tarot.thong-thai-cam-xuc-ngoai-giao', 'Thông thái cảm xúc, ngoại giao, cân bằng, từ bi. Kiểm soát cảm xúc trong khi vẫn giữ được lòng trắc ẩn.'),
+ rev:_tvmbT('js.tarot.thao-tung-cam-xuc-bat-on', 'Thao túng cảm xúc, bất ổn, lạnh lùng. Đang dùng trí tuệ cảm xúc để thao túng người khác.'),
+ kw:[_tvmbT('js.tarot.can-bang-cam-xuc', 'Cân bằng cảm xúc'),_tvmbT('js.tarot.ngoai-giao', 'Ngoại giao'),_tvmbT('js.tarot.tu-bi', 'Từ bi'),_tvmbT('js.tarot.thong-thai', 'Thông thái')]},
 // ── SWORDS (Kiếm) ────────────────────────────────────────────
-{id:50,name:'Át Kiếm',en:'Ace of Swords',type:'swords',sym:'⚔️',num:'Át',
- up:'Rõ ràng, sự thật, đột phá, trí tuệ. Nhận thức mới và tư duy sắc bén. Thời điểm cắt bỏ sự mơ hồ.',
- rev:'Hỗn loạn, thiếu rõ ràng, nói dối. Tư duy bị mù quáng bởi cảm xúc hoặc thông tin sai lệch.',
- kw:['Rõ ràng','Sự thật','Trí tuệ','Đột phá']},
-{id:51,name:'Hai Kiếm',en:'Two of Swords',type:'swords',sym:'🙈',num:'Hai',
- up:'Bế tắc, tránh né, không quyết định, cân bằng mong manh. Đang tránh một quyết định khó khăn bằng cách bịt mắt trước sự thật.',
- rev:'Bế tắc phá vỡ, thông tin xuất hiện, lựa chọn khó. Cuối cùng phải đối mặt với thực tế đã tránh né.',
- kw:['Bế tắc','Tránh né','Không quyết định','Mù quáng']},
-{id:52,name:'Ba Kiếm',en:'Three of Swords',type:'swords',sym:'💔',num:'Ba',
- up:'Đau buồn, từ chối, nỗi đau, tổn thương trái tim. Đau đớn và tổn thương là một phần của quá trình chữa lành.',
- rev:'Tha thứ, chữa lành, tiến lên. Đang dần dần chữa lành từ nỗi đau và tìm đường tiến về phía trước.',
- kw:['Đau buồn','Từ chối','Tổn thương','Chữa lành']},
-{id:53,name:'Bốn Kiếm',en:'Four of Swords',type:'swords',sym:'😴',num:'Bốn',
- up:'Nghỉ ngơi, thư giãn, phục hồi, thiền định. Cần thời gian để phục hồi và chuẩn bị cho những gì sắp đến.',
- rev:'Không nghỉ ngơi được, áp lực, sợ không hoạt động. Bị dồn vào trạng thái bất động trong khi cần phải hành động.',
- kw:['Nghỉ ngơi','Phục hồi','Thiền định','Nạp năng lượng']},
-{id:54,name:'Năm Kiếm',en:'Five of Swords',type:'swords',sym:'😈',num:'Năm',
- up:'Xung đột, mất mát danh dự, tự phụ, thất bại. Chiến thắng với cái giá quá đắt hoặc tham gia vào cuộc chiến không đáng.',
- rev:'Hoà giải, hối hận, giải quyết xung đột. Đang học từ sai lầm và tìm cách sửa chữa.',
- kw:['Xung đột','Tự phụ','Mất mát','Bài học']},
-{id:55,name:'Sáu Kiếm',en:'Six of Swords',type:'swords',sym:'⛵',num:'Sáu',
- up:'Chuyển đổi, rời đi, tiến về phía trước, bình yên hơn. Rời xa khó khăn hướng đến bình yên.',
- rev:'Kháng cự rời đi, không tiến được, quay trở lại. Biết cần phải thay đổi nhưng không thể rời bỏ tình huống cũ.',
- kw:['Chuyển đổi','Rời đi','Bình yên','Tiến về phía trước']},
-{id:56,name:'Bảy Kiếm',en:'Seven of Swords',type:'swords',sym:'🦊',num:'Bảy',
- up:'Lừa dối, mưu mẹo, chiến lược, tránh né. Cần phải khéo léo và chiến lược trong tình huống hiện tại.',
- rev:'Trả lại vật bị lấy, thú nhận, nghĩ lại chiến lược. Đang bắt đầu đối mặt trung thực với hành động không chính đáng.',
- kw:['Lừa dối','Mưu mẹo','Chiến lược','Thận trọng']},
-{id:57,name:'Tám Kiếm',en:'Eight of Swords',type:'swords',sym:'🔒',num:'Tám',
- up:'Tù túng, hạn chế, nạn nhân, tự giam cầm. Cảm thấy bị mắc kẹt nhưng thực ra ràng buộc chỉ là ảo giác trong tâm trí.',
- rev:'Tự giải phóng, đối mặt nỗi sợ, tiếp nhận trách nhiệm. Bắt đầu nhận ra mình có quyền năng để thay đổi tình huống.',
- kw:['Tù túng','Hạn chế','Ảo giác','Tự giam cầm']},
-{id:58,name:'Chín Kiếm',en:'Nine of Swords',type:'swords',sym:'😨',num:'Chín',
- up:'Lo lắng, ác mộng, tuyệt vọng, căng thẳng tinh thần. Lo lắng đang kiểm soát cuộc sống — hầu hết nỗi sợ tệ hơn thực tế.',
- rev:'Phục hồi từ lo lắng, nhận ra nỗi sợ, tìm kiếm giúp đỡ. Dần dần tìm được sự bình yên sau thời gian lo âu.',
- kw:['Lo lắng','Ác mộng','Căng thẳng','Tìm kiếm bình yên']},
-{id:59,name:'Mười Kiếm',en:'Ten of Swords',type:'swords',sym:'🌅',num:'Mười',
- up:'Kết thúc đau đớn, mất mát, phản bội, nhưng là điểm cuối. Chu kỳ đen tối nhất đã đến điểm kết thúc — chỉ có thể đi lên từ đây.',
- rev:'Phục hồi, không thể tránh khỏi, kháng cự cái kết. Từ chối chấp nhận sự kết thúc không thể tránh khỏi.',
- kw:['Kết thúc','Mất mát','Bình minh','Phục hồi']},
-{id:60,name:'Trang Kiếm',en:'Page of Swords',type:'swords',sym:'🔍',num:'Trang',
- up:'Tò mò, cảnh giác, thông tin mới, tư duy nhạy bén. Tinh thần tìm kiếm sự thật và học hỏi không ngừng.',
- rev:'Thô lỗ, thiếu kế hoạch, nói nhiều làm ít. Đang sử dụng trí thông minh một cách tiêu cực hoặc thiếu chiều sâu.',
- kw:['Tò mò','Cảnh giác','Thông tin','Tư duy sắc bén']},
-{id:61,name:'Kỵ Sĩ Kiếm',en:'Knight of Swords',type:'swords',sym:'⚡',num:'Kỵ Sĩ',
- up:'Tham vọng, hành động quyết đoán, thẳng thắn, dũng cảm. Lao về phía mục tiêu với quyết tâm sắt đá.',
- rev:'Bốc đồng, hung hãn, xung đột không cần thiết. Đang hành động quá nhanh và gây ra hậu quả không mong muốn.',
- kw:['Tham vọng','Quyết đoán','Dũng cảm','Thẳng thắn']},
-{id:62,name:'Hoàng Hậu Kiếm',en:'Queen of Swords',type:'swords',sym:'👸',num:'HH',
- up:'Độc lập, sắc bén, trực tiếp, kinh nghiệm. Người thông minh và trực tiếp, không bị cảm xúc làm mờ nhận xét.',
- rev:'Lạnh lùng, chua ngoa, cô đơn. Đang dùng trí tuệ sắc bén để tấn công hay che giấu nỗi đau.',
- kw:['Độc lập','Sắc bén','Trực tiếp','Kinh nghiệm']},
-{id:63,name:'Vua Kiếm',en:'King of Swords',type:'swords',sym:'⚖️',num:'Vua',
- up:'Thẩm quyền trí tuệ, sự thật, đạo đức, quyết định sáng suốt. Tư duy rõ ràng và phán quyết công bằng.',
- rev:'Độc đoán, lạm dụng quyền lực, thao túng. Đang sử dụng trí tuệ để kiểm soát thay vì hướng dẫn.',
- kw:['Trí tuệ','Sự thật','Đạo đức','Phán quyết']},
+{id:50,name:_tvmbT('js.tarot.at-kiem', 'Át Kiếm'),en:'Ace of Swords',type:'swords',sym:'⚔️',num:_tvmbT('js.tarot.at', 'Át'),
+ up:_tvmbT('js.tarot.ro-rang-su-that-dot-pha', 'Rõ ràng, sự thật, đột phá, trí tuệ. Nhận thức mới và tư duy sắc bén. Thời điểm cắt bỏ sự mơ hồ.'),
+ rev:_tvmbT('js.tarot.hon-loan-thieu-ro-rang-noi', 'Hỗn loạn, thiếu rõ ràng, nói dối. Tư duy bị mù quáng bởi cảm xúc hoặc thông tin sai lệch.'),
+ kw:[_tvmbT('js.tarot.ro-rang', 'Rõ ràng'),_tvmbT('js.tarot.su-that', 'Sự thật'),_tvmbT('js.tarot.tri-tue', 'Trí tuệ'),_tvmbT('js.tarot.dot-pha', 'Đột phá')]},
+{id:51,name:_tvmbT('js.tarot.hai-kiem', 'Hai Kiếm'),en:'Two of Swords',type:'swords',sym:'🙈',num:_tvmbT('js.tarot.hai', 'Hai'),
+ up:_tvmbT('js.tarot.be-tac-tranh-ne-khong-quyet', 'Bế tắc, tránh né, không quyết định, cân bằng mong manh. Đang tránh một quyết định khó khăn bằng cách bịt mắt trước sự thật.'),
+ rev:_tvmbT('js.tarot.be-tac-pha-vo-thong-tin', 'Bế tắc phá vỡ, thông tin xuất hiện, lựa chọn khó. Cuối cùng phải đối mặt với thực tế đã tránh né.'),
+ kw:[_tvmbT('js.tarot.be-tac', 'Bế tắc'),_tvmbT('js.tarot.tranh-ne', 'Tránh né'),_tvmbT('js.tarot.khong-quyet-dinh', 'Không quyết định'),_tvmbT('js.tarot.mu-quang', 'Mù quáng')]},
+{id:52,name:_tvmbT('js.tarot.ba-kiem', 'Ba Kiếm'),en:'Three of Swords',type:'swords',sym:'💔',num:_tvmbT('js.tarot.ba', 'Ba'),
+ up:_tvmbT('js.tarot.dau-buon-tu-choi-noi-dau', 'Đau buồn, từ chối, nỗi đau, tổn thương trái tim. Đau đớn và tổn thương là một phần của quá trình chữa lành.'),
+ rev:_tvmbT('js.tarot.tha-thu-chua-lanh-tien-len', 'Tha thứ, chữa lành, tiến lên. Đang dần dần chữa lành từ nỗi đau và tìm đường tiến về phía trước.'),
+ kw:[_tvmbT('js.tarot.dau-buon', 'Đau buồn'),_tvmbT('js.tarot.tu-choi', 'Từ chối'),_tvmbT('js.tarot.ton-thuong', 'Tổn thương'),_tvmbT('js.tarot.chua-lanh', 'Chữa lành')]},
+{id:53,name:_tvmbT('js.tarot.bon-kiem', 'Bốn Kiếm'),en:'Four of Swords',type:'swords',sym:'😴',num:_tvmbT('js.tarot.bon', 'Bốn'),
+ up:_tvmbT('js.tarot.nghi-ngoi-thu-gian-phuc-hoi', 'Nghỉ ngơi, thư giãn, phục hồi, thiền định. Cần thời gian để phục hồi và chuẩn bị cho những gì sắp đến.'),
+ rev:_tvmbT('js.tarot.khong-nghi-ngoi-duoc-ap-luc', 'Không nghỉ ngơi được, áp lực, sợ không hoạt động. Bị dồn vào trạng thái bất động trong khi cần phải hành động.'),
+ kw:[_tvmbT('js.tarot.nghi-ngoi', 'Nghỉ ngơi'),_tvmbT('js.tarot.phuc-hoi', 'Phục hồi'),_tvmbT('js.tarot.thien-dinh', 'Thiền định'),_tvmbT('js.tarot.nap-nang-luong', 'Nạp năng lượng')]},
+{id:54,name:_tvmbT('js.tarot.nam-kiem', 'Năm Kiếm'),en:'Five of Swords',type:'swords',sym:'😈',num:_tvmbT('js.tarot.nam', 'Năm'),
+ up:_tvmbT('js.tarot.xung-dot-mat-mat-danh-du', 'Xung đột, mất mát danh dự, tự phụ, thất bại. Chiến thắng với cái giá quá đắt hoặc tham gia vào cuộc chiến không đáng.'),
+ rev:_tvmbT('js.tarot.hoa-giai-hoi-han-giai-quyet', 'Hoà giải, hối hận, giải quyết xung đột. Đang học từ sai lầm và tìm cách sửa chữa.'),
+ kw:[_tvmbT('js.tarot.xung-dot', 'Xung đột'),_tvmbT('js.tarot.tu-phu', 'Tự phụ'),_tvmbT('js.tarot.mat-mat', 'Mất mát'),_tvmbT('js.tarot.bai-hoc', 'Bài học')]},
+{id:55,name:_tvmbT('js.tarot.sau-kiem', 'Sáu Kiếm'),en:'Six of Swords',type:'swords',sym:'⛵',num:_tvmbT('js.tarot.sau', 'Sáu'),
+ up:_tvmbT('js.tarot.chuyen-doi-roi-di-tien-ve', 'Chuyển đổi, rời đi, tiến về phía trước, bình yên hơn. Rời xa khó khăn hướng đến bình yên.'),
+ rev:_tvmbT('js.tarot.khang-cu-roi-di-khong-tien', 'Kháng cự rời đi, không tiến được, quay trở lại. Biết cần phải thay đổi nhưng không thể rời bỏ tình huống cũ.'),
+ kw:[_tvmbT('js.tarot.chuyen-doi', 'Chuyển đổi'),_tvmbT('js.tarot.roi-di', 'Rời đi'),_tvmbT('js.tarot.binh-yen', 'Bình yên'),_tvmbT('js.tarot.tien-ve-phia-truoc', 'Tiến về phía trước')]},
+{id:56,name:_tvmbT('js.tarot.bay-kiem', 'Bảy Kiếm'),en:'Seven of Swords',type:'swords',sym:'🦊',num:_tvmbT('js.tarot.bay', 'Bảy'),
+ up:_tvmbT('js.tarot.lua-doi-muu-meo-chien-luoc', 'Lừa dối, mưu mẹo, chiến lược, tránh né. Cần phải khéo léo và chiến lược trong tình huống hiện tại.'),
+ rev:_tvmbT('js.tarot.tra-lai-vat-bi-lay-thu', 'Trả lại vật bị lấy, thú nhận, nghĩ lại chiến lược. Đang bắt đầu đối mặt trung thực với hành động không chính đáng.'),
+ kw:[_tvmbT('js.tarot.lua-doi', 'Lừa dối'),_tvmbT('js.tarot.muu-meo', 'Mưu mẹo'),_tvmbT('js.tarot.chien-luoc', 'Chiến lược'),_tvmbT('js.tarot.than-trong', 'Thận trọng')]},
+{id:57,name:_tvmbT('js.tarot.tam-kiem', 'Tám Kiếm'),en:'Eight of Swords',type:'swords',sym:'🔒',num:_tvmbT('js.tarot.tam', 'Tám'),
+ up:_tvmbT('js.tarot.tu-tung-han-che-nan-nhan', 'Tù túng, hạn chế, nạn nhân, tự giam cầm. Cảm thấy bị mắc kẹt nhưng thực ra ràng buộc chỉ là ảo giác trong tâm trí.'),
+ rev:_tvmbT('js.tarot.tu-giai-phong-doi-mat-noi', 'Tự giải phóng, đối mặt nỗi sợ, tiếp nhận trách nhiệm. Bắt đầu nhận ra mình có quyền năng để thay đổi tình huống.'),
+ kw:[_tvmbT('js.tarot.tu-tung', 'Tù túng'),_tvmbT('js.tarot.han-che', 'Hạn chế'),_tvmbT('js.tarot.ao-giac', 'Ảo giác'),_tvmbT('js.tarot.tu-giam-cam', 'Tự giam cầm')]},
+{id:58,name:_tvmbT('js.tarot.chin-kiem', 'Chín Kiếm'),en:'Nine of Swords',type:'swords',sym:'😨',num:_tvmbT('js.tarot.chin', 'Chín'),
+ up:_tvmbT('js.tarot.lo-lang-ac-mong-tuyet-vong', 'Lo lắng, ác mộng, tuyệt vọng, căng thẳng tinh thần. Lo lắng đang kiểm soát cuộc sống — hầu hết nỗi sợ tệ hơn thực tế.'),
+ rev:_tvmbT('js.tarot.phuc-hoi-tu-lo-lang-nhan', 'Phục hồi từ lo lắng, nhận ra nỗi sợ, tìm kiếm giúp đỡ. Dần dần tìm được sự bình yên sau thời gian lo âu.'),
+ kw:[_tvmbT('js.tarot.lo-lang', 'Lo lắng'),_tvmbT('js.tarot.ac-mong', 'Ác mộng'),_tvmbT('js.tarot.cang-thang', 'Căng thẳng'),_tvmbT('js.tarot.tim-kiem-binh-yen', 'Tìm kiếm bình yên')]},
+{id:59,name:_tvmbT('js.tarot.muoi-kiem', 'Mười Kiếm'),en:'Ten of Swords',type:'swords',sym:'🌅',num:_tvmbT('js.tarot.muoi', 'Mười'),
+ up:_tvmbT('js.tarot.ket-thuc-dau-don-mat-mat', 'Kết thúc đau đớn, mất mát, phản bội, nhưng là điểm cuối. Chu kỳ đen tối nhất đã đến điểm kết thúc — chỉ có thể đi lên từ đây.'),
+ rev:_tvmbT('js.tarot.phuc-hoi-khong-the-tranh-khoi', 'Phục hồi, không thể tránh khỏi, kháng cự cái kết. Từ chối chấp nhận sự kết thúc không thể tránh khỏi.'),
+ kw:[_tvmbT('js.tarot.ket-thuc', 'Kết thúc'),_tvmbT('js.tarot.mat-mat', 'Mất mát'),_tvmbT('js.tarot.binh-minh', 'Bình minh'),_tvmbT('js.tarot.phuc-hoi', 'Phục hồi')]},
+{id:60,name:_tvmbT('js.tarot.trang-kiem', 'Trang Kiếm'),en:'Page of Swords',type:'swords',sym:'🔍',num:_tvmbT('js.tarot.trang', 'Trang'),
+ up:_tvmbT('js.tarot.to-mo-canh-giac-thong-tin', 'Tò mò, cảnh giác, thông tin mới, tư duy nhạy bén. Tinh thần tìm kiếm sự thật và học hỏi không ngừng.'),
+ rev:_tvmbT('js.tarot.tho-lo-thieu-ke-hoach-noi', 'Thô lỗ, thiếu kế hoạch, nói nhiều làm ít. Đang sử dụng trí thông minh một cách tiêu cực hoặc thiếu chiều sâu.'),
+ kw:[_tvmbT('js.tarot.to-mo', 'Tò mò'),_tvmbT('js.tarot.canh-giac', 'Cảnh giác'),_tvmbT('js.tarot.thong-tin', 'Thông tin'),_tvmbT('js.tarot.tu-duy-sac-ben', 'Tư duy sắc bén')]},
+{id:61,name:_tvmbT('js.tarot.ky-si-kiem', 'Kỵ Sĩ Kiếm'),en:'Knight of Swords',type:'swords',sym:'⚡',num:_tvmbT('js.tarot.ky-si', 'Kỵ Sĩ'),
+ up:_tvmbT('js.tarot.tham-vong-hanh-dong-quyet-doan', 'Tham vọng, hành động quyết đoán, thẳng thắn, dũng cảm. Lao về phía mục tiêu với quyết tâm sắt đá.'),
+ rev:_tvmbT('js.tarot.boc-dong-hung-han-xung-dot', 'Bốc đồng, hung hãn, xung đột không cần thiết. Đang hành động quá nhanh và gây ra hậu quả không mong muốn.'),
+ kw:[_tvmbT('js.tarot.tham-vong', 'Tham vọng'),_tvmbT('js.tarot.quyet-doan', 'Quyết đoán'),_tvmbT('js.tarot.dung-cam', 'Dũng cảm'),_tvmbT('js.tarot.thang-than', 'Thẳng thắn')]},
+{id:62,name:_tvmbT('js.tarot.hoang-hau-kiem', 'Hoàng Hậu Kiếm'),en:'Queen of Swords',type:'swords',sym:'👸',num:_tvmbT('js.tarot.hh', 'HH'),
+ up:_tvmbT('js.tarot.doc-lap-sac-ben-truc-tiep', 'Độc lập, sắc bén, trực tiếp, kinh nghiệm. Người thông minh và trực tiếp, không bị cảm xúc làm mờ nhận xét.'),
+ rev:_tvmbT('js.tarot.lanh-lung-chua-ngoa-co-don', 'Lạnh lùng, chua ngoa, cô đơn. Đang dùng trí tuệ sắc bén để tấn công hay che giấu nỗi đau.'),
+ kw:[_tvmbT('js.tarot.doc-lap', 'Độc lập'),_tvmbT('js.tarot.sac-ben', 'Sắc bén'),_tvmbT('js.tarot.truc-tiep', 'Trực tiếp'),_tvmbT('js.tarot.kinh-nghiem', 'Kinh nghiệm')]},
+{id:63,name:_tvmbT('js.tarot.vua-kiem', 'Vua Kiếm'),en:'King of Swords',type:'swords',sym:'⚖️',num:_tvmbT('js.tarot.vua', 'Vua'),
+ up:_tvmbT('js.tarot.tham-quyen-tri-tue-su-that', 'Thẩm quyền trí tuệ, sự thật, đạo đức, quyết định sáng suốt. Tư duy rõ ràng và phán quyết công bằng.'),
+ rev:_tvmbT('js.tarot.doc-doan-lam-dung-quyen-luc', 'Độc đoán, lạm dụng quyền lực, thao túng. Đang sử dụng trí tuệ để kiểm soát thay vì hướng dẫn.'),
+ kw:[_tvmbT('js.tarot.tri-tue', 'Trí tuệ'),_tvmbT('js.tarot.su-that', 'Sự thật'),_tvmbT('js.tarot.dao-duc', 'Đạo đức'),_tvmbT('js.tarot.phan-quyet', 'Phán quyết')]},
 // ── PENTACLES (Tiền) ─────────────────────────────────────────
-{id:64,name:'Át Tiền',en:'Ace of Pentacles',type:'pentacles',sym:'💰',num:'Át',
- up:'Cơ hội mới về tài chính, thịnh vượng, sự ổn định, nền tảng vật chất. Hạt giống của sự thịnh vượng và ổn định vật chất.',
- rev:'Cơ hội bị bỏ lỡ, thiếu quy hoạch tài chính, lãng phí. Cơ hội có nhưng chưa được tận dụng đúng cách.',
- kw:['Tài chính','Thịnh vượng','Cơ hội','Ổn định']},
-{id:65,name:'Hai Tiền',en:'Two of Pentacles',type:'pentacles',sym:'🤹',num:'Hai',
- up:'Cân bằng, thích nghi, quản lý thời gian. Đang tung hứng nhiều việc cùng lúc — cần linh hoạt để giữ cân bằng.',
- rev:'Mất kiểm soát, căng thẳng tài chính, thiếu tổ chức. Đang cố gắng làm quá nhiều và mọi thứ bắt đầu rơi vỡ.',
- kw:['Cân bằng','Thích nghi','Đa nhiệm','Linh hoạt']},
-{id:66,name:'Ba Tiền',en:'Three of Pentacles',type:'pentacles',sym:'🏗️',num:'Ba',
- up:'Làm việc nhóm, hợp tác, kỹ năng, xây dựng nền tảng. Làm việc cùng nhau để tạo ra điều gì đó có giá trị lâu dài.',
- rev:'Thiếu đồng đội, tranh cãi, thất vọng. Không làm việc được với người khác hoặc không nhận được sự công nhận.',
- kw:['Hợp tác','Kỹ năng','Xây dựng','Công nhận']},
-{id:67,name:'Bốn Tiền',en:'Four of Pentacles',type:'pentacles',sym:'💎',num:'Bốn',
- up:'Bảo tồn, ổn định, an toàn, kiểm soát. Đang giữ chặt tài nguyên — đôi khi cần thiết nhưng đừng để trở nên keo kiệt.',
- rev:'Hào phóng, buông bỏ, mở cửa cho sự phong phú. Bắt đầu buông bỏ sự bám víu vào vật chất.',
- kw:['Bảo tồn','Ổn định','An toàn','Kiểm soát']},
-{id:68,name:'Năm Tiền',en:'Five of Pentacles',type:'pentacles',sym:'🥶',num:'Năm',
- up:'Khó khăn tài chính, bất an, cô đơn, nghịch cảnh. Đang trải qua giai đoạn khó khăn — nhưng sự giúp đỡ luôn có sẵn nếu bạn tìm kiếm.',
- rev:'Phục hồi tài chính, cải thiện, nhận giúp đỡ. Đang dần vượt qua giai đoạn khó khăn.',
- kw:['Khó khăn','Bất an','Nghịch cảnh','Tìm kiếm giúp đỡ']},
-{id:69,name:'Sáu Tiền',en:'Six of Pentacles',type:'pentacles',sym:'🤲',num:'Sáu',
- up:'Cho đi, nhận lấy, quào phúc, trao đổi. Có sự cân bằng trong việc cho và nhận. Lòng hào phóng đang tỏa sáng.',
- rev:'Nợ nần, lòng tốt giả tạo, quyền lực bất bình đẳng. Sự hào phóng có điều kiện hoặc đang trao đổi với mục đích sai.',
- kw:['Hào phóng','Chia sẻ','Cân bằng','Lòng tốt']},
-{id:70,name:'Bảy Tiền',en:'Seven of Pentacles',type:'pentacles',sym:'🌱',num:'Bảy',
- up:'Đánh giá, kiên nhẫn, đầu tư dài hạn, chờ đợi kết quả. Đang chờ hạt giống đã gieo nảy mầm — cần kiên nhẫn.',
- rev:'Thiếu tầm nhìn dài hạn, sốt ruột, tổn thất đầu tư. Đang mất kiên nhẫn hoặc đầu tư vào sai hướng.',
- kw:['Kiên nhẫn','Đầu tư','Chờ đợi','Đánh giá']},
-{id:71,name:'Tám Tiền',en:'Eight of Pentacles',type:'pentacles',sym:'🔨',num:'Tám',
- up:'Chăm chỉ, học kỹ năng, tỉ mỉ, cam kết với công việc. Đang hoc hỏi và hoàn thiện kỹ năng với sự tập trung cao độ.',
- rev:'Thiếu kết quả từ công sức, chủ nghĩa hoàn hảo, công việc kém chất lượng. Đang làm việc chăm chỉ nhưng thiếu phương hướng.',
- kw:['Chăm chỉ','Kỹ năng','Tỉ mỉ','Học hỏi']},
-{id:72,name:'Chín Tiền',en:'Nine of Pentacles',type:'pentacles',sym:'🌿',num:'Chín',
- up:'Độc lập tài chính, tự túc, sang trọng, hoàn chỉnh. Đã đạt được sự ổn định và tự chủ. Tận hưởng thành quả lao động.',
- rev:'Phụ thuộc tài chính, thất bại dự án, ngắn hạn. Chưa đạt được sự tự chủ mong muốn hoặc đang chi tiêu quá mức.',
- kw:['Độc lập','Tự túc','Sang trọng','Hoàn chỉnh']},
-{id:73,name:'Mười Tiền',en:'Ten of Pentacles',type:'pentacles',sym:'🏰',num:'Mười',
- up:'Giàu có, di sản, hạnh phúc gia đình, hoàn chỉnh vật chất. Thịnh vượng lâu dài được chia sẻ với gia đình và thế hệ sau.',
- rev:'Mất mát tài sản, rắc rối gia đình, thế chấp. Có rủi ro tài chính liên quan đến gia đình hoặc di sản.',
- kw:['Di sản','Giàu có','Gia đình','Thịnh vượng lâu dài']},
-{id:74,name:'Trang Tiền',en:'Page of Pentacles',type:'pentacles',sym:'📚',num:'Trang',
- up:'Cơ hội mới, học hỏi thực tế, tập trung, tin tức về tiền. Tinh thần ham học hỏi trong các vấn đề thực tế.',
- rev:'Thiếu tập trung, trì hoãn, thiếu kỹ năng thực tế. Có ý định học nhưng thiếu kiên nhẫn để thực hiện.',
- kw:['Học hỏi','Thực tế','Tập trung','Cơ hội']},
-{id:75,name:'Kỵ Sĩ Tiền',en:'Knight of Pentacles',type:'pentacles',sym:'🐂',num:'Kỵ Sĩ',
- up:'Chăm chỉ, đáng tin, kiên nhẫn, phương pháp luận. Chậm mà chắc, tin tưởng vào quá trình và không bỏ cuộc.',
- rev:'Bướng bỉnh, chậm chạp, không có kết quả. Đang mắc kẹt trong thói quen và từ chối thích nghi.',
- kw:['Chăm chỉ','Đáng tin','Kiên nhẫn','Phương pháp']},
-{id:76,name:'Hoàng Hậu Tiền',en:'Queen of Pentacles',type:'pentacles',sym:'🌻',num:'HH',
- up:'Người mẹ nuôi dưỡng, thực tế, giàu có, công việc nhà. Chăm sóc người khác trong khi vẫn xây dựng sự ổn định vật chất.',
- rev:'Phụ thuộc, thiếu sự cân bằng, lơ là công việc. Bị mất cân bằng giữa chăm sóc người khác và chăm sóc bản thân.',
- kw:['Nuôi dưỡng','Thực tế','Giàu có','Chăm sóc']},
-{id:77,name:'Vua Tiền',en:'King of Pentacles',type:'pentacles',sym:'🏦',num:'Vua',
- up:'Sự thịnh vượng, kinh doanh, lãnh đạo, ổn định. Đã xây dựng được nền tảng vật chất vững chắc và lãnh đạo với sự khôn ngoan.',
- rev:'Tham lam, tham nhũng, quản lý kém, bảo thủ. Đang dùng tiền bạc và quyền lực một cách không chính đáng.',
- kw:['Thịnh vượng','Kinh doanh','Lãnh đạo','Ổn định']},
+{id:64,name:_tvmbT('js.tarot.at-tien', 'Át Tiền'),en:'Ace of Pentacles',type:'pentacles',sym:'💰',num:_tvmbT('js.tarot.at', 'Át'),
+ up:_tvmbT('js.tarot.co-hoi-moi-ve-tai-chinh', 'Cơ hội mới về tài chính, thịnh vượng, sự ổn định, nền tảng vật chất. Hạt giống của sự thịnh vượng và ổn định vật chất.'),
+ rev:_tvmbT('js.tarot.co-hoi-bi-bo-lo-thieu', 'Cơ hội bị bỏ lỡ, thiếu quy hoạch tài chính, lãng phí. Cơ hội có nhưng chưa được tận dụng đúng cách.'),
+ kw:[_tvmbT('js.tarot.tai-chinh', 'Tài chính'),_tvmbT('js.tarot.thinh-vuong', 'Thịnh vượng'),_tvmbT('js.tarot.co-hoi', 'Cơ hội'),_tvmbT('js.tarot.on-dinh', 'Ổn định')]},
+{id:65,name:_tvmbT('js.tarot.hai-tien', 'Hai Tiền'),en:'Two of Pentacles',type:'pentacles',sym:'🤹',num:_tvmbT('js.tarot.hai', 'Hai'),
+ up:_tvmbT('js.tarot.can-bang-thich-nghi-quan-ly', 'Cân bằng, thích nghi, quản lý thời gian. Đang tung hứng nhiều việc cùng lúc — cần linh hoạt để giữ cân bằng.'),
+ rev:_tvmbT('js.tarot.mat-kiem-soat-cang-thang-tai', 'Mất kiểm soát, căng thẳng tài chính, thiếu tổ chức. Đang cố gắng làm quá nhiều và mọi thứ bắt đầu rơi vỡ.'),
+ kw:[_tvmbT('js.tarot.can-bang', 'Cân bằng'),_tvmbT('js.tarot.thich-nghi', 'Thích nghi'),_tvmbT('js.tarot.da-nhiem', 'Đa nhiệm'),_tvmbT('js.tarot.linh-hoat', 'Linh hoạt')]},
+{id:66,name:_tvmbT('js.tarot.ba-tien', 'Ba Tiền'),en:'Three of Pentacles',type:'pentacles',sym:'🏗️',num:_tvmbT('js.tarot.ba', 'Ba'),
+ up:_tvmbT('js.tarot.lam-viec-nhom-hop-tac-ky', 'Làm việc nhóm, hợp tác, kỹ năng, xây dựng nền tảng. Làm việc cùng nhau để tạo ra điều gì đó có giá trị lâu dài.'),
+ rev:_tvmbT('js.tarot.thieu-dong-doi-tranh-cai-that', 'Thiếu đồng đội, tranh cãi, thất vọng. Không làm việc được với người khác hoặc không nhận được sự công nhận.'),
+ kw:[_tvmbT('js.tarot.hop-tac', 'Hợp tác'),_tvmbT('js.tarot.ky-nang', 'Kỹ năng'),_tvmbT('js.tarot.xay-dung', 'Xây dựng'),_tvmbT('js.tarot.cong-nhan', 'Công nhận')]},
+{id:67,name:_tvmbT('js.tarot.bon-tien', 'Bốn Tiền'),en:'Four of Pentacles',type:'pentacles',sym:'💎',num:_tvmbT('js.tarot.bon', 'Bốn'),
+ up:_tvmbT('js.tarot.bao-ton-on-dinh-an-toan', 'Bảo tồn, ổn định, an toàn, kiểm soát. Đang giữ chặt tài nguyên — đôi khi cần thiết nhưng đừng để trở nên keo kiệt.'),
+ rev:_tvmbT('js.tarot.hao-phong-buong-bo-mo-cua', 'Hào phóng, buông bỏ, mở cửa cho sự phong phú. Bắt đầu buông bỏ sự bám víu vào vật chất.'),
+ kw:[_tvmbT('js.tarot.bao-ton', 'Bảo tồn'),_tvmbT('js.tarot.on-dinh', 'Ổn định'),_tvmbT('js.tarot.an-toan', 'An toàn'),_tvmbT('js.tarot.kiem-soat', 'Kiểm soát')]},
+{id:68,name:_tvmbT('js.tarot.nam-tien', 'Năm Tiền'),en:'Five of Pentacles',type:'pentacles',sym:'🥶',num:_tvmbT('js.tarot.nam', 'Năm'),
+ up:_tvmbT('js.tarot.kho-khan-tai-chinh-bat-an', 'Khó khăn tài chính, bất an, cô đơn, nghịch cảnh. Đang trải qua giai đoạn khó khăn — nhưng sự giúp đỡ luôn có sẵn nếu bạn tìm kiếm.'),
+ rev:_tvmbT('js.tarot.phuc-hoi-tai-chinh-cai-thien', 'Phục hồi tài chính, cải thiện, nhận giúp đỡ. Đang dần vượt qua giai đoạn khó khăn.'),
+ kw:[_tvmbT('js.tarot.kho-khan', 'Khó khăn'),_tvmbT('js.tarot.bat-an', 'Bất an'),_tvmbT('js.tarot.nghich-canh', 'Nghịch cảnh'),_tvmbT('js.tarot.tim-kiem-giup-do', 'Tìm kiếm giúp đỡ')]},
+{id:69,name:_tvmbT('js.tarot.sau-tien', 'Sáu Tiền'),en:'Six of Pentacles',type:'pentacles',sym:'🤲',num:_tvmbT('js.tarot.sau', 'Sáu'),
+ up:_tvmbT('js.tarot.cho-di-nhan-lay-quao-phuc', 'Cho đi, nhận lấy, quào phúc, trao đổi. Có sự cân bằng trong việc cho và nhận. Lòng hào phóng đang tỏa sáng.'),
+ rev:_tvmbT('js.tarot.no-nan-long-tot-gia-tao', 'Nợ nần, lòng tốt giả tạo, quyền lực bất bình đẳng. Sự hào phóng có điều kiện hoặc đang trao đổi với mục đích sai.'),
+ kw:[_tvmbT('js.tarot.hao-phong', 'Hào phóng'),_tvmbT('js.tarot.chia-se', 'Chia sẻ'),_tvmbT('js.tarot.can-bang', 'Cân bằng'),_tvmbT('js.tarot.long-tot', 'Lòng tốt')]},
+{id:70,name:_tvmbT('js.tarot.bay-tien', 'Bảy Tiền'),en:'Seven of Pentacles',type:'pentacles',sym:'🌱',num:_tvmbT('js.tarot.bay', 'Bảy'),
+ up:_tvmbT('js.tarot.danh-gia-kien-nhan-dau-tu', 'Đánh giá, kiên nhẫn, đầu tư dài hạn, chờ đợi kết quả. Đang chờ hạt giống đã gieo nảy mầm — cần kiên nhẫn.'),
+ rev:_tvmbT('js.tarot.thieu-tam-nhin-dai-han-sot', 'Thiếu tầm nhìn dài hạn, sốt ruột, tổn thất đầu tư. Đang mất kiên nhẫn hoặc đầu tư vào sai hướng.'),
+ kw:[_tvmbT('js.tarot.kien-nhan', 'Kiên nhẫn'),_tvmbT('js.tarot.dau-tu', 'Đầu tư'),_tvmbT('js.tarot.cho-doi', 'Chờ đợi'),_tvmbT('js.tarot.danh-gia', 'Đánh giá')]},
+{id:71,name:_tvmbT('js.tarot.tam-tien', 'Tám Tiền'),en:'Eight of Pentacles',type:'pentacles',sym:'🔨',num:_tvmbT('js.tarot.tam', 'Tám'),
+ up:_tvmbT('js.tarot.cham-chi-hoc-ky-nang-ti', 'Chăm chỉ, học kỹ năng, tỉ mỉ, cam kết với công việc. Đang hoc hỏi và hoàn thiện kỹ năng với sự tập trung cao độ.'),
+ rev:_tvmbT('js.tarot.thieu-ket-qua-tu-cong-suc', 'Thiếu kết quả từ công sức, chủ nghĩa hoàn hảo, công việc kém chất lượng. Đang làm việc chăm chỉ nhưng thiếu phương hướng.'),
+ kw:[_tvmbT('js.tarot.cham-chi', 'Chăm chỉ'),_tvmbT('js.tarot.ky-nang', 'Kỹ năng'),_tvmbT('js.tarot.ti-mi', 'Tỉ mỉ'),_tvmbT('js.tarot.hoc-hoi', 'Học hỏi')]},
+{id:72,name:_tvmbT('js.tarot.chin-tien', 'Chín Tiền'),en:'Nine of Pentacles',type:'pentacles',sym:'🌿',num:_tvmbT('js.tarot.chin', 'Chín'),
+ up:_tvmbT('js.tarot.doc-lap-tai-chinh-tu-tuc', 'Độc lập tài chính, tự túc, sang trọng, hoàn chỉnh. Đã đạt được sự ổn định và tự chủ. Tận hưởng thành quả lao động.'),
+ rev:_tvmbT('js.tarot.phu-thuoc-tai-chinh-that-bai', 'Phụ thuộc tài chính, thất bại dự án, ngắn hạn. Chưa đạt được sự tự chủ mong muốn hoặc đang chi tiêu quá mức.'),
+ kw:[_tvmbT('js.tarot.doc-lap', 'Độc lập'),_tvmbT('js.tarot.tu-tuc', 'Tự túc'),_tvmbT('js.tarot.sang-trong', 'Sang trọng'),_tvmbT('js.tarot.hoan-chinh', 'Hoàn chỉnh')]},
+{id:73,name:_tvmbT('js.tarot.muoi-tien', 'Mười Tiền'),en:'Ten of Pentacles',type:'pentacles',sym:'🏰',num:_tvmbT('js.tarot.muoi', 'Mười'),
+ up:_tvmbT('js.tarot.giau-co-di-san-hanh-phuc', 'Giàu có, di sản, hạnh phúc gia đình, hoàn chỉnh vật chất. Thịnh vượng lâu dài được chia sẻ với gia đình và thế hệ sau.'),
+ rev:_tvmbT('js.tarot.mat-mat-tai-san-rac-roi', 'Mất mát tài sản, rắc rối gia đình, thế chấp. Có rủi ro tài chính liên quan đến gia đình hoặc di sản.'),
+ kw:[_tvmbT('js.tarot.di-san', 'Di sản'),_tvmbT('js.tarot.giau-co', 'Giàu có'),_tvmbT('js.tarot.gia-dinh', 'Gia đình'),_tvmbT('js.tarot.thinh-vuong-lau-dai', 'Thịnh vượng lâu dài')]},
+{id:74,name:_tvmbT('js.tarot.trang-tien', 'Trang Tiền'),en:'Page of Pentacles',type:'pentacles',sym:'📚',num:_tvmbT('js.tarot.trang', 'Trang'),
+ up:_tvmbT('js.tarot.co-hoi-moi-hoc-hoi-thuc', 'Cơ hội mới, học hỏi thực tế, tập trung, tin tức về tiền. Tinh thần ham học hỏi trong các vấn đề thực tế.'),
+ rev:_tvmbT('js.tarot.thieu-tap-trung-tri-hoan-thieu', 'Thiếu tập trung, trì hoãn, thiếu kỹ năng thực tế. Có ý định học nhưng thiếu kiên nhẫn để thực hiện.'),
+ kw:[_tvmbT('js.tarot.hoc-hoi', 'Học hỏi'),_tvmbT('js.tarot.thuc-te', 'Thực tế'),_tvmbT('js.tarot.tap-trung', 'Tập trung'),_tvmbT('js.tarot.co-hoi', 'Cơ hội')]},
+{id:75,name:_tvmbT('js.tarot.ky-si-tien', 'Kỵ Sĩ Tiền'),en:'Knight of Pentacles',type:'pentacles',sym:'🐂',num:_tvmbT('js.tarot.ky-si', 'Kỵ Sĩ'),
+ up:_tvmbT('js.tarot.cham-chi-dang-tin-kien-nhan', 'Chăm chỉ, đáng tin, kiên nhẫn, phương pháp luận. Chậm mà chắc, tin tưởng vào quá trình và không bỏ cuộc.'),
+ rev:_tvmbT('js.tarot.buong-binh-cham-chap-khong-co', 'Bướng bỉnh, chậm chạp, không có kết quả. Đang mắc kẹt trong thói quen và từ chối thích nghi.'),
+ kw:[_tvmbT('js.tarot.cham-chi', 'Chăm chỉ'),_tvmbT('js.tarot.dang-tin', 'Đáng tin'),_tvmbT('js.tarot.kien-nhan', 'Kiên nhẫn'),_tvmbT('js.tarot.phuong-phap', 'Phương pháp')]},
+{id:76,name:_tvmbT('js.tarot.hoang-hau-tien', 'Hoàng Hậu Tiền'),en:'Queen of Pentacles',type:'pentacles',sym:'🌻',num:_tvmbT('js.tarot.hh', 'HH'),
+ up:_tvmbT('js.tarot.nguoi-me-nuoi-duong-thuc-te', 'Người mẹ nuôi dưỡng, thực tế, giàu có, công việc nhà. Chăm sóc người khác trong khi vẫn xây dựng sự ổn định vật chất.'),
+ rev:_tvmbT('js.tarot.phu-thuoc-thieu-su-can-bang', 'Phụ thuộc, thiếu sự cân bằng, lơ là công việc. Bị mất cân bằng giữa chăm sóc người khác và chăm sóc bản thân.'),
+ kw:[_tvmbT('js.tarot.nuoi-duong', 'Nuôi dưỡng'),_tvmbT('js.tarot.thuc-te', 'Thực tế'),_tvmbT('js.tarot.giau-co', 'Giàu có'),_tvmbT('js.tarot.cham-soc', 'Chăm sóc')]},
+{id:77,name:_tvmbT('js.tarot.vua-tien', 'Vua Tiền'),en:'King of Pentacles',type:'pentacles',sym:'🏦',num:_tvmbT('js.tarot.vua', 'Vua'),
+ up:_tvmbT('js.tarot.su-thinh-vuong-kinh-doanh-lanh', 'Sự thịnh vượng, kinh doanh, lãnh đạo, ổn định. Đã xây dựng được nền tảng vật chất vững chắc và lãnh đạo với sự khôn ngoan.'),
+ rev:_tvmbT('js.tarot.tham-lam-tham-nhung-quan-ly', 'Tham lam, tham nhũng, quản lý kém, bảo thủ. Đang dùng tiền bạc và quyền lực một cách không chính đáng.'),
+ kw:[_tvmbT('js.tarot.thinh-vuong', 'Thịnh vượng'),'Kinh doanh',_tvmbT('js.tarot.lanh-dao', 'Lãnh đạo'),_tvmbT('js.tarot.on-dinh', 'Ổn định')]},
 ];
 
 // 78 sym là emoji màu (biểu tượng đại diện từng lá) — đổi sang icon SVG chuẩn
@@ -521,28 +521,28 @@ function renderCardSym(sym) {
 }
 
 var SPREADS = {
-  1: [{pos:'Thông Điệp',desc:'Năng lượng và thông điệp chính cho câu hỏi của bạn'}],
+  1: [{pos:_tvmbT('js.tarot.thong-diep', 'Thông Điệp'),desc:_tvmbT('js.tarot.nang-luong-va-thong-diep-chinh', 'Năng lượng và thông điệp chính cho câu hỏi của bạn')}],
   3: [
-    {pos:'Quá Khứ',desc:'Nền tảng và những gì đã dẫn đến tình huống hiện tại'},
-    {pos:'Hiện Tại',desc:'Tình trạng hiện tại và những gì đang ảnh hưởng đến bạn'},
-    {pos:'Tương Lai',desc:'Xu hướng và kết quả có thể nếu tiếp tục theo hướng này'},
+    {pos:_tvmbT('js.tarot.qua-khu', 'Quá Khứ'),desc:_tvmbT('js.tarot.nen-tang-va-nhung-gi-da', 'Nền tảng và những gì đã dẫn đến tình huống hiện tại')},
+    {pos:_tvmbT('js.tarot.hien-tai', 'Hiện Tại'),desc:_tvmbT('js.tarot.tinh-trang-hien-tai-va-nhung', 'Tình trạng hiện tại và những gì đang ảnh hưởng đến bạn')},
+    {pos:_tvmbT('js.tarot.tuong-lai', 'Tương Lai'),desc:_tvmbT('js.tarot.xu-huong-va-ket-qua-co', 'Xu hướng và kết quả có thể nếu tiếp tục theo hướng này')},
   ],
   10: [
-    {pos:'Tình Huống',desc:'Trung tâm — tình huống hay câu hỏi hiện tại'},
-    {pos:'Thách Thức',desc:'Điều đang cản trở hay thách thức bạn'},
-    {pos:'Quá Khứ Gần',desc:'Điều gì đó vừa qua ảnh hưởng đến tình huống'},
-    {pos:'Quá Khứ Xa',desc:'Nền tảng xa hơn của tình huống này'},
-    {pos:'Khả Năng Tốt Nhất',desc:'Điều tốt nhất có thể đạt được'},
-    {pos:'Tương Lai Gần',desc:'Điều sắp xảy ra trong thời gian ngắn'},
-    {pos:'Bản Thân',desc:'Cách bạn nhìn nhận tình huống'},
-    {pos:'Môi Trường',desc:'Những người và năng lượng xung quanh bạn'},
-    {pos:'Hy Vọng & Lo Sợ',desc:'Hy vọng sâu nhất hoặc nỗi lo sợ nhất của bạn'},
-    {pos:'Kết Quả',desc:'Kết quả có khả năng xảy ra nhất'},
+    {pos:_tvmbT('js.tarot.tinh-huong', 'Tình Huống'),desc:_tvmbT('js.tarot.trung-tam-tinh-huong-hay-cau', 'Trung tâm — tình huống hay câu hỏi hiện tại')},
+    {pos:_tvmbT('js.tarot.thach-thuc', 'Thách Thức'),desc:_tvmbT('js.tarot.dieu-dang-can-tro-hay-thach', 'Điều đang cản trở hay thách thức bạn')},
+    {pos:_tvmbT('js.tarot.qua-khu-gan', 'Quá Khứ Gần'),desc:_tvmbT('js.tarot.dieu-gi-do-vua-qua-anh', 'Điều gì đó vừa qua ảnh hưởng đến tình huống')},
+    {pos:_tvmbT('js.tarot.qua-khu-xa', 'Quá Khứ Xa'),desc:_tvmbT('js.tarot.nen-tang-xa-hon-cua-tinh', 'Nền tảng xa hơn của tình huống này')},
+    {pos:_tvmbT('js.tarot.kha-nang-tot-nhat', 'Khả Năng Tốt Nhất'),desc:_tvmbT('js.tarot.dieu-tot-nhat-co-the-dat', 'Điều tốt nhất có thể đạt được')},
+    {pos:_tvmbT('js.tarot.tuong-lai-gan', 'Tương Lai Gần'),desc:_tvmbT('js.tarot.dieu-sap-xay-ra-trong-thoi', 'Điều sắp xảy ra trong thời gian ngắn')},
+    {pos:_tvmbT('js.tarot.ban-than', 'Bản Thân'),desc:_tvmbT('js.tarot.cach-ban-nhin-nhan-tinh-huong', 'Cách bạn nhìn nhận tình huống')},
+    {pos:_tvmbT('js.tarot.moi-truong', 'Môi Trường'),desc:_tvmbT('js.tarot.nhung-nguoi-va-nang-luong-xung', 'Những người và năng lượng xung quanh bạn')},
+    {pos:_tvmbT('js.tarot.hy-vong-lo-so', 'Hy Vọng & Lo Sợ'),desc:_tvmbT('js.tarot.hy-vong-sau-nhat-hoac-noi', 'Hy vọng sâu nhất hoặc nỗi lo sợ nhất của bạn')},
+    {pos:_tvmbT('js.tarot.ket-qua', 'Kết Quả'),desc:_tvmbT('js.tarot.ket-qua-co-kha-nang-xay', 'Kết quả có khả năng xảy ra nhất')},
   ]
 };
 
 var SUIT_COLORS = {major:'#c9a84c',wands:'#E74C3C',cups:'#1455A4',swords:'#7F8C8D',pentacles:'#1E6B3C'};
-var SUIT_VI = {major:'Bí Ẩn Lớn',wands:'Gậy ♦ Lửa',cups:'Cốc ♦ Nước',swords:'Kiếm ♦ Gió',pentacles:'Tiền ♦ Đất'};
+var SUIT_VI = {major:_tvmbT('js.tarot.bi-an-lon', 'Bí Ẩn Lớn'),wands:_tvmbT('js.tarot.gay-lua', 'Gậy ♦ Lửa'),cups:_tvmbT('js.tarot.coc-nuoc', 'Cốc ♦ Nước'),swords:_tvmbT('js.tarot.kiem-gio', 'Kiếm ♦ Gió'),pentacles:_tvmbT('js.tarot.tien-dat', 'Tiền ♦ Đất')};
 
 var _spread = 1;
 var _drawn = [];
@@ -557,7 +557,7 @@ function draw() {
   const btn = document.getElementById('drawBtn');
   const lbl = document.getElementById('drawBtnLabel');
   btn.disabled = true;
-  lbl.textContent = 'Đang xáo bài...';
+  lbl.textContent = _tvmbT('js.tarot.dang-xao-bai', 'Đang xáo bài...');
   _drawn = [];
 
   setTimeout(() => {
@@ -572,7 +572,7 @@ function draw() {
 
     renderSpread();
     btn.disabled = false;
-    lbl.textContent = 'Xáo Bài & Rút Lại';
+    lbl.textContent = _tvmbT('js.tarot.xao-bai-rut-lai', 'Xáo Bài & Rút Lại');
   }, 800);
 }
 
@@ -597,20 +597,20 @@ function renderSpread() {
   }, 300);
 
   renderMeanings();
-  Shell.setShareable({ kind:'text', toolId:'tarot', title:'Kết quả Tarot của tôi', text: shareText() });
+  Shell.setShareable({ kind:'text', toolId:'tarot', title:_tvmbT('js.tarot.ket-qua-tarot-cua-toi', 'Kết quả Tarot của tôi'), text: shareText() });
   if (window.SHELL_INTRO) Shell.dismissIntro(window.SHELL_INTRO.key);
   const first = _drawn[0];
   Shell.setContext({
-    label: 'Tarot 78 Lá — ' + _drawn.length + ' lá',
-    greeting: (q ? 'Câu hỏi của bạn: "' + q + '". ' : '') + 'Lá đầu tiên bạn rút được: **' + first.name + '**' + (first.reversed ? ' (ngược)' : '') + '. Bạn muốn tôi luận theo hướng nào?',
-    chips: ['Major Arcana khác Minor Arcana thế nào?', 'Lá bài ngược nghĩa là gì?', 'Nên hỏi Tarot câu hỏi kiểu gì?']
+    label: _tvmbT('js.tarot.tarot-78-la', 'Tarot 78 Lá — ') + _drawn.length + _tvmbT('js.tarot.la', ' lá'),
+    greeting: (q ? _tvmbT('js.tarot.cau-hoi-cua-ban', 'Câu hỏi của bạn: "') + q + '". ' : '') + _tvmbT('js.tarot.la-dau-tien-ban-rut-duoc', 'Lá đầu tiên bạn rút được: **') + first.name + '**' + (first.reversed ? _tvmbT('js.tarot.nguoc', ' (ngược)') : '') + _tvmbT('js.tarot.ban-muon-toi-luan-theo-huong', '. Bạn muốn tôi luận theo hướng nào?'),
+    chips: [_tvmbT('js.tarot.major-arcana-khac-minor-arcana-the', 'Major Arcana khác Minor Arcana thế nào?'), _tvmbT('js.tarot.la-bai-nguoc-nghia-la-gi', 'Lá bài ngược nghĩa là gì?'), _tvmbT('js.tarot.nen-hoi-tarot-cau-hoi-kieu', 'Nên hỏi Tarot câu hỏi kiểu gì?')]
   });
   setTimeout(() => document.getElementById('result-section').scrollIntoView({ behavior: 'smooth', block: 'nearest' }), 400);
 }
 
 function shareText() {
   const spread = SPREADS[_spread];
-  return _drawn.map((c,i) => `${spread[i].pos}: ${c.name} (${c.reversed?'Ngược':'Xuôi'})`).join('\n');
+  return _drawn.map((c,i) => `${spread[i].pos}: ${c.name} (${c.reversed?_tvmbT('js.tarot.nguoc-2','Ngược'):_tvmbT('js.tarot.xuoi-2','Xuôi')})`).join('\n');
 }
 
 function cardBack(i) {
@@ -645,7 +645,7 @@ function flipCard(i) {
 function renderMeanings() {
   const spread = SPREADS[_spread];
   document.getElementById('readingResult').innerHTML = `
-    <div style="font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--text-lt);margin-bottom:16px">✦ Luận Giải Từng Lá</div>
+    <div style="font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--text-lt);margin-bottom:16px">✦ ${_tvmbT('js.tarot.luan-giai-tung-la','Luận Giải Từng Lá')}</div>
     ${_drawn.map((c, i) => {
       const col = SUIT_COLORS[c.type] || '#c9a84c';
       const meaning = c.reversed ? c.rev : c.up;
@@ -653,9 +653,9 @@ function renderMeanings() {
         <div class="cm-header">
           <div class="cm-symbol" style="color:${col}">${renderCardSym(c.sym)}</div>
           <div class="cm-info">
-            <div class="cm-name">${c.name} <span style="font-size:12px;color:var(--text-lt);font-weight:400">(${c.en})</span></div>
+            <div class="cm-name">${c.name}${(window.I18n&&I18n.locale==='en')?'':' <span style="font-size:12px;color:var(--text-lt);font-weight:400">('+c.en+')</span>'}</div>
             <div class="cm-sub">${SUIT_VI[c.type]} · ${spread[i].pos}</div>
-            <span class="cm-pos ${c.reversed ? 'pos-reversed' : 'pos-upright'}">${c.reversed ? '↕ Ngược' : '↑ Xuôi'}</span>
+            <span class="cm-pos ${c.reversed ? 'pos-reversed' : 'pos-upright'}">${c.reversed ? _tvmbT('js.tarot.nguoc-wrh9', '↕ Ngược') : _tvmbT('js.tarot.xuoi', '↑ Xuôi')}</span>
           </div>
         </div>
         <div style="font-size:12px;color:var(--text-lt);margin-bottom:8px;font-style:italic">${spread[i].desc}</div>
