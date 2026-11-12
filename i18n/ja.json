@@ -6747,6 +6747,126 @@
   "t": "Zalo",
   "h": "53b71aec"
  },
+ "js.thay.disc-bac-minh": {
+  "t": "相術",
+  "h": "ae8ee50b"
+ },
+ "js.thay.disc-co-nguyet": {
+  "t": "紫微斗数の基本と鑑定",
+  "h": "582cc3fc"
+ },
+ "js.thay.disc-dau-nam": {
+  "t": "恋愛と結婚",
+  "h": "03de9681"
+ },
+ "js.thay.disc-dieu-khong": {
+  "t": "仕事とお金",
+  "h": "5866572a"
+ },
+ "js.thay.disc-huyen-khong": {
+  "t": "風水",
+  "h": "181a3d4e"
+ },
+ "js.thay.disc-linh-co": {
+  "t": "易経と梅花易数",
+  "h": "deb6aa38"
+ },
+ "js.thay.disc-linh-son": {
+  "t": "競争のある仕事と人脈",
+  "h": "074cb601"
+ },
+ "js.thay.disc-ngoc-tinh": {
+  "t": "相性とご縁",
+  "h": "bf736fe8"
+ },
+ "js.thay.disc-nhat-nguyen": {
+  "t": "短期の運勢と日取り",
+  "h": "4649ae54"
+ },
+ "js.thay.disc-tam-kinh": {
+  "t": "四柱推命と奇門遁甲",
+  "h": "f8e8d286"
+ },
+ "js.thay.disc-thai-hu": {
+  "t": "即答と反問",
+  "h": "2b657843"
+ },
+ "js.thay.disc-thanh-hu": {
+  "t": "タロットと数秘術",
+  "h": "bf665759"
+ },
+ "js.thay.disc-thien-an": {
+  "t": "命名と子育て",
+  "h": "049ae929"
+ },
+ "js.thay.disc-tinh-quang": {
+  "t": "西洋占星術",
+  "h": "d690a059"
+ },
+ "js.thay.disc-tu-nguyen": {
+  "t": "大運と人生のサイクル",
+  "h": "8dfa0970"
+ },
+ "js.thay.tag-bac-minh": {
+  "t": "見る目を持つ者に、顔は何も隠せない。",
+  "h": "dedb2c1b"
+ },
+ "js.thay.tag-co-nguyet": {
+  "t": "枝葉を論じる前に、まず根をよく見る。",
+  "h": "c13f4553"
+ },
+ "js.thay.tag-dau-nam": {
+  "t": "耳の痛い真実でも、あなたには聞く必要がある。",
+  "h": "b0888693"
+ },
+ "js.thay.tag-dieu-khong": {
+  "t": "まさにここで才能を無駄にしている。",
+  "h": "c8ebbbce"
+ },
+ "js.thay.tag-huyen-khong": {
+  "t": "家の向きが悪いと、住む人は理由もわからず疲れてしまう。",
+  "h": "71c8a862"
+ },
+ "js.thay.tag-linh-co": {
+  "t": "一つの卦、一つのイメージ、一つの答え。",
+  "h": "d0c7ad43"
+ },
+ "js.thay.tag-linh-son": {
+  "t": "誰があなたを助け、誰が足を引っ張っているか——命盤を見ればわかる。",
+  "h": "fb8e84e7"
+ },
+ "js.thay.tag-ngoc-tinh": {
+  "t": "思いもよらないものにたとえてみせよう。",
+  "h": "d4381ff1"
+ },
+ "js.thay.tag-nhat-nguyen": {
+  "t": "あとどれくらい？すぐにカウントダウンしてあげよう。",
+  "h": "f8d8a373"
+ },
+ "js.thay.tag-tam-kinh": {
+  "t": "三つの体系を突き合わせ、重なる点を探す。",
+  "h": "0d0249f0"
+ },
+ "js.thay.tag-thai-hu": {
+  "t": "問題は、あなたが思っている所にはない。",
+  "h": "915233ed"
+ },
+ "js.thay.tag-thanh-hu": {
+  "t": "一枚引いて、本当に聞きたいことは何か見てみよう。",
+  "h": "c2a5a989"
+ },
+ "js.thay.tag-thien-an": {
+  "t": "言葉は少なく、されど一言一言に思慮を込めて。",
+  "h": "a23f6db3"
+ },
+ "js.thay.tag-tinh-quang": {
+  "t": "空全体を見て、一人の人間を理解する。",
+  "h": "9913b826"
+ },
+ "js.thay.tag-tu-nguyen": {
+  "t": "一言で言い切る——余計な説明はしない。",
+  "h": "cfa2af4b"
+ },
  "js.topup.aria-label-thanh-toan": {
   "t": " aria-label=\"お支払い：",
   "h": "3d7d89ae"
@@ -8502,6 +8622,26 @@
  "terms.voi-luong-da-nap-nhung-chua": {
   "t": "チャージ済みで未使用の両数については、ご請求をいただければ、個別に検討いたします",
   "h": "f410ec3e"
+ },
+ "thay.15-thay-luan-giai-cua-tu": {
+  "t": "明宝紫微斗数の鑑定を担う15人の先生——それぞれ専門も、語り口も異なります。",
+  "h": "619ab125"
+ },
+ "thay.cac-thay-15-thay-luan-giai": {
+  "t": "<b>先生の一覧</b><span>鑑定を担う15人の先生——専門も語り口も一人ひとり異なります</span>",
+  "h": "0d633e5a"
+ },
+ "thay.cac-thay-tu-vi-minh-bao": {
+  "t": "先生の一覧 — 明宝紫微斗数",
+  "h": "ad96cac8"
+ },
+ "thay.khong-tim-thay-thay-nao-khop": {
+  "t": "該当する先生が見つかりません。",
+  "h": "ed5cffeb"
+ },
+ "thay.tim-thay-theo-ten-hoac-chuyen": {
+  "t": "名前や専門で先生を探す…",
+  "h": "cb98738e"
  },
  "topup.ban-dang-mo-khoa": {
   "t": "ロック解除中…",

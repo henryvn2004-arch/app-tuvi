@@ -6747,6 +6747,126 @@
   "t": "Zalo",
   "h": "53b71aec"
  },
+ "js.thay.disc-bac-minh": {
+  "t": "관상",
+  "h": "ae8ee50b"
+ },
+ "js.thay.disc-co-nguyet": {
+  "t": "자미두수 기본과 풀이",
+  "h": "582cc3fc"
+ },
+ "js.thay.disc-dau-nam": {
+  "t": "연애와 결혼",
+  "h": "03de9681"
+ },
+ "js.thay.disc-dieu-khong": {
+  "t": "일과 재물",
+  "h": "5866572a"
+ },
+ "js.thay.disc-huyen-khong": {
+  "t": "풍수",
+  "h": "181a3d4e"
+ },
+ "js.thay.disc-linh-co": {
+  "t": "주역과 매화역수",
+  "h": "deb6aa38"
+ },
+ "js.thay.disc-linh-son": {
+  "t": "경쟁하는 일과 인맥",
+  "h": "074cb601"
+ },
+ "js.thay.disc-ngoc-tinh": {
+  "t": "궁합과 인연",
+  "h": "bf736fe8"
+ },
+ "js.thay.disc-nhat-nguyen": {
+  "t": "단기 운세와 택일",
+  "h": "4649ae54"
+ },
+ "js.thay.disc-tam-kinh": {
+  "t": "사주와 기문둔갑",
+  "h": "f8e8d286"
+ },
+ "js.thay.disc-thai-hu": {
+  "t": "빠른 답, 되묻기",
+  "h": "2b657843"
+ },
+ "js.thay.disc-thanh-hu": {
+  "t": "타로와 수비학",
+  "h": "bf665759"
+ },
+ "js.thay.disc-thien-an": {
+  "t": "작명과 자녀 교육",
+  "h": "049ae929"
+ },
+ "js.thay.disc-tinh-quang": {
+  "t": "서양 점성술",
+  "h": "d690a059"
+ },
+ "js.thay.disc-tu-nguyen": {
+  "t": "대운과 인생 사이클",
+  "h": "8dfa0970"
+ },
+ "js.thay.tag-bac-minh": {
+  "t": "볼 줄 아는 이에게 얼굴은 아무것도 숨기지 못한다.",
+  "h": "dedb2c1b"
+ },
+ "js.thay.tag-co-nguyet": {
+  "t": "가지를 논하기 전에 뿌리부터 꼼꼼히 본다.",
+  "h": "c13f4553"
+ },
+ "js.thay.tag-dau-nam": {
+  "t": "듣기 거북한 진실이라도, 너는 들어야 한다.",
+  "h": "b0888693"
+ },
+ "js.thay.tag-dieu-khong": {
+  "t": "바로 이 자리에서 재능을 낭비하고 있다.",
+  "h": "c8ebbbce"
+ },
+ "js.thay.tag-huyen-khong": {
+  "t": "집의 방향이 어긋나면, 사는 사람은 이유도 모른 채 지친다.",
+  "h": "71c8a862"
+ },
+ "js.thay.tag-linh-co": {
+  "t": "괘 하나, 이미지 하나, 답 하나.",
+  "h": "d0c7ad43"
+ },
+ "js.thay.tag-linh-son": {
+  "t": "누가 너를 돕고 누가 발목을 잡는지 — 명반을 보면 안다.",
+  "h": "fb8e84e7"
+ },
+ "js.thay.tag-ngoc-tinh": {
+  "t": "네가 생각지도 못한 것에 빗대어 보여 주마.",
+  "h": "d4381ff1"
+ },
+ "js.thay.tag-nhat-nguyen": {
+  "t": "얼마나 남았냐고? 바로 카운트다운해 주마.",
+  "h": "f8d8a373"
+ },
+ "js.thay.tag-tam-kinh": {
+  "t": "세 체계를 맞대어 보아 겹치는 지점을 찾는다.",
+  "h": "0d0249f0"
+ },
+ "js.thay.tag-thai-hu": {
+  "t": "문제는 네가 생각하는 곳에 있지 않다.",
+  "h": "915233ed"
+ },
+ "js.thay.tag-thanh-hu": {
+  "t": "한 장 뽑아서, 네가 정말 듣고 싶은 게 뭔지 보자.",
+  "h": "c2a5a989"
+ },
+ "js.thay.tag-thien-an": {
+  "t": "말은 적어도, 한마디 한마디에 숙고가 담겨 있다.",
+  "h": "a23f6db3"
+ },
+ "js.thay.tag-tinh-quang": {
+  "t": "하늘 전체를 보고 한 사람을 이해한다.",
+  "h": "9913b826"
+ },
+ "js.thay.tag-tu-nguyen": {
+  "t": "한마디로 끝낸다 — 덧붙이는 설명은 없다.",
+  "h": "cfa2af4b"
+ },
  "js.topup.aria-label-thanh-toan": {
   "t": " aria-label=\"결제 ",
   "h": "3d7d89ae"
@@ -8502,6 +8622,26 @@
  "terms.voi-luong-da-nap-nhung-chua": {
   "t": "충전했지만 사용하지 않은 냥은 요청해 주시면 사례별로 검토해 드립니다",
   "h": "f410ec3e"
+ },
+ "thay.15-thay-luan-giai-cua-tu": {
+  "t": "명보 자미두수의 풀이를 맡은 15명의 선생님 — 저마다 전문 분야도, 풀이의 목소리도 다릅니다.",
+  "h": "619ab125"
+ },
+ "thay.cac-thay-15-thay-luan-giai": {
+  "t": "<b>선생님들</b><span>풀이를 맡은 15명의 선생님 — 저마다 전문 분야와 목소리가 다릅니다</span>",
+  "h": "0d633e5a"
+ },
+ "thay.cac-thay-tu-vi-minh-bao": {
+  "t": "선생님들 — 명보 자미두수",
+  "h": "ad96cac8"
+ },
+ "thay.khong-tim-thay-thay-nao-khop": {
+  "t": "일치하는 선생님이 없습니다.",
+  "h": "ed5cffeb"
+ },
+ "thay.tim-thay-theo-ten-hoac-chuyen": {
+  "t": "이름이나 전문 분야로 선생님 찾기…",
+  "h": "cb98738e"
  },
  "topup.ban-dang-mo-khoa": {
   "t": "잠금 해제 중…",

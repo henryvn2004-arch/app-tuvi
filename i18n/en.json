@@ -6747,6 +6747,126 @@
   "t": "Zalo",
   "h": "53b71aec"
  },
+ "js.thay.disc-bac-minh": {
+  "t": "Physiognomy",
+  "h": "ae8ee50b"
+ },
+ "js.thay.disc-co-nguyet": {
+  "t": "Zi Wei Fundamentals & Readings",
+  "h": "582cc3fc"
+ },
+ "js.thay.disc-dau-nam": {
+  "t": "Love & Marriage",
+  "h": "03de9681"
+ },
+ "js.thay.disc-dieu-khong": {
+  "t": "Career & Money",
+  "h": "5866572a"
+ },
+ "js.thay.disc-huyen-khong": {
+  "t": "Feng Shui",
+  "h": "181a3d4e"
+ },
+ "js.thay.disc-linh-co": {
+  "t": "I Ching & Plum Blossom",
+  "h": "deb6aa38"
+ },
+ "js.thay.disc-linh-son": {
+  "t": "Competitive Careers & Networks",
+  "h": "074cb601"
+ },
+ "js.thay.disc-ngoc-tinh": {
+  "t": "Compatibility & Karmic Bonds",
+  "h": "bf736fe8"
+ },
+ "js.thay.disc-nhat-nguyen": {
+  "t": "Short-term Luck & Date Selection",
+  "h": "4649ae54"
+ },
+ "js.thay.disc-tam-kinh": {
+  "t": "BaZi & Qi Men",
+  "h": "f8e8d286"
+ },
+ "js.thay.disc-thai-hu": {
+  "t": "Quick Answers, Pushback",
+  "h": "2b657843"
+ },
+ "js.thay.disc-thanh-hu": {
+  "t": "Tarot & Numerology",
+  "h": "bf665759"
+ },
+ "js.thay.disc-thien-an": {
+  "t": "Naming & Parenting",
+  "h": "049ae929"
+ },
+ "js.thay.disc-tinh-quang": {
+  "t": "Western Astrology",
+  "h": "d690a059"
+ },
+ "js.thay.disc-tu-nguyen": {
+  "t": "Major Cycles & Life Cycles",
+  "h": "8dfa0970"
+ },
+ "js.thay.tag-bac-minh": {
+  "t": "A face hides nothing from someone who knows how to look.",
+  "h": "dedb2c1b"
+ },
+ "js.thay.tag-co-nguyet": {
+  "t": "Look closely at the root before judging the branches.",
+  "h": "c13f4553"
+ },
+ "js.thay.tag-dau-nam": {
+  "t": "The truth is hard to hear, but you need to hear it.",
+  "h": "b0888693"
+ },
+ "js.thay.tag-dieu-khong": {
+  "t": "Your talent is being wasted right here.",
+  "h": "c8ebbbce"
+ },
+ "js.thay.tag-huyen-khong": {
+  "t": "A house facing the wrong way wears its people out, and they never know why.",
+  "h": "71c8a862"
+ },
+ "js.thay.tag-linh-co": {
+  "t": "One hexagram, one image, one answer.",
+  "h": "d0c7ad43"
+ },
+ "js.thay.tag-linh-son": {
+  "t": "Who helps you and who just stands in your way — the chart tells.",
+  "h": "fb8e84e7"
+ },
+ "js.thay.tag-ngoc-tinh": {
+  "t": "A comparison you'd never have seen coming.",
+  "h": "d4381ff1"
+ },
+ "js.thay.tag-nhat-nguyen": {
+  "t": "How much longer? I'll count it down for you.",
+  "h": "f8d8a373"
+ },
+ "js.thay.tag-tam-kinh": {
+  "t": "Three systems side by side, to find where they converge.",
+  "h": "0d0249f0"
+ },
+ "js.thay.tag-thai-hu": {
+  "t": "The problem isn't where you think it is.",
+  "h": "915233ed"
+ },
+ "js.thay.tag-thanh-hu": {
+  "t": "Draw one card and see what you truly want to hear.",
+  "h": "c2a5a989"
+ },
+ "js.thay.tag-thien-an": {
+  "t": "Few words, but every one of them weighed.",
+  "h": "a23f6db3"
+ },
+ "js.thay.tag-tinh-quang": {
+  "t": "Reading the whole sky to understand one person.",
+  "h": "9913b826"
+ },
+ "js.thay.tag-tu-nguyen": {
+  "t": "One sentence, settled — no further explanation.",
+  "h": "cfa2af4b"
+ },
  "js.topup.aria-label-thanh-toan": {
   "t": " aria-label=\"Pay ",
   "h": "3d7d89ae"
@@ -8502,6 +8622,26 @@
  "terms.voi-luong-da-nap-nhung-chua": {
   "t": "For credits you have topped up but not yet used, you may submit a request and we will review it case by case",
   "h": "f410ec3e"
+ },
+ "thay.15-thay-luan-giai-cua-tu": {
+  "t": "The 15 masters behind Minh Bao Zi Wei Dou Shu readings — each with their own specialty and voice.",
+  "h": "619ab125"
+ },
+ "thay.cac-thay-15-thay-luan-giai": {
+  "t": "<b>The Masters</b><span>15 masters — each with their own specialty and voice</span>",
+  "h": "0d633e5a"
+ },
+ "thay.cac-thay-tu-vi-minh-bao": {
+  "t": "The Masters — Minh Bao Zi Wei Dou Shu",
+  "h": "ad96cac8"
+ },
+ "thay.khong-tim-thay-thay-nao-khop": {
+  "t": "No master matches your search.",
+  "h": "ed5cffeb"
+ },
+ "thay.tim-thay-theo-ten-hoac-chuyen": {
+  "t": "Search masters by name or specialty…",
+  "h": "cb98738e"
  },
  "topup.ban-dang-mo-khoa": {
   "t": "You're unlocking…",

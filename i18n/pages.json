@@ -487,6 +487,19 @@
    "nav"
   ]
  },
+ "/app/thay": {
+  "file": "app-thay.html",
+  "keys": [
+   "thay.15-thay-luan-giai-cua-tu",
+   "thay.cac-thay-15-thay-luan-giai",
+   "thay.cac-thay-tu-vi-minh-bao",
+   "thay.khong-tim-thay-thay-nao-khop",
+   "thay.tim-thay-theo-ten-hoac-chuyen"
+  ],
+  "js": [
+   "shell"
+  ]
+ },
  "/app/van-han-nam": {
   "file": "app-van-han-nam.html",
   "keys": [

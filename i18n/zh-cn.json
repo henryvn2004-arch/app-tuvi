@@ -6747,6 +6747,126 @@
   "t": "Zalo",
   "h": "53b71aec"
  },
+ "js.thay.disc-bac-minh": {
+  "t": "相术",
+  "h": "ae8ee50b"
+ },
+ "js.thay.disc-co-nguyet": {
+  "t": "紫微斗数根本与解读",
+  "h": "582cc3fc"
+ },
+ "js.thay.disc-dau-nam": {
+  "t": "感情与婚姻",
+  "h": "03de9681"
+ },
+ "js.thay.disc-dieu-khong": {
+  "t": "事业与财运",
+  "h": "5866572a"
+ },
+ "js.thay.disc-huyen-khong": {
+  "t": "风水",
+  "h": "181a3d4e"
+ },
+ "js.thay.disc-linh-co": {
+  "t": "易经与梅花易数",
+  "h": "deb6aa38"
+ },
+ "js.thay.disc-linh-son": {
+  "t": "竞争型事业与人脉",
+  "h": "074cb601"
+ },
+ "js.thay.disc-ngoc-tinh": {
+  "t": "合婚与缘分",
+  "h": "bf736fe8"
+ },
+ "js.thay.disc-nhat-nguyen": {
+  "t": "短期运势与择日",
+  "h": "4649ae54"
+ },
+ "js.thay.disc-tam-kinh": {
+  "t": "八字与奇门",
+  "h": "f8e8d286"
+ },
+ "js.thay.disc-thai-hu": {
+  "t": "快问快答、反问",
+  "h": "2b657843"
+ },
+ "js.thay.disc-thanh-hu": {
+  "t": "塔罗与生命灵数",
+  "h": "bf665759"
+ },
+ "js.thay.disc-thien-an": {
+  "t": "取名与教养",
+  "h": "049ae929"
+ },
+ "js.thay.disc-tinh-quang": {
+  "t": "西洋占星",
+  "h": "d690a059"
+ },
+ "js.thay.disc-tu-nguyen": {
+  "t": "大运与人生周期",
+  "h": "8dfa0970"
+ },
+ "js.thay.tag-bac-minh": {
+  "t": "在懂得看的人面前，脸藏不住任何事。",
+  "h": "dedb2c1b"
+ },
+ "js.thay.tag-co-nguyet": {
+  "t": "先看清根本，再论枝节。",
+  "h": "c13f4553"
+ },
+ "js.thay.tag-dau-nam": {
+  "t": "真话难听，但你需要听。",
+  "h": "b0888693"
+ },
+ "js.thay.tag-dieu-khong": {
+  "t": "你的才华正浪费在这个地方。",
+  "h": "c8ebbbce"
+ },
+ "js.thay.tag-huyen-khong": {
+  "t": "房子座向不对，住的人累了也不知为何。",
+  "h": "71c8a862"
+ },
+ "js.thay.tag-linh-co": {
+  "t": "一卦、一象、一个答案。",
+  "h": "d0c7ad43"
+ },
+ "js.thay.tag-linh-son": {
+  "t": "谁能帮你、谁只是挡路——看命盘就知道。",
+  "h": "fb8e84e7"
+ },
+ "js.thay.tag-ngoc-tinh": {
+  "t": "拿一件你意想不到的事来比喻。",
+  "h": "d4381ff1"
+ },
+ "js.thay.tag-nhat-nguyen": {
+  "t": "还有多久？马上替你倒数。",
+  "h": "f8d8a373"
+ },
+ "js.thay.tag-tam-kinh": {
+  "t": "对照三套体系，找出交会之处。",
+  "h": "0d0249f0"
+ },
+ "js.thay.tag-thai-hu": {
+  "t": "问题不在你以为的地方。",
+  "h": "915233ed"
+ },
+ "js.thay.tag-thanh-hu": {
+  "t": "抽一张牌，看看你真正想听的是什么。",
+  "h": "c2a5a989"
+ },
+ "js.thay.tag-thien-an": {
+  "t": "话不多，但字字斟酌。",
+  "h": "a23f6db3"
+ },
+ "js.thay.tag-tinh-quang": {
+  "t": "看遍整片星空，去理解一个人。",
+  "h": "9913b826"
+ },
+ "js.thay.tag-tu-nguyen": {
+  "t": "一句话说定——不多解释。",
+  "h": "cfa2af4b"
+ },
  "js.topup.aria-label-thanh-toan": {
   "t": " aria-label=\"付款 ",
   "h": "3d7d89ae"
@@ -8502,6 +8622,26 @@
  "terms.voi-luong-da-nap-nhung-chua": {
   "t": "对于已储值但尚未使用的两，您可提出申请，由我们依个案审酌",
   "h": "f410ec3e"
+ },
+ "thay.15-thay-luan-giai-cua-tu": {
+  "t": "明宝紫微斗数的 15 位解读老师——每位都有自己的专长与论命风格。",
+  "h": "619ab125"
+ },
+ "thay.cac-thay-15-thay-luan-giai": {
+  "t": "<b>老师们</b><span>15 位解读老师——每位各有专长、各有风格</span>",
+  "h": "0d633e5a"
+ },
+ "thay.cac-thay-tu-vi-minh-bao": {
+  "t": "老师们 — 明宝紫微斗数",
+  "h": "ad96cac8"
+ },
+ "thay.khong-tim-thay-thay-nao-khop": {
+  "t": "找不到符合的老师。",
+  "h": "ed5cffeb"
+ },
+ "thay.tim-thay-theo-ten-hoac-chuyen": {
+  "t": "依姓名或专长搜索老师…",
+  "h": "cb98738e"
  },
  "topup.ban-dang-mo-khoa": {
   "t": "您正在解锁…",
