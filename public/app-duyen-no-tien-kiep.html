@@ -298,6 +298,33 @@ var DN_STEPS = [
 ];
 var _loadingCtl = null;
 var _imgRetryTimer = null;
+
+// ── i18n (W30d) — VĂN ENGINE SERVER: /api/duyen-no-tien-kiep trả chữ Việt (lib/engine/past-life-bond-terms.ts) KÈM
+// mã tra (`bond.kind` · `capDuyen[].kind` · `signals[].ma/bien`). Dịch CHỈ ở chỗ VẼ + chia sẻ; prompt truyện /
+// `portrait_cache` giữ chữ Việt. Bản dịch theo chỉ số ở /tools-shared/i18n-long/<locale>/duyen-no.js
+// (docs/i18n/QUY-UOC.md "Văn engine server"). vi / payload cũ trong cache (thiếu mã) ⇒ nguyên chữ Việt.
+if (window.I18n && window.I18n.loadLong) window.I18n.loadLong('duyen-no');
+function _dnLong(key, vi, vars) {
+  var I = window.I18n;
+  if (I && I.long) return I.long('duyen-no', key, vi, vars);
+  return vars ? vi.replace(/\{(\w+)\}/g, function (m, n) { return vars[n] !== undefined ? vars[n] : m; }) : vi;
+}
+/** Nhãn / câu mô tả loại duyên theo `kind` (BondType hoặc phần tử capDuyen); thiếu kind ⇒ chữ engine. */
+function _bondLabel(b) { return b && b.kind ? _dnLong('bond.' + b.kind + '.label', b.label) : ((b && b.label) || ''); }
+function _bondGist(b) { return b && b.kind ? _dnLong('bond.' + b.kind + '.gist', b.gist) : ((b && b.gist) || ''); }
+/** Dấu hiệu cổ pháp: nhãn theo nhóm (`ma` trước dấu chấm) + câu khuôn với biến (hành nạp âm qua glossary). */
+function _sigLabel(s) { return s.ma ? _dnLong('sig.' + String(s.ma).split('.')[0], s.label) : s.label; }
+function _sigDetail(s) {
+  if (!s.ma) return s.detail;
+  var bien = null;
+  if (s.bien) {
+    bien = {};
+    for (var k in s.bien) bien[k] = s.bien[k];
+    if (bien.x) bien.x = _tvmbG('hanh', bien.x);
+    if (bien.y) bien.y = _tvmbG('hanh', bien.y);
+  }
+  return _dnLong('sigd.' + s.ma, s.detail, bien);
+}
 var _imgWait = null;      // đồng hồ chờ trong khung ảnh — PHẢI stop ở mọi nhánh thoát
 
 function setResultImage(url) {
@@ -583,16 +610,16 @@ function mountHook(data) {
   var a = data.nhanVats[data.bond.a], b = data.nhanVats[data.bond.b];
   var facts = [{
     tone: 'neutral',
-    title: _tvmbT('js.duyenno.loai-duyen-label', 'Loại duyên: {label}', {label: data.bond.label}),
-    body: _tvmbT('js.duyenno.giua-a-va-b-gist', 'Giữa {a} và {b}: {gist} Câu chuyện 4 hồi + bức tranh chung nằm trong bản đầy đủ.', {a: esc(a.ten), b: esc(b.ten), gist: data.bond.gist}),
+    title: _tvmbT('js.duyenno.loai-duyen-label', 'Loại duyên: {label}', {label: _bondLabel(data.bond)}),
+    body: _tvmbT('js.duyenno.giua-a-va-b-gist', 'Giữa {a} và {b}: {gist} Câu chuyện 4 hồi + bức tranh chung nằm trong bản đầy đủ.', {a: esc(a.ten), b: esc(b.ten), gist: _bondGist(data.bond)}),
     source: 'engine · computeGroupBond',
   }];
   var sig = Array.isArray(data.bond.signals) ? data.bond.signals[0] : null;
   if (sig && sig.label && sig.detail) {
     facts.push({
       tone: 'neutral',
-      title: _tvmbT('js.duyenno.dau-hieu-label', 'Dấu hiệu: {label}', {label: sig.label}),
-      body: sig.detail + _tvmbT('js.duyenno.cac-dau-hieu-con-lai-va', ' — các dấu hiệu còn lại và lưới duyên đầy đủ giữa mọi người nằm trong bản đầy đủ.'),
+      title: _tvmbT('js.duyenno.dau-hieu-label', 'Dấu hiệu: {label}', {label: _sigLabel(sig)}),
+      body: _sigDetail(sig) + _tvmbT('js.duyenno.cac-dau-hieu-con-lai-va', ' — các dấu hiệu còn lại và lưới duyên đầy đủ giữa mọi người nằm trong bản đầy đủ.'),
       source: 'engine · computeGroupBond',
     });
   }
@@ -847,9 +874,9 @@ async function _doGenerate(freeRerun) {
 
 function renderStory(data) {
   var bond = data.bond || {};
-  document.getElementById('bondKind').textContent = bond.label || _tvmbT('js.duyenno.moi-duyen', 'Mối duyên');
-  document.getElementById('tuaDe').textContent = data.tuaDe || bond.label || '';
-  document.getElementById('bondGist').textContent = bond.gist || '';
+  document.getElementById('bondKind').textContent = _bondLabel(bond) || _tvmbT('js.duyenno.moi-duyen', 'Mối duyên');
+  document.getElementById('tuaDe').textContent = data.tuaDe || _bondLabel(bond) || '';
+  document.getElementById('bondGist').textContent = _bondGist(bond);
 
   var e = data.era || {};
   var el = document.getElementById('eraLine');
@@ -894,10 +921,10 @@ function renderStory(data) {
       return '<div class="dn-cap' + (c.truc ? ' truc' : '') + '">' +
         '<div class="dn-cap-top">' +
           '<span class="dn-cap-who">' + esc(na) + ' — ' + esc(nb) + '</span>' +
-          '<span class="dn-cap-kind">' + esc(c.label || '') + '</span>' +
+          '<span class="dn-cap-kind">' + esc(_bondLabel(c)) + '</span>' +
           (c.truc ? ('<span class="dn-cap-truc">' + _tvmbT('js.duyenno.truc-cua-cau-chuyen', 'trục của câu chuyện') + '</span>') : '') +
         '</div>' +
-        '<div class="dn-cap-gist">' + esc(c.gist || '') + '</div></div>';
+        '<div class="dn-cap-gist">' + esc(_bondGist(c)) + '</div></div>';
     }).join('');
     cg.style.display = 'flex';
   } else { cg.style.display = 'none'; }
@@ -912,7 +939,7 @@ function renderStory(data) {
   var sig = bond.signals || [];
   if (sig.length) {
     document.getElementById('basisList').innerHTML = sig.map(function (s) {
-      return '<li><b>' + esc(s.label) + ':</b> ' + esc(s.detail) + '</li>';
+      return '<li><b>' + esc(_sigLabel(s)) + ':</b> ' + esc(_sigDetail(s)) + '</li>';
     }).join('');
     document.getElementById('basisBlock').style.display = 'block';
   }
@@ -962,7 +989,7 @@ function publishShareable(imageUrl) {
   blocks.push({
     header: _tvmbT('js.duyenno.duyen-no-tien-kiep', 'Duyên Nợ Tiền Kiếp'),
     image: imageUrl || undefined,
-    text: [bond.label, d.tuaDe].filter(Boolean).join(' — ') + '\n' +
+    text: [_bondLabel(bond), d.tuaDe].filter(Boolean).join(' — ') + '\n' +
       tenAll.join('  ·  ') + '\n\n' + (d.moTaMoiDuyen || ''),
   });
   // Nhóm ≥3: lưới cặp vào bản chia sẻ luôn — truyện chỉ kể quanh cặp trục, nếu
@@ -973,7 +1000,7 @@ function publishShareable(imageUrl) {
       header: _tvmbT('js.duyenno.cac-moi-duyen-trong-nhom', 'Các Mối Duyên Trong Nhóm'),
       text: caps.map(function (c) {
         return ((nvs[c.a] || {}).ten || '') + ' — ' + ((nvs[c.b] || {}).ten || '') +
-          ': ' + (c.label || '') + (c.truc ? _tvmbT('js.duyenno.truc-cua-cau-chuyen-j6j5', ' (trục của câu chuyện)') : '') + '\n' + (c.gist || '');
+          ': ' + _bondLabel(c) + (c.truc ? _tvmbT('js.duyenno.truc-cua-cau-chuyen-j6j5', ' (trục của câu chuyện)') : '') + '\n' + _bondGist(c);
       }).join('\n\n'),
     });
   }
@@ -1000,7 +1027,7 @@ function publishShareable(imageUrl) {
     // server từ chối và người dùng nhận "Không tạo được link chia sẻ".
     // Đường lùi này KHÔNG có khối "Lá số dùng để luận" đứng trên (khối đó chỉ
     // dựng khi có blocks) — nên phần mapping phải nằm ngay trong chữ.
-    text: [bond.label, d.tuaDe].filter(Boolean).join(' — ') + '\n' +
+    text: [_bondLabel(bond), d.tuaDe].filter(Boolean).join(' — ') + '\n' +
       nvs.map(pairLine).filter(Boolean).join('\n') +
       (d.moTaMoiDuyen ? '\n\n' + d.moTaMoiDuyen : ''),
     blocks: blocks,
@@ -1047,7 +1074,7 @@ function _posterOpts() {
     // người (xem drawContain trong poster.js).
     imageFit: 'contain',
     title: tenAll.join(' & ') || _tvmbT('js.duyenno.duyen-no-tien-kiep-r7a2', 'Duyên nợ tiền kiếp'),
-    subtitle: [bond.label, (d.era || {}).label].filter(Boolean).join(' · '),
+    subtitle: [_bondLabel(bond), (d.era || {}).label].filter(Boolean).join(' · '),
     quote: Poster.pickQuote([d.ketLuan, d.moTaMoiDuyen, ((d.acts || []).map(function (a) { return a.text || ''; }).join(' '))]),
     qrUrl: Poster.qrLink('duyen-no-tien-kiep', '/app/duyen-no-tien-kiep'),
     qrCaption: _tvmbT('js.duyenno.quet-ma-xem-duyen-no-cua', 'Quét mã — xem duyên nợ của bạn'),
