@@ -361,6 +361,7 @@ window.SHELL_CHAT_INTAKE=true;
 window.SHELL_INTRO={key:'nguoi-khac'};</script>
 <script src="/tools-shared/glossary.js?v=5"></script>
 <script src="/tools-shared/star-label.js?v=1"></script>
+<script src="/tools-shared/cach-cuc.js?v=1"></script>
 <script src="/tools-shared/i18n.js?v=7"></script>
 <script src="/laso-chart.js?v=12"></script>
 <script src="/tools-shared/vn-timezone.js?v=1"></script>
@@ -1114,7 +1115,7 @@ function renderMetaBasis(data) {
     rows.push('<li><b>' + esc(_nkMat(m.cung) || m.nhan) + '</b> — ' + _tvmbT('js.nguoikhac.cung-name', 'cung {name}', {name: _tvmbG('cung', m.cung)}) +
       (m.muon ? _tvmbT('js.nguoikhac.muon-xung-chieu', ' (mượn xung chiếu)') : '') + ': ' +
       esc(TuviStarLabel.list(m.sao) || _tvmbT('js.nguoikhac.khong-co-chinh-tinh', 'không có chính tinh')) +
-      ((m.cachCuc || []).length ? ' · ' + esc(m.cachCuc.join('; ')) : '') + '</li>');
+      ((m.cachCuc || []).length ? ' · ' + esc(TuviCachCuc.list(m.cachCuc, '; ')) : '') + '</li>');
   });
   if (data.than && data.than.cung) rows.push(_tvmbT('js.nguoikhac.cung-an-than', '<li><b>Cung an Thân</b> — ') + esc(_tvmbG('cung', data.than.cung)) + '</li>');
   if (data.daiVan) {

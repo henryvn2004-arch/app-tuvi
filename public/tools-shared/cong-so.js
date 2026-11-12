@@ -590,7 +590,7 @@
         row(_tvmbT('js.cs.bac-chuc-phan', 'Bậc chức phận'), PL(ho.nganh.ma && ho.nganh.ma.tier, ho.nganh.bac) + _tvmbT('js.cs.diem', ' · điểm ') + ho.nganh.bacDiem + (ho.nganh.bacChiTiet.length ? ' (' + bdList(ho.nganh).join(', ') + ')' : '')) +
         row(_tvmbT('js.cs.chuc-phan-theo-loi-co', 'Chức phận theo lối cổ'), PL(ho.nganh.ma && ho.nganh.ma.desc, ho.nganh.chucPhanCo)) +
         row(_tvmbT('js.cs.trich-dan-co-thu', 'Trích dẫn cổ thư'), PL(ho.nganh.ma && ho.nganh.ma.src, ho.nganh.nguon)) +
-        (ho.quanLoc.cachCuc.length ? row(_tvmbT('js.cs.cach-cuc-tai-cung-quan-loc', 'Cách cục tại cung Quan Lộc'), ho.quanLoc.cachCuc.join(' · ')) : '') +
+        (ho.quanLoc.cachCuc.length ? row(_tvmbT('js.cs.cach-cuc-tai-cung-quan-loc', 'Cách cục tại cung Quan Lộc'), (window.TuviCachCuc ? window.TuviCachCuc.list(ho.quanLoc.cachCuc, ' · ') : ho.quanLoc.cachCuc.join(' · '))) : '') +
         (ho.vanNam
           ? row(
               _tvmbT('js.cs.van-nam', 'Vận năm ') + ho.vanNam.nam,
