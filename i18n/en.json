@@ -6807,6 +6807,66 @@
   "t": "Major Cycles & Life Cycles",
   "h": "8dfa0970"
  },
+ "js.thay.greet-bac-minh": {
+  "t": "Bac Minh here. Send a photo, or describe your face and the way you walk — I'll read your features.",
+  "h": "c8d61d46"
+ },
+ "js.thay.greet-co-nguyet": {
+  "t": "I am Co Nguyet. Give me your date and hour of birth; I'll draw up your chart and we'll look closely at the roots together.",
+  "h": "0167331e"
+ },
+ "js.thay.greet-dau-nam": {
+  "t": "Dau Nam here. Don't hold back about matters of the heart — I speak plainly, but always for your sake.",
+  "h": "ecce6c42"
+ },
+ "js.thay.greet-dieu-khong": {
+  "t": "Dieu Khong here. Money and work — let's be direct and quick; I don't beat around the bush.",
+  "h": "8d902959"
+ },
+ "js.thay.greet-huyen-khong": {
+  "t": "Huyen Khong here. The space you live in — let me see whether it suits you.",
+  "h": "95554030"
+ },
+ "js.thay.greet-linh-co": {
+  "t": "Linh Co here. If something is weighing on you, cast a hexagram — I'll read it for you.",
+  "h": "7b0cb4da"
+ },
+ "js.thay.greet-linh-son": {
+  "t": "Linh Son here. Your circle of people — let me see who is worth keeping and who to let go.",
+  "h": "da3eb08e"
+ },
+ "js.thay.greet-ngoc-tinh": {
+  "t": "Ngoc Tinh here. The bond between two people — let me tell it to you as a completely different story.",
+  "h": "63614772"
+ },
+ "js.thay.greet-nhat-nguyen": {
+  "t": "Nhat Nguyen here. If it's urgent, ask right away — I'll work out the timing for you before you forget.",
+  "h": "c7694458"
+ },
+ "js.thay.greet-tam-kinh": {
+  "t": "Tam Kinh here. Give me your hour of birth; I'll look through both BaZi and Qi Men and tell you what they point to together.",
+  "h": "b8879f89"
+ },
+ "js.thay.greet-thai-hu": {
+  "t": "Thai Hu here. Before I answer, let me ask you one thing back — are you sure you're asking what you really need?",
+  "h": "85a85832"
+ },
+ "js.thay.greet-thanh-hu": {
+  "t": "Thanh Hu here! Draw a card or ask for your lucky number — let's take a look together.",
+  "h": "61e37793"
+ },
+ "js.thay.greet-thien-an": {
+  "t": "Thien An here. Children, names — ask away, and I'll answer unhurriedly.",
+  "h": "80ff291c"
+ },
+ "js.thay.greet-tinh-quang": {
+  "t": "Tinh Quang here. I read the chart the way Western astronomy does — where would you like to start?",
+  "h": "50328bf9"
+ },
+ "js.thay.greet-tu-nguyen": {
+  "t": "Tu Nguyen here. When it comes to major cycles, no going in circles — show me the chart and I'll settle it in one sentence.",
+  "h": "5910c96c"
+ },
  "js.thay.tag-bac-minh": {
   "t": "A face hides nothing from someone who knows how to look.",
   "h": "dedb2c1b"
@@ -6866,6 +6926,26 @@
  "js.thay.tag-tu-nguyen": {
   "t": "One sentence, settled — no further explanation.",
   "h": "cfa2af4b"
+ },
+ "js.thaycct.chua-dung-ten-cong-cu": {
+  "t": "Master {ten} doesn't head any tool yet — you can still ask directly through Ask the Master.",
+  "h": "fda6df93"
+ },
+ "js.thaycct.cong-cu-thay-dung-ten": {
+  "t": "Tools headed by Master {ten}",
+  "h": "657398c9"
+ },
+ "js.thaycct.hoi-thay-ten": {
+  "t": "Ask Master {ten}",
+  "h": "e23cca0d"
+ },
+ "js.thaycct.khong-tim-thay-thay-nay": {
+  "t": "This master could not be found.",
+  "h": "d044e6e1"
+ },
+ "js.thaycct.tieu-de-duoi": {
+  "t": " — Minh Bao Zi Wei Dou Shu",
+  "h": "ef7f10f4"
  },
  "js.topup.aria-label-thanh-toan": {
   "t": " aria-label=\"Pay ",
@@ -8642,6 +8722,18 @@
  "thay.tim-thay-theo-ten-hoac-chuyen": {
   "t": "Search masters by name or specialty…",
   "h": "cb98738e"
+ },
+ "thaycct.cac-thay": {
+  "t": "← The Masters",
+  "h": "4e97c621"
+ },
+ "thaycct.thay-chuyen-mon-cong-cu-va": {
+  "t": "<b id=\"tmTitle\">Master</b><span>Specialty, tools and how to start a conversation</span>",
+  "h": "817a3aa5"
+ },
+ "thaycct.thay-tu-vi-minh-bao": {
+  "t": "Master — Minh Bao Zi Wei Dou Shu",
+  "h": "9f2d3044"
  },
  "topup.ban-dang-mo-khoa": {
   "t": "You're unlocking…",

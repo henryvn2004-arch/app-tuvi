@@ -157,6 +157,18 @@
    "shell"
   ]
  },
+ "/app-thay-chi-tiet.html": {
+  "file": "app-thay-chi-tiet.html",
+  "keys": [
+   "thaycct.cac-thay",
+   "thaycct.thay-chuyen-mon-cong-cu-va",
+   "thaycct.thay-tu-vi-minh-bao",
+   "topup.dang-tai"
+  ],
+  "js": [
+   "shell"
+  ]
+ },
  "/app/bat-tu": {
   "file": "app-bat-tu.html",
   "keys": [

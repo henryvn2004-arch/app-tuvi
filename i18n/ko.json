@@ -6807,6 +6807,66 @@
   "t": "대운과 인생 사이클",
   "h": "8dfa0970"
  },
+ "js.thay.greet-bac-minh": {
+  "t": "북명이다. 사진을 보내거나 얼굴 생김새, 걸음걸이를 말로 들려 다오 — 관상을 봐 주마.",
+  "h": "c8d61d46"
+ },
+ "js.thay.greet-co-nguyet": {
+  "t": "나는 고월이다. 태어난 날과 시를 알려 다오. 명반을 세우고 너와 함께 뿌리부터 꼼꼼히 살펴보마.",
+  "h": "0167331e"
+ },
+ "js.thay.greet-dau-nam": {
+  "t": "두남이다. 연애 이야기라면 망설이지 말고 솔직히 털어놓아라 — 직설적으로 말하겠지만, 언제나 너를 위해서다.",
+  "h": "ecce6c42"
+ },
+ "js.thay.greet-dieu-khong": {
+  "t": "묘공이다. 돈과 일 이야기라면 돌려 말하지 않고 빠르게 핵심만 말하마.",
+  "h": "8d902959"
+ },
+ "js.thay.greet-huyen-khong": {
+  "t": "현공이다. 네가 지금 사는 공간이 너와 맞는지 한번 보자.",
+  "h": "95554030"
+ },
+ "js.thay.greet-linh-co": {
+  "t": "영기다. 망설여지는 일이 있다면 괘를 하나 뽑아라 — 내가 괘를 읽어 주마.",
+  "h": "7b0cb4da"
+ },
+ "js.thay.greet-linh-son": {
+  "t": "영산이다. 너의 인간관계를 보고, 누구를 곁에 두고 누구를 놓아야 할지 살펴보마.",
+  "h": "da3eb08e"
+ },
+ "js.thay.greet-ngoc-tinh": {
+  "t": "옥성이다. 두 사람의 인연을 전혀 다른 이야기 하나로 들려주마.",
+  "h": "63614772"
+ },
+ "js.thay.greet-nhat-nguyen": {
+  "t": "일원이다. 급한 일이면 바로 물어라 — 잊어버리기 전에 시기를 짚어 주마.",
+  "h": "c7694458"
+ },
+ "js.thay.greet-tam-kinh": {
+  "t": "심경이다. 태어난 시를 알려 다오. 사주와 기문둔갑 둘 다로 보고, 둘이 함께 가리키는 것을 말해 주마.",
+  "h": "b8879f89"
+ },
+ "js.thay.greet-thai-hu": {
+  "t": "태허다. 답하기 전에 하나 되묻겠다 — 정말 네게 필요한 것을 묻고 있다고 확신하느냐?",
+  "h": "85a85832"
+ },
+ "js.thay.greet-thanh-hu": {
+  "t": "청허야! 카드를 한 장 뽑든지 행운의 숫자를 묻든지, 같이 보자.",
+  "h": "61e37793"
+ },
+ "js.thay.greet-thien-an": {
+  "t": "천은이다. 자녀 일이든 이름 일이든 — 편히 물어라, 차근차근 답해 주마.",
+  "h": "80ff291c"
+ },
+ "js.thay.greet-tinh-quang": {
+  "t": "성광이다. 서양 천문의 방식으로 명반을 본다 — 어디서부터 시작하고 싶으냐?",
+  "h": "50328bf9"
+ },
+ "js.thay.greet-tu-nguyen": {
+  "t": "자원이다. 대운 이야기라면 돌려 말하지 마라 — 명반을 내놓아라, 한마디로 정해 주마.",
+  "h": "5910c96c"
+ },
  "js.thay.tag-bac-minh": {
   "t": "볼 줄 아는 이에게 얼굴은 아무것도 숨기지 못한다.",
   "h": "dedb2c1b"
@@ -6866,6 +6926,26 @@
  "js.thay.tag-tu-nguyen": {
   "t": "한마디로 끝낸다 — 덧붙이는 설명은 없다.",
   "h": "cfa2af4b"
+ },
+ "js.thaycct.chua-dung-ten-cong-cu": {
+  "t": "{ten} 선생님이 맡은 도구는 아직 없습니다 — '선생님께 묻기'로 바로 질문할 수 있습니다.",
+  "h": "fda6df93"
+ },
+ "js.thaycct.cong-cu-thay-dung-ten": {
+  "t": "{ten} 선생님이 맡은 도구",
+  "h": "657398c9"
+ },
+ "js.thaycct.hoi-thay-ten": {
+  "t": "{ten} 선생님께 묻기",
+  "h": "e23cca0d"
+ },
+ "js.thaycct.khong-tim-thay-thay-nay": {
+  "t": "이 선생님을 찾을 수 없습니다.",
+  "h": "d044e6e1"
+ },
+ "js.thaycct.tieu-de-duoi": {
+  "t": " — 명보 자미두수",
+  "h": "ef7f10f4"
  },
  "js.topup.aria-label-thanh-toan": {
   "t": " aria-label=\"결제 ",
@@ -8642,6 +8722,18 @@
  "thay.tim-thay-theo-ten-hoac-chuyen": {
   "t": "이름이나 전문 분야로 선생님 찾기…",
   "h": "cb98738e"
+ },
+ "thaycct.cac-thay": {
+  "t": "← 선생님들",
+  "h": "4e97c621"
+ },
+ "thaycct.thay-chuyen-mon-cong-cu-va": {
+  "t": "<b id=\"tmTitle\">선생님</b><span>전문 분야, 도구, 대화 시작하기</span>",
+  "h": "817a3aa5"
+ },
+ "thaycct.thay-tu-vi-minh-bao": {
+  "t": "선생님 — 명보 자미두수",
+  "h": "9f2d3044"
  },
  "topup.ban-dang-mo-khoa": {
   "t": "잠금 해제 중…",

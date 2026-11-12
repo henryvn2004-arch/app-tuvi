@@ -6807,6 +6807,66 @@
   "t": "大运与人生周期",
   "h": "8dfa0970"
  },
+ "js.thay.greet-bac-minh": {
+  "t": "我是北冥。传张照片，或描述你的面容、走路的样子给我听——我替你看相。",
+  "h": "c8d61d46"
+ },
+ "js.thay.greet-co-nguyet": {
+  "t": "我是古月。把出生年月日时给我，我替你排命盘，再一起把根本看仔细。",
+  "h": "0167331e"
+ },
+ "js.thay.greet-dau-nam": {
+  "t": "我是斗南。感情的事别怕说实话——我说话直，但总是为了你好。",
+  "h": "ecce6c42"
+ },
+ "js.thay.greet-dieu-khong": {
+  "t": "我是妙空。钱财、工作的事——直说就好，我不绕弯子。",
+  "h": "8d902959"
+ },
+ "js.thay.greet-huyen-khong": {
+  "t": "我是玄空。你现在住的空间，让我看看合不合你。",
+  "h": "95554030"
+ },
+ "js.thay.greet-linh-co": {
+  "t": "我是灵机。心里有犹豫就起一卦——我替你解卦。",
+  "h": "7b0cb4da"
+ },
+ "js.thay.greet-linh-son": {
+  "t": "我是灵山。你身边的人际圈，让我看看谁值得留、谁该放手。",
+  "h": "da3eb08e"
+ },
+ "js.thay.greet-ngoc-tinh": {
+  "t": "我是玉星。两人之间的缘分，让我用一个截然不同的故事讲给你听。",
+  "h": "63614772"
+ },
+ "js.thay.greet-nhat-nguyen": {
+  "t": "我是日元。急事就马上问——趁你还没忘，我先替你算出时间点。",
+  "h": "c7694458"
+ },
+ "js.thay.greet-tam-kinh": {
+  "t": "我是心镜。告诉我出生时辰，我用八字和奇门一起看，再告诉你两者共同指向什么。",
+  "h": "b8879f89"
+ },
+ "js.thay.greet-thai-hu": {
+  "t": "我是太虚。回答之前，我先反问你一句——你确定问的是自己真正需要的事吗？",
+  "h": "85a85832"
+ },
+ "js.thay.greet-thanh-hu": {
+  "t": "我是清虚！抽一张牌，或问问你的幸运数字，我们一起来看吧。",
+  "h": "61e37793"
+ },
+ "js.thay.greet-thien-an": {
+  "t": "我是天隐。孩子的事、名字的事——尽管问，我慢慢回答你。",
+  "h": "80ff291c"
+ },
+ "js.thay.greet-tinh-quang": {
+  "t": "我是星光。我用西方天文的方式看命盘——你想从哪里开始？",
+  "h": "50328bf9"
+ },
+ "js.thay.greet-tu-nguyen": {
+  "t": "我是紫元。谈大运就别拐弯抹角——拿出命盘，我一句话说定。",
+  "h": "5910c96c"
+ },
  "js.thay.tag-bac-minh": {
   "t": "在懂得看的人面前，脸藏不住任何事。",
   "h": "dedb2c1b"
@@ -6866,6 +6926,26 @@
  "js.thay.tag-tu-nguyen": {
   "t": "一句话说定——不多解释。",
   "h": "cfa2af4b"
+ },
+ "js.thaycct.chua-dung-ten-cong-cu": {
+  "t": "{ten}老师目前还没有负责的工具——仍可透过「问老师」直接提问。",
+  "h": "fda6df93"
+ },
+ "js.thaycct.cong-cu-thay-dung-ten": {
+  "t": "{ten}老师负责的工具",
+  "h": "657398c9"
+ },
+ "js.thaycct.hoi-thay-ten": {
+  "t": "问{ten}老师",
+  "h": "e23cca0d"
+ },
+ "js.thaycct.khong-tim-thay-thay-nay": {
+  "t": "找不到这位老师。",
+  "h": "d044e6e1"
+ },
+ "js.thaycct.tieu-de-duoi": {
+  "t": " — 明宝紫微斗数",
+  "h": "ef7f10f4"
  },
  "js.topup.aria-label-thanh-toan": {
   "t": " aria-label=\"付款 ",
@@ -8642,6 +8722,18 @@
  "thay.tim-thay-theo-ten-hoac-chuyen": {
   "t": "依姓名或专长搜索老师…",
   "h": "cb98738e"
+ },
+ "thaycct.cac-thay": {
+  "t": "← 老师们",
+  "h": "4e97c621"
+ },
+ "thaycct.thay-chuyen-mon-cong-cu-va": {
+  "t": "<b id=\"tmTitle\">老师</b><span>专长、工具与如何开始对话</span>",
+  "h": "817a3aa5"
+ },
+ "thaycct.thay-tu-vi-minh-bao": {
+  "t": "老师 — 明宝紫微斗数",
+  "h": "9f2d3044"
  },
  "topup.ban-dang-mo-khoa": {
   "t": "您正在解锁…",
