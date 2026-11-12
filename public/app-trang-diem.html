@@ -3,8 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Trang Điểm — Tử Vi Minh Bảo</title>
-<meta name="description" content="Phân tích tướng mặt theo cổ pháp — gợi ý phong cách makeup châu Á phù hợp với mệnh và tướng số của bạn.">
+<title data-i18n="trdi.trang-diem-tu-vi-minh-bao">Trang Điểm — Tử Vi Minh Bảo</title>
+<meta data-i18n-attr="content:trdi.phan-tich-tuong-mat-theo-co" name="description" content="Phân tích tướng mặt theo cổ pháp — gợi ý phong cách makeup châu Á phù hợp với mệnh và tướng số của bạn.">
 <link rel="icon" type="image/webp" href="/seal.webp">
 <link rel="preload" href="/fonts/noto-serif-latin-400.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="/fonts/noto-serif-vietnamese-400.woff2" as="font" type="font/woff2" crossorigin>
@@ -86,9 +86,9 @@
   <main class="ws" id="ws">
     <div class="ws-top">
       <button class="btn mobile-only" onclick="document.getElementById('shell-sidebar').classList.toggle('open');window.shellSyncBackdrop&&shellSyncBackdrop()" aria-label="Menu">☰</button>
-      <div class="ws-title"><b>Trang Điểm</b><span>Phân tích tướng mặt theo cổ pháp, gợi ý phong cách makeup + thử ngay trên ảnh</span></div>
+      <div data-i18n="trdi.trang-diem-phan-tich-tuong-mat" class="ws-title"><b>Trang Điểm</b><span>Phân tích tướng mặt theo cổ pháp, gợi ý phong cách makeup + thử ngay trên ảnh</span></div>
       <div class="ws-actions">
-        <button class="btn mobile-only" onclick="Shell.openRail()">✦ Hỏi</button>
+        <button data-i18n="battu.hoi" class="btn mobile-only" onclick="Shell.openRail()">✦ Hỏi</button>
       </div>
     </div>
     <div class="ws-body">
@@ -102,8 +102,8 @@
         <img class="intro-avatar" src="/tool-avatars/trang-diem-phan-tich.webp" alt="" onerror="this.remove()">
         <div class="intro-body">
           <div class="intro-text">
-            <div class="intro-t">Trang Điểm</div>
-            <div class="intro-d">Nhìn người khác trang điểm mà thấy nổi bật, còn mình makeup mãi vẫn thấy thiếu tự tin mỗi lần ra ngoài. Tải ảnh chân dung, nhận gợi ý phong cách hợp gương mặt và bản ghép thử ngay.</div>
+            <div data-i18n="trdi.trang-diem" class="intro-t">Trang Điểm</div>
+            <div data-i18n="trdi.nhin-nguoi-khac-trang-diem-ma" class="intro-d">Nhìn người khác trang điểm mà thấy nổi bật, còn mình makeup mãi vẫn thấy thiếu tự tin mỗi lần ra ngoài. Tải ảnh chân dung, nhận gợi ý phong cách hợp gương mặt và bản ghép thử ngay.</div>
             <div id="introSrc"></div>
           </div>
         </div>
@@ -114,15 +114,15 @@
            trang điểm), không phải một chuỗi 3-4 bước tuyến tính như pilot —
            gán số bước cứng vào đây sẽ nói sai trạng thái thật. -->
       <div class="td-card">
-        <h2><span class="ic" data-icon="camera"></span> Chụp Hoặc Tải Ảnh Khuôn Mặt</h2>
-        <p class="sub">Tải lên một tấm ảnh chân dung rõ mặt. Hệ thống phân tích khuôn mặt rồi ghép thử trang điểm ngay trên ảnh. Nhận về phong cách makeup phù hợp, bảng màu môi – mắt – má và ảnh đã ghép thử.</p>
+        <h2 data-i18n="trdi.chup-hoac-tai-anh-khuon-mat"><span class="ic" data-icon="camera"></span> Chụp Hoặc Tải Ảnh Khuôn Mặt</h2>
+        <p data-i18n="trdi.tai-len-mot-tam-anh-chan" class="sub">Tải lên một tấm ảnh chân dung rõ mặt. Hệ thống phân tích khuôn mặt rồi ghép thử trang điểm ngay trên ảnh. Nhận về phong cách makeup phù hợp, bảng màu môi – mắt – má và ảnh đã ghép thử.</p>
         <p class="price-note" data-tvp-price-label="trang-diem-phan-tich">…</p>
 
         <div class="upload-zone" id="uploadZone">
           <input type="file" accept="image/*" id="fileInput" capture="user">
           <div class="upload-icon ic" data-icon="camera" style="font-size:32px;margin-bottom:10px;display:block"></div>
-          <div class="upload-text">Nhấn để chọn ảnh hoặc kéo thả vào đây</div>
-          <div class="upload-hint">Ảnh rõ mặt, ánh sáng đủ, không đeo kính</div>
+          <div data-i18n="khis.nhan-de-chon-anh-hoac-keo" class="upload-text">Nhấn để chọn ảnh hoặc kéo thả vào đây</div>
+          <div data-i18n="trdi.anh-ro-mat-anh-sang-du" class="upload-hint">Ảnh rõ mặt, ánh sáng đủ, không đeo kính</div>
         </div>
         <div id="previewWrap" style="text-align:center;display:none">
           <div class="preview-wrap">
@@ -133,23 +133,23 @@
 
         <div class="inputs-row">
           <div class="input-group">
-            <label>Năm sinh (tùy chọn)</label>
-            <input type="number" id="namSinh" placeholder="VD: 1990" min="1920" max="2010" oninput="mountHook()">
+            <label data-i18n="trdi.nam-sinh-tuy-chon">Năm sinh (tùy chọn)</label>
+            <input data-i18n-attr="placeholder:phongthuy.vd-1990" type="number" id="namSinh" placeholder="VD: 1990" min="1920" max="2010" oninput="mountHook()">
           </div>
         </div>
 
         <div id="hookHost"></div>
 
-        <button class="btn-analyze" id="btnAnalyze" onclick="analyze()" disabled>
+        <button data-i18n="trdi.phan-tich-phong-cach-luong" class="btn-analyze" id="btnAnalyze" onclick="analyze()" disabled>
           <span class="ic" data-icon="palette"></span> Phân Tích Phong Cách — <span data-tvp-price="trang-diem-phan-tich">…</span> Lượng
         </button>
       </div>
       </div>
       <div class="ws-side-col">
       <div class="ws-promo">
-        <div class="wsp-eyebrow"><span class="wsp-ic" data-icon="book-open"></span><span>Giới thiệu</span></div>
-        <div class="wsp-title">Trang Điểm</div>
-        <p class="wsp-desc">Nhân tướng học phương Đông không chỉ luận vận mệnh mà còn phân loại hình dáng khuôn mặt theo Ngũ Hành (Kim, Mộc, Thủy, Hỏa, Thổ), mỗi hành ứng với một kiểu đường nét đặc trưng. Cách phân loại này được ứng dụng để gợi ý kiểu tóc, trang điểm hài hoà với gương mặt.</p>
+        <div data-i18n="battu.gioi-thieu" class="wsp-eyebrow"><span class="wsp-ic" data-icon="book-open"></span><span>Giới thiệu</span></div>
+        <div data-i18n="trdi.trang-diem" class="wsp-title">Trang Điểm</div>
+        <p data-i18n="kieut.nhan-tuong-hoc-phuong-dong-khong" class="wsp-desc">Nhân tướng học phương Đông không chỉ luận vận mệnh mà còn phân loại hình dáng khuôn mặt theo Ngũ Hành (Kim, Mộc, Thủy, Hỏa, Thổ), mỗi hành ứng với một kiểu đường nét đặc trưng. Cách phân loại này được ứng dụng để gợi ý kiểu tóc, trang điểm hài hoà với gương mặt.</p>
       </div>
       <div id="shellRecent"></div>
       </div>
@@ -164,7 +164,7 @@
         <div class="result-header" id="resultHeader">
           <div class="face-badge">
             <div class="face-emoji ic" id="faceEmoji" data-icon="user"></div>
-            <div class="face-label" id="faceLabel">Tướng mặt</div>
+            <div data-i18n="trdi.tuong-mat" class="face-label" id="faceLabel">Tướng mặt</div>
           </div>
           <div class="result-info">
             <h2 id="faceShapeText">—</h2>
@@ -172,12 +172,12 @@
           </div>
           <div class="menh-tag" id="menhTag" style="display:none">
             <div class="hanh" id="menhHanh">—</div>
-            <div class="hanh-label" id="menhLabel">Nạp Âm</div>
+            <div data-i18n="trdi.nap-am" class="hanh-label" id="menhLabel">Nạp Âm</div>
           </div>
         </div>
 
         <div class="td-card tryon-area" id="tryonArea">
-          <div class="tryon-title"><span class="ic" data-icon="sparkles"></span> Thử trang điểm — <span id="tryonStyleName"></span></div>
+          <div data-i18n="trdi.thu-trang-diem" class="tryon-title"><span class="ic" data-icon="sparkles"></span> Thử trang điểm — <span id="tryonStyleName"></span></div>
           <div class="tryon-style-name" id="tryonStyleSub"></div>
           <div class="tryon-loading" id="tryonLoading" style="display:none">
             <div id="tryonStepsHost"></div>
@@ -185,34 +185,34 @@
           <div class="tryon-result" id="tryonResult" style="display:none">
             <img id="tryonImg" alt="result">
             <div class="tryon-actions">
-              <button class="btn-download" onclick="downloadResult()"><span class="ic" data-icon="chevron-down"></span> Tải ảnh</button>
-              <button class="btn-retry" onclick="retryStyle()">↺ Thử lại</button>
+              <button data-i18n="trdi.tai-anh" class="btn-download" onclick="downloadResult()"><span class="ic" data-icon="chevron-down"></span> Tải ảnh</button>
+              <button data-i18n="trdi.thu-lai" class="btn-retry" onclick="retryStyle()">↺ Thử lại</button>
             </div>
           </div>
         </div>
 
         <div class="td-card">
-          <div class="styles-section-title">✦ Phong cách makeup phù hợp — nhấn "Thử →" để xem kết quả</div>
+          <div data-i18n="trdi.phong-cach-makeup-phu-hop-nhan" class="styles-section-title">✦ Phong cách makeup phù hợp — nhấn "Thử →" để xem kết quả</div>
           <div class="style-cards-list" id="styleCardsList"></div>
         </div>
 
         <div class="td-card" id="paletteCard" style="display:none">
-          <h2><span class="ic" data-icon="palette"></span> Bảng Màu Gợi Ý</h2>
+          <h2 data-i18n="trdi.bang-mau-goi-y"><span class="ic" data-icon="palette"></span> Bảng Màu Gợi Ý</h2>
           <div class="palette-row">
-            <div class="palette-label">Môi</div>
+            <div data-i18n="trdi.moi" class="palette-label">Môi</div>
             <div class="palette-swatches" id="lipSwatches"></div>
           </div>
           <div class="palette-row">
-            <div class="palette-label">Mắt</div>
+            <div data-i18n="trdi.mat" class="palette-label">Mắt</div>
             <div class="palette-swatches" id="eyeSwatches"></div>
           </div>
           <div class="palette-row">
-            <div class="palette-label">Má hồng</div>
+            <div data-i18n="trdi.ma-hong" class="palette-label">Má hồng</div>
             <div class="palette-swatches" id="blushSwatches"></div>
           </div>
         </div>
 
-        <div class="tip-card" id="tipCard" style="display:none">
+        <div data-i18n="trdi.loi-khuyen-co-phap" class="tip-card" id="tipCard" style="display:none">
           <strong>✦ Lời khuyên cổ pháp</strong>
           <span id="tipText">—</span>
         </div>
@@ -246,25 +246,25 @@ window.SHELL_INTRO={key:'trang-diem-phan-tich'};</script>
 var FACE_ICON = { oval:'user', round:'circle-dot', square:'user', heart:'heart', oblong:'user' }; // var: chạy lại được qua soft-nav — xem docs/luat/spa-nav.md
 
 var ANALYSIS_STEPS = [
-  { label: 'Tính nạp âm bản mệnh', ms: 900 },
-  { label: 'Phân tích khuôn mặt & gợi ý phong cách trang điểm', ms: 0 },
+  { label: _tvmbT('js.trdi.step-nap-am','Tính nạp âm bản mệnh'), ms: 900 },
+  { label: _tvmbT('js.trdi.step-phan-tich','Phân tích khuôn mặt & gợi ý phong cách trang điểm'), ms: 0 },
 ];
 var TRYON_STEPS = [
-  { label: 'Chuẩn bị prompt trang điểm', ms: 1200 },
-  { label: 'Đang tạo ảnh trang điểm mới', ms: 0 },
+  { label: _tvmbT('js.trdi.step-chuan-bi','Chuẩn bị prompt trang điểm'), ms: 1200 },
+  { label: _tvmbT('js.trdi.step-tao-anh','Đang tạo ảnh trang điểm mới'), ms: 0 },
 ];
 var _analysisLoadingCtl = null;
 var _tryonLoadingCtl = null;
 
 var STYLE_META = {
-  glass_skin:  { name:'Glass Skin Korea',  sub:'No-makeup makeup, dewy lit-from-within glow', icon:'sparkles', aesthetic:'K-Beauty' },
-  soft_girl:   { name:'Soft Girl Seoul',   sub:'Blush bomb, gradient lip, innocent glow',     icon:'flower', aesthetic:'K-Beauty' },
-  kdrama_glam: { name:'K-Drama Glam',      sub:'Defined liner, bold lip, đỉnh cao sang trọng',icon:'star', aesthetic:'K-Drama'  },
-  j_sheer:     { name:'J-Beauty Sheer',    sub:'Translucent skin, sheer lip, wabi-sabi tối giản', icon:'leaf', aesthetic:'J-Beauty' },
-  j_gyaru:     { name:'Gyaru Bold',        sub:'Circle-lens vibes, dramatic lash, bright liner', icon:'zap', aesthetic:'J-Gyaru' },
-  guochao:     { name:'Guochao Editorial', sub:'Red lips đậm, liner sắc, khí chất cổ đại',    icon:'crown', aesthetic:'C-Beauty' },
-  hoa_dan:     { name:'Hoa Đán Soft',      sub:'Đào hồng, rose blush, nhẹ nhàng duyên dáng',  icon:'flower', aesthetic:'V-Beauty' },
-  dark_muse:   { name:'Dark Muse',         sub:'Muted smoky, cool tones, editorial edge',      icon:'moon', aesthetic:'Editorial'},
+  glass_skin:  { name:'Glass Skin Korea',  sub:_tvmbT('js.trdi.st-glass_skin-sub','No-makeup makeup, dewy lit-from-within glow'), icon:'sparkles', aesthetic:'K-Beauty' },
+  soft_girl:   { name:'Soft Girl Seoul',   sub:_tvmbT('js.trdi.st-soft_girl-sub','Blush bomb, gradient lip, innocent glow'),     icon:'flower', aesthetic:'K-Beauty' },
+  kdrama_glam: { name:'K-Drama Glam',      sub:_tvmbT('js.trdi.st-kdrama_glam-sub','Defined liner, bold lip, đỉnh cao sang trọng'),icon:'star', aesthetic:'K-Drama'  },
+  j_sheer:     { name:'J-Beauty Sheer',    sub:_tvmbT('js.trdi.st-j_sheer-sub','Translucent skin, sheer lip, wabi-sabi tối giản'), icon:'leaf', aesthetic:'J-Beauty' },
+  j_gyaru:     { name:'Gyaru Bold',        sub:_tvmbT('js.trdi.st-j_gyaru-sub','Circle-lens vibes, dramatic lash, bright liner'), icon:'zap', aesthetic:'J-Gyaru' },
+  guochao:     { name:'Guochao Editorial', sub:_tvmbT('js.trdi.st-guochao-sub','Red lips đậm, liner sắc, khí chất cổ đại'),    icon:'crown', aesthetic:'C-Beauty' },
+  hoa_dan:     { name:_tvmbT('js.trdi.st-hoa-dan-name','Hoa Đán Soft'),      sub:_tvmbT('js.trdi.st-hoa_dan-sub','Đào hồng, rose blush, nhẹ nhàng duyên dáng'),  icon:'flower', aesthetic:'V-Beauty' },
+  dark_muse:   { name:'Dark Muse',         sub:_tvmbT('js.trdi.st-dark_muse-sub','Muted smoky, cool tones, editorial edge'),      icon:'moon', aesthetic:'Editorial'},
 };
 var ALL_STYLES = ['glass_skin','soft_girl','kdrama_glam','j_sheer','j_gyaru','guochao','hoa_dan','dark_muse'];
 
@@ -368,11 +368,11 @@ function mountHook() {
   const facts = [];
   if (_faceMeasurements) {
     const r = parseFloat(_faceMeasurements.widthToHeight);
-    const shape = r > 0.85 ? 'tròn/vuông' : r < 0.75 ? 'dài' : 'oval';
+    const shape = r > 0.85 ? _tvmbT('js.trdi.hinh-tron-vuong','tròn/vuông') : r < 0.75 ? _tvmbT('js.trdi.hinh-dai','dài') : _tvmbT('js.trdi.hinh-oval','oval');
     facts.push({
       tone: 'neutral',
-      title: 'Tỷ lệ rộng/cao khuôn mặt: ' + _faceMeasurements.widthToHeight + ' — xu hướng ' + shape,
-      body: 'Đo trực tiếp từ ảnh bằng MediaPipe.',
+      title: _tvmbT('js.trdi.ty-le-rong-cao','Tỷ lệ rộng/cao khuôn mặt: {r} — xu hướng {s}',{ r: _faceMeasurements.widthToHeight, s: shape }),
+      body: _tvmbT('js.trdi.do-truc-tiep','Đo trực tiếp từ ảnh bằng MediaPipe.'),
       source: 'engine · MediaPipe FaceMesh',
     });
   }
@@ -381,13 +381,13 @@ function mountHook() {
     const na = NAP_AM_MAP_TD[y] || null;
     if (na) facts.push({
       tone: 'good',
-      title: 'Mệnh ' + na,
-      body: 'Gợi ý phong cách trang điểm sẽ ưu tiên tông màu hợp mệnh này.',
+      title: _tvmbT('js.trdi.menh-n','Mệnh {h}',{ h: _tvmbG('hanh', na) }),
+      body: _tvmbT('js.trdi.goi-y-menh','Gợi ý phong cách trang điểm sẽ ưu tiên tông màu hợp mệnh này.'),
       source: 'engine · Nạp Âm',
     });
   }
   if (!facts.length) { host.innerHTML = ''; return; }
-  facts[facts.length - 1].body += ' 8 phong cách trang điểm xếp hạng + bảng màu + thử trực tiếp nằm trong bản phân tích chuyên sâu.';
+  facts[facts.length - 1].body += ' ' + _tvmbT('js.trdi.tam-phong-cach','8 phong cách trang điểm xếp hạng + bảng màu + thử trực tiếp nằm trong bản phân tích chuyên sâu.');
   window.HookLayer.mount(host, { tool: 'trang-diem', charts: [], facts });
 }
 
@@ -421,7 +421,7 @@ async function analyze() {
             }),
           });
           const data = await res.json();
-          if (!res.ok || data.error) throw new Error(data.error || 'Lỗi phân tích');
+          if (!res.ok || data.error) throw new Error(data.error || _tvmbT('js.trdi.loi-phan-tich','Lỗi phân tích'));
           _analysisResult = data;
           window.refreshNavCredits?.();
           _analysisLoadingCtl && _analysisLoadingCtl.finish();
@@ -432,7 +432,7 @@ async function analyze() {
     });
   } catch(e) {
     _analysisLoadingCtl && _analysisLoadingCtl.stop();
-    alert('Lỗi: ' + (e.message || 'Vui lòng thử lại.'));
+    alert(_tvmbT('js.trdi.loi-e','Lỗi: {e}',{ e: e.message || _tvmbT('js.trdi.vui-long-thu-lai','Vui lòng thử lại.') }));
   } finally {
     document.getElementById('btnAnalyze').disabled = false;
     document.getElementById('loadingOverlay').classList.remove('show');
@@ -446,12 +446,12 @@ function renderResults(data) {
   const faceShape = data.faceShape || 'oval';
   document.getElementById('faceEmoji').innerHTML = window.iconHtml ? window.iconHtml(FACE_ICON[faceShape] || 'user') : '';
   document.getElementById('faceLabel').textContent = data.faceShapeVN || '';
-  document.getElementById('faceShapeText').textContent = `Mặt ${data.faceShapeVN || ''} · ${data.ageGroup || ''} · Da ${data.skinTone || ''}`;
+  document.getElementById('faceShapeText').textContent = _tvmbT('js.trdi.mat-tuoi-da','Mặt {s} · {a} · Da {d}',{ s: data.faceShapeVN || '', a: data.ageGroup || '', d: data.skinTone || '' });
   document.getElementById('tuongHocText').textContent = data.tuongHocInsight || '';
 
   if (data.napAmHanh) {
-    document.getElementById('menhHanh').textContent = 'Mệnh ' + data.napAmHanh;
-    document.getElementById('menhLabel').textContent = data.napAmFull || data.canChi || '';
+    document.getElementById('menhHanh').textContent = _tvmbT('js.trdi.menh-n','Mệnh {h}',{ h: _tvmbG('hanh', data.napAmHanh) });
+    document.getElementById('menhLabel').textContent = data.napAmFull ? _tvmbG('napam', data.napAmFull) : (data.canChi ? _tvmbG('canchi', data.canChi) : '');
     document.getElementById('menhTag').style.display = 'block';
   } else {
     document.getElementById('menhTag').style.display = 'none';
@@ -479,15 +479,15 @@ function renderResults(data) {
       <div class="style-emoji ic" data-icon="${meta.icon}"></div>
       <div class="style-info">
         <div class="style-name-row">
-          ${rank ? `<span class="style-rank-badge">✦ #${rank} phù hợp</span>` : ''}
-          ${isMenh && rank ? `<span class="style-menh-badge">⟡ Hợp mệnh</span>` : ''}
+          ${rank ? `<span class="style-rank-badge">✦ ${_tvmbT('js.trdi.rank-phu-hop','#{n} phù hợp',{ n: rank })}</span>` : ''}
+          ${isMenh && rank ? `<span class="style-menh-badge">⟡ ${_tvmbT('js.trdi.hop-menh','Hợp mệnh')}</span>` : ''}
           <span class="style-name">${meta.name}</span>
         </div>
         <div class="style-aesthetic">${meta.aesthetic}</div>
         <div class="style-sub">${meta.sub}</div>
         ${reason ? `<div class="style-reason">✦ ${reason}</div>` : ''}
       </div>
-      <button class="try-btn" onclick="selectStyle('${id}')">Thử →</button>
+      <button class="try-btn" onclick="selectStyle('${id}')">${_tvmbT('js.trdi.thu','Thử →')}</button>
     `;
     list.appendChild(card);
   });
@@ -508,13 +508,13 @@ function renderResults(data) {
 
   if (window.SHELL_INTRO) Shell.dismissIntro(window.SHELL_INTRO.key);
   Shell.setContext({
-    label: 'Trang Điểm — ' + (data.faceShapeVN || ''),
-    greeting: 'Khuôn mặt của bạn: **' + (data.faceShapeVN || '') + '**' + (data.napAmHanh ? ', mệnh ' + data.napAmHanh : '') + '. Bạn muốn hỏi thêm về phong cách trang điểm nào?',
-    chips: ['Vì sao phong cách này hợp tôi?', 'Màu son nào hợp tông da tôi?', 'Trang điểm ảnh hưởng vận khí thế nào?']
+    label: _tvmbT('js.trdi.label','Trang Điểm — {s}',{ s: data.faceShapeVN || '' }),
+    greeting: (data.napAmHanh ? _tvmbT('js.trdi.greeting-menh','Khuôn mặt của bạn: **{s}**, mệnh {h}. Bạn muốn hỏi thêm về phong cách trang điểm nào?',{ s: data.faceShapeVN || '', h: _tvmbG('hanh', data.napAmHanh) }) : _tvmbT('js.trdi.greeting','Khuôn mặt của bạn: **{s}**. Bạn muốn hỏi thêm về phong cách trang điểm nào?',{ s: data.faceShapeVN || '' })),
+    chips: [_tvmbT('js.trdi.chip-vi-sao','Vì sao phong cách này hợp tôi?'), _tvmbT('js.trdi.chip-mau-son','Màu son nào hợp tông da tôi?'), _tvmbT('js.trdi.chip-van-khi','Trang điểm ảnh hưởng vận khí thế nào?')]
   });
   Shell.setShareable({
-    kind: 'text', toolId: 'trang-diem-phan-tich', title: 'Gợi ý trang điểm hợp tướng của tôi',
-    text: 'Mặt ' + (data.faceShapeVN || '') + (data.napAmHanh ? ' · Mệnh ' + data.napAmHanh : '') + (data.tip ? '\n\n✦ ' + data.tip : '')
+    kind: 'text', toolId: 'trang-diem-phan-tich', title: _tvmbT('js.trdi.share-title','Gợi ý trang điểm hợp tướng của tôi'),
+    text: _tvmbT('js.trdi.share-mat','Mặt {s}',{ s: data.faceShapeVN || '' }) + (data.napAmHanh ? ' · ' + _tvmbT('js.trdi.menh-n','Mệnh {h}',{ h: _tvmbG('hanh', data.napAmHanh) }) : '') + (data.tip ? '\n\n✦ ' + data.tip : '')
   });
 }
 
@@ -563,14 +563,14 @@ async function doTryon(id) {
             body: JSON.stringify({ action: 'trang-diem-tryon', image: _imageData, mediaType: _mediaType, style_id: id }),
           });
           const data = await res.json();
-          if (!res.ok || !data.imageUrl) throw new Error(data.error || 'Lỗi xử lý ảnh');
+          if (!res.ok || !data.imageUrl) throw new Error(data.error || _tvmbT('js.trdi.loi-xu-ly-anh','Lỗi xử lý ảnh'));
           document.getElementById('tryonImg').src = data.imageUrl;
           _tryonLoadingCtl && _tryonLoadingCtl.finish();
           document.getElementById('tryonResult').style.display = 'block';
           window.refreshNavCredits?.();
           Shell.setShareable({
-            kind: 'image', title: 'Trang điểm thử của tôi (thử ảo)',
-            imageUrl: data.imageUrl, text: 'Thử phong cách: ' + (STYLE_META[id]?.name || id)
+            kind: 'image', title: _tvmbT('js.trdi.share-tryon-title','Trang điểm thử của tôi (thử ảo)'),
+            imageUrl: data.imageUrl, text: _tvmbT('js.trdi.share-tryon-text','Thử phong cách: {n}',{ n: STYLE_META[id]?.name || id })
           });
           resolve();
         } catch(e) { reject(e); }
@@ -578,7 +578,7 @@ async function doTryon(id) {
     });
   } catch(e) {
     _tryonLoadingCtl && _tryonLoadingCtl.stop();
-    alert('Lỗi: ' + (e.message || 'Vui lòng thử lại.'));
+    alert(_tvmbT('js.trdi.loi-e','Lỗi: {e}',{ e: e.message || _tvmbT('js.trdi.vui-long-thu-lai','Vui lòng thử lại.') }));
   } finally {
     document.getElementById('tryonLoading').style.display = 'none';
   }

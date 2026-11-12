@@ -14171,6 +14171,162 @@
   "t": "다시 시도해 주세요.",
   "h": "2f1d18ee"
  },
+ "js.trdi.chip-mau-son": {
+  "t": "내 피부 톤에는 어떤 립 컬러가 어울려요?",
+  "h": "f013cf8c"
+ },
+ "js.trdi.chip-van-khi": {
+  "t": "메이크업은 운기에 어떤 영향을 주나요?",
+  "h": "a175f487"
+ },
+ "js.trdi.chip-vi-sao": {
+  "t": "왜 이 스타일이 나에게 어울려요?",
+  "h": "7ed2d820"
+ },
+ "js.trdi.do-truc-tiep": {
+  "t": "MediaPipe로 이미지에서 직접 측정했어요.",
+  "h": "6bca61a6"
+ },
+ "js.trdi.goi-y-menh": {
+  "t": "메이크업 스타일 추천에서는 이 본명에 맞는 색감을 우선해요.",
+  "h": "30df970d"
+ },
+ "js.trdi.greeting": {
+  "t": "당신의 얼굴형은 **{s}**이에요. 어떤 메이크업 스타일이 더 궁금하세요?",
+  "h": "b80d300f"
+ },
+ "js.trdi.greeting-menh": {
+  "t": "당신의 얼굴형은 **{s}**, 본명은 {h}이에요. 어떤 메이크업 스타일이 더 궁금하세요?",
+  "h": "3a4fb4b5"
+ },
+ "js.trdi.hinh-dai": {
+  "t": "긴 얼굴",
+  "h": "67167578"
+ },
+ "js.trdi.hinh-oval": {
+  "t": "계란형",
+  "h": "181b45bd"
+ },
+ "js.trdi.hinh-tron-vuong": {
+  "t": "둥글거나 각진 얼굴",
+  "h": "a30fca34"
+ },
+ "js.trdi.hop-menh": {
+  "t": "본명에 맞음",
+  "h": "44069c43"
+ },
+ "js.trdi.label": {
+  "t": "메이크업 — {s}",
+  "h": "f0eca080"
+ },
+ "js.trdi.loi-e": {
+  "t": "오류: {e}",
+  "h": "a7267203"
+ },
+ "js.trdi.loi-phan-tich": {
+  "t": "분석 오류",
+  "h": "3e06a99e"
+ },
+ "js.trdi.loi-xu-ly-anh": {
+  "t": "이미지 처리 오류",
+  "h": "52fb0d60"
+ },
+ "js.trdi.mat-tuoi-da": {
+  "t": "{s} · {a} · 피부 {d}",
+  "h": "07bd0f9d"
+ },
+ "js.trdi.menh-n": {
+  "t": "본명 {h}",
+  "h": "e46cbb3b"
+ },
+ "js.trdi.rank-phu-hop": {
+  "t": "추천 #{n}",
+  "h": "20cdc5b5"
+ },
+ "js.trdi.share-mat": {
+  "t": "얼굴형 {s}",
+  "h": "04abbf18"
+ },
+ "js.trdi.share-title": {
+  "t": "관상에 맞는 나의 메이크업 추천",
+  "h": "c6d0e9a5"
+ },
+ "js.trdi.share-tryon-text": {
+  "t": "스타일 체험: {n}",
+  "h": "4641d81c"
+ },
+ "js.trdi.share-tryon-title": {
+  "t": "나의 메이크업 체험(가상)",
+  "h": "a431ac26"
+ },
+ "js.trdi.st-dark_muse-sub": {
+  "t": "톤다운 스모키, 쿨톤, 에디토리얼한 개성",
+  "h": "e51b61c7"
+ },
+ "js.trdi.st-glass_skin-sub": {
+  "t": "노메이크업 메이크업, 속에서 빛나는 물광 피부",
+  "h": "0c6ac518"
+ },
+ "js.trdi.st-guochao-sub": {
+  "t": "진한 레드 립, 날카로운 라이너, 고풍스러운 기품",
+  "h": "2df3d2b1"
+ },
+ "js.trdi.st-hoa-dan-name": {
+  "t": "소프트 화단 스타일",
+  "h": "c859a2ac"
+ },
+ "js.trdi.st-hoa_dan-sub": {
+  "t": "복숭앗빛 핑크, 로즈 블러셔, 부드럽고 우아함",
+  "h": "ee95019a"
+ },
+ "js.trdi.st-j_gyaru-sub": {
+  "t": "서클렌즈 느낌, 드라마틱한 속눈썹, 선명한 라이너",
+  "h": "8342ee69"
+ },
+ "js.trdi.st-j_sheer-sub": {
+  "t": "투명한 피부, 시어한 립, 와비사비식 미니멀",
+  "h": "bef5b3e4"
+ },
+ "js.trdi.st-kdrama_glam-sub": {
+  "t": "또렷한 라이너, 대담한 립, 최고급 기품",
+  "h": "f6378d7f"
+ },
+ "js.trdi.st-soft_girl-sub": {
+  "t": "블러셔 폭탄, 그라데이션 립, 순수한 광채",
+  "h": "68ac4e8f"
+ },
+ "js.trdi.step-chuan-bi": {
+  "t": "메이크업 프롬프트 준비",
+  "h": "f2303939"
+ },
+ "js.trdi.step-nap-am": {
+  "t": "본명의 납음 계산",
+  "h": "94bf98e8"
+ },
+ "js.trdi.step-phan-tich": {
+  "t": "얼굴 분석 및 메이크업 스타일 추천",
+  "h": "17ac9e7f"
+ },
+ "js.trdi.step-tao-anh": {
+  "t": "새 메이크업 이미지 생성 중",
+  "h": "060bcb1f"
+ },
+ "js.trdi.tam-phong-cach": {
+  "t": "순위를 매긴 8가지 메이크업 스타일, 컬러 팔레트, 바로 체험은 심층 분석에 들어 있어요.",
+  "h": "d0bfd7a6"
+ },
+ "js.trdi.thu": {
+  "t": "체험 →",
+  "h": "c1480a0a"
+ },
+ "js.trdi.ty-le-rong-cao": {
+  "t": "얼굴 너비÷높이 비율: {r} — 경향: {s}",
+  "h": "2094599e"
+ },
+ "js.trdi.vui-long-thu-lai": {
+  "t": "다시 시도해 주세요.",
+  "h": "2f1d18ee"
+ },
  "js.tuviform.ca-nhan": {
   "t": "개인 정보",
   "h": "bbe1cce8"
@@ -18218,6 +18374,90 @@
  "tpng.xem-trang-phuc-hop-ngay-luong": {
   "t": "<span class=\"ic\" data-icon=\"shirt\"></span> 그날에 맞는 의상 보기 — <span data-tvp-price=\"trang-phuc-theo-ngay\">…</span> 냥",
   "h": "589f0801"
+ },
+ "trdi.anh-ro-mat-anh-sang-du": {
+  "t": "얼굴이 또렷하고 조명이 충분하며 안경은 쓰지 않은 사진",
+  "h": "68ec19ab"
+ },
+ "trdi.bang-mau-goi-y": {
+  "t": "<span class=\"ic\" data-icon=\"palette\"></span> 추천 컬러 팔레트",
+  "h": "d62e715b"
+ },
+ "trdi.chup-hoac-tai-anh-khuon-mat": {
+  "t": "<span class=\"ic\" data-icon=\"camera\"></span> 얼굴 사진 찍기 또는 올리기",
+  "h": "781a5bfa"
+ },
+ "trdi.loi-khuyen-co-phap": {
+  "t": "<strong>✦ 고법 조언</strong> <span id=\"tipText\">—</span>",
+  "h": "0417547e"
+ },
+ "trdi.ma-hong": {
+  "t": "블러셔",
+  "h": "21b3e53a"
+ },
+ "trdi.mat": {
+  "t": "눈",
+  "h": "5e87cc74"
+ },
+ "trdi.moi": {
+  "t": "입술",
+  "h": "299ea53e"
+ },
+ "trdi.nam-sinh-tuy-chon": {
+  "t": "출생 연도 (선택)",
+  "h": "82f3a240"
+ },
+ "trdi.nap-am": {
+  "t": "납음",
+  "h": "006a48d6"
+ },
+ "trdi.nhin-nguoi-khac-trang-diem-ma": {
+  "t": "다른 사람은 화장하면 돋보이는데, 나는 아무리 메이크업을 해도 외출할 때마다 자신이 없어요. 인물 사진을 올리고 얼굴에 맞는 스타일 추천과 체험 이미지를 바로 받아 보세요.",
+  "h": "27d407e0"
+ },
+ "trdi.phan-tich-phong-cach-luong": {
+  "t": "<span class=\"ic\" data-icon=\"palette\"></span> 스타일 분석 — <span data-tvp-price=\"trang-diem-phan-tich\">…</span> 냥",
+  "h": "5e1ca3e2"
+ },
+ "trdi.phan-tich-tuong-mat-theo-co": {
+  "t": "고법으로 관상을 분석해요 — 본명과 관상에 어울리는 아시아 메이크업 스타일을 추천해요.",
+  "h": "30eda66e"
+ },
+ "trdi.phong-cach-makeup-phu-hop-nhan": {
+  "t": "✦ 어울리는 메이크업 스타일 — \"체험 →\"을 눌러 결과를 확인하세요",
+  "h": "25e2d0d8"
+ },
+ "trdi.tai-anh": {
+  "t": "<span class=\"ic\" data-icon=\"chevron-down\"></span> 이미지 다운로드",
+  "h": "a343e31b"
+ },
+ "trdi.tai-len-mot-tam-anh-chan": {
+  "t": "얼굴이 또렷한 인물 사진을 한 장 올려 주세요. 시스템이 얼굴을 분석한 뒤 사진에 바로 메이크업을 합성해 체험해 볼 수 있어요. 어울리는 메이크업 스타일, 입술·눈·볼 컬러 팔레트, 체험 이미지를 받아 보세요.",
+  "h": "c8c9461c"
+ },
+ "trdi.thu-lai": {
+  "t": "↺ 다시 체험",
+  "h": "a1d342d1"
+ },
+ "trdi.thu-trang-diem": {
+  "t": "<span class=\"ic\" data-icon=\"sparkles\"></span> 메이크업 체험 — <span id=\"tryonStyleName\"></span>",
+  "h": "cd545d92"
+ },
+ "trdi.trang-diem": {
+  "t": "메이크업",
+  "h": "b67e6b3f"
+ },
+ "trdi.trang-diem-phan-tich-tuong-mat": {
+  "t": "<b>메이크업</b><span>고법으로 관상을 분석해 메이크업 스타일을 추천하고 사진에서 바로 체험</span>",
+  "h": "132106df"
+ },
+ "trdi.trang-diem-tu-vi-minh-bao": {
+  "t": "메이크업 — 명보 자미두수",
+  "h": "10926a7a"
+ },
+ "trdi.tuong-mat": {
+  "t": "관상",
+  "h": "424915c5"
  },
  "tuonghop.ban-luan-giai-mau-tai-pdf": {
   "t": "<span class=\"sc-ic\" data-icon=\"file-text\"></span> <span class=\"sc-txt\"><b>풀이 샘플</b><span>샘플 명반의 부부 궁합 전체 PDF를 내려받아 실제 내용을 미리 확인해 보세요.</span></span> <a class=\"sc-btn\" href=\"/tai-mau/mau-xem-tuoi.pdf\" target=\"_blank\" rel=\"noopener\">PDF 받기 →</a>",

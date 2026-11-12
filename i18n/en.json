@@ -14171,6 +14171,162 @@
   "t": "Please try again.",
   "h": "2f1d18ee"
  },
+ "js.trdi.chip-mau-son": {
+  "t": "Which lipstick shade suits my skin tone?",
+  "h": "f013cf8c"
+ },
+ "js.trdi.chip-van-khi": {
+  "t": "How does makeup affect your fortune?",
+  "h": "a175f487"
+ },
+ "js.trdi.chip-vi-sao": {
+  "t": "Why does this style suit me?",
+  "h": "7ed2d820"
+ },
+ "js.trdi.do-truc-tiep": {
+  "t": "Measured directly from the image with MediaPipe.",
+  "h": "6bca61a6"
+ },
+ "js.trdi.goi-y-menh": {
+  "t": "Makeup style suggestions will prioritize tones that suit this birth element.",
+  "h": "30df970d"
+ },
+ "js.trdi.greeting": {
+  "t": "Your face shape is **{s}**. Which makeup style would you like to ask more about?",
+  "h": "b80d300f"
+ },
+ "js.trdi.greeting-menh": {
+  "t": "Your face shape is **{s}**, birth element {h}. Which makeup style would you like to ask more about?",
+  "h": "3a4fb4b5"
+ },
+ "js.trdi.hinh-dai": {
+  "t": "long",
+  "h": "67167578"
+ },
+ "js.trdi.hinh-oval": {
+  "t": "oval",
+  "h": "181b45bd"
+ },
+ "js.trdi.hinh-tron-vuong": {
+  "t": "round/square",
+  "h": "a30fca34"
+ },
+ "js.trdi.hop-menh": {
+  "t": "Fits your element",
+  "h": "44069c43"
+ },
+ "js.trdi.label": {
+  "t": "Makeup — {s}",
+  "h": "f0eca080"
+ },
+ "js.trdi.loi-e": {
+  "t": "Error: {e}",
+  "h": "a7267203"
+ },
+ "js.trdi.loi-phan-tich": {
+  "t": "Analysis error",
+  "h": "3e06a99e"
+ },
+ "js.trdi.loi-xu-ly-anh": {
+  "t": "Image processing error",
+  "h": "52fb0d60"
+ },
+ "js.trdi.mat-tuoi-da": {
+  "t": "{s} · {a} · Skin {d}",
+  "h": "07bd0f9d"
+ },
+ "js.trdi.menh-n": {
+  "t": "Birth element {h}",
+  "h": "e46cbb3b"
+ },
+ "js.trdi.rank-phu-hop": {
+  "t": "#{n} match",
+  "h": "20cdc5b5"
+ },
+ "js.trdi.share-mat": {
+  "t": "Face {s}",
+  "h": "04abbf18"
+ },
+ "js.trdi.share-title": {
+  "t": "The makeup suggestions that suit my face",
+  "h": "c6d0e9a5"
+ },
+ "js.trdi.share-tryon-text": {
+  "t": "Trying a style: {n}",
+  "h": "4641d81c"
+ },
+ "js.trdi.share-tryon-title": {
+  "t": "My makeup try-on (virtual)",
+  "h": "a431ac26"
+ },
+ "js.trdi.st-dark_muse-sub": {
+  "t": "Muted smoky, cool tones, editorial edge",
+  "h": "e51b61c7"
+ },
+ "js.trdi.st-glass_skin-sub": {
+  "t": "No-makeup makeup, dewy lit-from-within glow",
+  "h": "0c6ac518"
+ },
+ "js.trdi.st-guochao-sub": {
+  "t": "Deep red lips, sharp liner, an air of ancient elegance",
+  "h": "2df3d2b1"
+ },
+ "js.trdi.st-hoa-dan-name": {
+  "t": "Hua Dan Soft",
+  "h": "c859a2ac"
+ },
+ "js.trdi.st-hoa_dan-sub": {
+  "t": "Peach pink, rose blush, gentle and graceful",
+  "h": "ee95019a"
+ },
+ "js.trdi.st-j_gyaru-sub": {
+  "t": "Circle-lens vibes, dramatic lash, bright liner",
+  "h": "8342ee69"
+ },
+ "js.trdi.st-j_sheer-sub": {
+  "t": "Translucent skin, sheer lip, minimalist wabi-sabi",
+  "h": "bef5b3e4"
+ },
+ "js.trdi.st-kdrama_glam-sub": {
+  "t": "Defined liner, bold lip, top-tier elegance",
+  "h": "f6378d7f"
+ },
+ "js.trdi.st-soft_girl-sub": {
+  "t": "Blush bomb, gradient lip, innocent glow",
+  "h": "68ac4e8f"
+ },
+ "js.trdi.step-chuan-bi": {
+  "t": "Preparing the makeup prompt",
+  "h": "f2303939"
+ },
+ "js.trdi.step-nap-am": {
+  "t": "Working out your birth element’s Na Yin",
+  "h": "94bf98e8"
+ },
+ "js.trdi.step-phan-tich": {
+  "t": "Analyzing the face & suggesting makeup styles",
+  "h": "17ac9e7f"
+ },
+ "js.trdi.step-tao-anh": {
+  "t": "Generating the new makeup image",
+  "h": "060bcb1f"
+ },
+ "js.trdi.tam-phong-cach": {
+  "t": "The 8 ranked makeup styles, the color palette and the live try-on are in the in-depth analysis.",
+  "h": "d0bfd7a6"
+ },
+ "js.trdi.thu": {
+  "t": "Try →",
+  "h": "c1480a0a"
+ },
+ "js.trdi.ty-le-rong-cao": {
+  "t": "Face width/height ratio: {r} — tends toward {s}",
+  "h": "2094599e"
+ },
+ "js.trdi.vui-long-thu-lai": {
+  "t": "Please try again.",
+  "h": "2f1d18ee"
+ },
  "js.tuviform.ca-nhan": {
   "t": "Personal details",
   "h": "bbe1cce8"
@@ -18218,6 +18374,90 @@
  "tpng.xem-trang-phuc-hop-ngay-luong": {
   "t": "<span class=\"ic\" data-icon=\"shirt\"></span> See the Outfit for the Day — <span data-tvp-price=\"trang-phuc-theo-ngay\">…</span> credits",
   "h": "589f0801"
+ },
+ "trdi.anh-ro-mat-anh-sang-du": {
+  "t": "A clear face, good light, no glasses",
+  "h": "68ec19ab"
+ },
+ "trdi.bang-mau-goi-y": {
+  "t": "<span class=\"ic\" data-icon=\"palette\"></span> Suggested Color Palette",
+  "h": "d62e715b"
+ },
+ "trdi.chup-hoac-tai-anh-khuon-mat": {
+  "t": "<span class=\"ic\" data-icon=\"camera\"></span> Take or Upload a Face Photo",
+  "h": "781a5bfa"
+ },
+ "trdi.loi-khuyen-co-phap": {
+  "t": "<strong>✦ Classical advice</strong> <span id=\"tipText\">—</span>",
+  "h": "0417547e"
+ },
+ "trdi.ma-hong": {
+  "t": "Blush",
+  "h": "21b3e53a"
+ },
+ "trdi.mat": {
+  "t": "Eyes",
+  "h": "5e87cc74"
+ },
+ "trdi.moi": {
+  "t": "Lips",
+  "h": "299ea53e"
+ },
+ "trdi.nam-sinh-tuy-chon": {
+  "t": "Birth year (optional)",
+  "h": "82f3a240"
+ },
+ "trdi.nap-am": {
+  "t": "Na Yin",
+  "h": "006a48d6"
+ },
+ "trdi.nhin-nguoi-khac-trang-diem-ma": {
+  "t": "Other people stand out with their makeup, while you still don’t feel confident every time you go out, however much you do. Upload a portrait and get style suggestions for your face and a try-on image right away.",
+  "h": "27d407e0"
+ },
+ "trdi.phan-tich-phong-cach-luong": {
+  "t": "<span class=\"ic\" data-icon=\"palette\"></span> Analyze My Style — <span data-tvp-price=\"trang-diem-phan-tich\">…</span> credits",
+  "h": "5e1ca3e2"
+ },
+ "trdi.phan-tich-tuong-mat-theo-co": {
+  "t": "A classical face-reading analysis — suggests Asian makeup styles that suit your birth element and features.",
+  "h": "30eda66e"
+ },
+ "trdi.phong-cach-makeup-phu-hop-nhan": {
+  "t": "✦ Makeup styles that suit you — press “Try →” to see the result",
+  "h": "25e2d0d8"
+ },
+ "trdi.tai-anh": {
+  "t": "<span class=\"ic\" data-icon=\"chevron-down\"></span> Download image",
+  "h": "a343e31b"
+ },
+ "trdi.tai-len-mot-tam-anh-chan": {
+  "t": "Upload one portrait with a clear face. The system analyzes your face and then tries makeup on directly in the photo. You get makeup styles that suit you, a lip–eye–cheek color palette and the try-on image.",
+  "h": "c8c9461c"
+ },
+ "trdi.thu-lai": {
+  "t": "↺ Try Again",
+  "h": "a1d342d1"
+ },
+ "trdi.thu-trang-diem": {
+  "t": "<span class=\"ic\" data-icon=\"sparkles\"></span> Try On Makeup — <span id=\"tryonStyleName\"></span>",
+  "h": "cd545d92"
+ },
+ "trdi.trang-diem": {
+  "t": "Makeup",
+  "h": "b67e6b3f"
+ },
+ "trdi.trang-diem-phan-tich-tuong-mat": {
+  "t": "<b>Makeup</b><span>Classical face-reading analysis, makeup style suggestions, and try-on right on the photo</span>",
+  "h": "132106df"
+ },
+ "trdi.trang-diem-tu-vi-minh-bao": {
+  "t": "Makeup — Minh Bao Zi Wei Dou Shu",
+  "h": "10926a7a"
+ },
+ "trdi.tuong-mat": {
+  "t": "Face reading",
+  "h": "424915c5"
  },
  "tuonghop.ban-luan-giai-mau-tai-pdf": {
   "t": "<span class=\"sc-ic\" data-icon=\"file-text\"></span> <span class=\"sc-txt\"><b>Sample reading</b><span>Download the full Marriage Compatibility PDF of a sample chart to preview the real content.</span></span> <a class=\"sc-btn\" href=\"/tai-mau/mau-xem-tuoi.pdf\" target=\"_blank\" rel=\"noopener\">Download PDF →</a>",

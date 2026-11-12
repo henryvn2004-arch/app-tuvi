@@ -802,7 +802,7 @@ Quy tắc:
 - colorPalette: hex codes thực tế phù hợp skinTone
 - Chỉ trả về JSON`;
 
-async function handleTrangDiemPhanTich(body) {
+async function handleTrangDiemPhanTich(body, locale = 'vi') {
   const { image, mediaType = 'image/jpeg', namSinh, faceMeasurements } = body;
   if (!image) return Response.json({ error: 'Thiếu dữ liệu ảnh.' }, { status: 400 });
   if (image.length > 7 * 1024 * 1024) return Response.json({ error: 'Ảnh quá lớn.' }, { status: 400 });
@@ -834,7 +834,8 @@ Theo cổ pháp, người mệnh ${napAmHanh} hợp với phong cách: ${menhMak
     text = await llmText({
       luanGiai: true,
       system: SP_TRANG_DIEM + napAmContext + measurementContext,
-      prompt: 'Phân tích khuôn mặt và trả về JSON phong cách makeup phù hợp.',
+      // Ngôn ngữ ở USER (json:true giữ nguyên khoá/enum: faceShape, makeupRanked id…); vi → chuỗi cũ.
+      prompt: withLang('Phân tích khuôn mặt và trả về JSON phong cách makeup phù hợp.', locale, [], { json: true }),
       images: [{ data: image, mediaType }],
       maxTokens: 1200,
     });
@@ -1495,7 +1496,7 @@ async function runPost(request) {
     if (action === 'personal-color') return await handlePersonalColor(body, requestLocale(request));
     if (action === 'personal-color-tryon') return await handlePersonalColorTryon(body);
     if (action === 'da-lieu-ai') return await handleDaLieuAI(body);
-    if (action === 'trang-diem-phan-tich') return await handleTrangDiemPhanTich(body);
+    if (action === 'trang-diem-phan-tich') return await handleTrangDiemPhanTich(body, requestLocale(request));
     if (action === 'trang-diem-tryon') return await handleTrangDiemTryon(body);
 
     // Validation: thanh-tuong & thanh-tuong-pro cần geoNote (text), còn lại cần image

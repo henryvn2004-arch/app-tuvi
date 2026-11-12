@@ -14171,6 +14171,162 @@
   "t": "もう一度お試しください。",
   "h": "2f1d18ee"
  },
+ "js.trdi.chip-mau-son": {
+  "t": "私の肌のトーンに合う口紅の色は？",
+  "h": "f013cf8c"
+ },
+ "js.trdi.chip-van-khi": {
+  "t": "メイクは運気にどう影響しますか？",
+  "h": "a175f487"
+ },
+ "js.trdi.chip-vi-sao": {
+  "t": "なぜこのスタイルが私に合うのですか？",
+  "h": "7ed2d820"
+ },
+ "js.trdi.do-truc-tiep": {
+  "t": "MediaPipeで画像から直接測定しました。",
+  "h": "6bca61a6"
+ },
+ "js.trdi.goi-y-menh": {
+  "t": "メイクスタイルの提案では、この本命に合う色味を優先します。",
+  "h": "30df970d"
+ },
+ "js.trdi.greeting": {
+  "t": "あなたの顔型は **{s}** です。どのメイクスタイルについて、さらに知りたいですか？",
+  "h": "b80d300f"
+ },
+ "js.trdi.greeting-menh": {
+  "t": "あなたの顔型は **{s}**、本命は{h}です。どのメイクスタイルについて、さらに知りたいですか？",
+  "h": "3a4fb4b5"
+ },
+ "js.trdi.hinh-dai": {
+  "t": "面長",
+  "h": "67167578"
+ },
+ "js.trdi.hinh-oval": {
+  "t": "卵型",
+  "h": "181b45bd"
+ },
+ "js.trdi.hinh-tron-vuong": {
+  "t": "丸・四角",
+  "h": "a30fca34"
+ },
+ "js.trdi.hop-menh": {
+  "t": "本命に合う",
+  "h": "44069c43"
+ },
+ "js.trdi.label": {
+  "t": "メイク — {s}",
+  "h": "f0eca080"
+ },
+ "js.trdi.loi-e": {
+  "t": "エラー: {e}",
+  "h": "a7267203"
+ },
+ "js.trdi.loi-phan-tich": {
+  "t": "分析エラー",
+  "h": "3e06a99e"
+ },
+ "js.trdi.loi-xu-ly-anh": {
+  "t": "画像の処理エラー",
+  "h": "52fb0d60"
+ },
+ "js.trdi.mat-tuoi-da": {
+  "t": "{s} · {a} · 肌 {d}",
+  "h": "07bd0f9d"
+ },
+ "js.trdi.menh-n": {
+  "t": "本命 {h}",
+  "h": "e46cbb3b"
+ },
+ "js.trdi.rank-phu-hop": {
+  "t": "おすすめ #{n}",
+  "h": "20cdc5b5"
+ },
+ "js.trdi.share-mat": {
+  "t": "顔型 {s}",
+  "h": "04abbf18"
+ },
+ "js.trdi.share-title": {
+  "t": "顔相に合う私のメイク提案",
+  "h": "c6d0e9a5"
+ },
+ "js.trdi.share-tryon-text": {
+  "t": "スタイルを試着: {n}",
+  "h": "4641d81c"
+ },
+ "js.trdi.share-tryon-title": {
+  "t": "私のメイク試着（バーチャル）",
+  "h": "a431ac26"
+ },
+ "js.trdi.st-dark_muse-sub": {
+  "t": "くすんだスモーキー、クールトーン、エディトリアルな個性",
+  "h": "e51b61c7"
+ },
+ "js.trdi.st-glass_skin-sub": {
+  "t": "ノーメイク風メイク、内側から光るようなつや肌",
+  "h": "0c6ac518"
+ },
+ "js.trdi.st-guochao-sub": {
+  "t": "濃い赤リップ、シャープなライナー、古の気品",
+  "h": "2df3d2b1"
+ },
+ "js.trdi.st-hoa-dan-name": {
+  "t": "ソフト花旦スタイル",
+  "h": "c859a2ac"
+ },
+ "js.trdi.st-hoa_dan-sub": {
+  "t": "桃色のピンク、ローズのチーク、やわらかく優雅",
+  "h": "ee95019a"
+ },
+ "js.trdi.st-j_gyaru-sub": {
+  "t": "サークルレンズ風、ドラマチックなまつ毛、鮮やかなライナー",
+  "h": "8342ee69"
+ },
+ "js.trdi.st-j_sheer-sub": {
+  "t": "透明感のある肌、シアーなリップ、侘び寂びのミニマル",
+  "h": "bef5b3e4"
+ },
+ "js.trdi.st-kdrama_glam-sub": {
+  "t": "くっきりライナー、大胆なリップ、最高峰の気品",
+  "h": "f6378d7f"
+ },
+ "js.trdi.st-soft_girl-sub": {
+  "t": "ふんわりチーク、グラデーションリップ、無垢なツヤ",
+  "h": "68ac4e8f"
+ },
+ "js.trdi.step-chuan-bi": {
+  "t": "メイクのプロンプトを準備",
+  "h": "f2303939"
+ },
+ "js.trdi.step-nap-am": {
+  "t": "本命の納音を算出",
+  "h": "94bf98e8"
+ },
+ "js.trdi.step-phan-tich": {
+  "t": "顔を分析してメイクスタイルを提案",
+  "h": "17ac9e7f"
+ },
+ "js.trdi.step-tao-anh": {
+  "t": "新しいメイクの画像を生成中",
+  "h": "060bcb1f"
+ },
+ "js.trdi.tam-phong-cach": {
+  "t": "ランク付けされた8つのメイクスタイル、カラーパレット、そのまま試着は、詳細分析に含まれています。",
+  "h": "d0bfd7a6"
+ },
+ "js.trdi.thu": {
+  "t": "試す →",
+  "h": "c1480a0a"
+ },
+ "js.trdi.ty-le-rong-cao": {
+  "t": "顔の幅÷高さの比: {r} — 傾向: {s}",
+  "h": "2094599e"
+ },
+ "js.trdi.vui-long-thu-lai": {
+  "t": "もう一度お試しください。",
+  "h": "2f1d18ee"
+ },
  "js.tuviform.ca-nhan": {
   "t": "個人情報",
   "h": "bbe1cce8"
@@ -18218,6 +18374,90 @@
  "tpng.xem-trang-phuc-hop-ngay-luong": {
   "t": "<span class=\"ic\" data-icon=\"shirt\"></span> その日に合う服装を見る — <span data-tvp-price=\"trang-phuc-theo-ngay\">…</span> 両",
   "h": "589f0801"
+ },
+ "trdi.anh-ro-mat-anh-sang-du": {
+  "t": "顔がはっきり写り、十分な明るさ、メガネなし",
+  "h": "68ec19ab"
+ },
+ "trdi.bang-mau-goi-y": {
+  "t": "<span class=\"ic\" data-icon=\"palette\"></span> おすすめカラーパレット",
+  "h": "d62e715b"
+ },
+ "trdi.chup-hoac-tai-anh-khuon-mat": {
+  "t": "<span class=\"ic\" data-icon=\"camera\"></span> 顔写真を撮影またはアップロード",
+  "h": "781a5bfa"
+ },
+ "trdi.loi-khuyen-co-phap": {
+  "t": "<strong>✦ 古法のアドバイス</strong> <span id=\"tipText\">—</span>",
+  "h": "0417547e"
+ },
+ "trdi.ma-hong": {
+  "t": "チーク",
+  "h": "21b3e53a"
+ },
+ "trdi.mat": {
+  "t": "目",
+  "h": "5e87cc74"
+ },
+ "trdi.moi": {
+  "t": "リップ",
+  "h": "299ea53e"
+ },
+ "trdi.nam-sinh-tuy-chon": {
+  "t": "生まれ年（任意）",
+  "h": "82f3a240"
+ },
+ "trdi.nap-am": {
+  "t": "納音",
+  "h": "006a48d6"
+ },
+ "trdi.nhin-nguoi-khac-trang-diem-ma": {
+  "t": "ほかの人はメイクで輝いて見えるのに、自分は何度メイクしても外出のたびに自信が持てない。ポートレート画像をアップロードして、顔に合うスタイルの提案と試着画像をすぐに受け取りましょう。",
+  "h": "27d407e0"
+ },
+ "trdi.phan-tich-phong-cach-luong": {
+  "t": "<span class=\"ic\" data-icon=\"palette\"></span> スタイルを分析 — <span data-tvp-price=\"trang-diem-phan-tich\">…</span> 両",
+  "h": "5e1ca3e2"
+ },
+ "trdi.phan-tich-tuong-mat-theo-co": {
+  "t": "古法で顔相を分析 — あなたの本命と相に合うアジアのメイクスタイルを提案します。",
+  "h": "30eda66e"
+ },
+ "trdi.phong-cach-makeup-phu-hop-nhan": {
+  "t": "✦ 似合うメイクスタイル — 「試す →」を押すと結果を見られます",
+  "h": "25e2d0d8"
+ },
+ "trdi.tai-anh": {
+  "t": "<span class=\"ic\" data-icon=\"chevron-down\"></span> 画像をダウンロード",
+  "h": "a343e31b"
+ },
+ "trdi.tai-len-mot-tam-anh-chan": {
+  "t": "顔がはっきり写ったポートレート画像を1枚アップロードしてください。システムが顔を分析し、そのまま画像でメイクを試着します。似合うメイクスタイル、リップ・アイ・チークのカラーパレット、試着画像が届きます。",
+  "h": "c8c9461c"
+ },
+ "trdi.thu-lai": {
+  "t": "↺ もう一度試す",
+  "h": "a1d342d1"
+ },
+ "trdi.thu-trang-diem": {
+  "t": "<span class=\"ic\" data-icon=\"sparkles\"></span> メイクを試着 — <span id=\"tryonStyleName\"></span>",
+  "h": "cd545d92"
+ },
+ "trdi.trang-diem": {
+  "t": "メイク",
+  "h": "b67e6b3f"
+ },
+ "trdi.trang-diem-phan-tich-tuong-mat": {
+  "t": "<b>メイク</b><span>古法で顔相を分析し、メイクスタイルを提案、そのまま画像で試着</span>",
+  "h": "132106df"
+ },
+ "trdi.trang-diem-tu-vi-minh-bao": {
+  "t": "メイク — 明宝紫微斗数",
+  "h": "10926a7a"
+ },
+ "trdi.tuong-mat": {
+  "t": "顔相",
+  "h": "424915c5"
  },
  "tuonghop.ban-luan-giai-mau-tai-pdf": {
   "t": "<span class=\"sc-ic\" data-icon=\"file-text\"></span> <span class=\"sc-txt\"><b>鑑定サンプル版</b><span>サンプル命盤の夫婦の相性の詳細版をPDFでダウンロードして、実際の内容を事前にご確認いただけます。</span></span> <a class=\"sc-btn\" href=\"/tai-mau/mau-xem-tuoi.pdf\" target=\"_blank\" rel=\"noopener\">PDFをダウンロード →</a>",

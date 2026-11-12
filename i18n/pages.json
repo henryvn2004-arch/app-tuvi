@@ -1370,6 +1370,40 @@
    "shell"
   ]
  },
+ "/app/trang-diem": {
+  "file": "app-trang-diem.html",
+  "keys": [
+   "battu.gioi-thieu",
+   "battu.hoi",
+   "khis.nhan-de-chon-anh-hoac-keo",
+   "kieut.nhan-tuong-hoc-phuong-dong-khong",
+   "phongthuy.vd-1990",
+   "trdi.anh-ro-mat-anh-sang-du",
+   "trdi.bang-mau-goi-y",
+   "trdi.chup-hoac-tai-anh-khuon-mat",
+   "trdi.loi-khuyen-co-phap",
+   "trdi.ma-hong",
+   "trdi.mat",
+   "trdi.moi",
+   "trdi.nam-sinh-tuy-chon",
+   "trdi.nap-am",
+   "trdi.nhin-nguoi-khac-trang-diem-ma",
+   "trdi.phan-tich-phong-cach-luong",
+   "trdi.phan-tich-tuong-mat-theo-co",
+   "trdi.phong-cach-makeup-phu-hop-nhan",
+   "trdi.tai-anh",
+   "trdi.tai-len-mot-tam-anh-chan",
+   "trdi.thu-lai",
+   "trdi.thu-trang-diem",
+   "trdi.trang-diem",
+   "trdi.trang-diem-phan-tich-tuong-mat",
+   "trdi.trang-diem-tu-vi-minh-bao",
+   "trdi.tuong-mat"
+  ],
+  "js": [
+   "shell"
+  ]
+ },
  "/app/trang-phuc-theo-ngay": {
   "file": "app-trang-phuc-theo-ngay.html",
   "keys": [

@@ -14171,6 +14171,162 @@
   "t": "請再試一次。",
   "h": "2f1d18ee"
  },
+ "js.trdi.chip-mau-son": {
+  "t": "哪種口紅色號適合我的膚色？",
+  "h": "f013cf8c"
+ },
+ "js.trdi.chip-van-khi": {
+  "t": "化妝會如何影響運勢？",
+  "h": "a175f487"
+ },
+ "js.trdi.chip-vi-sao": {
+  "t": "為什麼這種風格適合我？",
+  "h": "7ed2d820"
+ },
+ "js.trdi.do-truc-tiep": {
+  "t": "以 MediaPipe 直接從圖片測得。",
+  "h": "6bca61a6"
+ },
+ "js.trdi.goi-y-menh": {
+  "t": "妝容風格建議會優先選用適合此本命的色調。",
+  "h": "30df970d"
+ },
+ "js.trdi.greeting": {
+  "t": "您的臉型是 **{s}**。想進一步了解哪種妝容風格？",
+  "h": "b80d300f"
+ },
+ "js.trdi.greeting-menh": {
+  "t": "您的臉型是 **{s}**，本命為{h}。想進一步了解哪種妝容風格？",
+  "h": "3a4fb4b5"
+ },
+ "js.trdi.hinh-dai": {
+  "t": "長臉",
+  "h": "67167578"
+ },
+ "js.trdi.hinh-oval": {
+  "t": "鵝蛋臉",
+  "h": "181b45bd"
+ },
+ "js.trdi.hinh-tron-vuong": {
+  "t": "圓臉／方臉",
+  "h": "a30fca34"
+ },
+ "js.trdi.hop-menh": {
+  "t": "合本命",
+  "h": "44069c43"
+ },
+ "js.trdi.label": {
+  "t": "妝容——{s}",
+  "h": "f0eca080"
+ },
+ "js.trdi.loi-e": {
+  "t": "錯誤：{e}",
+  "h": "a7267203"
+ },
+ "js.trdi.loi-phan-tich": {
+  "t": "分析錯誤",
+  "h": "3e06a99e"
+ },
+ "js.trdi.loi-xu-ly-anh": {
+  "t": "圖片處理錯誤",
+  "h": "52fb0d60"
+ },
+ "js.trdi.mat-tuoi-da": {
+  "t": "{s} · {a} · 膚色 {d}",
+  "h": "07bd0f9d"
+ },
+ "js.trdi.menh-n": {
+  "t": "本命 {h}",
+  "h": "e46cbb3b"
+ },
+ "js.trdi.rank-phu-hop": {
+  "t": "推薦 #{n}",
+  "h": "20cdc5b5"
+ },
+ "js.trdi.share-mat": {
+  "t": "臉型 {s}",
+  "h": "04abbf18"
+ },
+ "js.trdi.share-title": {
+  "t": "適合我面相的妝容建議",
+  "h": "c6d0e9a5"
+ },
+ "js.trdi.share-tryon-text": {
+  "t": "試風格：{n}",
+  "h": "4641d81c"
+ },
+ "js.trdi.share-tryon-title": {
+  "t": "我的妝容試戴（虛擬）",
+  "h": "a431ac26"
+ },
+ "js.trdi.st-dark_muse-sub": {
+  "t": "霧感煙燻、冷色調、編輯感個性",
+  "h": "e51b61c7"
+ },
+ "js.trdi.st-glass_skin-sub": {
+  "t": "裸妝感妝容，由內透亮的水光肌",
+  "h": "0c6ac518"
+ },
+ "js.trdi.st-guochao-sub": {
+  "t": "濃烈紅唇、銳利眼線、古典氣質",
+  "h": "2df3d2b1"
+ },
+ "js.trdi.st-hoa-dan-name": {
+  "t": "柔美花旦風",
+  "h": "c859a2ac"
+ },
+ "js.trdi.st-hoa_dan-sub": {
+  "t": "桃粉色、玫瑰腮紅、輕柔婉約",
+  "h": "ee95019a"
+ },
+ "js.trdi.st-j_gyaru-sub": {
+  "t": "放大片感、戲劇感睫毛、鮮明眼線",
+  "h": "8342ee69"
+ },
+ "js.trdi.st-j_sheer-sub": {
+  "t": "透明肌、透明感唇色、侘寂式極簡",
+  "h": "bef5b3e4"
+ },
+ "js.trdi.st-kdrama_glam-sub": {
+  "t": "清晰眼線、大膽唇色、頂級高雅",
+  "h": "f6378d7f"
+ },
+ "js.trdi.st-soft_girl-sub": {
+  "t": "腮紅爆擊、漸層唇、純真光澤",
+  "h": "68ac4e8f"
+ },
+ "js.trdi.step-chuan-bi": {
+  "t": "準備妝容提示詞",
+  "h": "f2303939"
+ },
+ "js.trdi.step-nap-am": {
+  "t": "計算本命納音",
+  "h": "94bf98e8"
+ },
+ "js.trdi.step-phan-tich": {
+  "t": "分析臉部並建議妝容風格",
+  "h": "17ac9e7f"
+ },
+ "js.trdi.step-tao-anh": {
+  "t": "正在生成新妝容圖片",
+  "h": "060bcb1f"
+ },
+ "js.trdi.tam-phong-cach": {
+  "t": "依序排名的 8 種妝容風格、色彩調色盤與直接試戴，收錄於深度分析中。",
+  "h": "d0bfd7a6"
+ },
+ "js.trdi.thu": {
+  "t": "試試 →",
+  "h": "c1480a0a"
+ },
+ "js.trdi.ty-le-rong-cao": {
+  "t": "臉部寬／高比例：{r}——傾向：{s}",
+  "h": "2094599e"
+ },
+ "js.trdi.vui-long-thu-lai": {
+  "t": "請再試一次。",
+  "h": "2f1d18ee"
+ },
  "js.tuviform.ca-nhan": {
   "t": "個人資料",
   "h": "bbe1cce8"
@@ -18218,6 +18374,90 @@
  "tpng.xem-trang-phuc-hop-ngay-luong": {
   "t": "<span class=\"ic\" data-icon=\"shirt\"></span> 查看適合當日的穿搭——<span data-tvp-price=\"trang-phuc-theo-ngay\">…</span> 兩",
   "h": "589f0801"
+ },
+ "trdi.anh-ro-mat-anh-sang-du": {
+  "t": "臉部清晰、光線充足、不戴眼鏡的照片",
+  "h": "68ec19ab"
+ },
+ "trdi.bang-mau-goi-y": {
+  "t": "<span class=\"ic\" data-icon=\"palette\"></span> 建議調色盤",
+  "h": "d62e715b"
+ },
+ "trdi.chup-hoac-tai-anh-khuon-mat": {
+  "t": "<span class=\"ic\" data-icon=\"camera\"></span> 拍攝或上傳臉部照片",
+  "h": "781a5bfa"
+ },
+ "trdi.loi-khuyen-co-phap": {
+  "t": "<strong>✦ 古法建議</strong> <span id=\"tipText\">—</span>",
+  "h": "0417547e"
+ },
+ "trdi.ma-hong": {
+  "t": "腮紅",
+  "h": "21b3e53a"
+ },
+ "trdi.mat": {
+  "t": "眼",
+  "h": "5e87cc74"
+ },
+ "trdi.moi": {
+  "t": "唇",
+  "h": "299ea53e"
+ },
+ "trdi.nam-sinh-tuy-chon": {
+  "t": "出生年（選填）",
+  "h": "82f3a240"
+ },
+ "trdi.nap-am": {
+  "t": "納音",
+  "h": "006a48d6"
+ },
+ "trdi.nhin-nguoi-khac-trang-diem-ma": {
+  "t": "看別人化妝總是很出眾，自己卻怎麼化都覺得每次出門不夠有自信。上傳人像照片，立即獲得適合臉型的風格建議與試戴圖片。",
+  "h": "27d407e0"
+ },
+ "trdi.phan-tich-phong-cach-luong": {
+  "t": "<span class=\"ic\" data-icon=\"palette\"></span> 分析風格——<span data-tvp-price=\"trang-diem-phan-tich\">…</span> 兩",
+  "h": "5e1ca3e2"
+ },
+ "trdi.phan-tich-tuong-mat-theo-co": {
+  "t": "依古法分析面相——建議適合您本命與相貌的亞洲妝容風格。",
+  "h": "30eda66e"
+ },
+ "trdi.phong-cach-makeup-phu-hop-nhan": {
+  "t": "✦ 適合的妝容風格——點選「試試 →」查看結果",
+  "h": "25e2d0d8"
+ },
+ "trdi.tai-anh": {
+  "t": "<span class=\"ic\" data-icon=\"chevron-down\"></span> 下載圖片",
+  "h": "a343e31b"
+ },
+ "trdi.tai-len-mot-tam-anh-chan": {
+  "t": "請上傳一張臉部清晰的人像照片。系統會分析臉部，並直接在照片上試戴妝容。您會得到合適的妝容風格、唇／眼／頰的調色盤，以及試戴後的圖片。",
+  "h": "c8c9461c"
+ },
+ "trdi.thu-lai": {
+  "t": "↺ 再試一次",
+  "h": "a1d342d1"
+ },
+ "trdi.thu-trang-diem": {
+  "t": "<span class=\"ic\" data-icon=\"sparkles\"></span> 試戴妝容——<span id=\"tryonStyleName\"></span>",
+  "h": "cd545d92"
+ },
+ "trdi.trang-diem": {
+  "t": "妝容",
+  "h": "b67e6b3f"
+ },
+ "trdi.trang-diem-phan-tich-tuong-mat": {
+  "t": "<b>妝容</b><span>依古法分析面相，建議妝容風格，並直接在照片上試戴</span>",
+  "h": "132106df"
+ },
+ "trdi.trang-diem-tu-vi-minh-bao": {
+  "t": "妝容——明寶紫微斗數",
+  "h": "10926a7a"
+ },
+ "trdi.tuong-mat": {
+  "t": "面相",
+  "h": "424915c5"
  },
  "tuonghop.ban-luan-giai-mau-tai-pdf": {
   "t": "<span class=\"sc-ic\" data-icon=\"file-text\"></span> <span class=\"sc-txt\"><b>解讀範本</b><span>下載範例命盤的完整夫妻合婚 PDF，先看看實際內容。</span></span> <a class=\"sc-btn\" href=\"/tai-mau/mau-xem-tuoi.pdf\" target=\"_blank\" rel=\"noopener\">下載 PDF →</a>",
