@@ -7227,6 +7227,94 @@
   "t": "查看紀錄",
   "h": "21a19fb0"
  },
+ "js.trochuyen.gio-truoc": {
+  "t": "{n} 小時前",
+  "h": "19a19d72"
+ },
+ "js.trochuyen.ngay-truoc": {
+  "t": "{n} 天前",
+  "h": "21fad5cc"
+ },
+ "js.trochuyen.phut-truoc": {
+  "t": "{n} 分鐘前",
+  "h": "f63d5687"
+ },
+ "js.trochuyen.tool-bat-trach": {
+  "t": "八宅方位",
+  "h": "a9176f82"
+ },
+ "js.trochuyen.tool-bat-tu": {
+  "t": "八字命盤",
+  "h": "8959032f"
+ },
+ "js.trochuyen.tool-chon-ngay": {
+  "t": "擇日",
+  "h": "bac69f03"
+ },
+ "js.trochuyen.tool-dat-ten": {
+  "t": "寶寶取名",
+  "h": "8debaf02"
+ },
+ "js.trochuyen.tool-dat-ten-dn": {
+  "t": "企業取名",
+  "h": "86ab8b27"
+ },
+ "js.trochuyen.tool-kim-lau": {
+  "t": "金樓與三災",
+  "h": "541e773b"
+ },
+ "js.trochuyen.tool-kinh-dich": {
+  "t": "易經",
+  "h": "9e1c199b"
+ },
+ "js.trochuyen.tool-la-so": {
+  "t": "紫微斗數命盤",
+  "h": "d6fada77"
+ },
+ "js.trochuyen.tool-luan-giai": {
+  "t": "紫微斗數解讀",
+  "h": "19e52bc9"
+ },
+ "js.trochuyen.tool-nap-am": {
+  "t": "納音五行",
+  "h": "0de9a4ee"
+ },
+ "js.trochuyen.tool-ngu-hanh-ten": {
+  "t": "姓名五行",
+  "h": "9b92ea0c"
+ },
+ "js.trochuyen.tool-phong-thuy": {
+  "t": "風水",
+  "h": "06ec3c82"
+ },
+ "js.trochuyen.tool-sinh-con": {
+  "t": "生育年份合盤",
+  "h": "2e015092"
+ },
+ "js.trochuyen.tool-than-so-hoc": {
+  "t": "生命靈數",
+  "h": "686db34b"
+ },
+ "js.trochuyen.tool-tuong-hop": {
+  "t": "年齡相合",
+  "h": "e9fd3f4c"
+ },
+ "js.trochuyen.tool-xem-lam-an": {
+  "t": "合夥合盤",
+  "h": "791a32dc"
+ },
+ "js.trochuyen.tool-xem-tuoi": {
+  "t": "夫妻合婚",
+  "h": "d6d67d5c"
+ },
+ "js.trochuyen.tool-xem-tuong": {
+  "t": "相術",
+  "h": "7460a628"
+ },
+ "js.trochuyen.vua-xong": {
+  "t": "剛剛",
+  "h": "d1a7c7fa"
+ },
  "js.vanhannam.bai-tinh": {
   "t": "敗星：",
   "h": "c9888559"
@@ -8946,6 +9034,26 @@
  "topup.xem-lai-ket-qua-co-bi": {
   "t": "重新查看結果會再扣兩嗎？",
   "h": "64b49a22"
+ },
+ "trochuyen.chua-co-hoi-thoai-nao-bam": {
+  "t": "還沒有任何對話。<br>按上方的「新提問」，或打開任一工具向老師提問。",
+  "h": "9f9eecfb"
+ },
+ "trochuyen.hoi-moi-bat-dau-mot-cau": {
+  "t": "<span class=\"tc-plus\">+</span> <span><b>新提問</b><span>開始一個問題——系統會自動選對工具</span></span>",
+  "h": "bb8d13e7"
+ },
+ "trochuyen.hoi-thay-moi-cuoc-hoi-thay": {
+  "t": "<b>問老師</b><span>各工具中與老師的所有對話，集中在此</span>",
+  "h": "f8fc50f0"
+ },
+ "trochuyen.hoi-thay-tu-vi-minh-bao": {
+  "t": "問老師 — 明寶紫微斗數",
+  "h": "ddbd279c"
+ },
+ "trochuyen.toan-bo-cac-cuoc-hoi-thay": {
+  "t": "與老師的所有對話——隨時重新打開，或開始一個新問題。",
+  "h": "f799c12a"
  },
  "tuonghop.ban-luan-giai-mau-tai-pdf": {
   "t": "<span class=\"sc-ic\" data-icon=\"file-text\"></span> <span class=\"sc-txt\"><b>解讀範本</b><span>下載範例命盤的完整夫妻合婚 PDF，先看看實際內容。</span></span> <a class=\"sc-btn\" href=\"/tai-mau/mau-xem-tuoi.pdf\" target=\"_blank\" rel=\"noopener\">下載 PDF →</a>",

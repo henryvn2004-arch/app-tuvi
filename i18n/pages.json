@@ -512,6 +512,20 @@
    "shell"
   ]
  },
+ "/app/tro-chuyen": {
+  "file": "app-tro-chuyen.html",
+  "keys": [
+   "topup.dang-tai",
+   "trochuyen.chua-co-hoi-thoai-nao-bam",
+   "trochuyen.hoi-moi-bat-dau-mot-cau",
+   "trochuyen.hoi-thay-moi-cuoc-hoi-thay",
+   "trochuyen.hoi-thay-tu-vi-minh-bao",
+   "trochuyen.toan-bo-cac-cuoc-hoi-thay"
+  ],
+  "js": [
+   "shell"
+  ]
+ },
  "/app/van-han-nam": {
   "file": "app-van-han-nam.html",
   "keys": [
