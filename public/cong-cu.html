@@ -659,7 +659,7 @@ async function loadTools() {
     // Lấy đơn giá TRƯỚC khi vẽ thẻ để không chớp một con số sai rồi mới sửa.
     await loadPackageRate();
     _tools = window.ToolPrices ? window.ToolPrices.rows() : [];
-    if (!_tools?.length) { document.getElementById('tabContent').innerHTML = '<div class="tools-loading">Không có dữ liệu.</div>'; return; }
+    if (!_tools?.length) { document.getElementById('tabContent').innerHTML = _tvmbT('js.congcutr.khong-co-du-lieu', '<div class="tools-loading">Không có dữ liệu.</div>'); return; }
 
     // Dòng KHÔNG có đường dẫn thì không dựng thẻ. Trước đây chúng vẫn ra một thẻ
     // trỏ `href="#"` — bấm vào không đi đâu cả; `rail-message` (đơn giá mỗi tin
@@ -675,7 +675,7 @@ async function loadTools() {
     // trong khi bảng có 53) vì bật/tắt tool là việc làm dưới Admin, không ai
     // nhớ quay lại sửa trang.
     const heading = document.getElementById('toolsHeading');
-    if (heading) heading.textContent = _tools.length + ' Công Cụ Mệnh Lý — Dùng Riêng Lẻ';
+    if (heading) heading.textContent = _tools.length + _tvmbT('js.congcutr.cong-cu-menh-ly-dung-rieng', ' Công Cụ Mệnh Lý — Dùng Riêng Lẻ');
 
     // Update free count badge
     const freeCount = _tools.filter(t => t.is_free).length;
@@ -684,7 +684,7 @@ async function loadTools() {
     renderCurrentView();
   } catch(e) {
     console.error('[loadTools]', e);
-    document.getElementById('tabContent').innerHTML = '<div class="tools-loading"><span data-icon="alert-triangle" style="display:inline-flex;width:14px;height:14px;vertical-align:middle"></span> Không tải được. Vui lòng F5 thử lại.</div>';
+    document.getElementById('tabContent').innerHTML = _tvmbT('js.congcutr.khong-tai-duoc-vui-long-f5', '<div class="tools-loading"><span data-icon="alert-triangle" style="display:inline-flex;width:14px;height:14px;vertical-align:middle"></span> Không tải được. Vui lòng F5 thử lại.</div>');
     if (window.mountIcons) window.mountIcons(document.getElementById('tabContent'));
   }
 }
@@ -712,13 +712,13 @@ function renderNeedView() {
   const rest = _tools.filter(t => !seen.has(t.tool_id));
   if (rest.length) {
     html += needBlockHtml(
-      { key: 'khac', icon: 'layout-grid', title: 'Khác', subtitle: 'Chưa xếp vào nhóm nào' },
+      { key: 'khac', icon: 'layout-grid', title: _tvmbT('js.congcutr.khac', 'Khác'), subtitle: _tvmbT('js.congcutr.chua-xep-vao-nhom-nao', 'Chưa xếp vào nhóm nào') },
       rest
     );
   }
 
   const host = document.getElementById('tabContent');
-  host.innerHTML = html || '<div class="tools-loading">Không có công cụ nào.</div>';
+  host.innerHTML = html || _tvmbT('js.congcutr.khong-co-cong-cu-nao', '<div class="tools-loading">Không có công cụ nào.</div>');
   if (window.mountIcons) window.mountIcons(host);
 }
 
@@ -727,7 +727,7 @@ function needBlockHtml(g, items) {
     '<div class="need-head">' +
       '<span class="nh-ic" data-icon="' + esc(g.icon || 'layout-grid') + '"></span>' +
       '<span class="need-title">' + esc(g.title) + '</span>' +
-      '<span class="need-sub">' + esc(g.subtitle || '') + ' · ' + items.length + ' công cụ</span>' +
+      '<span class="need-sub">' + esc(g.subtitle || '') + ' · ' + items.length + _tvmbT('js.congcutr.cong-cu', ' công cụ</span>') +
     '</div>' +
     '<div class="tools-grid">' + items.map(t => toolCardHtml(t, true)).join('') + '</div>' +
   '</div>';
@@ -745,7 +745,7 @@ function renderActiveTab() {
 
 function renderToolGrid(tools, isFreeTab) {
   if (!tools.length) {
-    document.getElementById('tabContent').innerHTML = '<div class="tools-loading">Không có công cụ nào trong nhóm này.</div>';
+    document.getElementById('tabContent').innerHTML = _tvmbT('js.congcutr.khong-co-cong-cu-nao-trong', '<div class="tools-loading">Không có công cụ nào trong nhóm này.</div>');
     return;
   }
 
@@ -758,7 +758,7 @@ function renderToolGrid(tools, isFreeTab) {
       subGroups[t.category].push(t);
     });
     Object.entries(subGroups).forEach(([cat, items]) => {
-      html += '<div style="margin-top:24px;font-family:\'Noto Serif\',serif;font-size:14px;color:var(--gold);letter-spacing:.15em;text-transform:uppercase;margin-bottom:12px;padding-bottom:6px;border-bottom:1px solid var(--border-lt)">' + esc(cat) + ' · ' + items.length + ' công cụ</div>';
+      html += '<div style="margin-top:24px;font-family:\'Noto Serif\',serif;font-size:14px;color:var(--gold);letter-spacing:.15em;text-transform:uppercase;margin-bottom:12px;padding-bottom:6px;border-bottom:1px solid var(--border-lt)">' + esc(cat) + ' · ' + items.length + _tvmbT('js.congcutr.cong-cu-43pa', ' công cụ</div>');
       html += '<div class="tools-grid">' + items.map(t => toolCardHtml(t, false)).join('') + '</div>';
     });
   } else {
@@ -796,15 +796,15 @@ function toolCardHtml(t, byNeed) {
   const url = toolUrl(t) || '#';
   const featured = FEATURED.has(t.tool_id) ? ' featured' : '';
   const priceHtml = t.is_free
-    ? '<span class="tool-price-free">Miễn Phí</span>'
+    ? _tvmbT('js.congcutr.mien-phi', '<span class="tool-price-free">Miễn Phí</span>')
     // Tiền là giá CHÍNH với khách (luật CLAUDE.md; USD từ W5) — cùng thứ
     // tự/trọng lượng thị giác với `_vndFirst()` của tuvi-paywall.js. Đọc hụt
     // gói thì lùi về CHỈ hiện Lượng.
     : '<div class="tool-price">' +
         (_moneyLabel
           ? '<div class="tool-price-vnd">' + _moneyLabel(t.credits) + '</div>' +
-            '<div class="tool-price-credits">(' + t.credits + ' Lượng)</div>'
-          : '<div class="tool-price-vnd">' + t.credits + ' Lượng</div>') +
+            '<div class="tool-price-credits">(' + t.credits + _tvmbT('js.congcutr.luong', ' Lượng)</div>')
+          : '<div class="tool-price-vnd">' + t.credits + _tvmbT('js.congcutr.luong-icr4', ' Lượng</div>')) +
       '</div>';
   // Chưa gán `question` thì lùi về nhãn cũ — thiếu dữ liệu không được làm mất thẻ.
   // Ở lối nhu cầu, câu hỏi làm tiêu đề GIỮ NGUYÊN vai trò của nó (câu bắt sự tò
@@ -822,7 +822,7 @@ function toolCardHtml(t, byNeed) {
     '<div class="tool-icon">' + toolIcon(t) + '</div>' +
     head +
     '<div class="tool-footer">' + priceHtml +
-      '<div class="tool-cta">Mở →</div>' +
+      _tvmbT('js.congcutr.mo', '<div class="tool-cta">Mở →</div>') +
     '</div>' +
   '</a>';
 }
@@ -843,8 +843,8 @@ function esc(s) {
 // Chuyển lối xem
 // ─────────────────────────────────────────────────────────────
 const VIEW_HINTS = {
-  'nhu-cau': 'Không cần biết bộ môn nào — chọn đúng việc bạn đang bận tâm.',
-  'bo-mon': 'Xếp theo môn: Tử Vi, Tử Bình, Xem Tướng, Phong Thuỷ…',
+  'nhu-cau': _tvmbT('js.congcutr.khong-can-biet-bo-mon-nao', 'Không cần biết bộ môn nào — chọn đúng việc bạn đang bận tâm.'),
+  'bo-mon': _tvmbT('js.congcutr.xep-theo-mon-tu-vi-tu', 'Xếp theo môn: Tử Vi, Tử Bình, Xem Tướng, Phong Thuỷ…'),
 };
 
 function setView(view, opts) {
