@@ -463,15 +463,17 @@ function _nkSao(lb) {
   return _tvmbG(['chinh', 'sao'], m[1]) + (m[2] ? ' (' + _tvmbG('sang', m[2]) + ')' : '') + (m[3] ? ' [' + _tvmbG('sao', m[3]) + ']' : '');
 }
 function _nkMat(cung) { return cung ? _long('nguoikhac', 'mat.' + cung) : null; }
-// Các bảng (đoạn đầu khoá) mà trang tra — mã lạ ⇒ không tra.
-var NK_BANG = ['khoa', 'viec', 'mat'];
+// Các bảng (đoạn đầu khoá) tra QUA MÃ của payload (`khoa[].ma.k` và mã việc lồng) — mã lạ ⇒ không tra.
+// Nhãn mặt đọc (`'mat.' + cung`) tra ở `_nkMat`, không qua mã.
+var NK_BANG = ['khoa', 'viec'];
+function _nkHop(k) { return !!k && NK_BANG.indexOf(String(k).split('.')[0]) >= 0; }
 function _nkTr(ma, vi) {
-  if (!ma || !ma.k || NK_BANG.indexOf(String(ma.k).split('.')[0]) < 0) return vi;
+  if (!ma || !_nkHop(ma.k)) return vi;
   var s = _long('nguoikhac', ma.k); if (s == null) return vi;
   var v = ma.v || {}, o = {};
   for (var n in v) {
     var x = v[n];
-    if (n === 'viec') { var t = x && x.k ? _long('nguoikhac', x.k) : null; if (t == null) return vi; o[n] = t; }
+    if (n === 'viec') { var t = x && _nkHop(x.k) ? _long('nguoikhac', x.k) : null; if (t == null) return vi; o[n] = t; }
     else if (n === 'ten') {
       var p = (x || []).map(function (c) { var m = _nkMat(c); return m == null ? null : m.toLowerCase(); });
       if (p.some(function (m) { return m == null; })) return vi;
