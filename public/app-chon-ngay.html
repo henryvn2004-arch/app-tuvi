@@ -188,10 +188,11 @@ window.SHELL_INTRO={key:'chon-ngay'};</script>
 <script src="/tools-shared/sample-hint.js?v=1"></script>
 <script src="/shell.js?v=150"></script>
 <script src="/tools-shared/shell-soft-nav.js?v=49"></script>
+<script src="/tools-shared/glossary.js?v=4"></script>
 <script>
 function esc(s){return String(s==null?'':s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
 var BI_KHAC={'Kim':'Hỏa','Mộc':'Kim','Thổ':'Mộc','Thủy':'Thổ','Hỏa':'Thủy'}; // hành khắc mình — nguồn: tools-shared/nap-am.js
-(function(){ var t=document.getElementById('inpThang'); for(var i=1;i<=12;i++)t.innerHTML+='<option value="'+i+'">Tháng '+i+'</option>'; var now=new Date(); t.value=String(now.getMonth()+1); document.getElementById('inpNam').value=now.getFullYear(); })();
+(function(){ var t=document.getElementById('inpThang'); for(var i=1;i<=12;i++)t.innerHTML+='<option value="'+i+'">'+_tvmbT('js.chonngay.thang-n','Tháng {n}',{n:i})+'</option>'; var now=new Date(); t.value=String(now.getMonth()+1); document.getElementById('inpNam').value=now.getFullYear(); })();
 
 // Trang này KHÔNG có gì đang mờ/khoá — nền can chi hiện rõ hết. Hook chỉ
 // nhấn lại nền can chi chủ sự thành một fact nổi bật ngay trước CTA "chọn
@@ -236,23 +237,25 @@ function wsStepsSet(n){
 function doChonNgay(){
   var btn=document.getElementById('btnGo');
   var suKien=document.getElementById('inpSuKien').value;
+  // Chữ HIỂN THỊ của việc (option đã dịch ở /<locale>/); `suKien` (value) vẫn là chữ Việt gửi server.
+  var _skSel=document.getElementById('inpSuKien'), suLb=(_skSel.selectedOptions[0]&&_skSel.selectedOptions[0].textContent)||suKien;
   var hoTen=document.getElementById('inpHoTen').value.trim();
   var namSinh=parseInt(document.getElementById('inpNamSinh').value);
   var thangNum=parseInt(document.getElementById('inpThang').value);
   var namNum=parseInt(document.getElementById('inpNam').value);
-  if(!hoTen||!namSinh||!thangNum||!namNum){ alert('Vui lòng nhập họ tên, năm sinh, tháng và năm dự định.'); return; }
+  if(!hoTen||!namSinh||!thangNum||!namNum){ alert(_tvmbT('js.chonngay.vui-long-nhap-ho-ten','Vui lòng nhập họ tên, năm sinh, tháng và năm dự định.')); return; }
   btn.disabled=true;
   try{
     var info=CanChi.ccInfo(namSinh);
     var thangCC=CanChi.ccThangCanChi(thangNum,namNum);
     var namCC=(CanChi.ccInfo(namNum)||{}).canChi||'';
-    document.getElementById('resHead').textContent=suKien+' · '+hoTen;
+    document.getElementById('resHead').textContent=suLb+' · '+hoTen;
     function ccCard(who,cc,na){ return '<div class="cc-card"><div class="who">'+esc(who)+'</div><div class="cc">'+esc(cc)+'</div>'+(na?'<div class="na">'+esc(na)+'</div>':'')+'</div>'; }
     document.getElementById('ccRow').innerHTML=
-      ccCard('Tuổi chủ sự',info.canChi,info.napAm+' · '+info.hanh)+
-      ccCard('Tháng '+thangNum+'/'+namNum,thangCC,'')+
-      ccCard('Năm '+namNum,namCC,'');
-    document.getElementById('resNote').innerHTML='Chủ sự tuổi <b>'+esc(info.canChi)+'</b> ('+esc(info.hanh)+'). Tháng dự định <b>'+esc(thangCC)+'</b>, năm <b>'+esc(namCC)+'</b>. Ngày tốt cần <b>hợp</b> (lục hợp / tam hợp) với tuổi chủ sự và tránh <b>xung / hình</b>. Hỏi Thầy để có ngày &amp; giờ hoàng đạo cụ thể cho việc <b>'+esc(suKien.toLowerCase())+'</b>.';
+      ccCard(_tvmbT('js.chonngay.tuoi-chu-su','Tuổi chủ sự'),_tvmbG('canchi',info.canChi),_tvmbG('napam',info.napAm)+' · '+_tvmbG('hanh',info.hanh))+
+      ccCard(_tvmbT('js.chonngay.thang-n-m','Tháng {t}/{n}',{t:thangNum,n:namNum}),_tvmbG('canchi',thangCC),'')+
+      ccCard(_tvmbT('js.chonngay.nam-n','Năm {n}',{n:namNum}),_tvmbG('canchi',namCC),'');
+    document.getElementById('resNote').innerHTML=_tvmbT('js.chonngay.res-note','Chủ sự tuổi <b>{cc}</b> ({hanh}). Tháng dự định <b>{tcc}</b>, năm <b>{ncc}</b>. Ngày tốt cần <b>hợp</b> (lục hợp / tam hợp) với tuổi chủ sự và tránh <b>xung / hình</b>. Hỏi Thầy để có ngày &amp; giờ hoàng đạo cụ thể cho việc <b>{viec}</b>.',{cc:esc(_tvmbG('canchi',info.canChi)),hanh:esc(_tvmbG('hanh',info.hanh)),tcc:esc(_tvmbG('canchi',thangCC)),ncc:esc(_tvmbG('canchi',namCC)),viec:esc(suLb.toLowerCase())});
     mountHook(info,thangCC,namCC);
     // Globals cho khối "Chọn ngày chuyên sâu AI" (gate+SSE, port từ tools/chon-ngay-tot.html)
     _dtSuKien=suKien; _dtHoTen=hoTen||'Chủ sự'; _dtNamSinh=namSinh; _dtInfo=info; _dtThangCC=thangCC; _dtNamCC=namCC; _dtThangNum=thangNum; _dtNamNum=namNum;
@@ -264,9 +267,9 @@ function doChonNgay(){
     wsStepsSet(2); // Xem nền can chi — kết quả miễn phí đã hiện, chờ mở phần chuyên sâu
     Shell.setContext({
       scenario:{type:'chon-ngay-tot',data:{suKien:suKien,hoTen:hoTen,namSinh:namSinh,thangNum:thangNum,namNum:namNum}},
-      label:'Chọn ngày '+suKien+' · '+hoTen+' · T'+thangNum+'/'+namNum,
-      greeting:'Đã lập nền cho việc **'+esc(suKien)+'** (chủ sự tuổi **'+esc(info.canChi)+'**). Bạn muốn tôi tư vấn gì trước?',
-      chips:['Ngày nào đẹp nhất trong tháng này?','Giờ hoàng đạo cho việc này?','Ngày nào cần tuyệt đối tránh?','Hướng xuất hành tốt trong ngày đó?']
+      label:_tvmbT('js.chonngay.label','Chọn ngày {viec} · {ten} · T{t}/{n}',{viec:suLb,ten:hoTen,t:thangNum,n:namNum}),
+      greeting:_tvmbT('js.chonngay.greeting','Đã lập nền cho việc **{viec}** (chủ sự tuổi **{cc}**). Bạn muốn tôi tư vấn gì trước?',{viec:esc(suLb),cc:esc(_tvmbG('canchi',info.canChi))}),
+      chips:[_tvmbT('js.chonngay.chip1','Ngày nào đẹp nhất trong tháng này?'),_tvmbT('js.chonngay.chip2','Giờ hoàng đạo cho việc này?'),_tvmbT('js.chonngay.chip3','Ngày nào cần tuyệt đối tránh?'),_tvmbT('js.chonngay.chip4','Hướng xuất hành tốt trong ngày đó?')]
     });
     Shell.setShareable({
       kind:'text',
@@ -280,7 +283,7 @@ function doChonNgay(){
     });
     document.querySelectorAll('#resPanel [data-ask]').forEach(function(el){ el.addEventListener('click',function(){ Shell.ask(el.getAttribute('data-ask')); }); });
   }catch(e){
-    document.getElementById('ccRow').innerHTML='<div class="laso-error">Lỗi: '+esc(e.message)+'</div>';
+    document.getElementById('ccRow').innerHTML='<div class="laso-error">'+_tvmbT('js.chonngay.loi-colon','Lỗi: ')+esc(e.message)+'</div>';
     document.getElementById('birthPanel').style.display='none';
     document.getElementById('resPanel').style.display='block';
     document.getElementById('btnEdit').style.display='';
@@ -321,17 +324,17 @@ TuviPaywall.fillPriceSlots(document).then(function(){ _fillVndSlots(document,'ch
     if (!panel || document.getElementById('sampBar')) return;
     var bar = document.createElement('div');
     bar.className = 'samp-bar'; bar.id = 'sampBar';
-    bar.innerHTML = '<div class="sb-txt">Đây là <b>BẢN MẪU</b> minh hoạ (dữ liệu khác) — chưa phải kết quả của bạn.</div>' +
-      '<button type="button" id="sampBarClose">Nhập thông tin của tôi →</button>';
+    bar.innerHTML = '<div class="sb-txt">'+_tvmbT('js.chonngay.ban-mau-note','Đây là <b>BẢN MẪU</b> minh hoạ (dữ liệu khác) — chưa phải kết quả của bạn.')+'</div>' +
+      '<button type="button" id="sampBarClose">'+_tvmbT('js.chonngay.nhap-thong-tin-cua-toi','Nhập thông tin của tôi →')+'</button>';
     panel.insertBefore(bar, panel.firstChild);
     document.getElementById('sampBarClose').onclick = function () {
       var b = document.getElementById('sampBar'); if (b) b.remove();
       showForm();
-      var cta = document.getElementById('sampCta'); if (cta) cta.style.display = 'flex';
+      var cta = document.getElementById('sampCta'); if (cta && (!window.I18n || I18n.locale === 'vi')) cta.style.display = 'flex';
     };
   }
   window.SampleHint.open = function (btn) {
-    if (btn) { btn.disabled = true; btn.textContent = 'Đang mở…'; }
+    if (btn) { btn.disabled = true; btn.textContent = _tvmbT('js.chonngay.dang-mo','Đang mở…'); }
     var p = _cache ? Promise.resolve(_cache) : fetch(SAMPLE_URL).then(function (r) {
       if (!r.ok) throw new Error('HTTP ' + r.status);
       return r.json();
@@ -347,15 +350,17 @@ TuviPaywall.fillPriceSlots(document).then(function(){ _fillVndSlots(document,'ch
       document.getElementById('dtResult').innerHTML = renderMarkdownDt(data.text);
       var cta = document.getElementById('sampCta'); if (cta) cta.style.display = 'none';
       _showSampleBar();
-      if (btn) { btn.disabled = false; btn.textContent = 'Xem bản mẫu →'; }
+      if (btn) { btn.disabled = false; btn.textContent = _tvmbT('js.chonngay.xem-ban-mau','Xem bản mẫu →'); }
     }).catch(function (e) {
-      if (btn) { btn.disabled = false; btn.textContent = 'Xem bản mẫu →'; }
+      if (btn) { btn.disabled = false; btn.textContent = _tvmbT('js.chonngay.xem-ban-mau','Xem bản mẫu →'); }
       if (window.console) console.error('sample:', e);
-      window.alert('Chưa mở được bản mẫu. Thử lại sau nhé.');
+      window.alert(_tvmbT('js.chonngay.chua-mo-duoc-ban-mau','Chưa mở được bản mẫu. Thử lại sau nhé.'));
     });
   };
   try {
-    if (!(window.Shell && Shell.autoRun && Shell.autoRun()) &&
+    // Bản mẫu là văn LLM đã lưu sẵn bằng tiếng Việt (samples/*.json) ⇒ chỉ mời xem ở bản vi; /<locale>/ không hiện nút.
+    if ((!window.I18n || I18n.locale === 'vi') &&
+        !(window.Shell && Shell.autoRun && Shell.autoRun()) &&
         !(window.Shell && Shell.getRememberedBirth && Shell.getRememberedBirth())) {
       var c = document.getElementById('sampCta'); if (c) c.style.display = 'flex';
     }
@@ -389,7 +394,7 @@ function renderMarkdownDt(md){
 }
 
 async function initiateChonNgayChuyenSau(){
-  if(!_dtInfo||!_dtThangNum||!_dtNamNum){ alert('Vui lòng nhập thông tin trước.'); return; }
+  if(!_dtInfo||!_dtThangNum||!_dtNamNum){ alert(_tvmbT('js.chonngay.vui-long-nhap-thong-tin','Vui lòng nhập thông tin trước.')); return; }
   wsStepsSet(3); // Thanh toán — chờ requireCredits xác nhận
   var slug=TuviPaywall.generateToolSlug('chon-ngay-tot-'+_dtNamSinh+'-'+_dtThangNum+'-'+_dtNamNum);
   await TuviPaywall.requireCredits(slug, async function(){ await _doChonNgayAI(); });
@@ -399,7 +404,7 @@ async function _doChonNgayAI(){
   var btn=document.getElementById('btnUnlock');
   if(btn)btn.disabled=true;
   var el=document.getElementById('dtResult');
-  el.innerHTML='<div class="phan-empty">'+(window.iconHtml?window.iconHtml('calendar'):'')+' Đang phân tích ngày tốt… thường mất 15–25 giây</div>';
+  el.innerHTML='<div class="phan-empty">'+(window.iconHtml?window.iconHtml('calendar'):'')+' '+_tvmbT('js.chonngay.dang-phan-tich','Đang phân tích ngày tốt… thường mất 15–25 giây')+'</div>';
   el.scrollIntoView({behavior:'smooth',block:'nearest'});
   try{
     var res=await fetch('/api/xem-tuoi?action=chon-ngay-tot',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({
@@ -407,7 +412,7 @@ async function _doChonNgayAI(){
       canChiNguoi:_dtInfo.canChi, napAmNguoi:_dtInfo.napAm,
       thangCanChi:_dtThangCC, namCanChi:_dtNamCC, thangNum:_dtThangNum, namNum:_dtNamNum
     })});
-    if(!res.ok){ var d=await res.json().catch(function(){return {};}); throw new Error(d.error||'Lỗi '+res.status); }
+    if(!res.ok){ var d=await res.json().catch(function(){return {};}); throw new Error(d.error||_tvmbT('js.chonngay.loi-status','Lỗi {s}',{s:res.status})); }
     var reader=res.body.getReader(), dec=new TextDecoder(), full='', buf='';
     el.innerHTML='';
     while(true){
@@ -427,10 +432,10 @@ async function _doChonNgayAI(){
         }catch(e){ if(e.message&&e.message.indexOf('JSON')<0)throw e; }
       }
     }
-    if(!full)throw new Error('Không nhận được kết quả.');
+    if(!full)throw new Error(_tvmbT('js.chonngay.khong-nhan-duoc-ket-qua','Không nhận được kết quả.'));
     el.innerHTML=renderMarkdownDt(full);
   }catch(e){
-    el.innerHTML='<div class="laso-error">Lỗi: '+esc(e.message||'Không thể kết nối. Vui lòng thử lại.')+'</div>';
+    el.innerHTML='<div class="laso-error">'+_tvmbT('js.chonngay.loi-colon','Lỗi: ')+esc(e.message||_tvmbT('js.chonngay.khong-the-ket-noi','Không thể kết nối. Vui lòng thử lại.'))+'</div>';
   }
   if(btn)btn.disabled=false;
 }
