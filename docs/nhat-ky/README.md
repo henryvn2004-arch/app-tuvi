@@ -1,6 +1,6 @@
 # Nhật ký phát triển — mục lục
 
-572 mục ghi chép từng PR, tách khỏi `CLAUDE.md` để nó thôi ngốn ~350k token mỗi lượt.
+573 mục ghi chép từng PR, tách khỏi `CLAUDE.md` để nó thôi ngốn ~350k token mỗi lượt.
 
 **Sáu file dưới đây KHÔNG được nạp tự động.** Cần thì tra:
 
@@ -12,7 +12,7 @@ sed -n '120,190p' docs/nhat-ky/2026-08.md    # đọc đúng đoạn, đừng ca
 
 | file | số mục | dung lượng |
 |---|---:|---:|
-| `2026-11.md` | 31 | 99,548 B |
+| `2026-11.md` | 32 | 99,548 B |
 | `2026-10.md` | 16 | 39,635 B |
 | `2026-09.md` | 360 | 1,241,867 B |
 | `2026-08.md` | 148 | 1,024,027 B |
@@ -29,6 +29,7 @@ Luật rút ra từ các mục này đã được cô đọng lên `CLAUDE.md`. 
 | # | tháng | file | mục |
 |---:|---|---|---|
 | 1 | 2026-11 | `2026-11.md` | 🧒 W22 — 10 trang gia đình/công sở (Dạy Con · Người Khác · Duyên Nợ · Hướng Nghiệp Trẻ · Chân Dung ×2 · Nhân Mạch · Công Sở · Cả Nhà · Sinh Con) đủ 5 ngôn ngữ; văn engine TS còn tiếng Việt |
+| 1 | 2026-11 | `2026-11.md` | 🧩 W26a — Widget dùng chung: `tuvi-form.js` + `noi-sinh.js` theo ngôn ngữ (114 khoá, tên nước qua Intl.DisplayNames) |
 | 1 | 2026-11 | `2026-11.md` | 📨 W17b — "Gửi lại PDF" đọc văn luận theo ngôn ngữ người nhận (`readLuanI18n`), hụt lùi bản Việt |
 | 1 | 2026-11 | `2026-11.md` | 🌐 W18 — Chân dung/cẩm nang theo locale (cache tách ngôn ngữ, sở hữu giữ nguyên) · link email `/<locale>/` · PDF font CJK/Hangul + khung theo ngôn ngữ |
 | 1 | 2026-11 | `2026-11.md` | 🗂️ W17 — Bản luận lá số theo (slug, locale): bảng con `laso_public_i18n`, `/api/laso-luan`, `check:lasoi18n` |

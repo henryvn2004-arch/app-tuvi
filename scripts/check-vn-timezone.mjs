@@ -106,7 +106,17 @@ for (const f of allSources(join(ROOT, 'public')).concat(allSources(join(ROOT, 's
 // Tooltip là thứ NGƯỜI DÙNG đọc; VN_TZ_HISTORY là thứ MÁY tính. Lệch nhau thì
 // một trong hai đang nói dối và không gì bắt được ngoài phép so này. So theo
 // CẤU TRÚC (mốc bắt đầu + offset của từng dòng), không so chuỗi thô.
-const tipRows = [...form.matchAll(/<li><b>([^<]*)<\/b>\s*\(UTC\+(\d)/g)].map((m) => {
+// Chữ tooltip nay đi qua T('js.tuviform.tip-liN', …) (i18n W26) ⇒ câu gốc nằm ở i18n/vi.json, không còn
+// literal trong tuvi-form.js. Đọc từ vi.json, và đòi form VẪN gọi đủ từng khoá (không thì tooltip mồ côi).
+const viDict = JSON.parse(readFileSync(join(ROOT, 'i18n/vi.json'), 'utf-8'));
+const tipKeys = Object.keys(viDict)
+  .filter((k) => /^js\.tuviform\.tip-li\d+$/.test(k))
+  .sort((a, b) => Number(a.match(/\d+$/)) - Number(b.match(/\d+$/)));
+for (const k of tipKeys)
+  if (!form.includes(`'${k}'`))
+    fail(`tuvi-form.js không còn gọi ${k} — tooltip múi giờ thiếu dòng.`);
+const tipSrc = tipKeys.map((k) => `<li>${viDict[k]}</li>`).join('\n');
+const tipRows = [...tipSrc.matchAll(/<li><b>([^<]*)<\/b>\s*\(UTC\+(\d)/g)].map((m) => {
   const start = m[1]
     .split('–')[0]
     .replace(/^Từ\s*/, '')
