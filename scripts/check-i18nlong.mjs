@@ -204,6 +204,24 @@ for (const ns of Object.keys(ENGINE_NS)) {
     if (!code.includes('TuviStarLabel.'))
       fail(`${f}: không gọi TuviStarLabel (nhãn sao sẽ giữ chữ Việt)`);
   }
+  // W30f-6: các trang hiện cách cục có tên / ý nghĩa cung ngoài 4 trang trên.
+  for (const f of [
+    'public/app-chan-dung-vo-chong.html',
+    'public/app-luan-giai.html',
+    'public/app-chu-trinh-cuoc-doi.html',
+    'public/app-van-han-nam.html',
+  ])
+    if (!/\/tools-shared\/cach-cuc\.js\?v=\d+/.test(doc(f)))
+      fail(`${f}: không nạp /tools-shared/cach-cuc.js`);
+  if (!doc('public/app-chan-dung-vo-chong.html').includes('TuviCachCuc.t('))
+    fail(
+      'public/app-chan-dung-vo-chong.html: không gọi TuviCachCuc.t (cách cục · ý nghĩa cổ pháp giữ chữ Việt)'
+    );
+  const lg = doc('public/luan-giai-core.js');
+  if ((lg.match(/_ccT\(/g) || []).length < 5)
+    fail(
+      'public/luan-giai-core.js: thiếu _ccT(...) ở khối Cách cục / Phân tích sao (cần ≥5 chỗ gọi + 1 định nghĩa)'
+    );
   const cs = doc('public/tools-shared/cong-so.js');
   if (!cs.includes('TuviCachCuc')) fail('public/tools-shared/cong-so.js: không gọi TuviCachCuc');
   if (!cs.includes('TuviStarLabel'))
