@@ -223,7 +223,7 @@ body{font-family:Arial,sans-serif;background:var(--bg);color:var(--text);min-hei
 @media(max-width:700px){.bc,.article-wrap{padding-left:20px;padding-right:20px}.article-title{font-size:24px}}
 ${ask.css}
 </style>
-<script src="/auth.js?v=9"></script>
+<script src="/auth.js?v=10"></script>
 </head><body>
 <div id="nav-ph" style="height:60px;background:#FBFAF6"></div>
 <script src="/track.js?v=8" defer></script><script src="/nav.js?v=49" defer></script>

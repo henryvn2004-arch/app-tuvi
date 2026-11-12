@@ -261,7 +261,7 @@ body{font-family:Arial,sans-serif;background:var(--bg-soft);color:var(--text);mi
 <script src="/track.js?v=8"></script>
 <script>try{window.Track&&window.Track.event&&window.Track.event('topup_start',{meta:{from:'topup_page'}})}catch(e){}</script>
 <script src="/tool-prices.js?v=12"></script>
-<script src="/auth.js?v=9"></script>
+<script src="/auth.js?v=10"></script>
 <script src="/promo.js?v=1"></script>
 </head>
 <body>
@@ -1006,7 +1006,7 @@ async function loadToolPricing() {
                 : (window.iconHtml ? window.iconHtml(t.icon) : '')
             ) + '</div>'
           + '<div><div class="cost-name">' + esc(dbLb('js.tool.' + t.tool_id, t.label)) + '</div>'
-          + (t.description ? '<div class="cost-desc">' + esc(t.description) + '</div>' : '')
+          + (t.description ? '<div class="cost-desc">' + esc(dbLb('js.tool-desc.' + t.tool_id, t.description)) + '</div>' : '')
           + '</div></div>'
           + '<div class="cost-right"><div class="cost-credits">' + Number(t.credits) + _tvmbT('js.topup.luong', ' Lượng</div>')
           + (moneyLbl ? '<div class="cost-vnd">' + moneyLbl + '</div>' : '') + '</div>'
