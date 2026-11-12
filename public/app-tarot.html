@@ -521,28 +521,28 @@ function renderCardSym(sym) {
 }
 
 var SPREADS = {
-  1: [{pos:'Thông Điệp',desc:'Năng lượng và thông điệp chính cho câu hỏi của bạn'}],
+  1: [{pos:_tvmbT('js.tarot.thong-diep', 'Thông Điệp'),desc:_tvmbT('js.tarot.nang-luong-va-thong-diep-chinh', 'Năng lượng và thông điệp chính cho câu hỏi của bạn')}],
   3: [
-    {pos:'Quá Khứ',desc:'Nền tảng và những gì đã dẫn đến tình huống hiện tại'},
-    {pos:'Hiện Tại',desc:'Tình trạng hiện tại và những gì đang ảnh hưởng đến bạn'},
-    {pos:'Tương Lai',desc:'Xu hướng và kết quả có thể nếu tiếp tục theo hướng này'},
+    {pos:_tvmbT('js.tarot.qua-khu', 'Quá Khứ'),desc:_tvmbT('js.tarot.nen-tang-va-nhung-gi-da', 'Nền tảng và những gì đã dẫn đến tình huống hiện tại')},
+    {pos:_tvmbT('js.tarot.hien-tai', 'Hiện Tại'),desc:_tvmbT('js.tarot.tinh-trang-hien-tai-va-nhung', 'Tình trạng hiện tại và những gì đang ảnh hưởng đến bạn')},
+    {pos:_tvmbT('js.tarot.tuong-lai', 'Tương Lai'),desc:_tvmbT('js.tarot.xu-huong-va-ket-qua-co', 'Xu hướng và kết quả có thể nếu tiếp tục theo hướng này')},
   ],
   10: [
-    {pos:'Tình Huống',desc:'Trung tâm — tình huống hay câu hỏi hiện tại'},
-    {pos:'Thách Thức',desc:'Điều đang cản trở hay thách thức bạn'},
-    {pos:'Quá Khứ Gần',desc:'Điều gì đó vừa qua ảnh hưởng đến tình huống'},
-    {pos:'Quá Khứ Xa',desc:'Nền tảng xa hơn của tình huống này'},
-    {pos:'Khả Năng Tốt Nhất',desc:'Điều tốt nhất có thể đạt được'},
-    {pos:'Tương Lai Gần',desc:'Điều sắp xảy ra trong thời gian ngắn'},
-    {pos:'Bản Thân',desc:'Cách bạn nhìn nhận tình huống'},
-    {pos:'Môi Trường',desc:'Những người và năng lượng xung quanh bạn'},
-    {pos:'Hy Vọng & Lo Sợ',desc:'Hy vọng sâu nhất hoặc nỗi lo sợ nhất của bạn'},
-    {pos:'Kết Quả',desc:'Kết quả có khả năng xảy ra nhất'},
+    {pos:_tvmbT('js.tarot.tinh-huong', 'Tình Huống'),desc:_tvmbT('js.tarot.trung-tam-tinh-huong-hay-cau', 'Trung tâm — tình huống hay câu hỏi hiện tại')},
+    {pos:_tvmbT('js.tarot.thach-thuc', 'Thách Thức'),desc:_tvmbT('js.tarot.dieu-dang-can-tro-hay-thach', 'Điều đang cản trở hay thách thức bạn')},
+    {pos:_tvmbT('js.tarot.qua-khu-gan', 'Quá Khứ Gần'),desc:_tvmbT('js.tarot.dieu-gi-do-vua-qua-anh', 'Điều gì đó vừa qua ảnh hưởng đến tình huống')},
+    {pos:_tvmbT('js.tarot.qua-khu-xa', 'Quá Khứ Xa'),desc:_tvmbT('js.tarot.nen-tang-xa-hon-cua-tinh', 'Nền tảng xa hơn của tình huống này')},
+    {pos:_tvmbT('js.tarot.kha-nang-tot-nhat', 'Khả Năng Tốt Nhất'),desc:_tvmbT('js.tarot.dieu-tot-nhat-co-the-dat', 'Điều tốt nhất có thể đạt được')},
+    {pos:_tvmbT('js.tarot.tuong-lai-gan', 'Tương Lai Gần'),desc:_tvmbT('js.tarot.dieu-sap-xay-ra-trong-thoi', 'Điều sắp xảy ra trong thời gian ngắn')},
+    {pos:_tvmbT('js.tarot.ban-than', 'Bản Thân'),desc:_tvmbT('js.tarot.cach-ban-nhin-nhan-tinh-huong', 'Cách bạn nhìn nhận tình huống')},
+    {pos:_tvmbT('js.tarot.moi-truong', 'Môi Trường'),desc:_tvmbT('js.tarot.nhung-nguoi-va-nang-luong-xung', 'Những người và năng lượng xung quanh bạn')},
+    {pos:_tvmbT('js.tarot.hy-vong-lo-so', 'Hy Vọng & Lo Sợ'),desc:_tvmbT('js.tarot.hy-vong-sau-nhat-hoac-noi', 'Hy vọng sâu nhất hoặc nỗi lo sợ nhất của bạn')},
+    {pos:_tvmbT('js.tarot.ket-qua', 'Kết Quả'),desc:_tvmbT('js.tarot.ket-qua-co-kha-nang-xay', 'Kết quả có khả năng xảy ra nhất')},
   ]
 };
 
 var SUIT_COLORS = {major:'#c9a84c',wands:'#E74C3C',cups:'#1455A4',swords:'#7F8C8D',pentacles:'#1E6B3C'};
-var SUIT_VI = {major:'Bí Ẩn Lớn',wands:'Gậy ♦ Lửa',cups:'Cốc ♦ Nước',swords:'Kiếm ♦ Gió',pentacles:'Tiền ♦ Đất'};
+var SUIT_VI = {major:_tvmbT('js.tarot.bi-an-lon', 'Bí Ẩn Lớn'),wands:_tvmbT('js.tarot.gay-lua', 'Gậy ♦ Lửa'),cups:_tvmbT('js.tarot.coc-nuoc', 'Cốc ♦ Nước'),swords:_tvmbT('js.tarot.kiem-gio', 'Kiếm ♦ Gió'),pentacles:_tvmbT('js.tarot.tien-dat', 'Tiền ♦ Đất')};
 
 var _spread = 1;
 var _drawn = [];
@@ -557,7 +557,7 @@ function draw() {
   const btn = document.getElementById('drawBtn');
   const lbl = document.getElementById('drawBtnLabel');
   btn.disabled = true;
-  lbl.textContent = 'Đang xáo bài...';
+  lbl.textContent = _tvmbT('js.tarot.dang-xao-bai', 'Đang xáo bài...');
   _drawn = [];
 
   setTimeout(() => {
@@ -572,7 +572,7 @@ function draw() {
 
     renderSpread();
     btn.disabled = false;
-    lbl.textContent = 'Xáo Bài & Rút Lại';
+    lbl.textContent = _tvmbT('js.tarot.xao-bai-rut-lai', 'Xáo Bài & Rút Lại');
   }, 800);
 }
 
@@ -597,20 +597,20 @@ function renderSpread() {
   }, 300);
 
   renderMeanings();
-  Shell.setShareable({ kind:'text', toolId:'tarot', title:'Kết quả Tarot của tôi', text: shareText() });
+  Shell.setShareable({ kind:'text', toolId:'tarot', title:_tvmbT('js.tarot.ket-qua-tarot-cua-toi', 'Kết quả Tarot của tôi'), text: shareText() });
   if (window.SHELL_INTRO) Shell.dismissIntro(window.SHELL_INTRO.key);
   const first = _drawn[0];
   Shell.setContext({
-    label: 'Tarot 78 Lá — ' + _drawn.length + ' lá',
-    greeting: (q ? 'Câu hỏi của bạn: "' + q + '". ' : '') + 'Lá đầu tiên bạn rút được: **' + first.name + '**' + (first.reversed ? ' (ngược)' : '') + '. Bạn muốn tôi luận theo hướng nào?',
-    chips: ['Major Arcana khác Minor Arcana thế nào?', 'Lá bài ngược nghĩa là gì?', 'Nên hỏi Tarot câu hỏi kiểu gì?']
+    label: _tvmbT('js.tarot.tarot-78-la', 'Tarot 78 Lá — ') + _drawn.length + _tvmbT('js.tarot.la', ' lá'),
+    greeting: (q ? _tvmbT('js.tarot.cau-hoi-cua-ban', 'Câu hỏi của bạn: "') + q + '". ' : '') + _tvmbT('js.tarot.la-dau-tien-ban-rut-duoc', 'Lá đầu tiên bạn rút được: **') + first.name + '**' + (first.reversed ? _tvmbT('js.tarot.nguoc', ' (ngược)') : '') + _tvmbT('js.tarot.ban-muon-toi-luan-theo-huong', '. Bạn muốn tôi luận theo hướng nào?'),
+    chips: [_tvmbT('js.tarot.major-arcana-khac-minor-arcana-the', 'Major Arcana khác Minor Arcana thế nào?'), _tvmbT('js.tarot.la-bai-nguoc-nghia-la-gi', 'Lá bài ngược nghĩa là gì?'), _tvmbT('js.tarot.nen-hoi-tarot-cau-hoi-kieu', 'Nên hỏi Tarot câu hỏi kiểu gì?')]
   });
   setTimeout(() => document.getElementById('result-section').scrollIntoView({ behavior: 'smooth', block: 'nearest' }), 400);
 }
 
 function shareText() {
   const spread = SPREADS[_spread];
-  return _drawn.map((c,i) => `${spread[i].pos}: ${c.name} (${c.reversed?'Ngược':'Xuôi'})`).join('\n');
+  return _drawn.map((c,i) => `${spread[i].pos}: ${c.name} (${c.reversed?_tvmbT('js.tarot.nguoc-2','Ngược'):_tvmbT('js.tarot.xuoi-2','Xuôi')})`).join('\n');
 }
 
 function cardBack(i) {
@@ -645,7 +645,7 @@ function flipCard(i) {
 function renderMeanings() {
   const spread = SPREADS[_spread];
   document.getElementById('readingResult').innerHTML = `
-    <div style="font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--text-lt);margin-bottom:16px">✦ Luận Giải Từng Lá</div>
+    <div style="font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--text-lt);margin-bottom:16px">✦ ${_tvmbT('js.tarot.luan-giai-tung-la','Luận Giải Từng Lá')}</div>
     ${_drawn.map((c, i) => {
       const col = SUIT_COLORS[c.type] || '#c9a84c';
       const meaning = c.reversed ? c.rev : c.up;
@@ -655,7 +655,7 @@ function renderMeanings() {
           <div class="cm-info">
             <div class="cm-name">${c.name} <span style="font-size:12px;color:var(--text-lt);font-weight:400">(${c.en})</span></div>
             <div class="cm-sub">${SUIT_VI[c.type]} · ${spread[i].pos}</div>
-            <span class="cm-pos ${c.reversed ? 'pos-reversed' : 'pos-upright'}">${c.reversed ? '↕ Ngược' : '↑ Xuôi'}</span>
+            <span class="cm-pos ${c.reversed ? 'pos-reversed' : 'pos-upright'}">${c.reversed ? _tvmbT('js.tarot.nguoc-wrh9', '↕ Ngược') : _tvmbT('js.tarot.xuoi', '↑ Xuôi')}</span>
           </div>
         </div>
         <div style="font-size:12px;color:var(--text-lt);margin-bottom:8px;font-style:italic">${spread[i].desc}</div>

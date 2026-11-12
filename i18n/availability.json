@@ -20,6 +20,9 @@
   "zh-tw",
   "zh-cn"
  ],
+ "/app/boi-bai-tay": [
+  "ja"
+ ],
  "/app/chu-trinh-cuoc-doi": [
   "en",
   "ja",
@@ -75,6 +78,12 @@
   "ko",
   "zh-tw",
   "zh-cn"
+ ],
+ "/app/oracle": [
+  "ja"
+ ],
+ "/app/tarot": [
+  "ja"
  ],
  "/app/van-han-nam": [
   "en",

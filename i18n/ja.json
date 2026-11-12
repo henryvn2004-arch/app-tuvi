@@ -103,6 +103,78 @@
   "t": "この四柱のために、子平の古法で一から書き下ろします。全16項目：格局、十神、大運、流年。",
   "h": "f54c0d01"
  },
+ "boibai.1-la-thong-diep-hom-nay": {
+  "t": "1枚 — 今日のメッセージ",
+  "h": "f2ebf342"
+ },
+ "boibai.2-nhan-ket-qua": {
+  "t": "<span class=\"wss-n\">2</span><span class=\"wss-l\">結果を受け取る</span>",
+  "h": "b0b2f830"
+ },
+ "boibai.3-la-tinh-trang-thach-thuc": {
+  "t": "3枚 — 現状 · 課題 · 結末",
+  "h": "a2b3d188"
+ },
+ "boibai.5-la-trai-bai-ngu-hanh": {
+  "t": "5枚 — 五行スプレッド",
+  "h": "d39d67bd"
+ },
+ "boibai.boi-bai-tay": {
+  "t": "トランプ占い",
+  "h": "4a54dbba"
+ },
+ "boibai.boi-bai-tay-rut-bai-52": {
+  "t": "<b>トランプ占い</b><span>52枚のカードを引く — 恋愛 · 仕事 · 金運 — 無料</span>",
+  "h": "8beef430"
+ },
+ "boibai.boi-bai-tay-truyen-thong-dung": {
+  "t": "伝統的なトランプ占いは、専用のタロットではなく一般的な52枚のトランプを使い、欧米の多くの国やベトナムの民間に広く親しまれてきました。各カードにはスートと数字ごとに固有の意味があり、これからの流れを占います。",
+  "h": "7e2a1c46"
+ },
+ "boibai.boi-bai-tay-tu-vi-minh": {
+  "t": "トランプ占い — 明宝紫微斗数",
+  "h": "0d1548c3"
+ },
+ "boibai.cau-hoi-tuy-chon": {
+  "t": "質問(任意)",
+  "h": "66f517b4"
+ },
+ "boibai.chon-kieu-rut-bai": {
+  "t": "引き方を選ぶ",
+  "h": "5215cc5a"
+ },
+ "boibai.chon-kieu-trai-1-3-hay": {
+  "t": "スプレッド(1・3・5枚)を選ぶと、システムが無作為にカードを引き、恋愛・仕事・金運の観点から1枚ずつ読み解きます。",
+  "h": "b47db074"
+ },
+ "boibai.khong-can-hieu-het-78-la": {
+  "t": "78枚すべてを理解する必要はありません。心に引っかかっている質問がひとつあれば十分です。直感で1枚引いて、短い占いの言葉を受け取りましょう。昔、祖母や母がしてくれたトランプ占いのように、やわらかく。",
+  "h": "2487c895"
+ },
+ "boibai.loi-boi-dan-gian": {
+  "t": "<span class=\"hp-ic\" data-icon=\"compass\"></span><span>民間に伝わる<br>占い方</span>",
+  "h": "d309e0a7"
+ },
+ "boibai.rut-1-3-hay-5-la": {
+  "t": "<span class=\"hp-ic\" data-icon=\"spade\"></span><span>1・3・5枚<br>から選べる</span>",
+  "h": "658be253"
+ },
+ "boibai.rut-bai-tay-52-la-ngay": {
+  "t": "明宝紫微斗数で52枚のトランプ占い — 1・3・5枚のスプレッドで、恋愛・仕事・金運を読み解きます。",
+  "h": "1dff4433"
+ },
+ "boibai.tinh-cam-su-nghiep-tai-chinh": {
+  "t": "<span class=\"hp-ic\" data-icon=\"heart\"></span><span>恋愛、<br>仕事、金運</span>",
+  "h": "397044b2"
+ },
+ "boibai.vd-tinh-hinh-tai-chinh-cua": {
+  "t": "例:これからの私の金運は?",
+  "h": "0d4f2217"
+ },
+ "boibai.xao-bai-rut": {
+  "t": "<span class=\"bg-label\"><span class=\"ic\" data-icon=\"spade\"></span><b id=\"drawBtnLabel\">シャッフルして引く</b></span>",
+  "h": "e53dcebd"
+ },
  "chat.ke-chuyen-cua-ban-minh-bao": {
   "t": "お話を聞かせてください。明宝が15人の先生の中から最適な先生をご案内します：紫微斗数の命盤、四柱推命、相性、命名、吉日選び。",
   "h": "0f564294"
@@ -8135,6 +8207,78 @@
   "t": "<span class=\"hp-ic\" data-icon=\"users\"></span><span>相性の良い年<br>悪い年</span>",
   "h": "9a664cc3"
  },
+ "oracle.1-chon-kieu-rut": {
+  "t": "<span class=\"wss-n\">1</span><span class=\"wss-l\">引き方を選ぶ</span>",
+  "h": "36067a21"
+ },
+ "oracle.1-la-thong-diep-hien-tai": {
+  "t": "<span class=\"ic\" data-icon=\"sparkles\"></span> 1枚 — 今のメッセージ",
+  "h": "726e8adf"
+ },
+ "oracle.2-nhan-thong-diep": {
+  "t": "<span class=\"wss-n\">2</span><span class=\"wss-l\">メッセージを受け取る</span>",
+  "h": "25e0a2ec"
+ },
+ "oracle.3-la-nhan-duyen-qua": {
+  "t": "<span class=\"ic\" data-icon=\"sparkles\"></span> 3枚 — 因 · 縁 · 果",
+  "h": "9e43bc49"
+ },
+ "oracle.5-la-ngu-hanh-cuoc-doi": {
+  "t": "<span class=\"ic\" data-icon=\"sparkles\"></span> 5枚 — 人生の五行",
+  "h": "1d191df9"
+ },
+ "oracle.am-duong-ngu-hanh-va-bat": {
+  "t": "陰陽・五行・八卦は、万物の動きと均衡の法則を説く、古代東洋哲学の三つの基礎理論です。易経や風水など多くの術数が、これらの根本概念の上に成り立っています。",
+  "h": "833f5e18"
+ },
+ "oracle.cau-hoi-hoac-chu-de-muon": {
+  "t": "思いを巡らせたい質問やテーマ(任意)",
+  "h": "c328ff62"
+ },
+ "oracle.chon-kieu-rut-1-3-hay": {
+  "t": "引き方(1・3・5枚)を選ぶと、システムが無作為にカードを引き、1枚ごとにメッセージと実践のヒントを示します。",
+  "h": "806df5fc"
+ },
+ "oracle.dinh-tam-rut-bai": {
+  "t": "<span class=\"bg-label\"><span class=\"ic\" data-icon=\"sparkles\"></span><b id=\"drawBtnLabel\">心を静めて引く</b></span>",
+  "h": "d210cb2f"
+ },
+ "oracle.doi-khi-khong-can-mot-cau": {
+  "t": "具体的な答えは要らない、ただ立ち止まってゆっくり息をつく一瞬が欲しい——そんなときもあります。陰陽・五行・八卦の哲理を宿した1枚を引き、心を静める短い言葉を受け取りましょう。",
+  "h": "e0cc111c"
+ },
+ "oracle.huong-dan-thuc-hanh": {
+  "t": "<span class=\"hp-ic\" data-icon=\"lightbulb\"></span><span>実践の<br>ヒント</span>",
+  "h": "c5fe62e9"
+ },
+ "oracle.oracle-phuong-dong": {
+  "t": "東洋オラクル",
+  "h": "1146fb81"
+ },
+ "oracle.oracle-phuong-dong-rut-the-minh": {
+  "t": "<b>東洋オラクル</b><span>陰陽 · 五行 · 八卦の叡智カードを引く — 無料</span>",
+  "h": "541241f2"
+ },
+ "oracle.oracle-phuong-dong-tu-vi-minh": {
+  "t": "東洋オラクル — 明宝紫微斗数",
+  "h": "1d867bec"
+ },
+ "oracle.rut-1-3-hay-5-la": {
+  "t": "<span class=\"hp-ic\" data-icon=\"sparkles\"></span><span>1・3・5枚<br>から選べる</span>",
+  "h": "527946ce"
+ },
+ "oracle.rut-the-oracle-40-la-theo": {
+  "t": "明宝紫微斗数で、東洋哲学(陰陽・五行・八卦・天干地支)にもとづくオラクルカード40枚を引けます。",
+  "h": "83cb33e6"
+ },
+ "oracle.triet-ly-phuong-dong": {
+  "t": "<span class=\"hp-ic\" data-icon=\"aperture\"></span><span>東洋の<br>哲理</span>",
+  "h": "5b82c97f"
+ },
+ "oracle.vd-toi-can-nhan-ra-dieu": {
+  "t": "例:この時期、私が気づくべきことは?",
+  "h": "fba02ed0"
+ },
  "privacy.1-thong-tin-chung-toi-thu": {
   "t": "1. 収集する情報",
   "h": "5354d2ca"
@@ -8318,6 +8462,74 @@
  "privacy.xac-minh-trang-thai-thanh-toan": {
   "t": "決済状況の確認と結果のご提供",
   "h": "84a1b3b2"
+ },
+ "tarot.1-la-thong-diep-hom-nay": {
+  "t": "<span class=\"ic\" data-icon=\"sparkles\"></span> 1枚 — 今日のメッセージ",
+  "h": "ccc434dd"
+ },
+ "tarot.3-la-qua-khu-hien-tai": {
+  "t": "<span class=\"ic\" data-icon=\"sparkles\"></span> 3枚 — 過去 · 現在 · 未来",
+  "h": "880a5e95"
+ },
+ "tarot.cau-hoi-tuy-chon-nghi-trong": {
+  "t": "質問(任意 — 心の中で思い浮かべるか、ここに書いてください)",
+  "h": "1e7d5e62"
+ },
+ "tarot.celtic-cross-10-la": {
+  "t": "<span class=\"ic\" data-icon=\"sparkles\"></span> ケルト十字 — 10枚",
+  "h": "377006eb"
+ },
+ "tarot.chon-kieu-trai-1-3-hay": {
+  "t": "スプレッド(1・3・10枚)を選んでカードを無作為に引くと、正位置・逆位置を踏まえて、あなたの質問に沿った1枚ずつの読み解きが得られます。",
+  "h": "042a47ab"
+ },
+ "tarot.chon-kieu-trai-bai": {
+  "t": "スプレッドを選ぶ",
+  "h": "0d50f92b"
+ },
+ "tarot.doi-khi-chi-can-mot-la": {
+  "t": "迷っていることをはっきり見るには、カード1枚で十分なこともあります。スプレッドを選び、心にある質問を入力すれば、正位置・逆位置の読み解きがすぐに届きます。",
+  "h": "a7f0500b"
+ },
+ "tarot.luan-theo-cau-hoi-cua-ban": {
+  "t": "<span class=\"hp-ic\" data-icon=\"message-circle\"></span><span>あなたの質問に<br>沿って読み解く</span>",
+  "h": "85a815e9"
+ },
+ "tarot.rut-bai-tarot-78-la-ngay": {
+  "t": "明宝紫微斗数で78枚のタロットを引く — 1枚・3枚・ケルト十字10枚のスプレッドで、正位置・逆位置の意味を読み解きます。",
+  "h": "6902f0c6"
+ },
+ "tarot.tarot-78-la": {
+  "t": "タロット78枚",
+  "h": "0454df6e"
+ },
+ "tarot.tarot-78-la-rut-bai-trai": {
+  "t": "<b>タロット78枚</b><span>カードを引く — 1枚 / 3枚 / ケルト十字 — 無料</span>",
+  "h": "a74872de"
+ },
+ "tarot.tarot-78-la-tu-vi-minh": {
+  "t": "タロット78枚 — 明宝紫微斗数",
+  "h": "e9e2dbdf"
+ },
+ "tarot.tarot-la-bo-bai-78-la": {
+  "t": "タロットは78枚で構成されるカードで、22枚の大アルカナ(メジャーアルカナ)と56枚の小アルカナ(マイナーアルカナ)からなります。15世紀のヨーロッパに現れ、のちに内省や占いに広く用いられるようになりました。各カードには固有の象徴があり、正位置か逆位置かによって読み方が変わります。",
+  "h": "6a9eabe4"
+ },
+ "tarot.trai-1-3-hay-10-la": {
+  "t": "<span class=\"hp-ic\" data-icon=\"wallet-cards\"></span><span>1・3・10枚<br>のスプレッド</span>",
+  "h": "4355e693"
+ },
+ "tarot.vd-tinh-trang-su-nghiep-cua": {
+  "t": "例:今の私の仕事運はどうですか?",
+  "h": "69397559"
+ },
+ "tarot.xao-bai-rut": {
+  "t": "<span class=\"bg-label\"><span class=\"ic\" data-icon=\"wallet-cards\"></span><b id=\"drawBtnLabel\">シャッフルして引く</b></span>",
+  "h": "f40097d9"
+ },
+ "tarot.xuoi-hay-nguoc-nghia": {
+  "t": "<span class=\"hp-ic\" data-icon=\"sparkles\"></span><span>正位置と<br>逆位置</span>",
+  "h": "3097eb49"
  },
  "terms.1-tinh-chat-dich-vu": {
   "t": "1. サービスの性質",
