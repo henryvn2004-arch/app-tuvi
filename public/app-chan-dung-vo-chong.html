@@ -277,10 +277,10 @@ var _resultImgUrl = '';
 var _lastBirth = null;
 var _lastData = null;
 var CDVC_STEPS = [
-  { label: 'Lập lá số & xác định cung Phu Thê', ms: 900 },
-  { label: 'Luận giải cung Phu Thê', ms: 4500 },
-  { label: 'Phác thảo mô tả & ước lượng tuổi bạn đời', ms: 3200 },
-  { label: 'Đang vẽ chân dung (thường 45–60 giây)', ms: 0 },
+  { label: _tvmbT('js.cdvc.lap-la-so-xac-dinh-cung', 'Lập lá số & xác định cung Phu Thê'), ms: 900 },
+  { label: _tvmbT('js.cdvc.luan-giai-cung-phu-the', 'Luận giải cung Phu Thê'), ms: 4500 },
+  { label: _tvmbT('js.cdvc.phac-thao-mo-ta-uoc-luong', 'Phác thảo mô tả & ước lượng tuổi bạn đời'), ms: 3200 },
+  { label: _tvmbT('js.cdvc.dang-ve-chan-dung-thuong-45', 'Đang vẽ chân dung (thường 45–60 giây)'), ms: 0 },
 ];
 var _loadingCtl = null;
 var _imgRetryTimer = null;
@@ -297,7 +297,7 @@ function setResultImage(url) {
   var status = document.getElementById('imgLoadStatus');
   function showWaiting() {
     if (!status) return;
-    status.innerHTML = 'Ảnh đang tải, có thể hơi chậm — vui lòng đợi hoặc <button type="button" class="btn" style="padding:2px 10px;font-size:12px;margin-left:4px" onclick="retryResultImage()">Tải lại</button>';
+    status.innerHTML = (_tvmbT('js.cdvc.anh-dang-tai-co-the-hoi', 'Ảnh đang tải, có thể hơi chậm — vui lòng đợi hoặc') + ' <button type="button" class="btn" style="padding:2px 10px;font-size:12px;margin-left:4px" onclick="retryResultImage()">' + _tvmbT('js.cdvc.tai-lai', 'Tải lại') + '</button>');
     status.style.display = 'block';
   }
   function hideWaiting() { if (status) status.style.display = 'none'; }
@@ -396,7 +396,7 @@ async function analyze() {
   showError('');
   var fdIn = TuviForm.getData();
   var gender = fdIn.gioitinh, dd = fdIn.ngay, mm = fdIn.thang, yyyy = fdIn.nam, gioAmIdx = fdIn.gioIdx;
-  if (!dd || !mm || !yyyy) { showError('Vui lòng nhập đầy đủ ngày tháng năm sinh.'); return; }
+  if (!dd || !mm || !yyyy) { showError(_tvmbT('js.cdvc.vui-long-nhap-day-du-ngay', 'Vui lòng nhập đầy đủ ngày tháng năm sinh.')); return; }
 
   // Lưu lại NGAY để `?tpwResume=1` (xem `CDVC_RESUME_KEY` ở đầu file) khôi
   // phục được form này không cần gõ lại.
@@ -413,7 +413,7 @@ async function analyze() {
     free = await TuviPaywall.isFreeRerun('/api/chan-dung-vo-chong', PortraitRecover.birthQuery(_lastBirth));
   } catch (e) { free = false; }
   if (free) {
-    TuviPaywall._banner('✓ Bạn đã tạo kết quả cho lá số này — mở lại, không trừ Lượng');
+    TuviPaywall._banner(_tvmbT('js.cdvc.ban-da-tao-ket-qua-cho', '✓ Bạn đã tạo kết quả cho lá số này — mở lại, không trừ Lượng'));
     await _doGenerate(true);
     return;
   }
@@ -435,7 +435,7 @@ async function _runAnonPreview() {
       body: JSON.stringify({ birth: _lastBirth }),
     });
     var data = await res.json();
-    if (!res.ok || !data.success) throw new Error(data.error || 'Lỗi ' + res.status);
+    if (!res.ok || !data.success) throw new Error(data.error || _tvmbT('js.cdvc.loi', 'Lỗi ') + res.status);
     renderMeta(data);
     mountHook(data);
     document.getElementById('btnEdit').style.display = '';
@@ -447,7 +447,7 @@ async function _runAnonPreview() {
     _mountCnsVoChong(_lastBirth);
   } catch (e) {
     _closePanel();
-    showError('Lỗi: ' + (e.message || 'Không thể kết nối. Vui lòng thử lại.'));
+    showError(_tvmbT('js.cdvc.loi-8d72', 'Lỗi: ') + (e.message || _tvmbT('js.cdvc.khong-the-ket-noi-vui-long', 'Không thể kết nối. Vui lòng thử lại.')));
   }
 }
 
@@ -468,8 +468,8 @@ function mountHook(data) {
     var hiem = HF.cachCucHiem(pseudoLs, census);
     var spec = {
       tool: 'chan-dung-vo-chong',
-      toolLabel: 'Chân Dung Người Phối Ngẫu',
-      charts: [hexDims ? { type: 'hexRadar', data: { dims: hexDims }, title: 'Lục Giác cung Phu Thê' } : null].filter(Boolean),
+      toolLabel: _tvmbT('js.cdvc.chan-dung-nguoi-phoi-ngau', 'Chân Dung Người Phối Ngẫu'),
+      charts: [hexDims ? { type: 'hexRadar', data: { dims: hexDims }, title: _tvmbT('js.cdvc.luc-giac-cung-phu-the', 'Lục Giác cung Phu Thê') } : null].filter(Boolean),
       facts: [tongFact, hiem].filter(Boolean),
     };
     window.HookLayer.run(host, spec);
@@ -483,12 +483,12 @@ function _renderLockWall() {
   host.innerHTML = '';
   TuviPaywall.lockPreview({
     host: host,
-    title: '⊙ Chân dung người phối ngẫu chưa mở',
+    title: _tvmbT('js.cdvc.chan-dung-nguoi-phoi-ngau-chua', '⊙ Chân dung người phối ngẫu chưa mở'),
     items: [
       'Bức tranh chân dung — vẽ riêng theo lá số của bạn',
       'Luận giải cung Phu Thê + hoàn cảnh gặp gỡ',
     ],
-    cta: 'Mở chân dung đầy đủ',
+    cta: _tvmbT('js.cdvc.mo-chan-dung-day-du', 'Mở chân dung đầy đủ'),
     slug: function () { return _currentSlug; },
     onUnlock: function () { return _doGenerate(false); },
   });
@@ -523,9 +523,9 @@ function _showDummyPortrait(gender) {
   if (!host || !url) return;
   host.style.display = 'block';
   host.innerHTML =
-    TuviPaywall.lockBadge('Ảnh minh hoạ — chưa mở') +
+    TuviPaywall.lockBadge(_tvmbT('js.cdvc.anh-minh-hoa-chua-mo', 'Ảnh minh hoạ — chưa mở')) +
     '<img src="' + url + '" class="tpw-real-lock" ' +
-    'alt="Ảnh minh hoạ (mờ) — mở khoá để xem chân dung thật" ' +
+    'alt="' + _tvmbT('js.cdvc.anh-minh-hoa-mo-mo-khoa', 'Ảnh minh hoạ (mờ) — mở khoá để xem chân dung thật') + '" ' +
     'style="display:block;margin-top:8px;max-width:260px;width:100%;border-radius:12px">' +
     '<div id="dummyPortraitDesc" style="margin-top:10px"></div>';
   _cdvcDummyPromise().then(function (d) {
@@ -548,7 +548,7 @@ function _showLuanGiaiSkeleton() {
   var block = document.getElementById('luanGiaiBlock');
   var text = document.getElementById('luanGiaiText');
   if (!block || !text) return;
-  var badge = TuviPaywall.lockBadge('Luận giải — chưa mở');
+  var badge = TuviPaywall.lockBadge(_tvmbT('js.cdvc.luan-giai-chua-mo', 'Luận giải — chưa mở'));
   text.innerHTML = badge +
     '<div class="tpw-lock-blur" aria-hidden="true" style="margin-top:10px">' +
       '<i style="width:96%"></i><i style="width:88%"></i><i style="width:93%"></i>' +
@@ -616,7 +616,7 @@ async function _doGenerate(freeRerun) {
       // người dùng còn biết là chưa hỏng.
       if (rd) { data = rd; res = { ok: true, status: 200 }; }
     }
-    if (!res) throw new Error('Không thể kết nối. Vui lòng thử lại.');
+    if (!res) throw new Error(_tvmbT('js.cdvc.khong-the-ket-noi-vui-long', 'Không thể kết nối. Vui lòng thử lại.'));
     // Đi đường miễn phí mà server vẫn đòi tiền (bản cache vừa bị xoá giữa hai
     // lần hỏi) → quay lại đường trả phí thay vì ném một lỗi khó hiểu.
     if (res.status === 402 && freeRerun) {
@@ -625,7 +625,7 @@ async function _doGenerate(freeRerun) {
       await TuviPaywall.requireCredits(_currentSlug, function () { return _doGenerate(false); });
       return;
     }
-    if (!res.ok || !data.success) throw new Error(data.error || 'Lỗi ' + res.status);
+    if (!res.ok || !data.success) throw new Error(data.error || _tvmbT('js.cdvc.loi', 'Lỗi ') + res.status);
 
     _resultImgUrl = data.imageUrl;
     _lastData = data;
@@ -640,36 +640,36 @@ async function _doGenerate(freeRerun) {
     Shell.setContext({
       birth: _lastBirth,
       label: 'Chân dung vợ chồng',
-      greeting: 'Đã vẽ xong chân dung dựa trên cung Phu Thê của bạn. Muốn hỏi thêm về hôn nhân, cung Phu Thê hay lá số?',
-      chips: ['Cung Phu Thê của tôi có gì đặc biệt?', 'Hôn nhân của tôi có thuận không?', 'Bao giờ tôi lập gia đình?', 'Xem thêm về tính cách của tôi'],
+      greeting: _tvmbT('js.cdvc.da-ve-xong-chan-dung-dua', 'Đã vẽ xong chân dung dựa trên cung Phu Thê của bạn. Muốn hỏi thêm về hôn nhân, cung Phu Thê hay lá số?'),
+      chips: [_tvmbT('js.cdvc.cung-phu-the-cua-toi-co-gi', 'Cung Phu Thê của tôi có gì đặc biệt?'), _tvmbT('js.cdvc.hon-nhan-cua-toi-co-thuan', 'Hôn nhân của tôi có thuận không?'), _tvmbT('js.cdvc.bao-gio-toi-lap-gia-dinh', 'Bao giờ tôi lập gia đình?'), _tvmbT('js.cdvc.xem-them-ve-tinh-cach', 'Xem thêm về tính cách của tôi')],
     });
     // Dựng blocks Y HỆT 3 card đang hiện trong workspace (res-block: Cung Phu
     // Thê / Chân Dung / Luận Giải) — trang /ket-qua render lại đúng layout đó,
     // không chỉ mỗi tấm ảnh phẳng.
-    var spouseLabel = data.spouseGender === 'nu' ? 'Người Vợ' : 'Người Chồng';
+    var spouseLabel = data.spouseGender === 'nu' ? _tvmbT('js.cdvc.nguoi-vo', 'Người Vợ') : _tvmbT('js.cdvc.nguoi-chong', 'Người Chồng');
     var shareBlocks = [];
     if (data.phuThe) {
       var pt = data.phuThe;
       var ptLines = [
-        'Chính tinh: ' + ((pt.chinhTinh || []).join(', ') || 'Vô chính diệu'),
-        'Phụ tinh: ' + ((pt.phuTinh || []).slice(0, 10).join(', ') || '—'),
+        _tvmbT('js.cdvc.chinh-tinh-ds', 'Chính tinh: {ds}', {ds: (pt.chinhTinh || []).map(function (x) { return _tvmbG(['chinh', 'sao'], x); }).join(', ') || _tvmbT('js.cdvc.vo-chinh-dieu', 'Vô chính diệu')}),
+        _tvmbT('js.cdvc.phu-tinh-ds', 'Phụ tinh: {ds}', {ds: (pt.phuTinh || []).slice(0, 10).map(function (x) { return _tvmbG(['chinh', 'sao'], x); }).join(', ') || '—'}),
       ];
       if (pt.cachCuc && pt.cachCuc.length) {
-        ptLines.push('Cách cục đặc biệt: ' + pt.cachCuc.map(function (c) { return c.ten + (c.moTa ? ' — ' + c.moTa : ''); }).join('; '));
+        ptLines.push(_tvmbT('js.cdvc.cach-cuc-dac-biet', 'Cách cục đặc biệt: ') + pt.cachCuc.map(function (c) { return c.ten + (c.moTa ? ' — ' + c.moTa : ''); }).join('; '));
       }
-      if (pt.yNghia && pt.yNghia.length) ptLines.push('Ý nghĩa cổ pháp: ' + pt.yNghia.join('; '));
-      shareBlocks.push({ header: 'Cung Phu Thê Trong Lá Số Của Bạn', text: ptLines.join('\n') });
+      if (pt.yNghia && pt.yNghia.length) ptLines.push(_tvmbT('js.cdvc.y-nghia-co-phap', 'Ý nghĩa cổ pháp: ') + pt.yNghia.join('; '));
+      shareBlocks.push({ header: _tvmbT('js.cdvc.cung-phu-the-trong-la-so', 'Cung Phu Thê Trong Lá Số Của Bạn'), text: ptLines.join('\n') });
     }
     var cdText = spouseLabel;
     if (data.description) cdText += '\n\n' + data.description;
-    if (data.meetingContext) cdText += '\n\nHoàn cảnh gặp gỡ: ' + data.meetingContext;
-    shareBlocks.push({ header: 'Chân Dung Người Phối Ngẫu', image: data.imageUrl, text: cdText });
-    if (data.phuTheLuanGiai) shareBlocks.push({ header: 'Luận Giải Cung Phu Thê', text: data.phuTheLuanGiai });
+    if (data.meetingContext) cdText += _tvmbT('js.cdvc.hoan-canh-gap-go', '\n\nHoàn cảnh gặp gỡ: ') + data.meetingContext;
+    shareBlocks.push({ header: _tvmbT('js.cdvc.chan-dung-nguoi-phoi-ngau', 'Chân Dung Người Phối Ngẫu'), image: data.imageUrl, text: cdText });
+    if (data.phuTheLuanGiai) shareBlocks.push({ header: _tvmbT('js.cdvc.luan-giai-cung-phu-the-p43z', 'Luận Giải Cung Phu Thê'), text: data.phuTheLuanGiai });
 
     Shell.setShareable({
       kind: 'image',
       toolId: 'chan-dung-vo-chong',
-      title: 'Chân dung ' + (data.spouseGender === 'nu' ? 'người vợ' : 'người chồng') + ' của tôi',
+      title: data.spouseGender === 'nu' ? _tvmbT('js.cdvc.chan-dung-nguoi-vo-cua-toi', 'Chân dung người vợ của tôi') : _tvmbT('js.cdvc.chan-dung-nguoi-chong-cua-toi', 'Chân dung người chồng của tôi'),
       imageUrl: data.imageUrl,
       blocks: shareBlocks,
     });
@@ -680,7 +680,7 @@ async function _doGenerate(freeRerun) {
     if (window.TuviPaywall && TuviPaywall.showRefundNotice) TuviPaywall.showRefundNotice(data);
     _loadingCtl && _loadingCtl.stop();
     _closePanel();
-    showError('Lỗi: ' + (e.message || 'Không thể kết nối. Vui lòng thử lại.'));
+    showError(_tvmbT('js.cdvc.loi-8d72', 'Lỗi: ') + (e.message || _tvmbT('js.cdvc.khong-the-ket-noi-vui-long', 'Không thể kết nối. Vui lòng thử lại.')));
   }
 }
 
@@ -720,15 +720,15 @@ function renderMeta(data) {
   // TRƯỚC nên khối đã dựng sẵn; ở đây bỏ qua thay vì xoá trắng nó đi.
   if (!data.morph) return;
   var core = data.coreStar
-    ? '<b>Chính tinh chủ:</b> ' + esc(data.coreStar) +
+    ? _tvmbT('js.cdvc.chinh-tinh-chu', '<b>Chính tinh chủ:</b> ') + esc(_tvmbG(['chinh', 'sao'], data.coreStar)) +
       (data.coreBrightness ? ' (' + esc(data.coreBrightness) + ')' : '') +
-      (data.coreIsSatTinh ? ' — sát tinh, phá cách ngay từ gốc' : '')
+      (data.coreIsSatTinh ? _tvmbT('js.cdvc.sat-tinh-pha-cach-ngay-tu', ' — sát tinh, phá cách ngay từ gốc') : '')
     : '';
   document.getElementById('morphCore').innerHTML = core;
   document.getElementById('morphRows').innerHTML = data.morph.map(function (r) {
     var src = r.star
-      ? '<span class="src">' + (r.isCore ? 'theo chính tinh ' : 'theo phụ tinh ') + esc(r.star) +
-        (r.isSat ? ' (sát tinh — phá cách)' : '') + '</span>'
+      ? '<span class="src">' + (r.isCore ? _tvmbT('js.cdvc.theo-chinh-tinh', 'theo chính tinh ') : _tvmbT('js.cdvc.theo-phu-tinh', 'theo phụ tinh ')) + esc(_tvmbG(['chinh', 'sao'], r.star)) +
+        (r.isSat ? _tvmbT('js.cdvc.sat-tinh-pha-cach', ' (sát tinh — phá cách)') : '') + '</span>'
       : '';
     return '<tr><td class="k">' + esc(r.label) + '</td><td class="v">' + esc(r.value) + src + '</td></tr>';
   }).join('');
@@ -737,7 +737,7 @@ function renderMeta(data) {
 
 function renderProse(data) {
   setResultImage(data.imageUrl);
-  document.getElementById('descTitle').textContent = data.spouseGender === 'nu' ? 'Người Vợ' : 'Người Chồng';
+  document.getElementById('descTitle').textContent = data.spouseGender === 'nu' ? _tvmbT('js.cdvc.nguoi-vo', 'Người Vợ') : _tvmbT('js.cdvc.nguoi-chong', 'Người Chồng');
   document.getElementById('descText').textContent = data.description;
   var meetingBlock = document.getElementById('meetingBlock');
   if (data.meetingContext) {
@@ -756,7 +756,7 @@ function renderProse(data) {
   // Nên CTA đổi hướng: xin xác nhận "đúng gu chưa" + rủ bạn TỰ vẽ chân dung
   // của họ, thay vì "gửi cho người B trong kết quả này xem".
   document.getElementById('cdvcInviteText').innerHTML =
-    'Đúng gu bạn chưa? Gửi ảnh này cho hội bạn xem, rồi rủ họ vẽ thử <b>người bạn đời tương lai của chính họ</b> luôn.';
+    _tvmbT('js.cdvc.dung-gu-ban-chua-gui-anh', 'Đúng gu bạn chưa? Gửi ảnh này cho hội bạn xem, rồi rủ họ vẽ thử <b>người bạn đời tương lai của chính họ</b> luôn.');
   document.getElementById('cdvcInviteBlock').style.display = 'flex';
   _mountCnsVoChong(_lastBirth);
 }
@@ -764,8 +764,8 @@ function renderProse(data) {
 function renderPhuThe(pt) {
   var block = document.getElementById('phuTheBlock');
   if (!pt) { block.style.display = 'none'; return; }
-  document.getElementById('ptChinh').textContent = (pt.chinhTinh || []).join(', ') || 'Vô chính diệu';
-  document.getElementById('ptPhu').textContent = (pt.phuTinh || []).slice(0, 10).join(', ') || '—';
+  document.getElementById('ptChinh').textContent = (pt.chinhTinh || []).map(function (x) { return _tvmbG(['chinh', 'sao'], x); }).join(', ') || _tvmbT('js.cdvc.vo-chinh-dieu', 'Vô chính diệu');
+  document.getElementById('ptPhu').textContent = (pt.phuTinh || []).slice(0, 10).map(function (x) { return _tvmbG(['chinh', 'sao'], x); }).join(', ') || '—';
 
   var ccWrap = document.getElementById('ptCachCucWrap');
   if (pt.cachCuc && pt.cachCuc.length) {
@@ -807,13 +807,13 @@ function _posterOpts() {
   var chinh = ((d.phuThe || {}).chinhTinh || []).join(', ');
   return {
     imageUrl: _resultImgUrl,
-    title: d.spouseGender === 'nu' ? 'Chân dung người vợ của tôi' : 'Chân dung người chồng của tôi',
-    subtitle: chinh ? 'Cung Phu Thê: ' + chinh : 'Phác hoạ từ cung Phu Thê trong lá số',
+    title: d.spouseGender === 'nu' ? _tvmbT('js.cdvc.chan-dung-nguoi-vo-cua-toi', 'Chân dung người vợ của tôi') : _tvmbT('js.cdvc.chan-dung-nguoi-chong-cua-toi', 'Chân dung người chồng của tôi'),
+    subtitle: chinh ? _tvmbT('js.cdvc.cung-phu-the', 'Cung Phu Thê: ') + chinh : _tvmbT('js.cdvc.phac-hoa-tu-cung-phu-the', 'Phác hoạ từ cung Phu Thê trong lá số'),
     // Hoàn cảnh gặp gỡ trước phần mô tả ngoại hình: câu kể một khung cảnh đọc
     // hấp dẫn hơn câu tả mũi tả mắt, mà đây là ảnh để người ta đăng lên khoe.
     quote: Poster.pickQuote([d.meetingContext, d.description, d.phuTheLuanGiai]),
     qrUrl: Poster.qrLink('chan-dung-vo-chong', '/app/chan-dung-vo-chong'),
-    qrCaption: 'Quét mã — xem chân dung của bạn',
+    qrCaption: _tvmbT('js.cdvc.quet-ma-xem-chan-dung-cua', 'Quét mã — xem chân dung của bạn'),
   };
 }
 
@@ -821,7 +821,7 @@ async function downloadResult() {
   if (!_resultImgUrl) return;
   var btn = document.getElementById('btnDownload');
   var label = btn ? btn.textContent : '';
-  if (btn) { btn.disabled = true; btn.textContent = 'Đang dựng ảnh…'; }
+  if (btn) { btn.disabled = true; btn.textContent = _tvmbT('js.cdvc.dang-dung-anh', 'Đang dựng ảnh…'); }
   try {
     await _ensurePoster();
     await Poster.download(_posterOpts(), 'chan-dung-vo-chong-tuviminhbao.png');
@@ -864,7 +864,7 @@ async function _loadHistory() {
     var data = await res.json();
     if (!data.success || !data.items?.length) return;
     document.getElementById('histList').innerHTML = data.items.map(function (it) {
-      return '<img src="' + it.image_url + '" title="' + (it.spouse_gender === 'nu' ? 'Vợ' : 'Chồng') + ' — ' + it.spouse_age + ' tuổi" onclick="window.open(\'' + it.image_url + '\',\'_blank\')">';
+      return '<img src="' + it.image_url + '" title="' + (it.spouse_gender === 'nu' ? _tvmbT('js.cdvc.vo', 'Vợ') : _tvmbT('js.cdvc.chong', 'Chồng')) + ' — ' + _tvmbT('js.cdvc.n-tuoi-hist', '{n} tuổi', {n: it.spouse_age}) + '" onclick="window.open(\'' + it.image_url + '\',\'_blank\')">';
     }).join('');
     document.getElementById('histBlock').style.display = 'block';
   } catch (e) {}
@@ -876,7 +876,7 @@ function _mountInviteCta() {
   var host = document.getElementById('resPanel');
   if (!host) return;
   var go = function () {
-    if (window.InviteCta) window.InviteCta.mount(host, { toolId: 'chan-dung-vo-chong', toolLabel: 'lượt vẽ' });
+    if (window.InviteCta) window.InviteCta.mount(host, { toolId: 'chan-dung-vo-chong', toolLabel: _tvmbT('js.cdvc.luot-ve', 'lượt vẽ') });
   };
   if (window.InviteCta) return go();
   if (document.getElementById('_ivc_js')) return;

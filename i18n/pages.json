@@ -234,6 +234,55 @@
    "shell"
   ]
  },
+ "/app/chan-dung-vo-chong": {
+  "file": "app-chan-dung-vo-chong.html",
+  "keys": [
+   "battu.1-nhap-thong-tin",
+   "battu.3-thanh-toan",
+   "battu.4-nhan-ket-qua",
+   "battu.chi-phi-su-dung",
+   "battu.gioi-thieu",
+   "battu.hoi",
+   "cdvc.2-xem-truoc-cung-phu-the",
+   "cdvc.anh-chan-dung-minh-hoa",
+   "cdvc.ban-luan-giai-mau-tai-pdf",
+   "cdvc.bang-tren-la-tra-bang-co",
+   "cdvc.cach-cuc-dac-biet",
+   "cdvc.chan-dung-nay-chi-mang-tinh",
+   "cdvc.chan-dung-nguoi-phoi-ngau",
+   "cdvc.chan-dung-nguoi-phoi-ngau-xs4t",
+   "cdvc.chan-dung-vo-chong",
+   "cdvc.chan-dung-vo-chong-tu-vi",
+   "cdvc.chan-dung-vo-chong-ve-chan",
+   "cdvc.chia-se-cho-ban-be-xem",
+   "cdvc.chinh-tinh",
+   "cdvc.cung-phu-the-trong-la-so",
+   "cdvc.hinh-the-suy-tu-sao",
+   "cdvc.hinh-the-suy-tu-sao-tai",
+   "cdvc.hoan-canh-gap-go",
+   "cdvc.luan-giai-cung-phu-the",
+   "cdvc.luan-giai-cung-phu-the-e93e",
+   "cdvc.mo-ta",
+   "cdvc.moi-luot-luong",
+   "cdvc.nhap-ngay-sinh-khong-can-them",
+   "cdvc.phan-tich-cung-phu-the-trong",
+   "cdvc.phu-tinh",
+   "cdvc.tra-loi-thay-o-khung-chat",
+   "cdvc.truoc-khi-gap-dung-nguoi-nhieu",
+   "cdvc.ve-chan-dung-ton-luong",
+   "cdvc.ve-lai",
+   "cdvc.y-nghia-co-phap",
+   "ctk.da-ve-truoc-do",
+   "ctk.nhap-ngay-sinh-cua-ban-duong",
+   "duyenno.tai-anh-dang-story",
+   "luangiai.chuyen-khoan-qua-qr-ngan-hang",
+   "luangiai.mua-goi-de-nhan-nhieu-uu",
+   "luangiai.tu-vi-dau-so-la-mot"
+  ],
+  "js": [
+   "shell"
+  ]
+ },
  "/app/chu-trinh-cuoc-doi": {
   "file": "app-chu-trinh-cuoc-doi.html",
   "keys": [
