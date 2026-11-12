@@ -134,7 +134,7 @@ function renderMarkdown(text) {
 
 function updateSEO(book) {
   const url = `https://www.tuviminhbao.com/tai-lieu/sach/${book.slug}`;
-  const title = `${book.title} — ${book.author} | Tử Vi Minh Bảo`;
+  const title = `${book.title} — ${book.author} | ${_tvmbT('js.sachdetail.tu-vi-minh-bao', 'Tử Vi Minh Bảo')}`;
   document.title = title;
   document.querySelector('meta[name="description"]')?.setAttribute('content', book.excerpt || book.title);
   document.querySelector('meta[property="og:title"]')?.setAttribute('content', title);
@@ -202,10 +202,10 @@ function render(book) {
   document.getElementById('bc-title').textContent = book.title;
 
   // Meta badges
-  const langLabel = book.language === 'vi' ? 'Tiếng Việt' : 'Tiếng Trung';
+  const langLabel = book.language === 'vi' ? _tvmbT('js.sachdetail.tieng-viet', 'Tiếng Việt') : _tvmbT('js.sachdetail.tieng-trung', 'Tiếng Trung');
   const langCls   = book.language === 'vi' ? 'lang-vi' : 'lang-zh';
   document.getElementById('book-meta').innerHTML = `
-    <span class="meta-author">${window.iconHtml?window.iconHtml('pen-line'):''} ${book.author || 'Không rõ tác giả'}</span>
+    <span class="meta-author">${window.iconHtml?window.iconHtml('pen-line'):''} ${book.author || _tvmbT('js.sachdetail.khong-ro-tac-gia', 'Không rõ tác giả')}</span>
     <span class="meta-lang ${langCls}">${langLabel}</span>
     ${(book.tags||[]).slice(0,3).map(t=>`<span class="meta-tag">${t}</span>`).join('')}
   `;
@@ -224,13 +224,13 @@ function render(book) {
   const dlTxt = document.getElementById('dl-text');
   if (book.drive_url) {
     dlBox.classList.remove('no-link');
-    dlTxt.innerHTML = `<strong>${window.iconHtml?window.iconHtml('inbox'):''} Tải xuống miễn phí</strong><br>File PDF — chia sẻ cho cộng đồng nghiên cứu Tử Vi.`;
+    dlTxt.innerHTML = `<strong>${window.iconHtml?window.iconHtml('inbox'):''} ${_tvmbT('js.sachdetail.tai-xuong-mien-phi', 'Tải xuống miễn phí')}</strong><br>${_tvmbT('js.sachdetail.file-pdf-chia-se-cho', 'File PDF — chia sẻ cho cộng đồng nghiên cứu Tử Vi.')}`;
     dlBtn.href = book.drive_url;
     dlBtn.classList.remove('disabled');
-    dlBtn.textContent = '⬇ Tải xuống';
+    dlBtn.textContent = _tvmbT('js.sachdetail.tai-xuong', '⬇ Tải xuống');
   } else {
     dlBox.classList.add('no-link');
-    dlTxt.innerHTML = `<strong>Chưa có link tải xuống</strong><br>Tài liệu đang được cập nhật. Quay lại sau hoặc liên hệ để yêu cầu.`;
+    dlTxt.innerHTML = `<strong>${_tvmbT('js.sachdetail.chua-co-link-tai-xuong', 'Chưa có link tải xuống')}</strong><br>${_tvmbT('js.sachdetail.tai-lieu-dang-duoc-cap-nhat', 'Tài liệu đang được cập nhật. Quay lại sau hoặc liên hệ để yêu cầu.')}`;
     dlBtn.onclick = (e) => e.preventDefault();
   }
 

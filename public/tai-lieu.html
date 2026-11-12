@@ -171,7 +171,7 @@ function renderMarkdown(text) {
 }
 
 function renderMarkdownFull(text) {
-  if (!text) return '<p>Nội dung đang được cập nhật.</p>';
+  if (!text) return '<p>' + _tvmbT('js.tailieu.noi-dung-dang-duoc-cap-nhat', 'Nội dung đang được cập nhật.') + '</p>';
   let html = text;
   // Headers
   html = html.replace(/^### (.+)$/gm, '<h3>$1</h3>');
@@ -210,7 +210,7 @@ function renderMarkdownFull(text) {
 
 function updateSEO(article) {
   const url = `https://www.tuviminhbao.com/tai-lieu/${article.slug}`;
-  document.title = `${article.title} — Tử Vi Minh Bảo`;
+  document.title = `${article.title} — ${_tvmbT('js.tailieu.tu-vi-minh-bao', 'Tử Vi Minh Bảo')}`;
   document.querySelector('meta[name="description"]')?.setAttribute('content', article.excerpt || article.title);
   document.querySelector('meta[property="og:title"]')?.setAttribute('content', article.title);
   document.querySelector('meta[property="og:description"]')?.setAttribute('content', article.excerpt || article.title);
@@ -282,7 +282,7 @@ function render(d) {
   if (window.ShareButtons) {
     ShareButtons.render('share-article', {
       url: window.location.href,
-      title: d.title + ' — Tử Vi Minh Bảo',
+      title: d.title + ' — ' + _tvmbT('js.tailieu.tu-vi-minh-bao', 'Tử Vi Minh Bảo'),
       text: d.excerpt || d.title,
     });
   }
@@ -310,7 +310,7 @@ async function loadRelated(currentSlug, category, tags) {
     const related = [...same, ...other].slice(0, 5);
     if (!related.length) return;
 
-    const CAT = {'sao-chinh':'Sao Chính','sao-phu':'Sao Phụ','cung':'Cung Vị','cach-cuc':'Cách Cục','van-han':'Vận Hạn','luan-giai':'Luận Giải','khai-niem':'Khái Niệm'};
+    const CAT = {'sao-chinh':_tvmbT('js.tailieu.cat-sao-chinh','Sao Chính'),'sao-phu':_tvmbT('js.tailieu.cat-sao-phu','Sao Phụ'),'cung':_tvmbT('js.tailieu.cat-cung','Cung Vị'),'cach-cuc':_tvmbT('js.tailieu.cat-cach-cuc','Cách Cục'),'van-han':_tvmbT('js.tailieu.cat-van-han','Vận Hạn'),'luan-giai':_tvmbT('js.tailieu.cat-luan-giai','Luận Giải'),'khai-niem':_tvmbT('js.tailieu.cat-khai-niem','Khái Niệm')};
     document.getElementById('related-list').innerHTML = related.map(r =>
       `<li class="related-item"><a href="/tai-lieu/${r.slug}">
         <span class="rel-title">${r.title}</span>
