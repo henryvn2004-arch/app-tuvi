@@ -1427,6 +1427,146 @@
   "t": "Please enter your email and password.",
   "h": "d84b9abd"
  },
+ "js.bandosao.ban-do-sao": {
+  "t": "Star chart — ",
+  "h": "aaf64809"
+ },
+ "js.bandosao.ban-do-sao-gm5h": {
+  "t": "Star Chart",
+  "h": "0b3459d8"
+ },
+ "js.bandosao.ban-do-sao-luc-sinh": {
+  "t": "Birth star chart — ",
+  "h": "3f6bcfea"
+ },
+ "js.bandosao.ban-do-sao-tqhx": {
+  "t": "Star chart · ",
+  "h": "86318dde"
+ },
+ "js.bandosao.ban-muon-toi-doc-phan-nao": {
+  "t": "**. Which part shall I read first?",
+  "h": "e9d17729"
+ },
+ "js.bandosao.buon-ma-thuot": {
+  "t": "Buon Ma Thuot",
+  "h": "8bf97db6"
+ },
+ "js.bandosao.can-tho": {
+  "t": "Can Tho",
+  "h": "462902c5"
+ },
+ "js.bandosao.chua-dung-duoc-anh-thu-lai": {
+  "t": "Could not build the image. Please try again in a few seconds.",
+  "h": "f8055429"
+ },
+ "js.bandosao.chua-lap-duoc-ban-do-luc": {
+  "t": "Could not build the chart right now — please try again.",
+  "h": "a5e46558"
+ },
+ "js.bandosao.chuyen-tinh-cam-nhin-tu-ban": {
+  "t": "What does this chart say about love?",
+  "h": "9a016ff9"
+ },
+ "js.bandosao.cung-moc": {
+  "t": "**, Ascendant **",
+  "h": "340f627c"
+ },
+ "js.bandosao.cung-moc-1y0y": {
+  "t": "Ascendant: ",
+  "h": "230ed8b5"
+ },
+ "js.bandosao.cung-moc-bgoi": {
+  "t": " · Ascendant ",
+  "h": "cad089c9"
+ },
+ "js.bandosao.da-lap-ban-do-sao": {
+  "t": "Your chart is ready: **",
+  "h": "c16ca110"
+ },
+ "js.bandosao.da-nang": {
+  "t": "Da Nang",
+  "h": "fff4a50e"
+ },
+ "js.bandosao.dang-dung-anh": {
+  "t": "Building the image…",
+  "h": "7bce9760"
+ },
+ "js.bandosao.dang-lap": {
+  "t": "Building…",
+  "h": "b47d9598"
+ },
+ "js.bandosao.goc-chieu-nao-gay-kho-nhat": {
+  "t": "Which aspect is hardest for me?",
+  "h": "8439668d"
+ },
+ "js.bandosao.ha-noi": {
+  "t": "Hanoi",
+  "h": "89974fad"
+ },
+ "js.bandosao.hai-phong": {
+  "t": "Hai Phong",
+  "h": "18cf9167"
+ },
+ "js.bandosao.he-nha": {
+  "t": " (house system ",
+  "h": "cb040ba9"
+ },
+ "js.bandosao.hue": {
+  "t": "Hue",
+  "h": "23ed9a98"
+ },
+ "js.bandosao.mat-trang": {
+  "t": "**, Moon **",
+  "h": "bfc8f041"
+ },
+ "js.bandosao.mat-troi": {
+  "t": "**. Sun **",
+  "h": "b483737c"
+ },
+ "js.bandosao.mat-troi-8vvi": {
+  "t": "Sun ",
+  "h": "40bd8b96"
+ },
+ "js.bandosao.nguyen-to": {
+  "t": "Elements: ",
+  "h": "503b548c"
+ },
+ "js.bandosao.nha": {
+  "t": " (house ",
+  "h": "953fb7b3"
+ },
+ "js.bandosao.noi-khac-tu-nhap": {
+  "t": "— Other (enter manually) —",
+  "h": "5bda72d4"
+ },
+ "js.bandosao.quet-ma-lap-ban-do-sao": {
+  "t": "Scan the code — build your own star chart",
+  "h": "2abde300"
+ },
+ "js.bandosao.quy-nhon": {
+  "t": "Quy Nhon",
+  "h": "2b52fd6e"
+ },
+ "js.bandosao.su-nghiep-hop-huong-nao": {
+  "t": "Which career direction suits me?",
+  "h": "8d8b01c6"
+ },
+ "js.bandosao.tinh-cach-cot-loi-cua-toi": {
+  "t": "What is my core personality?",
+  "h": "485d721a"
+ },
+ "js.bandosao.tp-ho-chi-minh": {
+  "t": "Ho Chi Minh City",
+  "h": "4fc20e5f"
+ },
+ "js.bandosao.vui-long-chon-noi-sinh-hoac": {
+  "t": "Please choose a birthplace or enter latitude / longitude.",
+  "h": "1e78fa74"
+ },
+ "js.bandosao.vui-long-nhap-du-ngay-thang": {
+  "t": "Please enter the full day, month and year of birth.",
+  "h": "771ff27f"
+ },
  "js.banlamviec.100-sau-dieu-chinh-co-the": {
   "t": "/100**; after the adjustments it could reach **",
   "h": "a4c14f33"
@@ -5990,6 +6130,58 @@
  "js.shellui.bat-tu-ky-mon": {
   "t": "BaZi, Qi Men",
   "h": "eac6b8dd"
+ },
+ "js.shellui.bds-ban-cau": {
+  "t": "Hemispheres:",
+  "h": "91679aa1"
+ },
+ "js.shellui.bds-bon-truc": {
+  "t": "Four angles",
+  "h": "600b207c"
+ },
+ "js.shellui.bds-can-bang": {
+  "t": "Balance",
+  "h": "9fe59d4b"
+ },
+ "js.shellui.bds-goc-chieu": {
+  "t": "Key aspects",
+  "h": "77aad29d"
+ },
+ "js.shellui.bds-hanh-tinh": {
+  "t": "Planets",
+  "h": "0bfb6634"
+ },
+ "js.shellui.bds-hinh-the": {
+  "t": "Aspect patterns",
+  "h": "de8e9e43"
+ },
+ "js.shellui.bds-khong-co": {
+  "t": "none",
+  "h": "2884bacc"
+ },
+ "js.shellui.bds-lech": {
+  "t": "(orb {lech}°, strength {manh}%)",
+  "h": "17e9c540"
+ },
+ "js.shellui.bds-nghich": {
+  "t": "℞ retrograde",
+  "h": "8093efa5"
+ },
+ "js.shellui.bds-nghich-hanh": {
+  "t": "Retrograde:",
+  "h": "6917d7e7"
+ },
+ "js.shellui.bds-nguyen-to": {
+  "t": "Elements:",
+  "h": "69e4c7a2"
+ },
+ "js.shellui.bds-nha": {
+  "t": "house {n}",
+  "h": "19a346e7"
+ },
+ "js.shellui.bds-the": {
+  "t": "Modalities:",
+  "h": "3b48438e"
  },
  "js.shellui.be-an": {
   "t": "Annie",

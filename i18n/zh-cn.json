@@ -1427,6 +1427,146 @@
   "t": "请填写电子邮件与密码。",
   "h": "d84b9abd"
  },
+ "js.bandosao.ban-do-sao": {
+  "t": "星盘 — ",
+  "h": "aaf64809"
+ },
+ "js.bandosao.ban-do-sao-gm5h": {
+  "t": "星盘",
+  "h": "0b3459d8"
+ },
+ "js.bandosao.ban-do-sao-luc-sinh": {
+  "t": "出生星盘 — ",
+  "h": "3f6bcfea"
+ },
+ "js.bandosao.ban-do-sao-tqhx": {
+  "t": "星盘 · ",
+  "h": "86318dde"
+ },
+ "js.bandosao.ban-muon-toi-doc-phan-nao": {
+  "t": "**。想先从哪一部分谈起？",
+  "h": "e9d17729"
+ },
+ "js.bandosao.buon-ma-thuot": {
+  "t": "邦美蜀",
+  "h": "8bf97db6"
+ },
+ "js.bandosao.can-tho": {
+  "t": "芹苴",
+  "h": "462902c5"
+ },
+ "js.bandosao.chua-dung-duoc-anh-thu-lai": {
+  "t": "尚未能产生图片，请稍后再试。",
+  "h": "f8055429"
+ },
+ "js.bandosao.chua-lap-duoc-ban-do-luc": {
+  "t": "目前无法排出星盘——请再试一次。",
+  "h": "a5e46558"
+ },
+ "js.bandosao.chuyen-tinh-cam-nhin-tu-ban": {
+  "t": "从这张星盘看感情如何？",
+  "h": "9a016ff9"
+ },
+ "js.bandosao.cung-moc": {
+  "t": "**，上升星座 **",
+  "h": "340f627c"
+ },
+ "js.bandosao.cung-moc-1y0y": {
+  "t": "上升点：",
+  "h": "230ed8b5"
+ },
+ "js.bandosao.cung-moc-bgoi": {
+  "t": " · 上升 ",
+  "h": "cad089c9"
+ },
+ "js.bandosao.da-lap-ban-do-sao": {
+  "t": "已排出星盘：**",
+  "h": "c16ca110"
+ },
+ "js.bandosao.da-nang": {
+  "t": "岘港",
+  "h": "fff4a50e"
+ },
+ "js.bandosao.dang-dung-anh": {
+  "t": "图片产生中…",
+  "h": "7bce9760"
+ },
+ "js.bandosao.dang-lap": {
+  "t": "排盘中…",
+  "h": "b47d9598"
+ },
+ "js.bandosao.goc-chieu-nao-gay-kho-nhat": {
+  "t": "哪个相位对我最困难？",
+  "h": "8439668d"
+ },
+ "js.bandosao.ha-noi": {
+  "t": "河内",
+  "h": "89974fad"
+ },
+ "js.bandosao.hai-phong": {
+  "t": "海防",
+  "h": "18cf9167"
+ },
+ "js.bandosao.he-nha": {
+  "t": "（宫位制 ",
+  "h": "cb040ba9"
+ },
+ "js.bandosao.hue": {
+  "t": "顺化",
+  "h": "23ed9a98"
+ },
+ "js.bandosao.mat-trang": {
+  "t": "**，月亮 **",
+  "h": "bfc8f041"
+ },
+ "js.bandosao.mat-troi": {
+  "t": "**。太阳 **",
+  "h": "b483737c"
+ },
+ "js.bandosao.mat-troi-8vvi": {
+  "t": "太阳 ",
+  "h": "40bd8b96"
+ },
+ "js.bandosao.nguyen-to": {
+  "t": "元素：",
+  "h": "503b548c"
+ },
+ "js.bandosao.nha": {
+  "t": " (宫位 ",
+  "h": "953fb7b3"
+ },
+ "js.bandosao.noi-khac-tu-nhap": {
+  "t": "— 其他（自行输入）—",
+  "h": "5bda72d4"
+ },
+ "js.bandosao.quet-ma-lap-ban-do-sao": {
+  "t": "扫描 QR — 排出您的星盘",
+  "h": "2abde300"
+ },
+ "js.bandosao.quy-nhon": {
+  "t": "归仁",
+  "h": "2b52fd6e"
+ },
+ "js.bandosao.su-nghiep-hop-huong-nao": {
+  "t": "适合哪个职涯方向？",
+  "h": "8d8b01c6"
+ },
+ "js.bandosao.tinh-cach-cot-loi-cua-toi": {
+  "t": "我的核心性格是什么？",
+  "h": "485d721a"
+ },
+ "js.bandosao.tp-ho-chi-minh": {
+  "t": "胡志明市",
+  "h": "4fc20e5f"
+ },
+ "js.bandosao.vui-long-chon-noi-sinh-hoac": {
+  "t": "请选择出生地，或输入纬度／经度。",
+  "h": "1e78fa74"
+ },
+ "js.bandosao.vui-long-nhap-du-ngay-thang": {
+  "t": "请输入完整的出生日、月、年。",
+  "h": "771ff27f"
+ },
  "js.banlamviec.100-sau-dieu-chinh-co-the": {
   "t": "/100**，调整后可提升至 **",
   "h": "a4c14f33"
@@ -5990,6 +6130,58 @@
  "js.shellui.bat-tu-ky-mon": {
   "t": "八字、奇门",
   "h": "eac6b8dd"
+ },
+ "js.shellui.bds-ban-cau": {
+  "t": "半球：",
+  "h": "91679aa1"
+ },
+ "js.shellui.bds-bon-truc": {
+  "t": "四轴",
+  "h": "600b207c"
+ },
+ "js.shellui.bds-can-bang": {
+  "t": "平衡",
+  "h": "9fe59d4b"
+ },
+ "js.shellui.bds-goc-chieu": {
+  "t": "主要相位",
+  "h": "77aad29d"
+ },
+ "js.shellui.bds-hanh-tinh": {
+  "t": "行星",
+  "h": "0bfb6634"
+ },
+ "js.shellui.bds-hinh-the": {
+  "t": "相位图形",
+  "h": "de8e9e43"
+ },
+ "js.shellui.bds-khong-co": {
+  "t": "无",
+  "h": "2884bacc"
+ },
+ "js.shellui.bds-lech": {
+  "t": "（容许度 {lech}°，强度 {manh}%）",
+  "h": "17e9c540"
+ },
+ "js.shellui.bds-nghich": {
+  "t": "℞ 逆行",
+  "h": "8093efa5"
+ },
+ "js.shellui.bds-nghich-hanh": {
+  "t": "逆行：",
+  "h": "6917d7e7"
+ },
+ "js.shellui.bds-nguyen-to": {
+  "t": "元素：",
+  "h": "69e4c7a2"
+ },
+ "js.shellui.bds-nha": {
+  "t": "第 {n} 宫",
+  "h": "19a346e7"
+ },
+ "js.shellui.bds-the": {
+  "t": "型态：",
+  "h": "3b48438e"
  },
  "js.shellui.be-an": {
   "t": "小安",

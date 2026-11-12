@@ -1427,6 +1427,146 @@
   "t": "이메일과 비밀번호를 입력해 주세요.",
   "h": "d84b9abd"
  },
+ "js.bandosao.ban-do-sao": {
+  "t": "별자리 차트 — ",
+  "h": "aaf64809"
+ },
+ "js.bandosao.ban-do-sao-gm5h": {
+  "t": "별자리 차트",
+  "h": "0b3459d8"
+ },
+ "js.bandosao.ban-do-sao-luc-sinh": {
+  "t": "출생 별자리 차트 — ",
+  "h": "3f6bcfea"
+ },
+ "js.bandosao.ban-do-sao-tqhx": {
+  "t": "별자리 차트 · ",
+  "h": "86318dde"
+ },
+ "js.bandosao.ban-muon-toi-doc-phan-nao": {
+  "t": "**. 어느 부분부터 읽어 드릴까요?",
+  "h": "e9d17729"
+ },
+ "js.bandosao.buon-ma-thuot": {
+  "t": "부온마투옷",
+  "h": "8bf97db6"
+ },
+ "js.bandosao.can-tho": {
+  "t": "껀터",
+  "h": "462902c5"
+ },
+ "js.bandosao.chua-dung-duoc-anh-thu-lai": {
+  "t": "이미지를 만들지 못했어요. 잠시 후 다시 시도해 주세요.",
+  "h": "f8055429"
+ },
+ "js.bandosao.chua-lap-duoc-ban-do-luc": {
+  "t": "지금은 차트를 만들지 못했어요 — 다시 시도해 주세요.",
+  "h": "a5e46558"
+ },
+ "js.bandosao.chuyen-tinh-cam-nhin-tu-ban": {
+  "t": "이 차트로 본 연애는 어떤가요?",
+  "h": "9a016ff9"
+ },
+ "js.bandosao.cung-moc": {
+  "t": "**, 어센던트 **",
+  "h": "340f627c"
+ },
+ "js.bandosao.cung-moc-1y0y": {
+  "t": "어센던트: ",
+  "h": "230ed8b5"
+ },
+ "js.bandosao.cung-moc-bgoi": {
+  "t": " · 어센던트 ",
+  "h": "cad089c9"
+ },
+ "js.bandosao.da-lap-ban-do-sao": {
+  "t": "차트를 만들었어요: **",
+  "h": "c16ca110"
+ },
+ "js.bandosao.da-nang": {
+  "t": "다낭",
+  "h": "fff4a50e"
+ },
+ "js.bandosao.dang-dung-anh": {
+  "t": "이미지 만드는 중…",
+  "h": "7bce9760"
+ },
+ "js.bandosao.dang-lap": {
+  "t": "만드는 중…",
+  "h": "b47d9598"
+ },
+ "js.bandosao.goc-chieu-nao-gay-kho-nhat": {
+  "t": "저에게 가장 힘든 각도는 무엇인가요?",
+  "h": "8439668d"
+ },
+ "js.bandosao.ha-noi": {
+  "t": "하노이",
+  "h": "89974fad"
+ },
+ "js.bandosao.hai-phong": {
+  "t": "하이퐁",
+  "h": "18cf9167"
+ },
+ "js.bandosao.he-nha": {
+  "t": " (하우스 시스템 ",
+  "h": "cb040ba9"
+ },
+ "js.bandosao.hue": {
+  "t": "후에",
+  "h": "23ed9a98"
+ },
+ "js.bandosao.mat-trang": {
+  "t": "**, 달 **",
+  "h": "bfc8f041"
+ },
+ "js.bandosao.mat-troi": {
+  "t": "**. 태양 **",
+  "h": "b483737c"
+ },
+ "js.bandosao.mat-troi-8vvi": {
+  "t": "태양 ",
+  "h": "40bd8b96"
+ },
+ "js.bandosao.nguyen-to": {
+  "t": "원소: ",
+  "h": "503b548c"
+ },
+ "js.bandosao.nha": {
+  "t": " (하우스 ",
+  "h": "953fb7b3"
+ },
+ "js.bandosao.noi-khac-tu-nhap": {
+  "t": "— 다른 곳(직접 입력) —",
+  "h": "5bda72d4"
+ },
+ "js.bandosao.quet-ma-lap-ban-do-sao": {
+  "t": "QR 코드 스캔 — 나만의 차트 만들기",
+  "h": "2abde300"
+ },
+ "js.bandosao.quy-nhon": {
+  "t": "꾸이년",
+  "h": "2b52fd6e"
+ },
+ "js.bandosao.su-nghiep-hop-huong-nao": {
+  "t": "어떤 진로가 잘 맞나요?",
+  "h": "8d8b01c6"
+ },
+ "js.bandosao.tinh-cach-cot-loi-cua-toi": {
+  "t": "저의 핵심 성격은 무엇인가요?",
+  "h": "485d721a"
+ },
+ "js.bandosao.tp-ho-chi-minh": {
+  "t": "호찌민시",
+  "h": "4fc20e5f"
+ },
+ "js.bandosao.vui-long-chon-noi-sinh-hoac": {
+  "t": "출생지를 고르거나 위도·경도를 입력해 주세요.",
+  "h": "1e78fa74"
+ },
+ "js.bandosao.vui-long-nhap-du-ngay-thang": {
+  "t": "출생 일·월·연도를 모두 입력해 주세요.",
+  "h": "771ff27f"
+ },
  "js.banlamviec.100-sau-dieu-chinh-co-the": {
   "t": "/100**, 조정 후에는 **",
   "h": "a4c14f33"
@@ -5990,6 +6130,58 @@
  "js.shellui.bat-tu-ky-mon": {
   "t": "사주 · 기문둔갑",
   "h": "eac6b8dd"
+ },
+ "js.shellui.bds-ban-cau": {
+  "t": "반구:",
+  "h": "91679aa1"
+ },
+ "js.shellui.bds-bon-truc": {
+  "t": "네 개의 축",
+  "h": "600b207c"
+ },
+ "js.shellui.bds-can-bang": {
+  "t": "균형",
+  "h": "9fe59d4b"
+ },
+ "js.shellui.bds-goc-chieu": {
+  "t": "주요 각도",
+  "h": "77aad29d"
+ },
+ "js.shellui.bds-hanh-tinh": {
+  "t": "행성",
+  "h": "0bfb6634"
+ },
+ "js.shellui.bds-hinh-the": {
+  "t": "각도 패턴",
+  "h": "de8e9e43"
+ },
+ "js.shellui.bds-khong-co": {
+  "t": "없음",
+  "h": "2884bacc"
+ },
+ "js.shellui.bds-lech": {
+  "t": "(오브 {lech}°, 강도 {manh}%)",
+  "h": "17e9c540"
+ },
+ "js.shellui.bds-nghich": {
+  "t": "℞ 역행",
+  "h": "8093efa5"
+ },
+ "js.shellui.bds-nghich-hanh": {
+  "t": "역행:",
+  "h": "6917d7e7"
+ },
+ "js.shellui.bds-nguyen-to": {
+  "t": "원소:",
+  "h": "69e4c7a2"
+ },
+ "js.shellui.bds-nha": {
+  "t": "{n}하우스",
+  "h": "19a346e7"
+ },
+ "js.shellui.bds-the": {
+  "t": "양태:",
+  "h": "3b48438e"
  },
  "js.shellui.be-an": {
   "t": "하준",
