@@ -13,6 +13,12 @@
   "zh-tw",
   "zh-cn"
  ],
+ "/app/ban-do-sao": [
+  "en"
+ ],
+ "/app/ban-lam-viec": [
+  "en"
+ ],
  "/app/bat-tu": [
   "en",
   "ja",
@@ -21,6 +27,7 @@
   "zh-cn"
  ],
  "/app/boi-bai-tay": [
+  "en",
   "ja"
  ],
  "/app/chu-trinh-cuoc-doi": [
@@ -36,6 +43,9 @@
   "ko",
   "zh-tw",
   "zh-cn"
+ ],
+ "/app/cua-hang-phong-thuy": [
+  "en"
  ],
  "/app/kinh-dich": [
   "en",
@@ -80,10 +90,18 @@
   "zh-cn"
  ],
  "/app/oracle": [
+  "en",
   "ja"
  ],
+ "/app/phong-thuy": [
+  "en"
+ ],
  "/app/tarot": [
+  "en",
   "ja"
+ ],
+ "/app/than-so-hoc": [
+  "en"
  ],
  "/app/van-han-nam": [
   "en",
@@ -106,6 +124,9 @@
   "zh-tw",
   "zh-cn"
  ],
+ "/cong-cu": [
+  "en"
+ ],
  "/dieu-khoan-dich-vu.html": [
   "en",
   "ja",
@@ -120,11 +141,23 @@
   "zh-tw",
   "zh-cn"
  ],
+ "/menh-kho": [
+  "en"
+ ],
  "/mien-tru-trach-nhiem.html": [
   "en",
   "ja",
   "ko",
   "zh-tw",
   "zh-cn"
+ ],
+ "/resources": [
+  "en"
+ ],
+ "/sach-detail.html": [
+  "en"
+ ],
+ "/tai-lieu.html": [
+  "en"
  ]
 }

@@ -653,7 +653,7 @@ function renderMeanings() {
         <div class="cm-header">
           <div class="cm-symbol" style="color:${col}">${renderCardSym(c.sym)}</div>
           <div class="cm-info">
-            <div class="cm-name">${c.name} <span style="font-size:12px;color:var(--text-lt);font-weight:400">(${c.en})</span></div>
+            <div class="cm-name">${c.name}${(window.I18n&&I18n.locale==='en')?'':' <span style="font-size:12px;color:var(--text-lt);font-weight:400">('+c.en+')</span>'}</div>
             <div class="cm-sub">${SUIT_VI[c.type]} · ${spread[i].pos}</div>
             <span class="cm-pos ${c.reversed ? 'pos-reversed' : 'pos-upright'}">${c.reversed ? _tvmbT('js.tarot.nguoc-wrh9', '↕ Ngược') : _tvmbT('js.tarot.xuoi', '↑ Xuôi')}</span>
           </div>

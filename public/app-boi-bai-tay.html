@@ -321,7 +321,7 @@ function renderResult() {
         <div class="pcm-header">
           <div class="pcm-symbol ${s.cls}">${s.sym}</div>
           <div>
-            <div class="pcm-name">${r.label} ${s.name} <span style="font-size:12px;font-weight:400;color:var(--text-lt)">(${r.r} of ${s.id === 'h' ? 'Hearts' : s.id === 'd' ? 'Diamonds' : s.id === 's' ? 'Spades' : 'Clubs'})</span></div>
+            <div class="pcm-name">${r.label} ${s.name} ${(window.I18n&&I18n.locale==='en')?'':'<span style="font-size:12px;font-weight:400;color:var(--text-lt)">('+r.r+' of '+(s.id === 'h' ? 'Hearts' : s.id === 'd' ? 'Diamonds' : s.id === 's' ? 'Spades' : 'Clubs')+')</span>'}</div>
             <div class="pcm-sub">${s.name} · ${spread[i].pos}</div>
           </div>
         </div>
