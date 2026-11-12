@@ -3,8 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Thủ Tướng — Tử Vi Minh Bảo</title>
-<meta name="description" content="Tải hoặc chụp ảnh lòng bàn tay — hệ thống phân tích thủ tướng: Tam Đại Chỉ, đường vận mệnh, các gò tay theo cổ pháp Đông Tây.">
+<title data-i18n="thtu.thu-tuong-tu-vi-minh-bao">Thủ Tướng — Tử Vi Minh Bảo</title>
+<meta data-i18n-attr="content:thtu.tai-hoac-chup-anh-long-ban" name="description" content="Tải hoặc chụp ảnh lòng bàn tay — hệ thống phân tích thủ tướng: Tam Đại Chỉ, đường vận mệnh, các gò tay theo cổ pháp Đông Tây.">
 <link rel="icon" type="image/webp" href="/seal.webp">
 <link rel="preload" href="/fonts/noto-serif-latin-400.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="/fonts/noto-serif-vietnamese-400.woff2" as="font" type="font/woff2" crossorigin>
@@ -62,9 +62,9 @@
   <main class="ws" id="ws">
     <div class="ws-top">
       <button class="btn mobile-only" onclick="document.getElementById('shell-sidebar').classList.toggle('open');window.shellSyncBackdrop&&shellSyncBackdrop()" aria-label="Menu">☰</button>
-      <div class="ws-title"><b>Thủ Tướng</b><span>Xem chỉ tay theo cổ pháp — <span data-tvp-price="thu-tuong">…</span> Lượng</span></div>
+      <div data-i18n="thtu.thu-tuong-xem-chi-tay-theo" class="ws-title"><b>Thủ Tướng</b><span>Xem chỉ tay theo cổ pháp — <span data-tvp-price="thu-tuong">…</span> Lượng</span></div>
       <div class="ws-actions">
-        <button class="btn mobile-only" onclick="Shell.openRail()">✦ Hỏi</button>
+        <button data-i18n="battu.hoi" class="btn mobile-only" onclick="Shell.openRail()">✦ Hỏi</button>
       </div>
     </div>
     <div class="ws-body">
@@ -78,15 +78,15 @@
         <img class="intro-avatar" src="/tool-avatars/thu-tuong.webp" alt="" onerror="this.remove()">
         <div class="intro-body">
           <div class="intro-text">
-            <div class="intro-t">Thủ Tướng</div>
-            <div class="intro-d">Lòng bàn tay lưu lại dấu vết của cả một chặng đường sống — sự nghiệp, tình duyên, sức khoẻ đều để lại đường nét riêng. Chụp ảnh lòng bàn tay, nhận bản luận theo Ngũ Hành Hình Tướng.</div>
+            <div data-i18n="thtu.thu-tuong" class="intro-t">Thủ Tướng</div>
+            <div data-i18n="thtu.long-ban-tay-luu-lai-dau" class="intro-d">Lòng bàn tay lưu lại dấu vết của cả một chặng đường sống — sự nghiệp, tình duyên, sức khoẻ đều để lại đường nét riêng. Chụp ảnh lòng bàn tay, nhận bản luận theo Ngũ Hành Hình Tướng.</div>
             <div id="introSrc"></div>
           </div>
         </div>
         <div class="hero-pills">
-          <div class="hero-pill"><span class="hp-ic" data-icon="camera"></span><span>Tải ảnh hoặc<br>chụp trực tiếp</span></div>
-          <div class="hero-pill"><span class="hp-ic" data-icon="hand"></span><span>Đo Tam Đại Chỉ,<br>đường vận mệnh</span></div>
-          <div class="hero-pill"><span class="hp-ic" data-icon="scroll-text"></span><span>Luận theo<br>Ngũ Hành Hình Tướng</span></div>
+          <div data-i18n="nhtg.tai-anh-hoac-chup-truc-tiep" class="hero-pill"><span class="hp-ic" data-icon="camera"></span><span>Tải ảnh hoặc<br>chụp trực tiếp</span></div>
+          <div data-i18n="thtu.do-tam-dai-chi-duong-van" class="hero-pill"><span class="hp-ic" data-icon="hand"></span><span>Đo Tam Đại Chỉ,<br>đường vận mệnh</span></div>
+          <div data-i18n="thtu.luan-theo-ngu-hanh-hinh-tuong" class="hero-pill"><span class="hp-ic" data-icon="scroll-text"></span><span>Luận theo<br>Ngũ Hành Hình Tướng</span></div>
         </div>
       </div></div>
       <div class="ws-main-col">
@@ -96,43 +96,43 @@
            không có màn "xem trước" tách riêng — chọn/chụp ảnh xong vẫn đứng
            nguyên ở bước 1 cho tới khi bấm phân tích, nên chỉ 3 bước. -->
       <div class="ws-steps" id="wsSteps">
-        <div class="wss-step active"><span class="wss-n">1</span><span class="wss-l">Tải ảnh bàn tay</span></div>
-        <div class="wss-step"><span class="wss-n">2</span><span class="wss-l">Thanh toán</span></div>
-        <div class="wss-step"><span class="wss-n">3</span><span class="wss-l">Nhận kết quả</span></div>
+        <div data-i18n="thtu.1-tai-anh-ban-tay" class="wss-step active"><span class="wss-n">1</span><span class="wss-l">Tải ảnh bàn tay</span></div>
+        <div data-i18n="thtg.2-thanh-toan" class="wss-step"><span class="wss-n">2</span><span class="wss-l">Thanh toán</span></div>
+        <div data-i18n="thtg.3-nhan-ket-qua" class="wss-step"><span class="wss-n">3</span><span class="wss-l">Nhận kết quả</span></div>
       </div>
       <div class="dt-card" id="inputCard">
-        <div class="fc-head"><span class="fc-ic" data-icon="hand"></span><h2>Tải ảnh lòng bàn tay</h2></div>
-        <p class="sub">Chụp và tải một tấm ảnh rõ lòng bàn tay. Hệ thống phân tích đường chỉ tay theo Ngũ Hành Hình Tướng, luận tam đại chỉ, đường vận mệnh, gò và ngón tay.</p>
-        <div class="dt-privacy"><span class="ic" data-icon="lock"></span><div>Ảnh chỉ gửi tới máy chủ để phân tích, không lưu trên server. Xòe bàn tay phẳng, lòng bàn tay hướng lên, đủ sáng.</div></div>
+        <div class="fc-head"><span class="fc-ic" data-icon="hand"></span><h2 data-i18n="thtu.tai-anh-long-ban-tay">Tải ảnh lòng bàn tay</h2></div>
+        <p data-i18n="thtu.chup-va-tai-mot-tam-anh" class="sub">Chụp và tải một tấm ảnh rõ lòng bàn tay. Hệ thống phân tích đường chỉ tay theo Ngũ Hành Hình Tướng, luận tam đại chỉ, đường vận mệnh, gò và ngón tay.</p>
+        <div class="dt-privacy"><span class="ic" data-icon="lock"></span><div data-i18n="thtu.anh-chi-gui-toi-may-chu">Ảnh chỉ gửi tới máy chủ để phân tích, không lưu trên server. Xòe bàn tay phẳng, lòng bàn tay hướng lên, đủ sáng.</div></div>
 
         <div class="dt-input-tabs">
-          <button class="dt-input-tab active" onclick="switchTab('upload',this)"><span class="ic" data-icon="folder"></span> Tải Ảnh Lên</button>
-          <button class="dt-input-tab" onclick="switchTab('camera',this)"><span class="ic" data-icon="camera"></span> Chụp Ảnh</button>
+          <button data-i18n="nhtg.tai-anh-len" class="dt-input-tab active" onclick="switchTab('upload',this)"><span class="ic" data-icon="folder"></span> Tải Ảnh Lên</button>
+          <button data-i18n="nhtg.chup-anh" class="dt-input-tab" onclick="switchTab('camera',this)"><span class="ic" data-icon="camera"></span> Chụp Ảnh</button>
         </div>
 
         <div class="dt-input-pane active" id="pane-upload">
           <div id="uploadArea" class="upload-area" ondragover="onDragOver(event)" ondragleave="onDragLeave(event)" ondrop="onDrop(event)">
             <input type="file" id="fileInput" accept="image/*" onchange="onFileSelect(event)">
             <span class="upload-icon"><span class="ic" data-icon="hand"></span></span>
-            <div class="upload-title">Kéo thả ảnh lòng bàn tay hoặc click để chọn</div>
-            <div class="upload-sub">JPG, PNG, WebP — tối đa 5MB · Chụp lòng bàn tay, thấy rõ đường chỉ</div>
+            <div data-i18n="thtu.keo-tha-anh-long-ban-tay" class="upload-title">Kéo thả ảnh lòng bàn tay hoặc click để chọn</div>
+            <div data-i18n="thtu.jpg-png-webp-toi-da-5mb" class="upload-sub">JPG, PNG, WebP — tối đa 5MB · Chụp lòng bàn tay, thấy rõ đường chỉ</div>
           </div>
           <div style="display:flex;gap:6px;flex-wrap:wrap;margin-top:10px;justify-content:center">
-            <div style="font-size:12px;color:var(--heading);background:var(--gold-lt);border:1px solid var(--line-2);border-radius:20px;padding:3px 10px">Dùng tay <strong>thuận</strong> để xem vận trình hiện tại</div>
+            <div data-i18n="thtu.dung-tay-thuan-de-xem-van" style="font-size:12px;color:var(--heading);background:var(--gold-lt);border:1px solid var(--line-2);border-radius:20px;padding:3px 10px">Dùng tay <strong>thuận</strong> để xem vận trình hiện tại</div>
           </div>
         </div>
 
         <div class="dt-input-pane" id="pane-camera">
           <div style="text-align:center;padding:12px 0 16px">
             <div id="preCamTips">
-              <button class="camera-btn" id="openCamBtn" onclick="openCamera()"><span class="ic" data-icon="camera"></span> Mở Camera</button>
+              <button data-i18n="nhtg.mo-camera" class="camera-btn" id="openCamBtn" onclick="openCamera()"><span class="ic" data-icon="camera"></span> Mở Camera</button>
             </div>
             <div id="camWrap" style="display:none;position:relative;width:280px;margin:0 auto">
               <video id="camVideo" style="width:280px;border-radius:12px;display:block" autoplay playsinline></video>
             </div>
             <div id="camBtns" style="display:none;margin-top:14px;gap:10px;justify-content:center;flex-wrap:wrap">
-              <button class="btn-go inline" onclick="capturePhoto()"><span class="ic" data-icon="camera"></span> Chụp</button>
-              <button class="btn-cancel" onclick="stopCamera()">✕ Huỷ</button>
+              <button data-i18n="nhtg.chup" class="btn-go inline" onclick="capturePhoto()"><span class="ic" data-icon="camera"></span> Chụp</button>
+              <button data-i18n="nhtg.huy" class="btn-cancel" onclick="stopCamera()">✕ Huỷ</button>
             </div>
             <canvas id="camCanvas" style="display:none"></canvas>
           </div>
@@ -140,16 +140,16 @@
 
         <div id="previewSection" style="display:none;text-align:center;margin:18px 0">
           <div class="preview-wrap">
-            <img id="previewImg" class="preview-img" alt="Ảnh đã chọn">
+            <img data-i18n-attr="alt:nhtg.anh-da-chon-oxp5" id="previewImg" class="preview-img" alt="Ảnh đã chọn">
             <canvas id="overlayCanvas" class="overlay-canvas"></canvas>
-            <div class="preview-badge">✓ Ảnh đã chọn</div>
-            <div class="mp-badge" id="mpBadge"><span class="ic" data-icon="hand"></span> Bàn tay đã xác định</div>
+            <div data-i18n="nhtg.anh-da-chon" class="preview-badge">✓ Ảnh đã chọn</div>
+            <div data-i18n="thtu.ban-tay-da-xac-dinh" class="mp-badge" id="mpBadge"><span class="ic" data-icon="hand"></span> Bàn tay đã xác định</div>
           </div>
           <div id="handGeomPanel" style="display:none;margin-top:10px;padding:10px 14px;background:var(--paper);border-radius:8px;border:1px solid var(--border-lt);font-size:12px;text-align:left;max-width:340px;margin-left:auto;margin-right:auto">
-            <div style="font-size:10px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--text-lt);margin-bottom:6px"><span class="ic" data-icon="bar-chart-3"></span> Đo lường MediaPipe</div>
+            <div data-i18n="thtu.do-luong-mediapipe" style="font-size:10px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--text-lt);margin-bottom:6px"><span class="ic" data-icon="bar-chart-3"></span> Đo lường MediaPipe</div>
             <div id="handGeomText" style="color:var(--text-mid);line-height:1.8"></div>
           </div>
-          <button class="remove-btn" onclick="removePhoto()">✕ Xoá ảnh</button>
+          <button data-i18n="nhtg.xoa-anh" class="remove-btn" onclick="removePhoto()">✕ Xoá ảnh</button>
         </div>
 
         <!-- Khối hook (2 fact) — hé 2 dòng đầu của _handGeoNote (window,
@@ -161,9 +161,9 @@
           <div class="cb-l">
             <span class="cb-ic" data-icon="wallet"></span>
             <div>
-              <div class="cb-title">Chi phí sử dụng</div>
-              <div class="cb-amt"><span class="vnd" data-tvp-price-vnd="thu-tuong"></span> mỗi lượt <span class="cb-sub">(<span data-tvp-price="thu-tuong">…</span> Lượng)</span></div>
-              <div class="cb-pay">
+              <div data-i18n="battu.chi-phi-su-dung" class="cb-title">Chi phí sử dụng</div>
+              <div data-i18n="thtu.moi-luot-luong" class="cb-amt"><span class="vnd" data-tvp-price-vnd="thu-tuong"></span> mỗi lượt <span class="cb-sub">(<span data-tvp-price="thu-tuong">…</span> Lượng)</span></div>
+              <div data-i18n="luangiai.chuyen-khoan-qua-qr-ngan-hang" class="cb-pay">
                 <span><span class="ic" data-icon="qr-code"></span> Chuyển khoản (qua QR ngân hàng)</span>
                 <span><span class="ic" data-icon="credit-card"></span> PayPal / Thẻ quốc tế</span>
               </div>
@@ -171,10 +171,10 @@
           </div>
           <div class="cb-r">
             <span class="cb-ic" data-icon="gift"></span>
-            <div class="cb-r-txt">Mua gói để nhận nhiều ưu đãi hơn.<br><a href="/topup.html">Xem các gói ngay →</a></div>
+            <div data-i18n="luangiai.mua-goi-de-nhan-nhieu-uu" class="cb-r-txt">Mua gói để nhận nhiều ưu đãi hơn.<br><a href="/topup.html">Xem các gói ngay →</a></div>
           </div>
         </div>
-        <button class="btn-go" id="analyzeBtn" onclick="analyze()" disabled>
+        <button data-i18n="thtu.phan-tich-thu-tuong-ton-luong" class="btn-go" id="analyzeBtn" onclick="analyze()" disabled>
           <span class="bg-label"><span class="ic" data-icon="hand"></span><b id="analyzeBtnLabel">Phân Tích Thủ Tướng →</b></span>
           <small>Tốn <span class="vnd" data-tvp-price-vnd="thu-tuong"></span> <span class="cb-sub">(<span data-tvp-price="thu-tuong">…</span> Lượng)</span></small>
         </button>
@@ -183,25 +183,25 @@
       </div>
       <div class="ws-side-col">
       <div class="ws-promo">
-        <div class="wsp-eyebrow"><span class="wsp-ic" data-icon="book-open"></span><span>Giới thiệu</span></div>
-        <div class="wsp-title">Thủ Tướng</div>
-        <p class="wsp-desc">Chỉ tướng học phương Đông là môn xem chỉ tay dựa trên các đường chính trên lòng bàn tay cùng các gò xung quanh để luận đoán tính cách, sự nghiệp và vận trình. Đây là một nhánh riêng trong hệ thống nhân tướng học cổ truyền, song song với xem tướng mặt.</p>
+        <div data-i18n="battu.gioi-thieu" class="wsp-eyebrow"><span class="wsp-ic" data-icon="book-open"></span><span>Giới thiệu</span></div>
+        <div data-i18n="thtu.thu-tuong" class="wsp-title">Thủ Tướng</div>
+        <p data-i18n="thtu.chi-tuong-hoc-phuong-dong-la" class="wsp-desc">Chỉ tướng học phương Đông là môn xem chỉ tay dựa trên các đường chính trên lòng bàn tay cùng các gò xung quanh để luận đoán tính cách, sự nghiệp và vận trình. Đây là một nhánh riêng trong hệ thống nhân tướng học cổ truyền, song song với xem tướng mặt.</p>
       </div>
       <div class="samp-cta" id="sampCta">
         <span class="sc-ic" data-icon="lightbulb"></span>
-        <span class="sc-txt"><b>Chưa muốn chụp ảnh?</b><span>Bạn có thể xem một bản mẫu để trải nghiệm trước.</span></span>
-        <button type="button" id="btnSample" data-sample-tool="thu-tuong" onclick="SampleHint.open(this)">Xem bản mẫu →</button>
+        <span data-i18n="nhtg.chua-muon-chup-anh-ban-co" class="sc-txt"><b>Chưa muốn chụp ảnh?</b><span>Bạn có thể xem một bản mẫu để trải nghiệm trước.</span></span>
+        <button data-i18n="thtp.xem-ban-mau" type="button" id="btnSample" data-sample-tool="thu-tuong" onclick="SampleHint.open(this)">Xem bản mẫu →</button>
       </div>
       <div id="shellRecent"></div>
       </div>
       </div>
 
       <div class="dt-card" id="resultCard" data-ws-result style="display:none;margin-top:16px">
-        <h2>Phân Tích Thủ Tướng Học</h2>
-        <p class="sub">Thủ Tướng Cổ Pháp Đông Tây</p>
+        <h2 data-i18n="thtu.phan-tich-thu-tuong-hoc">Phân Tích Thủ Tướng Học</h2>
+        <p data-i18n="thtu.thu-tuong-co-phap-dong-tay" class="sub">Thủ Tướng Cổ Pháp Đông Tây</p>
         <div id="aiResult" class="dt-result"></div>
         <div style="text-align:center;margin-top:8px">
-          <button class="btn-cancel" onclick="resetTool()">Phân Tích Ảnh Khác</button>
+          <button data-i18n="nhtg.phan-tich-anh-khac" class="btn-cancel" onclick="resetTool()">Phân Tích Ảnh Khác</button>
         </div>
       </div>
     </div>
