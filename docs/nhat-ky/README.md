@@ -1,6 +1,6 @@
 # Nhật ký phát triển — mục lục
 
-590 mục ghi chép từng PR, tách khỏi `CLAUDE.md` để nó thôi ngốn ~350k token mỗi lượt.
+591 mục ghi chép từng PR, tách khỏi `CLAUDE.md` để nó thôi ngốn ~350k token mỗi lượt.
 
 **Sáu file dưới đây KHÔNG được nạp tự động.** Cần thì tra:
 
@@ -28,6 +28,7 @@ Luật rút ra từ các mục này đã được cô đọng lên `CLAUDE.md`. 
 
 | # | tháng | file | mục |
 |---:|---|---|---|
+| 1 | 2026-11 | `2026-11.md` | 🌠 W30f-1/2 — `starT()` dùng chung → `tools-shared/star-label.js` (cong-so · day-con · hntre · nguoi-khac) · Giờ Sinh: nhãn đáp án theo sao 5 ngôn ngữ (ns `giosinh-sao` 127 mục · mã `o.sao` gộp vào cơ chế `{k,v}` của lô E · `check-gio-sinh-tuoi` so nhãn dựng ở client với engine thật 485 mục) |
 | 1 | 2026-11 | `2026-11.md` | 🧭 W30e — Lục Nhâm · Giờ Sinh · Người Khác: văn engine theo ngôn ngữ (ns `lucnham` 115 · `giosinh` 60 · `nguoikhac` 24); KHUÔN `{x}` engine dựng chữ Việt bằng chính bảng + mã `{k,v}` lồng; vá glossary nguyệt tướng/can ngày/nhãn sao có độ sáng |
 | 1 | 2026-11 | `2026-11.md` | 🧒 W30d — Văn engine kết quả lô D: Dạy Con (5 trục · 8 chất) · Duyên Nợ Tiền Kiếp · Sổ Nhân Mạch × 4 ngôn ngữ (i18n-long `day-con-assess` 124 · `duyen-no` 37 · `nhan-mach` 6); mã tra additive, KHÔNG bump SHAPE; bộ dò mới `check:enginema` + golden từ engine cũ |
 | 1 | 2026-11 | `2026-11.md` | 🧒 W30a — Văn engine `huong-nghiep-tre.ts` theo ngôn ngữ (ns `hntre`, 305 mục × ja/ko/zh-tw/en + zh-cn OpenCC): thêm `ma` (matDoc · khongDoiHoi), đọc bảng TS bằng AST, vi byte-giống 10/10, red-team 8+5 đỏ; còn Việt: `kieu` (lô B) · `vi`/`chatNguoi` (lô D) |

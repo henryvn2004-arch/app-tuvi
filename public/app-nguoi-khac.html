@@ -360,6 +360,7 @@ window.SHELL_CHATFIRST=true;
 window.SHELL_CHAT_INTAKE=true;
 window.SHELL_INTRO={key:'nguoi-khac'};</script>
 <script src="/tools-shared/glossary.js?v=5"></script>
+<script src="/tools-shared/star-label.js?v=1"></script>
 <script src="/tools-shared/i18n.js?v=7"></script>
 <script src="/laso-chart.js?v=12"></script>
 <script src="/tools-shared/vn-timezone.js?v=1"></script>
@@ -453,15 +454,6 @@ function _nkViecTen(v) { return NK_VIEC_T[v.id] ? NK_VIEC_T[v.id]() : v.label; }
 // thiếu mã/bản dịch ⇒ giữ NGUYÊN câu Việt (vi không nạp gì ⇒ byte-giống; dòng cache cũ không có `ma` cũng lùi Việt).
 if (window.I18n && window.I18n.loadLong) window.I18n.loadLong('nguoikhac');
 function _long(ns, k) { var I = window.I18n; if (!I || !I.long) return null; var s = I.long(ns, k, '\u0000'); return s === '\u0000' ? null : s; }
-// Nhãn sao của engine "Tên (Độ sáng) [Hóa X]" → từng mảnh qua glossary (`chinh`/`sao` · `sang` · `sao` cho Hóa).
-// Glossary chỉ có TÊN trần nên tra nguyên nhãn là hụt ⇒ lộ chữ Việt. vi giữ nguyên nhãn (byte-giống).
-function _nkSao(lb) {
-  var I = window.I18n;
-  if (!I || !I.locale || I.locale === 'vi') return lb;
-  var m = /^(.+?)(?: \(([^)]+)\))?(?: \[([^\]]+)\])?$/.exec(String(lb || ''));
-  if (!m) return lb;
-  return _tvmbG(['chinh', 'sao'], m[1]) + (m[2] ? ' (' + _tvmbG('sang', m[2]) + ')' : '') + (m[3] ? ' [' + _tvmbG('sao', m[3]) + ']' : '');
-}
 function _nkMat(cung) { return cung ? _long('nguoikhac', 'mat.' + cung) : null; }
 // Các bảng (đoạn đầu khoá) tra QUA MÃ của payload (`khoa[].ma.k` và mã việc lồng) — mã lạ ⇒ không tra.
 // Nhãn mặt đọc tra ở `_nkMat` theo tên cung, không qua mã.
@@ -479,7 +471,7 @@ function _nkTr(ma, vi) {
       if (p.some(function (m) { return m == null; })) return vi;
       o[n] = p.join(' · ');
     }
-    else if (n === 'sao') o[n] = (x || []).map(_nkSao).join(', ');
+    else if (n === 'sao') o[n] = TuviStarLabel.list(x);
     else if (n === 'cung') o[n] = _tvmbG('cung', x);
     else o[n] = String(x);
   }
@@ -829,7 +821,7 @@ function mountHook(data) {
   var matDoc = data.matDoc || [];
   if (!matDoc.length) return;
   var facts = matDoc.map(function (m) {
-    var saoText = (m.sao || []).map(_nkSao).join(', ') || _tvmbT('js.nguoikhac.khong-co-chinh-tinh', 'không có chính tinh');
+    var saoText = TuviStarLabel.list(m.sao) || _tvmbT('js.nguoikhac.khong-co-chinh-tinh', 'không có chính tinh');
     return {
       tone: 'neutral',
       title: _tvmbT('js.nguoikhac.chinh-tinh-tai-cung', 'Chính tinh tại cung ') + _tvmbG('cung', m.cung) + ': ' + saoText + (m.muon ? _tvmbT('js.nguoikhac.muon-xung-chieu', ' (mượn xung chiếu)') : ''),
@@ -1121,7 +1113,7 @@ function renderMetaBasis(data) {
   (data.matDoc || []).forEach(function (m) {
     rows.push('<li><b>' + esc(_nkMat(m.cung) || m.nhan) + '</b> — ' + _tvmbT('js.nguoikhac.cung-name', 'cung {name}', {name: _tvmbG('cung', m.cung)}) +
       (m.muon ? _tvmbT('js.nguoikhac.muon-xung-chieu', ' (mượn xung chiếu)') : '') + ': ' +
-      esc((m.sao || []).map(_nkSao).join(', ') || _tvmbT('js.nguoikhac.khong-co-chinh-tinh', 'không có chính tinh')) +
+      esc(TuviStarLabel.list(m.sao) || _tvmbT('js.nguoikhac.khong-co-chinh-tinh', 'không có chính tinh')) +
       ((m.cachCuc || []).length ? ' · ' + esc(m.cachCuc.join('; ')) : '') + '</li>');
   });
   if (data.than && data.than.cung) rows.push(_tvmbT('js.nguoikhac.cung-an-than', '<li><b>Cung an Thân</b> — ') + esc(_tvmbG('cung', data.than.cung)) + '</li>');
@@ -1158,7 +1150,7 @@ function renderMetaBasis(data) {
     // không nội suy vào HTML thô.
     if (cs.trichDan) {
       h += '<div class="nk-quote">' + esc(cs.trichDan.cau) +
-        ('<span class="src">' + _tvmbT('js.nguoikhac.sach-dan-ve-sao', '— sách dẫn về sao') + ' ') + esc(_tvmbG(['chinh', 'sao'], cs.trichDan.sao)) + _tvmbT('js.nguoikhac.tai-cung-menh', ' tại cung Mệnh</span></div>');
+        ('<span class="src">' + _tvmbT('js.nguoikhac.sach-dan-ve-sao', '— sách dẫn về sao') + ' ') + esc(TuviStarLabel.t(cs.trichDan.sao)) + _tvmbT('js.nguoikhac.tai-cung-menh', ' tại cung Mệnh</span></div>');
     }
     csEl.innerHTML = h;
     csEl.style.display = 'block';
@@ -1251,7 +1243,7 @@ function renderProse(data) {
   if (data.voiBan && vb) {
     document.getElementById('voiBan').textContent = data.voiBan;
     var chips = [_tvmbT('js.nguoikhac.cung-cung-trong-la-so-cua', 'Cung {cung} trong lá số của bạn', {cung: _tvmbG('cung', vb.cung)}) + (vb.muon ? _tvmbT('js.nguoikhac.muon-xung-chieu', ' (mượn xung chiếu)') : '')];
-    if (vb.sao && vb.sao.length) chips.push(vb.sao.map(_nkSao).join(', '));
+    if (vb.sao && vb.sao.length) chips.push(TuviStarLabel.list(vb.sao));
     chips.push(vb.cungTinh ? _tvmbT('js.nguoikhac.cung-tinh-am-duong-de-va', 'Cùng tính âm/dương — dễ va') : _tvmbT('js.nguoikhac.khac-tinh-am-duong-de-bu', 'Khác tính âm/dương — dễ bù'));
     document.getElementById('voiBanChips').innerHTML = chips.map(function (c) {
       return '<span class="nk-chip">' + esc(c) + '</span>';

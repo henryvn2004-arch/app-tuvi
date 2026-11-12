@@ -173,6 +173,16 @@ for (const m of ${JSON.stringify(MAU)}) {
   const bank = G.buildQuestionBank(set);
   out.mau.push({
     ten: m.ten, tre: m.tre, tuoi: set.tuoi,
+    // W30f: nhãn đáp án câu cung + mã ma (client dựng lại, so với label) và dòng bằng chứng + khopMa/lechMa
+    cung: bank.filter((q) => q.kind === 'cung').map((q) => ({
+      id: q.id, cung: q.cung, options: G.publicQuestion(q).options,
+    })),
+    ma: (() => {
+      const cq = bank.filter((q) => q.kind === 'cung');
+      const ans = cq.map((q) => ({ id: q.id, value: q.options[0].value }));
+      const kq = G.scoreHours(set, bank, ans);
+      return kq.tatCa.flatMap((r) => [['khop', r.khop, r.khopMa], ['lech', r.lech, r.lechMa]].map(([t, v, ma]) => ({ t, v, ma })));
+    })(),
     cau: bank.map((q) => ({
       id: q.id, tieuDe: q.title, goiY: q.hint || '',
       nhan: q.options.map((o) => o.label),
@@ -257,6 +267,88 @@ console.log('__KQ__' + JSON.stringify(out));
         '   hoặc bộ dò đo trượt. Xanh kiểu này là xanh oan.'
     );
     loi++;
+  }
+
+  // ── 3) W30f — nhãn đáp án DỰNG THEO SAO (mã `o.sao`, ns `giosinh-sao`) phải TRÙNG engine, từng byte ──────────
+  // Chạy chính `_gsTr`/`_gsR`/`_gsSao` trong trang với I18n giả trả CHỮ VIỆT NGUỒN theo khoá (cả ns `giosinh` của lô E
+  // lẫn `giosinh-sao`) ⇒ khoá/ghép/dấu nối/cắt 52 ký tự sai một chỗ thì câu dựng ≠ engine. Hụt khoá làm hàm trả null
+  // (lùi về chữ Việt) nên PHẢI đòi "đã dựng được" — nếu không bộ dò xanh oan.
+  const vm = await import('node:vm');
+  const { loadSources } = await import('../lib/i18n/long.mjs');
+  const src = loadSources(ROOT);
+  const viTheoKhoa = {};
+  for (const ns of ['giosinh', 'giosinh-sao'])
+    viTheoKhoa[ns] = new Map(src[ns].map((e) => [e.k, e.vi]));
+  const page = readFileSync(join(ROOT, 'public/app-gio-sinh.html'), 'utf8');
+  const a = page.indexOf('function _long(');
+  const b = page.indexOf('// Tên sao của engine');
+  if (a < 0 || b < a) {
+    console.error('❌ app-gio-sinh.html: không thấy khối _long…_gsTr/_gsSao (đổi tên/di chuyển?)');
+    loi++;
+  } else {
+    const I18n = {
+      locale: 'xx',
+      loadLong() {},
+      long: (ns, k, vi) => (viTheoKhoa[ns] && viTheoKhoa[ns].has(k) ? viTheoKhoa[ns].get(k) : vi),
+    };
+    const ctx = vm.createContext({ window: { I18n }, _tvmbG: (kind, v) => v });
+    ctx.I18n = I18n;
+    vm.runInContext(page.slice(a, b), ctx);
+    const goi = (ma, vi) =>
+      vm.runInContext(`_gsTr(${JSON.stringify(ma)}, ${JSON.stringify(vi)})`, ctx);
+    const dung = (ma) => vm.runInContext(`_gsR(${JSON.stringify(ma)})`, ctx);
+    let ok = 0;
+    for (const m of kq.mau) {
+      if (m.loi) continue;
+      for (const q of m.cung)
+        for (const o of q.options) {
+          if (!o.ma) {
+            console.error(`❌ ${m.ten} — đáp án ${q.id} = ${o.value} không có mã \`ma\``);
+            loi++;
+            continue;
+          }
+          // Mệnh NGƯỜI LỚN theo sao đọc `MENH_ROLE` (ns past-life): null (giữ chữ Việt) là hợp lệ.
+          const menhLon =
+            q.cung === 'Mệnh' && o.ma.k === 'o.sao' && o.ma.v.tre === 0 && o.value !== 'VCD';
+          const t = goi(o.ma, o.label);
+          if (t !== o.label) {
+            console.error(
+              `❌ ${m.ten} — nhãn dựng ở client ≠ engine (${q.id} = ${o.value}):\n   engine: ${o.label}\n   client: ${t}`
+            );
+            loi++;
+          } else if (menhLon ? true : dung(o.ma) !== null) ok++;
+          else {
+            console.error(
+              `❌ ${m.ten} — ${q.id} = ${o.value}: hụt bản dịch (mã ${o.ma.k}) ⇒ lộ chữ Việt`
+            );
+            loi++;
+          }
+        }
+      // dòng bằng chứng: `khopMa/lechMa` song song `khop/lech`; dựng lại từ mã phải = chữ Việt engine (gồm lối cắt 52)
+      for (const { t, v, ma } of m.ma) {
+        if (!Array.isArray(ma) || ma.length !== v.length) {
+          console.error(
+            `❌ ${m.ten} — ${t}Ma không song song với ${t} (${ma && ma.length} ≠ ${v.length})`
+          );
+          loi++;
+          continue;
+        }
+        v.forEach((x, i) => {
+          if (goi(ma[i], x) !== x) {
+            console.error(
+              `❌ ${m.ten} — dòng bằng chứng ${t}[${i}] dựng từ mã ≠ engine:\n   ${x}\n   ${goi(ma[i], x)}`
+            );
+            loi++;
+          } else ok++;
+        });
+      }
+    }
+    if (ok < 100) {
+      console.error(
+        `❌ ĐỐI CHỨNG hỏng: chỉ ${ok} nhãn/dòng bằng chứng được so (cần ≥100) — bộ dò đang đo ít quá.`
+      );
+      loi++;
+    } else console.log(`  nhãn đáp án + bằng chứng dựng ở client trùng engine: ${ok} mục`);
   }
 } finally {
   rmSync(out, { recursive: true, force: true });

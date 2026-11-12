@@ -567,7 +567,10 @@ export function buildQuestionBank(set: HypothesisSet): SurveyQuestion[] {
       const stars = key === 'VCD' ? [] : key.split('+');
       const label = nhanCung(cung, stars, treEm);
       const mk = maNhanCung(cung, stars, treEm);
-      if (label) opts.push({ value: key, label, hours, ...(mk ? { ma: { k: mk } } : {}) });
+      // Nhãn dựng theo sao (bảng dấu hiệu `netCua`/`*_TRE_EM`/`TAT_ACH_*`) không có câu trong GS_VAN ⇒ mã `o.sao` mang
+      // đủ thứ client cần để dựng lại từ ns `gio-sinh` (W30f): cung · value 'A+B'/'VCD' · cờ trẻ em. Additive.
+      const ma = mk ? { k: mk } : { k: 'o.sao', v: { cung, vl: key, tre: treEm ? 1 : 0 } };
+      if (label) opts.push({ value: key, label, hours, ma });
     }
     if (opts.length < 2) continue;
     const kt = khoaCung('q', cung, treEm);

@@ -27,13 +27,8 @@
 
   // Chỗ HIỂN THỊ: tên sao/cung qua glossary (vi trả nguyên), tên kiểu qua id (server trả chữ Việt).
   function G(kind, v) { return typeof _tvmbG === 'function' && v ? _tvmbG(kind, v) : v; }
-  // Nhãn sao do engine dựng: `Tên (độ sáng) [Hóa X]` — tách ra dịch từng phần (độ sáng ← 'sang', Hóa X ← 'sao'); vi trả nguyên.
-  var SANG_ALIAS = { 'Đắc địa': 'Đắc', 'Bình hòa': 'Bình', 'Bình hoà': 'Bình' }; // cùng nghĩa, glossary chỉ có dạng ngắn
-  function starT(x) {
-    var m = /^(.+?)(?: \((.+?)\))?(?: \[Hóa (.+?)\])?$/.exec(String(x == null ? '' : x));
-    if (!m) return x;
-    return G(['chinh', 'sao'], m[1]) + (m[2] ? ' (' + G('sang', SANG_ALIAS[m[2]] || m[2]) + ')' : '') + (m[3] ? ' [' + G('sao', 'Hóa ' + m[3]) + ']' : '');
-  }
+  // Nhãn sao do engine dựng `Tên (độ sáng) [Hóa X]` — tách ra dịch từng phần ở MỘT nơi: tools-shared/star-label.js.
+  function starT(x) { return window.TuviStarLabel ? window.TuviStarLabel.t(x) : x; }
   // `nganh.sao` (past-life.ts) là tên sao HOẶC cặp 'A + B' kèm đuôi ' đồng cung' — tách từng tên rồi ghép lại.
   function saoNganh(x) {
     var m = /^(.*?)( đồng cung)?$/.exec(String(x == null ? '' : x));
