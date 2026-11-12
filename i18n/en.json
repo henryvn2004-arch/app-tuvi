@@ -6255,6 +6255,194 @@
   "t": "Sorry, something went wrong",
   "h": "4195c600"
  },
+ "js.pcol.ban-menh": {
+  "t": "✦ Birth element {h} ({f}) — season suggested by the classical method: {s}",
+  "h": "cadb88ef"
+ },
+ "js.pcol.chip-phoi-do": {
+  "t": "How should I put outfits together for my season?",
+  "h": "3a3ed4e0"
+ },
+ "js.pcol.chip-tranh": {
+  "t": "Which colors should I avoid?",
+  "h": "19ab5099"
+ },
+ "js.pcol.chip-vi-sao": {
+  "t": "Why am I in this color season?",
+  "h": "fd530a4e"
+ },
+ "js.pcol.conf-cao": {
+  "t": "high",
+  "h": "db10c479"
+ },
+ "js.pcol.conf-thap": {
+  "t": "low",
+  "h": "ecd6f14a"
+ },
+ "js.pcol.conf-trung-binh": {
+  "t": "medium",
+  "h": "9d324d94"
+ },
+ "js.pcol.day-la-goi-y": {
+  "t": "This is a suggestion from the Na Yin (nayin), not a reading of your actual skin tone from the photo — your exact season, color palette and outfit suggestions are in the in-depth analysis.",
+  "h": "25abe372"
+ },
+ "js.pcol.desc-autumn-deep": {
+  "t": "Deep earth tones, rich — warm brown skin, high contrast",
+  "h": "90f10d0f"
+ },
+ "js.pcol.desc-autumn-warm": {
+  "t": "Golden earth tones, deep warm — olive/wheat skin",
+  "h": "9b6a0f54"
+ },
+ "js.pcol.desc-spring-bright": {
+  "t": "Clear bright tones, high contrast, vivid standout colors",
+  "h": "20f039c2"
+ },
+ "js.pcol.desc-spring-warm": {
+  "t": "Warm, bright, fresh yellow-toned skin — peach/golden glow",
+  "h": "468acee7"
+ },
+ "js.pcol.desc-summer-cool": {
+  "t": "Cool pink tones, gentle — pink skin with a bluish cast",
+  "h": "1ed00edd"
+ },
+ "js.pcol.desc-summer-soft": {
+  "t": "Muted cool tones, soft — colors blended with a gentle gray",
+  "h": "5b194cf9"
+ },
+ "js.pcol.desc-winter-cool": {
+  "t": "High-contrast cool tones — blue-white skin or dark cool skin",
+  "h": "91dd2746"
+ },
+ "js.pcol.desc-winter-deep": {
+  "t": "Deep cool tones, very high contrast — brown/dark cool skin",
+  "h": "ca5cbf23"
+ },
+ "js.pcol.do-tin-cay": {
+  "t": "Confidence: {c}",
+  "h": "d9faf072"
+ },
+ "js.pcol.greeting": {
+  "t": "You belong to the **{s}** season, with a {u} undertone. Would you like to ask more about colors or outfits?",
+  "h": "72b706d2"
+ },
+ "js.pcol.lbl-ao": {
+  "t": "Top",
+  "h": "373c84b7"
+ },
+ "js.pcol.lbl-giay": {
+  "t": "Shoes",
+  "h": "a47dc437"
+ },
+ "js.pcol.lbl-layer": {
+  "t": "Outer layer",
+  "h": "c3f10446"
+ },
+ "js.pcol.lbl-quan-vay": {
+  "t": "Pants / Skirt",
+  "h": "879b0cdf"
+ },
+ "js.pcol.loi": {
+  "t": "Error",
+  "h": "d2907807"
+ },
+ "js.pcol.loi-e": {
+  "t": "Error: {e}",
+  "h": "a7267203"
+ },
+ "js.pcol.loi-phan-tich": {
+  "t": "Analysis error",
+  "h": "3e06a99e"
+ },
+ "js.pcol.menh-goi-y": {
+  "t": "Birth element {h} — season suggested by the classical method: {s}",
+  "h": "a8bdf4cb"
+ },
+ "js.pcol.nen-tranh": {
+  "t": "Colors to avoid",
+  "h": "4fd3dd20"
+ },
+ "js.pcol.season-autumn-deep": {
+  "t": "Deep Autumn",
+  "h": "576a8bf3"
+ },
+ "js.pcol.season-autumn-warm": {
+  "t": "Warm Autumn",
+  "h": "1034d9af"
+ },
+ "js.pcol.season-spring-bright": {
+  "t": "Bright Spring",
+  "h": "eedcebfe"
+ },
+ "js.pcol.season-spring-warm": {
+  "t": "Warm Spring",
+  "h": "1c006148"
+ },
+ "js.pcol.season-summer-cool": {
+  "t": "Cool Summer",
+  "h": "ee7b3719"
+ },
+ "js.pcol.season-summer-soft": {
+  "t": "Soft Summer",
+  "h": "3545a106"
+ },
+ "js.pcol.season-winter-cool": {
+  "t": "Cool Winter",
+  "h": "bde54243"
+ },
+ "js.pcol.season-winter-deep": {
+  "t": "Deep Winter",
+  "h": "0f222647"
+ },
+ "js.pcol.share-outfit-text": {
+  "t": "Season {s}",
+  "h": "f1a309aa"
+ },
+ "js.pcol.share-outfit-title": {
+  "t": "An outfit for my Personal Color",
+  "h": "26cbac11"
+ },
+ "js.pcol.share-text": {
+  "t": "Season: {n} ({s}) · Undertone: {u}",
+  "h": "d299d1fa"
+ },
+ "js.pcol.share-title": {
+  "t": "My Personal Color",
+  "h": "07a149e4"
+ },
+ "js.pcol.step-chuan-bi": {
+  "t": "Preparing an outfit for the season",
+  "h": "23134132"
+ },
+ "js.pcol.step-phan-tich": {
+  "t": "Analyzing skin tone & color season",
+  "h": "d712f3c3"
+ },
+ "js.pcol.step-tao-anh": {
+  "t": "Generating the new outfit image",
+  "h": "f192809a"
+ },
+ "js.pcol.step-tinh-menh": {
+  "t": "Working out your birth element from your birth year",
+  "h": "6c35f608"
+ },
+ "js.pcol.undertone-cool": {
+  "t": "Cool",
+  "h": "83997975"
+ },
+ "js.pcol.undertone-neutral": {
+  "t": "Neutral",
+  "h": "26af9b58"
+ },
+ "js.pcol.undertone-warm": {
+  "t": "Warm",
+  "h": "8e0429c4"
+ },
+ "js.pcol.vui-long-thu-lai": {
+  "t": "Please try again.",
+  "h": "2f1d18ee"
+ },
  "js.prices.luong-moi-luot": {
   "t": "{credits} credits per use",
   "h": "d8f9af98"
@@ -15694,6 +15882,162 @@
  "oracle.vd-toi-can-nhan-ra-dieu": {
   "t": "E.g. What do I need to realize during this period?",
   "h": "fba02ed0"
+ },
+ "pcol.anh-cua-ban": {
+  "t": "YOUR PHOTO",
+  "h": "e41a257b"
+ },
+ "pcol.anh-khuon-mat": {
+  "t": "<span class=\"ic\" data-icon=\"camera\"></span> Face Photo",
+  "h": "553ce737"
+ },
+ "pcol.anh-sang-tu-nhien-ban-ngay": {
+  "t": "Natural daylight · No filter, no makeup<br>Your skin tone must be clearly visible, not overexposed",
+  "h": "4cff1a71"
+ },
+ "pcol.anh-sang-tu-nhien-tot-nhat": {
+  "t": "<span class=\"tip-badge\"><span class=\"ic\" data-icon=\"sun\"></span> Natural light is best</span> <span class=\"tip-badge\"><span class=\"ic\" data-icon=\"x-circle\"></span> No color filter</span> <span class=\"tip-badge\"><span class=\"ic\" data-icon=\"smile\"></span> No makeup</span> <span class=\"tip-badge\"><span class=\"ic\" data-icon=\"camera\"></span> Shoot close, skin clearly visible</span>",
+  "h": "30e85f5e"
+ },
+ "pcol.bang-mau-ca-nhan": {
+  "t": "<span class=\"ic\" data-icon=\"palette\"></span> Your Color Palette",
+  "h": "eda62269"
+ },
+ "pcol.celeb-cung-tong-mau": {
+  "t": "<span class=\"ic\" data-icon=\"star\"></span> <strong>Celebrities with the same tone:</strong> <span id=\"celebInspo\">—</span>",
+  "h": "3b09c33a"
+ },
+ "pcol.chon-style": {
+  "t": "CHOOSE A STYLE",
+  "h": "92f6c1b3"
+ },
+ "pcol.chup-anh-toan-than": {
+  "t": "Take a full-body photo",
+  "h": "3269c13d"
+ },
+ "pcol.chup-hoac-chon-anh-khuon-mat": {
+  "t": "Take or choose a face photo",
+  "h": "93732afc"
+ },
+ "pcol.cong-so": {
+  "t": "<span class=\"ic\" data-icon=\"briefcase\"></span> Work",
+  "h": "2a18c4c4"
+ },
+ "pcol.cong-so-li34": {
+  "t": "<span class=\"ic\" data-icon=\"briefcase\"></span> Work",
+  "h": "57f12434"
+ },
+ "pcol.dien-do-dung-mot-ma-van": {
+  "t": "You dress on trend and still hear that you look tired or dull — maybe you’ve never found out which color season you belong to. Upload a portrait and see the try-on on your real photo right away.",
+  "h": "d671ee98"
+ },
+ "pcol.goi-y-trang-phuc-theo-season": {
+  "t": "<span class=\"ic\" data-icon=\"shirt\"></span> Outfit Suggestions for Your Season",
+  "h": "dc3ddd6e"
+ },
+ "pcol.gong-kinh": {
+  "t": "Eyeglass Frames",
+  "h": "9e539d7d"
+ },
+ "pcol.hang-ngay": {
+  "t": "<span class=\"ic\" data-icon=\"leaf\"></span> Everyday",
+  "h": "e45465a4"
+ },
+ "pcol.hang-ngay-dbs5": {
+  "t": "<span class=\"ic\" data-icon=\"leaf\"></span> Everyday",
+  "h": "55d92049"
+ },
+ "pcol.kim-loai": {
+  "t": "Metal",
+  "h": "8ff50d1f"
+ },
+ "pcol.kim-loai-phu-kien": {
+  "t": "<span class=\"ic\" data-icon=\"gem\"></span> Metal & Accessories",
+  "h": "90e92f92"
+ },
+ "pcol.ly-do": {
+  "t": "Reason",
+  "h": "0cbf3763"
+ },
+ "pcol.mau-ao-so-mi": {
+  "t": "Shirt Color",
+  "h": "870c2997"
+ },
+ "pcol.mau-hop-lam-sang-noi-bat": {
+  "t": "✓ Colors that suit you — brighten and make your face stand out",
+  "h": "b47aaef5"
+ },
+ "pcol.mau-nen-tranh-lam-xin-toi": {
+  "t": "✗ Colors to avoid — they dull and darken your skin",
+  "h": "190a8061"
+ },
+ "pcol.mau-toc": {
+  "t": "Hair Color",
+  "h": "2a321f26"
+ },
+ "pcol.nam-sinh-tuy-chon-ket-hop": {
+  "t": "Birth year (optional — combined with your birth element)",
+  "h": "a6c5911c"
+ },
+ "pcol.personal-color": {
+  "t": "Personal Color",
+  "h": "52515e4c"
+ },
+ "pcol.personal-color-phan-tich-mau-sac": {
+  "t": "Personal Color (personal color analysis) is a method that sorts skin, hair and eye tones into “color seasons” — Spring, Summer, Autumn, Winter — based on Western color theory, widely used in fashion and beauty in Korea and Japan. Each season matches a palette of clothing and makeup colors that suit it best.",
+  "h": "4d195af6"
+ },
+ "pcol.personal-color-phan-tich-undertone-seaso": {
+  "t": "<b>Personal Color</b><span>Analyzes your undertone and color season, suggests outfits and lets you try them on the photo</span>",
+  "h": "1946e328"
+ },
+ "pcol.personal-color-tu-vi-minh-bao": {
+  "t": "Personal Color — Minh Bao Zi Wei Dou Shu",
+  "h": "9b10e278"
+ },
+ "pcol.phan-tich-personal-color-luong": {
+  "t": "<span class=\"ic\" data-icon=\"palette\"></span> Analyze My Personal Color — <span data-tvp-price=\"personal-color\">…</span> credits",
+  "h": "cfa46f2a"
+ },
+ "pcol.phan-tich-undertone-va-personal-color": {
+  "t": "Analyze your undertone and Personal Color season — suggests the shirt colors, hair colors and accessories that brighten your face most. Combined with the classical Five Elements method.",
+  "h": "69b0927d"
+ },
+ "pcol.su-kien": {
+  "t": "<span class=\"ic\" data-icon=\"sparkles\"></span> Event",
+  "h": "f4429e62"
+ },
+ "pcol.su-kien-cbgc": {
+  "t": "<span class=\"ic\" data-icon=\"sparkles\"></span> Event",
+  "h": "f80867ad"
+ },
+ "pcol.tai-len-mot-tam-anh-chan": {
+  "t": "Upload one portrait with a clear face, bright enough in natural light. The system analyzes your skin tone and then tries colors on directly in the photo. You get your color season, a palette of colors that suit you and colors to avoid, and the try-on image.",
+  "h": "f645c739"
+ },
+ "pcol.thu-lai": {
+  "t": "<span class=\"ic\" data-icon=\"rotate-cw\"></span> Try Again",
+  "h": "66e7a368"
+ },
+ "pcol.thu-trang-phuc-luong-lan": {
+  "t": "<span class=\"ic\" data-icon=\"sparkles\"></span> Try On Clothes <span style=\"font-size:10px;background:var(--gold-lt);color:var(--tx-blue);padding:2px 8px;border-radius:10px;margin-left:4px\"><span data-tvp-price=\"personal-color-tryon\">…</span> credits/try</span>",
+  "h": "0b55d845"
+ },
+ "pcol.thu-trang-phuc-ngay": {
+  "t": "<span class=\"ic\" data-icon=\"sparkles\"></span> Try On Clothes Now",
+  "h": "92e398a6"
+ },
+ "pcol.tip-ap-dung-ngay": {
+  "t": "✦ Tip You Can Use Now",
+  "h": "236e351f"
+ },
+ "pcol.upload-anh-toan-than-he-thong": {
+  "t": "Upload a full-body photo → the system changes the clothes to the colors of your season <strong id=\"tryonSeasonLabel\"></strong>",
+  "h": "6403994e"
+ },
+ "pcol.vd-1992": {
+  "t": "e.g. 1992",
+  "h": "b50ab05e"
  },
  "phongthuy.1-ban-menh-thong-tin-phong": {
   "t": "<span class=\"pt-num\">1</span> Your Destiny Element &amp; Room Details",

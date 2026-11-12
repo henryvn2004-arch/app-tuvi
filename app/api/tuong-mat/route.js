@@ -1157,7 +1157,7 @@ Quy tắc quan trọng:
 - celebrity_inspo: chỉ celeb châu Á (Hàn/Nhật/Việt/Trung)
 - Chỉ trả về JSON`;
 
-async function handlePersonalColor(body) {
+async function handlePersonalColor(body, locale = 'vi') {
   const { image, mediaType = 'image/jpeg', namSinh } = body;
   if (!image) return Response.json({ error: 'Thiếu ảnh.' }, { status: 400 });
   if (image.length > 7 * 1024 * 1024) return Response.json({ error: 'Ảnh quá lớn.' }, { status: 400 });
@@ -1182,7 +1182,8 @@ Nếu kết quả phân tích ảnh cho phép, ưu tiên season này. Nếu tôn
     raw = await llmText({
       luanGiai: true,
       system: SP_PERSONAL_COLOR + menhContext,
-      prompt: 'Phân tích personal color từ ảnh này và trả về JSON.',
+      // Ngôn ngữ ở USER (json:true giữ nguyên khoá/enum: season, undertone, confidence cao|trung bình|thấp); vi → chuỗi cũ.
+      prompt: withLang('Phân tích personal color từ ảnh này và trả về JSON.', locale, [], { json: true }),
       images: [{ data: image, mediaType }],
       maxTokens: 1200,
     });
@@ -1491,7 +1492,7 @@ async function runPost(request) {
     if (action === 'wardrobe-add')    return await handleWardrobeAdd(request, body);
     if (action === 'wardrobe-mix')    return await handleWardrobeMix(request, body);
     if (action === 'wardrobe-delete') return await handleWardrobeDelete(request, body);
-    if (action === 'personal-color') return await handlePersonalColor(body);
+    if (action === 'personal-color') return await handlePersonalColor(body, requestLocale(request));
     if (action === 'personal-color-tryon') return await handlePersonalColorTryon(body);
     if (action === 'da-lieu-ai') return await handleDaLieuAI(body);
     if (action === 'trang-diem-phan-tich') return await handleTrangDiemPhanTich(body);

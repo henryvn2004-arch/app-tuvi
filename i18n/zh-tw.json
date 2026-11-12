@@ -6255,6 +6255,194 @@
   "t": "抱歉，發生了錯誤",
   "h": "4195c600"
  },
+ "js.pcol.ban-menh": {
+  "t": "✦ 本命 {h}（{f}）——古法建議的季型：{s}",
+  "h": "cadb88ef"
+ },
+ "js.pcol.chip-phoi-do": {
+  "t": "該如何依色彩季型搭配服裝？",
+  "h": "3a3ed4e0"
+ },
+ "js.pcol.chip-tranh": {
+  "t": "應避開哪些顏色？",
+  "h": "19ab5099"
+ },
+ "js.pcol.chip-vi-sao": {
+  "t": "為什麼我屬於這個色彩季型？",
+  "h": "fd530a4e"
+ },
+ "js.pcol.conf-cao": {
+  "t": "高",
+  "h": "db10c479"
+ },
+ "js.pcol.conf-thap": {
+  "t": "低",
+  "h": "ecd6f14a"
+ },
+ "js.pcol.conf-trung-binh": {
+  "t": "中",
+  "h": "9d324d94"
+ },
+ "js.pcol.day-la-goi-y": {
+  "t": "這是依納音得出的建議，並非從圖片讀取真實膚色的結果——準確的季型、色彩調色盤與服裝建議，收錄於深度分析中。",
+  "h": "25abe372"
+ },
+ "js.pcol.desc-autumn-deep": {
+  "t": "深沉大地色調、豐厚——暖褐膚色、高對比",
+  "h": "90f10d0f"
+ },
+ "js.pcol.desc-autumn-warm": {
+  "t": "黃褐大地色調、深暖——橄欖色／小麥膚色",
+  "h": "9b6a0f54"
+ },
+ "js.pcol.desc-spring-bright": {
+  "t": "明亮清晰的色調、高對比、鮮豔醒目的色彩",
+  "h": "20f039c2"
+ },
+ "js.pcol.desc-spring-warm": {
+  "t": "偏黃的暖亮膚色，明亮清新——蜜桃／金色光澤",
+  "h": "468acee7"
+ },
+ "js.pcol.desc-summer-cool": {
+  "t": "偏冷的粉色調，柔和——帶藍調的粉嫩膚色",
+  "h": "1ed00edd"
+ },
+ "js.pcol.desc-summer-soft": {
+  "t": "冷調偏霧、柔和——帶灰的柔和色彩",
+  "h": "5b194cf9"
+ },
+ "js.pcol.desc-winter-cool": {
+  "t": "高對比冷色調——青白膚色或偏暗的冷膚色",
+  "h": "91dd2746"
+ },
+ "js.pcol.desc-winter-deep": {
+  "t": "深冷色調、對比極高——褐色／偏暗的冷膚色",
+  "h": "ca5cbf23"
+ },
+ "js.pcol.do-tin-cay": {
+  "t": "可信度：{c}",
+  "h": "d9faf072"
+ },
+ "js.pcol.greeting": {
+  "t": "您屬於 **{s}** 季型，底色為 {u}。想進一步了解色彩或穿搭嗎？",
+  "h": "72b706d2"
+ },
+ "js.pcol.lbl-ao": {
+  "t": "上衣",
+  "h": "373c84b7"
+ },
+ "js.pcol.lbl-giay": {
+  "t": "鞋子",
+  "h": "a47dc437"
+ },
+ "js.pcol.lbl-layer": {
+  "t": "外層",
+  "h": "c3f10446"
+ },
+ "js.pcol.lbl-quan-vay": {
+  "t": "褲子／裙子",
+  "h": "879b0cdf"
+ },
+ "js.pcol.loi": {
+  "t": "錯誤",
+  "h": "d2907807"
+ },
+ "js.pcol.loi-e": {
+  "t": "錯誤：{e}",
+  "h": "a7267203"
+ },
+ "js.pcol.loi-phan-tich": {
+  "t": "分析錯誤",
+  "h": "3e06a99e"
+ },
+ "js.pcol.menh-goi-y": {
+  "t": "本命 {h}——古法建議的季型：{s}",
+  "h": "a8bdf4cb"
+ },
+ "js.pcol.nen-tranh": {
+  "t": "建議避開",
+  "h": "4fd3dd20"
+ },
+ "js.pcol.season-autumn-deep": {
+  "t": "深秋型",
+  "h": "576a8bf3"
+ },
+ "js.pcol.season-autumn-warm": {
+  "t": "暖秋型",
+  "h": "1034d9af"
+ },
+ "js.pcol.season-spring-bright": {
+  "t": "亮春型",
+  "h": "eedcebfe"
+ },
+ "js.pcol.season-spring-warm": {
+  "t": "暖春型",
+  "h": "1c006148"
+ },
+ "js.pcol.season-summer-cool": {
+  "t": "冷夏型",
+  "h": "ee7b3719"
+ },
+ "js.pcol.season-summer-soft": {
+  "t": "柔夏型",
+  "h": "3545a106"
+ },
+ "js.pcol.season-winter-cool": {
+  "t": "冷冬型",
+  "h": "bde54243"
+ },
+ "js.pcol.season-winter-deep": {
+  "t": "深冬型",
+  "h": "0f222647"
+ },
+ "js.pcol.share-outfit-text": {
+  "t": "季型 {s}",
+  "h": "f1a309aa"
+ },
+ "js.pcol.share-outfit-title": {
+  "t": "符合我個人色彩的穿搭",
+  "h": "26cbac11"
+ },
+ "js.pcol.share-text": {
+  "t": "季型：{n}（{s}）· 底色：{u}",
+  "h": "d299d1fa"
+ },
+ "js.pcol.share-title": {
+  "t": "我的個人色彩",
+  "h": "07a149e4"
+ },
+ "js.pcol.step-chuan-bi": {
+  "t": "依季型準備穿搭",
+  "h": "23134132"
+ },
+ "js.pcol.step-phan-tich": {
+  "t": "分析膚色與色彩季型",
+  "h": "d712f3c3"
+ },
+ "js.pcol.step-tao-anh": {
+  "t": "正在生成新穿搭圖片",
+  "h": "f192809a"
+ },
+ "js.pcol.step-tinh-menh": {
+  "t": "依出生年計算本命",
+  "h": "6c35f608"
+ },
+ "js.pcol.undertone-cool": {
+  "t": "冷調（Cool）",
+  "h": "83997975"
+ },
+ "js.pcol.undertone-neutral": {
+  "t": "中性（Neutral）",
+  "h": "26af9b58"
+ },
+ "js.pcol.undertone-warm": {
+  "t": "暖調（Warm）",
+  "h": "8e0429c4"
+ },
+ "js.pcol.vui-long-thu-lai": {
+  "t": "請再試一次。",
+  "h": "2f1d18ee"
+ },
  "js.prices.luong-moi-luot": {
   "t": "每次 {credits} 兩",
   "h": "d8f9af98"
@@ -15694,6 +15882,162 @@
  "oracle.vd-toi-can-nhan-ra-dieu": {
   "t": "例：這個階段我需要看清什麼？",
   "h": "fba02ed0"
+ },
+ "pcol.anh-cua-ban": {
+  "t": "您的照片",
+  "h": "e41a257b"
+ },
+ "pcol.anh-khuon-mat": {
+  "t": "<span class=\"ic\" data-icon=\"camera\"></span> 臉部照片",
+  "h": "553ce737"
+ },
+ "pcol.anh-sang-tu-nhien-ban-ngay": {
+  "t": "白天的自然光 · 不加濾鏡、不化妝<br>需清楚呈現膚色、不要過曝",
+  "h": "4cff1a71"
+ },
+ "pcol.anh-sang-tu-nhien-tot-nhat": {
+  "t": "<span class=\"tip-badge\"><span class=\"ic\" data-icon=\"sun\"></span> 自然光最佳</span> <span class=\"tip-badge\"><span class=\"ic\" data-icon=\"x-circle\"></span> 不加色彩濾鏡</span> <span class=\"tip-badge\"><span class=\"ic\" data-icon=\"smile\"></span> 素顏</span> <span class=\"tip-badge\"><span class=\"ic\" data-icon=\"camera\"></span> 近距離拍、拍清楚肌膚</span>",
+  "h": "30e85f5e"
+ },
+ "pcol.bang-mau-ca-nhan": {
+  "t": "<span class=\"ic\" data-icon=\"palette\"></span> 您的專屬調色盤",
+  "h": "eda62269"
+ },
+ "pcol.celeb-cung-tong-mau": {
+  "t": "<span class=\"ic\" data-icon=\"star\"></span> <strong>同色調的名人：</strong><span id=\"celebInspo\">—</span>",
+  "h": "3b09c33a"
+ },
+ "pcol.chon-style": {
+  "t": "選擇風格",
+  "h": "92f6c1b3"
+ },
+ "pcol.chup-anh-toan-than": {
+  "t": "拍攝全身照",
+  "h": "3269c13d"
+ },
+ "pcol.chup-hoac-chon-anh-khuon-mat": {
+  "t": "拍攝或選擇臉部照片",
+  "h": "93732afc"
+ },
+ "pcol.cong-so": {
+  "t": "<span class=\"ic\" data-icon=\"briefcase\"></span> 職場",
+  "h": "2a18c4c4"
+ },
+ "pcol.cong-so-li34": {
+  "t": "<span class=\"ic\" data-icon=\"briefcase\"></span> 職場",
+  "h": "57f12434"
+ },
+ "pcol.dien-do-dung-mot-ma-van": {
+  "t": "穿著流行的衣服，卻仍被說看起來疲憊、氣色黯沉——也許您還不知道自己屬於哪個色彩季型。上傳人像照片，立即看看在真實照片上的合成效果。",
+  "h": "d671ee98"
+ },
+ "pcol.goi-y-trang-phuc-theo-season": {
+  "t": "<span class=\"ic\" data-icon=\"shirt\"></span> 依季型的穿搭建議",
+  "h": "dc3ddd6e"
+ },
+ "pcol.gong-kinh": {
+  "t": "鏡框",
+  "h": "9e539d7d"
+ },
+ "pcol.hang-ngay": {
+  "t": "<span class=\"ic\" data-icon=\"leaf\"></span> 日常",
+  "h": "e45465a4"
+ },
+ "pcol.hang-ngay-dbs5": {
+  "t": "<span class=\"ic\" data-icon=\"leaf\"></span> 日常",
+  "h": "55d92049"
+ },
+ "pcol.kim-loai": {
+  "t": "金屬",
+  "h": "8ff50d1f"
+ },
+ "pcol.kim-loai-phu-kien": {
+  "t": "<span class=\"ic\" data-icon=\"gem\"></span> 金屬與配件",
+  "h": "90e92f92"
+ },
+ "pcol.ly-do": {
+  "t": "理由",
+  "h": "0cbf3763"
+ },
+ "pcol.mau-ao-so-mi": {
+  "t": "襯衫顏色",
+  "h": "870c2997"
+ },
+ "pcol.mau-hop-lam-sang-noi-bat": {
+  "t": "✓ 適合的顏色——讓臉龐明亮突出",
+  "h": "b47aaef5"
+ },
+ "pcol.mau-nen-tranh-lam-xin-toi": {
+  "t": "✗ 建議避開的顏色——使膚色黯沉",
+  "h": "190a8061"
+ },
+ "pcol.mau-toc": {
+  "t": "髮色",
+  "h": "2a321f26"
+ },
+ "pcol.nam-sinh-tuy-chon-ket-hop": {
+  "t": "出生年（選填——結合本命）",
+  "h": "a6c5911c"
+ },
+ "pcol.personal-color": {
+  "t": "個人色彩",
+  "h": "52515e4c"
+ },
+ "pcol.personal-color-phan-tich-mau-sac": {
+  "t": "個人色彩（Personal Color）分析，是將膚色、髮色與瞳色歸類為「春、夏、秋、冬」色彩季型的方法，依據西方配色理論，在韓國、日本的時尚與美妝領域被廣泛應用。每個季型都對應一組最適合的服裝與妝容調色盤。",
+  "h": "4d195af6"
+ },
+ "pcol.personal-color-phan-tich-undertone-seaso": {
+  "t": "<b>個人色彩</b><span>分析底色與色彩季型，建議穿搭並直接在照片上試穿</span>",
+  "h": "1946e328"
+ },
+ "pcol.personal-color-tu-vi-minh-bao": {
+  "t": "個人色彩——明寶紫微斗數",
+  "h": "9b10e278"
+ },
+ "pcol.phan-tich-personal-color-luong": {
+  "t": "<span class=\"ic\" data-icon=\"palette\"></span> 分析個人色彩——<span data-tvp-price=\"personal-color\">…</span> 兩",
+  "h": "cfa46f2a"
+ },
+ "pcol.phan-tich-undertone-va-personal-color": {
+  "t": "分析底色與個人色彩季型——建議最能讓臉龐明亮的上衣顏色、髮色與配件。並結合五行古法。",
+  "h": "69b0927d"
+ },
+ "pcol.su-kien": {
+  "t": "<span class=\"ic\" data-icon=\"sparkles\"></span> 活動",
+  "h": "f4429e62"
+ },
+ "pcol.su-kien-cbgc": {
+  "t": "<span class=\"ic\" data-icon=\"sparkles\"></span> 活動",
+  "h": "f80867ad"
+ },
+ "pcol.tai-len-mot-tam-anh-chan": {
+  "t": "請上傳一張臉部清晰、自然光下足夠明亮的人像照片。系統會分析膚色，並直接在照片上試色。您會得到自己的色彩季型、適合與應避開的調色盤，以及試穿後的圖片。",
+  "h": "f645c739"
+ },
+ "pcol.thu-lai": {
+  "t": "<span class=\"ic\" data-icon=\"rotate-cw\"></span> 再試一次",
+  "h": "66e7a368"
+ },
+ "pcol.thu-trang-phuc-luong-lan": {
+  "t": "<span class=\"ic\" data-icon=\"sparkles\"></span> 試穿服裝 <span style=\"font-size:10px;background:var(--gold-lt);color:var(--tx-blue);padding:2px 8px;border-radius:10px;margin-left:4px\"><span data-tvp-price=\"personal-color-tryon\">…</span> 兩／次</span>",
+  "h": "0b55d845"
+ },
+ "pcol.thu-trang-phuc-ngay": {
+  "t": "<span class=\"ic\" data-icon=\"sparkles\"></span> 立即試穿服裝",
+  "h": "92e398a6"
+ },
+ "pcol.tip-ap-dung-ngay": {
+  "t": "✦ 立即可用的小訣竅",
+  "h": "236e351f"
+ },
+ "pcol.upload-anh-toan-than-he-thong": {
+  "t": "上傳全身照 → 系統會把服裝換成符合您季型 <strong id=\"tryonSeasonLabel\"></strong> 的顏色",
+  "h": "6403994e"
+ },
+ "pcol.vd-1992": {
+  "t": "例：1992",
+  "h": "b50ab05e"
  },
  "phongthuy.1-ban-menh-thong-tin-phong": {
   "t": "<span class=\"pt-num\">1</span> 本命與房間資料",

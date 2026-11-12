@@ -6255,6 +6255,194 @@
   "t": "죄송해요, 오류가 발생했어요",
   "h": "4195c600"
  },
+ "js.pcol.ban-menh": {
+  "t": "✦ 본명 {h}({f}) — 고법이 권하는 시즌: {s}",
+  "h": "cadb88ef"
+ },
+ "js.pcol.chip-phoi-do": {
+  "t": "시즌에 맞춰 어떻게 코디하면 좋을까요?",
+  "h": "3a3ed4e0"
+ },
+ "js.pcol.chip-tranh": {
+  "t": "어떤 색은 피해야 하나요?",
+  "h": "19ab5099"
+ },
+ "js.pcol.chip-vi-sao": {
+  "t": "왜 나는 이 시즌이에요?",
+  "h": "fd530a4e"
+ },
+ "js.pcol.conf-cao": {
+  "t": "높음",
+  "h": "db10c479"
+ },
+ "js.pcol.conf-thap": {
+  "t": "낮음",
+  "h": "ecd6f14a"
+ },
+ "js.pcol.conf-trung-binh": {
+  "t": "보통",
+  "h": "9d324d94"
+ },
+ "js.pcol.day-la-goi-y": {
+  "t": "이것은 납음에 따른 추천일 뿐, 이미지에서 실제 피부 톤을 읽어 낸 결과가 아니에요. 정확한 시즌, 컬러 팔레트, 코디 추천은 심층 분석에 들어 있어요.",
+  "h": "25abe372"
+ },
+ "js.pcol.desc-autumn-deep": {
+  "t": "깊은 어스 톤, 리치 — 따뜻한 갈색 피부, 높은 대비",
+  "h": "90f10d0f"
+ },
+ "js.pcol.desc-autumn-warm": {
+  "t": "황토빛 어스 톤, 깊은 웜 — 올리브·구릿빛 피부",
+  "h": "9b6a0f54"
+ },
+ "js.pcol.desc-spring-bright": {
+  "t": "뚜렷하게 밝은 톤, 높은 대비, 선명한 색",
+  "h": "20f039c2"
+ },
+ "js.pcol.desc-spring-warm": {
+  "t": "노란기가 도는 따뜻하고 밝은 피부 — 피치/골드 빛",
+  "h": "468acee7"
+ },
+ "js.pcol.desc-summer-cool": {
+  "t": "푸른기가 도는 부드러운 핑크 톤 — 푸른 기가 섞인 핑크빛 피부",
+  "h": "1ed00edd"
+ },
+ "js.pcol.desc-summer-soft": {
+  "t": "탁한 쿨 톤, 소프트 — 은은한 회색빛이 섞인 색",
+  "h": "5b194cf9"
+ },
+ "js.pcol.desc-winter-cool": {
+  "t": "대비가 높은 쿨 톤 — 푸르스름한 흰 피부 또는 어두운 쿨 피부",
+  "h": "91dd2746"
+ },
+ "js.pcol.desc-winter-deep": {
+  "t": "깊은 쿨 톤, 매우 높은 대비 — 갈색/어두운 쿨 피부",
+  "h": "ca5cbf23"
+ },
+ "js.pcol.do-tin-cay": {
+  "t": "신뢰도: {c}",
+  "h": "d9faf072"
+ },
+ "js.pcol.greeting": {
+  "t": "당신의 시즌은 **{s}**, 언더톤은 {u}이에요. 색상이나 코디에 대해 더 궁금한 점이 있나요?",
+  "h": "72b706d2"
+ },
+ "js.pcol.lbl-ao": {
+  "t": "상의",
+  "h": "373c84b7"
+ },
+ "js.pcol.lbl-giay": {
+  "t": "신발",
+  "h": "a47dc437"
+ },
+ "js.pcol.lbl-layer": {
+  "t": "겉옷",
+  "h": "c3f10446"
+ },
+ "js.pcol.lbl-quan-vay": {
+  "t": "바지 / 치마",
+  "h": "879b0cdf"
+ },
+ "js.pcol.loi": {
+  "t": "오류",
+  "h": "d2907807"
+ },
+ "js.pcol.loi-e": {
+  "t": "오류: {e}",
+  "h": "a7267203"
+ },
+ "js.pcol.loi-phan-tich": {
+  "t": "분석 오류",
+  "h": "3e06a99e"
+ },
+ "js.pcol.menh-goi-y": {
+  "t": "본명 {h} — 고법이 권하는 시즌: {s}",
+  "h": "a8bdf4cb"
+ },
+ "js.pcol.nen-tranh": {
+  "t": "피하면 좋은 색",
+  "h": "4fd3dd20"
+ },
+ "js.pcol.season-autumn-deep": {
+  "t": "가을 딥",
+  "h": "576a8bf3"
+ },
+ "js.pcol.season-autumn-warm": {
+  "t": "가을 웜",
+  "h": "1034d9af"
+ },
+ "js.pcol.season-spring-bright": {
+  "t": "봄 브라이트",
+  "h": "eedcebfe"
+ },
+ "js.pcol.season-spring-warm": {
+  "t": "봄 웜",
+  "h": "1c006148"
+ },
+ "js.pcol.season-summer-cool": {
+  "t": "여름 쿨",
+  "h": "ee7b3719"
+ },
+ "js.pcol.season-summer-soft": {
+  "t": "여름 소프트",
+  "h": "3545a106"
+ },
+ "js.pcol.season-winter-cool": {
+  "t": "겨울 쿨",
+  "h": "bde54243"
+ },
+ "js.pcol.season-winter-deep": {
+  "t": "겨울 딥",
+  "h": "0f222647"
+ },
+ "js.pcol.share-outfit-text": {
+  "t": "시즌 {s}",
+  "h": "f1a309aa"
+ },
+ "js.pcol.share-outfit-title": {
+  "t": "내 퍼스널 컬러에 맞는 코디",
+  "h": "26cbac11"
+ },
+ "js.pcol.share-text": {
+  "t": "시즌: {n}({s}) · 언더톤: {u}",
+  "h": "d299d1fa"
+ },
+ "js.pcol.share-title": {
+  "t": "나의 퍼스널 컬러",
+  "h": "07a149e4"
+ },
+ "js.pcol.step-chuan-bi": {
+  "t": "시즌에 맞는 코디 준비",
+  "h": "23134132"
+ },
+ "js.pcol.step-phan-tich": {
+  "t": "피부 톤과 컬러 시즌 분석",
+  "h": "d712f3c3"
+ },
+ "js.pcol.step-tao-anh": {
+  "t": "새 코디 이미지 생성 중",
+  "h": "f192809a"
+ },
+ "js.pcol.step-tinh-menh": {
+  "t": "출생 연도로 본명 계산",
+  "h": "6c35f608"
+ },
+ "js.pcol.undertone-cool": {
+  "t": "쿨 (Cool)",
+  "h": "83997975"
+ },
+ "js.pcol.undertone-neutral": {
+  "t": "뉴트럴 (Neutral)",
+  "h": "26af9b58"
+ },
+ "js.pcol.undertone-warm": {
+  "t": "웜 (Warm)",
+  "h": "8e0429c4"
+ },
+ "js.pcol.vui-long-thu-lai": {
+  "t": "다시 시도해 주세요.",
+  "h": "2f1d18ee"
+ },
  "js.prices.luong-moi-luot": {
   "t": "1회당 {credits}냥",
   "h": "d8f9af98"
@@ -15694,6 +15882,162 @@
  "oracle.vd-toi-can-nhan-ra-dieu": {
   "t": "예: 이 시기에 제가 알아차려야 할 것은 무엇일까요?",
   "h": "fba02ed0"
+ },
+ "pcol.anh-cua-ban": {
+  "t": "내 사진",
+  "h": "e41a257b"
+ },
+ "pcol.anh-khuon-mat": {
+  "t": "<span class=\"ic\" data-icon=\"camera\"></span> 얼굴 사진",
+  "h": "553ce737"
+ },
+ "pcol.anh-sang-tu-nhien-ban-ngay": {
+  "t": "낮의 자연광 · 필터도 화장도 없이<br>피부 톤이 또렷이 보이고 과다 노출이 없어야 해요",
+  "h": "4cff1a71"
+ },
+ "pcol.anh-sang-tu-nhien-tot-nhat": {
+  "t": "<span class=\"tip-badge\"><span class=\"ic\" data-icon=\"sun\"></span> 자연광이 가장 좋아요</span> <span class=\"tip-badge\"><span class=\"ic\" data-icon=\"x-circle\"></span> 컬러 필터 없음</span> <span class=\"tip-badge\"><span class=\"ic\" data-icon=\"smile\"></span> 화장 안 한 얼굴</span> <span class=\"tip-badge\"><span class=\"ic\" data-icon=\"camera\"></span> 가까이서 피부가 잘 보이게</span>",
+  "h": "30e85f5e"
+ },
+ "pcol.bang-mau-ca-nhan": {
+  "t": "<span class=\"ic\" data-icon=\"palette\"></span> 나만의 컬러 팔레트",
+  "h": "eda62269"
+ },
+ "pcol.celeb-cung-tong-mau": {
+  "t": "<span class=\"ic\" data-icon=\"star\"></span> <strong>같은 톤의 셀럽:</strong> <span id=\"celebInspo\">—</span>",
+  "h": "3b09c33a"
+ },
+ "pcol.chon-style": {
+  "t": "스타일 선택",
+  "h": "92f6c1b3"
+ },
+ "pcol.chup-anh-toan-than": {
+  "t": "전신 사진 찍기",
+  "h": "3269c13d"
+ },
+ "pcol.chup-hoac-chon-anh-khuon-mat": {
+  "t": "얼굴 사진 찍기 또는 선택",
+  "h": "93732afc"
+ },
+ "pcol.cong-so": {
+  "t": "<span class=\"ic\" data-icon=\"briefcase\"></span> 출근룩",
+  "h": "2a18c4c4"
+ },
+ "pcol.cong-so-li34": {
+  "t": "<span class=\"ic\" data-icon=\"briefcase\"></span> 출근룩",
+  "h": "57f12434"
+ },
+ "pcol.dien-do-dung-mot-ma-van": {
+  "t": "유행하는 옷을 입는데도 피곤해 보이고 칙칙하다는 말을 듣는다면 — 아직 자신이 어떤 컬러 시즌인지 몰라서일 수 있어요. 인물 사진을 올리고 실제 사진에 합성한 결과를 바로 확인해 보세요.",
+  "h": "d671ee98"
+ },
+ "pcol.goi-y-trang-phuc-theo-season": {
+  "t": "<span class=\"ic\" data-icon=\"shirt\"></span> 시즌별 코디 추천",
+  "h": "dc3ddd6e"
+ },
+ "pcol.gong-kinh": {
+  "t": "안경테",
+  "h": "9e539d7d"
+ },
+ "pcol.hang-ngay": {
+  "t": "<span class=\"ic\" data-icon=\"leaf\"></span> 데일리",
+  "h": "e45465a4"
+ },
+ "pcol.hang-ngay-dbs5": {
+  "t": "<span class=\"ic\" data-icon=\"leaf\"></span> 데일리",
+  "h": "55d92049"
+ },
+ "pcol.kim-loai": {
+  "t": "금속",
+  "h": "8ff50d1f"
+ },
+ "pcol.kim-loai-phu-kien": {
+  "t": "<span class=\"ic\" data-icon=\"gem\"></span> 금속과 액세서리",
+  "h": "90e92f92"
+ },
+ "pcol.ly-do": {
+  "t": "이유",
+  "h": "0cbf3763"
+ },
+ "pcol.mau-ao-so-mi": {
+  "t": "셔츠 색",
+  "h": "870c2997"
+ },
+ "pcol.mau-hop-lam-sang-noi-bat": {
+  "t": "✓ 어울리는 색 — 얼굴을 환하고 돋보이게",
+  "h": "b47aaef5"
+ },
+ "pcol.mau-nen-tranh-lam-xin-toi": {
+  "t": "✗ 피하면 좋은 색 — 칙칙하고 어두워 보이게",
+  "h": "190a8061"
+ },
+ "pcol.mau-toc": {
+  "t": "헤어 컬러",
+  "h": "2a321f26"
+ },
+ "pcol.nam-sinh-tuy-chon-ket-hop": {
+  "t": "출생 연도 (선택 — 본명과 함께 반영)",
+  "h": "a6c5911c"
+ },
+ "pcol.personal-color": {
+  "t": "퍼스널 컬러",
+  "h": "52515e4c"
+ },
+ "pcol.personal-color-phan-tich-mau-sac": {
+  "t": "퍼스널 컬러(개인 색채 분석)는 피부, 머리카락, 눈동자의 톤을 봄·여름·가을·겨울 ‘컬러 시즌’으로 분류하는 방법이에요. 서양의 배색 이론에 바탕을 두고, 한국과 일본의 패션과 뷰티에서 널리 쓰여요. 각 시즌마다 옷과 메이크업에 가장 잘 맞는 컬러 팔레트가 있어요.",
+  "h": "4d195af6"
+ },
+ "pcol.personal-color-phan-tich-undertone-seaso": {
+  "t": "<b>퍼스널 컬러</b><span>언더톤과 컬러 시즌을 분석해 코디를 추천하고 사진에서 바로 체험</span>",
+  "h": "1946e328"
+ },
+ "pcol.personal-color-tu-vi-minh-bao": {
+  "t": "퍼스널 컬러 — 명보 자미두수",
+  "h": "9b10e278"
+ },
+ "pcol.phan-tich-personal-color-luong": {
+  "t": "<span class=\"ic\" data-icon=\"palette\"></span> 퍼스널 컬러 분석 — <span data-tvp-price=\"personal-color\">…</span> 냥",
+  "h": "cfa46f2a"
+ },
+ "pcol.phan-tich-undertone-va-personal-color": {
+  "t": "언더톤과 퍼스널 컬러 시즌을 분석해 얼굴을 가장 환하게 해 주는 상의 색, 헤어 컬러, 액세서리를 추천해요. 오행 고법도 함께 반영해요.",
+  "h": "69b0927d"
+ },
+ "pcol.su-kien": {
+  "t": "<span class=\"ic\" data-icon=\"sparkles\"></span> 행사",
+  "h": "f4429e62"
+ },
+ "pcol.su-kien-cbgc": {
+  "t": "<span class=\"ic\" data-icon=\"sparkles\"></span> 행사",
+  "h": "f80867ad"
+ },
+ "pcol.tai-len-mot-tam-anh-chan": {
+  "t": "얼굴이 또렷하고 자연광에서 충분히 밝은 인물 사진을 한 장 올려 주세요. 시스템이 피부 톤을 분석한 뒤 사진에 바로 색을 합성해 체험해 볼 수 있어요. 나의 컬러 시즌, 어울리는 색과 피해야 할 색 팔레트, 체험 이미지를 받아 보세요.",
+  "h": "f645c739"
+ },
+ "pcol.thu-lai": {
+  "t": "<span class=\"ic\" data-icon=\"rotate-cw\"></span> 다시 체험",
+  "h": "66e7a368"
+ },
+ "pcol.thu-trang-phuc-luong-lan": {
+  "t": "<span class=\"ic\" data-icon=\"sparkles\"></span> 옷 체험 <span style=\"font-size:10px;background:var(--gold-lt);color:var(--tx-blue);padding:2px 8px;border-radius:10px;margin-left:4px\"><span data-tvp-price=\"personal-color-tryon\">…</span> 냥/회</span>",
+  "h": "0b55d845"
+ },
+ "pcol.thu-trang-phuc-ngay": {
+  "t": "<span class=\"ic\" data-icon=\"sparkles\"></span> 지금 바로 옷 체험",
+  "h": "92e398a6"
+ },
+ "pcol.tip-ap-dung-ngay": {
+  "t": "✦ 바로 쓰는 팁",
+  "h": "236e351f"
+ },
+ "pcol.upload-anh-toan-than-he-thong": {
+  "t": "전신 사진 올리기 → 시스템이 옷을 내 시즌 <strong id=\"tryonSeasonLabel\"></strong> 에 맞는 색으로 바꿔 줘요",
+  "h": "6403994e"
+ },
+ "pcol.vd-1992": {
+  "t": "예: 1992",
+  "h": "b50ab05e"
  },
  "phongthuy.1-ban-menh-thong-tin-phong": {
   "t": "<span class=\"pt-num\">1</span> 본명 &amp; 방 정보",

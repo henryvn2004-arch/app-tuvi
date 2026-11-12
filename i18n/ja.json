@@ -6255,6 +6255,194 @@
   "t": "申し訳ありません。エラーが発生しました",
   "h": "4195c600"
  },
+ "js.pcol.ban-menh": {
+  "t": "✦ 本命 {h}（{f}）— 古法が勧めるシーズン: {s}",
+  "h": "cadb88ef"
+ },
+ "js.pcol.chip-phoi-do": {
+  "t": "シーズンに合わせた服の合わせ方は？",
+  "h": "3a3ed4e0"
+ },
+ "js.pcol.chip-tranh": {
+  "t": "避けるべき色は？",
+  "h": "19ab5099"
+ },
+ "js.pcol.chip-vi-sao": {
+  "t": "なぜ私はこのシーズンなのですか？",
+  "h": "fd530a4e"
+ },
+ "js.pcol.conf-cao": {
+  "t": "高い",
+  "h": "db10c479"
+ },
+ "js.pcol.conf-thap": {
+  "t": "低い",
+  "h": "ecd6f14a"
+ },
+ "js.pcol.conf-trung-binh": {
+  "t": "普通",
+  "h": "9d324d94"
+ },
+ "js.pcol.day-la-goi-y": {
+  "t": "これは納音にもとづく目安であり、画像から実際の肌のトーンを読み取った結果ではありません。正確なシーズン、カラーパレット、服装の提案は、詳細分析に含まれています。",
+  "h": "25abe372"
+ },
+ "js.pcol.desc-autumn-deep": {
+  "t": "深みのあるアースカラー、リッチ — 暖かみのある褐色の肌、高コントラスト",
+  "h": "90f10d0f"
+ },
+ "js.pcol.desc-autumn-warm": {
+  "t": "黄みのあるアースカラー、深いウォーム — オリーブ・小麦色の肌",
+  "h": "9b6a0f54"
+ },
+ "js.pcol.desc-spring-bright": {
+  "t": "はっきり明るいトーン、高コントラスト、鮮やかな色",
+  "h": "20f039c2"
+ },
+ "js.pcol.desc-spring-warm": {
+  "t": "黄みがかった暖かく明るい肌 — ピーチ／ゴールドの輝き",
+  "h": "468acee7"
+ },
+ "js.pcol.desc-summer-cool": {
+  "t": "青みがかったやさしいピンクのトーン — 青みを帯びたピンクの肌",
+  "h": "1ed00edd"
+ },
+ "js.pcol.desc-summer-soft": {
+  "t": "くすんだクールトーン、ソフト — やわらかいグレーがかった色",
+  "h": "5b194cf9"
+ },
+ "js.pcol.desc-winter-cool": {
+  "t": "高コントラストのクールトーン — 青白い肌、または暗めのクールな肌",
+  "h": "91dd2746"
+ },
+ "js.pcol.desc-winter-deep": {
+  "t": "深いクールトーン、非常に高いコントラスト — 褐色・暗めのクールな肌",
+  "h": "ca5cbf23"
+ },
+ "js.pcol.do-tin-cay": {
+  "t": "信頼度: {c}",
+  "h": "d9faf072"
+ },
+ "js.pcol.greeting": {
+  "t": "あなたのシーズンは **{s}**、アンダートーンは {u} です。色やコーディネートについて、さらに質問はありますか？",
+  "h": "72b706d2"
+ },
+ "js.pcol.lbl-ao": {
+  "t": "トップス",
+  "h": "373c84b7"
+ },
+ "js.pcol.lbl-giay": {
+  "t": "靴",
+  "h": "a47dc437"
+ },
+ "js.pcol.lbl-layer": {
+  "t": "アウター",
+  "h": "c3f10446"
+ },
+ "js.pcol.lbl-quan-vay": {
+  "t": "パンツ / スカート",
+  "h": "879b0cdf"
+ },
+ "js.pcol.loi": {
+  "t": "エラー",
+  "h": "d2907807"
+ },
+ "js.pcol.loi-e": {
+  "t": "エラー: {e}",
+  "h": "a7267203"
+ },
+ "js.pcol.loi-phan-tich": {
+  "t": "分析エラー",
+  "h": "3e06a99e"
+ },
+ "js.pcol.menh-goi-y": {
+  "t": "本命 {h} — 古法が勧めるシーズン: {s}",
+  "h": "a8bdf4cb"
+ },
+ "js.pcol.nen-tranh": {
+  "t": "避けたい色",
+  "h": "4fd3dd20"
+ },
+ "js.pcol.season-autumn-deep": {
+  "t": "オータム・ディープ",
+  "h": "576a8bf3"
+ },
+ "js.pcol.season-autumn-warm": {
+  "t": "オータム・ウォーム",
+  "h": "1034d9af"
+ },
+ "js.pcol.season-spring-bright": {
+  "t": "スプリング・ブライト",
+  "h": "eedcebfe"
+ },
+ "js.pcol.season-spring-warm": {
+  "t": "スプリング・ウォーム",
+  "h": "1c006148"
+ },
+ "js.pcol.season-summer-cool": {
+  "t": "サマー・クール",
+  "h": "ee7b3719"
+ },
+ "js.pcol.season-summer-soft": {
+  "t": "サマー・ソフト",
+  "h": "3545a106"
+ },
+ "js.pcol.season-winter-cool": {
+  "t": "ウィンター・クール",
+  "h": "bde54243"
+ },
+ "js.pcol.season-winter-deep": {
+  "t": "ウィンター・ディープ",
+  "h": "0f222647"
+ },
+ "js.pcol.share-outfit-text": {
+  "t": "シーズン {s}",
+  "h": "f1a309aa"
+ },
+ "js.pcol.share-outfit-title": {
+  "t": "私のパーソナルカラーに合うコーディネート",
+  "h": "26cbac11"
+ },
+ "js.pcol.share-text": {
+  "t": "シーズン: {n}（{s}）· アンダートーン: {u}",
+  "h": "d299d1fa"
+ },
+ "js.pcol.share-title": {
+  "t": "私のパーソナルカラー",
+  "h": "07a149e4"
+ },
+ "js.pcol.step-chuan-bi": {
+  "t": "シーズンに合わせたコーディネートを準備",
+  "h": "23134132"
+ },
+ "js.pcol.step-phan-tich": {
+  "t": "肌のトーンとカラーシーズンを分析",
+  "h": "d712f3c3"
+ },
+ "js.pcol.step-tao-anh": {
+  "t": "新しいコーディネートの画像を生成中",
+  "h": "f192809a"
+ },
+ "js.pcol.step-tinh-menh": {
+  "t": "生まれ年から本命を算出",
+  "h": "6c35f608"
+ },
+ "js.pcol.undertone-cool": {
+  "t": "クール（Cool）",
+  "h": "83997975"
+ },
+ "js.pcol.undertone-neutral": {
+  "t": "ニュートラル（Neutral）",
+  "h": "26af9b58"
+ },
+ "js.pcol.undertone-warm": {
+  "t": "ウォーム（Warm）",
+  "h": "8e0429c4"
+ },
+ "js.pcol.vui-long-thu-lai": {
+  "t": "もう一度お試しください。",
+  "h": "2f1d18ee"
+ },
  "js.prices.luong-moi-luot": {
   "t": "1回 {credits}両",
   "h": "d8f9af98"
@@ -15694,6 +15882,162 @@
  "oracle.vd-toi-can-nhan-ra-dieu": {
   "t": "例:この時期、私が気づくべきことは?",
   "h": "fba02ed0"
+ },
+ "pcol.anh-cua-ban": {
+  "t": "あなたの画像",
+  "h": "e41a257b"
+ },
+ "pcol.anh-khuon-mat": {
+  "t": "<span class=\"ic\" data-icon=\"camera\"></span> 顔写真",
+  "h": "553ce737"
+ },
+ "pcol.anh-sang-tu-nhien-ban-ngay": {
+  "t": "昼間の自然光 · フィルターもメイクもなし<br>肌のトーンがはっきり見え、白飛びしていないこと",
+  "h": "4cff1a71"
+ },
+ "pcol.anh-sang-tu-nhien-tot-nhat": {
+  "t": "<span class=\"tip-badge\"><span class=\"ic\" data-icon=\"sun\"></span> 自然光が最適</span> <span class=\"tip-badge\"><span class=\"ic\" data-icon=\"x-circle\"></span> 色フィルターなし</span> <span class=\"tip-badge\"><span class=\"ic\" data-icon=\"smile\"></span> すっぴん</span> <span class=\"tip-badge\"><span class=\"ic\" data-icon=\"camera\"></span> 近くで肌がはっきり見えるように</span>",
+  "h": "30e85f5e"
+ },
+ "pcol.bang-mau-ca-nhan": {
+  "t": "<span class=\"ic\" data-icon=\"palette\"></span> あなたのカラーパレット",
+  "h": "eda62269"
+ },
+ "pcol.celeb-cung-tong-mau": {
+  "t": "<span class=\"ic\" data-icon=\"star\"></span> <strong>同じトーンの著名人:</strong> <span id=\"celebInspo\">—</span>",
+  "h": "3b09c33a"
+ },
+ "pcol.chon-style": {
+  "t": "スタイルを選ぶ",
+  "h": "92f6c1b3"
+ },
+ "pcol.chup-anh-toan-than": {
+  "t": "全身写真を撮影",
+  "h": "3269c13d"
+ },
+ "pcol.chup-hoac-chon-anh-khuon-mat": {
+  "t": "顔写真を撮影または選択",
+  "h": "93732afc"
+ },
+ "pcol.cong-so": {
+  "t": "<span class=\"ic\" data-icon=\"briefcase\"></span> オフィス",
+  "h": "2a18c4c4"
+ },
+ "pcol.cong-so-li34": {
+  "t": "<span class=\"ic\" data-icon=\"briefcase\"></span> オフィス",
+  "h": "57f12434"
+ },
+ "pcol.dien-do-dung-mot-ma-van": {
+  "t": "流行の服を着ているのに疲れて見える、くすんで見えると言われる — 自分がどのカラーシーズンか、まだ知らないのかもしれません。ポートレート画像をアップロードして、実際の写真での試着をすぐに見てみましょう。",
+  "h": "d671ee98"
+ },
+ "pcol.goi-y-trang-phuc-theo-season": {
+  "t": "<span class=\"ic\" data-icon=\"shirt\"></span> シーズン別コーディネート提案",
+  "h": "dc3ddd6e"
+ },
+ "pcol.gong-kinh": {
+  "t": "メガネフレーム",
+  "h": "9e539d7d"
+ },
+ "pcol.hang-ngay": {
+  "t": "<span class=\"ic\" data-icon=\"leaf\"></span> 日常",
+  "h": "e45465a4"
+ },
+ "pcol.hang-ngay-dbs5": {
+  "t": "<span class=\"ic\" data-icon=\"leaf\"></span> 日常",
+  "h": "55d92049"
+ },
+ "pcol.kim-loai": {
+  "t": "金属",
+  "h": "8ff50d1f"
+ },
+ "pcol.kim-loai-phu-kien": {
+  "t": "<span class=\"ic\" data-icon=\"gem\"></span> 金属とアクセサリー",
+  "h": "90e92f92"
+ },
+ "pcol.ly-do": {
+  "t": "理由",
+  "h": "0cbf3763"
+ },
+ "pcol.mau-ao-so-mi": {
+  "t": "シャツの色",
+  "h": "870c2997"
+ },
+ "pcol.mau-hop-lam-sang-noi-bat": {
+  "t": "✓ 似合う色 — 顔を明るく引き立てる",
+  "h": "b47aaef5"
+ },
+ "pcol.mau-nen-tranh-lam-xin-toi": {
+  "t": "✗ 避けたい色 — くすんで肌が暗く見える",
+  "h": "190a8061"
+ },
+ "pcol.mau-toc": {
+  "t": "ヘアカラー",
+  "h": "2a321f26"
+ },
+ "pcol.nam-sinh-tuy-chon-ket-hop": {
+  "t": "生まれ年（任意 — 本命と組み合わせます）",
+  "h": "a6c5911c"
+ },
+ "pcol.personal-color": {
+  "t": "パーソナルカラー",
+  "h": "52515e4c"
+ },
+ "pcol.personal-color-phan-tich-mau-sac": {
+  "t": "パーソナルカラー（個人の色彩分析）は、肌・髪・瞳のトーンを「春・夏・秋・冬」のカラーシーズンに分類する手法です。西洋の配色理論にもとづき、韓国や日本のファッションや美容で広く使われています。各シーズンには、服やメイクに最も合うカラーパレットが対応します。",
+  "h": "4d195af6"
+ },
+ "pcol.personal-color-phan-tich-undertone-seaso": {
+  "t": "<b>パーソナルカラー</b><span>アンダートーンとカラーシーズンを分析し、コーディネートを提案して、そのまま画像で試着</span>",
+  "h": "1946e328"
+ },
+ "pcol.personal-color-tu-vi-minh-bao": {
+  "t": "パーソナルカラー — 明宝紫微斗数",
+  "h": "9b10e278"
+ },
+ "pcol.phan-tich-personal-color-luong": {
+  "t": "<span class=\"ic\" data-icon=\"palette\"></span> パーソナルカラーを分析 — <span data-tvp-price=\"personal-color\">…</span> 両",
+  "h": "cfa46f2a"
+ },
+ "pcol.phan-tich-undertone-va-personal-color": {
+  "t": "アンダートーンとパーソナルカラーシーズンを分析 — 顔を最も明るく見せるトップスの色、髪色、アクセサリーを提案します。五行の古法も組み合わせます。",
+  "h": "69b0927d"
+ },
+ "pcol.su-kien": {
+  "t": "<span class=\"ic\" data-icon=\"sparkles\"></span> イベント",
+  "h": "f4429e62"
+ },
+ "pcol.su-kien-cbgc": {
+  "t": "<span class=\"ic\" data-icon=\"sparkles\"></span> イベント",
+  "h": "f80867ad"
+ },
+ "pcol.tai-len-mot-tam-anh-chan": {
+  "t": "顔がはっきり写り、自然光で十分明るいポートレート画像を1枚アップロードしてください。システムが肌のトーンを分析し、そのまま画像で色を試着します。あなたのカラーシーズン、似合う色と避けたい色のパレット、試着画像が届きます。",
+  "h": "f645c739"
+ },
+ "pcol.thu-lai": {
+  "t": "<span class=\"ic\" data-icon=\"rotate-cw\"></span> もう一度試す",
+  "h": "66e7a368"
+ },
+ "pcol.thu-trang-phuc-luong-lan": {
+  "t": "<span class=\"ic\" data-icon=\"sparkles\"></span> 服を試着 <span style=\"font-size:10px;background:var(--gold-lt);color:var(--tx-blue);padding:2px 8px;border-radius:10px;margin-left:4px\"><span data-tvp-price=\"personal-color-tryon\">…</span> 両/回</span>",
+  "h": "0b55d845"
+ },
+ "pcol.thu-trang-phuc-ngay": {
+  "t": "<span class=\"ic\" data-icon=\"sparkles\"></span> 今すぐ服を試着",
+  "h": "92e398a6"
+ },
+ "pcol.tip-ap-dung-ngay": {
+  "t": "✦ すぐ使えるヒント",
+  "h": "236e351f"
+ },
+ "pcol.upload-anh-toan-than-he-thong": {
+  "t": "全身画像をアップロード → システムが服を、あなたのシーズン <strong id=\"tryonSeasonLabel\"></strong> に合う色に着せ替えます",
+  "h": "6403994e"
+ },
+ "pcol.vd-1992": {
+  "t": "例：1992",
+  "h": "b50ab05e"
  },
  "phongthuy.1-ban-menh-thong-tin-phong": {
   "t": "<span class=\"pt-num\">1</span> 本命と部屋の情報",
