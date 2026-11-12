@@ -110,6 +110,19 @@
     }
     return out;
   }
+  // Chữ HIỂN THỊ qua I18n.tv + glossary (trang /<locale>/); vi / Node (lib/engine/bat-trach.ts) / trang không nạp ⇒ chữ Việt nguyên.
+  // `data` (gửi rail/server) và bảng `guaDataLegacy` GIỮ chữ Việt — chỉ `*HTML`/`resTitleText`/`error` đổi theo ngôn ngữ.
+  function _tv(key, vi, vars) {
+    var I = root.I18n;
+    if (I && I.tv) return I.tv(key, vi, vars);
+    return vars ? vi.replace(/\{(\w+)\}/g, function (x, n) { return vars[n] !== undefined ? vars[n] : x; }) : vi;
+  }
+  function _g(kind, v) {
+    var g = root.TuviGlossary;
+    return g && v ? g.t(kind, v) : v;
+  }
+  var HUONG_KEY = { 'Bắc': 'Chính Bắc', 'Nam': 'Chính Nam', 'Đông': 'Chính Đông', 'Tây': 'Chính Tây', 'Trung tâm': 'Trung cung' };
+  function _dir(vi) { return _g('huong', HUONG_KEY[vi] || vi); }
   var CAT_DESC = ['Tài lộc, sức khỏe, phát triển tốt nhất', 'Sức khỏe, trường thọ, y duyên', 'Hôn nhân, sự nghiệp bền vững', 'Bình ổn, an cư, giữ vững'];
   var HUNG_DESC = ['Hao tài, thị phi, chuyện không hay', 'Tình cảm trục trặc, sức khỏe suy', 'Tiểu nhân, phá hoại ngầm', 'Tuyệt vận, bệnh nặng, tai họa lớn'];
   var CAT_USE = ['Cửa chính, phòng ngủ, bàn làm việc', 'Phòng ngủ, hướng đầu giường', 'Bàn thờ, phòng khách, bàn ăn', 'Kho, nhà vệ sinh, phòng phụ'];
@@ -117,23 +130,51 @@
   var DIR_VI = { 'N': 'Bắc', 'S': 'Nam', 'E': 'Đông', 'W': 'Tây', 'NE': 'Đông Bắc', 'NW': 'Tây Bắc', 'SE': 'Đông Nam', 'SW': 'Tây Nam' };
   var DIR_POS = { 'N': { css: 'dir-N' }, 'S': { css: 'dir-S' }, 'E': { css: 'dir-E' }, 'W': { css: 'dir-W' }, 'NE': { css: 'dir-NE' }, 'NW': { css: 'dir-NW' }, 'SE': { css: 'dir-SE' }, 'SW': { css: 'dir-SW' } };
 
+  // Mô tả/ứng dụng từng sao: bảng theo chỉ số → khoá LITERAL (vi giữ đúng câu gốc của CAT_DESC/HUNG_DESC/…).
+  function _catDesc(i) {
+    return [
+      _tv('js.shellui.bt-cd-0', 'Tài lộc, sức khỏe, phát triển tốt nhất'), _tv('js.shellui.bt-cd-1', 'Sức khỏe, trường thọ, y duyên'),
+      _tv('js.shellui.bt-cd-2', 'Hôn nhân, sự nghiệp bền vững'), _tv('js.shellui.bt-cd-3', 'Bình ổn, an cư, giữ vững'),
+    ][i];
+  }
+  function _hungDesc(i) {
+    return [
+      _tv('js.shellui.bt-hd-0', 'Hao tài, thị phi, chuyện không hay'), _tv('js.shellui.bt-hd-1', 'Tình cảm trục trặc, sức khỏe suy'),
+      _tv('js.shellui.bt-hd-2', 'Tiểu nhân, phá hoại ngầm'), _tv('js.shellui.bt-hd-3', 'Tuyệt vận, bệnh nặng, tai họa lớn'),
+    ][i];
+  }
+  function _catUse(i) {
+    return [
+      _tv('js.shellui.bt-cu-0', 'Cửa chính, phòng ngủ, bàn làm việc'), _tv('js.shellui.bt-cu-1', 'Phòng ngủ, hướng đầu giường'),
+      _tv('js.shellui.bt-cu-2', 'Bàn thờ, phòng khách, bàn ăn'), _tv('js.shellui.bt-cu-3', 'Kho, nhà vệ sinh, phòng phụ'),
+    ][i];
+  }
+  function _hungUse(i) {
+    return [
+      _tv('js.shellui.bt-hu-0', 'Tránh cửa chính, phòng ngủ'), _tv('js.shellui.bt-hu-1', 'Tránh đặt bàn thờ, phòng ngủ'),
+      _tv('js.shellui.bt-hu-2', 'Tránh bếp, phòng chủ'), _tv('js.shellui.bt-hu-3', 'Không đặt cửa, không kê giường'),
+    ][i];
+  }
+
   function compute(year, gender) {
     if (!year || year < 1900 || year > 2010) {
-      return { ok: false, error: 'Vui lòng nhập năm sinh hợp lệ (1900–2010).' };
+      return { ok: false, error: _tv('js.shellui.bt-nhap-nam-hop-le', 'Vui lòng nhập năm sinh hợp lệ (1900–2010).') };
     }
     var cung = getCungMenh(year, gender);
     if (cung === 5) cung = gender === 'nam' ? 2 : 8;
     var dirs = duNienArr(cung);
-    if (!dirs) return { ok: false, error: 'Không tính được cung mệnh.' };
+    if (!dirs) return { ok: false, error: _tv('js.shellui.bt-khong-tinh-duoc-cung', 'Không tính được cung mệnh.') };
     var nhom = NHOM[cung];
-    var resTitleText = `Năm ${year} — Cung ${cung} ${CUNG_NAME[cung]} — ${nhom} Tứ Mệnh`;
+    var nhomLb = nhom === 'Đông' ? _tv('js.shellui.bt-dong-tu-menh', 'Đông Tứ Mệnh') : _tv('js.shellui.bt-tay-tu-menh', 'Tây Tứ Mệnh');
+    var cungLb = _g('quai', CUNG_NAME[cung]);
+    var resTitleText = _tv('js.shellui.bt-title', 'Năm {y} — Cung {c} {q} — {n}', { y: year, c: cung, q: cungLb, n: nhomLb });
     var resInfoHTML = `
-    <div style="margin-bottom:16px"><span class="nhom-badge ${nhom === 'Đông' ? 'dong' : 'tay'}">${nhom} Tứ Mệnh</span></div>
+    <div style="margin-bottom:16px"><span class="nhom-badge ${nhom === 'Đông' ? 'dong' : 'tay'}">${nhomLb}</span></div>
     <div style="display:flex;flex-direction:column;gap:8px">
-      <div class="res-row"><span class="res-row-label">Cung Mệnh</span><span class="res-row-val">${cung} — ${CUNG_NAME[cung]}</span></div>
-      <div class="res-row"><span class="res-row-label">Ngũ Hành</span><span class="res-row-val">${CUNG_HANH[cung]}</span></div>
-      <div class="res-row"><span class="res-row-label">Vị Trí Cung</span><span class="res-row-val">${DIR_VI[CUNG_DIR[cung]] || 'Trung tâm'}</span></div>
-      <div class="res-row" style="border:none"><span class="res-row-label">Nhóm</span><span class="res-row-val">${nhom === 'Đông' ? 'Đông Tứ Mệnh — hợp các hướng Đông, Đông Nam, Nam, Bắc' : 'Tây Tứ Mệnh — hợp các hướng Tây, Tây Bắc, Đông Bắc, Tây Nam'}</span></div>
+      <div class="res-row"><span class="res-row-label">${_tv('js.shellui.bt-cung-menh', 'Cung Mệnh')}</span><span class="res-row-val">${cung} — ${cungLb}</span></div>
+      <div class="res-row"><span class="res-row-label">${_tv('js.shellui.bt-ngu-hanh', 'Ngũ Hành')}</span><span class="res-row-val">${_g('hanh', CUNG_HANH[cung])}</span></div>
+      <div class="res-row"><span class="res-row-label">${_tv('js.shellui.bt-vi-tri-cung', 'Vị Trí Cung')}</span><span class="res-row-val">${_dir(DIR_VI[CUNG_DIR[cung]] || 'Trung tâm')}</span></div>
+      <div class="res-row" style="border:none"><span class="res-row-label">${_tv('js.shellui.bt-nhom', 'Nhóm')}</span><span class="res-row-val">${nhom === 'Đông' ? _tv('js.shellui.bt-dong-hop', 'Đông Tứ Mệnh — hợp các hướng Đông, Đông Nam, Nam, Bắc') : _tv('js.shellui.bt-tay-hop', 'Tây Tứ Mệnh — hợp các hướng Tây, Tây Bắc, Đông Bắc, Tây Nam')}</span></div>
     </div>`;
     var compassInner = Object.keys(DIR_POS).map(function (d) {
       var p = DIR_POS[d];
@@ -142,13 +183,13 @@
       var cls = 'dir-neu', label = '';
       if (catIdx >= 0) { cls = 'dir-good'; label = CAT_NAMES[catIdx]; }
       else if (hungIdx >= 0) { cls = 'dir-bad'; label = HUNG_NAMES[hungIdx]; }
-      return `<div class="compass-dir ${p.css} ${cls}"><div>${DIR_VI[d]}</div><div class="dir-label">${label}</div></div>`;
+      return `<div class="compass-dir ${p.css} ${cls}"><div>${_dir(DIR_VI[d])}</div><div class="dir-label">${_g('battrach', label)}</div></div>`;
     }).join('');
-    var compassHTML = `<div class="compass-ring"></div><div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:11px;color:var(--text-lt);font-weight:600">CUNG ${cung}</div>${compassInner}`;
+    var compassHTML = `<div class="compass-ring"></div><div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:11px;color:var(--text-lt);font-weight:600">${_tv('js.shellui.bt-cung-n', 'CUNG {c}', { c: cung })}</div>${compassInner}`;
     var rows = dirs.slice(0, 4).map(function (d, i) {
-      return `<tr class="good"><td><span class="dot-good"></span><strong>${DIR_VI[d]}</strong></td><td style="color:#1E6B3C;font-weight:600">${CAT_NAMES[i]}</td><td>${CAT_DESC[i]}</td><td style="font-size:12px">${CAT_USE[i]}</td></tr>`;
+      return `<tr class="good"><td><span class="dot-good"></span><strong>${_dir(DIR_VI[d])}</strong></td><td style="color:#1E6B3C;font-weight:600">${_g('battrach', CAT_NAMES[i])}</td><td>${_catDesc(i)}</td><td style="font-size:12px">${_catUse(i)}</td></tr>`;
     }).concat(dirs.slice(4).map(function (d, i) {
-      return `<tr class="bad"><td><span class="dot-bad"></span><strong>${DIR_VI[d]}</strong></td><td style="color:#C0392B;font-weight:600">${HUNG_NAMES[i]}</td><td>${HUNG_DESC[i]}</td><td style="font-size:12px;color:#999">${HUNG_USE[i]}</td></tr>`;
+      return `<tr class="bad"><td><span class="dot-bad"></span><strong>${_dir(DIR_VI[d])}</strong></td><td style="color:#C0392B;font-weight:600">${_g('battrach', HUNG_NAMES[i])}</td><td>${_hungDesc(i)}</td><td style="font-size:12px;color:#999">${_hungUse(i)}</td></tr>`;
     }));
     var huongRowsHTML = rows.join('');
 
