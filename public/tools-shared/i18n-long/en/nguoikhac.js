@@ -1,0 +1,27 @@
+// SINH bởi npm run i18n:long (docs/i18n/QUY-UOC.md "Văn dài") — KHÔNG sửa tay. ns=nguoikhac locale=en
+window.I18n&&window.I18n.defineLong("nguoikhac",{
+"mat.Mệnh":{"t":"Core character","h":"a78d9caa"},
+"mat.Phúc Đức":{"t":"Inner foundation","h":"71767ef7"},
+"mat.Thiên Di":{"t":"Out in the world","h":"a8d58a6c"},
+"mat.Quan Lộc":{"t":"Way of working","h":"5659fe96"},
+"mat.Nô Bộc":{"t":"With the people around them","h":"fa79c45d"},
+"viec.nho-viec":{"t":"asking them for a favour / pitching a proposal","h":"46620574"},
+"viec.thuong-luong":{"t":"negotiating terms (pay, a share)","h":"65e7fbab"},
+"viec.bao-tin-xau":{"t":"having to deliver news they won't want to hear","h":"f0e4bb42"},
+"viec.tu-choi":{"t":"turning them down without losing the relationship","h":"32ca6115"},
+"viec.bat-dong":{"t":"A disagreement that hasn't been resolved","h":"f32b8bb1"},
+"viec.giao-viec":{"t":"assigning or following up on work","h":"29e0c846"},
+"viec.ru-hop-tac":{"t":"inviting them into a big project together","h":"8559b571"},
+"viec.gan-lai":{"t":"reconnecting after a time apart","h":"323cd9df"},
+"viec.lan-dau":{"t":"meeting or working with them for the first time, knowing nothing about them","h":"f859922e"},
+"khoa.keHoach":{"t":"How to approach it: {viec}","h":"e1ae3139"},
+"khoa.matDoc.sao":{"t":"{n} more sides of this person — {ten} (read from {sao})","h":"9229ac05"},
+"khoa.matDoc":{"t":"{n} more sides of this person — {ten}","h":"ddb7991b"},
+"khoa.coiTrong":{"t":"What they value — and what they fear losing","h":"cb1b27aa"},
+"khoa.nenNoi":{"t":"Three things to say, with real lines you can use right away","h":"4ff94510"},
+"khoa.tranhNoi":{"t":"Three things never to say to this person","h":"aa53c77d"},
+"khoa.thoiDiem.dv":{"t":"When to bring them something big — based on the {a}–{b} major cycle they are in now","h":"3c44fa5a"},
+"khoa.thoiDiem":{"t":"When to bring them something big","h":"94a8e09a"},
+"khoa.voiBan":{"t":"Where you and this person clash — read from your {cung}","h":"35a04e5f"},
+"khoa.motCau":{"t":"One line to remember this person by","h":"e7d726c6"}
+});
