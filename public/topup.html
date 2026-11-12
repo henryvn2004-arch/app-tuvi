@@ -498,6 +498,9 @@ const FEATURED_INDEX = 1;
 
 const State = { method: 'paypal', packages: [], rateLabel: '', vndRails: false };
 
+// Nhãn từ DB (tool_pricing.label · credit_packages.label) theo ngôn ngữ trang — I18n.db dịch chỉ khi nhãn DB còn
+// trùng câu gốc (W27). Chỉ hiển thị: payPackage/đơn PayPal vẫn đi theo package_id.
+function dbLb(k, v) { return window.I18n && I18n.db ? I18n.db(k, v) : v; }
 function esc(s) {
   return String(s == null ? '' : s).replace(/[&<>"']/g, c =>
     ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[c]);
@@ -663,7 +666,7 @@ function renderPackages() {
     return '<div class="pkg-card' + (featured ? ' featured' : '') + '">'
       + (featured ? '<div class="pkg-badge">' + badge + '</div>' : '')
       + '<div class="pkg-icon">' + ic(PKG_ICONS[i] || 'sparkles') + '</div>'
-      + '<div class="pkg-name">' + esc(p.label) + '</div>'
+      + '<div class="pkg-name">' + esc(dbLb('js.goi.' + p.package_id, p.label)) + '</div>'
       + '<div class="pkg-price">' + money(priceOf(p)) + '</div>'
       + '<div class="pkg-credits">' + p.credits + _tvmbT('js.topup.luong', ' Lượng</div>')
       + '<div class="pkg-rate">' + moneyRate(rate) + _tvmbT('js.topup.luong-10zo', ' / Lượng')
@@ -672,7 +675,7 @@ function renderPackages() {
       // Giá đã to đùng ngay trên nút → nhắc lại trong nút là thừa. Giữ ngữ cảnh
       // cho trình đọc màn hình bằng aria-label vì 4 nút giờ đọc giống hệt nhau.
       + '<button class="btn-pkg" id="btn-' + esc(p.package_id) + '" onclick="payPackage(\'' + esc(p.package_id) + '\')"'
-      + _tvmbT('js.topup.aria-label-thanh-toan', ' aria-label="Thanh toán ') + btnLabel + _tvmbT('js.topup.goi', ' gói ') + esc(p.label) + ' — ' + money(priceOf(p)) + '">'
+      + _tvmbT('js.topup.aria-label-thanh-toan', ' aria-label="Thanh toán ') + btnLabel + _tvmbT('js.topup.goi', ' gói ') + esc(dbLb('js.goi.' + p.package_id, p.label)) + ' — ' + money(priceOf(p)) + '">'
       + ic(btnIcon)
       + '<span>' + btnLabel + '</span></button>'
       + '</div>';
@@ -811,7 +814,7 @@ async function renderPendingBanner() {
     if (window.ToolPrices) {
       await window.ToolPrices.load();
       const row = window.ToolPrices.rows().find(r => r && r.tool_id === pending.product);
-      if (row && row.label) label = row.label;
+      if (row && row.label) label = dbLb('js.tool.' + row.tool_id, row.label);
     }
   } catch (e) { /* giữ nhãn chung chung */ }
   const exact = prefillCustomFor(pending.need);
@@ -1002,7 +1005,7 @@ async function loadToolPricing() {
                 ? '<img src="' + window.ToolIcons.src(t.tool_id) + '" alt="" loading="lazy">'
                 : (window.iconHtml ? window.iconHtml(t.icon) : '')
             ) + '</div>'
-          + '<div><div class="cost-name">' + esc(t.label) + '</div>'
+          + '<div><div class="cost-name">' + esc(dbLb('js.tool.' + t.tool_id, t.label)) + '</div>'
           + (t.description ? '<div class="cost-desc">' + esc(t.description) + '</div>' : '')
           + '</div></div>'
           + '<div class="cost-right"><div class="cost-credits">' + Number(t.credits) + _tvmbT('js.topup.luong', ' Lượng</div>')

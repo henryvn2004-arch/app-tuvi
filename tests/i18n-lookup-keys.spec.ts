@@ -34,7 +34,7 @@ async function open(page: Page, url: string, fakeLocale: boolean) {
         .replace(
           /<head\b[^>]*>/i,
           (m) =>
-            `${m}\n<script id="tvmb-i18n" type="application/json">${dict}</script>\n<script src="/tools-shared/i18n.js?v=5"></script>`
+            `${m}\n<script id="tvmb-i18n" type="application/json">${dict}</script>\n<script src="/tools-shared/i18n.js?v=6"></script>`
         );
       await route.fulfill({ response: res, body: html });
     });

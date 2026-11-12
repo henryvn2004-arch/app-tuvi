@@ -653,14 +653,8 @@ window.iconHtml=window.iconHtml||function(k){return (window.ICONS&&window.ICONS[
 </script>
 <script src="/auth.js?v=9"></script>
   <script src="/nav.js?v=49" data-icons-only></script>
-<script src="/shell.js?v=150"></script>
+<script src="/shell.js?v=151"></script>
 <script src="/tools-shared/shell-soft-nav.js?v=49"></script>
 <script src="/account-core.js?v=16"></script>
-<script>
-// Chữ do account-core.js dựng nằm ở namespace js.taikhoan. Server (lib/i18n/render.mjs detectSoftNamespaces) chỉ
-// nhận namespace qua lời gọi T/_tvmbT('js.<ns>.…') NGAY TRONG HTML trang (file .js ngoài không được quét) ⇒ dòng
-// dưới chỉ để server nhúng từ điển js.taikhoan cho trang này; nó không làm gì lúc chạy.
-// _tvmbT('js.taikhoan.nguoi-dung', 'Người Dùng')
-</script>
 </body>
 </html>

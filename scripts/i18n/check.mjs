@@ -36,6 +36,7 @@ import {
 import { buildZhCn } from './zhcn.mjs';
 import { SINGLE_LOCALE_PAGES } from '../../lib/i18n/single-locale.mjs';
 import { SELF_MANAGED_PREFIXES, isSelfManaged } from '../../lib/i18n/self-managed.mjs';
+import { REF_RE } from './ns-refs.mjs';
 
 const errors = [];
 const fail = (m) => errors.push(m);
@@ -161,11 +162,19 @@ for (const f of htmlFiles) {
     if (!(k in vi)) fail(`public/${f}: khoá "${k}" không có trong i18n/vi.json`);
 }
 // .js + <script> nội tuyến trong .html (vd topup.html). `_tvmbT` = bản toàn cục của auth.js.
-const jsFiles = fs.readdirSync(PUBLIC).filter((f) => f.endsWith('.js') || f.endsWith('.html'));
+// W27: + module dùng chung `tools-shared/*.js` (không đệ quy: `i18n-long/` là văn dài, bộ dò riêng) và mọi kiểu gọi
+// trong REF_RE (I18n.tv/_tv/_lcT…) — trước đó khoá gõ sai trong module rơi về tiếng Việt IM LẶNG.
+const jsFiles = [
+  ...fs.readdirSync(PUBLIC).filter((f) => f.endsWith('.js') || f.endsWith('.html')),
+  ...fs
+    .readdirSync(path.join(PUBLIC, 'tools-shared'))
+    .filter((f) => f.endsWith('.js'))
+    .map((f) => 'tools-shared/' + f),
+];
 let jsRefs = 0;
 for (const f of jsFiles) {
   const src = fs.readFileSync(path.join(PUBLIC, f), 'utf8');
-  for (const m of src.matchAll(/\b(?:T|_tvmbT)\(\s*'(js\.[\w.-]+)'/g)) {
+  for (const m of src.matchAll(REF_RE)) {
     jsRefs++;
     if (!(m[1] in vi)) fail(`public/${f}: T('${m[1]}') — khoá không có trong i18n/vi.json`);
   }
@@ -249,6 +258,13 @@ for (const [p, page] of Object.entries(pages)) {
         );
       if (!r.html.includes(`<link rel="canonical" href="${urlFor(l, p)}">`))
         fail(`${p} [${l}]: canonical không tự trỏ về ${urlFor(l, p)}`);
+      // JSON-LD (W27): trang đã khai dịch đủ thì dữ liệu cấu trúc cũng phải theo ngôn ngữ — chuỗi tiếng Việt còn
+      // sót = FAQ/HowTo lệch chữ hiển thị. Thêm khoá `ld.<trang>.*` (câu gốc = đúng chuỗi JSON-LD) rồi dịch.
+      if (r.ldMissing.length)
+        fail(
+          `${p} [${l}]: JSON-LD còn ${r.ldMissing.length} chuỗi tiếng Việt chưa có bản dịch, vd "${r.ldMissing[0].slice(0, 60)}"`
+        );
+      if (/"inLanguage":\s*"vi"/.test(r.html)) fail(`${p} [${l}]: JSON-LD còn inLanguage "vi"`);
     } else {
       if (!noindex)
         fail(

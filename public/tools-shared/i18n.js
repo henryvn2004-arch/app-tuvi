@@ -109,6 +109,29 @@
     return s;
   }
 
+  /**
+   * I18n.db('js.tool.laso', row.label) — chữ ĐỌC TỪ DB (tool_pricing.label, credit_packages.label,
+   * master_profiles.discipline/greeting) theo ngôn ngữ trang (W27). Server nhúng kèm câu gốc tiếng Việt
+   * của khoá (`src`, chỉ namespace DB_NS ở render.mjs); dịch CHỈ KHI chữ DB còn trùng câu gốc — Admin đổi
+   * chữ ở DB thì hiện chữ DB mới, không hiện bản dịch của câu cũ. vi / thiếu khoá ⇒ chữ DB nguyên trạng.
+   * CHỈ để HIỂN THỊ: `description` sổ tiền, prompt, khoá tra vẫn dùng chữ DB.
+   */
+  var SRC = null;
+  function db(key, val) {
+    if (LOCALE === 'vi' || val == null || val === '') return val;
+    if (!SRC) {
+      SRC = {};
+      try {
+        var node = document.getElementById('tvmb-i18n');
+        if (node) SRC = JSON.parse(node.textContent).src || {};
+      } catch (e) {
+        SRC = {};
+      }
+    }
+    if (!Object.prototype.hasOwnProperty.call(SRC, key) || SRC[key] !== String(val)) return val;
+    return tv(key, String(val));
+  }
+
   // ── Văn DÀI theo chỉ số (W16a): hào từ, lời khuyên quẻ, luận Thể–Dụng… ───────
   // Bản dịch KHÔNG nằm trong i18n/<locale>.json mà ở file riêng theo locale
   // /tools-shared/i18n-long/<locale>/<ns>.js (file tự gọi I18n.defineLong). Chỉ nạp file của
@@ -178,5 +201,5 @@
     return 'Thầy ' + n;
   }
 
-  window.I18n = { locale: LOCALE, t: t, tv: tv, href: href, defineLong: defineLong, loadLong: loadLong, long: long, master: master, masterTitle: masterTitle };
+  window.I18n = { locale: LOCALE, t: t, tv: tv, href: href, defineLong: defineLong, loadLong: loadLong, long: long, master: master, masterTitle: masterTitle, db: db };
 })();
