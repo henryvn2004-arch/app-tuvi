@@ -6,8 +6,7 @@
 // NỘI DUNG: route đó nhận `phans` client gửi kèm (vừa hiển thị xong, còn
 // trong bộ nhớ trình duyệt) — route NÀY không có nguồn đó (mở lại trang sau
 // nhiều ngày, browser không còn state), nên đọc thẳng `laso_public.luan_giai`
-// (đã tự lưu mỗi lượt sinh xong, xem `app/api/save-laso/route.ts`) — hoặc bản
-// theo ngôn ngữ người nhận ở `laso_public_i18n` (W17), hụt thì lùi bản Việt. KHÔNG gọi
+// (đã tự lưu mỗi lượt sinh xong, xem `app/api/save-laso/route.ts`). KHÔNG gọi
 // lại LLM/engine — đúng luật "route không tính lại", chỉ đổi NGUỒN đọc.
 // ============================================================
 import { NextRequest, NextResponse } from 'next/server';
@@ -15,12 +14,13 @@ import { createClient } from '@supabase/supabase-js';
 import { getUserFromSupabaseToken } from '@/lib/admin/auth';
 import { sendTransactionalEmail } from '@/lib/email/send';
 import { localeFromCookieHeader, saveUserLocale, getUserLocale } from '@/lib/email/locale';
-import { renderPdfMail } from '@/lib/email/i18n';
+import { birthLine } from '@/lib/pdf/i18n';
+import { renderPdfMail, siteUrl } from '@/lib/email/i18n';
 import { renderLuanGiaiPdf } from '@/lib/pdf/luan-giai';
 import { buildPhans } from '@/lib/pdf/phan-labels';
+import { readLuanI18n } from '@/lib/laso/luan-i18n';
 import { getOrCreateReportToken } from '@/lib/pdf/report-link';
 import { classifyLuanGiaiSlug } from '@/lib/pdf/luan-giai-slug';
-import { readLuanI18n } from '@/lib/laso/luan-i18n';
 
 export const dynamic = 'force-dynamic';
 export const runtime = 'nodejs';
@@ -59,16 +59,17 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: 'Bạn không sở hữu lá số này' }, { status: 403 });
   }
 
-  // Cookie = ngôn ngữ khách ĐANG dùng; có thì ghi nhớ cho các email sau.
+  // Cookie = ngôn ngữ khách ĐANG dùng; có thì ghi nhớ cho các email sau. Tính TRƯỚC khi dựng PDF:
+  // khung PDF (bìa/mục lục/nhãn phần/giờ sinh) VÀ văn luận đi cùng ngôn ngữ thư — W18.
   const cookieLocale = localeFromCookieHeader(req.headers.get('cookie'));
   if (cookieLocale) await saveUserLocale(user.id, cookieLocale);
   const locale = cookieLocale ?? (await getUserLocale(user.id));
 
-  // Văn luận theo ngôn ngữ NGƯỜI NHẬN (i18n W17): `laso_public.luan_giai` chỉ là bản VIỆT, bản ja/ko/zh-*/en
-  // nằm ở `laso_public_i18n`. Hụt (chưa từng sinh ở ngôn ngữ đó / bảng lỗi) ⇒ lùi về bản Việt như cũ —
-  // gửi bản Việt vẫn hơn từ chối gửi thứ khách đã mua. `vi` không chạm kho mới (readLuanI18n trả null).
-  const ngoaiNgu = await readLuanI18n(slug, locale);
-  const phans = buildPhans((ngoaiNgu?.luanGiai ?? row.luan_giai) as Record<string, unknown> | null)
+  // Văn luận: ngôn ngữ ≠ vi đọc bản cùng slug ở `laso_public_i18n` (W17, cùng khoá số phần); chưa có
+  // bản đó (khách mua ở trang Việt) thì lùi về bản Việt của `laso_public` — PDF có chữ còn hơn từ chối.
+  const banNgoai = locale === 'vi' ? null : await readLuanI18n(slug, locale);
+  const phansNgoai = buildPhans(banNgoai?.luanGiai as Record<string, unknown> | null);
+  const phans = (phansNgoai.length ? phansNgoai : buildPhans(row.luan_giai as Record<string, unknown> | null))
     .map((p) => ({ title: p.title, text: p.text.slice(0, 50_000) }));
   if (!phans.length) {
     return NextResponse.json({ error: 'Chưa có nội dung luận giải nào được lưu cho lá số này' }, { status: 400 });
@@ -76,11 +77,12 @@ export async function POST(req: NextRequest) {
 
   const hoTen = row.person_name ? String(row.person_name) : '';
   const ngaySinh = [row.ngay_sinh, row.thang_sinh, row.nam_sinh].every((v) => v != null)
-    ? `${row.ngay_sinh}/${row.thang_sinh}/${row.nam_sinh}${row.gio_chi ? ', giờ ' + row.gio_chi : ''}`
+    ? birthLine(locale, row.ngay_sinh, row.thang_sinh, row.nam_sinh, row.gio_chi ? String(row.gio_chi) : null)
     : '';
 
   try {
     const pdfBuffer = await renderLuanGiaiPdf({
+      locale,
       toolId, hoTen, ngaySinh,
       gioiTinh: row.gioi_tinh ? String(row.gioi_tinh) : '',
       phans,
@@ -102,15 +104,16 @@ export async function POST(req: NextRequest) {
     let viewUrl: string | undefined;
     try {
       const linkToken = await getOrCreateReportToken(slug, toolId, user.id);
-      viewUrl = `https://tuviminhbao.com/ket-qua-laso/${linkToken}`;
+      // Trang xem online theo ngôn ngữ người nhận (`/ja/ket-qua-laso/…`) — W18.
+      viewUrl = siteUrl(locale, `/ket-qua-laso/${linkToken}`);
     } catch (e) {
       console.error('[luan-giai/resend-pdf] lỗi sinh report token', e);
     }
-
     const mail = renderPdfMail(locale, toolId, hoTen, { resend: true, viewUrl });
 
     const result = await sendTransactionalEmail({
-      dedupeKey: `resend-pdf-luan-giai-${toolId}-${user.id}-${slug}-${dayBucket}`,
+      // Ngôn ngữ vào khoá (vi giữ khoá cũ): gửi bản Nhật rồi bản Việt trong cùng ngày là hai thư khác nhau.
+      dedupeKey: `resend-pdf-luan-giai-${toolId}-${user.id}-${slug}-${dayBucket}${locale === 'vi' ? '' : '-' + locale}`,
       template: 'luan-giai-pdf-resend',
       to: user.email,
       subject: mail.subject,

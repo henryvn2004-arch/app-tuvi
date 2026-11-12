@@ -40,8 +40,10 @@ import {
   lasoKey,
   userOwnsLaso,
   birthFromQuery,
+  KHONG_THEO_NGON_NGU,
   type PortraitPhase,
 } from '@/lib/portraits/cache';
+import { requestLocale, withLang, type LangLocale } from '@/lib/llm/locale';
 
 
 
@@ -148,7 +150,13 @@ interface StoryAct {
 }
 
 
-async function handleStory(birth: BirthParams, userId: string, key: string, eraId?: string) {
+async function handleStory(
+  birth: BirthParams,
+  userId: string,
+  key: string,
+  locale: LangLocale,
+  eraId?: string,
+) {
   const built = buildProfile(birth, eraId);
   if (!built.ok) return err(built.error, 400);
   const { profile } = built;
@@ -173,11 +181,17 @@ async function handleStory(birth: BirthParams, userId: string, key: string, eraI
       const llmRes = await llmTextFull({
         luanGiai: true,
         system: PAST_LIFE_STORY_SYSTEM_PROMPT,
-        prompt:
+        // Chỉ pha truyện mang chữ cho người đọc ⇒ chỉ pha này nhận ngôn ngữ (pha ảnh tả mặt bằng
+        // tiếng Anh cho model vẽ, dùng chung mọi ngôn ngữ).
+        prompt: withLang(
           buildPastLifeStoryPrompt(profile) +
-          (nudge
-            ? '\n\nLƯU Ý: lượt trước bạn trả về không đúng định dạng. Lần này CHỈ trả về đúng một object JSON hợp lệ, bắt đầu bằng { và kết thúc bằng }, KHÔNG kèm bất kỳ chữ nào ngoài JSON.'
-            : ''),
+            (nudge
+              ? '\n\nLƯU Ý: lượt trước bạn trả về không đúng định dạng. Lần này CHỈ trả về đúng một object JSON hợp lệ, bắt đầu bằng { và kết thúc bằng }, KHÔNG kèm bất kỳ chữ nào ngoài JSON.'
+              : ''),
+          locale,
+          [buildPastLifeStoryPrompt(profile)],
+          { json: true },
+        ),
         // Ép JSON ở tầng API (xem PAST_LIFE_STORY_SCHEMA) — chốt chặn thật,
         // prompt chỉ là lớp nhắc. parseJSON + lượt thử lại bên dưới vẫn giữ
         // làm lưới an toàn cho nhánh backup Anthropic (API không có JSON mode).
@@ -258,7 +272,7 @@ async function handleStory(birth: BirthParams, userId: string, key: string, eraI
   };
   // Pha `story` KHÔNG có dòng lịch sử riêng (`past_life_portraits` chỉ ghi ở
   // pha `image`) → `row: null`.
-  CACHE.put('story', key, { payload, row: null }, userId);
+  CACHE.put('story', key, { payload, row: null }, userId, locale);
   return ok(payload);
 }
 
@@ -352,7 +366,7 @@ async function handleImage(userId: string, birth: BirthParams, key: string, eraI
     portraitAge: profile.arc.portraitAge,
     era: { id: profile.era.id, label: profile.era.label, ageLabel: profile.era.ageLabel },
   };
-  CACHE.put('image', key, { payload, row: historyRow }, userId);
+  CACHE.put('image', key, { payload, row: historyRow }, userId, KHONG_THEO_NGON_NGU);
   return ok(payload);
 }
 
@@ -382,15 +396,15 @@ async function handleCacheStatus(request: NextRequest, sp: URLSearchParams) {
 
   const key = lasoKey(birthFromQuery(sp), sp.get('era') || undefined);
   const [story, image, owns] = await Promise.all([
-    CACHE.get('story', key),
-    CACHE.get('image', key),
+    CACHE.get('story', key, requestLocale(request)),
+    CACHE.get('image', key, KHONG_THEO_NGON_NGU),
     userOwnsLaso(TOOL_ID, auth.user.id, key),
   ]);
   // ⚠️ `story`/`image` là OBJECT `{cached, stale}` — đọc thẳng chúng như boolean
   // thì lúc nào cũng "có cache" và client bỏ luôn bước trả tiền.
   const cached = Boolean(story.cached) && Boolean(image.cached);
-  const coDong = (story.cached || story.stale) && (image.cached || image.stale);
-  return ok({ success: true, cached, free: Boolean(coDong) && owns });
+  const coDong = story.coDong && image.coDong;
+  return ok({ success: true, cached, free: coDong && owns });
 }
 
 // ── Routes ──────────────────────────────────────────────────────────────
@@ -414,7 +428,9 @@ async function runPost(request: NextRequest) {
   // Tra RIÊNG từng pha: hai pha chạy song song, lượt gốc có thể hỏng giữa
   // chừng và chỉ một pha kịp vào cache. Coi cả hai là một khối thì nửa còn
   // thiếu sẽ được phát miễn phí.
-  const look = await CACHE.lookup(phase, auth.user.id, birth, eraId);
+  // Ngôn ngữ chỉ tách dòng cache của pha TRUYỆN; ảnh dùng chung (xem `KHONG_THEO_NGON_NGU`).
+  const locale = phase === 'story' ? requestLocale(request) : KHONG_THEO_NGON_NGU;
+  const look = await CACHE.lookup(phase, auth.user.id, birth, locale, eraId);
 
   if (!look.free) {
     // Chốt chặn thanh toán PHÍA SERVER (S0 track COO). Trước đây route chỉ kiểm
@@ -427,7 +443,7 @@ async function runPost(request: NextRequest) {
   }
 
   if (look.cached) {
-    CACHE.touch(phase, look.key);
+    CACHE.touch(phase, look.key, locale);
     // Dòng lịch sử chỉ có ở pha `image` (đúng như luồng gen thật) — nên chỉ pha
     // đó mới ghi dòng cho người mới, và cũng chỉ pha đó tặng lượt rail, để một
     // lượt mua không tặng hai lần.
@@ -442,7 +458,7 @@ async function runPost(request: NextRequest) {
 
   const res =
     phase === 'story'
-      ? await handleStory(birth, auth.user.id, look.key, eraId)
+      ? await handleStory(birth, auth.user.id, look.key, locale, eraId)
       : await handleImage(auth.user.id, birth, look.key, eraId);
   return refundIfSystemFailure(res, {
     toolId: TOOL_ID,

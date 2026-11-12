@@ -145,8 +145,13 @@ Khách mới là người Nhật · Hàn · Đài · Trung · Anh, nên cả 6 l
   ngân hàng/MoMo cũ không có USD ⇒ vẫn VNĐ. Tên gói (tiếng Việt) chỉ hiện ở bản `vi`.
 - **Broadcast: nội dung do admin soạn** — tự lo ngôn ngữ (soạn riêng từng bản, gửi riêng từng danh sách);
   `locale` chỉ đổi footer + người gửi + trang huỷ. Link huỷ mang `&lang=` (KHÔNG nằm trong chữ ký HMAC).
+- **Link trang theo người nhận (W18):** `send.ts` chạy `localizeSiteLinks` (`lib/email/links.ts`) trên MỌI thư có
+  `locale` ⇒ `href` tới trang tuviminhbao.com thành `/<locale>/…` — kể cả broadcast admin soạn và `viewUrl`. Để nguyên
+  `/api/…` (link huỷ), file tĩnh, link đã có tiền tố. Mẫu mới vẫn nên dùng `siteUrl(locale, …)`.
+- **PDF đính kèm (W18):** khung (bìa/mục lục/nhãn phần) theo `locale` của thư, font CJK/Hangul nhúng (`lib/pdf/`);
+  văn luận là thứ đã sinh — resend-pdf ≠ vi đọc `laso_public_i18n` (W17), thiếu thì lùi bản Việt.
 - **Chưa phủ:** `lib/channels/email-link.ts` (mã gộp tài khoản — thuộc kênh chat, ngoài phạm vi W11),
-  OTP đăng ký (Supabase Auth — việc tay, xem bên dưới), và PDF đính kèm (ngôn ngữ do prompt W8 quyết).
+  OTP đăng ký (Supabase Auth — việc tay, xem bên dưới).
 
 ### Việc tay Henry — OTP đa ngôn ngữ (code không làm thay được)
 OTP đi qua Supabase Auth custom SMTP nên không đổi được bằng code. Dashboard → Authentication → Emails

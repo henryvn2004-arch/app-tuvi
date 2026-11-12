@@ -33,6 +33,7 @@ import {
   insertHistoryRow,
   userOwnsLaso,
 } from '@/lib/portraits/cache';
+import { requestLocale, withLang, type LangLocale } from '@/lib/llm/locale';
 
 const TOOL_ID = 'day-con';
 
@@ -168,6 +169,7 @@ async function buildReport(
   ten: string,
   userId: string,
   key: string,
+  locale: LangLocale,
   coLaSoChaMe: boolean,
   // Lá số gốc — chỉ dùng cho `previewExtras` (câu trích cổ pháp). `runPost`
   // truyền vào nhưng không đọc tới.
@@ -184,11 +186,15 @@ async function buildReport(
       const r = await llmTextFull({
         luanGiai: true,
         system: DAY_CON_SYSTEM_PROMPT,
-        prompt:
+        prompt: withLang(
           prompt +
-          (nudge
-            ? '\n\nLƯU Ý: lượt trước bạn trả về không đúng định dạng. Lần này CHỈ trả về đúng một object JSON hợp lệ, bắt đầu bằng { và kết thúc bằng }, KHÔNG kèm bất kỳ chữ nào ngoài JSON.'
-            : ''),
+            (nudge
+              ? '\n\nLƯU Ý: lượt trước bạn trả về không đúng định dạng. Lần này CHỈ trả về đúng một object JSON hợp lệ, bắt đầu bằng { và kết thúc bằng }, KHÔNG kèm bất kỳ chữ nào ngoài JSON.'
+              : ''),
+          locale,
+          [prompt],
+          { json: true },
+        ),
         json: true,
         jsonSchema: DAY_CON_SCHEMA,
         // 3.200 đủ cho 9 khoá; khung mới thêm `chatNoi`/`dinhHuong`/`hoatDong`
@@ -284,7 +290,7 @@ async function buildReport(
   // nghĩa sở hữu (ngữ nghĩa đó nằm ở bảng lịch sử), nên dòng này chỉ có tác
   // dụng làm lượt trả tiền ngay sau đó tốn 0đ model. `created_by` nhận null khi
   // khách chưa đăng nhập.
-  CACHE.put('main', key, { payload, row }, userId);
+  CACHE.put('main', key, { payload, row }, userId, locale);
   return preview
     ? ok({ ...previewOf(payload, PREVIEW_KEEP, TOOL_ID), ...previewExtras(p, ls) })
     : ok(payload);
@@ -340,9 +346,10 @@ async function runPreview(request: NextRequest) {
   };
 
   const key = lasoKey(birth, cacheExtra(moiLo, birthParent));
-  const { cached } = await CACHE.get('main', key);
+  const locale = requestLocale(request);
+  const { cached } = await CACHE.get('main', key, locale);
   if (cached) {
-    CACHE.touch('main', key);
+    CACHE.touch('main', key, locale);
     return ok({
       ...previewOf(cached.payload as Record<string, unknown>, PREVIEW_KEEP, TOOL_ID),
       ...previewExtras(p, r.ls),
@@ -362,7 +369,7 @@ async function runPreview(request: NextRequest) {
     return ok(khung);
   }
 
-  return buildReport(p, ten, 'error' in auth ? '' : auth.user.id, key, Boolean(lsChaMe), r.ls, true);
+  return buildReport(p, ten, 'error' in auth ? '' : auth.user.id, key, locale, Boolean(lsChaMe), r.ls, true);
 }
 
 async function runPost(request: NextRequest) {
@@ -378,14 +385,15 @@ async function runPost(request: NextRequest) {
   const birthParent = validBirth(body.birthParent) ? (body.birthParent as BirthParams) : null;
 
   const key = lasoKey(birth, cacheExtra(moiLo, birthParent));
-  const [{ cached, stale }, owns] = await Promise.all([
-    CACHE.get('main', key),
+  const locale = requestLocale(request);
+  const [{ cached, coDong }, owns] = await Promise.all([
+    CACHE.get('main', key, locale),
     userOwnsLaso(TOOL_ID, auth.user.id, key),
   ]);
   // Dòng cũ đã bị `CACHE.get` trả về `cached: null` nên tự khắc DỰNG LẠI —
   // nhưng vẫn tính là "đã có" cho `free`, vì người này đã trả tiền cho đúng lá
   // số đó rồi; bắt trả lần nữa để lấy bản sửa lỗi của mình là sai.
-  const free = Boolean(cached || stale) && owns;
+  const free = coDong && owns;
 
   if (!free) {
     // Chốt chặn thanh toán PHÍA SERVER — thiếu bước này thì gọi thẳng endpoint
@@ -395,7 +403,7 @@ async function runPost(request: NextRequest) {
   }
 
   if (cached) {
-    CACHE.touch('main', key);
+    CACHE.touch('main', key, locale);
     if (!owns && cached.row) {
       insertHistoryRow(TOOL_ID, { ...cached.row, user_id: auth.user.id, laso_key: key });
       void railFreeTurnsPerGen().then((n) => railFreeGrant(auth.user.id, n)).catch(() => {});
@@ -415,7 +423,7 @@ async function runPost(request: NextRequest) {
   const gender = birth.gender === 'nu' ? ('nu' as const) : ('nam' as const);
   const profile = computeDayCon(r.ls, gender, moiLo, lsChaMe);
 
-  const res = await buildReport(profile, ten, auth.user.id, key, Boolean(lsChaMe), r.ls);
+  const res = await buildReport(profile, ten, auth.user.id, key, locale, Boolean(lsChaMe), r.ls);
   return refundIfSystemFailure(res, {
     toolId: TOOL_ID,
     userId: auth.user.id,
@@ -459,13 +467,14 @@ async function handleCacheStatus(request: NextRequest, sp: URLSearchParams) {
       }
     : null;
   const key = lasoKey(birth, cacheExtra(resolveMoiLo(sp.get('lo')), parent));
-  const [{ cached, stale }, owns] = await Promise.all([
-    CACHE.get('main', key),
+  const locale = requestLocale(request);
+  const [{ cached, coDong }, owns] = await Promise.all([
+    CACHE.get('main', key, locale),
     userOwnsLaso(TOOL_ID, auth.user.id, key),
   ]);
   // `cached` = có dòng DÙNG ĐƯỢC (dòng cũ đã bị lọc). `free` = đã trả tiền cho
   // lá số này, kể cả khi dòng cũ và sắp phải dựng lại.
-  return ok({ success: true, cached: Boolean(cached), free: Boolean(cached || stale) && owns });
+  return ok({ success: true, cached: Boolean(cached), free: coDong && owns });
 }
 
 export async function OPTIONS() {

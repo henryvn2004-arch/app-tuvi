@@ -111,3 +111,5 @@ scripts/fixtures/lunar-table-jp.json
 # i18n: font CJK SINH bởi npm run i18n:fonts (từ @fontsource-variable/noto-sans-*) trong prebuild
 /public/fonts/cjk/
 /public/fonts/i18n-*.css
+# Font CJK TĨNH cho PDF — SINH bởi npm run pdf:fonts (prebuild), xem scripts/pdf-fonts.mjs
+/data/pdf-fonts/

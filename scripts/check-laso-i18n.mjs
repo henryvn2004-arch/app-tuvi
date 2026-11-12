@@ -229,9 +229,10 @@ for (const [p, fn] of [
   const r = read('app/api/luan-giai/resend-pdf/route.ts');
   const iLoc = r.indexOf('const locale = cookieLocale ?? (await getUserLocale(user.id));');
   const iRead = r.indexOf('await readLuanI18n(slug, locale)');
-  const iBuild = r.indexOf('buildPhans((ngoaiNgu?.luanGiai ?? row.luan_giai)');
+  const iNgoai = r.indexOf('buildPhans(banNgoai?.luanGiai');
+  const iViet = r.indexOf('buildPhans(row.luan_giai');
   must(
-    iLoc > 0 && iRead > iLoc && iBuild > iRead,
+    iLoc > 0 && iRead > iLoc && iNgoai > iRead && iViet > iNgoai,
     'resend-pdf: phải lấy locale người nhận → readLuanI18n → buildPhans(bản ngôn ngữ ?? bản Việt)'
   );
 }

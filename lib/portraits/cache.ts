@@ -26,6 +26,8 @@ import { createHash } from 'crypto';
 import type { BirthParams } from '@/lib/contract/v1';
 import { tietKhiKhoa } from '@/lib/engine/tubinh';
 import { recordUserReport } from '@/lib/reports/userReports';
+import type { Locale } from '@/lib/i18n/locales';
+import { localeKeySuffix } from '@/lib/llm/locale';
 
 const SUPABASE_URL = process.env.SUPABASE_URL;
 const SUPABASE_KEY = process.env.SUPABASE_SERVICE_KEY;
@@ -90,6 +92,27 @@ export function lasoKey(birth: BirthParams, extra?: string): string {
 }
 
 /**
+ * Khoá DÒNG cache theo ngôn ngữ (i18n W18) — tách khỏi khoá SỞ HỮU.
+ *
+ * Hai thứ cùng tên `laso_key` mà KHÁC vai:
+ *   · khoá sở hữu (`lasoKey()`) — ghi vào bảng lịch sử, `userOwnsLaso` đọc. GIỮ NGUYÊN mọi
+ *     ngôn ngữ: người đã trả ở `vi` mở lại ở `/ja` vẫn là "đã trả" ⇒ không bị tính lần hai.
+ *   · khoá dòng cache (hàm này) — chữ LLM viết bằng ngôn ngữ nào thì nằm ở dòng của ngôn ngữ đó.
+ *     `vi` → khoá gốc NGUYÊN từng byte (không mồ côi dòng cache nào đang có).
+ * Đi ngoài `lasoKey` (không băm lại) là cố ý: băm lại thì không còn đọc ra được ngôn ngữ của dòng.
+ */
+export function cacheRowKey(key: string, locale: Locale): string {
+  return key + localeKeySuffix(locale);
+}
+
+/**
+ * Pha KHÔNG có chữ theo ngôn ngữ (ảnh: chỉ `imageUrl` + nhãn engine) — truyền hằng này thay cho
+ * ngôn ngữ request để mọi ngôn ngữ dùng CHUNG một bức ảnh (một lá số một kết quả, và không đốt
+ * thêm ~$0.08 mỗi ngôn ngữ). Viết tên ra thay cho `'vi'` trần để người đọc biết đó là chủ ý.
+ */
+export const KHONG_THEO_NGON_NGU: Locale = 'vi';
+
+/**
  * Dựng `BirthParams` từ query của endpoint `action=cache-status`.
  *
  * Chỉ nhận đúng những trường vào khoá lá số — client hỏi "lá số này có sẵn kết
@@ -144,6 +167,14 @@ export interface CacheRead {
   cached: CachedPortrait | null;
   /** Dòng cũ hơn `shape` đang khai — có tồn tại, nhưng KHÔNG dùng được. */
   stale: boolean;
+  /**
+   * Lá số này ĐÃ có dòng — ở ngôn ngữ đang hỏi HOẶC ở bản gốc `vi`, bất kể shape. Đây là vế "có
+   * cache" của `free` (cùng `owns`): người đã trả ở `vi` mở ở `/ja` thì lượt viết bản Nhật là miễn
+   * phí cho họ. Với `vi` đúng bằng `Boolean(cached || stale)` như trước.
+   * Trần lạm dụng: mỗi ngôn ngữ chỉ sinh được MỘT lần (sau đó trúng dòng của ngôn ngữ đó) ⇒ tối đa
+   * 5 lượt sinh thêm cho một lá số đã trả, không phải vô hạn.
+   */
+  coDong: boolean;
 }
 
 function ready(): boolean {
@@ -227,6 +258,28 @@ async function ghiCache(
     });
   } catch {
     /* best-effort — không cache được thì lượt sau gen lại, không ai mất gì */
+  }
+}
+
+/**
+ * Có dòng nào (bất kể shape) ở khoá này không — chỉ đọc khoá, không kéo payload. Lỗi ⇒ `false`
+ * (fail-CLOSED như `userOwnsLaso`: đoán nhầm "có dòng" là phát không một lượt sinh).
+ */
+async function coDongTai(toolId: PortraitToolId, phase: PortraitPhase, key: string): Promise<boolean> {
+  if (!ready() || !key) return false;
+  try {
+    const res = await fetch(
+      `${SUPABASE_URL}/rest/v1/portrait_cache` +
+        `?tool_id=eq.${encodeURIComponent(toolId)}` +
+        `&phase=eq.${encodeURIComponent(phase)}` +
+        `&laso_key=eq.${encodeURIComponent(key)}` +
+        '&select=laso_key&limit=1',
+      { headers: SB_HEADERS, cache: 'no-store' },
+    );
+    if (!res.ok) return false;
+    return ((await res.json()) as unknown[]).length > 0;
+  } catch {
+    return false;
   }
 }
 
@@ -320,15 +373,28 @@ export interface CacheLookup extends CacheRead {
  * ⚠️ `shape` CỐ Ý không đi vào `lasoKey`: đổi khoá là mồ côi cả cache LẪN
  * `userOwnsLaso` ⇒ người đã trả tiền bị tính lại. Giữ khoá thì lượt dựng lại
  * vẫn miễn phí đúng cho họ.
+ *
+ * 🌐 `locale` (i18n W18) là tham số BẮT BUỘC ở `get`/`lookup`/`put`/`touch` vì cùng lý do với
+ * `shape`: quên truyền ở `put` là ghi chữ Nhật vào dòng `vi` — khách Việt nhận bản Nhật MÃI MÃI
+ * (ignore-duplicates, bản đầu thắng). Lấy bằng `requestLocale(req)`; pha ảnh truyền
+ * `KHONG_THEO_NGON_NGU`. Ngôn ngữ chỉ đổi khoá DÒNG cache (`cacheRowKey`), không đổi khoá sở hữu.
  */
 export function cacheFor(toolId: PortraitToolId, shape: number) {
+  /** Dòng của ĐÚNG ngôn ngữ + có-dòng-ở-bản-gốc (chỉ hỏi thêm khi ngôn ngữ ≠ `vi`). */
+  async function doc(phase: PortraitPhase, key: string, locale: Locale): Promise<CacheRead> {
+    const rowKey = cacheRowKey(key, locale);
+    const [c, goc] = await Promise.all([
+      docCache(toolId, phase, rowKey),
+      rowKey === key ? Promise.resolve(false) : coDongTai(toolId, phase, key),
+    ]);
+    const stale = Boolean(c) && docShape(c!.payload) < shape;
+    return { cached: stale ? null : c, stale, coDong: Boolean(c) || goc };
+  }
+
   return {
     /** Bản cache của một pha. Dòng cũ ⇒ `cached: null` + `stale: true`. */
-    async get(phase: PortraitPhase, key: string): Promise<CacheRead> {
-      const c = await docCache(toolId, phase, key);
-      if (!c) return { cached: null, stale: false };
-      const stale = docShape(c.payload) < shape;
-      return { cached: stale ? null : c, stale };
+    async get(phase: PortraitPhase, key: string, locale: Locale): Promise<CacheRead> {
+      return doc(phase, key, locale);
     },
 
     /**
@@ -342,15 +408,13 @@ export function cacheFor(toolId: PortraitToolId, shape: number) {
       phase: PortraitPhase,
       userId: string,
       birth: BirthParams,
+      locale: Locale,
       extra?: string,
     ): Promise<CacheLookup> {
+      // `key` trả ra là khoá SỞ HỮU (ghi lịch sử / `put` / `touch` nhận nó cùng `locale`).
       const key = lasoKey(birth, extra);
-      const [c, owns] = await Promise.all([
-        docCache(toolId, phase, key),
-        userOwnsLaso(toolId, userId, key),
-      ]);
-      const stale = Boolean(c) && docShape(c!.payload) < shape;
-      return { key, cached: stale ? null : c, stale, owns, free: Boolean(c) && owns };
+      const [r, owns] = await Promise.all([doc(phase, key, locale), userOwnsLaso(toolId, userId, key)]);
+      return { key, ...r, owns, free: r.coDong && owns };
     },
 
     /**
@@ -366,16 +430,17 @@ export function cacheFor(toolId: PortraitToolId, shape: number) {
      * Ba nhánh: chưa có dòng ⇒ chèn · dòng còn mới ⇒ BỎ QUA (luật một-lá-số-
      * một-kết-quả: bản về đích trước thắng) · dòng cũ hơn `shape` ⇒ ghi đè.
      */
-    put(phase: PortraitPhase, key: string, entry: CachedPortrait, userId: string): void {
+    put(phase: PortraitPhase, key: string, entry: CachedPortrait, userId: string, locale: Locale): void {
+      const rowKey = cacheRowKey(key, locale);
       void (async () => {
-        const cu = await docCache(toolId, phase, key);
+        const cu = await docCache(toolId, phase, rowKey);
         const cuKy = Boolean(cu) && docShape(cu!.payload) < shape;
-        await ghiCache(toolId, phase, key, entry, userId, shape, cuKy);
+        await ghiCache(toolId, phase, rowKey, entry, userId, shape, cuKy);
       })();
     },
 
-    touch(phase: PortraitPhase, key: string): void {
-      chamCache(toolId, phase, key);
+    touch(phase: PortraitPhase, key: string, locale: Locale): void {
+      chamCache(toolId, phase, cacheRowKey(key, locale));
     },
   };
 }

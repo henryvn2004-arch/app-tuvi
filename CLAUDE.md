@@ -216,9 +216,9 @@ Mỗi luật dưới đây sinh ra từ một lần cắn thật. Cột cuối l
   cộng dồn. Chạm trần `check:prompt` thì CẮT chỗ khác, đừng nới.
 - **Đổi công thức thì phải quét cả chỗ MÔ TẢ công thức** — prompt không được
   typecheck bắt. **Giọng dạy bằng VÍ DỤ rẻ và ăn hơn dạy bằng LUẬT.**
-- **Ngôn ngữ đầu ra LLM** (`lib/llm/locale.ts` `withLang`): câu chỉ định vào USER message, không system; mọi khoá cache
-  của route có luận phải thêm `localeKeySuffix` (`vi` → '' giữ khoá cũ); `laso_public.luan_giai` CHỈ chứa tiếng Việt
-  — bản ≠vi ở `laso_public_i18n(slug,locale)`, cửa DUY NHẤT `lib/laso/luan-i18n.ts` (`check:lasoi18n`). `docs/i18n/QUY-UOC.md`.
+- **Ngôn ngữ đầu ra LLM** (`lib/llm/locale.ts` `withLang`): vào USER message; khoá cache có luận thêm `localeKeySuffix` (`portrait_cache`:
+  khoá DÒNG `cacheRowKey`, CẤM qua `extra`/`lasoKey` — đổi khoá sở hữu ⇒ tính tiền lại); `laso_public.luan_giai` CHỈ tiếng Việt — bản ≠vi
+  ở `laso_public_i18n(slug,locale)`, cửa DUY NHẤT `lib/laso/luan-i18n.ts` (`check:lasoi18n`). `docs/i18n/QUY-UOC.md`.
 - **Chữ qua `T()`/`_tvmbT()` chỉ để HIỂN THỊ** — khoá tra bảng (tên cung/sao so với engine), truy vấn `/api/search`,
   văn bản/prompt gửi LLM, `description` sổ tiền giữ chữ Việt gốc; bọc là ở /ja tra hụt IM LẶNG. Hàm dựng dữ liệu gửi
   đi ⇒ thêm vào `SERVER_BOUND` (`check:i18n`). `docs/nhat-ky/2026-11.md` "W13c".

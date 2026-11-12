@@ -18,6 +18,9 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { authUserFromRequest } from '@/lib/api/tool-helpers';
 import { snapshotRow, saveSnapshot, type ReportBlock } from '@/lib/reports/snapshots';
+import { FRAME } from '@/lib/pdf/i18n';
+import { isLocale, type Locale } from '@/lib/i18n/locales';
+import { requestLocale } from '@/lib/llm/locale';
 import { renderReportPdf } from '@/lib/pdf/luan-giai';
 import { sendFileToUserChats } from '@/lib/channels/notify';
 import { pdfLinkReady, signPdfQuery, verifyPdfQuery, pdfResponse, textResponse } from '@/lib/pdf/signed-link';
@@ -32,9 +35,10 @@ const SB_KEY = process.env.SUPABASE_SERVICE_KEY || '';
 
 type Snap = { tool_id: string; tool_label: string | null; title: string; subtitle: string | null; blocks: ReportBlock[] };
 
-function render(r: Snap): Promise<Buffer> {
+function render(r: Snap, locale: Locale = 'vi'): Promise<Buffer> {
   return renderReportPdf({
-    title: r.tool_label || r.title || 'Báo cáo',
+    locale,
+    title: r.tool_label || r.title || FRAME[locale].report,
     subtitle: r.subtitle || (r.tool_label && r.title !== r.tool_label ? r.title : ''),
     sections: (r.blocks || []).filter((b) => b.text).map((b) => ({ header: b.header, text: String(b.text) })),
   });
@@ -58,7 +62,11 @@ export async function POST(req: NextRequest) {
   if (!id) return NextResponse.json({ error: 'Không lưu được báo cáo, thử lại sau ít phút' }, { status: 502 });
 
   if (b.to !== 'chat') {
-    return NextResponse.json({ ok: true, url: `/api/reports/pdf?${signPdfQuery(SCOPE, id, auth.user.id)}` });
+    // `&lang=` nằm NGOÀI chữ ký (cùng lối link huỷ email): chỉ đổi chữ khung PDF, không mở quyền gì.
+    // `vi` không gắn ⇒ URL của khách Việt y như cũ. Gửi vào Zalo (nhánh dưới) giữ tiếng Việt như kênh chat.
+    const loc = requestLocale(req);
+    const lang = loc === 'vi' ? '' : `&lang=${loc}`;
+    return NextResponse.json({ ok: true, url: `/api/reports/pdf?${signPdfQuery(SCOPE, id, auth.user.id)}${lang}` });
   }
   try {
     const r = await sendFileToUserChats(auth.user.id, await render(row), fileName(row.tool_id), `Bản PDF ${row.tool_label || row.title} — lưu lại để đọc dần nhé.`);
@@ -91,7 +99,8 @@ export async function GET(req: NextRequest) {
     }
     const r = ((await res.json()) as Snap[])[0];
     if (!r) return textResponse('Không tìm thấy báo cáo.', 404);
-    return pdfResponse(await render(r), fileName(r.tool_id));
+    const lang = req.nextUrl.searchParams.get('lang');
+    return pdfResponse(await render(r, isLocale(lang) ? lang : 'vi'), fileName(r.tool_id));
   } catch (e) {
     console.error('[reports/pdf] lỗi dựng PDF', e);
     return textResponse('Không tạo được PDF, thử lại sau ít phút.', 500);

@@ -19,9 +19,15 @@
 // PDF, không còn `Helvetica` trong resource. Vercel cần
 // `outputFileTracingIncludes` cho đúng route này để mang theo 2 file .ttf —
 // xem next.config.mjs.
+// Pragma: tsc/Next đã mặc định `react`; ghi rõ để trình biến đổi của Playwright (tests/pdf-cjk.spec.ts)
+// không đổi JSX sang runtime riêng của nó — đổi là `renderToBuffer` nhận phần tử rỗng.
+/** @jsxImportSource react */
 import React from 'react';
 import { join } from 'path';
 import { Document, Page, Text, View, StyleSheet, Font, renderToBuffer } from '@react-pdf/renderer';
+import type { Locale } from '@/lib/i18n/locales';
+import { cjkFamiliesFor, needsCjk } from './cjk-font';
+import { FRAME, TOOL_META_I18N, genderLabel, issuedDate, phanTitle } from './i18n';
 
 const FONT_DIR = join(process.cwd(), 'public', 'fonts');
 Font.register({
@@ -33,7 +39,14 @@ Font.register({
 });
 // @react-pdf/renderer tự động ngắt từ theo khoảng trắng — KHÔNG tự bật
 // hyphenation cho tiếng Việt (không cần, từ tiếng Việt đơn âm tiết).
-Font.registerHyphenationCallback((word) => [word]);
+// Chữ Nhật/Trung KHÔNG có khoảng trắng giữa từ: cả đoạn là MỘT "từ" ⇒ không ngắt
+// được dòng, tràn lề phải (i18n W18). Cắt "từ" có ký tự CJK thành từng ký tự, xen
+// chuỗi RỖNG giữa hai ký tự: textkit coi phần `trim()===''` là KEO (glue) rộng 0 ⇒
+// ngắt dòng ở đó KHÔNG chèn dấu '-'. Trả từng ký tự trần thì textkit coi là âm tiết
+// và chèn '-' ở mỗi chỗ ngắt (đã thấy trên ảnh render thật). Tiếng Việt/Latin đi nhánh cũ.
+Font.registerHyphenationCallback((word) =>
+  needsCjk(word) ? Array.from(word).flatMap((c, i) => (i ? ['', c] : [c])) : [word],
+);
 
 const styles = StyleSheet.create({
   page: { paddingTop: 44, paddingBottom: 44, paddingHorizontal: 44, fontSize: 11, color: '#232323', lineHeight: 1.55, fontFamily: 'BeVN' },
@@ -83,6 +96,8 @@ export type LuanGiaiToolId = 'laso' | 'chu-trinh-cuoc-doi';
 
 export interface LuanGiaiPdfInput {
   toolId: LuanGiaiToolId;
+  /** Ngôn ngữ KHUNG (bìa/mục lục/nhãn phần). Thiếu ⇒ `vi` (y như trước W18). */
+  locale?: Locale;
   hoTen: string;
   ngaySinh: string; // đã format sẵn ở phía gọi, vd "12/03/1995 (Âm lịch: 21/2 Ất Hợi)"
   gioiTinh: string;
@@ -95,58 +110,65 @@ export interface LuanGiaiPdfInput {
 // CLAUDE.md — đây là văn bản trang trí tĩnh, hai nơi render bằng hai bộ máy
 // khác hẳn nhau (React-PDF primitives vs HTML/CSS in trình duyệt) nên không
 // thể dùng chung một hàm. Đổi quote thì sửa CẢ HAI chỗ.
-export const TOOL_META: Record<LuanGiaiToolId, { title: string; quoteVi: string; quoteViet: string; quoteSrc: string }> = {
-  laso: {
-    title: 'Luận Giải Lá Số',
-    quoteVi: 'Tận kỳ tâm giả, tri kỳ tính dã; tri kỳ tính, tắc tri thiên hĩ.',
-    quoteViet: 'Người thấu tận lòng mình thì biết được tính mình; biết tính mình thì biết được lẽ trời.',
-    quoteSrc: 'Mạnh Tử · Tận Tâm thượng',
-  },
-  'chu-trinh-cuoc-doi': {
-    title: 'Chu Trình Cuộc Đời',
-    quoteVi: 'Tam thập nhi lập, tứ thập nhi bất hoặc, ngũ thập nhi tri thiên mệnh.',
-    quoteViet: 'Ba mươi tuổi lập thân, bốn mươi tuổi hết nghi hoặc, năm mươi tuổi biết mệnh trời.',
-    quoteSrc: 'Khổng Tử · Luận Ngữ, Vi Chính',
-  },
-};
+// Bản theo ngôn ngữ ở `./i18n.ts` (`TOOL_META_I18N`); tên cũ giữ cho nơi gọi đang dùng (paid-reports).
+export const TOOL_META = TOOL_META_I18N.vi;
 
-function todayVi(): string {
-  const d = new Date();
-  return `${String(d.getDate()).padStart(2, '0')}/${String(d.getMonth() + 1).padStart(2, '0')}/${d.getFullYear()}`;
+/**
+ * Họ font cho cả tài liệu: 'BeVN' (Latin + Việt) rồi các lát Noto CJK cần cho ĐÚNG chữ trong tài liệu
+ * (`./cjk-font.ts`). Tài liệu không có chữ CJK ⇒ chuỗi 'BeVN' như cũ (không đổi một byte).
+ */
+function fontFor(text: string, locale?: Locale): string | string[] {
+  const cjk = cjkFamiliesFor(text, locale);
+  return cjk.length ? ['BeVN', ...cjk] : 'BeVN';
 }
 
 function LuanGiaiDoc({ input }: { input: LuanGiaiPdfInput }) {
-  const meta = TOOL_META[input.toolId] || TOOL_META.laso;
-  const ten = input.hoTen || 'Ẩn danh';
+  const locale = input.locale || 'vi';
+  const f = FRAME[locale];
+  const metaL = TOOL_META_I18N[locale];
+  const meta = metaL[input.toolId] || metaL.laso;
+  const ten = input.hoTen || f.anonymous;
+  const phans = input.phans.map((p) => ({ title: phanTitle(locale, p.title), text: p.text }));
+  const gioiTinh = genderLabel(locale, input.gioiTinh);
+  const published = issuedDate(locale);
+  const ff = {
+    fontFamily: fontFor(
+      [f.brand, meta.title, meta.quoteVi, meta.quoteViet, meta.quoteSrc, ten, input.ngaySinh, gioiTinh, published, f.toc, f.dob, f.gender, f.published]
+        .concat(phans.flatMap((p) => [p.title, p.text]))
+        .join('\n'),
+      locale,
+    ),
+  };
   return (
     <Document>
       {/* ── Trang bìa ── */}
-      <Page size="A4" style={styles.coverPage}>
+      <Page size="A4" style={[styles.coverPage, ff]}>
         <View style={styles.coverTop}>
           {/* KHÔNG chèn "紫微明寶" (chữ Hán trang trí web dùng) — Be Vietnam Pro
               không có glyph CJK, và thiếu glyph làm react-pdf/fontkit ÂM THẦM
               đổi CẢ RUN chữ đó sang Helvetica-Bold (đã bắt được lúc kiểm PDF
               thật: /BaseFont Helvetica-Bold xuất hiện đúng ở trang bìa) — mất
               hệt tác dụng của Font.register bên trên cho riêng dòng này. */}
-          <Text style={styles.brandRow}>TỬ VI MINH BẢO</Text>
+          {/* Bản CJK (W18) có chữ Hán ở đây là CỐ Ý — font CJK đã nối sau 'BeVN' qua `ff`. */}
+          <Text style={styles.brandRow}>{f.brand}</Text>
           <Text style={styles.coverTitle}>{meta.title}</Text>
           <Text style={styles.coverName}>{ten}</Text>
-          <Text style={styles.coverMetaRow}>Ngày sinh: {input.ngaySinh}</Text>
-          <Text style={styles.coverMetaRow}>Giới tính: {input.gioiTinh}</Text>
-          <Text style={styles.coverMetaRow}>Xuất bản: {todayVi()}</Text>
+          <Text style={styles.coverMetaRow}>{f.dob}: {input.ngaySinh}</Text>
+          <Text style={styles.coverMetaRow}>{f.gender}: {gioiTinh}</Text>
+          <Text style={styles.coverMetaRow}>{f.published}: {published}</Text>
         </View>
         <View style={styles.coverQuoteBlock}>
           <Text style={styles.coverQuoteVi}>&ldquo;{meta.quoteVi}&rdquo;</Text>
-          <Text style={styles.coverQuoteViet}>{meta.quoteViet}</Text>
+          {meta.quoteViet ? <Text style={styles.coverQuoteViet}>{meta.quoteViet}</Text> : null}
           <Text style={styles.coverQuoteSrc}>— {meta.quoteSrc}</Text>
         </View>
         <Text style={styles.coverFoot}>tuviminhbao.com</Text>
       </Page>
 
       {/* ── Mục lục ── */}
-      <Page size="A4" style={styles.page}>
-        <Text style={styles.tocTitle}>Mục lục</Text>
-        {input.phans.map((phan, i) => (
+      <Page size="A4" style={[styles.page, ff]}>
+        <Text style={styles.tocTitle}>{f.toc}</Text>
+        {phans.map((phan, i) => (
           <View key={i} style={styles.tocRow}>
             <Text style={styles.tocNum}>{i + 1}</Text>
             <Text style={styles.tocLabel}>{phan.title}</Text>
@@ -162,8 +184,8 @@ function LuanGiaiDoc({ input }: { input: LuanGiaiPdfInput }) {
       </Page>
 
       {/* ── Nội dung từng phần ── */}
-      {input.phans.map((phan, i) => (
-        <Page key={i} size="A4" style={styles.page} wrap>
+      {phans.map((phan, i) => (
+        <Page key={i} size="A4" style={[styles.page, ff]} wrap>
           <View style={styles.sectionHeader}>
             <Text style={styles.sectionNum}>{i + 1}</Text>
             <Text style={styles.sectionTitle}>{phan.title}</Text>
@@ -189,6 +211,8 @@ export async function renderLuanGiaiPdf(input: LuanGiaiPdfInput): Promise<Buffer
 // tự ngắt (công cụ ngắn không đẻ ra chục trang trắng một khối). Ảnh bỏ qua:
 // react-pdf không đọc webp, mà ảnh công cụ phần lớn là webp.
 export interface ReportPdfInput {
+  /** Ngôn ngữ khung (dòng thương hiệu, "Xuất bản"). Thiếu ⇒ `vi`. */
+  locale?: Locale;
   title: string;
   subtitle: string;
   sections: { header: string | null; text: string }[];
@@ -197,18 +221,29 @@ export interface ReportPdfInput {
 const stripMd = (t: string) => t.replace(/\*\*([^*]+)\*\*/g, '$1').replace(/^#{1,6}\s+/gm, '');
 
 function ReportDoc({ input }: { input: ReportPdfInput }) {
+  const locale = input.locale || 'vi';
+  const f = FRAME[locale];
+  const published = issuedDate(locale);
+  const ff = {
+    fontFamily: fontFor(
+      [f.brand, f.published, published, input.title, input.subtitle]
+        .concat(input.sections.flatMap((s) => [s.header || '', s.text]))
+        .join('\n'),
+      locale,
+    ),
+  };
   return (
     <Document>
-      <Page size="A4" style={styles.coverPage}>
+      <Page size="A4" style={[styles.coverPage, ff]}>
         <View style={styles.coverTop}>
-          <Text style={styles.brandRow}>TỬ VI MINH BẢO</Text>
+          <Text style={styles.brandRow}>{f.brand}</Text>
           <Text style={styles.coverTitle}>{input.title}</Text>
           {input.subtitle ? <Text style={styles.coverName}>{input.subtitle}</Text> : null}
-          <Text style={styles.coverMetaRow}>Xuất bản: {todayVi()}</Text>
+          <Text style={styles.coverMetaRow}>{f.published}: {published}</Text>
         </View>
         <Text style={styles.coverFoot}>tuviminhbao.com</Text>
       </Page>
-      <Page size="A4" style={styles.page} wrap>
+      <Page size="A4" style={[styles.page, ff]} wrap>
         {input.sections.map((s, i) => (
           <View key={i} style={{ marginBottom: 10 }}>
             {s.header ? <Text style={[styles.sectionTitle, { marginBottom: 8 }]}>{s.header}</Text> : null}

@@ -5,7 +5,7 @@
   "scripts": {
     "predev": "node scripts/ensure-engine-built.mjs",
     "dev": "next dev",
-    "prebuild": "cd tuvi-engine && npm ci && npm run build && cd .. && node scripts/minify-public.mjs && node scripts/i18n/fonts.mjs",
+    "prebuild": "cd tuvi-engine && npm ci && npm run build && cd .. && node scripts/minify-public.mjs && node scripts/i18n/fonts.mjs && node scripts/pdf-fonts.mjs",
     "build": "next build",
     "build:engine": "cd tuvi-engine && npm run build",
     "start": "next start",
@@ -34,6 +34,8 @@
     "i18n:fix-ns": "node scripts/i18n/fix-ns.mjs",
     "i18n:prune": "node scripts/i18n/prune.mjs",
     "i18n:fonts": "node scripts/i18n/fonts.mjs",
+    "pdf:fonts": "node scripts/pdf-fonts.mjs",
+    "test:unit": "playwright test -c playwright.unit.config.ts",
     "check:formph": "node scripts/check-form-placeholder.mjs",
     "check:formblock": "node scripts/check-form-blocking-script.mjs",
     "check:shellboot": "node scripts/check-shell-boot.mjs",
