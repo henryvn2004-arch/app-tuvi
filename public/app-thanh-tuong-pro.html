@@ -3,8 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Thanh Tướng Pro — Tử Vi Minh Bảo</title>
-<meta name="description" content="Bốn bài đo giọng nói chuyên sâu — hệ thống phân tích Ngũ Âm theo Ma Y Thần Tướng, Thần Tướng Toàn Biên, Thủy Kính Tập.">
+<title data-i18n="thtp.thanh-tuong-pro-tu-vi-minh">Thanh Tướng Pro — Tử Vi Minh Bảo</title>
+<meta data-i18n-attr="content:thtp.bon-bai-do-giong-noi-chuyen" name="description" content="Bốn bài đo giọng nói chuyên sâu — hệ thống phân tích Ngũ Âm theo Ma Y Thần Tướng, Thần Tướng Toàn Biên, Thủy Kính Tập.">
 <link rel="icon" type="image/webp" href="/seal.webp">
 <link rel="preload" href="/fonts/noto-serif-latin-400.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="/fonts/noto-serif-vietnamese-400.woff2" as="font" type="font/woff2" crossorigin>
@@ -85,9 +85,9 @@
   <main class="ws" id="ws">
     <div class="ws-top">
       <button class="btn mobile-only" onclick="document.getElementById('shell-sidebar').classList.toggle('open');window.shellSyncBackdrop&&shellSyncBackdrop()" aria-label="Menu">☰</button>
-      <div class="ws-title"><b>Thanh Tướng Pro</b><span>4 bài đo giọng nói chuyên sâu — <span data-tvp-price="thanh-tuong-pro">…</span> Lượng</span></div>
+      <div data-i18n="thtp.thanh-tuong-pro-4-bai-do" class="ws-title"><b>Thanh Tướng Pro</b><span>4 bài đo giọng nói chuyên sâu — <span data-tvp-price="thanh-tuong-pro">…</span> Lượng</span></div>
       <div class="ws-actions">
-        <button class="btn mobile-only" onclick="Shell.openRail()">✦ Hỏi</button>
+        <button data-i18n="battu.hoi" class="btn mobile-only" onclick="Shell.openRail()">✦ Hỏi</button>
       </div>
     </div>
     <div class="ws-body">
@@ -101,15 +101,15 @@
         <img class="intro-avatar" src="/tool-avatars/thanh-tuong.webp" alt="" onerror="this.remove()">
         <div class="intro-body">
           <div class="intro-text">
-            <div class="intro-t">Thanh Tướng Pro</div>
-            <div class="intro-d">Giọng nói mang nhiều thông tin hơn ta tưởng — 12 chỉ số âm học từ 4 bài đo chuyên sâu vẽ ra bức tranh Ngũ Âm và khí lực đầy đủ nhất. Dành cho ai muốn đi sâu hơn bản Thanh Tướng thường.</div>
+            <div data-i18n="thtp.thanh-tuong-pro" class="intro-t">Thanh Tướng Pro</div>
+            <div data-i18n="thtp.giong-noi-mang-nhieu-thong-tin" class="intro-d">Giọng nói mang nhiều thông tin hơn ta tưởng — 12 chỉ số âm học từ 4 bài đo chuyên sâu vẽ ra bức tranh Ngũ Âm và khí lực đầy đủ nhất. Dành cho ai muốn đi sâu hơn bản Thanh Tướng thường.</div>
             <div id="introSrc"></div>
           </div>
         </div>
         <div class="hero-pills">
-          <div class="hero-pill"><span class="hp-ic" data-icon="mic"></span><span>4 bài đo<br>giọng chuyên sâu</span></div>
-          <div class="hero-pill"><span class="hp-ic" data-icon="bar-chart-3"></span><span>12 chỉ số<br>âm học</span></div>
-          <div class="hero-pill"><span class="hp-ic" data-icon="scroll-text"></span><span>Luận Ngũ Âm<br>và khí lực</span></div>
+          <div data-i18n="thtp.4-bai-do-giong-chuyen-sau" class="hero-pill"><span class="hp-ic" data-icon="mic"></span><span>4 bài đo<br>giọng chuyên sâu</span></div>
+          <div data-i18n="thtp.12-chi-so-am-hoc" class="hero-pill"><span class="hp-ic" data-icon="bar-chart-3"></span><span>12 chỉ số<br>âm học</span></div>
+          <div data-i18n="thtp.luan-ngu-am-va-khi-luc" class="hero-pill"><span class="hp-ic" data-icon="scroll-text"></span><span>Luận Ngũ Âm<br>và khí lực</span></div>
         </div>
       </div></div>
       <div class="ws-main-col">
@@ -119,28 +119,28 @@
            kết quả). Không có nút "làm lại từ đầu" trong flow này nên không
            có lượt reset về bước 1. -->
       <div class="ws-steps" id="wsSteps">
-        <div class="wss-step active"><span class="wss-n">1</span><span class="wss-l">Nhập thông tin</span></div>
-        <div class="wss-step"><span class="wss-n">2</span><span class="wss-l">Xem kết quả đo</span></div>
-        <div class="wss-step"><span class="wss-n">3</span><span class="wss-l">Thanh toán</span></div>
-        <div class="wss-step"><span class="wss-n">4</span><span class="wss-l">Nhận kết quả</span></div>
+        <div data-i18n="battu.1-nhap-thong-tin" class="wss-step active"><span class="wss-n">1</span><span class="wss-l">Nhập thông tin</span></div>
+        <div data-i18n="thtp.2-xem-ket-qua-do" class="wss-step"><span class="wss-n">2</span><span class="wss-l">Xem kết quả đo</span></div>
+        <div data-i18n="battu.3-thanh-toan" class="wss-step"><span class="wss-n">3</span><span class="wss-l">Thanh toán</span></div>
+        <div data-i18n="battu.4-nhan-ket-qua" class="wss-step"><span class="wss-n">4</span><span class="wss-l">Nhận kết quả</span></div>
       </div>
       <div class="dt-card" id="setupCard">
-        <div class="fc-head"><span class="fc-ic" data-icon="mic"></span><h2>Bước 1 · Thông Tin Cơ Bản</h2></div>
-        <p class="sub">Ghi âm đủ 4 bài đo theo giới tính và tuổi của bạn. Hệ thống phân tích chuyên sâu, luận khí, tính cách, vận mệnh và cách dưỡng thanh dưỡng khí.</p>
-        <div class="setup-label">Giới Tính</div>
+        <div class="fc-head"><span class="fc-ic" data-icon="mic"></span><h2 data-i18n="thtp.buoc-1-thong-tin-co-ban">Bước 1 · Thông Tin Cơ Bản</h2></div>
+        <p data-i18n="thtp.ghi-am-du-4-bai-do" class="sub">Ghi âm đủ 4 bài đo theo giới tính và tuổi của bạn. Hệ thống phân tích chuyên sâu, luận khí, tính cách, vận mệnh và cách dưỡng thanh dưỡng khí.</p>
+        <div data-i18n="laso.gioi-tinh" class="setup-label">Giới Tính</div>
         <div class="gender-opts" id="genderOpts">
           <div class="gender-opt" data-gender="nam">Nam</div>
-          <div class="gender-opt" data-gender="nu">Nữ</div>
+          <div data-i18n="laso.nu" class="gender-opt" data-gender="nu">Nữ</div>
         </div>
-        <div class="setup-label" style="margin-top:6px">Tuổi</div>
-        <input type="number" class="age-input" id="ageInput" placeholder="Ví dụ: 32" min="10" max="100">
+        <div data-i18n="thtp.tuoi" class="setup-label" style="margin-top:6px">Tuổi</div>
+        <input data-i18n-attr="placeholder:thtp.vi-du-32" type="number" class="age-input" id="ageInput" placeholder="Ví dụ: 32" min="10" max="100">
         <div class="record-wrap" style="padding-top:16px">
-          <button class="btn-record" id="startBtn" disabled>Bắt Đầu Bài Đo</button>
+          <button data-i18n="thtp.bat-dau-bai-do" class="btn-record" id="startBtn" disabled>Bắt Đầu Bài Đo</button>
         </div>
       </div>
 
       <div class="dt-card" id="tasksSection" style="display:none">
-        <h2>Bước 2 · Bốn Bài Đo Giọng</h2>
+        <h2 data-i18n="thtp.buoc-2-bon-bai-do-giong">Bước 2 · Bốn Bài Đo Giọng</h2>
         <div class="task-progress" id="taskProgress">
           <div class="task-pip" data-idx="0"></div>
           <div class="task-pip" data-idx="1"></div>
@@ -149,34 +149,34 @@
         </div>
 
         <div id="taskCard">
-          <div class="task-header">
+          <div data-i18n="thtp.bai-1-4-10-giay" class="task-header">
             <span class="task-num" id="taskNum">Bài 1/4</span>
             <span class="task-time" id="taskTime">10 giây</span>
           </div>
-          <h3 class="task-title" id="taskTitle">Đọc Đoạn Văn</h3>
-          <div class="task-instruction" id="taskInstruction">Đọc bình thường, rõ ràng, không gấp.</div>
+          <h3 data-i18n="thtp.doc-doan-van" class="task-title" id="taskTitle">Đọc Đoạn Văn</h3>
+          <div data-i18n="thtp.doc-binh-thuong-ro-rang-khong" class="task-instruction" id="taskInstruction">Đọc bình thường, rõ ràng, không gấp.</div>
           <div class="task-text" id="taskText"></div>
 
           <div class="record-wrap">
             <div class="countdown-badge" id="countdown"></div>
-            <button class="btn-record" id="recordBtn">Bắt Đầu Thu Âm</button>
+            <button data-i18n="thtp.bat-dau-thu-am" class="btn-record" id="recordBtn">Bắt Đầu Thu Âm</button>
           </div>
           <div class="timer-bar-wrap" id="timerWrap"><div class="timer-bar" id="timerBar"></div></div>
           <div class="waveform-wrap" id="waveWrap"><canvas id="waveCanvas" width="800" height="56"></canvas></div>
           <div class="record-status" id="recordStatus"></div>
 
           <div class="task-done-mini" id="taskDone">
-            <div id="taskDoneText">✓ Đã ghi xong.</div>
-            <button class="btn-next-task" id="nextBtn">Bài Tiếp Theo →</button>
-            <button class="btn-retry" id="retryBtn">Thu Lại</button>
+            <div data-i18n="thtp.da-ghi-xong" id="taskDoneText">✓ Đã ghi xong.</div>
+            <button data-i18n="thtp.bai-tiep-theo" class="btn-next-task" id="nextBtn">Bài Tiếp Theo →</button>
+            <button data-i18n="thtp.thu-lai" class="btn-retry" id="retryBtn">Thu Lại</button>
           </div>
         </div>
       </div>
 
       <div class="dt-card" id="featuresPanel" style="display:none">
         <div class="features-head">
-          <h2 style="margin:0">Bước 3 · Kết Quả Đo</h2>
-          <span class="nguam-badge" id="nguamBadge">Ngũ Âm: —</span>
+          <h2 data-i18n="thtp.buoc-3-ket-qua-do" style="margin:0">Bước 3 · Kết Quả Đo</h2>
+          <span data-i18n="thtp.ngu-am" class="nguam-badge" id="nguamBadge">Ngũ Âm: —</span>
         </div>
         <div class="features-grid" id="featuresGrid"></div>
         <div class="warn-card" id="featuresWarn"></div>
@@ -192,9 +192,9 @@
           <div class="cb-l">
             <span class="cb-ic" data-icon="wallet"></span>
             <div>
-              <div class="cb-title">Chi phí sử dụng</div>
-              <div class="cb-amt"><span class="vnd" data-tvp-price-vnd="thanh-tuong-pro"></span> mỗi lượt <span class="cb-sub">(<span data-tvp-price="thanh-tuong-pro">…</span> Lượng)</span></div>
-              <div class="cb-pay">
+              <div data-i18n="battu.chi-phi-su-dung" class="cb-title">Chi phí sử dụng</div>
+              <div data-i18n="thtp.moi-luot-luong" class="cb-amt"><span class="vnd" data-tvp-price-vnd="thanh-tuong-pro"></span> mỗi lượt <span class="cb-sub">(<span data-tvp-price="thanh-tuong-pro">…</span> Lượng)</span></div>
+              <div data-i18n="luangiai.chuyen-khoan-qua-qr-ngan-hang" class="cb-pay">
                 <span><span class="ic" data-icon="qr-code"></span> Chuyển khoản (qua QR ngân hàng)</span>
                 <span><span class="ic" data-icon="credit-card"></span> PayPal / Thẻ quốc tế</span>
               </div>
@@ -202,10 +202,10 @@
           </div>
           <div class="cb-r">
             <span class="cb-ic" data-icon="gift"></span>
-            <div class="cb-r-txt">Mua gói để nhận nhiều ưu đãi hơn.<br><a href="/topup.html">Xem các gói ngay →</a></div>
+            <div data-i18n="luangiai.mua-goi-de-nhan-nhieu-uu" class="cb-r-txt">Mua gói để nhận nhiều ưu đãi hơn.<br><a href="/topup.html">Xem các gói ngay →</a></div>
           </div>
         </div>
-        <button class="btn-go" id="analyzeBtn">
+        <button data-i18n="thtp.luan-giai-thanh-tuong-ton-luong" class="btn-go" id="analyzeBtn">
           <span class="bg-label"><span class="ic" data-icon="music"></span><b id="analyzeBtnLabel">Luận Giải Thanh Tướng →</b></span>
           <small>Tốn <span class="vnd" data-tvp-price-vnd="thanh-tuong-pro"></span> <span class="cb-sub">(<span data-tvp-price="thanh-tuong-pro">…</span> Lượng)</span></small>
         </button>
@@ -213,22 +213,22 @@
       </div>
       <div class="ws-side-col">
       <div class="ws-promo">
-        <div class="wsp-eyebrow"><span class="wsp-ic" data-icon="book-open"></span><span>Giới thiệu</span></div>
-        <div class="wsp-title">Thanh Tướng Pro</div>
-        <p class="wsp-desc">Ngũ Âm tướng pháp là một nhánh của nhân tướng học luận đoán qua giọng nói, phân loại âm thanh theo Cung, Thương, Giốc, Chủy, Vũ tương ứng với Ngũ Hành. Phương pháp này được ghi nhận trong các cổ thư tướng học như Ma Y Thần Tướng.</p>
+        <div data-i18n="battu.gioi-thieu" class="wsp-eyebrow"><span class="wsp-ic" data-icon="book-open"></span><span>Giới thiệu</span></div>
+        <div data-i18n="thtp.thanh-tuong-pro" class="wsp-title">Thanh Tướng Pro</div>
+        <p data-i18n="thtp.ngu-am-tuong-phap-la-mot" class="wsp-desc">Ngũ Âm tướng pháp là một nhánh của nhân tướng học luận đoán qua giọng nói, phân loại âm thanh theo Cung, Thương, Giốc, Chủy, Vũ tương ứng với Ngũ Hành. Phương pháp này được ghi nhận trong các cổ thư tướng học như Ma Y Thần Tướng.</p>
       </div>
       <div class="samp-cta" id="sampCta">
         <span class="sc-ic" data-icon="lightbulb"></span>
-        <span class="sc-txt"><b>Chưa muốn ghi âm?</b><span>Bạn có thể xem một bản mẫu để trải nghiệm trước.</span></span>
-        <button type="button" id="btnSample" data-sample-tool="thanh-tuong-pro" onclick="SampleHint.open(this)">Xem bản mẫu →</button>
+        <span data-i18n="thtp.chua-muon-ghi-am-ban-co" class="sc-txt"><b>Chưa muốn ghi âm?</b><span>Bạn có thể xem một bản mẫu để trải nghiệm trước.</span></span>
+        <button data-i18n="thtp.xem-ban-mau" type="button" id="btnSample" data-sample-tool="thanh-tuong-pro" onclick="SampleHint.open(this)">Xem bản mẫu →</button>
       </div>
       <div id="shellRecent"></div>
       </div>
       </div>
 
       <div class="dt-card" id="resultsCard" data-ws-result style="display:none">
-        <h2>Phân Tích Thanh Tướng Chuyên Sâu</h2>
-        <p class="sub">Ngũ Âm Cổ Pháp · Ma Y · Thần Tướng Toàn Biên · Thủy Kính Tập</p>
+        <h2 data-i18n="thtp.phan-tich-thanh-tuong-chuyen-sau">Phân Tích Thanh Tướng Chuyên Sâu</h2>
+        <p data-i18n="thtp.ngu-am-co-phap-ma-y" class="sub">Ngũ Âm Cổ Pháp · Ma Y · Thần Tướng Toàn Biên · Thủy Kính Tập</p>
         <div class="dt-result" id="resultsPanel"></div>
       </div>
     </div>
