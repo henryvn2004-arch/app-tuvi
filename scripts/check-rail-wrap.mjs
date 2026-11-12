@@ -272,7 +272,9 @@ for (const t of TOOLS) {
     return !f || !(ifaceKeys(f[0], name) || []).includes(k);
   });
   if (deepStale.length)
-    fail(`${t.id}: deepSkip khai thừa (kiểu lồng không còn trường): ${deepStale.join(', ')} — gỡ đi`);
+    fail(
+      `${t.id}: deepSkip khai thừa (kiểu lồng không còn trường): ${deepStale.join(', ')} — gỡ đi`
+    );
 
   const label = `${t.id} — ${keys.length} trường cấp 1, bỏ có khai ${Object.keys(t.skip).length}`;
   if (missing.length) {

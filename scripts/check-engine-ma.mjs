@@ -57,9 +57,13 @@ try {
   execFileSync('ln', ['-sfn', join(ROOT, 'node_modules'), join(build, 'node_modules')]);
   execFileSync('ln', ['-sfn', join(ROOT, 'tuvi-engine'), join(build, 'tuvi-engine')]);
   // `@/` đổi TRƯỚC rồi mới thêm đuôi `.js` (xem check-cache-shape.mjs).
-  const files = execFileSync('bash', ['-c', `find ${build} -name '*.js' -not -path '*/node_modules/*'`], {
-    encoding: 'utf8',
-  })
+  const files = execFileSync(
+    'bash',
+    ['-c', `find ${build} -name '*.js' -not -path '*/node_modules/*'`],
+    {
+      encoding: 'utf8',
+    }
+  )
     .split('\n')
     .filter(Boolean);
   for (const f of files) {
@@ -139,7 +143,10 @@ console.log('__KQ__' + JSON.stringify(out));
     const sai = [];
     const lech = [];
     for (const b of kq.bond) {
-      for (const [f, vi] of [['label', b.label], ['gist', b.gist]]) {
+      for (const [f, vi] of [
+        ['label', b.label],
+        ['gist', b.gist],
+      ]) {
         const k = `bond.${b.kind}.${f}`;
         dung.add(k);
         if (!S.has(k)) sai.push(k);
@@ -158,19 +165,30 @@ console.log('__KQ__' + JSON.stringify(out));
         if (!S.has(kd)) sai.push(kd);
         else {
           // câu khuôn thế biến == chữ Việt engine trả (client thay {x} ở câu dịch bằng CHÍNH bien này)
-          const tpl = S.get(kd).replace(/\{(\w+)\}/g, (m, n) => (s.bien && s.bien[n] !== undefined ? s.bien[n] : m));
+          const tpl = S.get(kd).replace(/\{(\w+)\}/g, (m, n) =>
+            s.bien && s.bien[n] !== undefined ? s.bien[n] : m
+          );
           if (tpl !== s.detail) lech.push(kd);
           for (const t of S.get(kd).matchAll(/\{(\w+)\}/g))
             if (!s.bien || s.bien[t[1]] === undefined) sai.push(`${kd}: thiếu biến {${t[1]}}`);
         }
       }
     }
-    bao(sai.length === 0, `duyen-no — ${dung.size} khoá chạm bởi ${kq.bond.length} cặp mẫu, không trỏ trượt: ${[...new Set(sai)].slice(0, 5).join(', ') || 'không'}`);
-    bao(lech.length === 0, `duyen-no — chữ Việt trong payload == nguồn dịch: ${[...new Set(lech)].slice(0, 5).join(', ') || 'khớp'}`);
+    bao(
+      sai.length === 0,
+      `duyen-no — ${dung.size} khoá chạm bởi ${kq.bond.length} cặp mẫu, không trỏ trượt: ${[...new Set(sai)].slice(0, 5).join(', ') || 'không'}`
+    );
+    bao(
+      lech.length === 0,
+      `duyen-no — chữ Việt trong payload == nguồn dịch: ${[...new Set(lech)].slice(0, 5).join(', ') || 'khớp'}`
+    );
     // phủ: 7 loại duyên + ≥ 14/18 câu dấu hiệu + 5 nhãn (phu-the/oan-gia/doi-dau hiếm nhưng 1500 cặp chạm được)
     const kinds = new Set(kq.bond.map((b) => b.kind));
     const nSig = [...dung].filter((k) => k.startsWith('sigd.')).length;
-    bao(kinds.size >= 6 && nSig >= 14, `duyen-no — mẫu phủ ${kinds.size}/7 loại duyên, ${nSig}/18 câu dấu hiệu (cần ≥6 · ≥14)`);
+    bao(
+      kinds.size >= 6 && nSig >= 14,
+      `duyen-no — mẫu phủ ${kinds.size}/7 loại duyên, ${nSig}/18 câu dấu hiệu (cần ≥6 · ≥14)`
+    );
   }
 
   // ── Nhân mạch: cap.<loai> + kieu.<id>.ten
@@ -187,8 +205,11 @@ console.log('__KQ__' + JSON.stringify(out));
           sai.push('(thiếu kieuA/kieuB/bien) ' + c.loai);
           continue;
         }
-        for (const id of [c.kieuA, c.kieuB]) if (!S.has(`kieu.${id}.ten`)) sai.push(`kieu.${id}.ten`);
-        const tpl = (S.get(`cap.${c.loai}`) || '').replace(/\{(\w+)\}/g, (m, n) => (c.bien[n] !== undefined ? c.bien[n] : m));
+        for (const id of [c.kieuA, c.kieuB])
+          if (!S.has(`kieu.${id}.ten`)) sai.push(`kieu.${id}.ten`);
+        const tpl = (S.get(`cap.${c.loai}`) || '').replace(/\{(\w+)\}/g, (m, n) =>
+          c.bien[n] !== undefined ? c.bien[n] : m
+        );
         if (tpl !== c.vi) lech.push(`cap.${c.loai}`);
       }
       for (const k of g.kieu) {
@@ -196,9 +217,18 @@ console.log('__KQ__' + JSON.stringify(out));
         else if (S.get(`kieu.${k.id}.ten`) !== k.ten) lech.push(`kieu.${k.id}.ten`);
       }
     }
-    bao(sai.length === 0, `nhan-mach — ${kq.nm.length} nhóm mẫu, không trỏ trượt: ${[...new Set(sai)].slice(0, 5).join(', ') || 'không'}`);
-    bao(lech.length === 0, `nhan-mach — chữ Việt trong payload == nguồn dịch: ${[...new Set(lech)].slice(0, 5).join(', ') || 'khớp'}`);
-    bao(loai.size === 2, `nhan-mach — mẫu chạm cả 2 loại cặp (giam-chan · bu-nhau): ${[...loai].join(' · ')}`);
+    bao(
+      sai.length === 0,
+      `nhan-mach — ${kq.nm.length} nhóm mẫu, không trỏ trượt: ${[...new Set(sai)].slice(0, 5).join(', ') || 'không'}`
+    );
+    bao(
+      lech.length === 0,
+      `nhan-mach — chữ Việt trong payload == nguồn dịch: ${[...new Set(lech)].slice(0, 5).join(', ') || 'khớp'}`
+    );
+    bao(
+      loai.size === 2,
+      `nhan-mach — mẫu chạm cả 2 loại cặp (giam-chan · bu-nhau): ${[...loai].join(' · ')}`
+    );
   }
 
   // ── Dạy con (đánh giá): truc.<id>.<…> · khieu.<id>.<…> — khoá DỰNG Y NHƯ app-day-con.html
@@ -218,8 +248,11 @@ console.log('__KQ__' + JSON.stringify(out));
         chk(`truc.${t.id}.cauHoi`, t.cauHoi);
         chk(`truc.${t.id}.thap.nhan`, t.nhanThap);
         chk(`truc.${t.id}.cao.nhan`, t.nhanCao);
-        if (t.cuc) for (const f of ['bieuHien', 'dayThe', 'docNham']) chk(`truc.${t.id}.${t.nghieng}.${f}`, t.cuc[f]);
-        else if (t.canND) for (const f of ['bieuHien', 'dayThe']) chk(`truc.${t.id}.can.${f}`, t.canND[f]);
+        if (t.cuc)
+          for (const f of ['bieuHien', 'dayThe', 'docNham'])
+            chk(`truc.${t.id}.${t.nghieng}.${f}`, t.cuc[f]);
+        else if (t.canND)
+          for (const f of ['bieuHien', 'dayThe']) chk(`truc.${t.id}.can.${f}`, t.canND[f]);
         else sai.push(`trục ${t.id}: không có cuc lẫn canND`);
       }
     for (const ds of kq.khieu)
@@ -227,14 +260,25 @@ console.log('__KQ__' + JSON.stringify(out));
         for (const f of ['ten', 'motCau', 'chuY', 'oLop']) chk(`khieu.${k.id}.${f}`, k[f]);
         k.dauHieu.forEach((d, i) => chk(`khieu.${k.id}.dau.${i}`, d));
       }
-    bao(sai.length === 0, `day-con-assess — ${dung.size} khoá chạm bởi ${kq.truc.length} lá số mẫu, không trỏ trượt: ${[...new Set(sai)].slice(0, 5).join(', ') || 'không'}`);
-    bao(lech.length === 0, `day-con-assess — chữ Việt trong payload == nguồn dịch: ${[...new Set(lech)].slice(0, 5).join(', ') || 'khớp'}`);
-    bao(dung.size >= 100, `day-con-assess — mẫu chạm ${dung.size}/124 khoá (cần ≥100: cả hai cực + ca nằm giữa của 5 trục, 8 chất)`);
+    bao(
+      sai.length === 0,
+      `day-con-assess — ${dung.size} khoá chạm bởi ${kq.truc.length} lá số mẫu, không trỏ trượt: ${[...new Set(sai)].slice(0, 5).join(', ') || 'không'}`
+    );
+    bao(
+      lech.length === 0,
+      `day-con-assess — chữ Việt trong payload == nguồn dịch: ${[...new Set(lech)].slice(0, 5).join(', ') || 'khớp'}`
+    );
+    bao(
+      dung.size >= 100,
+      `day-con-assess — mẫu chạm ${dung.size}/124 khoá (cần ≥100: cả hai cực + ca nằm giữa của 5 trục, 8 chất)`
+    );
   }
 
   // ── GOLDEN: chữ Việt byte-giống engine cũ (nguồn độc lập với bảng khuôn)
   {
-    const gold = JSON.parse(readFileSync(join(ROOT, 'scripts/fixtures/engine-ma-golden.json'), 'utf8'));
+    const gold = JSON.parse(
+      readFileSync(join(ROOT, 'scripts/fixtures/engine-ma-golden.json'), 'utf8')
+    );
     const lechB = [];
     gold.bond.forEach((g, i) => {
       const n = kq.golden.bond[i];
@@ -242,7 +286,10 @@ console.log('__KQ__' + JSON.stringify(out));
       const b = JSON.stringify([n.type, n.signals]);
       if (a !== b) lechB.push(`cặp #${i}`);
     });
-    bao(gold.bond.length >= 10 && lechB.length === 0, `golden duyen-no — ${gold.bond.length} cặp (22 dạng câu) byte-giống engine cũ: ${lechB.join(', ') || 'khớp'}`);
+    bao(
+      gold.bond.length >= 10 && lechB.length === 0,
+      `golden duyen-no — ${gold.bond.length} cặp (22 dạng câu) byte-giống engine cũ: ${lechB.join(', ') || 'khớp'}`
+    );
     bao(
       JSON.stringify(gold.nm.cap) === JSON.stringify(kq.golden.nm),
       `golden nhan-mach — ${gold.nm.cap.length} câu cặp byte-giống engine cũ`
