@@ -1619,6 +1619,10 @@
   "t": "<li><b>신궁 위치</b> — ",
   "h": "23b5a7a9"
  },
+ "js.daycon.cung-name": {
+  "t": "{name}",
+  "h": "3cb49303"
+ },
  "js.daycon.cung-tinh-am-duong-de-va": {
   "t": "음양 성질이 같아요 — 부딪히기 쉬워요",
   "h": "38ee66ae"
@@ -3158,6 +3162,402 @@
  "js.nav.xem-tuong-qua-anh": {
   "t": "사진으로 관상 보기",
   "h": "24c4d64e"
+ },
+ "js.nguoikhac.ban-cam-nang": {
+  "t": "가이드",
+  "h": "a9696c9f"
+ },
+ "js.nguoikhac.ban-co-muon-doi-chieu-them": {
+  "t": "내 명반도 함께 대조해 볼까요? “이 사람과 나” 항목이 더해져요.",
+  "h": "e86dc3aa"
+ },
+ "js.nguoikhac.ban-da-xem-ban-nay-roi": {
+  "t": "✓ 이미 본 풀이예요 — 다시 열어도 냥이 차감되지 않아요",
+  "h": "7d2c6a5b"
+ },
+ "js.nguoikhac.ban-dang-can-lam": {
+  "t": "해야 할 일",
+  "h": "91e799f3"
+ },
+ "js.nguoikhac.ban-dang-can-lam-gi-voi": {
+  "t": "이 사람과 관련해 무엇을 해야 하나요?",
+  "h": "a3a85f1f"
+ },
+ "js.nguoikhac.ban-day-du-se-co-mot": {
+  "t": "전체 버전에는 바로 이 일만 다루는 별도 항목이 있어요.",
+  "h": "6c907e5e"
+ },
+ "js.nguoikhac.ban-nay-doc-tu": {
+  "t": "이 풀이는 입력하신 생년월일시로 세운 <b>",
+  "h": "d989b954"
+ },
+ "js.nguoikhac.ban-se-nhan-chia-viec-the": {
+  "t": "받을 수 있는 내용: 서로 발을 밟지 않도록 일을 나누는 방법, 마음 상하지 않도록 피할 것.",
+  "h": "8824cf10"
+ },
+ "js.nguoikhac.ban-se-nhan-cho-nao-la": {
+  "t": "받을 수 있는 내용: 어디까지가 성격 차이이고, 어디가 사랑이 식은 것이 아닌지.",
+  "h": "93bae219"
+ },
+ "js.nguoikhac.ban-se-nhan-dua-tre-nay": {
+  "t": "받을 수 있는 내용: 이 아이에게 필요한 건 재촉일까, 기다림일까.",
+  "h": "d6a5344d"
+ },
+ "js.nguoikhac.ban-se-nhan-giao-viec-kieu": {
+  "t": "받을 수 있는 내용: 어떤 방식으로 일을 맡기면 움직이고, 어떻게 일깨워 주면 귀 기울이는지.",
+  "h": "753ebc00"
+ },
+ "js.nguoikhac.ban-se-nhan-ho-quyet-bang": {
+  "t": "받을 수 있는 내용: 그 사람이 무엇을 기준으로 결정하는지, 무엇이 그 사람을 주춤하게 만드는지.",
+  "h": "65d83930"
+ },
+ "js.nguoikhac.ban-se-nhan-noi-the-nao": {
+  "t": "받을 수 있는 내용: 똑같은 옛일로 다투게 되지 않도록 말하는 방법.",
+  "h": "e80b5e7c"
+ },
+ "js.nguoikhac.ban-se-nhan-trinh-bay-the": {
+  "t": "받을 수 있는 내용: 승인을 받으려면 어떻게 제시해야 하는지, 그리고 제시하면 안 되는 때.",
+  "h": "ba10c251"
+ },
+ "js.nguoikhac.ban-se-nhan-trong-cay-duoc": {
+  "t": "받을 수 있는 내용: 어떤 일은 믿고 맡길 수 있고, 어떤 일은 기대하면 안 되는지.",
+  "h": "19b64bfa"
+ },
+ "js.nguoikhac.bo-qua": {
+  "t": "건너뛰기",
+  "h": "861dafde"
+ },
+ "js.nguoikhac.bo-qua-doi-chieu-la-so": {
+  "t": "내 명반 대조는 건너뛰었어요.",
+  "h": "7c25b196"
+ },
+ "js.nguoikhac.cach-cuc": {
+  "t": " 개의 격국, ",
+  "h": "a4f8bc9a"
+ },
+ "js.nguoikhac.cach-cuc-dai-van-van-nam": {
+  "t": "격국, 대운, 연운, 그리고 이 사람에게 구체적으로 대하는 방법은 전체 가이드에 들어 있어요.",
+  "h": "7a23f4d4"
+ },
+ "js.nguoikhac.cach-di-cho-viec": {
+  "t": "이 일을 풀어 가는 방법: ",
+  "h": "36885ebf"
+ },
+ "js.nguoikhac.cam-nang-ung-xu": {
+  "t": "대응 가이드 — ",
+  "h": "2aba8d61"
+ },
+ "js.nguoikhac.can-giao-viec-nhac-viec-cho": {
+  "t": "일을 맡기거나 상기시켜 줘야 해요",
+  "h": "8a5c5843"
+ },
+ "js.nguoikhac.cat": {
+  "t": "길 ",
+  "h": "bbbbd4e0"
+ },
+ "js.nguoikhac.chang-dai-van": {
+  "t": " 개의 대운 구간이 있어요. ",
+  "h": "0bc2d397"
+ },
+ "js.nguoikhac.chinh-tinh-tai-cung": {
+  "t": "주성이 있는 궁: ",
+  "h": "37742cf1"
+ },
+ "js.nguoikhac.cho-thay-xin-thong-tin-cua": {
+  "t": "이 사람의 정보를 알려 주세요.",
+  "h": "4704e927"
+ },
+ "js.nguoikhac.chon-mot-viec-cu-the-thi": {
+  "t": "구체적인 일을 고르면 그 일만을 위한 “풀어 가는 방법”이 풀이에 더해져요.",
+  "h": "29c1bbf5"
+ },
+ "js.nguoikhac.chua-cham": {
+  "t": "미채점",
+  "h": "a20bbf69"
+ },
+ "js.nguoikhac.co-doi-chieu": {
+  "t": "네, 대조할게요 →",
+  "h": "a3846e57"
+ },
+ "js.nguoikhac.con": {
+  "t": "아직 열리지 않은 ",
+  "h": "be81ceb0"
+ },
+ "js.nguoikhac.cung-an-than": {
+  "t": "<li><b>신궁 위치</b> — ",
+  "h": "23b5a7a9"
+ },
+ "js.nguoikhac.cung-cung-trong-la-so-cua": {
+  "t": "내 명반의 {cung}",
+  "h": "85ab2993"
+ },
+ "js.nguoikhac.cung-name": {
+  "t": "{name}",
+  "h": "3cb49303"
+ },
+ "js.nguoikhac.cung-tinh-am-duong-de-va": {
+  "t": "음양 성질이 같아요 — 부딪히기 쉬워요",
+  "h": "38ee66ae"
+ },
+ "js.nguoikhac.da": {
+  "t": "흐름 ",
+  "h": "ea471098"
+ },
+ "js.nguoikhac.dai-van-dang-chay": {
+  "t": "<li><b>진행 중인 대운</b> — ",
+  "h": "7e2a0133"
+ },
+ "js.nguoikhac.dang-co-bat-dong-chua-go": {
+  "t": "풀리지 않은 의견 충돌이 있어요",
+  "h": "f32b8bb1"
+ },
+ "js.nguoikhac.day-la-ban-cam-nang-ung-ten": {
+  "t": "**{ten}**에 대한 대응 가이드예요. 더 묻고 싶은 상황이 있나요?",
+  "h": "10e397ff"
+ },
+ "js.nguoikhac.doc-menh-phuc-duc-thien-di": {
+  "t": "명궁·복덕궁·천이궁·관록궁·복역궁을 읽는 중",
+  "h": "1a737bb6"
+ },
+ "js.nguoikhac.doi-chieu-them-voi-la-so": {
+  "t": "내 명반과의 대조도 더했어요 ✓",
+  "h": "65992be6"
+ },
+ "js.nguoikhac.doi-chieu-voi-la-so-cua": {
+  "t": "내 명반과의 대조: ",
+  "h": "69111647"
+ },
+ "js.nguoikhac.du-kien-lap-ra-tu-chinh": {
+  "t": " 건의 데이터</b>를 읽어 낸 거예요 — ",
+  "h": "fdb76ddf"
+ },
+ "js.nguoikhac.hai-ben-de-va-nhau-o": {
+  "t": "두 사람은 어디에서 자주 부딪히나요?",
+  "h": "4604fce9"
+ },
+ "js.nguoikhac.ho-coi-trong-cai-gi-va": {
+  "t": "무엇을 소중히 여기고, 무엇을 잃을까 두려워하는가",
+  "h": "cb1b27aa"
+ },
+ "js.nguoikhac.khac-tinh-am-duong-de-bu": {
+  "t": "음양 성질이 달라요 — 서로 채워 주기 쉬워요",
+  "h": "b5f77a93"
+ },
+ "js.nguoikhac.khoa": {
+  "t": "잠김",
+  "h": "393cb36a"
+ },
+ "js.nguoikhac.khong-co-buoc-nao-doan-mo": {
+  "t": "짐작으로 한 단계는 하나도 없어요. 생년월일시의 세부를 하나만 바꿔도 위 표 전체가 달라져요.",
+  "h": "065d23da"
+ },
+ "js.nguoikhac.khong-co-chinh-tinh": {
+  "t": "주성 없음",
+  "h": "753ded73"
+ },
+ "js.nguoikhac.khong-co-gi-gap-chi-muon": {
+  "t": "급한 건 없고, 그저 이 사람을 더 이해하고 싶어요",
+  "h": "7c188ebe"
+ },
+ "js.nguoikhac.khong-dat-ten": {
+  "t": "이름 없음",
+  "h": "295915d5"
+ },
+ "js.nguoikhac.khong-the-ket-noi-vui-long": {
+  "t": "연결할 수 없어요. 다시 시도해 주세요.",
+  "h": "bf0b6e7b"
+ },
+ "js.nguoikhac.khung-dai-van": {
+  "t": "대운 구간 ",
+  "h": "06be9124"
+ },
+ "js.nguoikhac.la-so": {
+  "t": "명반: ",
+  "h": "2644d5f2"
+ },
+ "js.nguoikhac.la-so-nguoi-khac": {
+  "t": "타인 명반",
+  "h": "e454923c"
+ },
+ "js.nguoikhac.lap-la-so-phan-kieu-nguoi": {
+  "t": "명반을 세우고 유형 분류",
+  "h": "61f07874"
+ },
+ "js.nguoikhac.loi": {
+  "t": "오류 ",
+  "h": "1b80116b"
+ },
+ "js.nguoikhac.loi-8d72": {
+  "t": "오류: ",
+  "h": "471c0087"
+ },
+ "js.nguoikhac.luc-nao-nen-dua-viec-lon": {
+  "t": "큰 일을 꺼낼 시점",
+  "h": "94a8e09a"
+ },
+ "js.nguoikhac.luong": {
+  "t": "냥 →",
+  "h": "36d6704d"
+ },
+ "js.nguoikhac.luu-nien-cung": {
+  "t": "유년 궁 ",
+  "h": "8f5a16cc"
+ },
+ "js.nguoikhac.mo-cam-nang-day-du": {
+  "t": "전체 가이드 열기",
+  "h": "1e071c6b"
+ },
+ "js.nguoikhac.mot-cau-chot": {
+  "t": "한 줄 요약",
+  "h": "9e19232a"
+ },
+ "js.nguoikhac.muc-trong-la-so": {
+  "t": "개 더 보기",
+  "h": "4e83a32a"
+ },
+ "js.nguoikhac.muon-gan-lai-sau-mot-thoi": {
+  "t": "한동안 멀어졌다가 다시 가까워지고 싶어요",
+  "h": "30e6d4da"
+ },
+ "js.nguoikhac.muon-ru-ho-lam-chung-mot": {
+  "t": "함께 큰 일을 해 보자고 제안하고 싶어요",
+  "h": "9c94c0ef"
+ },
+ "js.nguoikhac.muon-xung-chieu": {
+  "t": " (맞은편 궁을 빌림)",
+  "h": "7363dfe3"
+ },
+ "js.nguoikhac.nen-noi-gi-3-viec-kem": {
+  "t": "무슨 말을 할까 — 실제 말투를 곁들인 세 가지",
+  "h": "e6639d28"
+ },
+ "js.nguoikhac.nguoi-ban-muon-hieu-la-ai": {
+  "t": "이해하고 싶은 사람이 나에게 어떤 사람인가요?",
+  "h": "4f8c6227"
+ },
+ "js.nguoikhac.nguoi-nay": {
+  "t": "이 사람",
+  "h": "bed03c25"
+ },
+ "js.nguoikhac.nguoi-nay-la": {
+  "t": "이 사람은",
+  "h": "d70093a0"
+ },
+ "js.nguoikhac.nguoi-nay-la-jle1": {
+  "t": "이 사람은: <b>",
+  "h": "bdd5dac7"
+ },
+ "js.nguoikhac.nguoi-nay-rxn3": {
+  "t": "이 사람",
+  "h": "794cf474"
+ },
+ "js.nguoikhac.pha-them": {
+  "t": "추가로 섞인 유형:",
+  "h": "4b629d3a"
+ },
+ "js.nguoikhac.phai-tu-choi-ho-ma-khong": {
+  "t": "관계를 잃고 싶지 않지만 거절해야 해요",
+  "h": "c189e09a"
+ },
+ "js.nguoikhac.phan-chua-mo-ve-nguoi-nay": {
+  "t": " 개 항목 (이 사람에 대해)",
+  "h": "45be6b61"
+ },
+ "js.nguoikhac.sach-dan-ve-sao": {
+  "t": "— 명궁의 별",
+  "h": "7b5e7401"
+ },
+ "js.nguoikhac.sao-an-tren-12-cung": {
+  "t": " 개의 별이 12궁에 배치되고, ",
+  "h": "a6914f13"
+ },
+ "js.nguoikhac.sap-gap-lam-viec-lan-dau": {
+  "t": "처음 만나거나 함께 일하게 되는데 그 사람에 대해 아는 게 없어요",
+  "h": "e36b0cd8"
+ },
+ "js.nguoikhac.sap-nho-ho-mot-viec-trinh": {
+  "t": "곧 부탁하거나 제안을 올릴 예정이에요",
+  "h": "60e6e0e6"
+ },
+ "js.nguoikhac.sap-phai-bao-mot-tin-ho": {
+  "t": "그 사람이 듣고 싶어 하지 않을 소식을 전해야 해요",
+  "h": "0d739532"
+ },
+ "js.nguoikhac.sap-phai-trao-doi-mot-viec-kho": {
+  "t": "{ten}에게 어려운 이야기를 꺼내야 해요. 어떻게 말문을 열어야 할까요?",
+  "h": "db0677dd"
+ },
+ "js.nguoikhac.sap-thuong-luong-quyen-loi-luong": {
+  "t": "곧 처우(급여, 몫 나누기)를 협상할 예정이에요",
+  "h": "93d154e1"
+ },
+ "js.nguoikhac.sat": {
+  "t": " / 살 ",
+  "h": "c472d1aa"
+ },
+ "js.nguoikhac.tai-cung-menh": {
+  "t": " 에 대한 고전의 인용</span></div>",
+  "h": "173c6b01"
+ },
+ "js.nguoikhac.tiep-tuc": {
+  "t": "계속 →",
+  "h": "86f35ed9"
+ },
+ "js.nguoikhac.tieu-han-cung": {
+  "t": "소한 궁 ",
+  "h": "4d7ba471"
+ },
+ "js.nguoikhac.tranh-noi-gi-3-viec-kem": {
+  "t": "무슨 말을 피할까 — 실제 말투를 곁들인 세 가지",
+  "h": "3031b0e9"
+ },
+ "js.nguoikhac.tuoi": {
+  "t": " 세",
+  "h": "2e261bf5"
+ },
+ "js.nguoikhac.tuoi-cung": {
+  "t": " 세, ",
+  "h": "b6a16394"
+ },
+ "js.nguoikhac.van-nam": {
+  "t": "<li><b>연운 ",
+  "h": "1192aa32"
+ },
+ "js.nguoikhac.vi-sao-la-so-lai-luan-ra": {
+  "t": "왜 명반에서 이런 성격이 읽히나요?",
+  "h": "e91e824f"
+ },
+ "js.nguoikhac.viec-can-lam": {
+  "t": "해야 할 일",
+  "h": "33183420"
+ },
+ "js.nguoikhac.viec-can-lam-20zs": {
+  "t": "해야 할 일: <b>",
+  "h": "50291106"
+ },
+ "js.nguoikhac.viec-gi-thi-dung-giao-cho": {
+  "t": "{ten}에게 맡기면 안 되는 일은 무엇인가요?",
+  "h": "3e1787c1"
+ },
+ "js.nguoikhac.viet-cam-nang-ung-xu": {
+  "t": "대응 가이드 작성",
+  "h": "20a60416"
+ },
+ "js.nguoikhac.vui-long-nhap-day-du-ngay": {
+  "t": "이해하고 싶은 사람의 생년월일을 연·월·일까지 모두 입력해 주세요.",
+  "h": "62f8b003"
+ },
+ "js.nguoikhac.who-nghieng-ve-kieu-kieu": {
+  "t": "{who}은(는) {kieu} 유형에 가까워요",
+  "h": "03d0db57"
+ },
+ "js.nguoikhac.xem-cam-nang-day-du": {
+  "t": "✦ 전체 가이드 보기 —",
+  "h": "de73e107"
+ },
+ "js.nguoikhac.xem-them": {
+  "t": "<summary>명반 항목 ",
+  "h": "c5afdcd1"
  },
  "js.paywall.bam-mo-la-tra-tien-va": {
   "t": " · 열면 바로 결제되고 곧바로 읽을 수 있어요, ",
@@ -8846,6 +9246,158 @@
  "napam.tuoi-hop-ky": {
   "t": "<span class=\"hp-ic\" data-icon=\"users\"></span><span>맞는 띠<br>꺼리는 띠</span>",
   "h": "9a664cc3"
+ },
+ "nguoikhac.2-xem-truoc-cam-nang": {
+  "t": "<span class=\"wss-n\">2</span><span class=\"wss-l\">가이드 미리보기</span>",
+  "h": "f63afb72"
+ },
+ "nguoikhac.ban-be": {
+  "t": "친구",
+  "h": "159fe485"
+ },
+ "nguoikhac.ban-cam-nang-nay-phac-hoa": {
+  "t": "<span class=\"ic\" data-icon=\"lightbulb\"></span> 이 대응 가이드는 자미두수 명반의 데이터에 선인들이 남긴 연구 경험을 더해 그려낸 것이에요. 참고용으로만 봐 주세요.<br><br> <span class=\"ic\" data-icon=\"scale\"></span> 이것은 <b>함께 잘 지내기 위해 이해하는</b> 틀이지 누군가를 조종하기 위한 것이 아니에요. 풀이 대상인 사람은 이 자리에 없기 때문에, 이 풀이는 그 사람의 <b>건강, 개인적인 재물, 결혼 문제는 일부러 읽지 않아요</b>. 성격에는 좋고 나쁨이 없고, 상황에 맞거나 맞지 않을 뿐이에요.",
+  "h": "d4cf893e"
+ },
+ "nguoikhac.ban-dang-can-lam-gi-voi": {
+  "t": "이 사람과 관련해 무엇을 해야 하나요",
+  "h": "c237535b"
+ },
+ "nguoikhac.ban-luan-giai-mau-tai-pdf": {
+  "t": "<span class=\"sc-ic\" data-icon=\"file-text\"></span> <span class=\"sc-txt\"><b>샘플 풀이서</b><span>샘플 명반으로 만든 「타인 명반」 전체 PDF를 내려받아 실제 내용을 미리 확인해 보세요.</span></span> <a class=\"sc-btn\" href=\"/tai-mau/mau-nguoi-khac.pdf\" target=\"_blank\" rel=\"noopener\">PDF 받기 →</a>",
+  "h": "90ab14f5"
+ },
+ "nguoikhac.cam-nang-ung-xu": {
+  "t": "<span class=\"hp-ic\" data-icon=\"scroll-text\"></span><span>대응<br>가이드</span>",
+  "h": "02dec92e"
+ },
+ "nguoikhac.cap-duoi-nguoi-minh-quan": {
+  "t": "부하 직원 / 내가 관리하는 사람",
+  "h": "eb2f06ee"
+ },
+ "nguoikhac.cau-hoi-chay-ngam-trong-dau": {
+  "t": "그 사람 머릿속에서 늘 돌아가는 질문",
+  "h": "c0934bd9"
+ },
+ "nguoikhac.cha-me-nguoi-lon-trong-nha": {
+  "t": "부모 / 집안 어른",
+  "h": "5f1e7b56"
+ },
+ "nguoikhac.co-la-so-cua-ban-thi": {
+  "t": "내 명반이 있으면 풀이에 <b>“이 사람과 나”</b> 항목이 더해져요. 서로 부딪히기 쉬운 지점과 서로 채워 줄 수 있는 지점이에요. 비워 두어도 나머지 내용은 모두 볼 수 있어요.",
+  "h": "cfbb6a2e"
+ },
+ "nguoikhac.con-cai": {
+  "t": "자녀",
+  "h": "eb70b34b"
+ },
+ "nguoikhac.con-nguoi-nay-van-hanh-the": {
+  "t": "이 사람이 움직이는 방식",
+  "h": "444d1e25"
+ },
+ "nguoikhac.dieu-ho-coi-trong": {
+  "t": "<span class=\"res-block-title\">소중하게 여기는 것</span>",
+  "h": "5656f5b5"
+ },
+ "nguoikhac.dieu-lam-ho-kho-chiu": {
+  "t": "불편해하는 것",
+  "h": "754ed7ce"
+ },
+ "nguoikhac.doi-chieu-them-voi-la-so": {
+  "t": "내 명반도 함께 대조하기 (선택)",
+  "h": "c04c1f4c"
+ },
+ "nguoikhac.doi-tac-khach-hang": {
+  "t": "거래처 / 고객",
+  "h": "b39df542"
+ },
+ "nguoikhac.dong-nghiep-ngang-hang": {
+  "t": "동료 (같은 직급)",
+  "h": "c2321d8a"
+ },
+ "nguoikhac.hieu-sai-mot-nguoi-quan-trong": {
+  "t": "중요한 사람을 오해하는 것이 피할 수 있었던 갈등의 뿌리가 되곤 해요. 상사, 거래처, 연인 — 그 사람의 생년월일과 시간을 입력하면 무슨 말을 하고 무엇을 피해야 하는지 알려 주는 가이드를 받을 수 있어요.",
+  "h": "f8a6e6f5"
+ },
+ "nguoikhac.la-so-nguoi-khac": {
+  "t": "타인 명반",
+  "h": "e454923c"
+ },
+ "nguoikhac.la-so-nguoi-khac-cam-nang": {
+  "t": "<b>타인 명반</b><span>딱 한 사람에게 맞춘 대응 가이드</span>",
+  "h": "fdca2edd"
+ },
+ "nguoikhac.la-so-nguoi-khac-tu-vi": {
+  "t": "타인 명반 — 명보 자미두수",
+  "h": "b5ba1ea3"
+ },
+ "nguoikhac.luc-nao-nen-dua-viec-lon": {
+  "t": "<span class=\"hp-ic\" data-icon=\"hourglass\"></span><span>큰 일을<br>꺼낼 시점</span>",
+  "h": "ff316436"
+ },
+ "nguoikhac.luc-nay-ho-dang-o-dau": {
+  "t": "<span class=\"res-block-title\">지금 그 사람은 어디쯤 있나</span>",
+  "h": "85151bc9"
+ },
+ "nguoikhac.moi-luot-luong": {
+  "t": "<span class=\"vnd\" data-tvp-price-vnd=\"nguoi-khac\"></span> / 회 <span class=\"cb-sub\">(<span data-tvp-price=\"nguoi-khac\">…</span> 냥)</span>",
+  "h": "4e692d79"
+ },
+ "nguoikhac.nen-noi-gi-tranh-noi-gi": {
+  "t": "<span class=\"hp-ic\" data-icon=\"message-circle\"></span><span>해야 할 말<br>피할 말</span>",
+  "h": "686a6593"
+ },
+ "nguoikhac.ngay-sinh-cua-nguoi-ban-muon": {
+  "t": "이해하고 싶은 사람의 생년월일",
+  "h": "983c4051"
+ },
+ "nguoikhac.nguoi-nay-la": {
+  "t": "이 사람은",
+  "h": "d70093a0"
+ },
+ "nguoikhac.nguoi-nay-la-ai": {
+  "t": "<span class=\"res-block-title\">이 사람은 어떤 사람인가</span>",
+  "h": "22ef9ce3"
+ },
+ "nguoikhac.nguoi-nay-voi-ban": {
+  "t": "<span class=\"res-block-title\">이 사람과 나</span>",
+  "h": "a89f8cc8"
+ },
+ "nguoikhac.nhap-la-so-sep-dong-nghiep": {
+  "t": "상사, 동료, 부하 직원이나 가까운 사람의 명반을 입력하면 대응 가이드를 받을 수 있어요: 그 사람이 움직이는 방식, 해야 할 말과 피할 말, 큰 일을 꺼낼 시점까지.",
+  "h": "95d5f29c"
+ },
+ "nguoikhac.nhap-ngay-gio-sinh-nguoi-do": {
+  "t": "그 사람의 생년월일과 시간, 나와의 관계, 그 사람과 관련해 필요한 일을 입력하면 말씀하신 용건에 맞춰 명반을 분석해요.",
+  "h": "8d0d8d61"
+ },
+ "nguoikhac.noi-the-nao": {
+  "t": "<span class=\"res-block-title\">어떻게 말할까</span>",
+  "h": "2757978b"
+ },
+ "nguoikhac.sep-cap-tren": {
+  "t": "상사 / 윗사람",
+  "h": "976d7a60"
+ },
+ "nguoikhac.tra-loi-thay-o-khung-chat": {
+  "t": "채팅창에서 선생님께 이해하고 싶은 사람이 누구인지와 그 사람의 생년월일을 알려 주세요.",
+  "h": "0b35941d"
+ },
+ "nguoikhac.tranh": {
+  "t": "피함",
+  "h": "718a6b75"
+ },
+ "nguoikhac.vo-chong-nguoi-yeu": {
+  "t": "배우자 / 연인",
+  "h": "4165e532"
+ },
+ "nguoikhac.xem-cam-nang-ung-xu-ton": {
+  "t": "<span class=\"bg-label\"><span class=\"ic\" data-icon=\"user\"></span><b id=\"btnGoLabel\">대응 가이드 보기 →</b></span> <small>비용 <span class=\"vnd\" data-tvp-price-vnd=\"nguoi-khac\"></span> <span class=\"cb-sub\">(<span data-tvp-price=\"nguoi-khac\">…</span> 냥)</span></small>",
+  "h": "da20bb48"
+ },
+ "nguoikhac.xem-nguoi-khac": {
+  "t": "다른 사람 보기",
+  "h": "a058d2f4"
  },
  "privacy.1-thong-tin-chung-toi-thu": {
   "t": "1. 수집하는 정보",

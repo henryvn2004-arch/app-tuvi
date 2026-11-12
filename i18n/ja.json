@@ -1619,6 +1619,10 @@
   "t": "<li><b>身宮の位置</b> — ",
   "h": "23b5a7a9"
  },
+ "js.daycon.cung-name": {
+  "t": "{name}",
+  "h": "3cb49303"
+ },
  "js.daycon.cung-tinh-am-duong-de-va": {
   "t": "陰陽の性質が同じ — ぶつかりやすい",
   "h": "38ee66ae"
@@ -3158,6 +3162,402 @@
  "js.nav.xem-tuong-qua-anh": {
   "t": "写真で相を見る",
   "h": "24c4d64e"
+ },
+ "js.nguoikhac.ban-cam-nang": {
+  "t": "ガイド",
+  "h": "a9696c9f"
+ },
+ "js.nguoikhac.ban-co-muon-doi-chieu-them": {
+  "t": "あなた自身の命盤も照らし合わせますか？「この方とあなた」の項目が加わります。",
+  "h": "e86dc3aa"
+ },
+ "js.nguoikhac.ban-da-xem-ban-nay-roi": {
+  "t": "✓ この鑑定はすでにご覧になっています — 再度開いても両は差し引かれません",
+  "h": "7d2c6a5b"
+ },
+ "js.nguoikhac.ban-dang-can-lam": {
+  "t": "必要なこと",
+  "h": "91e799f3"
+ },
+ "js.nguoikhac.ban-dang-can-lam-gi-voi": {
+  "t": "この方とのことで、何をする必要がありますか？",
+  "h": "a3a85f1f"
+ },
+ "js.nguoikhac.ban-day-du-se-co-mot": {
+  "t": "フル版には、まさにこの用件だけを扱う専用の項目があります。",
+  "h": "6c907e5e"
+ },
+ "js.nguoikhac.ban-nay-doc-tu": {
+  "t": "この鑑定は、ご入力の生年月日時から立てた<b>",
+  "h": "d989b954"
+ },
+ "js.nguoikhac.ban-se-nhan-chia-viec-the": {
+  "t": "受け取れる内容：足を踏み合わないための仕事の分け方と、気まずくならないために避けること。",
+  "h": "8824cf10"
+ },
+ "js.nguoikhac.ban-se-nhan-cho-nao-la": {
+  "t": "受け取れる内容：どこが性格の違いで、どこが愛情が冷めたわけではないのか。",
+  "h": "93bae219"
+ },
+ "js.nguoikhac.ban-se-nhan-dua-tre-nay": {
+  "t": "受け取れる内容：この子は背中を押すべきか、そっとしておくべきか。",
+  "h": "d6a5344d"
+ },
+ "js.nguoikhac.ban-se-nhan-giao-viec-kieu": {
+  "t": "受け取れる内容：どんな任せ方なら動いてくれて、どんな声かけなら聞いてくれるか。",
+  "h": "753ebc00"
+ },
+ "js.nguoikhac.ban-se-nhan-ho-quyet-bang": {
+  "t": "受け取れる内容：相手が何を基準に決めるのか、そして何が相手をひるませるのか。",
+  "h": "65d83930"
+ },
+ "js.nguoikhac.ban-se-nhan-noi-the-nao": {
+  "t": "受け取れる内容：同じ昔の話でのけんかにならないための話し方。",
+  "h": "e80b5e7c"
+ },
+ "js.nguoikhac.ban-se-nhan-trinh-bay-the": {
+  "t": "受け取れる内容：承認を得るためにどう提示するか、そして提示してはいけない時期。",
+  "h": "ba10c251"
+ },
+ "js.nguoikhac.ban-se-nhan-trong-cay-duoc": {
+  "t": "受け取れる内容：何なら頼りにでき、何は頼りにしてはいけないか。",
+  "h": "19b64bfa"
+ },
+ "js.nguoikhac.bo-qua": {
+  "t": "スキップ",
+  "h": "861dafde"
+ },
+ "js.nguoikhac.bo-qua-doi-chieu-la-so": {
+  "t": "あなたの命盤との照合はスキップしました。",
+  "h": "7c25b196"
+ },
+ "js.nguoikhac.cach-cuc": {
+  "t": " つの格局、",
+  "h": "a4f8bc9a"
+ },
+ "js.nguoikhac.cach-cuc-dai-van-van-nam": {
+  "t": "格局、大運、年運、そしてこの方への具体的な接し方は、フル版のガイドに入っています。",
+  "h": "7a23f4d4"
+ },
+ "js.nguoikhac.cach-di-cho-viec": {
+  "t": "この用件の進め方：",
+  "h": "36885ebf"
+ },
+ "js.nguoikhac.cam-nang-ung-xu": {
+  "t": "接し方ガイド — ",
+  "h": "2aba8d61"
+ },
+ "js.nguoikhac.can-giao-viec-nhac-viec-cho": {
+  "t": "仕事を任せる／声をかける必要がある",
+  "h": "8a5c5843"
+ },
+ "js.nguoikhac.cat": {
+  "t": "吉 ",
+  "h": "bbbbd4e0"
+ },
+ "js.nguoikhac.chang-dai-van": {
+  "t": " つの大運の区間があります。",
+  "h": "0bc2d397"
+ },
+ "js.nguoikhac.chinh-tinh-tai-cung": {
+  "t": "命宮・主星の位置：",
+  "h": "37742cf1"
+ },
+ "js.nguoikhac.cho-thay-xin-thong-tin-cua": {
+  "t": "この方の情報を教えてください。",
+  "h": "4704e927"
+ },
+ "js.nguoikhac.chon-mot-viec-cu-the-thi": {
+  "t": "具体的な用件を選ぶと、その用件だけの「進め方」が鑑定に加わります。",
+  "h": "29c1bbf5"
+ },
+ "js.nguoikhac.chua-cham": {
+  "t": "未採点",
+  "h": "a20bbf69"
+ },
+ "js.nguoikhac.co-doi-chieu": {
+  "t": "はい、照らし合わせる →",
+  "h": "a3846e57"
+ },
+ "js.nguoikhac.con": {
+  "t": "残り ",
+  "h": "be81ceb0"
+ },
+ "js.nguoikhac.cung-an-than": {
+  "t": "<li><b>身宮の位置</b> — ",
+  "h": "23b5a7a9"
+ },
+ "js.nguoikhac.cung-cung-trong-la-so-cua": {
+  "t": "あなたの命盤の{cung}",
+  "h": "85ab2993"
+ },
+ "js.nguoikhac.cung-name": {
+  "t": "{name}",
+  "h": "3cb49303"
+ },
+ "js.nguoikhac.cung-tinh-am-duong-de-va": {
+  "t": "陰陽の性質が同じ — ぶつかりやすい",
+  "h": "38ee66ae"
+ },
+ "js.nguoikhac.da": {
+  "t": "勢い ",
+  "h": "ea471098"
+ },
+ "js.nguoikhac.dai-van-dang-chay": {
+  "t": "<li><b>現在の大運</b> — ",
+  "h": "7e2a0133"
+ },
+ "js.nguoikhac.dang-co-bat-dong-chua-go": {
+  "t": "解決できていない意見の食い違いがある",
+  "h": "f32b8bb1"
+ },
+ "js.nguoikhac.day-la-ban-cam-nang-ung-ten": {
+  "t": "**{ten}**さんへの接し方ガイドです。さらに知りたい場面はありますか？",
+  "h": "10e397ff"
+ },
+ "js.nguoikhac.doc-menh-phuc-duc-thien-di": {
+  "t": "命宮・福徳宮・遷移宮・官禄宮・僕役宮を読む",
+  "h": "1a737bb6"
+ },
+ "js.nguoikhac.doi-chieu-them-voi-la-so": {
+  "t": "あなたの命盤との照合も追加しました ✓",
+  "h": "65992be6"
+ },
+ "js.nguoikhac.doi-chieu-voi-la-so-cua": {
+  "t": "あなたの命盤との照合：",
+  "h": "69111647"
+ },
+ "js.nguoikhac.du-kien-lap-ra-tu-chinh": {
+  "t": " 件のデータ</b>を読み取っています — ",
+  "h": "fdb76ddf"
+ },
+ "js.nguoikhac.hai-ben-de-va-nhau-o": {
+  "t": "二人がぶつかりやすいのはどこですか？",
+  "h": "4604fce9"
+ },
+ "js.nguoikhac.ho-coi-trong-cai-gi-va": {
+  "t": "何を大切にし、何を失うことを恐れているか",
+  "h": "cb1b27aa"
+ },
+ "js.nguoikhac.khac-tinh-am-duong-de-bu": {
+  "t": "陰陽の性質が違う — 補い合いやすい",
+  "h": "b5f77a93"
+ },
+ "js.nguoikhac.khoa": {
+  "t": "ロック",
+  "h": "393cb36a"
+ },
+ "js.nguoikhac.khong-co-buoc-nao-doan-mo": {
+  "t": "当て推量の工程は一切ありません。生年月日時のどれか一つを変えると、上の表全体が変わります。",
+  "h": "065d23da"
+ },
+ "js.nguoikhac.khong-co-chinh-tinh": {
+  "t": "主星なし",
+  "h": "753ded73"
+ },
+ "js.nguoikhac.khong-co-gi-gap-chi-muon": {
+  "t": "急ぎではなく、ただこの方をもっと理解したい",
+  "h": "7c188ebe"
+ },
+ "js.nguoikhac.khong-dat-ten": {
+  "t": "名前なし",
+  "h": "295915d5"
+ },
+ "js.nguoikhac.khong-the-ket-noi-vui-long": {
+  "t": "接続できませんでした。もう一度お試しください。",
+  "h": "bf0b6e7b"
+ },
+ "js.nguoikhac.khung-dai-van": {
+  "t": "大運の区間 ",
+  "h": "06be9124"
+ },
+ "js.nguoikhac.la-so": {
+  "t": "命盤：",
+  "h": "2644d5f2"
+ },
+ "js.nguoikhac.la-so-nguoi-khac": {
+  "t": "他の人の命盤",
+  "h": "e454923c"
+ },
+ "js.nguoikhac.lap-la-so-phan-kieu-nguoi": {
+  "t": "命盤を立て、タイプを分類",
+  "h": "61f07874"
+ },
+ "js.nguoikhac.loi": {
+  "t": "エラー ",
+  "h": "1b80116b"
+ },
+ "js.nguoikhac.loi-8d72": {
+  "t": "エラー：",
+  "h": "471c0087"
+ },
+ "js.nguoikhac.luc-nao-nen-dua-viec-lon": {
+  "t": "大きな話を切り出す時期",
+  "h": "94a8e09a"
+ },
+ "js.nguoikhac.luong": {
+  "t": "両 →",
+  "h": "36d6704d"
+ },
+ "js.nguoikhac.luu-nien-cung": {
+  "t": "流年の宮 ",
+  "h": "8f5a16cc"
+ },
+ "js.nguoikhac.mo-cam-nang-day-du": {
+  "t": "フル版のガイドを開く",
+  "h": "1e071c6b"
+ },
+ "js.nguoikhac.mot-cau-chot": {
+  "t": "ひとことで言うと",
+  "h": "9e19232a"
+ },
+ "js.nguoikhac.muc-trong-la-so": {
+  "t": "件見る",
+  "h": "4e83a32a"
+ },
+ "js.nguoikhac.muon-gan-lai-sau-mot-thoi": {
+  "t": "しばらく疎遠だった後で、また距離を縮めたい",
+  "h": "30e6d4da"
+ },
+ "js.nguoikhac.muon-ru-ho-lam-chung-mot": {
+  "t": "一緒に大きなことに取り組もうと誘いたい",
+  "h": "9c94c0ef"
+ },
+ "js.nguoikhac.muon-xung-chieu": {
+  "t": "（対宮を借りる）",
+  "h": "7363dfe3"
+ },
+ "js.nguoikhac.nen-noi-gi-3-viec-kem": {
+  "t": "何を言うべきか — 実際の言い回し付きの3つのこと",
+  "h": "e6639d28"
+ },
+ "js.nguoikhac.nguoi-ban-muon-hieu-la-ai": {
+  "t": "相手があなたにとってどんな人なのか、教えてください。",
+  "h": "4f8c6227"
+ },
+ "js.nguoikhac.nguoi-nay": {
+  "t": "この方",
+  "h": "bed03c25"
+ },
+ "js.nguoikhac.nguoi-nay-la": {
+  "t": "この方は",
+  "h": "d70093a0"
+ },
+ "js.nguoikhac.nguoi-nay-la-jle1": {
+  "t": "この方は：<b>",
+  "h": "bdd5dac7"
+ },
+ "js.nguoikhac.nguoi-nay-rxn3": {
+  "t": "この方",
+  "h": "794cf474"
+ },
+ "js.nguoikhac.pha-them": {
+  "t": "さらに混ざる要素：",
+  "h": "4b629d3a"
+ },
+ "js.nguoikhac.phai-tu-choi-ho-ma-khong": {
+  "t": "関係を壊さずに断らなければならない",
+  "h": "c189e09a"
+ },
+ "js.nguoikhac.phan-chua-mo-ve-nguoi-nay": {
+  "t": " 件の未開封の項目（この方について）",
+  "h": "45be6b61"
+ },
+ "js.nguoikhac.sach-dan-ve-sao": {
+  "t": "— 命宮にある星「",
+  "h": "7b5e7401"
+ },
+ "js.nguoikhac.sao-an-tren-12-cung": {
+  "t": " 個の星を12宮に配置、",
+  "h": "a6914f13"
+ },
+ "js.nguoikhac.sap-gap-lam-viec-lan-dau": {
+  "t": "初めて会う／一緒に仕事をする予定で、相手のことは何も知らない",
+  "h": "e36b0cd8"
+ },
+ "js.nguoikhac.sap-nho-ho-mot-viec-trinh": {
+  "t": "これから頼みごとをする／提案を出す予定がある",
+  "h": "60e6e0e6"
+ },
+ "js.nguoikhac.sap-phai-bao-mot-tin-ho": {
+  "t": "相手が聞きたくない知らせを伝えなければならない",
+  "h": "0d739532"
+ },
+ "js.nguoikhac.sap-phai-trao-doi-mot-viec-kho": {
+  "t": "{ten}さんに難しい話を切り出さなければなりません。どう口を開けばよいでしょうか？",
+  "h": "db0677dd"
+ },
+ "js.nguoikhac.sap-thuong-luong-quyen-loi-luong": {
+  "t": "待遇（給与、取り分）の交渉をする予定がある",
+  "h": "93d154e1"
+ },
+ "js.nguoikhac.sat": {
+  "t": " / 殺 ",
+  "h": "c472d1aa"
+ },
+ "js.nguoikhac.tai-cung-menh": {
+  "t": "」についての古典の引用</span></div>",
+  "h": "173c6b01"
+ },
+ "js.nguoikhac.tiep-tuc": {
+  "t": "続ける →",
+  "h": "86f35ed9"
+ },
+ "js.nguoikhac.tieu-han-cung": {
+  "t": "小限の宮 ",
+  "h": "4d7ba471"
+ },
+ "js.nguoikhac.tranh-noi-gi-3-viec-kem": {
+  "t": "何を避けるべきか — 実際の言い回し付きの3つのこと",
+  "h": "3031b0e9"
+ },
+ "js.nguoikhac.tuoi": {
+  "t": " 歳",
+  "h": "2e261bf5"
+ },
+ "js.nguoikhac.tuoi-cung": {
+  "t": " 歳、",
+  "h": "b6a16394"
+ },
+ "js.nguoikhac.van-nam": {
+  "t": "<li><b>年運 ",
+  "h": "1192aa32"
+ },
+ "js.nguoikhac.vi-sao-la-so-lai-luan-ra": {
+  "t": "なぜ命盤からこの性格が読み取れるのですか？",
+  "h": "e91e824f"
+ },
+ "js.nguoikhac.viec-can-lam": {
+  "t": "必要なこと",
+  "h": "33183420"
+ },
+ "js.nguoikhac.viec-can-lam-20zs": {
+  "t": "必要なこと：<b>",
+  "h": "50291106"
+ },
+ "js.nguoikhac.viec-gi-thi-dung-giao-cho": {
+  "t": "{ten}さんに任せてはいけないことは何ですか？",
+  "h": "3e1787c1"
+ },
+ "js.nguoikhac.viet-cam-nang-ung-xu": {
+  "t": "接し方ガイドを作成",
+  "h": "20a60416"
+ },
+ "js.nguoikhac.vui-long-nhap-day-du-ngay": {
+  "t": "理解したい方の生年月日を、年・月・日まですべてご入力ください。",
+  "h": "62f8b003"
+ },
+ "js.nguoikhac.who-nghieng-ve-kieu-kieu": {
+  "t": "{who}は{kieu}タイプ寄りです",
+  "h": "03d0db57"
+ },
+ "js.nguoikhac.xem-cam-nang-day-du": {
+  "t": "✦ フル版のガイドを見る —",
+  "h": "de73e107"
+ },
+ "js.nguoikhac.xem-them": {
+  "t": "<summary>命盤の項目をさらに ",
+  "h": "c5afdcd1"
  },
  "js.paywall.bam-mo-la-tra-tien-va": {
   "t": " ・開くとお支払いのうえ、すぐにお読みいただけます。",
@@ -8846,6 +9246,158 @@
  "napam.tuoi-hop-ky": {
   "t": "<span class=\"hp-ic\" data-icon=\"users\"></span><span>相性の良い年<br>悪い年</span>",
   "h": "9a664cc3"
+ },
+ "nguoikhac.2-xem-truoc-cam-nang": {
+  "t": "<span class=\"wss-n\">2</span><span class=\"wss-l\">ガイドを先読み</span>",
+  "h": "f63afb72"
+ },
+ "nguoikhac.ban-be": {
+  "t": "友人",
+  "h": "159fe485"
+ },
+ "nguoikhac.ban-cam-nang-nay-phac-hoa": {
+  "t": "<span class=\"ic\" data-icon=\"lightbulb\"></span> この接し方ガイドは、紫微斗数の命盤のデータに、先人が残した研究の経験を組み合わせて描いたものです。あくまで参考としてお読みください。<br><br> <span class=\"ic\" data-icon=\"scale\"></span> これは<b>うまく付き合っていくために理解する</b>ための枠組みであり、誰かを操るためのものではありません。見られる側の方はここにいないため、本鑑定はその方の<b>健康、個人的なお金、結婚については、あえて読みません</b>。性格に良し悪しはなく、場面に合うか合わないかがあるだけです。",
+  "h": "d4cf893e"
+ },
+ "nguoikhac.ban-dang-can-lam-gi-voi": {
+  "t": "この方とのことで、何をする必要がありますか",
+  "h": "c237535b"
+ },
+ "nguoikhac.ban-luan-giai-mau-tai-pdf": {
+  "t": "<span class=\"sc-ic\" data-icon=\"file-text\"></span> <span class=\"sc-txt\"><b>サンプル鑑定書</b><span>サンプル命盤の「他の人の命盤」フル版PDFをダウンロードして、実際の内容を先にご確認いただけます。</span></span> <a class=\"sc-btn\" href=\"/tai-mau/mau-nguoi-khac.pdf\" target=\"_blank\" rel=\"noopener\">PDFをダウンロード →</a>",
+  "h": "90ab14f5"
+ },
+ "nguoikhac.cam-nang-ung-xu": {
+  "t": "<span class=\"hp-ic\" data-icon=\"scroll-text\"></span><span>接し方<br>ガイド</span>",
+  "h": "02dec92e"
+ },
+ "nguoikhac.cap-duoi-nguoi-minh-quan": {
+  "t": "部下／自分が管理する人",
+  "h": "eb2f06ee"
+ },
+ "nguoikhac.cau-hoi-chay-ngam-trong-dau": {
+  "t": "頭の中で働いている問い",
+  "h": "c0934bd9"
+ },
+ "nguoikhac.cha-me-nguoi-lon-trong-nha": {
+  "t": "親／家の年長者",
+  "h": "5f1e7b56"
+ },
+ "nguoikhac.co-la-so-cua-ban-thi": {
+  "t": "あなた自身の命盤があれば、鑑定に<b>「この方とあなた」</b>の項目が加わります。二人がぶつかりやすいところと、補い合えるところです。空欄でも、それ以外の部分はすべてご覧いただけます。",
+  "h": "cfbb6a2e"
+ },
+ "nguoikhac.con-cai": {
+  "t": "子ども",
+  "h": "eb70b34b"
+ },
+ "nguoikhac.con-nguoi-nay-van-hanh-the": {
+  "t": "この人がどう動くか",
+  "h": "444d1e25"
+ },
+ "nguoikhac.dieu-ho-coi-trong": {
+  "t": "<span class=\"res-block-title\">大切にしていること</span>",
+  "h": "5656f5b5"
+ },
+ "nguoikhac.dieu-lam-ho-kho-chiu": {
+  "t": "不快に感じること",
+  "h": "754ed7ce"
+ },
+ "nguoikhac.doi-chieu-them-voi-la-so": {
+  "t": "あなた自身の命盤も照らし合わせる（任意）",
+  "h": "c04c1f4c"
+ },
+ "nguoikhac.doi-tac-khach-hang": {
+  "t": "取引先／顧客",
+  "h": "b39df542"
+ },
+ "nguoikhac.dong-nghiep-ngang-hang": {
+  "t": "同僚（同じ立場）",
+  "h": "c2321d8a"
+ },
+ "nguoikhac.hieu-sai-mot-nguoi-quan-trong": {
+  "t": "大切な人を誤解することが、避けられたはずの衝突の根っこになりがちです。上司、取引先、恋人 — 相手の生年月日と時刻を入力すると、何を言うべきか、何を避けるべきかのガイドが届きます。",
+  "h": "f8a6e6f5"
+ },
+ "nguoikhac.la-so-nguoi-khac": {
+  "t": "他の人の命盤",
+  "h": "e454923c"
+ },
+ "nguoikhac.la-so-nguoi-khac-cam-nang": {
+  "t": "<b>他の人の命盤</b><span>ひとりの相手に合わせた接し方ガイド</span>",
+  "h": "fdca2edd"
+ },
+ "nguoikhac.la-so-nguoi-khac-tu-vi": {
+  "t": "他の人の命盤 — 明宝紫微斗数",
+  "h": "b5ba1ea3"
+ },
+ "nguoikhac.luc-nao-nen-dua-viec-lon": {
+  "t": "<span class=\"hp-ic\" data-icon=\"hourglass\"></span><span>大きな話を<br>切り出す時期</span>",
+  "h": "ff316436"
+ },
+ "nguoikhac.luc-nay-ho-dang-o-dau": {
+  "t": "<span class=\"res-block-title\">今、相手はどこにいるか</span>",
+  "h": "85151bc9"
+ },
+ "nguoikhac.moi-luot-luong": {
+  "t": "<span class=\"vnd\" data-tvp-price-vnd=\"nguoi-khac\"></span> / 回 <span class=\"cb-sub\">(<span data-tvp-price=\"nguoi-khac\">…</span> 両)</span>",
+  "h": "4e692d79"
+ },
+ "nguoikhac.nen-noi-gi-tranh-noi-gi": {
+  "t": "<span class=\"hp-ic\" data-icon=\"message-circle\"></span><span>言うべきこと<br>避けること</span>",
+  "h": "686a6593"
+ },
+ "nguoikhac.ngay-sinh-cua-nguoi-ban-muon": {
+  "t": "理解したい相手の生年月日",
+  "h": "983c4051"
+ },
+ "nguoikhac.nguoi-nay-la": {
+  "t": "この方は",
+  "h": "d70093a0"
+ },
+ "nguoikhac.nguoi-nay-la-ai": {
+  "t": "<span class=\"res-block-title\">この人はどんな人か</span>",
+  "h": "22ef9ce3"
+ },
+ "nguoikhac.nguoi-nay-voi-ban": {
+  "t": "<span class=\"res-block-title\">この方とあなた</span>",
+  "h": "a89f8cc8"
+ },
+ "nguoikhac.nhap-la-so-sep-dong-nghiep": {
+  "t": "上司、同僚、部下、身近な人の命盤を入力すると、接し方ガイドが届きます：相手がどう動くか、何を言うべきか、避けるべきか、大きな話はいつ切り出すか。",
+  "h": "95d5f29c"
+ },
+ "nguoikhac.nhap-ngay-gio-sinh-nguoi-do": {
+  "t": "相手の生年月日と時刻、あなたとの関係、その方とのことで必要なことを入力すると、挙げていただいた用件に沿って命盤を読み解きます。",
+  "h": "8d0d8d61"
+ },
+ "nguoikhac.noi-the-nao": {
+  "t": "<span class=\"res-block-title\">どう伝えるか</span>",
+  "h": "2757978b"
+ },
+ "nguoikhac.sep-cap-tren": {
+  "t": "上司／目上の人",
+  "h": "976d7a60"
+ },
+ "nguoikhac.tra-loi-thay-o-khung-chat": {
+  "t": "右のチャット欄で先生に、理解したい方が誰か、その方の生年月日をお伝えください。",
+  "h": "0b35941d"
+ },
+ "nguoikhac.tranh": {
+  "t": "避",
+  "h": "718a6b75"
+ },
+ "nguoikhac.vo-chong-nguoi-yeu": {
+  "t": "配偶者／恋人",
+  "h": "4165e532"
+ },
+ "nguoikhac.xem-cam-nang-ung-xu-ton": {
+  "t": "<span class=\"bg-label\"><span class=\"ic\" data-icon=\"user\"></span><b id=\"btnGoLabel\">接し方ガイドを見る →</b></span> <small>料金 <span class=\"vnd\" data-tvp-price-vnd=\"nguoi-khac\"></span> <span class=\"cb-sub\">(<span data-tvp-price=\"nguoi-khac\">…</span> 両)</span></small>",
+  "h": "da20bb48"
+ },
+ "nguoikhac.xem-nguoi-khac": {
+  "t": "別の人を見る",
+  "h": "a058d2f4"
  },
  "privacy.1-thong-tin-chung-toi-thu": {
   "t": "1. 収集する情報",
