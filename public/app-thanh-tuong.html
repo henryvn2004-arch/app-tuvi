@@ -3,8 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Thanh Tướng — Tử Vi Minh Bảo</title>
-<meta name="description" content="Ghi âm đọc một đoạn thơ ngắn — hệ thống phân tích thanh tướng theo Ngũ Âm cổ pháp: Kim, Mộc, Thủy, Hỏa, Thổ.">
+<title data-i18n="thtg.thanh-tuong-tu-vi-minh-bao">Thanh Tướng — Tử Vi Minh Bảo</title>
+<meta data-i18n-attr="content:thtg.ghi-am-doc-mot-doan-tho" name="description" content="Ghi âm đọc một đoạn thơ ngắn — hệ thống phân tích thanh tướng theo Ngũ Âm cổ pháp: Kim, Mộc, Thủy, Hỏa, Thổ.">
 <link rel="icon" type="image/webp" href="/seal.webp">
 <link rel="preload" href="/fonts/noto-serif-latin-400.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="/fonts/noto-serif-vietnamese-400.woff2" as="font" type="font/woff2" crossorigin>
@@ -81,9 +81,9 @@ body.chat-first-live .features-grid{grid-template-columns:1fr}
   <main class="ws" id="ws">
     <div class="ws-top">
       <button class="btn mobile-only" onclick="document.getElementById('shell-sidebar').classList.toggle('open');window.shellSyncBackdrop&&shellSyncBackdrop()" aria-label="Menu">☰</button>
-      <div class="ws-title"><b>Thanh Tướng</b><span>Xem tướng giọng nói theo Ngũ Âm cổ pháp — <span data-tvp-price="thanh-tuong">…</span> Lượng</span></div>
+      <div data-i18n="thtg.thanh-tuong-xem-tuong-giong-noi" class="ws-title"><b>Thanh Tướng</b><span>Xem tướng giọng nói theo Ngũ Âm cổ pháp — <span data-tvp-price="thanh-tuong">…</span> Lượng</span></div>
       <div class="ws-actions">
-        <button class="btn mobile-only" onclick="Shell.openRail()">✦ Hỏi</button>
+        <button data-i18n="battu.hoi" class="btn mobile-only" onclick="Shell.openRail()">✦ Hỏi</button>
       </div>
     </div>
     <div class="ws-body">
@@ -97,15 +97,15 @@ body.chat-first-live .features-grid{grid-template-columns:1fr}
         <img class="intro-avatar" src="/tool-avatars/thanh-tuong.webp" alt="" onerror="this.remove()">
         <div class="intro-body">
           <div class="intro-text">
-            <div class="intro-t">Thanh Tướng</div>
-            <div class="intro-d">Giọng nói không chỉ để giao tiếp — cổ pháp thanh âm học đọc được cả nghề hợp, nghề nên tránh từ chính chất giọng của bạn. Ghi âm một đoạn ngắn, nhận bản luận Ngũ Âm ngay.</div>
+            <div data-i18n="thtg.thanh-tuong" class="intro-t">Thanh Tướng</div>
+            <div data-i18n="thtg.giong-noi-khong-chi-de-giao" class="intro-d">Giọng nói không chỉ để giao tiếp — cổ pháp thanh âm học đọc được cả nghề hợp, nghề nên tránh từ chính chất giọng của bạn. Ghi âm một đoạn ngắn, nhận bản luận Ngũ Âm ngay.</div>
             <div id="introSrc"></div>
           </div>
         </div>
         <div class="hero-pills">
-          <div class="hero-pill"><span class="hp-ic" data-icon="mic"></span><span>Ghi âm<br>đoạn thơ ngắn</span></div>
-          <div class="hero-pill"><span class="hp-ic" data-icon="bar-chart-3"></span><span>Đo cao độ,<br>tốc độ, âm sắc</span></div>
-          <div class="hero-pill"><span class="hp-ic" data-icon="scroll-text"></span><span>Luận theo<br>Ngũ Âm cổ pháp</span></div>
+          <div data-i18n="thtg.ghi-am-doan-tho-ngan" class="hero-pill"><span class="hp-ic" data-icon="mic"></span><span>Ghi âm<br>đoạn thơ ngắn</span></div>
+          <div data-i18n="thtg.do-cao-do-toc-do-am" class="hero-pill"><span class="hp-ic" data-icon="bar-chart-3"></span><span>Đo cao độ,<br>tốc độ, âm sắc</span></div>
+          <div data-i18n="thtg.luan-theo-ngu-am-co-phap" class="hero-pill"><span class="hp-ic" data-icon="scroll-text"></span><span>Luận theo<br>Ngũ Âm cổ pháp</span></div>
         </div>
       </div></div>
       <div class="ws-main-col">
@@ -115,33 +115,33 @@ body.chat-first-live .features-grid{grid-template-columns:1fr}
            không có màn "xem trước" tách riêng — đo giọng xong vẫn đứng
            nguyên ở bước 1 cho tới khi bấm phân tích, nên chỉ 3 bước. -->
       <div class="ws-steps" id="wsSteps">
-        <div class="wss-step active"><span class="wss-n">1</span><span class="wss-l">Ghi âm giọng nói</span></div>
-        <div class="wss-step"><span class="wss-n">2</span><span class="wss-l">Thanh toán</span></div>
-        <div class="wss-step"><span class="wss-n">3</span><span class="wss-l">Nhận kết quả</span></div>
+        <div data-i18n="thtg.1-ghi-am-giong-noi" class="wss-step active"><span class="wss-n">1</span><span class="wss-l">Ghi âm giọng nói</span></div>
+        <div data-i18n="thtg.2-thanh-toan" class="wss-step"><span class="wss-n">2</span><span class="wss-l">Thanh toán</span></div>
+        <div data-i18n="thtg.3-nhan-ket-qua" class="wss-step"><span class="wss-n">3</span><span class="wss-l">Nhận kết quả</span></div>
       </div>
       <div class="dt-card" id="inputCard">
-        <div class="fc-head"><span class="fc-ic" data-icon="mic"></span><h2>Ghi Âm Giọng Nói</h2></div>
-        <p class="sub">Đọc thành tiếng đoạn mẫu bên dưới để hệ thống ghi âm và đo chỉ số âm học, đối chiếu với Ngũ Âm cổ pháp.</p>
-        <div class="dt-privacy"><span class="ic" data-icon="lock"></span><div>Âm thanh xử lý hoàn toàn trong trình duyệt. Chỉ gửi các chỉ số đo được (không gửi file audio) lên server để máy chủ phân tích.</div></div>
+        <div class="fc-head"><span class="fc-ic" data-icon="mic"></span><h2 data-i18n="thtg.ghi-am-giong-noi">Ghi Âm Giọng Nói</h2></div>
+        <p data-i18n="thtg.doc-thanh-tieng-doan-mau-ben" class="sub">Đọc thành tiếng đoạn mẫu bên dưới để hệ thống ghi âm và đo chỉ số âm học, đối chiếu với Ngũ Âm cổ pháp.</p>
+        <div class="dt-privacy"><span class="ic" data-icon="lock"></span><div data-i18n="thtg.am-thanh-xu-ly-hoan-toan">Âm thanh xử lý hoàn toàn trong trình duyệt. Chỉ gửi các chỉ số đo được (không gửi file audio) lên server để máy chủ phân tích.</div></div>
 
         <div class="passage-card">
-          <div class="passage-label"><span class="ic" data-icon="book-open"></span> Đọc đoạn thơ này (tự nhiên, rõ ràng)</div>
-          <div class="passage-text">
+          <div data-i18n="thtg.doc-doan-tho-nay-tu-nhien" class="passage-label"><span class="ic" data-icon="book-open"></span> Đọc đoạn thơ này (tự nhiên, rõ ràng)</div>
+          <div data-i18n="thtg.cong-cha-nhu-nui-thai-son" class="passage-text">
             Công cha như núi <em>Thái Sơn</em>,<br>
             nghĩa mẹ như nước trong nguồn <em>chảy ra</em>.<br>
             Một lòng thờ mẹ kính cha,<br>
             cho tròn chữ hiếu mới là <em>đạo con</em>.
           </div>
-          <div class="passage-note">Đọc chậm rãi, tự nhiên — khoảng 10–15 giây · Nên ở nơi yên tĩnh, không có tiếng ồn</div>
+          <div data-i18n="thtg.doc-cham-rai-tu-nhien-khoang" class="passage-note">Đọc chậm rãi, tự nhiên — khoảng 10–15 giây · Nên ở nơi yên tĩnh, không có tiếng ồn</div>
         </div>
 
         <div class="record-wrap">
           <div class="countdown-badge" id="countdownBadge"></div>
-          <button class="btn-record" id="recordBtn" onclick="toggleRecord()">
+          <button data-i18n="thtg.bat-dau-thu-am" class="btn-record" id="recordBtn" onclick="toggleRecord()">
             <span id="recordIcon" class="ic" data-icon="mic"></span>
             <span id="recordLabel">Bắt Đầu Thu Âm</span>
           </button>
-          <div class="status-msg" id="statusMsg">Nhấn để bắt đầu thu âm · Cho phép truy cập microphone khi trình duyệt hỏi</div>
+          <div data-i18n="thtg.nhan-de-bat-dau-thu-am" class="status-msg" id="statusMsg">Nhấn để bắt đầu thu âm · Cho phép truy cập microphone khi trình duyệt hỏi</div>
           <div class="timer-bar-wrap" id="timerBarWrap">
             <div class="timer-bar" id="timerBar"></div>
           </div>
@@ -152,7 +152,7 @@ body.chat-first-live .features-grid{grid-template-columns:1fr}
         </div>
 
         <div class="features-panel" id="featuresPanel">
-          <div class="features-title"><span class="ic" data-icon="bar-chart-3"></span> Kết quả đo lường giọng nói</div>
+          <div data-i18n="thtg.ket-qua-do-luong-giong-noi" class="features-title"><span class="ic" data-icon="bar-chart-3"></span> Kết quả đo lường giọng nói</div>
           <div class="features-grid" id="featuresGrid"></div>
           <div style="text-align:center;margin-top:6px">
             <span id="nguAmBadge" class="ngu-am-badge"></span>
@@ -163,9 +163,9 @@ body.chat-first-live .features-grid{grid-template-columns:1fr}
           <div class="cb-l">
             <span class="cb-ic" data-icon="wallet"></span>
             <div>
-              <div class="cb-title">Chi phí sử dụng</div>
-              <div class="cb-amt"><span class="vnd" data-tvp-price-vnd="thanh-tuong"></span> mỗi lượt <span class="cb-sub">(<span data-tvp-price="thanh-tuong">…</span> Lượng)</span></div>
-              <div class="cb-pay">
+              <div data-i18n="battu.chi-phi-su-dung" class="cb-title">Chi phí sử dụng</div>
+              <div data-i18n="thtg.moi-luot-luong" class="cb-amt"><span class="vnd" data-tvp-price-vnd="thanh-tuong"></span> mỗi lượt <span class="cb-sub">(<span data-tvp-price="thanh-tuong">…</span> Lượng)</span></div>
+              <div data-i18n="luangiai.chuyen-khoan-qua-qr-ngan-hang" class="cb-pay">
                 <span><span class="ic" data-icon="qr-code"></span> Chuyển khoản (qua QR ngân hàng)</span>
                 <span><span class="ic" data-icon="credit-card"></span> PayPal / Thẻ quốc tế</span>
               </div>
@@ -173,10 +173,10 @@ body.chat-first-live .features-grid{grid-template-columns:1fr}
           </div>
           <div class="cb-r">
             <span class="cb-ic" data-icon="gift"></span>
-            <div class="cb-r-txt">Mua gói để nhận nhiều ưu đãi hơn.<br><a href="/topup.html">Xem các gói ngay →</a></div>
+            <div data-i18n="luangiai.mua-goi-de-nhan-nhieu-uu" class="cb-r-txt">Mua gói để nhận nhiều ưu đãi hơn.<br><a href="/topup.html">Xem các gói ngay →</a></div>
           </div>
         </div>
-        <button class="btn-go" id="analyzeBtn" onclick="analyze()" disabled>
+        <button data-i18n="thtg.phan-tich-thanh-tuong-ton-luong" class="btn-go" id="analyzeBtn" onclick="analyze()" disabled>
           <span class="bg-label"><span class="ic" data-icon="music"></span><b id="analyzeBtnLabel">Phân Tích Thanh Tướng →</b></span>
           <small>Tốn <span class="vnd" data-tvp-price-vnd="thanh-tuong"></span> <span class="cb-sub">(<span data-tvp-price="thanh-tuong">…</span> Lượng)</span></small>
         </button>
@@ -185,25 +185,25 @@ body.chat-first-live .features-grid{grid-template-columns:1fr}
       </div>
       <div class="ws-side-col">
       <div class="ws-promo">
-        <div class="wsp-eyebrow"><span class="wsp-ic" data-icon="book-open"></span><span>Giới thiệu</span></div>
-        <div class="wsp-title">Thanh Tướng</div>
-        <p class="wsp-desc">Ngũ Âm tướng pháp là một nhánh của nhân tướng học luận đoán qua giọng nói, phân loại âm thanh theo Cung, Thương, Giốc, Chủy, Vũ tương ứng với Ngũ Hành. Phương pháp này được ghi nhận trong các cổ thư tướng học như Ma Y Thần Tướng.</p>
+        <div data-i18n="battu.gioi-thieu" class="wsp-eyebrow"><span class="wsp-ic" data-icon="book-open"></span><span>Giới thiệu</span></div>
+        <div data-i18n="thtg.thanh-tuong" class="wsp-title">Thanh Tướng</div>
+        <p data-i18n="thtp.ngu-am-tuong-phap-la-mot" class="wsp-desc">Ngũ Âm tướng pháp là một nhánh của nhân tướng học luận đoán qua giọng nói, phân loại âm thanh theo Cung, Thương, Giốc, Chủy, Vũ tương ứng với Ngũ Hành. Phương pháp này được ghi nhận trong các cổ thư tướng học như Ma Y Thần Tướng.</p>
       </div>
       <div class="samp-cta" id="sampCta">
         <span class="sc-ic" data-icon="lightbulb"></span>
-        <span class="sc-txt"><b>Chưa muốn ghi âm?</b><span>Bạn có thể xem một bản mẫu để trải nghiệm trước.</span></span>
-        <button type="button" id="btnSample" data-sample-tool="thanh-tuong" onclick="SampleHint.open(this)">Xem bản mẫu →</button>
+        <span data-i18n="thtp.chua-muon-ghi-am-ban-co" class="sc-txt"><b>Chưa muốn ghi âm?</b><span>Bạn có thể xem một bản mẫu để trải nghiệm trước.</span></span>
+        <button data-i18n="thtp.xem-ban-mau" type="button" id="btnSample" data-sample-tool="thanh-tuong" onclick="SampleHint.open(this)">Xem bản mẫu →</button>
       </div>
       <div id="shellRecent"></div>
       </div>
       </div>
 
       <div class="dt-card" id="resultCard" data-ws-result style="display:none;margin-top:16px">
-        <h2>Phân Tích Thanh Tướng Học</h2>
-        <p class="sub">Ngũ Âm Cổ Pháp · Mã Môi · Đạt Ma</p>
+        <h2 data-i18n="thtg.phan-tich-thanh-tuong-hoc">Phân Tích Thanh Tướng Học</h2>
+        <p data-i18n="thtg.ngu-am-co-phap-ma-moi" class="sub">Ngũ Âm Cổ Pháp · Mã Môi · Đạt Ma</p>
         <div id="aiResult" class="dt-result"></div>
         <div style="text-align:center;margin-top:8px">
-          <button class="btn-cancel" onclick="resetTool()">Thu Âm Lại</button>
+          <button data-i18n="thtg.thu-am-lai" class="btn-cancel" onclick="resetTool()">Thu Âm Lại</button>
         </div>
       </div>
     </div>
@@ -271,7 +271,7 @@ async function startCountdown() {
   const badge = document.getElementById('countdownBadge');
   const statusEl = document.getElementById('statusMsg');
   badge.classList.add('visible');
-  statusEl.textContent = 'Chuẩn bị giọng nói...';
+  statusEl.textContent = _tvmbT('js.thtg.chuan-bi-giong-noi', 'Chuẩn bị giọng nói...');
   let n = COUNTDOWN;
   badge.textContent = n;
   await new Promise(res => {
@@ -290,7 +290,7 @@ async function startRecording() {
   try {
     _stream = await navigator.mediaDevices.getUserMedia({ audio: { echoCancellation: true, noiseSuppression: true, sampleRate: 44100 }, video: false });
   } catch(e) {
-    errEl.textContent = 'Không thể truy cập microphone. Vui lòng cho phép quyền trong trình duyệt.';
+    errEl.textContent = _tvmbT('js.thtg.khong-the-truy-cap-microphone-vui', 'Không thể truy cập microphone. Vui lòng cho phép quyền trong trình duyệt.');
     errEl.classList.add('active');
     return;
   }
@@ -326,7 +326,7 @@ function stopRecording() {
   if (_stream) _stream.getTracks().forEach(t => t.stop());
   stopProgressBar();
   updateRecordUI(false, true);
-  document.getElementById('statusMsg').textContent = 'Đang phân tích âm thanh...';
+  document.getElementById('statusMsg').textContent = _tvmbT('js.thtg.dang-phan-tich-am-thanh', 'Đang phân tích âm thanh...');
 }
 
 function updateRecordUI(recording, processing = false) {
@@ -340,18 +340,18 @@ function updateRecordUI(recording, processing = false) {
   if (recording) {
     btn.classList.add('recording');
     icon.textContent = '⏹'; // không có icon "dừng" trong bộ Lucide đang dùng — giữ nguyên
-    label.textContent = 'Dừng Lại';
+    label.textContent = _tvmbT('js.thtg.dung-lai', 'Dừng Lại');
     timerWrap.classList.add('visible');
     waveWrap.classList.add('visible');
-    document.getElementById('statusMsg').textContent = 'Đang thu âm — hãy đọc đoạn thơ trên...';
+    document.getElementById('statusMsg').textContent = _tvmbT('js.thtg.dang-thu-am-hay-doc-doan', 'Đang thu âm — hãy đọc đoạn thơ trên...');
   } else if (processing) {
     btn.classList.add('processing');
     icon.innerHTML = window.iconHtml ? window.iconHtml('hourglass') : '⏳';
-    label.textContent = 'Đang xử lý...';
+    label.textContent = _tvmbT('js.thtg.dang-xu-ly', 'Đang xử lý...');
     timerWrap.classList.remove('visible');
   } else {
     icon.innerHTML = window.iconHtml ? window.iconHtml('mic') : '🎙';
-    label.textContent = 'Thu Âm Lại';
+    label.textContent = _tvmbT('js.thtg.thu-am-lai', 'Thu Âm Lại');
     timerWrap.classList.remove('visible');
     waveWrap.classList.remove('visible');
   }
@@ -416,11 +416,11 @@ async function processAudio() {
     showFeatures(_features);
     document.getElementById('analyzeBtn').disabled = false;
     updateRecordUI(false);
-    document.getElementById('statusMsg').textContent = 'Thu âm hoàn tất — nhấn "Phân Tích" để xem kết quả.';
+    document.getElementById('statusMsg').textContent = _tvmbT('js.thtg.thu-am-hoan-tat-nhan-phan', 'Thu âm hoàn tất — nhấn "Phân Tích" để xem kết quả.');
     document.getElementById('waveWrap').classList.remove('visible');
   } catch(e) {
     const errEl = document.getElementById('error-msg');
-    errEl.textContent = 'Không thể xử lý âm thanh: ' + e.message + '. Vui lòng thử lại.';
+    errEl.textContent = _tvmbT('js.thtg.khong-the-xu-ly-am-thanh-e', 'Không thể xử lý âm thanh: {e}. Vui lòng thử lại.', { e: e.message });
     errEl.classList.add('active');
     updateRecordUI(false);
     document.getElementById('statusMsg').textContent = '';
@@ -540,13 +540,13 @@ function estimateNguAm(f) {
 
   const winner = Object.entries(scores).sort((a, b) => b[1] - a[1])[0][0];
   const descs = {
-    Kim: 'Kim Thanh (Thương) — trong sáng, vang xa',
-    Moc: 'Mộc Thanh (Giốc) — tròn trịa, đôn hậu',
-    Thuy: 'Thủy Thanh (Vũ) — lành lạnh, sâu sa',
-    Hoa: 'Hỏa Thanh (Chủy) — cao, gằn có lực',
-    Tho: 'Thổ Thanh (Cung) — trầm ấm, ngân vang',
+    Kim: ['Kim Thanh (Thương) — trong sáng, vang xa', _tvmbT('js.thtg.nguam-kim-short', 'Kim Thanh (Thương)'), _tvmbT('js.thtg.nguam-kim', 'Kim Thanh (Thương) — trong sáng, vang xa')],
+    Moc: ['Mộc Thanh (Giốc) — tròn trịa, đôn hậu', _tvmbT('js.thtg.nguam-moc-short', 'Mộc Thanh (Giốc)'), _tvmbT('js.thtg.nguam-moc', 'Mộc Thanh (Giốc) — tròn trịa, đôn hậu')],
+    Thuy: ['Thủy Thanh (Vũ) — lành lạnh, sâu sa', _tvmbT('js.thtg.nguam-thuy-short', 'Thủy Thanh (Vũ)'), _tvmbT('js.thtg.nguam-thuy', 'Thủy Thanh (Vũ) — lành lạnh, sâu sa')],
+    Hoa: ['Hỏa Thanh (Chủy) — cao, gằn có lực', _tvmbT('js.thtg.nguam-hoa-short', 'Hỏa Thanh (Chủy)'), _tvmbT('js.thtg.nguam-hoa', 'Hỏa Thanh (Chủy) — cao, gằn có lực')],
+    Tho: ['Thổ Thanh (Cung) — trầm ấm, ngân vang', _tvmbT('js.thtg.nguam-tho-short', 'Thổ Thanh (Cung)'), _tvmbT('js.thtg.nguam-tho', 'Thổ Thanh (Cung) — trầm ấm, ngân vang')],
   };
-  return { type: winner, label: descs[winner] };
+  return { type: winner, label: descs[winner][0], shortShown: descs[winner][1], shown: descs[winner][2] };
 }
 
 function showFeatures(f) {
@@ -554,33 +554,33 @@ function showFeatures(f) {
   const grid = document.getElementById('featuresGrid');
   const badge = document.getElementById('nguAmBadge');
 
-  const pitchLabel = f.pitch === 0 ? 'Không rõ' :
-    f.pitch < 110 ? `${f.pitch}Hz — rất trầm` :
-    f.pitch < 140 ? `${f.pitch}Hz — trầm` :
-    f.pitch < 170 ? `${f.pitch}Hz — trung-thấp` :
-    f.pitch < 200 ? `${f.pitch}Hz — trung bình` :
-    f.pitch < 240 ? `${f.pitch}Hz — trung-cao` : `${f.pitch}Hz — cao`;
+  const pitchLabel = f.pitch === 0 ? _tvmbT('js.thtg.khong-ro', 'Không rõ') :
+    f.pitch < 110 ? _tvmbT('js.thtg.pitch-rat-tram', '{p}Hz — rất trầm', { p: f.pitch }) :
+    f.pitch < 140 ? _tvmbT('js.thtg.pitch-tram', '{p}Hz — trầm', { p: f.pitch }) :
+    f.pitch < 170 ? _tvmbT('js.thtg.pitch-trung-thap', '{p}Hz — trung-thấp', { p: f.pitch }) :
+    f.pitch < 200 ? _tvmbT('js.thtg.pitch-trung-binh', '{p}Hz — trung bình', { p: f.pitch }) :
+    f.pitch < 240 ? _tvmbT('js.thtg.pitch-trung-cao', '{p}Hz — trung-cao', { p: f.pitch }) : _tvmbT('js.thtg.pitch-cao', '{p}Hz — cao', { p: f.pitch });
 
-  const rateLabel = f.speechRate < 2 ? `${f.speechRate} âm/s — rất chậm` :
-    f.speechRate < 3.5 ? `${f.speechRate} âm/s — chậm` :
-    f.speechRate < 5 ? `${f.speechRate} âm/s — vừa` :
-    f.speechRate < 6.5 ? `${f.speechRate} âm/s — nhanh` : `${f.speechRate} âm/s — rất nhanh`;
+  const rateLabel = f.speechRate < 2 ? _tvmbT('js.thtg.rate-rat-cham', '{r} âm/s — rất chậm', { r: f.speechRate }) :
+    f.speechRate < 3.5 ? _tvmbT('js.thtg.rate-cham', '{r} âm/s — chậm', { r: f.speechRate }) :
+    f.speechRate < 5 ? _tvmbT('js.thtg.rate-vua', '{r} âm/s — vừa', { r: f.speechRate }) :
+    f.speechRate < 6.5 ? _tvmbT('js.thtg.rate-nhanh', '{r} âm/s — nhanh', { r: f.speechRate }) : _tvmbT('js.thtg.rate-rat-nhanh', '{r} âm/s — rất nhanh', { r: f.speechRate });
 
-  const ampLabel = f.amplitude < 0.015 ? 'Nhỏ, yếu' :
-    f.amplitude < 0.045 ? 'Vừa phải' :
-    f.amplitude < 0.09  ? 'Khá to' : 'To, có lực';
+  const ampLabel = f.amplitude < 0.015 ? _tvmbT('js.thtg.nho-yeu', 'Nhỏ, yếu') :
+    f.amplitude < 0.045 ? _tvmbT('js.thtg.vua-phai', 'Vừa phải') :
+    f.amplitude < 0.09  ? _tvmbT('js.thtg.kha-to', 'Khá to') : _tvmbT('js.thtg.to-co-luc', 'To, có lực');
 
-  const brightLabel = f.brightness < 0.25 ? 'Tối, ấm' :
-    f.brightness < 0.45 ? 'Trung bình, ấm' :
-    f.brightness < 0.65 ? 'Sáng, trong' : 'Rất sáng';
+  const brightLabel = f.brightness < 0.25 ? _tvmbT('js.thtg.toi-am', 'Tối, ấm') :
+    f.brightness < 0.45 ? _tvmbT('js.thtg.trung-binh-am', 'Trung bình, ấm') :
+    f.brightness < 0.65 ? _tvmbT('js.thtg.sang-trong', 'Sáng, trong') : _tvmbT('js.thtg.rat-sang', 'Rất sáng');
 
   const items = [
-    { label: 'Cao Độ (Pitch)', value: pitchLabel, fill: f.pitch > 0 ? Math.min(100, (f.pitch - 75) / 3.5) : 0, color: '#378ADD' },
-    { label: 'Tốc Độ Nói', value: rateLabel, fill: Math.min(100, f.speechRate / 7 * 100), color: '#1D9E75' },
-    { label: 'Âm Lượng', value: ampLabel, fill: Math.min(100, f.amplitude / 0.12 * 100), color: '#BA7517' },
-    { label: 'Âm Sắc (Brightness)', value: brightLabel, fill: f.brightness * 100, color: '#7B2FBE' },
-    { label: 'Độ Ổn Định', value: `${f.stability}%`, fill: f.stability, color: '#0F6E56' },
-    { label: 'Thời Lượng', value: `${f.duration}s`, fill: Math.min(100, f.duration / 15 * 100), color: '#534AB7' },
+    { label: _tvmbT('js.thtg.cao-do-pitch', 'Cao Độ (Pitch)'), value: pitchLabel, fill: f.pitch > 0 ? Math.min(100, (f.pitch - 75) / 3.5) : 0, color: '#378ADD' },
+    { label: _tvmbT('js.thtg.toc-do-noi', 'Tốc Độ Nói'), value: rateLabel, fill: Math.min(100, f.speechRate / 7 * 100), color: '#1D9E75' },
+    { label: _tvmbT('js.thtg.am-luong', 'Âm Lượng'), value: ampLabel, fill: Math.min(100, f.amplitude / 0.12 * 100), color: '#BA7517' },
+    { label: _tvmbT('js.thtg.am-sac-brightness', 'Âm Sắc (Brightness)'), value: brightLabel, fill: f.brightness * 100, color: '#7B2FBE' },
+    { label: _tvmbT('js.thtg.do-on-dinh', 'Độ Ổn Định'), value: `${f.stability}%`, fill: f.stability, color: '#0F6E56' },
+    { label: _tvmbT('js.thtg.thoi-luong', 'Thời Lượng'), value: `${f.duration}s`, fill: Math.min(100, f.duration / 15 * 100), color: '#534AB7' },
   ];
 
   grid.innerHTML = items.map(it => `
@@ -593,7 +593,7 @@ function showFeatures(f) {
 
   const nguAm = estimateNguAm(f);
   badge.className = `ngu-am-badge ngu-am-${nguAm.type}`;
-  badge.textContent = `Ước tính: ${nguAm.label}`;
+  badge.textContent = _tvmbT('js.thtg.uoc-tinh-n', 'Ước tính: {n}', { n: nguAm.shown });
 
   panel.classList.add('visible');
 }
@@ -661,7 +661,7 @@ async function _doAnalyze() {
   document.getElementById('resultCard').style.display = 'block';
   wsStepsSet(3); // Nhận kết quả — đã trả tiền, bắt đầu luận giải
   const aiResultEl = document.getElementById('aiResult');
-  aiResultEl.innerHTML = '<div class="dt-loading"><span class="dt-loading-icon ic" data-icon="music"></span><div class="dt-loading-text">Đang luận giải thanh tướng...<br><span style="font-size:12px;opacity:.7">Thường mất 10–15 giây</span></div></div>';
+  aiResultEl.innerHTML = '<div class="dt-loading"><span class="dt-loading-icon ic" data-icon="music"></span><div class="dt-loading-text">' + _tvmbT('js.thtg.dang-luan-giai-thanh-tuong', 'Đang luận giải thanh tướng...') + '<br><span style="font-size:12px;opacity:.7">' + _tvmbT('js.thtg.thuong-mat-10-15-giay', 'Thường mất 10–15 giây') + '</span></div></div>';
   window.mountIcons && window.mountIcons(aiResultEl);
   document.getElementById('resultCard').scrollIntoView({ behavior: 'smooth', block: 'nearest' });
 
@@ -675,7 +675,7 @@ async function _doAnalyze() {
         image: null,
       })
     });
-    if (!res.ok) { const d = await res.json().catch(() => ({})); throw new Error(d.error || 'Lỗi ' + res.status); }
+    if (!res.ok) { const d = await res.json().catch(() => ({})); throw new Error(d.error || _tvmbT('js.thtg.loi-s', 'Lỗi {s}', { s: res.status })); }
 
     const reader = res.body.getReader();
     const dec = new TextDecoder();
@@ -699,25 +699,25 @@ async function _doAnalyze() {
         } catch(e) { if (e.message && !e.message.includes('JSON')) throw e; }
       }
     }
-    if (!full) throw new Error('Không có kết quả.');
+    if (!full) throw new Error(_tvmbT('js.thtg.khong-co-ket-qua', 'Không có kết quả.'));
     el.innerHTML = renderMd(full);
     _saveTuongReading('thanh-tuong', full, null, null);
     // Chia sẻ CHỈ text luận giải của AI — KHÔNG đính kèm bản ghi âm giọng nói
     // thật của user (riêng tư, và cũng chưa có cơ chế lưu audio public).
-    Shell.setShareable({ kind:'text', toolId:'thanh-tuong', title:'Thanh Tướng của tôi', text:full });
+    Shell.setShareable({ kind:'text', toolId:'thanh-tuong', title:_tvmbT('js.thtg.thanh-tuong-cua-toi', 'Thanh Tướng của tôi'), text:full });
 
     if (window.SHELL_INTRO) Shell.dismissIntro(window.SHELL_INTRO.key);
     var _nguAm = _features ? estimateNguAm(_features) : null;
     Shell.setContext({
-      label: 'Thanh Tướng' + (_nguAm ? ' — ' + _nguAm.label.split(' — ')[0] : ''),
-      greeting: 'Giọng của bạn thuộc **' + (_nguAm ? _nguAm.label : 'Ngũ Âm') + '**. Bạn muốn hỏi thêm về thanh tướng học?',
-      chips: ['Ngũ Âm là gì?', 'Giọng trầm nói lên điều gì?', 'Thanh tướng có đổi được không?']
+      label: _tvmbT('js.thtg.thanh-tuong', 'Thanh Tướng') + (_nguAm ? ' — ' + _nguAm.shortShown : ''),
+      greeting: _tvmbT('js.thtg.giong-cua-ban-thuoc-n', 'Giọng của bạn thuộc **{n}**. Bạn muốn hỏi thêm về thanh tướng học?', { n: _nguAm ? _nguAm.shown : _tvmbT('js.thtg.ngu-am', 'Ngũ Âm') }),
+      chips: [_tvmbT('js.thtg.ngu-am-la-gi', 'Ngũ Âm là gì?'), _tvmbT('js.thtg.giong-tram-noi-len-dieu-gi', 'Giọng trầm nói lên điều gì?'), _tvmbT('js.thtg.thanh-tuong-co-doi-duoc-khong', 'Thanh tướng có đổi được không?')]
     });
   } catch(e) {
     document.getElementById('aiResult').innerHTML = '';
     document.getElementById('resultCard').style.display = 'none';
     const errEl = document.getElementById('error-msg');
-    errEl.textContent = 'Lỗi: ' + (e.message || 'Không thể kết nối.');
+    errEl.textContent = _tvmbT('js.thtg.loi-e', 'Lỗi: {e}', { e: e.message || _tvmbT('js.thtg.khong-the-ket-noi', 'Không thể kết nối.') });
     errEl.classList.add('active');
   }
 }
@@ -733,7 +733,7 @@ function resetTool() {
   _audioCtx = null; _stream = null; _recorder = null;
 
   updateRecordUI(false);
-  document.getElementById('statusMsg').textContent = 'Nhấn để bắt đầu thu âm · Cho phép truy cập microphone khi trình duyệt hỏi';
+  document.getElementById('statusMsg').textContent = _tvmbT('js.thtg.nhan-de-bat-dau-thu-am', 'Nhấn để bắt đầu thu âm · Cho phép truy cập microphone khi trình duyệt hỏi');
   document.getElementById('featuresPanel').classList.remove('visible');
   document.getElementById('analyzeBtn').disabled = true;
   document.getElementById('resultCard').style.display = 'none';
@@ -744,7 +744,7 @@ function resetTool() {
   document.getElementById('timerBarWrap').classList.remove('visible');
   document.getElementById('recordBtn').classList.remove('recording', 'processing');
   document.getElementById('recordIcon').innerHTML = window.iconHtml ? window.iconHtml('mic') : '🎙';
-  document.getElementById('recordLabel').textContent = 'Bắt Đầu Thu Âm';
+  document.getElementById('recordLabel').textContent = _tvmbT('js.thtg.bat-dau-thu-am', 'Bắt Đầu Thu Âm');
   document.getElementById('inputCard').scrollIntoView({ behavior: 'smooth', block: 'start' });
   wsStepsSet(1); // về lại Ghi âm giọng nói
   Shell.setShareable(null);
