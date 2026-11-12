@@ -267,9 +267,26 @@ for (const ns of Object.keys(ENGINE_NS)) {
       fail(
         'app/api/chan-dung-tien-kiep/route.ts: prompt truyện không nhận tên theo ngôn ngữ (truyện sẽ tự phiên âm ra tên khác màn hình)'
       );
+    // Rail (W30f-9): tên đã dịch đi vào USER message qua runAgent (system giữ tên Việt — luật cache).
+    const run = doc('lib/agent/run.ts');
+    if (!run.includes("khoiTenTheoNgonNgu(req.locale ?? 'vi', wrapNhanVat, 'rail')"))
+      fail(
+        'lib/agent/run.ts: rail không nối khối tên/danh xưng đã dịch vào tin user (LLM rail sẽ gọi nhân vật bằng tên Việt)'
+      );
+    // vi byte-giống: chỉ đúng biểu thức này cho `langTxt === langBlock` khi `tenTxt` rỗng (không thêm dấu nối thừa).
+    if (
+      !/langBlock\([^)]*\{ rail: true \}\),\s*tenTxt,\s*\]\s*\.filter\(Boolean\)\s*\.join\('\\n\\n'\)/.test(
+        run
+      )
+    )
+      fail(
+        "lib/agent/run.ts: langTxt phải là [langBlock(...), tenTxt].filter(Boolean).join('\\n\\n') — đổi là đổi byte tin user của khách vi/không vỏ"
+      );
+    if (!/wrapNhanVat = \[pl\]/.test(run) || !/wrapNhanVat = group\.profiles/.test(run))
+      fail('lib/agent/run.ts: hai vỏ rail (past-life · past-life-bond) phải gán wrapNhanVat');
     // Server đọc file dịch trong public/ bằng fs ⇒ phải khai tracing, không thì hàm Vercel thiếu file và tên lặng lẽ lùi về chữ Việt.
     const nc = doc('next.config.mjs');
-    for (const r of ['/api/chan-dung-tien-kiep', '/api/duyen-no-tien-kiep'])
+    for (const r of ['/api/chan-dung-tien-kiep', '/api/duyen-no-tien-kiep', '/api/v1/chat'])
       if (
         !new RegExp(
           `'${r}':\\s*\\['\\./public/tools-shared/i18n-long/\\*/past-life-ten\\.js'\\]`

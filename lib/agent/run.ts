@@ -72,6 +72,7 @@ import {
 import { huongNghiepTreRailWrapper } from '@/lib/agent/huong-nghiep-tre-prompt';
 import { resolveAvatarId } from '@/lib/media/tool-avatar-prompt';
 import { langBlock } from '@/lib/llm/locale';
+import { khoiTenTheoNgonNgu } from '@/lib/engine/past-life-ten';
 
 const ANTHROPIC_URL = 'https://api.anthropic.com/v1/messages';
 const ANTHROPIC_API_KEY = process.env.ANTHROPIC_API_KEY!;
@@ -322,6 +323,8 @@ async function runAgentInner(
   let focusHintText = '';
   // Văn bản lá số (tiếng Việt) đang luận — để chọn ĐÚNG phần thuật ngữ cho khối ngôn ngữ (i18n W8).
   let lasoTermSrc = '';
+  // Nhân vật tiền kiếp của vỏ rail (W30f-9): để nối bảng "tên Việt → chữ hiển thị" vào USER message theo ngôn ngữ.
+  let wrapNhanVat: Parameters<typeof khoiTenTheoNgonNgu>[1] = [];
 
   const scenario = req.scenario;
   if (scenario && scenario.type) {
@@ -458,7 +461,9 @@ async function runAgentInner(
     if (req.wrap === 'past-life' && ctx.ls && req.birth) {
       try {
         const g = req.birth.gender === 'nu' ? ('nu' as const) : ('nam' as const);
-        system += '\n\n' + pastLifeRailWrapper(computePastLife(ctx.ls, g));
+        const pl = computePastLife(ctx.ls, g);
+        system += '\n\n' + pastLifeRailWrapper(pl);
+        wrapNhanVat = [pl];
       } catch (e) {
         // Hỏng lớp vỏ thì vẫn trả lời được như luận giải thường — không chặn lượt.
         console.error('[runAgent] pastLifeRailWrapper lỗi:', (e as Error)?.message);
@@ -493,6 +498,7 @@ async function runAgentInner(
         }
         if (members.length >= 2) {
           const group = computeGroupBond(members);
+          wrapNhanVat = group.profiles;
           system +=
             '\n\n' +
             (members.length === 2
@@ -724,7 +730,15 @@ async function runAgentInner(
 
   // NGÔN NGỮ (i18n W8) — khách /ja /ko /zh-* /en nhận chữ sinh THẲNG bằng ngôn ngữ đó. Khối đi vào CUỐI tin
   // user (không vào system, giữ prompt cache); 'vi'/kênh chat → '' nên không đổi một byte.
-  const langTxt = langBlock(req.locale ?? 'vi', lasoTermSrc ? [lasoTermSrc] : [], { rail: true });
+  // W30f-9: vỏ nhân vật tiền kiếp ⇒ thêm bảng tên/danh xưng đã dịch (cùng chữ hiện trên màn hình) — system vẫn giữ tên Việt nên PHẢI
+  // đi ở đây; `vi` → '' nên không đổi một byte.
+  const tenTxt = khoiTenTheoNgonNgu(req.locale ?? 'vi', wrapNhanVat, 'rail');
+  const langTxt = [
+    langBlock(req.locale ?? 'vi', lasoTermSrc ? [lasoTermSrc] : [], { rail: true }),
+    tenTxt,
+  ]
+    .filter(Boolean)
+    .join('\n\n');
   if (langTxt && convo.length) {
     const last = convo[convo.length - 1];
     if (last?.role === 'user') {
