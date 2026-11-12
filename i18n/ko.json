@@ -583,6 +583,66 @@
   "t": "일치도<br>순위",
   "h": "a6655e79"
  },
+ "hoangdao.1-nhap-ngay": {
+  "t": "<span class=\"wss-n\">1</span><span class=\"wss-l\">날짜 입력</span>",
+  "h": "a99fbfcf"
+ },
+ "hoangdao.6-gio-tot-nen-dung": {
+  "t": "쓰면 좋은<br>길시 6개",
+  "h": "ca3f8fea"
+ },
+ "hoangdao.6-gio-xau-can-tranh": {
+  "t": "피해야 할<br>흉시 6개",
+  "h": "4f1e6bfc"
+ },
+ "hoangdao.chon-ngay-thang-nam-duong-lich": {
+  "t": "확인하려는 양력 일·월·연을 고르세요. 시스템이 황도 시진을 계산하고 그날의 황력과 대조해요.",
+  "h": "b7dbabb0"
+ },
+ "hoangdao.cung-mot-viec-lam-gio-nay": {
+  "t": "같은 일도 어떤 시각에는 순조롭고 다른 시각에는 이유 없이 막히기도 해요. 보려는 날을 고르면 황력에 따른 길시와 피해야 할 시각 목록을 바로 받아 볼 수 있어요.",
+  "h": "173c7571"
+ },
+ "hoangdao.gio-hoang-dao": {
+  "t": "황도 시진",
+  "h": "940fb21d"
+ },
+ "hoangdao.gio-hoang-dao-12-gio-tot": {
+  "t": "<b>황도 시진</b><span>간지로 보는 하루 12시진의 길흉</span>",
+  "h": "23839283"
+ },
+ "hoangdao.gio-hoang-dao-tu-vi-minh": {
+  "t": "황도 시진 — 명보 자미두수",
+  "h": "51a0db68"
+ },
+ "hoangdao.hac-dao-6-gio-can-tranh": {
+  "t": "✗ 흑도 — 피해야 할 6개 시진",
+  "h": "39601183"
+ },
+ "hoangdao.hoang-dao-6-gio-tot": {
+  "t": "✦ 황도 — 좋은 6개 시진",
+  "h": "7263a1c8"
+ },
+ "hoangdao.hoang-lich-day-du": {
+  "t": "황력<br>전체",
+  "h": "f4d66b7c"
+ },
+ "hoangdao.hoi-thay-nen-lam-viec-vao": {
+  "t": "✦ 선생님께 몇 시에 하면 좋은지 묻기",
+  "h": "2a9b43ce"
+ },
+ "hoangdao.ngay-can-xem-duong-lich": {
+  "t": "확인할 날짜 (양력)",
+  "h": "a32fbe04"
+ },
+ "hoangdao.tra-12-gio-hoang-dao-hac": {
+  "t": "하루 12시진의 황도·흑도를 간지로 조회해요. 개업·출행·계약에 좋은 시각을 알 수 있어요. 선생님께 내 일에 맞춰 풀이를 물어보세요.",
+  "h": "6f4fa691"
+ },
+ "hoangdao.xem-gio": {
+  "t": "시진 보기 →",
+  "h": "e1db5866"
+ },
  "home.270-000-da-quoc-gia-da": {
   "t": "<span><span class=\"ic\" data-icon=\"file-text\"></span>270,000+</span> <span><span class=\"ic\" data-icon=\"globe\"></span>다국적</span> <span><span class=\"ic\" data-icon=\"check\"></span>검증 완료</span>",
   "h": "4d77621e"
@@ -3007,6 +3067,30 @@
   "t": "사진으로 관상 보기",
   "h": "24c4d64e"
  },
+ "js.ngaytot.chip1": {
+  "t": "결혼식을 하기 좋은 날은 언제인가요?",
+  "h": "409c6fd4"
+ },
+ "js.ngaytot.chip2": {
+  "t": "착공이나 입주하기 좋은 날은 언제인가요?",
+  "h": "26db2036"
+ },
+ "js.ngaytot.chip3": {
+  "t": "왜 꺼리는 날은 피하나요?",
+  "h": "2cc8c854"
+ },
+ "js.ngaytot.chip4": {
+  "t": "개업은 어느 날을 고르면 좋을까요?",
+  "h": "b44fce94"
+ },
+ "js.ngaytot.greeting": {
+  "t": "**{y}년 {m}월** 달력을 확인했어요. 어떤 일을 하실 건지 알려 주시면 가장 좋은 날을 골라 드릴게요.",
+  "h": "3a05f3ac"
+ },
+ "js.ngaytot.label": {
+  "t": "길일 · {y}년 {m}월",
+  "h": "cbd777dc"
+ },
  "js.paywall.bam-mo-la-tra-tien-va": {
   "t": " · 열면 바로 결제되고 곧바로 읽을 수 있어요, ",
   "h": "9a6023cd"
@@ -4927,9 +5011,17 @@
   "t": "**의 점수 평가인가요, 새 이름 추천인가요?",
   "h": "d922a861"
  },
+ "js.shellui.hd-al": {
+  "t": " (음력 {m}/{d})",
+  "h": "3fd68961"
+ },
  "js.shellui.hd-can-hanh": {
   "t": ", 천간 오행 ",
   "h": "96563d79"
+ },
+ "js.shellui.hd-can-hanh-info": {
+  "t": "천간 <strong>{can}</strong> — 오행 <strong>{hanh}</strong>",
+  "h": "4069d76b"
  },
  "js.shellui.hd-gio-can-tranh-hac-dao": {
   "t": "피해야 할 시진(흑도): ",
@@ -4946,6 +5038,118 @@
  "js.shellui.hd-gio-tot-hoang-dao": {
   "t": "좋은 시진(황도): ",
   "h": "100b31dc"
+ },
+ "js.shellui.hd-ngay-cc": {
+  "t": "일진 <strong>{cc}</strong>",
+  "h": "7f416c3a"
+ },
+ "js.shellui.hd-nhap-ngay-hop-le": {
+  "t": "올바른 날짜를 입력해 주세요.",
+  "h": "11a91c34"
+ },
+ "js.shellui.hd-thang-khong-co-ngay": {
+  "t": "{y}년 {m}월에는 {d}일이 없어요. 다시 선택해 주세요.",
+  "h": "da49ec5e"
+ },
+ "js.shellui.hd-title": {
+  "t": "{date}{al} — {cc}일",
+  "h": "593d5baf"
+ },
+ "js.shellui.hdd-bh": {
+  "t": "살기, 재앙",
+  "h": "28e5f7d8"
+ },
+ "js.shellui.hdd-cht": {
+  "t": "얽힘, 정체",
+  "h": "4363abe5"
+ },
+ "js.shellui.hdd-ct": {
+  "t": "구설, 시비",
+  "h": "845d6380"
+ },
+ "js.shellui.hdd-hv": {
+  "t": "도난, 손실",
+  "h": "cde5c999"
+ },
+ "js.shellui.hdd-kq": {
+  "t": "재물, 돈이 들어옴",
+  "h": "15237468"
+ },
+ "js.shellui.hdd-md": {
+  "t": "귀인의 도움, 순조로움",
+  "h": "a8e75ee4"
+ },
+ "js.shellui.hdd-nd": {
+  "t": "명망, 성취",
+  "h": "b3890138"
+ },
+ "js.shellui.hdd-td": {
+  "t": "복덕, 흉을 풀어줌",
+  "h": "e3a72954"
+ },
+ "js.shellui.hdd-th": {
+  "t": "소송, 분쟁, 흉",
+  "h": "a6198a39"
+ },
+ "js.shellui.hdd-tl": {
+  "t": "재물운, 만사형통",
+  "h": "1ae9748a"
+ },
+ "js.shellui.hdd-tlao": {
+  "t": "구속, 장애",
+  "h": "5d6fac43"
+ },
+ "js.shellui.hdd-tm": {
+  "t": "보호, 복을 기원",
+  "h": "cdb38651"
+ },
+ "js.shellui.hdt-bh": {
+  "t": "백호",
+  "h": "f6380016"
+ },
+ "js.shellui.hdt-cht": {
+  "t": "구진",
+  "h": "36fb04ef"
+ },
+ "js.shellui.hdt-ct": {
+  "t": "주작",
+  "h": "90214276"
+ },
+ "js.shellui.hdt-hv": {
+  "t": "현무",
+  "h": "f27e517b"
+ },
+ "js.shellui.hdt-kq": {
+  "t": "금궤",
+  "h": "6b3e8125"
+ },
+ "js.shellui.hdt-md": {
+  "t": "명당",
+  "h": "323a8d91"
+ },
+ "js.shellui.hdt-nd": {
+  "t": "옥당",
+  "h": "2c94d958"
+ },
+ "js.shellui.hdt-td": {
+  "t": "천덕",
+  "h": "3c86d12a"
+ },
+ "js.shellui.hdt-th": {
+  "t": "천형",
+  "h": "51b356df"
+ },
+ "js.shellui.hdt-tl": {
+  "t": "청룡",
+  "h": "deccb086"
+ },
+ "js.shellui.hdt-tlao": {
+  "t": "천뢰",
+  "h": "44ad7734"
+ },
+ "js.shellui.hdt-tm": {
+  "t": "사명",
+  "h": "fa69d852"
  },
  "js.shellui.het-phan-dung-thu": {
   "t": "체험 분량을 모두 사용했어요.",
@@ -6374,6 +6578,38 @@
  "js.shellui.nghe-them-mon-khac": {
   "t": "다른 분야도 들어 보기</span>",
   "h": "abd835bb"
+ },
+ "js.shellui.ngt-al": {
+  "t": "음 {m}/{d}",
+  "h": "a38795f8"
+ },
+ "js.shellui.ngt-chon-thang": {
+  "t": "월은 1~12 중에서 선택해 주세요.",
+  "h": "ad9727eb"
+ },
+ "js.shellui.ngt-duong-cong-ki": {
+  "t": "양공기",
+  "h": "a919874b"
+ },
+ "js.shellui.ngt-nguyet-ki": {
+  "t": "월기",
+  "h": "53f1d21f"
+ },
+ "js.shellui.ngt-nhap-nam-hop-le": {
+  "t": "올바른 연도(2020~2030)를 입력해 주세요.",
+  "h": "386683dc"
+ },
+ "js.shellui.ngt-tam-nuong": {
+  "t": "삼낭",
+  "h": "a82168f4"
+ },
+ "js.shellui.ngt-title": {
+  "t": "{y}년 {m}월 — 길흉일 달력",
+  "h": "abd229f8"
+ },
+ "js.shellui.ngt-tot": {
+  "t": "길",
+  "h": "f716d517"
  },
  "js.shellui.ngu-hanh-net-lien-quan-gi": {
   "t": "필획의 오행은 용신과 어떤 관계가 있나요?",
@@ -8694,6 +8930,70 @@
  "napam.tuoi-hop-ky": {
   "t": "<span class=\"hp-ic\" data-icon=\"users\"></span><span>맞는 띠<br>꺼리는 띠</span>",
   "h": "9a664cc3"
+ },
+ "ngaytot.2-nhan-ket-qua": {
+  "t": "<span class=\"wss-n\">2</span><span class=\"wss-l\">결과 받기</span>",
+  "h": "b0b2f830"
+ },
+ "ngaytot.chon-thang-nam-duong-lich-he": {
+  "t": "양력 월과 연을 고르세요. 시스템이 달력을 계산해 길흉일을 대조하고, 한 달 전체를 좋음·주의·꺼림으로 표시해 돌려줘요.",
+  "h": "0ad99575"
+ },
+ "ngaytot.hoi-thay-chon-ngay-dep-trong": {
+  "t": "✦ 선생님께 이번 달 좋은 날 골라 달라고 묻기",
+  "h": "254611c0"
+ },
+ "ngaytot.lich-ngay-tot-xau-ca-thang": {
+  "t": "음력 기준 한 달 길흉일 달력 — 삼낭, 월기, 양공기. 선생님께 결혼식·착공에 좋은 날을 골라 달라고 할 수 있어요.",
+  "h": "39fc01f0"
+ },
+ "ngaytot.lich-tot-xau-ca-thang": {
+  "t": "한 달 전체<br>길흉 달력",
+  "h": "2da65fe3"
+ },
+ "ngaytot.luu-y-nho-duong-cong-ki": {
+  "t": "가벼운 주의 (양공기)",
+  "h": "72c4ae94"
+ },
+ "ngaytot.muon-len-lich-ca-thang-ma": {
+  "t": "한 달 일정을 짜고 싶은데 어느 날을 피해야 하고 어느 날이 중요한 일을 시작하기 편한지 모르겠나요? 달을 고르면 길흉일을 날짜별로 보기 쉽게 정리한 목록을 바로 받아요.",
+  "h": "b18291cb"
+ },
+ "ngaytot.ngay-ki-tranh-viec-lon": {
+  "t": "꺼리는 날 — 큰일은 피하세요",
+  "h": "c5145190"
+ },
+ "ngaytot.ngay-ky-can-tranh": {
+  "t": "피해야 할<br>꺼리는 날",
+  "h": "22943f84"
+ },
+ "ngaytot.ngay-tot-an-toan": {
+  "t": "좋은 날 — 안전",
+  "h": "3795683e"
+ },
+ "ngaytot.ngay-tot-trong-thang": {
+  "t": "이달의 좋은 날",
+  "h": "c2d7afad"
+ },
+ "ngaytot.ngay-tot-trong-thang-lich-van": {
+  "t": "<b>이달의 좋은 날</b><span>만년력 · 음력 기준 길흉일</span>",
+  "h": "a5097cc1"
+ },
+ "ngaytot.ngay-tot-trong-thang-tu-vi": {
+  "t": "이달의 좋은 날 — 명보 자미두수",
+  "h": "d7f28313"
+ },
+ "ngaytot.thang-can-xem-duong-lich": {
+  "t": "확인할 달 (양력)",
+  "h": "f67dc270"
+ },
+ "ngaytot.truc-nhi-thap-bat-tu": {
+  "t": "십이직·<br>이십팔숙",
+  "h": "d2ad3351"
+ },
+ "ngaytot.xem-lich": {
+  "t": "달력 보기 →",
+  "h": "6fa85107"
  },
  "privacy.1-thong-tin-chung-toi-thu": {
   "t": "1. 수집하는 정보",

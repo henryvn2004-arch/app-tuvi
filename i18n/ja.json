@@ -583,6 +583,66 @@
   "t": "一致度で<br>ランキング",
   "h": "a6655e79"
  },
+ "hoangdao.1-nhap-ngay": {
+  "t": "<span class=\"wss-n\">1</span><span class=\"wss-l\">日付を入力</span>",
+  "h": "a99fbfcf"
+ },
+ "hoangdao.6-gio-tot-nen-dung": {
+  "t": "使うべき<br>吉時6つ",
+  "h": "ca3f8fea"
+ },
+ "hoangdao.6-gio-xau-can-tranh": {
+  "t": "避けるべき<br>凶時6つ",
+  "h": "4f1e6bfc"
+ },
+ "hoangdao.chon-ngay-thang-nam-duong-lich": {
+  "t": "確認したい新暦の日・月・年を選んでください。システムが黄道吉時を算出し、その日の暦と照らし合わせます。",
+  "h": "b7dbabb0"
+ },
+ "hoangdao.cung-mot-viec-lam-gio-nay": {
+  "t": "同じことでも、この時刻なら順調で、別の時刻だとなぜかつまずくことがあります。見たい日を選べば、暦にもとづく吉時と避けるべき時刻の一覧がすぐに届きます。",
+  "h": "173c7571"
+ },
+ "hoangdao.gio-hoang-dao": {
+  "t": "黄道吉時",
+  "h": "940fb21d"
+ },
+ "hoangdao.gio-hoang-dao-12-gio-tot": {
+  "t": "<b>黄道吉時</b><span>干支で見る、その日の吉凶12の時刻</span>",
+  "h": "23839283"
+ },
+ "hoangdao.gio-hoang-dao-tu-vi-minh": {
+  "t": "黄道吉時 — 明宝紫微斗数",
+  "h": "51a0db68"
+ },
+ "hoangdao.hac-dao-6-gio-can-tranh": {
+  "t": "✗ 黒道 — 避けるべき6つの時刻",
+  "h": "39601183"
+ },
+ "hoangdao.hoang-dao-6-gio-tot": {
+  "t": "✦ 黄道 — 吉の6つの時刻",
+  "h": "7263a1c8"
+ },
+ "hoangdao.hoang-lich-day-du": {
+  "t": "黄暦<br>フル版",
+  "h": "f4d66b7c"
+ },
+ "hoangdao.hoi-thay-nen-lam-viec-vao": {
+  "t": "✦ 先生に、何時に行うのがよいか聞く",
+  "h": "2a9b43ce"
+ },
+ "hoangdao.ngay-can-xem-duong-lich": {
+  "t": "確認したい日（新暦）",
+  "h": "a32fbe04"
+ },
+ "hoangdao.tra-12-gio-hoang-dao-hac": {
+  "t": "その日の黄道・黒道12の時刻を干支で調べます。開業・出立・契約に向く吉時がわかります。あなたの用件に合わせて先生に読み解いてもらえます。",
+  "h": "6f4fa691"
+ },
+ "hoangdao.xem-gio": {
+  "t": "時刻を見る →",
+  "h": "e1db5866"
+ },
  "home.270-000-da-quoc-gia-da": {
   "t": "<span><span class=\"ic\" data-icon=\"file-text\"></span>270,000+</span> <span><span class=\"ic\" data-icon=\"globe\"></span>多国籍</span> <span><span class=\"ic\" data-icon=\"check\"></span>検証済み</span>",
   "h": "4d77621e"
@@ -3007,6 +3067,30 @@
   "t": "写真で相を見る",
   "h": "24c4d64e"
  },
+ "js.ngaytot.chip1": {
+  "t": "結婚式に良い日はいつですか？",
+  "h": "409c6fd4"
+ },
+ "js.ngaytot.chip2": {
+  "t": "着工や入居に良い日はいつですか？",
+  "h": "26db2036"
+ },
+ "js.ngaytot.chip3": {
+  "t": "なぜ忌日は避けるのですか？",
+  "h": "2cc8c854"
+ },
+ "js.ngaytot.chip4": {
+  "t": "開業にはどの日を選べばよいですか？",
+  "h": "b44fce94"
+ },
+ "js.ngaytot.greeting": {
+  "t": "**{y}年{m}月**の暦を確認しました。何をなさる予定ですか？最適な日をお選びします。",
+  "h": "3a05f3ac"
+ },
+ "js.ngaytot.label": {
+  "t": "吉日・{y}年{m}月",
+  "h": "cbd777dc"
+ },
  "js.paywall.bam-mo-la-tra-tien-va": {
   "t": " ・開くとお支払いのうえ、すぐにお読みいただけます。",
   "h": "9a6023cd"
@@ -4927,9 +5011,17 @@
   "t": "**。それとも、新しい名前を提案しましょうか？",
   "h": "d922a861"
  },
+ "js.shellui.hd-al": {
+  "t": "（旧暦{m}/{d}）",
+  "h": "3fd68961"
+ },
  "js.shellui.hd-can-hanh": {
   "t": "、干の五行：",
   "h": "96563d79"
+ },
+ "js.shellui.hd-can-hanh-info": {
+  "t": "天干 <strong>{can}</strong> — 五行 <strong>{hanh}</strong>",
+  "h": "4069d76b"
  },
  "js.shellui.hd-gio-can-tranh-hac-dao": {
   "t": "避けたい時刻（黒道）：",
@@ -4946,6 +5038,118 @@
  "js.shellui.hd-gio-tot-hoang-dao": {
   "t": "吉時（黄道）：",
   "h": "100b31dc"
+ },
+ "js.shellui.hd-ngay-cc": {
+  "t": "日 <strong>{cc}</strong>",
+  "h": "7f416c3a"
+ },
+ "js.shellui.hd-nhap-ngay-hop-le": {
+  "t": "有効な日付を入力してください。",
+  "h": "11a91c34"
+ },
+ "js.shellui.hd-thang-khong-co-ngay": {
+  "t": "{y}年{m}月に{d}日はありません。選び直してください。",
+  "h": "da49ec5e"
+ },
+ "js.shellui.hd-title": {
+  "t": "{date}{al} — {cc}の日",
+  "h": "593d5baf"
+ },
+ "js.shellui.hdd-bh": {
+  "t": "殺気、災い",
+  "h": "28e5f7d8"
+ },
+ "js.shellui.hdd-cht": {
+  "t": "もつれ、停滞",
+  "h": "4363abe5"
+ },
+ "js.shellui.hdd-ct": {
+  "t": "口論、いざこざ",
+  "h": "845d6380"
+ },
+ "js.shellui.hdd-hv": {
+  "t": "盗難、損失",
+  "h": "cde5c999"
+ },
+ "js.shellui.hdd-kq": {
+  "t": "金運、収入",
+  "h": "15237468"
+ },
+ "js.shellui.hdd-md": {
+  "t": "貴人の助け、順調",
+  "h": "a8e75ee4"
+ },
+ "js.shellui.hdd-nd": {
+  "t": "名声、成就",
+  "h": "b3890138"
+ },
+ "js.shellui.hdd-td": {
+  "t": "福徳、凶を和らげる",
+  "h": "e3a72954"
+ },
+ "js.shellui.hdd-th": {
+  "t": "訴訟、争い、凶",
+  "h": "a6198a39"
+ },
+ "js.shellui.hdd-tl": {
+  "t": "財運、万事順調",
+  "h": "1ae9748a"
+ },
+ "js.shellui.hdd-tlao": {
+  "t": "拘束、障害",
+  "h": "5d6fac43"
+ },
+ "js.shellui.hdd-tm": {
+  "t": "守護、祈福",
+  "h": "cdb38651"
+ },
+ "js.shellui.hdt-bh": {
+  "t": "白虎",
+  "h": "f6380016"
+ },
+ "js.shellui.hdt-cht": {
+  "t": "勾陳",
+  "h": "36fb04ef"
+ },
+ "js.shellui.hdt-ct": {
+  "t": "朱雀",
+  "h": "90214276"
+ },
+ "js.shellui.hdt-hv": {
+  "t": "玄武",
+  "h": "f27e517b"
+ },
+ "js.shellui.hdt-kq": {
+  "t": "金匱",
+  "h": "6b3e8125"
+ },
+ "js.shellui.hdt-md": {
+  "t": "明堂",
+  "h": "323a8d91"
+ },
+ "js.shellui.hdt-nd": {
+  "t": "玉堂",
+  "h": "2c94d958"
+ },
+ "js.shellui.hdt-td": {
+  "t": "天徳",
+  "h": "3c86d12a"
+ },
+ "js.shellui.hdt-th": {
+  "t": "天刑",
+  "h": "51b356df"
+ },
+ "js.shellui.hdt-tl": {
+  "t": "青竜",
+  "h": "deccb086"
+ },
+ "js.shellui.hdt-tlao": {
+  "t": "天牢",
+  "h": "44ad7734"
+ },
+ "js.shellui.hdt-tm": {
+  "t": "司命",
+  "h": "fa69d852"
  },
  "js.shellui.het-phan-dung-thu": {
   "t": "お試しはここまでです。",
@@ -6374,6 +6578,38 @@
  "js.shellui.nghe-them-mon-khac": {
   "t": "他の分野も聞く</span>",
   "h": "abd835bb"
+ },
+ "js.shellui.ngt-al": {
+  "t": "旧{m}/{d}",
+  "h": "a38795f8"
+ },
+ "js.shellui.ngt-chon-thang": {
+  "t": "月は1〜12から選んでください。",
+  "h": "ad9727eb"
+ },
+ "js.shellui.ngt-duong-cong-ki": {
+  "t": "楊公忌",
+  "h": "a919874b"
+ },
+ "js.shellui.ngt-nguyet-ki": {
+  "t": "月忌",
+  "h": "53f1d21f"
+ },
+ "js.shellui.ngt-nhap-nam-hop-le": {
+  "t": "有効な年（2020〜2030）を入力してください。",
+  "h": "386683dc"
+ },
+ "js.shellui.ngt-tam-nuong": {
+  "t": "三娘",
+  "h": "a82168f4"
+ },
+ "js.shellui.ngt-title": {
+  "t": "{y}年{m}月 — 吉凶日カレンダー",
+  "h": "abd229f8"
+ },
+ "js.shellui.ngt-tot": {
+  "t": "吉",
+  "h": "f716d517"
  },
  "js.shellui.ngu-hanh-net-lien-quan-gi": {
   "t": "筆跡の五行は、用神とどう関係しますか？",
@@ -8694,6 +8930,70 @@
  "napam.tuoi-hop-ky": {
   "t": "<span class=\"hp-ic\" data-icon=\"users\"></span><span>相性の良い年<br>悪い年</span>",
   "h": "9a664cc3"
+ },
+ "ngaytot.2-nhan-ket-qua": {
+  "t": "<span class=\"wss-n\">2</span><span class=\"wss-l\">結果を受け取る</span>",
+  "h": "b0b2f830"
+ },
+ "ngaytot.chon-thang-nam-duong-lich-he": {
+  "t": "新暦の月と年を選んでください。システムが暦を算出して吉凶の日を照合し、ひと月分を「吉」「要注意」「忌避」に色分けして返します。",
+  "h": "0ad99575"
+ },
+ "ngaytot.hoi-thay-chon-ngay-dep-trong": {
+  "t": "✦ 先生に今月の吉日を選んでもらう",
+  "h": "254611c0"
+ },
+ "ngaytot.lich-ngay-tot-xau-ca-thang": {
+  "t": "旧暦にもとづく、ひと月分の吉凶日カレンダー。三娘・月忌・楊公忌がわかります。結婚式や着工に向く日を先生に選んでもらえます。",
+  "h": "39fc01f0"
+ },
+ "ngaytot.lich-tot-xau-ca-thang": {
+  "t": "ひと月分の<br>吉凶カレンダー",
+  "h": "2da65fe3"
+ },
+ "ngaytot.luu-y-nho-duong-cong-ki": {
+  "t": "軽い注意（楊公忌）",
+  "h": "72c4ae94"
+ },
+ "ngaytot.muon-len-lich-ca-thang-ma": {
+  "t": "ひと月の予定を立てたいけれど、避けるべき日や、大事なことを始めるのに都合のよい日がわからない。そんなときは月を選ぶだけで、吉凶の日を一日ずつ見やすく並べた一覧が届きます。",
+  "h": "b18291cb"
+ },
+ "ngaytot.ngay-ki-tranh-viec-lon": {
+  "t": "忌日 — 大事は避ける",
+  "h": "c5145190"
+ },
+ "ngaytot.ngay-ky-can-tranh": {
+  "t": "避けるべき<br>忌日",
+  "h": "22943f84"
+ },
+ "ngaytot.ngay-tot-an-toan": {
+  "t": "吉日 — 安心",
+  "h": "3795683e"
+ },
+ "ngaytot.ngay-tot-trong-thang": {
+  "t": "今月の吉日",
+  "h": "c2d7afad"
+ },
+ "ngaytot.ngay-tot-trong-thang-lich-van": {
+  "t": "<b>今月の吉日</b><span>万年暦 · 旧暦にもとづく吉凶日</span>",
+  "h": "a5097cc1"
+ },
+ "ngaytot.ngay-tot-trong-thang-tu-vi": {
+  "t": "今月の吉日 — 明宝紫微斗数",
+  "h": "d7f28313"
+ },
+ "ngaytot.thang-can-xem-duong-lich": {
+  "t": "確認したい月（新暦）",
+  "h": "f67dc270"
+ },
+ "ngaytot.truc-nhi-thap-bat-tu": {
+  "t": "十二直・<br>二十八宿",
+  "h": "d2ad3351"
+ },
+ "ngaytot.xem-lich": {
+  "t": "カレンダーを見る →",
+  "h": "6fa85107"
  },
  "privacy.1-thong-tin-chung-toi-thu": {
   "t": "1. 収集する情報",

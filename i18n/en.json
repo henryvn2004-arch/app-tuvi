@@ -583,6 +583,66 @@
   "t": "Rank by<br>match",
   "h": "a6655e79"
  },
+ "hoangdao.1-nhap-ngay": {
+  "t": "<span class=\"wss-n\">1</span><span class=\"wss-l\">Enter the date</span>",
+  "h": "a99fbfcf"
+ },
+ "hoangdao.6-gio-tot-nen-dung": {
+  "t": "6 good hours<br>to use",
+  "h": "ca3f8fea"
+ },
+ "hoangdao.6-gio-xau-can-tranh": {
+  "t": "6 bad hours<br>to avoid",
+  "h": "4f1e6bfc"
+ },
+ "hoangdao.chon-ngay-thang-nam-duong-lich": {
+  "t": "Choose the solar-calendar day, month and year you want to check. The system works out the auspicious hours and checks that day against the almanac.",
+  "h": "b7dbabb0"
+ },
+ "hoangdao.cung-mot-viec-lam-gio-nay": {
+  "t": "The same task goes smoothly at one hour and hits unexplained snags at another. Pick the day you want to check and get the list of good hours and hours to avoid, straight from the almanac.",
+  "h": "173c7571"
+ },
+ "hoangdao.gio-hoang-dao": {
+  "t": "Auspicious Hours (Huang Dao)",
+  "h": "940fb21d"
+ },
+ "hoangdao.gio-hoang-dao-12-gio-tot": {
+  "t": "<b>Auspicious Hours (Huang Dao)</b><span>The day's 12 good/bad hours by Stems &amp; Branches</span>",
+  "h": "23839283"
+ },
+ "hoangdao.gio-hoang-dao-tu-vi-minh": {
+  "t": "Auspicious Hours (Huang Dao) — Minh Bao Zi Wei Dou Shu",
+  "h": "51a0db68"
+ },
+ "hoangdao.hac-dao-6-gio-can-tranh": {
+  "t": "✗ Hei Dao — 6 Hours to Avoid",
+  "h": "39601183"
+ },
+ "hoangdao.hoang-dao-6-gio-tot": {
+  "t": "✦ Huang Dao — 6 Good Hours",
+  "h": "7263a1c8"
+ },
+ "hoangdao.hoang-lich-day-du": {
+  "t": "Full<br>almanac",
+  "h": "f4d66b7c"
+ },
+ "hoangdao.hoi-thay-nen-lam-viec-vao": {
+  "t": "✦ Ask the Master which hour to do it",
+  "h": "2a9b43ce"
+ },
+ "hoangdao.ngay-can-xem-duong-lich": {
+  "t": "Date to check (solar calendar)",
+  "h": "a32fbe04"
+ },
+ "hoangdao.tra-12-gio-hoang-dao-hac": {
+  "t": "Look up the day's 12 Huang Dao / Hei Dao hours by Stems & Branches — good hours for opening a business, setting out, signing. Ask the Master to read them for your matter.",
+  "h": "6f4fa691"
+ },
+ "hoangdao.xem-gio": {
+  "t": "See hours →",
+  "h": "e1db5866"
+ },
  "home.270-000-da-quoc-gia-da": {
   "t": "<span><span class=\"ic\" data-icon=\"file-text\"></span>270,000+</span> <span><span class=\"ic\" data-icon=\"globe\"></span>Worldwide</span> <span><span class=\"ic\" data-icon=\"check\"></span>Verified</span>",
   "h": "4d77621e"
@@ -3007,6 +3067,30 @@
   "t": "Face reading from photos",
   "h": "24c4d64e"
  },
+ "js.ngaytot.chip1": {
+  "t": "Which day is good for a wedding?",
+  "h": "409c6fd4"
+ },
+ "js.ngaytot.chip2": {
+  "t": "Which day is good to break ground or move in?",
+  "h": "26db2036"
+ },
+ "js.ngaytot.chip3": {
+  "t": "Why avoid taboo days?",
+  "h": "2cc8c854"
+ },
+ "js.ngaytot.chip4": {
+  "t": "Which day should I choose to open a business?",
+  "h": "b44fce94"
+ },
+ "js.ngaytot.greeting": {
+  "t": "I've looked at the calendar for **{m}/{y}**. What are you planning, so I can pick the best days?",
+  "h": "3a05f3ac"
+ },
+ "js.ngaytot.label": {
+  "t": "Good days · {y}/{m}",
+  "h": "cbd777dc"
+ },
  "js.paywall.bam-mo-la-tra-tien-va": {
   "t": " · tap to open — you pay and read right away, ",
   "h": "9a6023cd"
@@ -4927,9 +5011,17 @@
   "t": "** or suggest new names?",
   "h": "d922a861"
  },
+ "js.shellui.hd-al": {
+  "t": " (Lunar {d}/{m})",
+  "h": "3fd68961"
+ },
  "js.shellui.hd-can-hanh": {
   "t": ", Heavenly Stem element ",
   "h": "96563d79"
+ },
+ "js.shellui.hd-can-hanh-info": {
+  "t": "Stem <strong>{can}</strong> — Element <strong>{hanh}</strong>",
+  "h": "4069d76b"
  },
  "js.shellui.hd-gio-can-tranh-hac-dao": {
   "t": "Hours to avoid (Hei Dao): ",
@@ -4946,6 +5038,118 @@
  "js.shellui.hd-gio-tot-hoang-dao": {
   "t": "Good hours (Huang Dao): ",
   "h": "100b31dc"
+ },
+ "js.shellui.hd-ngay-cc": {
+  "t": "Day <strong>{cc}</strong>",
+  "h": "7f416c3a"
+ },
+ "js.shellui.hd-nhap-ngay-hop-le": {
+  "t": "Please enter a valid date.",
+  "h": "11a91c34"
+ },
+ "js.shellui.hd-thang-khong-co-ngay": {
+  "t": "{m}/{y} has no day {d} — please choose again.",
+  "h": "da49ec5e"
+ },
+ "js.shellui.hd-title": {
+  "t": "{date}{al} — Day {cc}",
+  "h": "593d5baf"
+ },
+ "js.shellui.hdd-bh": {
+  "t": "Killing energy, disaster",
+  "h": "28e5f7d8"
+ },
+ "js.shellui.hdd-cht": {
+  "t": "Entanglement, stagnation",
+  "h": "4363abe5"
+ },
+ "js.shellui.hdd-ct": {
+  "t": "Quarrels, gossip",
+  "h": "845d6380"
+ },
+ "js.shellui.hdd-hv": {
+  "t": "Theft, losses",
+  "h": "cde5c999"
+ },
+ "js.shellui.hdd-kq": {
+  "t": "Finances, taking in money",
+  "h": "15237468"
+ },
+ "js.shellui.hdd-md": {
+  "t": "Help from benefactors, smooth progress",
+  "h": "a8e75ee4"
+ },
+ "js.shellui.hdd-nd": {
+  "t": "Reputation, achievement",
+  "h": "b3890138"
+ },
+ "js.shellui.hdd-td": {
+  "t": "Merit and virtue, resolves misfortune",
+  "h": "e3a72954"
+ },
+ "js.shellui.hdd-th": {
+  "t": "Lawsuits, disputes, unlucky",
+  "h": "a6198a39"
+ },
+ "js.shellui.hdd-tl": {
+  "t": "Wealth, everything goes smoothly",
+  "h": "1ae9748a"
+ },
+ "js.shellui.hdd-tlao": {
+  "t": "Confinement, obstacles",
+  "h": "5d6fac43"
+ },
+ "js.shellui.hdd-tm": {
+  "t": "Protection, praying for blessings",
+  "h": "cdb38651"
+ },
+ "js.shellui.hdt-bh": {
+  "t": "Bai Hu",
+  "h": "f6380016"
+ },
+ "js.shellui.hdt-cht": {
+  "t": "Gou Chen",
+  "h": "36fb04ef"
+ },
+ "js.shellui.hdt-ct": {
+  "t": "Zhu Que",
+  "h": "90214276"
+ },
+ "js.shellui.hdt-hv": {
+  "t": "Xuan Wu",
+  "h": "f27e517b"
+ },
+ "js.shellui.hdt-kq": {
+  "t": "Jin Gui",
+  "h": "6b3e8125"
+ },
+ "js.shellui.hdt-md": {
+  "t": "Ming Tang",
+  "h": "323a8d91"
+ },
+ "js.shellui.hdt-nd": {
+  "t": "Yu Tang",
+  "h": "2c94d958"
+ },
+ "js.shellui.hdt-td": {
+  "t": "Tian De",
+  "h": "3c86d12a"
+ },
+ "js.shellui.hdt-th": {
+  "t": "Tian Xing",
+  "h": "51b356df"
+ },
+ "js.shellui.hdt-tl": {
+  "t": "Qing Long",
+  "h": "deccb086"
+ },
+ "js.shellui.hdt-tlao": {
+  "t": "Tian Lao",
+  "h": "44ad7734"
+ },
+ "js.shellui.hdt-tm": {
+  "t": "Si Ming",
+  "h": "fa69d852"
  },
  "js.shellui.het-phan-dung-thu": {
   "t": "The free trial is used up.",
@@ -6374,6 +6578,38 @@
  "js.shellui.nghe-them-mon-khac": {
   "t": "Hear another field</span>",
   "h": "abd835bb"
+ },
+ "js.shellui.ngt-al": {
+  "t": "Lunar {d}/{m}",
+  "h": "a38795f8"
+ },
+ "js.shellui.ngt-chon-thang": {
+  "t": "Choose a month from 1 to 12.",
+  "h": "ad9727eb"
+ },
+ "js.shellui.ngt-duong-cong-ki": {
+  "t": "Yang Gong Ji",
+  "h": "a919874b"
+ },
+ "js.shellui.ngt-nguyet-ki": {
+  "t": "Yue Ji",
+  "h": "53f1d21f"
+ },
+ "js.shellui.ngt-nhap-nam-hop-le": {
+  "t": "Enter a valid year (2020–2030).",
+  "h": "386683dc"
+ },
+ "js.shellui.ngt-tam-nuong": {
+  "t": "San Niang",
+  "h": "a82168f4"
+ },
+ "js.shellui.ngt-title": {
+  "t": "{y}/{m} — Auspicious and Inauspicious Day Calendar",
+  "h": "abd229f8"
+ },
+ "js.shellui.ngt-tot": {
+  "t": "Good",
+  "h": "f716d517"
  },
  "js.shellui.ngu-hanh-net-lien-quan-gi": {
   "t": "How does the stroke's Five Element relate to the Useful God?",
@@ -8694,6 +8930,70 @@
  "napam.tuoi-hop-ky": {
   "t": "<span class=\"hp-ic\" data-icon=\"users\"></span><span>Compatible<br>and clashing years</span>",
   "h": "9a664cc3"
+ },
+ "ngaytot.2-nhan-ket-qua": {
+  "t": "<span class=\"wss-n\">2</span><span class=\"wss-l\">Get the result</span>",
+  "h": "b0b2f830"
+ },
+ "ngaytot.chon-thang-nam-duong-lich-he": {
+  "t": "Choose a solar-calendar month and year. The system works out the calendar and checks good and bad days — returning the whole month marked as good, use-with-care, or to-avoid.",
+  "h": "0ad99575"
+ },
+ "ngaytot.hoi-thay-chon-ngay-dep-trong": {
+  "t": "✦ Ask the Master to pick good days this month",
+  "h": "254611c0"
+ },
+ "ngaytot.lich-ngay-tot-xau-ca-thang": {
+  "t": "A month-long calendar of good and bad days by the lunar calendar — San Niang, Yue Ji, Yang Gong Ji. Ask the Master to pick good days for weddings and groundbreaking.",
+  "h": "39fc01f0"
+ },
+ "ngaytot.lich-tot-xau-ca-thang": {
+  "t": "Whole-month<br>good/bad calendar",
+  "h": "2da65fe3"
+ },
+ "ngaytot.luu-y-nho-duong-cong-ki": {
+  "t": "Minor caution (Yang Gong Ji)",
+  "h": "72c4ae94"
+ },
+ "ngaytot.muon-len-lich-ca-thang-ma": {
+  "t": "Want to plan the whole month but don't know which days to avoid and which are convenient for starting something important? Pick the month and get a day-by-day list of good and bad days, clearly laid out.",
+  "h": "b18291cb"
+ },
+ "ngaytot.ngay-ki-tranh-viec-lon": {
+  "t": "Taboo day — avoid major undertakings",
+  "h": "c5145190"
+ },
+ "ngaytot.ngay-ky-can-tranh": {
+  "t": "Taboo days<br>to avoid",
+  "h": "22943f84"
+ },
+ "ngaytot.ngay-tot-an-toan": {
+  "t": "Good day — safe",
+  "h": "3795683e"
+ },
+ "ngaytot.ngay-tot-trong-thang": {
+  "t": "Good days this month",
+  "h": "c2d7afad"
+ },
+ "ngaytot.ngay-tot-trong-thang-lich-van": {
+  "t": "<b>Good Days This Month</b><span>Perpetual calendar · good/bad days by the lunar calendar</span>",
+  "h": "a5097cc1"
+ },
+ "ngaytot.ngay-tot-trong-thang-tu-vi": {
+  "t": "Good Days This Month — Minh Bao Zi Wei Dou Shu",
+  "h": "d7f28313"
+ },
+ "ngaytot.thang-can-xem-duong-lich": {
+  "t": "Month to check (solar calendar)",
+  "h": "f67dc270"
+ },
+ "ngaytot.truc-nhi-thap-bat-tu": {
+  "t": "Day officers,<br>28 Mansions",
+  "h": "d2ad3351"
+ },
+ "ngaytot.xem-lich": {
+  "t": "See calendar →",
+  "h": "6fa85107"
  },
  "privacy.1-thong-tin-chung-toi-thu": {
   "t": "1. Information we collect",

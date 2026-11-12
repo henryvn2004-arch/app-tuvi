@@ -583,6 +583,66 @@
   "t": "依吻合度<br>排名",
   "h": "a6655e79"
  },
+ "hoangdao.1-nhap-ngay": {
+  "t": "<span class=\"wss-n\">1</span><span class=\"wss-l\">輸入日期</span>",
+  "h": "a99fbfcf"
+ },
+ "hoangdao.6-gio-tot-nen-dung": {
+  "t": "適合使用的<br>6個吉時",
+  "h": "ca3f8fea"
+ },
+ "hoangdao.6-gio-xau-can-tranh": {
+  "t": "需要避開的<br>6個凶時",
+  "h": "4f1e6bfc"
+ },
+ "hoangdao.chon-ngay-thang-nam-duong-lich": {
+  "t": "選擇要查詢的國曆日、月、年。系統會推算黃道時辰，並比對當日的黃曆。",
+  "h": "b7dbabb0"
+ },
+ "hoangdao.cung-mot-viec-lam-gio-nay": {
+  "t": "同一件事，在這個時辰順利，換個時辰卻莫名受阻。選好要查的日期，即刻依黃曆取得吉時與該避開的時辰清單。",
+  "h": "173c7571"
+ },
+ "hoangdao.gio-hoang-dao": {
+  "t": "黃道吉時",
+  "h": "940fb21d"
+ },
+ "hoangdao.gio-hoang-dao-12-gio-tot": {
+  "t": "<b>黃道吉時</b><span>依干支推算一日12時辰的吉凶</span>",
+  "h": "23839283"
+ },
+ "hoangdao.gio-hoang-dao-tu-vi-minh": {
+  "t": "黃道吉時——明寶紫微斗數",
+  "h": "51a0db68"
+ },
+ "hoangdao.hac-dao-6-gio-can-tranh": {
+  "t": "✗ 黑道——需避開的6個時辰",
+  "h": "39601183"
+ },
+ "hoangdao.hoang-dao-6-gio-tot": {
+  "t": "✦ 黃道——6個吉時",
+  "h": "7263a1c8"
+ },
+ "hoangdao.hoang-lich-day-du": {
+  "t": "完整<br>黃曆",
+  "h": "f4d66b7c"
+ },
+ "hoangdao.hoi-thay-nen-lam-viec-vao": {
+  "t": "✦ 請問老師該在哪個時辰做事",
+  "h": "2a9b43ce"
+ },
+ "hoangdao.ngay-can-xem-duong-lich": {
+  "t": "要查詢的日期（國曆）",
+  "h": "a32fbe04"
+ },
+ "hoangdao.tra-12-gio-hoang-dao-hac": {
+  "t": "依干支查詢當日12時辰的黃道／黑道——適合開張、出行、簽約的吉時。也可請老師依您的事項論析。",
+  "h": "6f4fa691"
+ },
+ "hoangdao.xem-gio": {
+  "t": "查看時辰 →",
+  "h": "e1db5866"
+ },
  "home.270-000-da-quoc-gia-da": {
   "t": "<span><span class=\"ic\" data-icon=\"file-text\"></span>270,000+</span> <span><span class=\"ic\" data-icon=\"globe\"></span>跨國資料</span> <span><span class=\"ic\" data-icon=\"check\"></span>已經查證</span>",
   "h": "4d77621e"
@@ -3007,6 +3067,30 @@
   "t": "照片看面相",
   "h": "24c4d64e"
  },
+ "js.ngaytot.chip1": {
+  "t": "哪天適合辦婚禮？",
+  "h": "409c6fd4"
+ },
+ "js.ngaytot.chip2": {
+  "t": "哪天適合動土或入宅？",
+  "h": "26db2036"
+ },
+ "js.ngaytot.chip3": {
+  "t": "為什麼要避開忌日？",
+  "h": "2cc8c854"
+ },
+ "js.ngaytot.chip4": {
+  "t": "開張該選哪一天？",
+  "h": "b44fce94"
+ },
+ "js.ngaytot.greeting": {
+  "t": "已查看**{y}年{m}月**的曆。您打算做什麼事，好讓我挑選最好的日子？",
+  "h": "3a05f3ac"
+ },
+ "js.ngaytot.label": {
+  "t": "吉日・{y}年{m}月",
+  "h": "cbd777dc"
+ },
  "js.paywall.bam-mo-la-tra-tien-va": {
   "t": " · 點開即付款並立即閱讀，",
   "h": "9a6023cd"
@@ -4927,9 +5011,17 @@
   "t": "**，還是建議新的名字？",
   "h": "d922a861"
  },
+ "js.shellui.hd-al": {
+  "t": "（農曆{m}/{d}）",
+  "h": "3fd68961"
+ },
  "js.shellui.hd-can-hanh": {
   "t": "，天干五行 ",
   "h": "96563d79"
+ },
+ "js.shellui.hd-can-hanh-info": {
+  "t": "天干 <strong>{can}</strong>——五行 <strong>{hanh}</strong>",
+  "h": "4069d76b"
  },
  "js.shellui.hd-gio-can-tranh-hac-dao": {
   "t": "需避開的時辰（黑道）：",
@@ -4946,6 +5038,118 @@
  "js.shellui.hd-gio-tot-hoang-dao": {
   "t": "吉時（黃道）：",
   "h": "100b31dc"
+ },
+ "js.shellui.hd-ngay-cc": {
+  "t": "日 <strong>{cc}</strong>",
+  "h": "7f416c3a"
+ },
+ "js.shellui.hd-nhap-ngay-hop-le": {
+  "t": "請輸入有效的日期。",
+  "h": "11a91c34"
+ },
+ "js.shellui.hd-thang-khong-co-ngay": {
+  "t": "{y}年{m}月沒有{d}日——請重新選擇。",
+  "h": "da49ec5e"
+ },
+ "js.shellui.hd-title": {
+  "t": "{date}{al}——{cc}日",
+  "h": "593d5baf"
+ },
+ "js.shellui.hdd-bh": {
+  "t": "煞氣、災禍",
+  "h": "28e5f7d8"
+ },
+ "js.shellui.hdd-cht": {
+  "t": "糾纏、停滯",
+  "h": "4363abe5"
+ },
+ "js.shellui.hdd-ct": {
+  "t": "口舌、是非",
+  "h": "845d6380"
+ },
+ "js.shellui.hdd-hv": {
+  "t": "盜賊、損失",
+  "h": "cde5c999"
+ },
+ "js.shellui.hdd-kq": {
+  "t": "財務、進財",
+  "h": "15237468"
+ },
+ "js.shellui.hdd-md": {
+  "t": "貴人相助、順利",
+  "h": "a8e75ee4"
+ },
+ "js.shellui.hdd-nd": {
+  "t": "名望、成就",
+  "h": "b3890138"
+ },
+ "js.shellui.hdd-td": {
+  "t": "福德、化解凶險",
+  "h": "e3a72954"
+ },
+ "js.shellui.hdd-th": {
+  "t": "官訟、爭執、凶",
+  "h": "a6198a39"
+ },
+ "js.shellui.hdd-tl": {
+  "t": "財祿、諸事亨通",
+  "h": "1ae9748a"
+ },
+ "js.shellui.hdd-tlao": {
+  "t": "囚禁、阻礙",
+  "h": "5d6fac43"
+ },
+ "js.shellui.hdd-tm": {
+  "t": "護佑、祈福",
+  "h": "cdb38651"
+ },
+ "js.shellui.hdt-bh": {
+  "t": "白虎",
+  "h": "f6380016"
+ },
+ "js.shellui.hdt-cht": {
+  "t": "勾陳",
+  "h": "36fb04ef"
+ },
+ "js.shellui.hdt-ct": {
+  "t": "朱雀",
+  "h": "90214276"
+ },
+ "js.shellui.hdt-hv": {
+  "t": "玄武",
+  "h": "f27e517b"
+ },
+ "js.shellui.hdt-kq": {
+  "t": "金匱",
+  "h": "6b3e8125"
+ },
+ "js.shellui.hdt-md": {
+  "t": "明堂",
+  "h": "323a8d91"
+ },
+ "js.shellui.hdt-nd": {
+  "t": "玉堂",
+  "h": "2c94d958"
+ },
+ "js.shellui.hdt-td": {
+  "t": "天德",
+  "h": "3c86d12a"
+ },
+ "js.shellui.hdt-th": {
+  "t": "天刑",
+  "h": "51b356df"
+ },
+ "js.shellui.hdt-tl": {
+  "t": "青龍",
+  "h": "deccb086"
+ },
+ "js.shellui.hdt-tlao": {
+  "t": "天牢",
+  "h": "44ad7734"
+ },
+ "js.shellui.hdt-tm": {
+  "t": "司命",
+  "h": "fa69d852"
  },
  "js.shellui.het-phan-dung-thu": {
   "t": "試用內容已用完。",
@@ -6374,6 +6578,38 @@
  "js.shellui.nghe-them-mon-khac": {
   "t": "聽聽其他領域的意見</span>",
   "h": "abd835bb"
+ },
+ "js.shellui.ngt-al": {
+  "t": "農{m}/{d}",
+  "h": "a38795f8"
+ },
+ "js.shellui.ngt-chon-thang": {
+  "t": "請選擇1至12月。",
+  "h": "ad9727eb"
+ },
+ "js.shellui.ngt-duong-cong-ki": {
+  "t": "楊公忌",
+  "h": "a919874b"
+ },
+ "js.shellui.ngt-nguyet-ki": {
+  "t": "月忌",
+  "h": "53f1d21f"
+ },
+ "js.shellui.ngt-nhap-nam-hop-le": {
+  "t": "請輸入有效年份（2020–2030）。",
+  "h": "386683dc"
+ },
+ "js.shellui.ngt-tam-nuong": {
+  "t": "三娘",
+  "h": "a82168f4"
+ },
+ "js.shellui.ngt-title": {
+  "t": "{y}年{m}月——吉凶日曆",
+  "h": "abd229f8"
+ },
+ "js.shellui.ngt-tot": {
+  "t": "吉",
+  "h": "f716d517"
  },
  "js.shellui.ngu-hanh-net-lien-quan-gi": {
   "t": "筆畫的五行與用神有什麼關係？",
@@ -8694,6 +8930,70 @@
  "napam.tuoi-hop-ky": {
   "t": "<span class=\"hp-ic\" data-icon=\"users\"></span><span>相合、相剋<br>的生肖</span>",
   "h": "9a664cc3"
+ },
+ "ngaytot.2-nhan-ket-qua": {
+  "t": "<span class=\"wss-n\">2</span><span class=\"wss-l\">取得結果</span>",
+  "h": "b0b2f830"
+ },
+ "ngaytot.chon-thang-nam-duong-lich-he": {
+  "t": "選擇國曆月份與年份。系統會自動排曆並比對吉凶日，回傳整個月份，標示為吉、宜留意或宜避忌。",
+  "h": "0ad99575"
+ },
+ "ngaytot.hoi-thay-chon-ngay-dep-trong": {
+  "t": "✦ 請老師挑選本月吉日",
+  "h": "254611c0"
+ },
+ "ngaytot.lich-ngay-tot-xau-ca-thang": {
+  "t": "依農曆編製的整月吉凶日曆——三娘、月忌、楊公忌。可請老師為婚嫁、動土挑選好日子。",
+  "h": "39fc01f0"
+ },
+ "ngaytot.lich-tot-xau-ca-thang": {
+  "t": "整月<br>吉凶曆",
+  "h": "2da65fe3"
+ },
+ "ngaytot.luu-y-nho-duong-cong-ki": {
+  "t": "小提醒（楊公忌）",
+  "h": "72c4ae94"
+ },
+ "ngaytot.muon-len-lich-ca-thang-ma": {
+  "t": "想安排整個月的行程，卻不知道哪天該避開、哪天適合開始重要的事？選好月份，即刻取得逐日清楚標示的吉凶日名單。",
+  "h": "b18291cb"
+ },
+ "ngaytot.ngay-ki-tranh-viec-lon": {
+  "t": "忌日——避免辦大事",
+  "h": "c5145190"
+ },
+ "ngaytot.ngay-ky-can-tranh": {
+  "t": "需避開的<br>忌日",
+  "h": "22943f84"
+ },
+ "ngaytot.ngay-tot-an-toan": {
+  "t": "吉日——安穩",
+  "h": "3795683e"
+ },
+ "ngaytot.ngay-tot-trong-thang": {
+  "t": "本月吉日",
+  "h": "c2d7afad"
+ },
+ "ngaytot.ngay-tot-trong-thang-lich-van": {
+  "t": "<b>本月吉日</b><span>萬年曆・依農曆的吉凶日</span>",
+  "h": "a5097cc1"
+ },
+ "ngaytot.ngay-tot-trong-thang-tu-vi": {
+  "t": "本月吉日——明寶紫微斗數",
+  "h": "d7f28313"
+ },
+ "ngaytot.thang-can-xem-duong-lich": {
+  "t": "要查詢的月份（國曆）",
+  "h": "f67dc270"
+ },
+ "ngaytot.truc-nhi-thap-bat-tu": {
+  "t": "建除十二神、<br>二十八宿",
+  "h": "d2ad3351"
+ },
+ "ngaytot.xem-lich": {
+  "t": "查看日曆 →",
+  "h": "6fa85107"
  },
  "privacy.1-thong-tin-chung-toi-thu": {
   "t": "1. 我們蒐集的資料",
