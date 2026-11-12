@@ -611,7 +611,7 @@
    "lucnham.ngay-gio-can-xem",
    "lucnham.quy-nhan-dan-loi",
    "lucnham.tu-khoa-tam-truyen",
-   "lucnham.xem-que",
+   "lucnham.xem-que-b",
    "napam.2-xem-ket-qua",
    "napam.sua"
   ],
@@ -783,6 +783,7 @@
    "battu.chi-phi-su-dung",
    "battu.gioi-thieu",
    "battu.hoi",
+   "battu.mien-phi",
    "napam.sua",
    "ngaytot.2-nhan-ket-qua",
    "nguhanhten.can-bang-ngu-hanh",
@@ -806,7 +807,7 @@
    "nguhanhten.nhap-ten-tieng-viet-tra-chu",
    "nguhanhten.tho",
    "nguhanhten.thuy",
-   "nguhanhten.tra-ngu-hanh-ten-mien-phi",
+   "nguhanhten.tra-ngu-hanh-ten",
    "nguhanhten.vd-nguyen-van-an"
   ],
   "js": [

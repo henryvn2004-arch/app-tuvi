@@ -90,6 +90,13 @@
   "zh-tw",
   "zh-cn"
  ],
+ "/app/luc-nham": [
+  "en",
+  "ja",
+  "ko",
+  "zh-tw",
+  "zh-cn"
+ ],
  "/app/mai-hoa": [
   "en",
   "ja",
@@ -112,6 +119,13 @@
   "zh-cn"
  ],
  "/app/ngay-tot": [
+  "en",
+  "ja",
+  "ko",
+  "zh-tw",
+  "zh-cn"
+ ],
+ "/app/ngu-hanh-ten": [
   "en",
   "ja",
   "ko",

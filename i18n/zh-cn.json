@@ -2931,6 +2931,30 @@
   "t": "▸ 查看完整命盘",
   "h": "fee98465"
  },
+ "js.lucnham.chip1": {
+  "t": "此事会成还是败？",
+  "h": "fa905597"
+ },
+ "js.lucnham.chip2": {
+  "t": "何时会有结果？",
+  "h": "698cf33d"
+ },
+ "js.lucnham.chip3": {
+  "t": "该进还是该退？",
+  "h": "0735035e"
+ },
+ "js.lucnham.chip4": {
+  "t": "三传对事态的发展说了什么？",
+  "h": "43368fd7"
+ },
+ "js.lucnham.greeting": {
+  "t": "已起**大六壬**课——日 {ngay}、时 {gio}、{tdem}。取传依**{phap}**之法，初传为**{chi}・{tuong}**。您想问什么事？",
+  "h": "9e3179ca"
+ },
+ "js.lucnham.label": {
+  "t": "六壬・{ngay} {gio}",
+  "h": "f76e2ec9"
+ },
  "js.maihoa.bien-quai-noi-ket-cuc-the": {
   "t": "变卦说明了怎样的结局？",
   "h": "3c27069a"
@@ -5231,6 +5255,82 @@
   "t": "我的面相",
   "h": "d5784500"
  },
+ "js.shellui.dln-chua-lap-duoc": {
+  "t": "目前无法起课，请再试一次。（六壬课需依真实节气取月将，必须在服务器端起课。）",
+  "h": "349a0a1c"
+ },
+ "js.shellui.dln-dang-lap": {
+  "t": "正在起六壬课…",
+  "h": "24a55230"
+ },
+ "js.shellui.dln-gio-b": {
+  "t": "时 <b>{v}</b>",
+  "h": "d7ddd40f"
+ },
+ "js.shellui.dln-hanh-vuong-suy": {
+  "t": "五行 {h}——{vs}",
+  "h": "aafd8bf9"
+ },
+ "js.shellui.dln-khoa-the": {
+  "t": "课体",
+  "h": "1a2eeeba"
+ },
+ "js.shellui.dln-ngay-b": {
+  "t": "日 <b>{v}</b>",
+  "h": "5eec8778"
+ },
+ "js.shellui.dln-nguyet-tuong": {
+  "t": "月将 <b>{nt}</b> 加临占时 <b>{ct}</b>",
+  "h": "17b75e38"
+ },
+ "js.shellui.dln-note": {
+  "t": "月将加临占时以转天盘；十二天将依日干贵人之位安布（昼用昼贵人，夜用夜贵人）。",
+  "h": "c0123ca5"
+ },
+ "js.shellui.dln-phep-thu-truyen": {
+  "t": "取传之法",
+  "h": "cddbdb0f"
+ },
+ "js.shellui.dln-quy-nhan": {
+  "t": "贵人 <b>{tb}</b> 临 <b>{db}</b>",
+  "h": "f66202db"
+ },
+ "js.shellui.dln-roi-tuan-khong": {
+  "t": "落旬空",
+  "h": "7118ae11"
+ },
+ "js.shellui.dln-tam-truyen": {
+  "t": "三传",
+  "h": "68b2f0a5"
+ },
+ "js.shellui.dln-than-sat": {
+  "t": "神煞",
+  "h": "365af4b4"
+ },
+ "js.shellui.dln-thang-b": {
+  "t": "月 <b>{v}</b>",
+  "h": "1da6071f"
+ },
+ "js.shellui.dln-thien-ban-gia-dia-ban": {
+  "t": "天盘加地盘",
+  "h": "67a30bc5"
+ },
+ "js.shellui.dln-tren": {
+  "t": "临 {v}",
+  "h": "6adfd61e"
+ },
+ "js.shellui.dln-tu-khoa": {
+  "t": "四课",
+  "h": "56938410"
+ },
+ "js.shellui.dln-tuan-khong": {
+  "t": "旬空 <b>{v}</b>",
+  "h": "ecffad13"
+ },
+ "js.shellui.dln-voi-can-ngay": {
+  "t": "与日干的关系：{v}",
+  "h": "e6e06e50"
+ },
  "js.shellui.doi": {
   "t": "更换",
   "h": "c291a425"
@@ -6422,6 +6522,14 @@
  "js.shellui.lich-su-hoi-thoai": {
   "t": "对话纪录",
   "h": "0fd2afce"
+ },
+ "js.shellui.ln-nhap-ngay-thang-nam": {
+  "t": "请输入日、月、年。",
+  "h": "f001ab44"
+ },
+ "js.shellui.ln-title": {
+  "t": "{date}——{chi}时（{time}）",
+  "h": "453d1ef5"
  },
  "js.shellui.loai-cong-ty": {
   "t": "公司",
@@ -9623,6 +9731,114 @@
   "t": "紫微不是用来预测未来，而是帮助您了解自己，做出更好的选择。",
   "h": "ae92de9d"
  },
+ "lucnham.1-nhap-ngay-gio": {
+  "t": "<span class=\"wss-n\">1</span><span class=\"wss-l\">输入日期时辰</span>",
+  "h": "953e7b97"
+ },
+ "lucnham.dang-phan-van-chuyen-tien-bac": {
+  "t": "正为钱财、感情或需立刻拿定的决定犹豫不决吗？依当下的时辰与日期起一课，直指重点作答。取得直切您所问之事的简短论断。",
+  "h": "295b866e"
+ },
+ "lucnham.de-trong-la-lay-gio-hien": {
+  "t": "留空则取当下时间。系统起大六壬课，回传四课、三传、贵人，以及依《考变占》的论断。",
+  "h": "1e494a7c"
+ },
+ "lucnham.gio-can-xem": {
+  "t": "要查找的时辰",
+  "h": "84e96644"
+ },
+ "lucnham.gio-dan-03-05h": {
+  "t": "寅时（03–05时）",
+  "h": "a2d01564"
+ },
+ "lucnham.gio-dau-17-19h": {
+  "t": "酉时（17–19时）",
+  "h": "d17bfbc2"
+ },
+ "lucnham.gio-hoi-21-23h": {
+  "t": "亥时（21–23时）",
+  "h": "9721a904"
+ },
+ "lucnham.gio-mao-05-07h": {
+  "t": "卯时（05–07时）",
+  "h": "58eab8cc"
+ },
+ "lucnham.gio-mui-13-15h": {
+  "t": "未时（13–15时）",
+  "h": "56d4bde0"
+ },
+ "lucnham.gio-ngo-11-13h": {
+  "t": "午时（11–13时）",
+  "h": "8b9d2da7"
+ },
+ "lucnham.gio-suu-01-03h": {
+  "t": "丑时（01–03时）",
+  "h": "33993400"
+ },
+ "lucnham.gio-than-15-17h": {
+  "t": "申时（15–17时）",
+  "h": "9d910299"
+ },
+ "lucnham.gio-thin-07-09h": {
+  "t": "辰时（07–09时）",
+  "h": "24c10915"
+ },
+ "lucnham.gio-tuat-19-21h": {
+  "t": "戌时（19–21时）",
+  "h": "8c0c8255"
+ },
+ "lucnham.gio-ty-09-11h": {
+  "t": "巳时（09–11时）",
+  "h": "4f543b45"
+ },
+ "lucnham.gio-ty-23-01h": {
+  "t": "子时（23–01时）",
+  "h": "b64ae149"
+ },
+ "lucnham.hoi-thay-luan-than-tuong": {
+  "t": "✦ 请老师论神将",
+  "h": "fd4349af"
+ },
+ "lucnham.luan-theo-khao-bien-chiem": {
+  "t": "依《考变占》<br>论断",
+  "h": "d2082bef"
+ },
+ "lucnham.luc-nham-gian": {
+  "t": "简易六壬",
+  "h": "a7f92fcb"
+ },
+ "lucnham.luc-nham-gian-12-than-tuong": {
+  "t": "<b>简易六壬</b><span>依时辰、日期推十二神将</span>",
+  "h": "337b9381"
+ },
+ "lucnham.luc-nham-gian-tra-12-than": {
+  "t": "简易六壬——依时辰／日期查找十二神将，以及当值之神吉凶。会面、求财、出行等事，可请老师论断。",
+  "h": "554217a5"
+ },
+ "lucnham.luc-nham-gian-tu-vi-minh": {
+  "t": "简易六壬——明宝紫微斗数",
+  "h": "fd05d989"
+ },
+ "lucnham.luc-nham-la-mot-trong-tam": {
+  "t": "六壬是中国古代术数「三式」之一，以天盘、地盘配合当下的时辰与日期起课。论断聚焦于所问的具体事项，依盘上天将的位置而定。",
+  "h": "1c7538cd"
+ },
+ "lucnham.ngay-gio-can-xem": {
+  "t": "要查找的日期与时辰",
+  "h": "80c37086"
+ },
+ "lucnham.quy-nhan-dan-loi": {
+  "t": "贵人<br>指路",
+  "h": "b1fa7db6"
+ },
+ "lucnham.tu-khoa-tam-truyen": {
+  "t": "四课<br>三传",
+  "h": "dfa03fb9"
+ },
+ "lucnham.xem-que-b": {
+  "t": "起课 →",
+  "h": "f19970b5"
+ },
  "maihoa.1-lap-que": {
   "t": "<span class=\"wss-n\">1</span><span class=\"wss-l\">起卦</span>",
   "h": "b51a3df6"
@@ -9842,6 +10058,98 @@
  "ngaytot.xem-lich": {
   "t": "查看日历 →",
   "h": "6fa85107"
+ },
+ "nguhanhten.can-bang-ngu-hanh": {
+  "t": "五行<br>平衡",
+  "h": "6beeac0b"
+ },
+ "nguhanhten.can-bang-ngu-hanh-h4ql": {
+  "t": "五行平衡",
+  "h": "d1b5ef33"
+ },
+ "nguhanhten.chua-tim-thay-chu-han-cho": {
+  "t": "⚠ 找不到下列音节对应的汉字——请手动输入笔画数（可到 <a href=\"https://hanzii.net\" target=\"_blank\" style=\"color:var(--tx-blue)\">hanzii.net</a> 查找）：",
+  "h": "464b3314"
+ },
+ "nguhanhten.diem-so-hop-khac": {
+  "t": "相合相克<br>分数",
+  "h": "1b721b9d"
+ },
+ "nguhanhten.ho-va-ten-day-du": {
+  "t": "完整姓名",
+  "h": "e920e42c"
+ },
+ "nguhanhten.hoa": {
+  "t": "火",
+  "h": "be792fa1"
+ },
+ "nguhanhten.hoi-thay-luan-sau-ngu-hanh": {
+  "t": "✦ 请老师深入论析姓名五行",
+  "h": "ba1b2c72"
+ },
+ "nguhanhten.khong-ro-bo-qua": {
+  "t": "不确定／略过",
+  "h": "941d7cdc"
+ },
+ "nguhanhten.moc": {
+  "t": "木",
+  "h": "4bd601ae"
+ },
+ "nguhanhten.mot-cai-ten-goi-hang-ngay": {
+  "t": "每天被叫的名字也自带五行——与本命相合还是相克，很少人检查过。输入姓名，免费取得五行分数与明确结论。",
+  "h": "3e585f76"
+ },
+ "nguhanhten.ngu-hanh-ban-menh-tuy-chon": {
+  "t": "本命五行（选填）",
+  "h": "c90318f2"
+ },
+ "nguhanhten.ngu-hanh-kim-moc-thuy-hoa": {
+  "t": "五行（金、木、水、火、土）是中国古代描述五种基本元素相生相克规律的学说，是众多东方命理学的基础。每个音、字或数字都可归入某一行，与本命对照其相合与相克。",
+  "h": "bcca1f1c"
+ },
+ "nguhanhten.ngu-hanh-ten": {
+  "t": "姓名五行",
+  "h": "9b92ea0c"
+ },
+ "nguhanhten.ngu-hanh-ten-ngu-hanh-tung": {
+  "t": "<b>姓名五行</b><span>每个字的五行与平衡</span>",
+  "h": "32d338b2"
+ },
+ "nguhanhten.ngu-hanh-ten-tu-vi-minh": {
+  "t": "姓名五行——明宝紫微斗数",
+  "h": "2de02e4f"
+ },
+ "nguhanhten.ngu-hanh-tung-chu": {
+  "t": "每个字的<br>五行",
+  "h": "f7103aec"
+ },
+ "nguhanhten.nhap-du-ho-ten-co-dau": {
+  "t": "请输入姓＋名（含越南语声调符号），以空格分隔",
+  "h": "aefee322"
+ },
+ "nguhanhten.nhap-ho-ten-day-du-co": {
+  "t": "请输入完整姓名，也可另选本命五行。取得五行平衡图、分数，以及与本命相合或相克的结论。",
+  "h": "2fd9ddb3"
+ },
+ "nguhanhten.nhap-ten-tieng-viet-tra-chu": {
+  "t": "输入越南语姓名——查找汉字、笔画数与每个字的五行、五行平衡，并与本命对照。更深入的解读可请教老师。",
+  "h": "f620e146"
+ },
+ "nguhanhten.tho": {
+  "t": "土",
+  "h": "9a0da463"
+ },
+ "nguhanhten.thuy": {
+  "t": "水",
+  "h": "f354741d"
+ },
+ "nguhanhten.tra-ngu-hanh-ten": {
+  "t": "查找姓名五行 →",
+  "h": "bfb81211"
+ },
+ "nguhanhten.vd-nguyen-van-an": {
+  "t": "例：Nguyễn Văn An",
+  "h": "4811bda0"
  },
  "privacy.1-thong-tin-chung-toi-thu": {
   "t": "1. 我们搜集的数据",

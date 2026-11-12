@@ -2931,6 +2931,30 @@
   "t": "▸ View full chart",
   "h": "fee98465"
  },
+ "js.lucnham.chip1": {
+  "t": "Will this succeed or fail?",
+  "h": "fa905597"
+ },
+ "js.lucnham.chip2": {
+  "t": "When will there be a result?",
+  "h": "698cf33d"
+ },
+ "js.lucnham.chip3": {
+  "t": "Should I advance or hold back?",
+  "h": "0735035e"
+ },
+ "js.lucnham.chip4": {
+  "t": "What do the Three Transmissions say about how it unfolds?",
+  "h": "43368fd7"
+ },
+ "js.lucnham.greeting": {
+  "t": "The **Da Liu Ren** chart is ready — day {ngay}, hour {gio}, {tdem}. The transmission is selected by the method **{phap}**, with the initial transmission **{chi} · {tuong}**. What would you like to ask about?",
+  "h": "9e3179ca"
+ },
+ "js.lucnham.label": {
+  "t": "Liu Ren · {ngay}, hour {gio}",
+  "h": "f76e2ec9"
+ },
  "js.maihoa.bien-quai-noi-ket-cuc-the": {
   "t": "What does the changed hexagram say about the outcome?",
   "h": "3c27069a"
@@ -5231,6 +5255,82 @@
   "t": "My face reading",
   "h": "d5784500"
  },
+ "js.shellui.dln-chua-lap-duoc": {
+  "t": "Couldn't build the chart right now — please try again. (The Liu Ren chart must be built on the server because it needs the monthly general by the real solar term.)",
+  "h": "349a0a1c"
+ },
+ "js.shellui.dln-dang-lap": {
+  "t": "Building the Liu Ren chart…",
+  "h": "24a55230"
+ },
+ "js.shellui.dln-gio-b": {
+  "t": "Hour <b>{v}</b>",
+  "h": "d7ddd40f"
+ },
+ "js.shellui.dln-hanh-vuong-suy": {
+  "t": "Element {h} — {vs}",
+  "h": "aafd8bf9"
+ },
+ "js.shellui.dln-khoa-the": {
+  "t": "Chart type",
+  "h": "1a2eeeba"
+ },
+ "js.shellui.dln-ngay-b": {
+  "t": "Day <b>{v}</b>",
+  "h": "5eec8778"
+ },
+ "js.shellui.dln-nguyet-tuong": {
+  "t": "Monthly General <b>{nt}</b> placed on the divination hour <b>{ct}</b>",
+  "h": "17b75e38"
+ },
+ "js.shellui.dln-note": {
+  "t": "The Monthly General is placed on the divination hour to rotate the Heaven Plate; the 12 Heavenly Generals are set from the Noble Person position for the day stem (day uses the daytime Noble Person, night uses the nighttime one).",
+  "h": "c0123ca5"
+ },
+ "js.shellui.dln-phep-thu-truyen": {
+  "t": "Method of selecting the transmission",
+  "h": "cddbdb0f"
+ },
+ "js.shellui.dln-quy-nhan": {
+  "t": "Noble Person <b>{tb}</b> over <b>{db}</b>",
+  "h": "f66202db"
+ },
+ "js.shellui.dln-roi-tuan-khong": {
+  "t": "falls in the Void",
+  "h": "7118ae11"
+ },
+ "js.shellui.dln-tam-truyen": {
+  "t": "Three Transmissions",
+  "h": "68b2f0a5"
+ },
+ "js.shellui.dln-than-sat": {
+  "t": "Spirit stars",
+  "h": "365af4b4"
+ },
+ "js.shellui.dln-thang-b": {
+  "t": "Month <b>{v}</b>",
+  "h": "1da6071f"
+ },
+ "js.shellui.dln-thien-ban-gia-dia-ban": {
+  "t": "Heaven Plate over Earth Plate",
+  "h": "67a30bc5"
+ },
+ "js.shellui.dln-tren": {
+  "t": "over {v}",
+  "h": "6adfd61e"
+ },
+ "js.shellui.dln-tu-khoa": {
+  "t": "Four Lessons",
+  "h": "56938410"
+ },
+ "js.shellui.dln-tuan-khong": {
+  "t": "Void <b>{v}</b>",
+  "h": "ecffad13"
+ },
+ "js.shellui.dln-voi-can-ngay": {
+  "t": "Relation to the day stem: {v}",
+  "h": "e6e06e50"
+ },
  "js.shellui.doi": {
   "t": "Change",
   "h": "c291a425"
@@ -6422,6 +6522,14 @@
  "js.shellui.lich-su-hoi-thoai": {
   "t": "Conversation history",
   "h": "0fd2afce"
+ },
+ "js.shellui.ln-nhap-ngay-thang-nam": {
+  "t": "Please enter the day, month and year.",
+  "h": "f001ab44"
+ },
+ "js.shellui.ln-title": {
+  "t": "{date} — {chi} hour ({time})",
+  "h": "453d1ef5"
  },
  "js.shellui.loai-cong-ty": {
   "t": "Company",
@@ -9623,6 +9731,114 @@
   "t": "Zi Wei doesn't predict the future. It helps you understand yourself so you can choose better.",
   "h": "ae92de9d"
  },
+ "lucnham.1-nhap-ngay-gio": {
+  "t": "<span class=\"wss-n\">1</span><span class=\"wss-l\">Enter date &amp; time</span>",
+  "h": "953e7b97"
+ },
+ "lucnham.dang-phan-van-chuyen-tien-bac": {
+  "t": "Torn over money, love or a decision that must be made right now — cast a chart for the exact current hour and day to answer the heart of it. Get a short reading that goes straight to what you are asking.",
+  "h": "295b866e"
+ },
+ "lucnham.de-trong-la-lay-gio-hien": {
+  "t": "Leave blank to use the current time. The system builds a Da Liu Ren chart and returns the Four Lessons, Three Transmissions, the Noble Person and a reading following the Kao Bian Zhan.",
+  "h": "1e494a7c"
+ },
+ "lucnham.gio-can-xem": {
+  "t": "Hour to check",
+  "h": "84e96644"
+ },
+ "lucnham.gio-dan-03-05h": {
+  "t": "Yin hour (03–05)",
+  "h": "a2d01564"
+ },
+ "lucnham.gio-dau-17-19h": {
+  "t": "You hour (17–19)",
+  "h": "d17bfbc2"
+ },
+ "lucnham.gio-hoi-21-23h": {
+  "t": "Hai hour (21–23)",
+  "h": "9721a904"
+ },
+ "lucnham.gio-mao-05-07h": {
+  "t": "Mao hour (05–07)",
+  "h": "58eab8cc"
+ },
+ "lucnham.gio-mui-13-15h": {
+  "t": "Wei hour (13–15)",
+  "h": "56d4bde0"
+ },
+ "lucnham.gio-ngo-11-13h": {
+  "t": "Wu hour (11–13)",
+  "h": "8b9d2da7"
+ },
+ "lucnham.gio-suu-01-03h": {
+  "t": "Chou hour (01–03)",
+  "h": "33993400"
+ },
+ "lucnham.gio-than-15-17h": {
+  "t": "Shen hour (15–17)",
+  "h": "9d910299"
+ },
+ "lucnham.gio-thin-07-09h": {
+  "t": "Chen hour (07–09)",
+  "h": "24c10915"
+ },
+ "lucnham.gio-tuat-19-21h": {
+  "t": "Xu hour (19–21)",
+  "h": "8c0c8255"
+ },
+ "lucnham.gio-ty-09-11h": {
+  "t": "Si hour (09–11)",
+  "h": "4f543b45"
+ },
+ "lucnham.gio-ty-23-01h": {
+  "t": "Zi hour (23–01)",
+  "h": "b64ae149"
+ },
+ "lucnham.hoi-thay-luan-than-tuong": {
+  "t": "✦ Ask the Master to read the generals",
+  "h": "fd4349af"
+ },
+ "lucnham.luan-theo-khao-bien-chiem": {
+  "t": "Reading by the<br>Kao Bian Zhan",
+  "h": "d2082bef"
+ },
+ "lucnham.luc-nham-gian": {
+  "t": "Simple Liu Ren",
+  "h": "a7f92fcb"
+ },
+ "lucnham.luc-nham-gian-12-than-tuong": {
+  "t": "<b>Simple Liu Ren</b><span>The 12 generals by hour · day</span>",
+  "h": "337b9381"
+ },
+ "lucnham.luc-nham-gian-tra-12-than": {
+  "t": "Simple Liu Ren — look up the 12 generals by hour/day and whether the general on duty is auspicious or inauspicious. Ask the Master for a reading on meetings, seeking wealth, setting out.",
+  "h": "554217a5"
+ },
+ "lucnham.luc-nham-gian-tu-vi-minh": {
+  "t": "Simple Liu Ren — Minh Bao Zi Wei Dou Shu",
+  "h": "fd05d989"
+ },
+ "lucnham.luc-nham-la-mot-trong-tam": {
+  "t": "Liu Ren is one of the Three Arts of traditional Chinese divination, using the Heaven Plate and Earth Plate matched to the current hour and day to cast a chart. The reading focuses on the specific matter being asked, based on the positions of the Heavenly Generals on the plate.",
+  "h": "1c7538cd"
+ },
+ "lucnham.ngay-gio-can-xem": {
+  "t": "Date &amp; time to check",
+  "h": "80c37086"
+ },
+ "lucnham.quy-nhan-dan-loi": {
+  "t": "Noble Person<br>shows the way",
+  "h": "b1fa7db6"
+ },
+ "lucnham.tu-khoa-tam-truyen": {
+  "t": "Four Lessons<br>Three Transmissions",
+  "h": "dfa03fb9"
+ },
+ "lucnham.xem-que-b": {
+  "t": "Cast the chart →",
+  "h": "f19970b5"
+ },
  "maihoa.1-lap-que": {
   "t": "<span class=\"wss-n\">1</span><span class=\"wss-l\">Cast the hexagram</span>",
   "h": "b51a3df6"
@@ -9842,6 +10058,98 @@
  "ngaytot.xem-lich": {
   "t": "See calendar →",
   "h": "6fa85107"
+ },
+ "nguhanhten.can-bang-ngu-hanh": {
+  "t": "Five Elements<br>balance",
+  "h": "6beeac0b"
+ },
+ "nguhanhten.can-bang-ngu-hanh-h4ql": {
+  "t": "Five Elements Balance",
+  "h": "d1b5ef33"
+ },
+ "nguhanhten.chua-tim-thay-chu-han-cho": {
+  "t": "⚠ No Chinese character found for the syllables below — enter the stroke count by hand (look it up at <a href=\"https://hanzii.net\" target=\"_blank\" style=\"color:var(--tx-blue)\">hanzii.net</a>):",
+  "h": "464b3314"
+ },
+ "nguhanhten.diem-so-hop-khac": {
+  "t": "Match / clash<br>score",
+  "h": "1b721b9d"
+ },
+ "nguhanhten.ho-va-ten-day-du": {
+  "t": "Full name",
+  "h": "e920e42c"
+ },
+ "nguhanhten.hoa": {
+  "t": "Fire",
+  "h": "be792fa1"
+ },
+ "nguhanhten.hoi-thay-luan-sau-ngu-hanh": {
+  "t": "✦ Ask the Master for an in-depth reading of the name's Five Elements",
+  "h": "ba1b2c72"
+ },
+ "nguhanhten.khong-ro-bo-qua": {
+  "t": "Not sure / skip",
+  "h": "941d7cdc"
+ },
+ "nguhanhten.moc": {
+  "t": "Wood",
+  "h": "4bd601ae"
+ },
+ "nguhanhten.mot-cai-ten-goi-hang-ngay": {
+  "t": "Even the name you are called every day carries its own Five Element — whether it harmonizes with or clashes with your life element is something few people have ever checked. Enter your full name for a Five Element score and a clear verdict, free.",
+  "h": "3e585f76"
+ },
+ "nguhanhten.ngu-hanh-ban-menh-tuy-chon": {
+  "t": "Life element (optional)",
+  "h": "c90318f2"
+ },
+ "nguhanhten.ngu-hanh-kim-moc-thuy-hoa": {
+  "t": "The Five Elements (Metal, Wood, Water, Fire, Earth) is an ancient Chinese doctrine describing the laws of generation and restraint among the five basic elements, underlying many Eastern fate-reading arts. Every sound, character or number can be assigned to an element to compare harmony and clash with one's life element.",
+  "h": "bcca1f1c"
+ },
+ "nguhanhten.ngu-hanh-ten": {
+  "t": "Name Five Elements",
+  "h": "9b92ea0c"
+ },
+ "nguhanhten.ngu-hanh-ten-ngu-hanh-tung": {
+  "t": "<b>Name Five Elements</b><span>Each character's element &amp; the balance</span>",
+  "h": "32d338b2"
+ },
+ "nguhanhten.ngu-hanh-ten-tu-vi-minh": {
+  "t": "Name Five Elements — Minh Bao Zi Wei Dou Shu",
+  "h": "2de02e4f"
+ },
+ "nguhanhten.ngu-hanh-tung-chu": {
+  "t": "Element of<br>each character",
+  "h": "f7103aec"
+ },
+ "nguhanhten.nhap-du-ho-ten-co-dau": {
+  "t": "Enter the family name + given name with diacritics, separated by spaces",
+  "h": "aefee322"
+ },
+ "nguhanhten.nhap-ho-ten-day-du-co": {
+  "t": "Enter your full name; you can also choose your life element. Get a Five Element balance chart, a score and a verdict on whether it harmonizes or clashes with your life element.",
+  "h": "2fd9ddb3"
+ },
+ "nguhanhten.nhap-ten-tieng-viet-tra-chu": {
+  "t": "Enter a Vietnamese name — look up the Chinese characters, stroke counts and element of each character, the Five Element balance and the comparison with your life element. Ask the Master for a deeper reading.",
+  "h": "f620e146"
+ },
+ "nguhanhten.tho": {
+  "t": "Earth",
+  "h": "9a0da463"
+ },
+ "nguhanhten.thuy": {
+  "t": "Water",
+  "h": "f354741d"
+ },
+ "nguhanhten.tra-ngu-hanh-ten": {
+  "t": "Check name elements →",
+  "h": "bfb81211"
+ },
+ "nguhanhten.vd-nguyen-van-an": {
+  "t": "e.g. Nguyễn Văn An",
+  "h": "4811bda0"
  },
  "privacy.1-thong-tin-chung-toi-thu": {
   "t": "1. Information we collect",

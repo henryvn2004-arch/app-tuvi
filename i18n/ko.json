@@ -2931,6 +2931,30 @@
   "t": "▸ 전체 명반 보기",
   "h": "fee98465"
  },
+ "js.lucnham.chip1": {
+  "t": "이 일은 성사될까요, 실패할까요?",
+  "h": "fa905597"
+ },
+ "js.lucnham.chip2": {
+  "t": "언제쯤 결과가 나올까요?",
+  "h": "698cf33d"
+ },
+ "js.lucnham.chip3": {
+  "t": "나아가야 할까요, 물러나야 할까요?",
+  "h": "0735035e"
+ },
+ "js.lucnham.chip4": {
+  "t": "삼전은 전개에 대해 무엇을 말해 주나요?",
+  "h": "43368fd7"
+ },
+ "js.lucnham.greeting": {
+  "t": "**대육임** 과를 세웠어요 — 일 {ngay}, 시 {gio}, {tdem}. 취전은 **{phap}** 법에 따르며 초전은 **{chi} · {tuong}**이에요. 어떤 일을 묻고 싶으세요?",
+  "h": "9e3179ca"
+ },
+ "js.lucnham.label": {
+  "t": "육임 · {ngay} {gio}시",
+  "h": "f76e2ec9"
+ },
  "js.maihoa.bien-quai-noi-ket-cuc-the": {
   "t": "변괘는 결말을 어떻게 말해 주나요?",
   "h": "3c27069a"
@@ -5231,6 +5255,82 @@
   "t": "내 면상",
   "h": "d5784500"
  },
+ "js.shellui.dln-chua-lap-duoc": {
+  "t": "지금은 반을 세우지 못했어요. 다시 시도해 주세요. (육임반은 실제 절기에 따른 월장이 필요해 서버에서 세워야 해요.)",
+  "h": "349a0a1c"
+ },
+ "js.shellui.dln-dang-lap": {
+  "t": "육임반을 세우는 중…",
+  "h": "24a55230"
+ },
+ "js.shellui.dln-gio-b": {
+  "t": "시 <b>{v}</b>",
+  "h": "d7ddd40f"
+ },
+ "js.shellui.dln-hanh-vuong-suy": {
+  "t": "오행 {h} — {vs}",
+  "h": "aafd8bf9"
+ },
+ "js.shellui.dln-khoa-the": {
+  "t": "과체",
+  "h": "1a2eeeba"
+ },
+ "js.shellui.dln-ngay-b": {
+  "t": "일 <b>{v}</b>",
+  "h": "5eec8778"
+ },
+ "js.shellui.dln-nguyet-tuong": {
+  "t": "월장 <b>{nt}</b>이(가) 점시 <b>{ct}</b>에 가해짐",
+  "h": "17b75e38"
+ },
+ "js.shellui.dln-note": {
+  "t": "월장을 점시에 가해 천반을 돌려요. 12천장은 일간의 귀인 위치에서 배치해요 (낮에는 주귀인, 밤에는 야귀인을 써요).",
+  "h": "c0123ca5"
+ },
+ "js.shellui.dln-phep-thu-truyen": {
+  "t": "취전법",
+  "h": "cddbdb0f"
+ },
+ "js.shellui.dln-quy-nhan": {
+  "t": "귀인 <b>{tb}</b>이(가) <b>{db}</b> 위에",
+  "h": "f66202db"
+ },
+ "js.shellui.dln-roi-tuan-khong": {
+  "t": "공망에 듦",
+  "h": "7118ae11"
+ },
+ "js.shellui.dln-tam-truyen": {
+  "t": "삼전",
+  "h": "68b2f0a5"
+ },
+ "js.shellui.dln-than-sat": {
+  "t": "신살",
+  "h": "365af4b4"
+ },
+ "js.shellui.dln-thang-b": {
+  "t": "월 <b>{v}</b>",
+  "h": "1da6071f"
+ },
+ "js.shellui.dln-thien-ban-gia-dia-ban": {
+  "t": "천반이 지반에 가해짐",
+  "h": "67a30bc5"
+ },
+ "js.shellui.dln-tren": {
+  "t": "{v} 위",
+  "h": "6adfd61e"
+ },
+ "js.shellui.dln-tu-khoa": {
+  "t": "사과",
+  "h": "56938410"
+ },
+ "js.shellui.dln-tuan-khong": {
+  "t": "공망 <b>{v}</b>",
+  "h": "ecffad13"
+ },
+ "js.shellui.dln-voi-can-ngay": {
+  "t": "일간과의 관계: {v}",
+  "h": "e6e06e50"
+ },
  "js.shellui.doi": {
   "t": "변경",
   "h": "c291a425"
@@ -6422,6 +6522,14 @@
  "js.shellui.lich-su-hoi-thoai": {
   "t": "대화 기록",
   "h": "0fd2afce"
+ },
+ "js.shellui.ln-nhap-ngay-thang-nam": {
+  "t": "일·월·연을 입력해 주세요.",
+  "h": "f001ab44"
+ },
+ "js.shellui.ln-title": {
+  "t": "{date} — {chi}시 ({time})",
+  "h": "453d1ef5"
  },
  "js.shellui.loai-cong-ty": {
   "t": "회사",
@@ -9623,6 +9731,114 @@
   "t": "자미두수는 미래를 맞히는 것이 아니라, 나를 이해하고 더 나은 선택을 하도록 돕습니다.",
   "h": "ae92de9d"
  },
+ "lucnham.1-nhap-ngay-gio": {
+  "t": "<span class=\"wss-n\">1</span><span class=\"wss-l\">날짜·시각 입력</span>",
+  "h": "953e7b97"
+ },
+ "lucnham.dang-phan-van-chuyen-tien-bac": {
+  "t": "돈이나 애정, 지금 당장 정해야 할 결정으로 고민 중인가요? 현재 시각과 날짜에 딱 맞춰 점을 쳐서 핵심에 답해 드려요. 묻는 일에 곧바로 들어가는 짧은 풀이를 받아 보세요.",
+  "h": "295b866e"
+ },
+ "lucnham.de-trong-la-lay-gio-hien": {
+  "t": "비워 두면 현재 시각을 써요. 시스템이 대육임 과를 세워 사과·삼전·귀인과 『고변점』에 따른 풀이를 돌려줘요.",
+  "h": "1e494a7c"
+ },
+ "lucnham.gio-can-xem": {
+  "t": "볼 시각",
+  "h": "84e96644"
+ },
+ "lucnham.gio-dan-03-05h": {
+  "t": "인시 (03–05시)",
+  "h": "a2d01564"
+ },
+ "lucnham.gio-dau-17-19h": {
+  "t": "유시 (17–19시)",
+  "h": "d17bfbc2"
+ },
+ "lucnham.gio-hoi-21-23h": {
+  "t": "해시 (21–23시)",
+  "h": "9721a904"
+ },
+ "lucnham.gio-mao-05-07h": {
+  "t": "묘시 (05–07시)",
+  "h": "58eab8cc"
+ },
+ "lucnham.gio-mui-13-15h": {
+  "t": "미시 (13–15시)",
+  "h": "56d4bde0"
+ },
+ "lucnham.gio-ngo-11-13h": {
+  "t": "오시 (11–13시)",
+  "h": "8b9d2da7"
+ },
+ "lucnham.gio-suu-01-03h": {
+  "t": "축시 (01–03시)",
+  "h": "33993400"
+ },
+ "lucnham.gio-than-15-17h": {
+  "t": "신시 (15–17시)",
+  "h": "9d910299"
+ },
+ "lucnham.gio-thin-07-09h": {
+  "t": "진시 (07–09시)",
+  "h": "24c10915"
+ },
+ "lucnham.gio-tuat-19-21h": {
+  "t": "술시 (19–21시)",
+  "h": "8c0c8255"
+ },
+ "lucnham.gio-ty-09-11h": {
+  "t": "사시 (09–11시)",
+  "h": "4f543b45"
+ },
+ "lucnham.gio-ty-23-01h": {
+  "t": "자시 (23–01시)",
+  "h": "b64ae149"
+ },
+ "lucnham.hoi-thay-luan-than-tuong": {
+  "t": "✦ 선생님께 신장 풀이 묻기",
+  "h": "fd4349af"
+ },
+ "lucnham.luan-theo-khao-bien-chiem": {
+  "t": "『고변점』에<br>따른 풀이",
+  "h": "d2082bef"
+ },
+ "lucnham.luc-nham-gian": {
+  "t": "육임 간이판",
+  "h": "a7f92fcb"
+ },
+ "lucnham.luc-nham-gian-12-than-tuong": {
+  "t": "<b>육임 간이판</b><span>시각·날짜별 12신장</span>",
+  "h": "337b9381"
+ },
+ "lucnham.luc-nham-gian-tra-12-than": {
+  "t": "육임 간이판 — 시각/날짜별 12신장과 당직 신이 길한지 흉한지 조회해요. 만남·재물·출행에 대한 풀이는 선생님께 물어보세요.",
+  "h": "554217a5"
+ },
+ "lucnham.luc-nham-gian-tu-vi-minh": {
+  "t": "육임 간이판 — 명보 자미두수",
+  "h": "fd05d989"
+ },
+ "lucnham.luc-nham-la-mot-trong-tam": {
+  "t": "육임은 중국 고대 술수 「삼식」의 하나로, 천반과 지반을 현재 시각·날짜에 맞춰 과를 세워요. 풀이는 묻는 구체적인 일에 초점을 두고, 반 위 천장의 위치를 근거로 해요.",
+  "h": "1c7538cd"
+ },
+ "lucnham.ngay-gio-can-xem": {
+  "t": "볼 날짜·시각",
+  "h": "80c37086"
+ },
+ "lucnham.quy-nhan-dan-loi": {
+  "t": "귀인이<br>이끌어줌",
+  "h": "b1fa7db6"
+ },
+ "lucnham.tu-khoa-tam-truyen": {
+  "t": "사과<br>삼전",
+  "h": "dfa03fb9"
+ },
+ "lucnham.xem-que-b": {
+  "t": "과 세우기 →",
+  "h": "f19970b5"
+ },
  "maihoa.1-lap-que": {
   "t": "<span class=\"wss-n\">1</span><span class=\"wss-l\">괘 세우기</span>",
   "h": "b51a3df6"
@@ -9842,6 +10058,98 @@
  "ngaytot.xem-lich": {
   "t": "달력 보기 →",
   "h": "6fa85107"
+ },
+ "nguhanhten.can-bang-ngu-hanh": {
+  "t": "오행<br>균형",
+  "h": "6beeac0b"
+ },
+ "nguhanhten.can-bang-ngu-hanh-h4ql": {
+  "t": "오행 균형",
+  "h": "d1b5ef33"
+ },
+ "nguhanhten.chua-tim-thay-chu-han-cho": {
+  "t": "⚠ 아래 음절에 해당하는 한자를 찾지 못했어요. 획수를 직접 입력해 주세요 (<a href=\"https://hanzii.net\" target=\"_blank\" style=\"color:var(--tx-blue)\">hanzii.net</a>에서 조회):",
+  "h": "464b3314"
+ },
+ "nguhanhten.diem-so-hop-khac": {
+  "t": "합·극<br>점수",
+  "h": "1b721b9d"
+ },
+ "nguhanhten.ho-va-ten-day-du": {
+  "t": "성명(전체)",
+  "h": "e920e42c"
+ },
+ "nguhanhten.hoa": {
+  "t": "화",
+  "h": "be792fa1"
+ },
+ "nguhanhten.hoi-thay-luan-sau-ngu-hanh": {
+  "t": "✦ 선생님께 이름의 오행 깊이 풀이받기",
+  "h": "ba1b2c72"
+ },
+ "nguhanhten.khong-ro-bo-qua": {
+  "t": "잘 모름 / 건너뛰기",
+  "h": "941d7cdc"
+ },
+ "nguhanhten.moc": {
+  "t": "목",
+  "h": "4bd601ae"
+ },
+ "nguhanhten.mot-cai-ten-goi-hang-ngay": {
+  "t": "매일 불리는 이름에도 저마다의 오행이 있어요. 본명(命)과 어울리는지 극하는지 확인해 본 사람은 드물어요. 성명을 입력하면 오행 점수와 분명한 결론을 무료로 받아 볼 수 있어요.",
+  "h": "3e585f76"
+ },
+ "nguhanhten.ngu-hanh-ban-menh-tuy-chon": {
+  "t": "본명 오행 (선택)",
+  "h": "c90318f2"
+ },
+ "nguhanhten.ngu-hanh-kim-moc-thuy-hoa": {
+  "t": "오행(금·목·수·화·토)은 다섯 가지 기본 요소 사이의 상생·상극 법칙을 설명하는 중국 고대 학설로, 여러 동양 명리학의 토대가 돼요. 모든 소리·글자·숫자는 오행 중 하나로 귀속시켜 본명과의 합·극을 대조할 수 있어요.",
+  "h": "bcca1f1c"
+ },
+ "nguhanhten.ngu-hanh-ten": {
+  "t": "이름의 오행",
+  "h": "9b92ea0c"
+ },
+ "nguhanhten.ngu-hanh-ten-ngu-hanh-tung": {
+  "t": "<b>이름의 오행</b><span>글자별 오행과 균형</span>",
+  "h": "32d338b2"
+ },
+ "nguhanhten.ngu-hanh-ten-tu-vi-minh": {
+  "t": "이름의 오행 — 명보 자미두수",
+  "h": "2de02e4f"
+ },
+ "nguhanhten.ngu-hanh-tung-chu": {
+  "t": "글자별<br>오행",
+  "h": "f7103aec"
+ },
+ "nguhanhten.nhap-du-ho-ten-co-dau": {
+  "t": "성 + 이름을 성조 부호와 함께 띄어쓰기로 구분해 입력",
+  "h": "aefee322"
+ },
+ "nguhanhten.nhap-ho-ten-day-du-co": {
+  "t": "성명을 입력하세요. 본명 오행도 선택할 수 있어요. 오행 균형 도표, 점수, 그리고 본명과 합인지 극인지에 대한 결론을 받아요.",
+  "h": "2fd9ddb3"
+ },
+ "nguhanhten.nhap-ten-tieng-viet-tra-chu": {
+  "t": "베트남어 이름을 입력하면 한자·획수·글자별 오행, 오행 균형, 본명과의 대조를 알 수 있어요. 더 깊은 풀이는 선생님께 물어보세요.",
+  "h": "f620e146"
+ },
+ "nguhanhten.tho": {
+  "t": "토",
+  "h": "9a0da463"
+ },
+ "nguhanhten.thuy": {
+  "t": "수",
+  "h": "f354741d"
+ },
+ "nguhanhten.tra-ngu-hanh-ten": {
+  "t": "이름의 오행 조회하기 →",
+  "h": "bfb81211"
+ },
+ "nguhanhten.vd-nguyen-van-an": {
+  "t": "예: Nguyễn Văn An",
+  "h": "4811bda0"
  },
  "privacy.1-thong-tin-chung-toi-thu": {
   "t": "1. 수집하는 정보",

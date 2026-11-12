@@ -2931,6 +2931,30 @@
   "t": "▸ 命盤の全体を見る",
   "h": "fee98465"
  },
+ "js.lucnham.chip1": {
+  "t": "これは成功しますか、失敗しますか？",
+  "h": "fa905597"
+ },
+ "js.lucnham.chip2": {
+  "t": "いつ結果が出ますか？",
+  "h": "698cf33d"
+ },
+ "js.lucnham.chip3": {
+  "t": "進むべきですか、退くべきですか？",
+  "h": "0735035e"
+ },
+ "js.lucnham.chip4": {
+  "t": "三伝は経過について何を語っていますか？",
+  "h": "43368fd7"
+ },
+ "js.lucnham.greeting": {
+  "t": "**大六壬**の課を立てました。日 {ngay}、時 {gio}、{tdem}。取伝は**{phap}**の法により、初伝は**{chi}・{tuong}**です。どんなことを聞きたいですか？",
+  "h": "9e3179ca"
+ },
+ "js.lucnham.label": {
+  "t": "六壬・{ngay} {gio}",
+  "h": "f76e2ec9"
+ },
  "js.maihoa.bien-quai-noi-ket-cuc-the": {
   "t": "変卦は結末をどう示していますか？",
   "h": "3c27069a"
@@ -5231,6 +5255,82 @@
   "t": "私の面相",
   "h": "d5784500"
  },
+ "js.shellui.dln-chua-lap-duoc": {
+  "t": "今は盤を立てられませんでした。もう一度お試しください。（六壬盤は、実際の節気にもとづく月将が必要なため、サーバー側で立てます。）",
+  "h": "349a0a1c"
+ },
+ "js.shellui.dln-dang-lap": {
+  "t": "六壬盤を作成中…",
+  "h": "24a55230"
+ },
+ "js.shellui.dln-gio-b": {
+  "t": "時 <b>{v}</b>",
+  "h": "d7ddd40f"
+ },
+ "js.shellui.dln-hanh-vuong-suy": {
+  "t": "五行 {h} — {vs}",
+  "h": "aafd8bf9"
+ },
+ "js.shellui.dln-khoa-the": {
+  "t": "課体",
+  "h": "1a2eeeba"
+ },
+ "js.shellui.dln-ngay-b": {
+  "t": "日 <b>{v}</b>",
+  "h": "5eec8778"
+ },
+ "js.shellui.dln-nguyet-tuong": {
+  "t": "月将 <b>{nt}</b> が占時 <b>{ct}</b> に加わる",
+  "h": "17b75e38"
+ },
+ "js.shellui.dln-note": {
+  "t": "月将を占時に加えて天盤を回します。十二天将は日干の貴人の位置から配置します（昼は昼貴人、夜は夜貴人を用います）。",
+  "h": "c0123ca5"
+ },
+ "js.shellui.dln-phep-thu-truyen": {
+  "t": "取伝の法",
+  "h": "cddbdb0f"
+ },
+ "js.shellui.dln-quy-nhan": {
+  "t": "貴人 <b>{tb}</b> が <b>{db}</b> の上",
+  "h": "f66202db"
+ },
+ "js.shellui.dln-roi-tuan-khong": {
+  "t": "空亡にあたる",
+  "h": "7118ae11"
+ },
+ "js.shellui.dln-tam-truyen": {
+  "t": "三伝",
+  "h": "68b2f0a5"
+ },
+ "js.shellui.dln-than-sat": {
+  "t": "神殺",
+  "h": "365af4b4"
+ },
+ "js.shellui.dln-thang-b": {
+  "t": "月 <b>{v}</b>",
+  "h": "1da6071f"
+ },
+ "js.shellui.dln-thien-ban-gia-dia-ban": {
+  "t": "天盤が地盤に加わる",
+  "h": "67a30bc5"
+ },
+ "js.shellui.dln-tren": {
+  "t": "{v}の上",
+  "h": "6adfd61e"
+ },
+ "js.shellui.dln-tu-khoa": {
+  "t": "四課",
+  "h": "56938410"
+ },
+ "js.shellui.dln-tuan-khong": {
+  "t": "空亡 <b>{v}</b>",
+  "h": "ecffad13"
+ },
+ "js.shellui.dln-voi-can-ngay": {
+  "t": "日干との関係：{v}",
+  "h": "e6e06e50"
+ },
  "js.shellui.doi": {
   "t": "変更",
   "h": "c291a425"
@@ -6422,6 +6522,14 @@
  "js.shellui.lich-su-hoi-thoai": {
   "t": "会話履歴",
   "h": "0fd2afce"
+ },
+ "js.shellui.ln-nhap-ngay-thang-nam": {
+  "t": "日・月・年を入力してください。",
+  "h": "f001ab44"
+ },
+ "js.shellui.ln-title": {
+  "t": "{date} — {chi}の刻（{time}）",
+  "h": "453d1ef5"
  },
  "js.shellui.loai-cong-ty": {
   "t": "会社",
@@ -9623,6 +9731,114 @@
   "t": "紫微斗数は未来を言い当てるものではなく、自分を知って、よりよい選択をするための手がかりです。",
   "h": "ae92de9d"
  },
+ "lucnham.1-nhap-ngay-gio": {
+  "t": "<span class=\"wss-n\">1</span><span class=\"wss-l\">日時を入力</span>",
+  "h": "953e7b97"
+ },
+ "lucnham.dang-phan-van-chuyen-tien-bac": {
+  "t": "お金や恋愛のこと、今すぐ決めたいことで迷っていませんか？今の日時にぴったり合わせた課を立てて、核心に答えます。ご質問にまっすぐ向き合う短い鑑定が届きます。",
+  "h": "295b866e"
+ },
+ "lucnham.de-trong-la-lay-gio-hien": {
+  "t": "空欄なら現在の日時を使います。システムが大六壬の課を立て、四課・三伝・貴人と、『考変占』にもとづく鑑定を返します。",
+  "h": "1e494a7c"
+ },
+ "lucnham.gio-can-xem": {
+  "t": "見たい時刻",
+  "h": "84e96644"
+ },
+ "lucnham.gio-dan-03-05h": {
+  "t": "寅の刻（03–05時）",
+  "h": "a2d01564"
+ },
+ "lucnham.gio-dau-17-19h": {
+  "t": "酉の刻（17–19時）",
+  "h": "d17bfbc2"
+ },
+ "lucnham.gio-hoi-21-23h": {
+  "t": "亥の刻（21–23時）",
+  "h": "9721a904"
+ },
+ "lucnham.gio-mao-05-07h": {
+  "t": "卯の刻（05–07時）",
+  "h": "58eab8cc"
+ },
+ "lucnham.gio-mui-13-15h": {
+  "t": "未の刻（13–15時）",
+  "h": "56d4bde0"
+ },
+ "lucnham.gio-ngo-11-13h": {
+  "t": "午の刻（11–13時）",
+  "h": "8b9d2da7"
+ },
+ "lucnham.gio-suu-01-03h": {
+  "t": "丑の刻（01–03時）",
+  "h": "33993400"
+ },
+ "lucnham.gio-than-15-17h": {
+  "t": "申の刻（15–17時）",
+  "h": "9d910299"
+ },
+ "lucnham.gio-thin-07-09h": {
+  "t": "辰の刻（07–09時）",
+  "h": "24c10915"
+ },
+ "lucnham.gio-tuat-19-21h": {
+  "t": "戌の刻（19–21時）",
+  "h": "8c0c8255"
+ },
+ "lucnham.gio-ty-09-11h": {
+  "t": "巳の刻（09–11時）",
+  "h": "4f543b45"
+ },
+ "lucnham.gio-ty-23-01h": {
+  "t": "子の刻（23–01時）",
+  "h": "b64ae149"
+ },
+ "lucnham.hoi-thay-luan-than-tuong": {
+  "t": "✦ 先生に天将を読み解いてもらう",
+  "h": "fd4349af"
+ },
+ "lucnham.luan-theo-khao-bien-chiem": {
+  "t": "『考変占』に<br>よる鑑定",
+  "h": "d2082bef"
+ },
+ "lucnham.luc-nham-gian": {
+  "t": "六壬（簡易）",
+  "h": "a7f92fcb"
+ },
+ "lucnham.luc-nham-gian-12-than-tuong": {
+  "t": "<b>六壬（簡易）</b><span>時・日ごとの十二天将</span>",
+  "h": "337b9381"
+ },
+ "lucnham.luc-nham-gian-tra-12-than": {
+  "t": "六壬（簡易） — 時・日ごとの十二天将と、当直の神が吉か凶かを調べます。会合・金運・出立について、先生に鑑定してもらえます。",
+  "h": "554217a5"
+ },
+ "lucnham.luc-nham-gian-tu-vi-minh": {
+  "t": "六壬（簡易） — 明宝紫微斗数",
+  "h": "fd05d989"
+ },
+ "lucnham.luc-nham-la-mot-trong-tam": {
+  "t": "六壬は中国古来の術数「三式」のひとつで、天盤と地盤を現在の時刻と日にあわせて課を立てます。鑑定は問われた具体的な事柄に焦点を当て、盤上の天将の位置にもとづきます。",
+  "h": "1c7538cd"
+ },
+ "lucnham.ngay-gio-can-xem": {
+  "t": "見たい日時",
+  "h": "80c37086"
+ },
+ "lucnham.quy-nhan-dan-loi": {
+  "t": "貴人が<br>導く",
+  "h": "b1fa7db6"
+ },
+ "lucnham.tu-khoa-tam-truyen": {
+  "t": "四課<br>三伝",
+  "h": "dfa03fb9"
+ },
+ "lucnham.xem-que-b": {
+  "t": "課を立てる →",
+  "h": "f19970b5"
+ },
  "maihoa.1-lap-que": {
   "t": "<span class=\"wss-n\">1</span><span class=\"wss-l\">卦を立てる</span>",
   "h": "b51a3df6"
@@ -9842,6 +10058,98 @@
  "ngaytot.xem-lich": {
   "t": "カレンダーを見る →",
   "h": "6fa85107"
+ },
+ "nguhanhten.can-bang-ngu-hanh": {
+  "t": "五行の<br>バランス",
+  "h": "6beeac0b"
+ },
+ "nguhanhten.can-bang-ngu-hanh-h4ql": {
+  "t": "五行のバランス",
+  "h": "d1b5ef33"
+ },
+ "nguhanhten.chua-tim-thay-chu-han-cho": {
+  "t": "⚠ 下の音節に対応する漢字が見つかりませんでした。画数を手入力してください（<a href=\"https://hanzii.net\" target=\"_blank\" style=\"color:var(--tx-blue)\">hanzii.net</a>で調べられます）：",
+  "h": "464b3314"
+ },
+ "nguhanhten.diem-so-hop-khac": {
+  "t": "相性（合・剋）<br>スコア",
+  "h": "1b721b9d"
+ },
+ "nguhanhten.ho-va-ten-day-du": {
+  "t": "氏名（フルネーム）",
+  "h": "e920e42c"
+ },
+ "nguhanhten.hoa": {
+  "t": "火",
+  "h": "be792fa1"
+ },
+ "nguhanhten.hoi-thay-luan-sau-ngu-hanh": {
+  "t": "✦ 先生に、名前の五行を詳しく読み解いてもらう",
+  "h": "ba1b2c72"
+ },
+ "nguhanhten.khong-ro-bo-qua": {
+  "t": "不明／スキップ",
+  "h": "941d7cdc"
+ },
+ "nguhanhten.moc": {
+  "t": "木",
+  "h": "4bd601ae"
+ },
+ "nguhanhten.mot-cai-ten-goi-hang-ngay": {
+  "t": "毎日呼ばれる名前にも、それぞれ五行があります。自分の本命と合うのか剋するのかを確かめた人は、ほとんどいません。氏名を入力すれば、五行のスコアと明確な結論が無料で届きます。",
+  "h": "3e585f76"
+ },
+ "nguhanhten.ngu-hanh-ban-menh-tuy-chon": {
+  "t": "本命の五行（任意）",
+  "h": "c90318f2"
+ },
+ "nguhanhten.ngu-hanh-kim-moc-thuy-hoa": {
+  "t": "五行（金・木・水・火・土）は、五つの基本要素の相生・相剋の法則を説く中国古来の学説で、多くの東洋の命理学の土台になっています。あらゆる音・文字・数は五行のいずれかに帰属させ、本命との相性（合・剋）を照らし合わせることができます。",
+  "h": "bcca1f1c"
+ },
+ "nguhanhten.ngu-hanh-ten": {
+  "t": "名前の五行",
+  "h": "9b92ea0c"
+ },
+ "nguhanhten.ngu-hanh-ten-ngu-hanh-tung": {
+  "t": "<b>名前の五行</b><span>一文字ごとの五行とバランス</span>",
+  "h": "32d338b2"
+ },
+ "nguhanhten.ngu-hanh-ten-tu-vi-minh": {
+  "t": "名前の五行 — 明宝紫微斗数",
+  "h": "2de02e4f"
+ },
+ "nguhanhten.ngu-hanh-tung-chu": {
+  "t": "一文字ごとの<br>五行",
+  "h": "f7103aec"
+ },
+ "nguhanhten.nhap-du-ho-ten-co-dau": {
+  "t": "姓＋名を、声調記号つきでスペース区切りで入力",
+  "h": "aefee322"
+ },
+ "nguhanhten.nhap-ho-ten-day-du-co": {
+  "t": "氏名を入力してください。本命の五行も選べます。五行のバランス図、スコア、そして本命との相性（合・剋）の結論が届きます。",
+  "h": "2fd9ddb3"
+ },
+ "nguhanhten.nhap-ten-tieng-viet-tra-chu": {
+  "t": "ベトナム語の名前を入力すると、漢字・画数・一文字ごとの五行、五行のバランス、本命との照合がわかります。さらに詳しい鑑定は先生に。",
+  "h": "f620e146"
+ },
+ "nguhanhten.tho": {
+  "t": "土",
+  "h": "9a0da463"
+ },
+ "nguhanhten.thuy": {
+  "t": "水",
+  "h": "f354741d"
+ },
+ "nguhanhten.tra-ngu-hanh-ten": {
+  "t": "名前の五行を調べる →",
+  "h": "bfb81211"
+ },
+ "nguhanhten.vd-nguyen-van-an": {
+  "t": "例：Nguyễn Văn An",
+  "h": "4811bda0"
  },
  "privacy.1-thong-tin-chung-toi-thu": {
   "t": "1. 収集する情報",

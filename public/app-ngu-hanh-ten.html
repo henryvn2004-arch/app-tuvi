@@ -144,9 +144,9 @@
               <option data-i18n="nguhanhten.thuy" value="Thủy">Thủy</option>
             </select>
           </div>
-          <button data-i18n="nguhanhten.tra-ngu-hanh-ten-mien-phi" class="btn-go" id="btnGo" onclick="calculate()">
-            <span class="bg-label"><span class="ic" data-icon="pen-line"></span><b>Tra ngũ hành tên →</b></span>
-            <small>Miễn phí</small>
+          <button class="btn-go" id="btnGo" onclick="calculate()">
+            <span class="bg-label"><span class="ic" data-icon="pen-line"></span><b data-i18n="nguhanhten.tra-ngu-hanh-ten">Tra ngũ hành tên →</b></span>
+            <small data-i18n="battu.mien-phi">Miễn phí</small>
           </button>
         </div>
         <div class="cost-box">
@@ -200,11 +200,12 @@
 // khong lat som luc boot, va vung ket qua khong tran o ca cot artifact 420px lan man 393px.
 window.SHELL_CHATFIRST=true;
 window.SHELL_INTRO={key:'ngu-hanh-ten'};</script>
-<script src="/tools-shared/ngu-hanh-ten.js?v=3"></script>
+<script src="/tools-shared/ngu-hanh-ten.js?v=4"></script>
 <script src="/auth.js?v=9"></script>
   <script src="/nav.js?v=49" data-icons-only></script>
 <script src="/shell.js?v=150"></script>
 <script src="/tools-shared/shell-soft-nav.js?v=49"></script>
+<script src="/tools-shared/glossary.js?v=4"></script>
 <script>
 // Thanh tiến trình (`.ws-steps`, xem shell.css) — chỉ phản ánh trạng thái đã
 // có sẵn trong flow cũ (form → kết quả), không tạo trạng thái mới. `n` các
@@ -247,9 +248,9 @@ function syncShell(menh) {
   const d = NguHanhTenTool.railData(_syls, menh);
   Shell.setContext({
     scenario: { type: 'ngu-hanh-ten', data: d },
-    label: 'Ngũ hành tên · ' + d.hoTen,
-    greeting: 'Đã tra ngũ hành tên **' + d.hoTen + '** (' + d.tungChu + ').' + (menh ? ' Mệnh **' + menh + '**.' : '') + ' Bạn muốn tôi luận gì?',
-    chips: ['Vì sao tên tôi được điểm này?', 'Chữ nào trong tên đang kéo điểm xuống?', 'Gợi ý vài chữ hợp mệnh hơn', 'Chữ tên chính bồi mệnh thế nào?']
+    label: _tvmbT('js.nguhanhten.label', 'Ngũ hành tên · {ten}', { ten: d.hoTen }),
+    greeting: _tvmbT('js.nguhanhten.greeting', 'Đã tra ngũ hành tên **{ten}** ({tc}).', { ten: d.hoTen, tc: d.tungChu }) + (menh ? _tvmbT('js.nguhanhten.menh', ' Mệnh **{m}**.', { m: _tvmbG('hanh', menh) }) : '') + _tvmbT('js.nguhanhten.ban-muon-luan', ' Bạn muốn tôi luận gì?'),
+    chips: [_tvmbT('js.nguhanhten.chip1', 'Vì sao tên tôi được điểm này?'), _tvmbT('js.nguhanhten.chip2', 'Chữ nào trong tên đang kéo điểm xuống?'), _tvmbT('js.nguhanhten.chip3', 'Gợi ý vài chữ hợp mệnh hơn'), _tvmbT('js.nguhanhten.chip4', 'Chữ tên chính bồi mệnh thế nào?')]
   });
   var _nhLines = ['Ngũ hành tên: ' + d.hoTen];
   _nhLines.push('Từng chữ: ' + d.tungChu);
@@ -287,8 +288,8 @@ function applyManual(idx) {
   if (card) {
     card.className = `syl-card hanh-${hanh}`;
     card.querySelector('.syl-han').textContent = '?';
-    card.querySelector('.syl-net').textContent = `${v} nét (đơn vị: ${v % 10 || 10})`;
-    card.querySelector('.syl-hanh').textContent = hanh;
+    card.querySelector('.syl-net').textContent = _tvmbT('js.shellui.nh-net-don-vi', '{n} nét (đơn vị: {d})', { n: v, d: v % 10 || 10 });
+    card.querySelector('.syl-hanh').textContent = _tvmbG('hanh', hanh);
   }
   renderBalance(document.getElementById('menhInput').value);
 }
