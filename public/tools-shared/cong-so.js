@@ -25,6 +25,18 @@
     });
   }
 
+  // Chỗ HIỂN THỊ: tên sao/cung qua glossary (vi trả nguyên), tên kiểu qua id (server trả chữ Việt).
+  function G(kind, v) { return typeof _tvmbG === 'function' && v ? _tvmbG(kind, v) : v; }
+  function GS(arr) { return (arr || []).map(function (x) { return G(['chinh', 'sao'], x); }).join(', '); }
+  var KIEU_TEN = {
+    'khai-sang': function () { return _tvmbT('js.cs.khai-sang', 'Khai sáng'); },
+    'lanh-dao': function () { return _tvmbT('js.cs.lanh-dao', 'Lãnh đạo'); },
+    'ho-tro': function () { return _tvmbT('js.cs.ho-tro', 'Hỗ trợ'); },
+    'hop-tac': function () { return _tvmbT('js.cs.hop-tac', 'Hợp tác'); },
+  };
+  function kieuTen(k) { return k ? (KIEU_TEN[k.id] ? KIEU_TEN[k.id]() : k.ten) : ''; }
+  function cungTen(c) { return _tvmbT('js.cs.cung-name', 'cung {name}', { name: G('cung', c) }); }
+
   function dpiFit(canvas, w, h) {
     var r = window.devicePixelRatio || 1;
     canvas.width = w * r;
@@ -55,10 +67,10 @@
       cy = y0 + s / 2;
 
     var quads = [
-      { id: 'khai-sang', ten: 'Khai sáng', qx: 1, qy: 1 },
-      { id: 'lanh-dao', ten: 'Lãnh đạo', qx: 1, qy: -1 },
-      { id: 'ho-tro', ten: 'Hỗ trợ', qx: -1, qy: 1 },
-      { id: 'hop-tac', ten: 'Hợp tác', qx: -1, qy: -1 },
+      { id: 'khai-sang', ten: _tvmbT('js.cs.khai-sang', 'Khai sáng'), qx: 1, qy: 1 },
+      { id: 'lanh-dao', ten: _tvmbT('js.cs.lanh-dao', 'Lãnh đạo'), qx: 1, qy: -1 },
+      { id: 'ho-tro', ten: _tvmbT('js.cs.ho-tro', 'Hỗ trợ'), qx: -1, qy: 1 },
+      { id: 'hop-tac', ten: _tvmbT('js.cs.hop-tac', 'Hợp tác'), qx: -1, qy: -1 },
     ];
 
     quads.forEach(function (q) {
@@ -94,12 +106,12 @@
     var af = Math.max(9, Math.round(s * 0.038));
     ctx.font = af + 'px ' + (opt.sans || 'system-ui, sans-serif');
     ctx.fillStyle = dim;
-    ctx.fillText('xông pha', cx, y0 - af * 0.9);
-    ctx.fillText('trầm ổn', cx, y0 + s + af * 0.9);
+    ctx.fillText(_tvmbT('js.cs.xong-pha', 'xông pha'), cx, y0 - af * 0.9);
+    ctx.fillText(_tvmbT('js.cs.tram-on', 'trầm ổn'), cx, y0 + s + af * 0.9);
     ctx.save();
     ctx.translate(x0 - af * 0.9, cy);
     ctx.rotate(-Math.PI / 2);
-    ctx.fillText('nhường', 0, 0);
+    ctx.fillText(_tvmbT('js.cs.nhuong', 'nhường'), 0, 0);
     ctx.restore();
     ctx.save();
     ctx.translate(x0 + s + af * 0.9, cy);
@@ -292,11 +304,11 @@
       ctx.textAlign = 'center';
       ctx.fillStyle = gold;
       ctx.font = '600 30px ' + sans;
-      ctx.fillText('KIỂU NGƯỜI Ở CHỖ LÀM', box.x + box.w / 2, box.y + 74);
+      ctx.fillText(_tvmbT('js.cs.kieu-nguoi-o-cho-lam', 'KIỂU NGƯỜI Ở CHỖ LÀM'), box.x + box.w / 2, box.y + 74);
 
       ctx.fillStyle = '#fff';
       ctx.font = '700 76px ' + serif;
-      ctx.fillText(ho.kieu.ten, box.x + box.w / 2, box.y + 158);
+      ctx.fillText(kieuTen(ho.kieu), box.x + box.w / 2, box.y + 158);
 
       ctx.fillStyle = 'rgba(255,255,255,.72)';
       ctx.font = '28px ' + sans;
@@ -349,13 +361,13 @@
     var k = ho.kieu;
     return (
       '<div class="cs-head" style="border-left:4px solid ' + mau + '">' +
-        '<div class="cs-kieu" style="color:' + mau + '">' + esc(k.ten) + '</div>' +
+        '<div class="cs-kieu" style="color:' + mau + '">' + esc(kieuTen(k)) + '</div>' +
         '<div class="cs-tt">' + esc(k.tuTuong) + ' · ' + esc(k.saoNhom.join(' · ')) + '</div>' +
         '<div class="cs-mot">' + esc(k.motCau) + '</div>' +
         (ho.phan.lai && ho.kieuPhu
-          ? '<div class="cs-lai">⚠ <b>Kiểu lai.</b> Toạ độ của bạn nằm sát ranh giới nên nghiêng <b>' +
-            esc(k.ten) + '</b> nhưng pha khá rõ <b>' + esc(ho.kieuPhu.ten) +
-            '</b>. Đọc cả hai phần, đừng ép mình vào một ô.</div>'
+          ? ('<div class="cs-lai">' + _tvmbT('js.cs.kieu-lai-toa-do-cua-ban', '⚠ <b>Kiểu lai.</b> Toạ độ của bạn nằm sát ranh giới nên nghiêng <b>')) +
+            esc(kieuTen(k)) + _tvmbT('js.cs.nhung-pha-kha-ro', '</b> nhưng pha khá rõ <b>') + esc(kieuTen(ho.kieuPhu)) +
+            _tvmbT('js.cs.doc-ca-hai-phan-dung-ep', '</b>. Đọc cả hai phần, đừng ép mình vào một ô.</div>')
           : '') +
         '</div>'
     );
@@ -368,19 +380,19 @@
 
     h.push(
       '<div class="cs-grid">' +
-        card('Cái thúc bạn đi', esc(k.dongLuc)) +
-        card('Nhận ra ở chỗ làm', esc(k.datChat)) +
-        card('Câu hỏi chạy ngầm trong đầu', '<ul class="cs-ul"><li>' + k.cauHoi.map(esc).join('</li><li>') + '</li></ul>') +
-        card('Khi được giao quyền', esc(k.kieuDan)) +
-        card('Môi trường hợp', esc(k.moiTruongHop)) +
-        card('Môi trường kỵ', esc(k.moiTruongKy)) +
+        card(_tvmbT('js.cs.cai-thuc-ban-di', 'Cái thúc bạn đi'), esc(k.dongLuc)) +
+        card(_tvmbT('js.cs.nhan-ra-o-cho-lam', 'Nhận ra ở chỗ làm'), esc(k.datChat)) +
+        card(_tvmbT('js.cs.cau-hoi-chay-ngam-trong-dau', 'Câu hỏi chạy ngầm trong đầu'), '<ul class="cs-ul"><li>' + k.cauHoi.map(esc).join('</li><li>') + '</li></ul>') +
+        card(_tvmbT('js.cs.khi-duoc-giao-quyen', 'Khi được giao quyền'), esc(k.kieuDan)) +
+        card(_tvmbT('js.cs.moi-truong-hop', 'Môi trường hợp'), esc(k.moiTruongHop)) +
+        card(_tvmbT('js.cs.moi-truong-ky', 'Môi trường kỵ'), esc(k.moiTruongKy)) +
         '</div>'
     );
 
     h.push(
       '<div class="cs-two">' +
-        '<div class="cs-box cs-ok"><b>Mạnh nhất</b><p>' + esc(k.manh) + '</p></div>' +
-        '<div class="cs-box cs-no"><b>Chỗ hay vấp</b><p>' + esc(k.yeu) + '</p></div>' +
+        ('<div class="cs-box cs-ok">' + _tvmbT('js.cs.manh-nhat-gixi', '<b>Mạnh nhất</b>') + '<p>') + esc(k.manh) + '</p></div>' +
+        ('<div class="cs-box cs-no">' + _tvmbT('js.cs.cho-hay-vap', '<b>Chỗ hay vấp</b>') + '<p>') + esc(k.yeu) + '</p></div>' +
         '</div>'
     );
 
@@ -389,15 +401,15 @@
     // gợi ý này: lĩnh vực (cung Quan Lộc) × vai trò (kiểu người) × quy mô (bậc).
     var ng = ho.nganh;
     h.push(
-      '<div class="cs-sec"><h3>Bạn hợp làm gì</h3>' +
+      ('<div class="cs-sec"><h3>' + _tvmbT('js.cs.ban-hop-lam-gi', 'Bạn hợp làm gì') + '</h3>') +
         '<div class="cs-linhvuc" style="border-color:' + mau + '">' +
         '<div class="cs-lv-ten">' + esc(ng.linhVuc) + '</div>' +
         '<div class="cs-lv-chat">' + esc(ng.chatViec) + '</div>' +
         '<ul class="cs-nganh">' + ng.nganh.map(function (x) { return '<li>' + esc(x) + '</li>'; }).join('') + '</ul>' +
         '</div>' +
         '<div class="cs-grid" style="margin-top:11px">' +
-        card('Vai bạn nên nhận trong ngành đó', esc(ng.vaiTro)) +
-        card('Quy mô gánh được — bậc ' + esc(ng.bac), esc(ng.quyMo)) +
+        card(_tvmbT('js.cs.vai-ban-nen-nhan-trong-nganh', 'Vai bạn nên nhận trong ngành đó'), esc(ng.vaiTro)) +
+        card(_tvmbT('js.cs.quy-mo-ganh-duoc-bac', 'Quy mô gánh được — bậc ') + esc(ng.bac), esc(ng.quyMo)) +
         '</div>' +
         // ⚠️ Sắc thái phụ tinh THU HẸP TRONG lĩnh vực, KHÔNG thay lĩnh vực. Không
         // nói rõ chỗ này thì nó đọc thành mâu thuẫn ngay trên màn hình: lĩnh vực
@@ -405,50 +417,50 @@
         // Đọc đúng thì đó là nhánh giảng dạy / nghiên cứu / viết chuyên môn CỦA
         // chính ngành đó — và đấy mới là chi tiết đáng tiền.
         (ng.sacThai.length
-          ? '<div class="cs-card" style="margin-bottom:11px"><b>Trong lĩnh vực đó, bạn nghiêng về nhánh nào</b>' +
+          ? ('<div class="cs-card" style="margin-bottom:11px">' + _tvmbT('js.cs.trong-linh-vuc-do-ban-nghieng', '<b>Trong lĩnh vực đó, bạn nghiêng về nhánh nào</b>')) +
             '<div style="font-size:12px;color:var(--text-lt);line-height:1.65;margin-bottom:7px">' +
-            'Phụ tinh đóng tại cung Quan Lộc <b>thu hẹp bên trong</b> lĩnh vực trên, không thay nó. ' +
-            'Ví dụ nghiêng “chữ nghĩa” trong ngành y là nhánh giảng dạy, nghiên cứu, viết chuyên môn — vẫn là ngành y.' +
+            _tvmbT('js.cs.phu-tinh-dong-tai-cung-quan', 'Phụ tinh đóng tại cung Quan Lộc <b>thu hẹp bên trong</b> lĩnh vực trên, không thay nó. ') +
+            _tvmbT('js.cs.vi-du-nghieng-chu-nghia-trong', 'Ví dụ nghiêng “chữ nghĩa” trong ngành y là nhánh giảng dạy, nghiên cứu, viết chuyên môn — vẫn là ngành y.') +
             '</div>' +
             '<ul class="cs-ul"><li>' + ng.sacThai.map(esc).join('</li><li>') + '</li></ul></div>'
           : '') +
-        '<p class="cs-note">Đây là gợi ý HƯỚNG, không phải chỉ định nghề. Cổ thư nói về <b>chất việc</b> ' +
-        '(đối mặt hay bàn giấy, cầm người hay cầm nghề); danh sách ngành hiện đại ở trên là phần trang quy chiếu ra. ' +
-        'Không có tên ngành bạn đang làm trong danh sách <b>không</b> có nghĩa là bạn đang làm sai — hãy đối chiếu ' +
-        '<i>chất việc</i> thay vì đối chiếu tên ngành.</p>' +
+        ('<p class="cs-note">' + _tvmbT('js.cs.day-la-goi-y-huong-khong', 'Đây là gợi ý HƯỚNG, không phải chỉ định nghề. Cổ thư nói về <b>chất việc</b>') + ' ') +
+        _tvmbT('js.cs.doi-mat-hay-ban-giay-cam', '(đối mặt hay bàn giấy, cầm người hay cầm nghề); danh sách ngành hiện đại ở trên là phần trang quy chiếu ra. ') +
+        _tvmbT('js.cs.khong-co-ten-nganh-ban-dang', 'Không có tên ngành bạn đang làm trong danh sách <b>không</b> có nghĩa là bạn đang làm sai — hãy đối chiếu ') +
+        _tvmbT('js.cs.chat-viec-thay-vi-doi-chieu', '<i>chất việc</i> thay vì đối chiếu tên ngành.</p>') +
         '</div>'
     );
 
     // Lời theo tình trạng nghề — đặt CAO trên trang vì đây là phần người ta
     // thấy "nói đúng mình" nhất, và nó phụ thuộc ô người dùng vừa tự khai.
     h.push(
-      '<div class="cs-sec"><h3>Cho người đang ở vị trí: ' + esc(ho.trangThaiLabel) + '</h3>' +
+      ('<div class="cs-sec"><h3>' + _tvmbT('js.cs.cho-nguoi-dang-o-vi-tri', 'Cho người đang ở vị trí:') + ' ') + esc(ho.trangThaiLabel) + '</h3>' +
         '<p class="cs-lead">' + esc(ho.loiTrangThai) + '</p></div>'
     );
 
     h.push(
-      '<div class="cs-sec"><h3>Bốn việc phải học khi bắt đầu cầm người</h3>' +
+      ('<div class="cs-sec"><h3>' + _tvmbT('js.cs.bon-viec-phai-hoc-khi-bat', 'Bốn việc phải học khi bắt đầu cầm người') + '</h3>') +
         '<ol class="cs-ol"><li>' + k.baiHoc.map(esc).join('</li><li>') + '</li></ol></div>'
     );
 
     // Radar
     var top = ho.radar.slice().sort(function (a, b) { return b.diem - a.diem; });
     h.push(
-      '<div class="cs-sec"><h3>Mười hai mặt của đời đi làm</h3>' +
-        '<p class="cs-note">Điểm do engine chấm trên chính lá số của bạn (thang 10). ' +
-        'Đây là <b>thế mạnh tương đối giữa các mặt</b> của riêng bạn, không phải điểm so với người khác.</p>' +
+      ('<div class="cs-sec"><h3>' + _tvmbT('js.cs.muoi-hai-mat-cua-doi-di-gqoe', 'Mười hai mặt của đời đi làm') + '</h3>') +
+        ('<p class="cs-note">' + _tvmbT('js.cs.diem-do-engine-cham-tren-chinh', 'Điểm do engine chấm trên chính lá số của bạn (thang 10).') + ' ') +
+        _tvmbT('js.cs.day-la-the-manh-tuong-doi', 'Đây là <b>thế mạnh tương đối giữa các mặt</b> của riêng bạn, không phải điểm so với người khác.</p>') +
         '<div class="cs-canvas-wrap"><canvas id="csRadar"></canvas></div>' +
-        '<table class="cs-tb"><thead><tr><th>Mặt</th><th>Điểm</th><th>Nó nói về</th></tr></thead><tbody>' +
+        ('<table class="cs-tb"><thead><tr><th>' + _tvmbT('js.cs.mat', 'Mặt') + '</th><th>' + _tvmbT('js.cs.diem-8vmw', 'Điểm') + '</th><th>' + _tvmbT('js.cs.no-noi-ve', 'Nó nói về') + '</th></tr></thead><tbody>') +
         top
           .map(function (r) {
             var badge = r.namNay
               ? '<span class="cs-badge">' +
-                (r.namNay === 'ca-hai' ? 'năm nay chiếu kép' : r.namNay === 'tieu-han' ? 'tiểu hạn năm nay' : 'lưu niên năm nay') +
+                (r.namNay === 'ca-hai' ? _tvmbT('js.cs.nam-nay-chieu-kep', 'năm nay chiếu kép') : r.namNay === 'tieu-han' ? _tvmbT('js.cs.tieu-han-nam-nay', 'tiểu hạn năm nay') : _tvmbT('js.cs.luu-nien-nam-nay', 'lưu niên năm nay')) +
                 '</span>'
               : '';
             return (
-              '<tr><td><b>' + esc(r.nhan) + '</b> ' + badge + '<div class="cs-sub">cung ' + esc(r.cung) +
-              (r.sao.length ? ' · ' + esc(r.sao.join(', ')) : ' · vô chính diệu') + '</div></td>' +
+              '<tr><td><b>' + esc(r.nhan) + '</b> ' + badge + '<div class="cs-sub">' + esc(cungTen(r.cung)) +
+              (r.sao.length ? ' · ' + esc(GS(r.sao)) : _tvmbT('js.cs.vo-chinh-dieu', ' · vô chính diệu')) + '</div></td>' +
               '<td class="cs-num">' + esc(r.diem) + '</td><td class="cs-sm">' + esc(r.y) + '</td></tr>'
             );
           })
@@ -458,20 +470,20 @@
 
     // Lộ trình
     h.push(
-      '<div class="cs-sec"><h3>Bốn mươi năm đi làm, chia làm bốn chặng</h3>' +
-        '<p class="cs-note">Bốn đại vận liên tiếp phủ quãng đi làm. Điểm là điểm đại vận do engine chấm; ' +
-        '“thuận đà / ngược đà” là so tính âm–dương của đại vận với kiểu bản mệnh của bạn.</p>' +
+      ('<div class="cs-sec"><h3>' + _tvmbT('js.cs.bon-muoi-nam-di-lam-chia-90zk', 'Bốn mươi năm đi làm, chia làm bốn chặng') + '</h3>') +
+        ('<p class="cs-note">' + _tvmbT('js.cs.bon-dai-van-lien-tiep-phu', 'Bốn đại vận liên tiếp phủ quãng đi làm. Điểm là điểm đại vận do engine chấm;') + ' ') +
+        _tvmbT('js.cs.thuan-da-nguoc-da-la-so', '“thuận đà / ngược đà” là so tính âm–dương của đại vận với kiểu bản mệnh của bạn.</p>') +
         '<div class="cs-lo">' +
         ho.loTrinh
           .map(function (n) {
             return (
               '<div class="cs-nac' + (n.dangChay ? ' now' : '') + '">' +
-              '<div class="cs-nac-top"><b>' + esc(n.nac) + '</b>' + (n.dangChay ? '<span class="cs-badge">đang ở đây</span>' : '') + '</div>' +
-              '<div class="cs-sub">' + esc(n.tuoiStart) + '–' + esc(n.tuoiEnd) + ' tuổi' +
+              '<div class="cs-nac-top"><b>' + esc(n.nac) + '</b>' + (n.dangChay ? ('<span class="cs-badge">' + _tvmbT('js.cs.dang-o-day', 'đang ở đây') + '</span>') : '') + '</div>' +
+              '<div class="cs-sub">' + esc(n.tuoiStart) + '–' + esc(n.tuoiEnd) + _tvmbT('js.cs.tuoi', ' tuổi') +
               (n.namStart ? ' · ' + esc(n.namStart) + '–' + esc(n.namEnd) : '') +
-              ' · cung ' + esc(n.cung) + (n.diem != null ? ' · <b>' + esc(n.diem) + '/10</b> ' + esc(n.flag) : '') + '</div>' +
-              '<div class="cs-sub">' + (n.sao.length ? esc(n.sao.join(', ')) + (n.muon ? ' (mượn xung chiếu)' : '') : 'vô chính diệu') +
-              (n.hopMenh === null ? '' : n.hopMenh ? ' · <span class="cs-ok-t">thuận đà</span>' : ' · <span class="cs-no-t">ngược đà</span>') + '</div>' +
+              ' · ' + esc(cungTen(n.cung)) + (n.diem != null ? ' · <b>' + esc(n.diem) + '/10</b> ' + esc(n.flag) : '') + '</div>' +
+              '<div class="cs-sub">' + (n.sao.length ? esc(GS(n.sao)) + (n.muon ? _tvmbT('js.cs.muon-xung-chieu', ' (mượn xung chiếu)') : '') : _tvmbT('js.cs.vo-chinh-dieu-pwt9', 'vô chính diệu')) +
+              (n.hopMenh === null ? '' : n.hopMenh ? (' · <span class="cs-ok-t">' + _tvmbT('js.cs.thuan-da', 'thuận đà') + '</span>') : (' · <span class="cs-no-t">' + _tvmbT('js.cs.nguoc-da', 'ngược đà') + '</span>')) + '</div>' +
               '<p>' + esc(n.luan) + '</p></div>'
             );
           })
@@ -481,16 +493,16 @@
 
     // Ghép đội
     h.push(
-      '<div class="cs-sec"><h3>Ghép đội — ai đỡ được bạn</h3>' +
-        '<p class="cs-note">Đọc theo cổ pháp: <b>Phụ Mẫu</b> là bề trên, <b>Huynh Đệ</b> là người ngang hàng, ' +
-        '<b>Nô Bộc</b> là thuộc hạ và bạn nghề. Luật bù là âm ghép dương.</p>' +
+      ('<div class="cs-sec"><h3>' + _tvmbT('js.cs.ghep-doi-ai-do-duoc-ban', 'Ghép đội — ai đỡ được bạn') + '</h3>') +
+        ('<p class="cs-note">' + _tvmbT('js.cs.doc-theo-co-phap-phu-mau', 'Đọc theo cổ pháp: <b>Phụ Mẫu</b> là bề trên, <b>Huynh Đệ</b> là người ngang hàng,') + ' ') +
+        _tvmbT('js.cs.no-boc-la-thuoc-ha-va', '<b>Nô Bộc</b> là thuộc hạ và bạn nghề. Luật bù là âm ghép dương.</p>') +
         '<div class="cs-grid">' +
         ho.doi
           .map(function (d) {
             return card(
-              esc(d.vai) + ' <span class="cs-sub">(cung ' + esc(d.cung) + ')</span>',
+              esc(d.vai) + ' <span class="cs-sub">(' + esc(cungTen(d.cung)) + ')</span>',
               '<div class="cs-sub" style="margin-bottom:6px">' +
-                (d.sao.length ? esc(d.sao.join(', ')) + (d.muon ? ' (mượn xung chiếu)' : '') : 'vô chính diệu') +
+                (d.sao.length ? esc(GS(d.sao)) + (d.muon ? _tvmbT('js.cs.muon-xung-chieu', ' (mượn xung chiếu)') : '') : _tvmbT('js.cs.vo-chinh-dieu-pwt9', 'vô chính diệu')) +
                 '</div>' + esc(d.goiY)
             );
           })
@@ -500,24 +512,24 @@
 
     // Cơ sở
     h.push(
-      '<div class="cs-sec"><h3>Cơ sở trong lá số</h3><div class="cs-basis">' +
-        row('Chính tinh cung Mệnh', (ho.phan.saoMenh.join(', ') || 'vô chính diệu') + (ho.phan.muonMenh ? ' — mượn cung xung chiếu' : '')) +
-        row('Chính tinh cung Quan Lộc', (ho.phan.saoQuan.join(', ') || 'vô chính diệu') + (ho.phan.muonQuan ? ' — mượn cung xung chiếu' : '')) +
-        row('Toạ độ', 'tranh ↔ nhường: ' + ho.phan.x + ' · xông ↔ trầm: ' + ho.phan.y) +
-        (ho.phan.vaiTro ? row('Tư cách theo cung Mệnh', ho.phan.vaiTro.role) : '') +
-        row('Sao quyết định lĩnh vực', ho.nganh.sao + (ho.nganh.laCap ? ' — đọc theo CẶP đồng cung' : '') + (ho.nganh.muon ? ' — mượn cung xung chiếu' : '')) +
-        row('Bậc chức phận', ho.nganh.bac + ' · điểm ' + ho.nganh.bacDiem + (ho.nganh.bacChiTiet.length ? ' (' + ho.nganh.bacChiTiet.join(', ') + ')' : '')) +
-        row('Chức phận theo lối cổ', ho.nganh.chucPhanCo) +
-        row('Trích dẫn cổ thư', ho.nganh.nguon) +
-        (ho.quanLoc.cachCuc.length ? row('Cách cục tại cung Quan Lộc', ho.quanLoc.cachCuc.join(' · ')) : '') +
+      ('<div class="cs-sec"><h3>' + _tvmbT('js.cs.co-so-trong-la-so', 'Cơ sở trong lá số') + '</h3><div class="cs-basis">') +
+        row(_tvmbT('js.cs.chinh-tinh-cung-menh', 'Chính tinh cung Mệnh'), (GS(ho.phan.saoMenh) || _tvmbT('js.cs.vo-chinh-dieu-pwt9', 'vô chính diệu')) + (ho.phan.muonMenh ? _tvmbT('js.cs.muon-cung-xung-chieu', ' — mượn cung xung chiếu') : '')) +
+        row(_tvmbT('js.cs.chinh-tinh-cung-quan-loc', 'Chính tinh cung Quan Lộc'), (GS(ho.phan.saoQuan) || _tvmbT('js.cs.vo-chinh-dieu-pwt9', 'vô chính diệu')) + (ho.phan.muonQuan ? _tvmbT('js.cs.muon-cung-xung-chieu', ' — mượn cung xung chiếu') : '')) +
+        row(_tvmbT('js.cs.toa-do', 'Toạ độ'), _tvmbT('js.cs.tranh-nhuong', 'tranh ↔ nhường: ') + ho.phan.x + _tvmbT('js.cs.xong-tram', ' · xông ↔ trầm: ') + ho.phan.y) +
+        (ho.phan.vaiTro ? row(_tvmbT('js.cs.tu-cach-theo-cung-menh', 'Tư cách theo cung Mệnh'), ho.phan.vaiTro.role) : '') +
+        row(_tvmbT('js.cs.sao-quyet-dinh-linh-vuc', 'Sao quyết định lĩnh vực'), G(['chinh', 'sao'], ho.nganh.sao) + (ho.nganh.laCap ? _tvmbT('js.cs.doc-theo-cap-dong-cung', ' — đọc theo CẶP đồng cung') : '') + (ho.nganh.muon ? _tvmbT('js.cs.muon-cung-xung-chieu', ' — mượn cung xung chiếu') : '')) +
+        row(_tvmbT('js.cs.bac-chuc-phan', 'Bậc chức phận'), ho.nganh.bac + _tvmbT('js.cs.diem', ' · điểm ') + ho.nganh.bacDiem + (ho.nganh.bacChiTiet.length ? ' (' + ho.nganh.bacChiTiet.join(', ') + ')' : '')) +
+        row(_tvmbT('js.cs.chuc-phan-theo-loi-co', 'Chức phận theo lối cổ'), ho.nganh.chucPhanCo) +
+        row(_tvmbT('js.cs.trich-dan-co-thu', 'Trích dẫn cổ thư'), ho.nganh.nguon) +
+        (ho.quanLoc.cachCuc.length ? row(_tvmbT('js.cs.cach-cuc-tai-cung-quan-loc', 'Cách cục tại cung Quan Lộc'), ho.quanLoc.cachCuc.join(' · ')) : '') +
         (ho.vanNam
           ? row(
-              'Vận năm ' + ho.vanNam.nam,
+              _tvmbT('js.cs.van-nam', 'Vận năm ') + ho.vanNam.nam,
               (ho.vanNam.diem != null ? ho.vanNam.diem + '/10 · ' : '') +
-                'tiểu hạn ở cung ' + (ho.vanNam.tieuHanCung || '—') + ' · lưu niên ở cung ' + (ho.vanNam.luuNienCung || '—')
+                _tvmbT('js.cs.tieu-han-o-cung', 'tiểu hạn ở cung ') + (G('cung', ho.vanNam.tieuHanCung) || '—') + _tvmbT('js.cs.luu-nien-o-cung', ' · lưu niên ở cung ') + (G('cung', ho.vanNam.luuNienCung) || '—')
             )
           : '') +
-        row('Nguồn cách chia bốn kiểu', ho.kieu.source) +
+        row(_tvmbT('js.cs.nguon-cach-chia-bon-kieu', 'Nguồn cách chia bốn kiểu'), ho.kieu.source) +
         '</div></div>'
     );
 
@@ -545,25 +557,25 @@
     if (!nh || !nh.goiY || !nh.goiY.length) return '';
     var h = [];
 
-    h.push('<div class="cs-sec"><h3>Nhánh nghề hợp với bạn</h3>');
+    h.push(('<div class="cs-sec"><h3>' + _tvmbT('js.cs.nhanh-nghe-hop-voi-ban', 'Nhánh nghề hợp với bạn') + '</h3>'));
     h.push(
-      '<p class="cs-note">Ba tầng ở trên nói bạn hợp <b>lĩnh vực</b> nào và ' +
-        'ở <b>quy mô</b> nào. Phần này nói <b>nhánh cụ thể</b> bên trong lĩnh vực đó — ' +
-        'cùng một ngành nhưng mỗi nhánh cần một chất người khác hẳn.</p>'
+      ('<p class="cs-note">' + _tvmbT('js.cs.ba-tang-o-tren-noi-ban', 'Ba tầng ở trên nói bạn hợp <b>lĩnh vực</b> nào và') + ' ') +
+        _tvmbT('js.cs.o-quy-mo-nao-phan-nay', 'ở <b>quy mô</b> nào. Phần này nói <b>nhánh cụ thể</b> bên trong lĩnh vực đó — ') +
+        _tvmbT('js.cs.cung-mot-nganh-nhung-moi-nhanh', 'cùng một ngành nhưng mỗi nhánh cần một chất người khác hẳn.</p>')
     );
 
     if (nh.moNhat) {
       h.push(
-        '<div class="cs-warn">Lá số của bạn <b>không chỉ ra một nhánh nào nổi bật</b> ' +
-          'trong lĩnh vực này. Nói thẳng là chưa đủ tín hiệu để chốt — phần dưới chỉ là ' +
-          'hướng tham khảo, đừng đọc như một lời khẳng định.</div>'
+        ('<div class="cs-warn">' + _tvmbT('js.cs.la-so-cua-ban-khong-chi', 'Lá số của bạn <b>không chỉ ra một nhánh nào nổi bật</b>') + ' ') +
+          _tvmbT('js.cs.trong-linh-vuc-nay-noi-thang', 'trong lĩnh vực này. Nói thẳng là chưa đủ tín hiệu để chốt — phần dưới chỉ là ') +
+          _tvmbT('js.cs.huong-tham-khao-dung-doc-nhu', 'hướng tham khảo, đừng đọc như một lời khẳng định.</div>')
       );
     }
     if (nh.lechBac) {
       h.push(
-        '<div class="cs-warn">Các nhánh dưới đây hợp với <b>chất người</b> của bạn nhưng ' +
-          '<b>chưa khớp bậc chức phận hiện tại</b>. Đọc chúng như HƯỚNG ĐI, không phải chỗ ' +
-          'đứng ngay bây giờ.</div>'
+        ('<div class="cs-warn">' + _tvmbT('js.cs.cac-nhanh-duoi-day-hop-voi', 'Các nhánh dưới đây hợp với <b>chất người</b> của bạn nhưng') + ' ') +
+          _tvmbT('js.cs.chua-khop-bac-chuc-phan-hien', '<b>chưa khớp bậc chức phận hiện tại</b>. Đọc chúng như HƯỚNG ĐI, không phải chỗ ') +
+          _tvmbT('js.cs.dung-ngay-bay-gio', 'đứng ngay bây giờ.</div>')
       );
     }
 
@@ -574,14 +586,14 @@
             '<span class="cs-nhanh-ten">' + (i + 1) + '. ' + esc(g.ten) + '</span>' +
             // Nhánh phổ thông KHÔNG hiện % — con số ở đó vô nghĩa vì nghề không
             // đòi một chất người đặc thù nào, bày ra là giả vờ có kết luận.
-            (g.phoThong ? '' : '<span class="cs-nhanh-diem">khớp ' + esc(String(g.diem)) + '%</span>') +
+            (g.phoThong ? '' : ('<span class="cs-nhanh-diem">' + _tvmbT('js.cs.khop', 'khớp') + ' ') + esc(String(g.diem)) + '%</span>') +
           '</div>' +
           '<div class="cs-nhanh-chat">' + esc(g.chat) + '</div>' +
           (g.vi && g.vi.length
-            ? '<div class="cs-nhanh-vi"><b>Vì sao hợp:</b> ' + g.vi.map(esc).join(' · ') + '</div>'
+            ? ('<div class="cs-nhanh-vi">' + _tvmbT('js.cs.vi-sao-hop', '<b>Vì sao hợp:</b>') + ' ') + g.vi.map(esc).join(' · ') + '</div>'
             : '') +
           '<ul class="cs-nganh">' + g.viec.map(function (v) { return '<li>' + esc(v) + '</li>'; }).join('') + '</ul>' +
-          (g.hopBac ? '' : '<div class="cs-nhanh-bac">Nhánh này thường ở bậc khác với bậc chức phận lá số đang chỉ ra.</div>') +
+          (g.hopBac ? '' : ('<div class="cs-nhanh-bac">' + _tvmbT('js.cs.nhanh-nay-thuong-o-bac-khac', 'Nhánh này thường ở bậc khác với bậc chức phận lá số đang chỉ ra.') + '</div>')) +
         '</div>'
       );
     });
@@ -589,12 +601,12 @@
     if (nh.chatNguoi && nh.chatNguoi.length) {
       h.push(
         '<div class="cs-grid">' +
-          row('Chất người nổi bật', nh.chatNguoi.map(function (t) { return t.ten + ' — ' + t.cao; }).join(' · ')) +
+          row(_tvmbT('js.cs.chat-nguoi-noi-bat', 'Chất người nổi bật'), nh.chatNguoi.map(function (t) { return t.ten + ' — ' + t.cao; }).join(' · ')) +
           // ⚠️ Nhãn PHẢI là "nghề không đòi hỏi", KHÔNG được viết thành "bạn
           // thiếu". Đây là chỗ duy nhất trong tool có thể xúc phạm người dùng
           // bằng một dòng nhãn, và không test nào bắt được.
           (nh.neTranh && nh.neTranh.length
-            ? row('Nghề hợp với bạn thường KHÔNG đòi hỏi', nh.neTranh.map(function (t) { return t.ten + ' — ' + t.thap; }).join(' · '))
+            ? row(_tvmbT('js.cs.nghe-hop-voi-ban-thuong-khong', 'Nghề hợp với bạn thường KHÔNG đòi hỏi'), nh.neTranh.map(function (t) { return t.ten + ' — ' + t.thap; }).join(' · '))
             : '') +
         '</div>'
       );
@@ -604,17 +616,17 @@
       // "tvmb-src-note" + data-share-skip: đánh dấu để shell.js không tự chèn
       // chồng thêm một khối nguồn thứ hai (xem `maybeAppendSrcNote` trong
       // shell.js), và loại khối này khỏi bản chia sẻ tự suy.
-      '<p class="cs-note tvmb-src-note" data-share-skip>📚 <b>Nguồn:</b> Theo <i>Tử Vi Đẩu Số Tân Biên</i> ' +
-        '(Vân Đằng Thái Thứ Lang) và <i>Trung Châu Phái — Lục Thập Tinh Hệ</i> (Vương Đình Chi). ' +
-        'Bốn kiểu người và cách gợi ngành là phương pháp riêng do <b>đội ngũ chuyên gia Tử Vi Minh Bảo</b> xây dựng.<br><br>' +
-        'Con số phần trăm là độ <b>khớp giữa chất người và chất việc</b>, ' +
-        '<b>không phải</b> khả năng thành công. Danh sách nghề là quy chiếu của trang cho ' +
-        'bối cảnh Việt Nam; đang làm nghề không có trong danh sách thì đối chiếu theo ' +
-        '<b>chất việc</b>, đừng đọc thành “bạn đang làm sai nghề”. ' +
+      ('<p class="cs-note tvmb-src-note" data-share-skip>' + _tvmbT('js.cs.nguon-theo-tu-vi-dau-so', '📚 <b>Nguồn:</b> Theo <i>Tử Vi Đẩu Số Tân Biên</i>') + ' ') +
+        _tvmbT('js.cs.van-dang-thai-thu-lang-va', '(Vân Đằng Thái Thứ Lang) và <i>Trung Châu Phái — Lục Thập Tinh Hệ</i> (Vương Đình Chi). ') +
+        _tvmbT('js.cs.bon-kieu-nguoi-va-cach-goi', 'Bốn kiểu người và cách gợi ngành là phương pháp riêng do <b>đội ngũ chuyên gia Tử Vi Minh Bảo</b> xây dựng.<br><br>') +
+        _tvmbT('js.cs.con-so-phan-tram-la-do', 'Con số phần trăm là độ <b>khớp giữa chất người và chất việc</b>, ') +
+        _tvmbT('js.cs.khong-phai-kha-nang-thanh-cong', '<b>không phải</b> khả năng thành công. Danh sách nghề là quy chiếu của trang cho ') +
+        _tvmbT('js.cs.boi-canh-viet-nam-dang-lam', 'bối cảnh Việt Nam; đang làm nghề không có trong danh sách thì đối chiếu theo ') +
+        _tvmbT('js.cs.chat-viec-dung-doc-thanh-ban', '<b>chất việc</b>, đừng đọc thành “bạn đang làm sai nghề”. ') +
         // Đường dẫn ghi công — giấy phép CC BY của bộ dữ liệu dùng để CHẤM đòi
         // ghi công, nhưng bản đọc KHÔNG nêu tên nguồn (xem CLAUDE.md). Một link
         // ở cuối phần là chỗ đúng: không chen vào nội dung, mà vẫn có đường tới.
-        '<a href="/nguon-du-lieu.html" target="_blank" rel="noopener">Nguồn dữ liệu →</a></p></div>'
+        ('<a href="/nguon-du-lieu.html" target="_blank" rel="noopener">' + _tvmbT('js.cs.nguon-du-lieu', 'Nguồn dữ liệu →') + '</a></p></div>')
     );
     return h.join('');
   }
@@ -664,6 +676,7 @@
 
   window.CongSoTool = {
     lap: lap,
+    kieuTen: kieuTen,
     moNhanh: moNhanh,
     headHTML: headHTML,
     bodyHTML: bodyHTML,

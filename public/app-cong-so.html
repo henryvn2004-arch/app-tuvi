@@ -246,7 +246,8 @@ window.SHELL_INTRO={key:'cong-so'};</script>
 <script src="/tuvi-laso-format.js?v=7"></script>
 <script src="/tools-shared/illus-nguong.js?v=1"></script>
 <script src="/tools-shared/illus-match.js?v=1"></script>
-<script src="/tools-shared/cong-so.js?v=4"></script>
+<script src="/tools-shared/glossary.js?v=4"></script>
+<script src="/tools-shared/cong-so.js?v=5"></script>
 <script src="/tools-shared/vn-timezone.js?v=1"></script>
 <script src="/tools-shared/noi-sinh.js?v=1"></script>
 <script src="/tuvi-form.js?v=15"></script>
@@ -318,7 +319,7 @@ function doCongSo(){
     document.getElementById('csIllusHost').innerHTML=congSoIllusHtml(fd);
     var ten=fd.hoten||_tvmbT('js.cs.ho-so', 'Hồ sơ');
     var loggedIn=window.Auth&&Auth.isLoggedIn&&Auth.isLoggedIn();
-    document.getElementById('resTitle').textContent=ten+_tvmbT('js.cs.kieu', ' · kiểu ')+_ho.kieu.ten;
+    document.getElementById('resTitle').textContent=ten+_tvmbT('js.cs.kieu', ' · kiểu ')+CongSoTool.kieuTen(_ho.kieu);
     // Chưa đăng nhập → chỉ dựng HEAD (kiểu người). Phần còn lại (6 thẻ · radar
     // 12 mặt · lộ trình · ghép đội · cơ sở) gộp vào tấm khoá cùng tầng nhánh —
     // xem `dungTuong()`. Đã đăng nhập → dựng trọn, như cũ (tool free, 0 Lượng).
@@ -348,12 +349,12 @@ function doCongSo(){
         birth:{day:fd.ngay,month:fd.thang,year:fd.nam,hourBranch:fd.gioIdx,gender:fd.gioitinh,name:fd.hoten||undefined,lich:fd.lich,noiSinh:fd.noiSinh},
         scenario:{type:'cong-so',data:j.rail},
         label:'Tử Vi Công Sở · '+ten+' · '+_ho.kieu.ten,
-        greeting:_tvmbT('js.cs.ho-so-cong-so-da-dung-full', 'Hồ sơ công sở đã dựng xong — bạn nghiêng về kiểu **{kieu}** ({tt}). Mạnh nhất đang là **{manh}**. Bạn muốn tôi đi sâu phần nào?', {kieu: _ho.kieu.ten, tt: _ho.kieu.tuTuong.split('(')[0].trim(), manh: manhNhat()}),
+        greeting:_tvmbT('js.cs.ho-so-cong-so-da-dung-full', 'Hồ sơ công sở đã dựng xong — bạn nghiêng về kiểu **{kieu}** ({tt}). Mạnh nhất đang là **{manh}**. Bạn muốn tôi đi sâu phần nào?', {kieu: CongSoTool.kieuTen(_ho.kieu), tt: _ho.kieu.tuTuong.split('(')[0].trim(), manh: manhNhat()}),
         chips:[_tvmbT('js.cs.trong-may-nganh-do-toi-nen', 'Trong mấy ngành đó tôi nên chọn ngành nào?'),_tvmbT('js.cs.toi-nen-tranh-moi-truong-nao', 'Tôi nên tránh môi trường nào?'),_tvmbT('js.cs.muoi-hai-thang-toi-nen-lam', 'Mười hai tháng tới nên làm gì?'),_tvmbT('js.cs.toi-hop-lam-viec-voi-kieu', 'Tôi hợp làm việc với kiểu người nào?'),_tvmbT('js.cs.chang-nghe-tiep-theo-cua-toi', 'Chặng nghề tiếp theo của tôi ra sao?')]
       });
       Shell.setShareable({
         kind:'text',toolId:'cong-so',
-        title:_tvmbT('js.cs.tu-vi-cong-so-kieu', 'Tử Vi Công Sở — kiểu ')+_ho.kieu.ten,
+        title:_tvmbT('js.cs.tu-vi-cong-so-kieu', 'Tử Vi Công Sở — kiểu ')+CongSoTool.kieuTen(_ho.kieu),
         text:['Kiểu người ở chỗ làm: '+_ho.kieu.ten+' ('+_ho.kieu.tuTuong+')',
           _ho.kieu.motCau,
           'Mạnh nhất: '+manhNhat(),
@@ -369,7 +370,7 @@ function doCongSo(){
         birth:{day:fd.ngay,month:fd.thang,year:fd.nam,hourBranch:fd.gioIdx,gender:fd.gioitinh,name:fd.hoten||undefined,lich:fd.lich,noiSinh:fd.noiSinh},
         scenario:{type:'cong-so',data:{kieu:_ho.kieu.ten,tuTuong:_ho.kieu.tuTuong,motCau:_ho.kieu.motCau,daDangKy:false}},
         label:'Tử Vi Công Sở · '+ten+' · '+_ho.kieu.ten,
-        greeting:_tvmbT('js.cs.ban-nghieng-ve-kieu-full', 'Bạn nghiêng về kiểu **{kieu}** ({tt}). Đăng ký tài khoản (được tặng Lượng miễn phí) để xem đủ 12 mặt, lộ trình 4 chặng và ghép đội — tôi sẽ đi sâu được sau khi bạn mở phần đó.', {kieu: _ho.kieu.ten, tt: _ho.kieu.tuTuong.split('(')[0].trim()}),
+        greeting:_tvmbT('js.cs.ban-nghieng-ve-kieu-full', 'Bạn nghiêng về kiểu **{kieu}** ({tt}). Đăng ký tài khoản (được tặng Lượng miễn phí) để xem đủ 12 mặt, lộ trình 4 chặng và ghép đội — tôi sẽ đi sâu được sau khi bạn mở phần đó.', {kieu: CongSoTool.kieuTen(_ho.kieu), tt: _ho.kieu.tuTuong.split('(')[0].trim()}),
         chips:[_tvmbT('js.cs.kieu-nguoi-nay-la-gi', 'Kiểu người này là gì?'),_tvmbT('js.cs.vi-sao-la-so-lai-ra', 'Vì sao lá số lại ra kiểu này?')]
       });
       Shell.setShareable(null);
@@ -544,7 +545,7 @@ function taiAnh(){
   btn.disabled=true;btn.textContent=_tvmbT('js.cs.dang-dung-anh', 'Đang dựng ảnh…');
   Poster.download({
     title:_tvmbT('js.cs.tu-vi-cong-so-ordd', 'Tử Vi Công Sở'),
-    subtitle:_tvmbT('js.cs.kieu-4mx9', 'Kiểu ')+_ho.kieu.ten+' · '+_ho.trangThaiLabel,
+    subtitle:_tvmbT('js.cs.kieu-4mx9', 'Kiểu ')+CongSoTool.kieuTen(_ho.kieu)+' · '+_ho.trangThaiLabel,
     quote:_tvmbT('js.cs.manh-nhat', 'Mạnh nhất: ')+manhNhat(),
     draw:CongSoTool.posterDraw(_ho),
     qrUrl:Poster.qrLink('cong-so','/app/cong-so'),

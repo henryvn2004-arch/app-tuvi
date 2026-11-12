@@ -350,6 +350,46 @@
    "shell"
   ]
  },
+ "/app/cong-so": {
+  "file": "app-cong-so.html",
+  "keys": [
+   "battu.1-nhap-thong-tin",
+   "battu.3-thanh-toan",
+   "battu.4-nhan-ket-qua",
+   "battu.chi-phi-su-dung",
+   "battu.gioi-thieu",
+   "battu.hoi",
+   "battu.mien-phi",
+   "cs.2-xem-truoc-ho-so",
+   "cs.40-nam-4-chang",
+   "cs.ban-dang-o-vi-tri-nao",
+   "cs.ban-luan-giai-mau-tai-pdf",
+   "cs.bon-ten-goi-khai-sang-lanh",
+   "cs.chu-doanh-nghiep",
+   "cs.cung-mot-nang-luc-co-nguoi",
+   "cs.dang-tim-viec-chuyen-huong",
+   "cs.doc-la-so-tu-vi-bang",
+   "cs.dung-ho-so-kieu-nguoi-12",
+   "cs.dung-ho-so-mien-phi",
+   "cs.hoi-thay-doc-ky-ho-so",
+   "cs.kieu-nguoi-noi-cong-so",
+   "cs.lam-tu-do-nghe-rieng",
+   "cs.ngay-gio-sinh-va-cho-dung",
+   "cs.nhan-vien-lam-thue",
+   "cs.nhanh-nghe-ghep-doi",
+   "cs.nhap-ngay-gio-sinh-va-vi",
+   "cs.quan-ly-lam-thue",
+   "cs.tai-anh",
+   "cs.tu-vi-cong-so",
+   "cs.tu-vi-cong-so-la-so",
+   "cs.tu-vi-cong-so-tu-vi",
+   "luangiai.tu-vi-dau-so-la-mot",
+   "napam.sua"
+  ],
+  "js": [
+   "shell"
+  ]
+ },
  "/app/day-con": {
   "file": "app-day-con.html",
   "keys": [
