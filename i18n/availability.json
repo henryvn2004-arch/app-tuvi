@@ -27,6 +27,20 @@
   "zh-tw",
   "zh-cn"
  ],
+ "/app/ban-do-sao": [
+  "en",
+  "ja",
+  "ko",
+  "zh-tw",
+  "zh-cn"
+ ],
+ "/app/ban-lam-viec": [
+  "en",
+  "ja",
+  "ko",
+  "zh-tw",
+  "zh-cn"
+ ],
  "/app/bao-cao": [
   "en",
   "ja",
@@ -35,6 +49,41 @@
   "zh-cn"
  ],
  "/app/bat-tu": [
+  "en",
+  "ja",
+  "ko",
+  "zh-tw",
+  "zh-cn"
+ ],
+ "/app/boi-bai-tay": [
+  "en",
+  "ja",
+  "ko",
+  "zh-tw",
+  "zh-cn"
+ ],
+ "/app/ca-nha": [
+  "en",
+  "ja",
+  "ko",
+  "zh-tw",
+  "zh-cn"
+ ],
+ "/app/chan-dung-tien-kiep": [
+  "en",
+  "ja",
+  "ko",
+  "zh-tw",
+  "zh-cn"
+ ],
+ "/app/chan-dung-vo-chong": [
+  "en",
+  "ja",
+  "ko",
+  "zh-tw",
+  "zh-cn"
+ ],
+ "/app/chon-ngay": [
   "en",
   "ja",
   "ko",
@@ -69,7 +118,63 @@
   "zh-tw",
   "zh-cn"
  ],
+ "/app/cong-so": [
+  "en",
+  "ja",
+  "ko",
+  "zh-tw",
+  "zh-cn"
+ ],
+ "/app/cua-hang-phong-thuy": [
+  "en",
+  "ja",
+  "ko",
+  "zh-tw",
+  "zh-cn"
+ ],
+ "/app/day-con": [
+  "en",
+  "ja",
+  "ko",
+  "zh-tw",
+  "zh-cn"
+ ],
+ "/app/duyen-no-tien-kiep": [
+  "en",
+  "ja",
+  "ko",
+  "zh-tw",
+  "zh-cn"
+ ],
+ "/app/gio-sinh": [
+  "en",
+  "ja",
+  "ko",
+  "zh-tw",
+  "zh-cn"
+ ],
  "/app/ho-so": [
+  "en",
+  "ja",
+  "ko",
+  "zh-tw",
+  "zh-cn"
+ ],
+ "/app/hoang-dao": [
+  "en",
+  "ja",
+  "ko",
+  "zh-tw",
+  "zh-cn"
+ ],
+ "/app/huong-nghiep-tre": [
+  "en",
+  "ja",
+  "ko",
+  "zh-tw",
+  "zh-cn"
+ ],
+ "/app/kim-lau": [
   "en",
   "ja",
   "ko",
@@ -118,7 +223,63 @@
   "zh-tw",
   "zh-cn"
  ],
+ "/app/ngay-tot": [
+  "en",
+  "ja",
+  "ko",
+  "zh-tw",
+  "zh-cn"
+ ],
+ "/app/nguoi-khac": [
+  "en",
+  "ja",
+  "ko",
+  "zh-tw",
+  "zh-cn"
+ ],
+ "/app/nhan-mach": [
+  "en",
+  "ja",
+  "ko",
+  "zh-tw",
+  "zh-cn"
+ ],
  "/app/nhan-tuong": [
+  "en",
+  "ja",
+  "ko",
+  "zh-tw",
+  "zh-cn"
+ ],
+ "/app/oracle": [
+  "en",
+  "ja",
+  "ko",
+  "zh-tw",
+  "zh-cn"
+ ],
+ "/app/phong-thuy": [
+  "en",
+  "ja",
+  "ko",
+  "zh-tw",
+  "zh-cn"
+ ],
+ "/app/sinh-con": [
+  "en",
+  "ja",
+  "ko",
+  "zh-tw",
+  "zh-cn"
+ ],
+ "/app/tarot": [
+  "en",
+  "ja",
+  "ko",
+  "zh-tw",
+  "zh-cn"
+ ],
+ "/app/than-so-hoc": [
   "en",
   "ja",
   "ko",
@@ -174,6 +335,13 @@
   "zh-tw",
   "zh-cn"
  ],
+ "/cong-cu": [
+  "en",
+  "ja",
+  "ko",
+  "zh-tw",
+  "zh-cn"
+ ],
  "/contact": [
   "en",
   "ja",
@@ -209,6 +377,13 @@
   "zh-tw",
   "zh-cn"
  ],
+ "/menh-kho": [
+  "en",
+  "ja",
+  "ko",
+  "zh-tw",
+  "zh-cn"
+ ],
  "/mien-tru-trach-nhiem.html": [
   "en",
   "ja",
@@ -237,7 +412,28 @@
   "zh-tw",
   "zh-cn"
  ],
+ "/resources": [
+  "en",
+  "ja",
+  "ko",
+  "zh-tw",
+  "zh-cn"
+ ],
+ "/sach-detail.html": [
+  "en",
+  "ja",
+  "ko",
+  "zh-tw",
+  "zh-cn"
+ ],
  "/san-pham-dich-vu.html": [
+  "en",
+  "ja",
+  "ko",
+  "zh-tw",
+  "zh-cn"
+ ],
+ "/tai-lieu.html": [
   "en",
   "ja",
   "ko",

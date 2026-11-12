@@ -3,8 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Lục Nhâm Giản — Tử Vi Minh Bảo</title>
-<meta name="description" content="Lục Nhâm Giản — tra 12 thần tướng theo giờ/ngày, thần đang trực cát hay hung. Hỏi Thầy luận cho việc gặp gỡ, cầu tài, xuất hành.">
+<title data-i18n="lucnham.luc-nham-gian-tu-vi-minh">Lục Nhâm Giản — Tử Vi Minh Bảo</title>
+<meta data-i18n-attr="content:lucnham.luc-nham-gian-tra-12-than" name="description" content="Lục Nhâm Giản — tra 12 thần tướng theo giờ/ngày, thần đang trực cát hay hung. Hỏi Thầy luận cho việc gặp gỡ, cầu tài, xuất hành.">
 <link rel="icon" type="image/webp" href="/seal.webp">
 <link rel="preload" href="/fonts/noto-serif-latin-400.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="/fonts/noto-serif-vietnamese-400.woff2" as="font" type="font/woff2" crossorigin>
@@ -42,10 +42,10 @@
   <main class="ws" id="ws">
     <div class="ws-top">
       <button class="btn mobile-only" onclick="document.getElementById('shell-sidebar').classList.toggle('open');window.shellSyncBackdrop&&shellSyncBackdrop()" aria-label="Menu">☰</button>
-      <div class="ws-title"><b>Lục Nhâm Giản</b><span>12 thần tướng theo giờ · ngày</span></div>
+      <div data-i18n="lucnham.luc-nham-gian-12-than-tuong" class="ws-title"><b>Lục Nhâm Giản</b><span>12 thần tướng theo giờ · ngày</span></div>
       <div class="ws-actions">
-        <button class="btn" id="btnEdit" onclick="showForm()" style="display:none">Sửa</button>
-        <button class="btn mobile-only" onclick="Shell.openRail()">✦ Hỏi</button>
+        <button data-i18n="napam.sua" class="btn" id="btnEdit" onclick="showForm()" style="display:none">Sửa</button>
+        <button data-i18n="battu.hoi" class="btn mobile-only" onclick="Shell.openRail()">✦ Hỏi</button>
       </div>
     </div>
     <div class="ws-body">
@@ -59,53 +59,53 @@
         <img class="intro-avatar" src="/tool-avatars/luc-nham.webp" alt="" onerror="this.remove()">
         <div class="intro-body">
           <div class="intro-text">
-            <div class="intro-t">Lục Nhâm Giản</div>
-            <div class="intro-d">Đang phân vân chuyện tiền bạc, tình cảm hay một quyết định cần chốt ngay — tra một quẻ đúng theo giờ, ngày hiện tại để trả lời đúng trọng tâm đó. Nhận lời luận ngắn gọn, đi thẳng vào việc bạn đang hỏi.</div>
+            <div data-i18n="lucnham.luc-nham-gian" class="intro-t">Lục Nhâm Giản</div>
+            <div data-i18n="lucnham.dang-phan-van-chuyen-tien-bac" class="intro-d">Đang phân vân chuyện tiền bạc, tình cảm hay một quyết định cần chốt ngay — tra một quẻ đúng theo giờ, ngày hiện tại để trả lời đúng trọng tâm đó. Nhận lời luận ngắn gọn, đi thẳng vào việc bạn đang hỏi.</div>
             <div id="introSrc"></div>
           </div>
         </div>
         <div class="hero-pills">
-          <div class="hero-pill"><span class="hp-ic" data-icon="layout-grid"></span><span>Tứ khóa<br>tam truyền</span></div>
-          <div class="hero-pill"><span class="hp-ic" data-icon="circle-dot"></span><span>Quý nhân<br>dẫn lối</span></div>
-          <div class="hero-pill"><span class="hp-ic" data-icon="message-circle"></span><span>Luận theo<br>Khảo Biến Chiêm</span></div>
+          <div class="hero-pill"><span class="hp-ic" data-icon="layout-grid"></span><span data-i18n="lucnham.tu-khoa-tam-truyen">Tứ khóa<br>tam truyền</span></div>
+          <div class="hero-pill"><span class="hp-ic" data-icon="circle-dot"></span><span data-i18n="lucnham.quy-nhan-dan-loi">Quý nhân<br>dẫn lối</span></div>
+          <div class="hero-pill"><span class="hp-ic" data-icon="message-circle"></span><span data-i18n="lucnham.luan-theo-khao-bien-chiem">Luận theo<br>Khảo Biến Chiêm</span></div>
         </div>
       </div></div>
       <div class="ws-main-col">
       <!-- Thanh tiến trình — tool này MIỄN PHÍ, không có paywall, chỉ 2 chặng
            thật: nhập ngày giờ rồi xem kết quả. JS chuyển bước ở `wsStepsSet`. -->
       <div class="ws-steps" id="wsSteps">
-        <div class="wss-step active"><span class="wss-n">1</span><span class="wss-l">Nhập ngày giờ</span></div>
-        <div class="wss-step"><span class="wss-n">2</span><span class="wss-l">Xem kết quả</span></div>
+        <div data-i18n="lucnham.1-nhap-ngay-gio" class="wss-step active"><span class="wss-n">1</span><span class="wss-l">Nhập ngày giờ</span></div>
+        <div data-i18n="napam.2-xem-ket-qua" class="wss-step"><span class="wss-n">2</span><span class="wss-l">Xem kết quả</span></div>
       </div>
       <div class="form-card" id="birthPanel">
-        <div class="fc-head"><span class="fc-ic" data-icon="circle-dot"></span><h2>Ngày &amp; giờ cần xem</h2></div>
-        <p class="sub">Để trống là lấy giờ hiện tại. Hệ thống lập khóa Đại Lục Nhâm, trả tứ khóa, tam truyền, quý nhân và lời luận theo Khảo Biến Chiêm.</p>
+        <div class="fc-head"><span class="fc-ic" data-icon="circle-dot"></span><h2 data-i18n="lucnham.ngay-gio-can-xem">Ngày &amp; giờ cần xem</h2></div>
+        <p data-i18n="lucnham.de-trong-la-lay-gio-hien" class="sub">Để trống là lấy giờ hiện tại. Hệ thống lập khóa Đại Lục Nhâm, trả tứ khóa, tam truyền, quý nhân và lời luận theo Khảo Biến Chiêm.</p>
         <div class="cost-box">
           <div class="cb-l">
             <span class="cb-ic" data-icon="wallet"></span>
             <div>
-              <div class="cb-title">Chi phí sử dụng</div>
+              <div data-i18n="battu.chi-phi-su-dung" class="cb-title">Chi phí sử dụng</div>
               <div class="cb-amt" data-tvp-price-label="luc-nham">…</div>
             </div>
           </div>
         </div>
         <div class="frow">
-          <div class="fg"><label>Ngày</label><input type="number" id="ngay" min="1" max="31" placeholder="1–31"></div>
-          <div class="fg"><label>Tháng</label><input type="number" id="thang" min="1" max="12" placeholder="1–12"></div>
-          <div class="fg"><label>Năm</label><input type="number" id="nam" min="1900" max="2100" placeholder="2026"></div>
+          <div class="fg"><label data-i18n="giosinh.ngay">Ngày</label><input type="number" id="ngay" min="1" max="31" placeholder="1–31"></div>
+          <div class="fg"><label data-i18n="giosinh.thang">Tháng</label><input type="number" id="thang" min="1" max="12" placeholder="1–12"></div>
+          <div class="fg"><label data-i18n="giosinh.nam">Năm</label><input type="number" id="nam" min="1900" max="2100" placeholder="2026"></div>
         </div>
         <div class="frow" style="margin-bottom:4px">
-          <div class="fg" style="flex:1;min-width:170px"><label>Giờ cần xem</label>
+          <div class="fg" style="flex:1;min-width:170px"><label data-i18n="lucnham.gio-can-xem">Giờ cần xem</label>
             <select id="gio">
-              <option value="0">Giờ Tý (23–01h)</option><option value="1">Giờ Sửu (01–03h)</option>
-              <option value="2">Giờ Dần (03–05h)</option><option value="3">Giờ Mão (05–07h)</option>
-              <option value="4">Giờ Thìn (07–09h)</option><option value="5">Giờ Tỵ (09–11h)</option>
-              <option value="6" selected>Giờ Ngọ (11–13h)</option><option value="7">Giờ Mùi (13–15h)</option>
-              <option value="8">Giờ Thân (15–17h)</option><option value="9">Giờ Dậu (17–19h)</option>
-              <option value="10">Giờ Tuất (19–21h)</option><option value="11">Giờ Hợi (21–23h)</option>
+              <option data-i18n="lucnham.gio-ty-23-01h" value="0">Giờ Tý (23–01h)</option><option data-i18n="lucnham.gio-suu-01-03h" value="1">Giờ Sửu (01–03h)</option>
+              <option data-i18n="lucnham.gio-dan-03-05h" value="2">Giờ Dần (03–05h)</option><option data-i18n="lucnham.gio-mao-05-07h" value="3">Giờ Mão (05–07h)</option>
+              <option data-i18n="lucnham.gio-thin-07-09h" value="4">Giờ Thìn (07–09h)</option><option data-i18n="lucnham.gio-ty-09-11h" value="5">Giờ Tỵ (09–11h)</option>
+              <option data-i18n="lucnham.gio-ngo-11-13h" value="6" selected>Giờ Ngọ (11–13h)</option><option data-i18n="lucnham.gio-mui-13-15h" value="7">Giờ Mùi (13–15h)</option>
+              <option data-i18n="lucnham.gio-than-15-17h" value="8">Giờ Thân (15–17h)</option><option data-i18n="lucnham.gio-dau-17-19h" value="9">Giờ Dậu (17–19h)</option>
+              <option data-i18n="lucnham.gio-tuat-19-21h" value="10">Giờ Tuất (19–21h)</option><option data-i18n="lucnham.gio-hoi-21-23h" value="11">Giờ Hợi (21–23h)</option>
             </select>
           </div>
-          <button class="btn-go" id="btnGo" onclick="calculate()">
+          <button data-i18n="lucnham.xem-que" class="btn-go" id="btnGo" onclick="calculate()">
             <span class="bg-label"><span class="ic" data-icon="circle-dot"></span><b>Xem quẻ →</b></span>
           </button>
         </div>
@@ -114,9 +114,9 @@
       </div>
       <div class="ws-side-col">
       <div class="ws-promo">
-        <div class="wsp-eyebrow"><span class="wsp-ic" data-icon="book-open"></span><span>Giới thiệu</span></div>
-        <div class="wsp-title">Lục Nhâm Giản</div>
-        <p class="wsp-desc">Lục Nhâm là một trong Tam Thức của thuật số cổ Trung Hoa, dùng bàn Thiên Bàn – Địa Bàn phối theo giờ và ngày hiện tại để lập quẻ. Phép đoán tập trung vào việc cụ thể đang hỏi, dựa trên vị trí của Thiên Tướng trên bàn.</p>
+        <div data-i18n="battu.gioi-thieu" class="wsp-eyebrow"><span class="wsp-ic" data-icon="book-open"></span><span>Giới thiệu</span></div>
+        <div data-i18n="lucnham.luc-nham-gian" class="wsp-title">Lục Nhâm Giản</div>
+        <p data-i18n="lucnham.luc-nham-la-mot-trong-tam" class="wsp-desc">Lục Nhâm là một trong Tam Thức của thuật số cổ Trung Hoa, dùng bàn Thiên Bàn – Địa Bàn phối theo giờ và ngày hiện tại để lập quẻ. Phép đoán tập trung vào việc cụ thể đang hỏi, dựa trên vị trí của Thiên Tướng trên bàn.</p>
       </div>
       <div id="shellRecent"></div>
       </div>
@@ -127,7 +127,7 @@
           <div class="res-block-header"><span class="res-block-title" id="resTitle">—</span></div>
           <div class="res-block-body" id="activeBox" style="margin-bottom:20px"></div>
         </div>
-        <div class="ask" data-ask="Thần tướng đang trực nói lên điều gì cho việc tôi định làm (gặp gỡ / cầu tài / ký kết / xuất hành)? Nên hay không nên, cách hóa giải?">✦ Hỏi Thầy luận thần tướng</div>
+        <div data-i18n="lucnham.hoi-thay-luan-than-tuong" class="ask" data-ask="Thần tướng đang trực nói lên điều gì cho việc tôi định làm (gặp gỡ / cầu tài / ký kết / xuất hành)? Nên hay không nên, cách hóa giải?">✦ Hỏi Thầy luận thần tướng</div>
       </div>
     </div>
   </main>

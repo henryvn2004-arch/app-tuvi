@@ -18,6 +18,15 @@ export function scriptsOf(html) {
   const has = (f) => new RegExp(`<script[^>]+src=["']/${f.replace('.', '\\.')}`, 'i').test(html);
   for (const f of ['shell.js', 'tuvi-paywall.js', 'auth.js', 'tool-prices.js', 'tuvi-form.js'])
     if (has(f)) out.add(f);
+  for (const f of [
+    'laso-chart.js',
+    'tool-sources.js',
+    'tools-shared/hook-layer.js',
+    'tools-shared/ai-loading-steps.js',
+    'tools-shared/cung-ngay-sinh.js',
+    'tools-shared/sample-hint.js',
+  ])
+    if (has(f)) out.add(f);
   if (out.has('shell.js'))
     ['tuvi-paywall.js', 'auth.js', 'tool-prices.js', 'tuvi-form.js'].forEach((f) => out.add(f));
   if (detectJsNamespaces(html).includes('nav')) out.add('nav.js');

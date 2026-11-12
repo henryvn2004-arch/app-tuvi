@@ -3,8 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Tử Vi Công Sở — Tử Vi Minh Bảo</title>
-<meta name="description" content="Đọc lá số Tử Vi bằng ngôn ngữ công việc: bạn thuộc kiểu người nào ở chỗ làm, mạnh yếu ở mười hai mặt, bốn chặng bốn mươi năm đi làm, và nên ghép đội với ai.">
+<title data-i18n="cs.tu-vi-cong-so-tu-vi">Tử Vi Công Sở — Tử Vi Minh Bảo</title>
+<meta data-i18n-attr="content:cs.doc-la-so-tu-vi-bang" name="description" content="Đọc lá số Tử Vi bằng ngôn ngữ công việc: bạn thuộc kiểu người nào ở chỗ làm, mạnh yếu ở mười hai mặt, bốn chặng bốn mươi năm đi làm, và nên ghép đội với ai.">
 <link rel="icon" type="image/webp" href="/seal.webp">
 <link rel="preload" href="/fonts/noto-serif-latin-400.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="/fonts/noto-serif-vietnamese-400.woff2" as="font" type="font/woff2" crossorigin>
@@ -111,10 +111,10 @@
   <main class="ws" id="ws">
     <div class="ws-top">
       <button class="btn mobile-only" onclick="document.getElementById('shell-sidebar').classList.toggle('open');window.shellSyncBackdrop&&shellSyncBackdrop()" aria-label="Menu">☰</button>
-      <div class="ws-title"><b>Tử Vi Công Sở</b><span>Lá số đọc bằng ngôn ngữ công việc</span></div>
+      <div data-i18n="cs.tu-vi-cong-so-la-so" class="ws-title"><b>Tử Vi Công Sở</b><span>Lá số đọc bằng ngôn ngữ công việc</span></div>
       <div class="ws-actions">
-        <button class="btn" id="btnEdit" onclick="showForm()" style="display:none">Sửa</button>
-        <button class="btn mobile-only" onclick="Shell.openRail()">✦ Hỏi</button>
+        <button data-i18n="napam.sua" class="btn" id="btnEdit" onclick="showForm()" style="display:none">Sửa</button>
+        <button data-i18n="battu.hoi" class="btn mobile-only" onclick="Shell.openRail()">✦ Hỏi</button>
       </div>
     </div>
     <div class="ws-body">
@@ -128,15 +128,15 @@
         <img class="intro-avatar" src="/tool-avatars/cong-so.webp" alt="" onerror="this.remove()">
         <div class="intro-body">
           <div class="intro-text">
-            <div class="intro-t">Tử Vi Công Sở</div>
-            <div class="intro-d">Cùng một năng lực, có người thăng tiến êm xuôi, có người mãi giậm chân — phần lớn nằm ở việc chọn đúng môi trường và cách thể hiện mình. Đọc kiểu người của bạn ở chỗ làm để định hướng rõ ràng hơn.</div>
+            <div data-i18n="cs.tu-vi-cong-so" class="intro-t">Tử Vi Công Sở</div>
+            <div data-i18n="cs.cung-mot-nang-luc-co-nguoi" class="intro-d">Cùng một năng lực, có người thăng tiến êm xuôi, có người mãi giậm chân — phần lớn nằm ở việc chọn đúng môi trường và cách thể hiện mình. Đọc kiểu người của bạn ở chỗ làm để định hướng rõ ràng hơn.</div>
             <div id="introSrc"></div>
           </div>
         </div>
         <div class="hero-pills">
-          <div class="hero-pill"><span class="hp-ic" data-icon="briefcase"></span><span>Kiểu người<br>nơi công sở</span></div>
-          <div class="hero-pill"><span class="hp-ic" data-icon="trending-up"></span><span>40 năm,<br>4 chặng</span></div>
-          <div class="hero-pill"><span class="hp-ic" data-icon="users"></span><span>Nhánh nghề,<br>ghép đội</span></div>
+          <div data-i18n="cs.kieu-nguoi-noi-cong-so" class="hero-pill"><span class="hp-ic" data-icon="briefcase"></span><span>Kiểu người<br>nơi công sở</span></div>
+          <div data-i18n="cs.40-nam-4-chang" class="hero-pill"><span class="hp-ic" data-icon="trending-up"></span><span>40 năm,<br>4 chặng</span></div>
+          <div data-i18n="cs.nhanh-nghe-ghep-doi" class="hero-pill"><span class="hp-ic" data-icon="users"></span><span>Nhánh nghề,<br>ghép đội</span></div>
         </div>
       </div></div>
       <div class="ws-main-col">
@@ -144,23 +144,23 @@
            chuyển bước ở `wsStepsSet` (cuối file), gọi tại đúng chỗ trạng thái
            đã đổi trong code cũ (doCongSo/showForm/dungTuong/moNhanh). -->
       <div class="ws-steps" id="wsSteps">
-        <div class="wss-step active"><span class="wss-n">1</span><span class="wss-l">Nhập thông tin</span></div>
-        <div class="wss-step"><span class="wss-n">2</span><span class="wss-l">Xem trước hồ sơ</span></div>
-        <div class="wss-step"><span class="wss-n">3</span><span class="wss-l">Thanh toán</span></div>
-        <div class="wss-step"><span class="wss-n">4</span><span class="wss-l">Nhận kết quả</span></div>
+        <div data-i18n="battu.1-nhap-thong-tin" class="wss-step active"><span class="wss-n">1</span><span class="wss-l">Nhập thông tin</span></div>
+        <div data-i18n="cs.2-xem-truoc-ho-so" class="wss-step"><span class="wss-n">2</span><span class="wss-l">Xem trước hồ sơ</span></div>
+        <div data-i18n="battu.3-thanh-toan" class="wss-step"><span class="wss-n">3</span><span class="wss-l">Thanh toán</span></div>
+        <div data-i18n="battu.4-nhan-ket-qua" class="wss-step"><span class="wss-n">4</span><span class="wss-l">Nhận kết quả</span></div>
       </div>
       <div class="form-card" id="birthPanel">
-        <div class="fc-head"><span class="fc-ic" data-icon="briefcase"></span><h2>Ngày giờ sinh và chỗ đứng hiện tại</h2></div>
-        <p class="sub">Nhập ngày giờ sinh và vị trí hiện tại. Hệ thống đối chiếu cổ pháp — kiểu người nơi công sở, nhánh nghề hợp và 40 năm sự nghiệp chia 4 chặng.</p>
+        <div class="fc-head"><span class="fc-ic" data-icon="briefcase"></span><h2 data-i18n="cs.ngay-gio-sinh-va-cho-dung">Ngày giờ sinh và chỗ đứng hiện tại</h2></div>
+        <p data-i18n="cs.nhap-ngay-gio-sinh-va-vi" class="sub">Nhập ngày giờ sinh và vị trí hiện tại. Hệ thống đối chiếu cổ pháp — kiểu người nơi công sở, nhánh nghề hợp và 40 năm sự nghiệp chia 4 chặng.</p>
         <div id="tuviFormHost"></div>
         <div class="frow">
-          <div class="fg"><label>Bạn đang ở vị trí nào</label>
+          <div class="fg"><label data-i18n="cs.ban-dang-o-vi-tri-nao">Bạn đang ở vị trí nào</label>
             <select id="trangThai">
-              <option value="nhan-vien">Nhân viên làm thuê</option>
-              <option value="quan-ly">Quản lý làm thuê</option>
-              <option value="chu">Chủ doanh nghiệp</option>
-              <option value="tu-do">Làm tự do / nghề riêng</option>
-              <option value="dang-tim">Đang tìm việc / chuyển hướng</option>
+              <option data-i18n="cs.nhan-vien-lam-thue" value="nhan-vien">Nhân viên làm thuê</option>
+              <option data-i18n="cs.quan-ly-lam-thue" value="quan-ly">Quản lý làm thuê</option>
+              <option data-i18n="cs.chu-doanh-nghiep" value="chu">Chủ doanh nghiệp</option>
+              <option data-i18n="cs.lam-tu-do-nghe-rieng" value="tu-do">Làm tự do / nghề riêng</option>
+              <option data-i18n="cs.dang-tim-viec-chuyen-huong" value="dang-tim">Đang tìm việc / chuyển hướng</option>
             </select>
           </div>
         </div>
@@ -168,26 +168,26 @@
           <div class="cb-l">
             <span class="cb-ic" data-icon="wallet"></span>
             <div>
-              <div class="cb-title">Chi phí sử dụng</div>
-              <div class="cb-amt">Miễn phí</div>
+              <div data-i18n="battu.chi-phi-su-dung" class="cb-title">Chi phí sử dụng</div>
+              <div data-i18n="battu.mien-phi" class="cb-amt">Miễn phí</div>
             </div>
           </div>
         </div>
-        <button class="btn-go" id="btnGo" onclick="doCongSo()">
+        <button data-i18n="cs.dung-ho-so-mien-phi" class="btn-go" id="btnGo" onclick="doCongSo()">
           <span class="bg-label"><span class="ic" data-icon="briefcase"></span><b id="btnGoLabel">Dựng hồ sơ →</b></span>
           <small>Miễn phí</small>
         </button>
-        <p class="sub" style="margin:10px 0 0">Dựng hồ sơ kiểu người + 12 mặt là <b>miễn phí</b>. Mở phần nhánh nghề cụ thể mới tính Lượng.</p>
+        <p data-i18n="cs.dung-ho-so-kieu-nguoi-12" class="sub" style="margin:10px 0 0">Dựng hồ sơ kiểu người + 12 mặt là <b>miễn phí</b>. Mở phần nhánh nghề cụ thể mới tính Lượng.</p>
         <div class="err" id="error-msg"></div>
       </div>
       </div>
       <div class="ws-side-col">
       <div class="ws-promo">
-        <div class="wsp-eyebrow"><span class="wsp-ic" data-icon="book-open"></span><span>Giới thiệu</span></div>
-        <div class="wsp-title">Tử Vi Công Sở</div>
-        <p class="wsp-desc">Tử Vi Đẩu Số là một môn mệnh lý cổ truyền Trung Hoa, lập lá số theo giờ sinh âm lịch với 12 cung và hệ thống chính tinh, phụ tinh chiếu mệnh. Môn học được hệ thống hoá qua nhiều đời, phổ biến tại Việt Nam qua bản dịch <i>Tử Vi Đẩu Số Tân Biên</i> của Vân Đằng Thái Thứ Lang.</p>
+        <div data-i18n="battu.gioi-thieu" class="wsp-eyebrow"><span class="wsp-ic" data-icon="book-open"></span><span>Giới thiệu</span></div>
+        <div data-i18n="cs.tu-vi-cong-so" class="wsp-title">Tử Vi Công Sở</div>
+        <p data-i18n="luangiai.tu-vi-dau-so-la-mot" class="wsp-desc">Tử Vi Đẩu Số là một môn mệnh lý cổ truyền Trung Hoa, lập lá số theo giờ sinh âm lịch với 12 cung và hệ thống chính tinh, phụ tinh chiếu mệnh. Môn học được hệ thống hoá qua nhiều đời, phổ biến tại Việt Nam qua bản dịch <i>Tử Vi Đẩu Số Tân Biên</i> của Vân Đằng Thái Thứ Lang.</p>
       </div>
-      <div class="samp-cta">
+      <div data-i18n="cs.ban-luan-giai-mau-tai-pdf" class="samp-cta">
         <span class="sc-ic" data-icon="file-text"></span>
         <span class="sc-txt"><b>Bản luận giải mẫu</b><span>Tải PDF Tử Vi Công Sở đầy đủ của một lá số mẫu để xem trước nội dung thật.</span></span>
         <a class="sc-btn" href="/tai-mau/mau-cong-so.pdf" target="_blank" rel="noopener">Tải PDF →</a>
@@ -200,7 +200,7 @@
         <div class="res-block">
           <div class="res-block-header">
             <span class="res-block-title" id="resTitle">—</span>
-            <button class="btn-tai" id="taiBtn" onclick="taiAnh()">⬇ Tải ảnh</button>
+            <button data-i18n="cs.tai-anh" class="btn-tai" id="taiBtn" onclick="taiAnh()">⬇ Tải ảnh</button>
           </div>
           <div class="res-block-body">
             <div class="cs-canvas-wrap"><canvas id="csToaDo"></canvas></div>
@@ -219,11 +219,11 @@
                  nguyên — đúng khuôn W1. -->
             <div id="nhanhHost"></div>
             <div id="lockHost"></div>
-            <div class="disc">
+            <div data-i18n="cs.bon-ten-goi-khai-sang-lanh" class="disc">
               Bốn tên gọi <b>Khai sáng · Lãnh đạo · Hỗ trợ · Hợp tác</b> là nhãn hiện đại do trang đặt cho dễ đọc — cổ thư không gọi thế. Cách chia thì có nền cổ pháp: nó là <b>tứ tượng</b> (lão dương · thiếu âm · thiếu dương · lão âm) áp lên 14 chính tinh, rơi đúng vào các bộ sao kinh điển.<br>
               Đây là <b>một khung đọc lá số</b>, không phải trắc nghiệm tâm lý đã qua kiểm định. Không có nghiên cứu đối chứng nào đứng sau nó. Dùng để hiểu mình và gợi chuyện, đừng dùng để tuyển người hay xếp việc cho người khác.
             </div>
-            <div class="ask" data-ask="Đọc kỹ giúp tôi hồ sơ công sở này: tôi hợp môi trường nào, đang vướng gì, và ba việc nên làm trong mười hai tháng tới?">✦ Hỏi Thầy đọc kỹ hồ sơ này</div>
+            <div data-i18n="cs.hoi-thay-doc-ky-ho-so" class="ask" data-ask="Đọc kỹ giúp tôi hồ sơ công sở này: tôi hợp môi trường nào, đang vướng gì, và ba việc nên làm trong mười hai tháng tới?">✦ Hỏi Thầy đọc kỹ hồ sơ này</div>
           </div>
         </div>
         <!-- "Ai Sinh Cùng Ngày Với Bạn" — miễn phí, 0 token LLM. Hỏng mạng/API
@@ -246,13 +246,14 @@ window.SHELL_INTRO={key:'cong-so'};</script>
 <script src="/tuvi-laso-format.js?v=7"></script>
 <script src="/tools-shared/illus-nguong.js?v=1"></script>
 <script src="/tools-shared/illus-match.js?v=1"></script>
-<script src="/tools-shared/cong-so.js?v=4"></script>
+<script src="/tools-shared/glossary.js?v=4"></script>
+<script src="/tools-shared/cong-so.js?v=5"></script>
 <script src="/tools-shared/vn-timezone.js?v=1"></script>
 <script src="/tools-shared/noi-sinh.js?v=2"></script>
 <script src="/tuvi-form.js?v=16"></script>
-<script src="/tools-shared/cung-ngay-sinh.js?v=2"></script>
+<script src="/tools-shared/cung-ngay-sinh.js?v=3"></script>
 <script src="/tuvi-paywall.js?v=44"></script>
-<script src="/tools-shared/hook-layer.js?v=7"></script>
+<script src="/tools-shared/hook-layer.js?v=8"></script>
 <script src="/poster.js?v=4"></script>
 <script src="/auth.js?v=9"></script>
   <script src="/nav.js?v=49" data-icons-only></script>
@@ -307,18 +308,18 @@ function congSoIllusHtml(fd){
 function doCongSo(){
   var fd=TuviForm.getData();
   _err('');
-  if(!fd.ngay||!fd.thang||!fd.nam){_err('Vui lòng nhập đủ ngày, tháng, năm sinh.');return;}
+  if(!fd.ngay||!fd.thang||!fd.nam){_err(_tvmbT('js.cs.vui-long-nhap-du-ngay-thang', 'Vui lòng nhập đủ ngày, tháng, năm sinh.'));return;}
   var tt=document.getElementById('trangThai').value;
   var btn=document.getElementById('btnGo'),lbl=document.getElementById('btnGoLabel'),old=lbl?lbl.textContent:'';
-  btn.disabled=true; if(lbl) lbl.textContent='Đang dựng…';
+  btn.disabled=true; if(lbl) lbl.textContent=_tvmbT('js.cs.dang-dung', 'Đang dựng…');
   CongSoTool.lap({ngay:fd.ngay,thang:fd.thang,nam:fd.nam,gio:fd.gioIdx,gioiTinh:fd.gioitinh,trangThai:tt}).then(function(j){
     btn.disabled=false; if(lbl) lbl.textContent=old;
-    if(!j){_err('Chưa dựng được hồ sơ lúc này — vui lòng thử lại.');return;}
+    if(!j){_err(_tvmbT('js.cs.chua-dung-duoc-ho-so-luc', 'Chưa dựng được hồ sơ lúc này — vui lòng thử lại.'));return;}
     _ho=j.hoSo;_birth=fd;
     document.getElementById('csIllusHost').innerHTML=congSoIllusHtml(fd);
-    var ten=fd.hoten||'Hồ sơ';
+    var ten=fd.hoten||_tvmbT('js.cs.ho-so', 'Hồ sơ');
     var loggedIn=window.Auth&&Auth.isLoggedIn&&Auth.isLoggedIn();
-    document.getElementById('resTitle').textContent=ten+' · kiểu '+_ho.kieu.ten;
+    document.getElementById('resTitle').textContent=ten+_tvmbT('js.cs.kieu', ' · kiểu ')+CongSoTool.kieuTen(_ho.kieu);
     // Chưa đăng nhập → chỉ dựng HEAD (kiểu người). Phần còn lại (6 thẻ · radar
     // 12 mặt · lộ trình · ghép đội · cơ sở) gộp vào tấm khoá cùng tầng nhánh —
     // xem `dungTuong()`. Đã đăng nhập → dựng trọn, như cũ (tool free, 0 Lượng).
@@ -348,13 +349,12 @@ function doCongSo(){
         birth:{day:fd.ngay,month:fd.thang,year:fd.nam,hourBranch:fd.gioIdx,gender:fd.gioitinh,name:fd.hoten||undefined,lich:fd.lich,noiSinh:fd.noiSinh},
         scenario:{type:'cong-so',data:j.rail},
         label:'Tử Vi Công Sở · '+ten+' · '+_ho.kieu.ten,
-        greeting:'Hồ sơ công sở đã dựng xong — bạn nghiêng về kiểu **'+_ho.kieu.ten+'** ('+_ho.kieu.tuTuong.split('(')[0].trim()+'). '+
-          'Mạnh nhất đang là **'+manhNhat()+'**. Bạn muốn tôi đi sâu phần nào?',
-        chips:['Trong mấy ngành đó tôi nên chọn ngành nào?','Tôi nên tránh môi trường nào?','Mười hai tháng tới nên làm gì?','Tôi hợp làm việc với kiểu người nào?','Chặng nghề tiếp theo của tôi ra sao?']
+        greeting:_tvmbT('js.cs.ho-so-cong-so-da-dung-full', 'Hồ sơ công sở đã dựng xong — bạn nghiêng về kiểu **{kieu}** ({tt}). Mạnh nhất đang là **{manh}**. Bạn muốn tôi đi sâu phần nào?', {kieu: CongSoTool.kieuTen(_ho.kieu), tt: _ho.kieu.tuTuong.split('(')[0].trim(), manh: manhNhat()}),
+        chips:[_tvmbT('js.cs.trong-may-nganh-do-toi-nen', 'Trong mấy ngành đó tôi nên chọn ngành nào?'),_tvmbT('js.cs.toi-nen-tranh-moi-truong-nao', 'Tôi nên tránh môi trường nào?'),_tvmbT('js.cs.muoi-hai-thang-toi-nen-lam', 'Mười hai tháng tới nên làm gì?'),_tvmbT('js.cs.toi-hop-lam-viec-voi-kieu', 'Tôi hợp làm việc với kiểu người nào?'),_tvmbT('js.cs.chang-nghe-tiep-theo-cua-toi', 'Chặng nghề tiếp theo của tôi ra sao?')]
       });
       Shell.setShareable({
         kind:'text',toolId:'cong-so',
-        title:'Tử Vi Công Sở — kiểu '+_ho.kieu.ten,
+        title:_tvmbT('js.cs.tu-vi-cong-so-kieu', 'Tử Vi Công Sở — kiểu ')+CongSoTool.kieuTen(_ho.kieu),
         text:['Kiểu người ở chỗ làm: '+_ho.kieu.ten+' ('+_ho.kieu.tuTuong+')',
           _ho.kieu.motCau,
           'Mạnh nhất: '+manhNhat(),
@@ -370,9 +370,8 @@ function doCongSo(){
         birth:{day:fd.ngay,month:fd.thang,year:fd.nam,hourBranch:fd.gioIdx,gender:fd.gioitinh,name:fd.hoten||undefined,lich:fd.lich,noiSinh:fd.noiSinh},
         scenario:{type:'cong-so',data:{kieu:_ho.kieu.ten,tuTuong:_ho.kieu.tuTuong,motCau:_ho.kieu.motCau,daDangKy:false}},
         label:'Tử Vi Công Sở · '+ten+' · '+_ho.kieu.ten,
-        greeting:'Bạn nghiêng về kiểu **'+_ho.kieu.ten+'** ('+_ho.kieu.tuTuong.split('(')[0].trim()+'). '+
-          'Đăng ký tài khoản (được tặng Lượng miễn phí) để xem đủ 12 mặt, lộ trình 4 chặng và ghép đội — tôi sẽ đi sâu được sau khi bạn mở phần đó.',
-        chips:['Kiểu người này là gì?','Vì sao lá số lại ra kiểu này?']
+        greeting:_tvmbT('js.cs.ban-nghieng-ve-kieu-full', 'Bạn nghiêng về kiểu **{kieu}** ({tt}). Đăng ký tài khoản (được tặng Lượng miễn phí) để xem đủ 12 mặt, lộ trình 4 chặng và ghép đội — tôi sẽ đi sâu được sau khi bạn mở phần đó.', {kieu: CongSoTool.kieuTen(_ho.kieu), tt: _ho.kieu.tuTuong.split('(')[0].trim()}),
+        chips:[_tvmbT('js.cs.kieu-nguoi-nay-la-gi', 'Kiểu người này là gì?'),_tvmbT('js.cs.vi-sao-la-so-lai-ra', 'Vì sao lá số lại ra kiểu này?')]
       });
       Shell.setShareable(null);
     }
@@ -400,18 +399,18 @@ function _fillVndSlots(host,product){
 // Danh sách hiện cho người ĐÃ ĐĂNG NHẬP nhưng chưa mở nhánh — họ đã thấy trọn
 // phần thân (radar/lộ trình/ghép đội), nên chỉ liệt kê đúng phần nhánh.
 var NHANH_KHOA=[
-  'Ba nhánh nghề cụ thể bên trong lĩnh vực của bạn',
-  'Việc làm được ngay ở từng nhánh, theo bối cảnh Việt Nam',
-  'Vì sao lá số hợp nhánh đó — nêu đích danh chất người',
-  'Chất người nổi bật và thứ nghề hợp với bạn KHÔNG đòi hỏi'
+  _tvmbT('js.cs.ba-nhanh-nghe-cu-the-ben', 'Ba nhánh nghề cụ thể bên trong lĩnh vực của bạn'),
+  _tvmbT('js.cs.viec-lam-duoc-ngay-o-tung', 'Việc làm được ngay ở từng nhánh, theo bối cảnh Việt Nam'),
+  _tvmbT('js.cs.vi-sao-la-so-hop-nhanh', 'Vì sao lá số hợp nhánh đó — nêu đích danh chất người'),
+  _tvmbT('js.cs.chat-nguoi-noi-bat-va-thu', 'Chất người nổi bật và thứ nghề hợp với bạn KHÔNG đòi hỏi')
 ];
 // Danh sách cho khách CHƯA ĐĂNG KÝ — họ mới chỉ thấy HEAD (kiểu người), nên
 // tấm khoá phải liệt kê ĐỦ cả phần THÂN (vốn free) lẫn phần NHÁNH (trả phí).
 var HO_SO_KHOA_ANON=[
-  'Mười hai mặt của đời đi làm — điểm + lý do từng mặt',
-  'Bốn mươi năm đi làm, chia bốn chặng',
-  'Bạn hợp làm ngành gì — lĩnh vực · vai trò · quy mô',
-  'Ghép đội — ai đỡ được bạn'
+  _tvmbT('js.cs.muoi-hai-mat-cua-doi-di', 'Mười hai mặt của đời đi làm — điểm + lý do từng mặt'),
+  _tvmbT('js.cs.bon-muoi-nam-di-lam-chia', 'Bốn mươi năm đi làm, chia bốn chặng'),
+  _tvmbT('js.cs.ban-hop-lam-nganh-gi-linh', 'Bạn hợp làm ngành gì — lĩnh vực · vai trò · quy mô'),
+  _tvmbT('js.cs.ghep-doi-ai-do-duoc-ban', 'Ghép đội — ai đỡ được bạn')
 ].concat(NHANH_KHOA);
 
 // Đã đăng nhập → KHÔNG dựng tường xem trước nữa: một nút bấm gate (trừ Lượng)
@@ -432,7 +431,7 @@ function dungTuong(){
   if(loggedIn){
     // Đã đăng nhập đã thấy TRỌN radar 12 mặt (bangHTML) — không hook lại nữa,
     // hook chỉ có việc ở màn ĐĂNG KÝ (mountHookAnon dưới).
-    host.innerHTML='<button class="btn-go" id="btnNhanh"><span class="bg-label"><span class="ic" data-icon="users"></span><b>Mở phần nhánh nghề →</b></span><small>Tốn <span class="vnd" data-tvp-price-vnd="cong-so"></span> <span class="cb-sub">(<span data-tvp-price="cong-so">…</span> Lượng)</span></small></button>';
+    host.innerHTML=('<button class="btn-go" id="btnNhanh"><span class="bg-label"><span class="ic" data-icon="users"></span>' + _tvmbT('js.cs.mo-phan-nhanh-nghe', '<b>Mở phần nhánh nghề →</b>') + '</span>' + _tvmbT('js.cs.ton', '<small>Tốn') + ' <span class="vnd" data-tvp-price-vnd="cong-so"></span> <span class="cb-sub">(<span data-tvp-price="cong-so">…</span> ' + _tvmbT('js.cs.luong', 'Lượng)') + '</span></small></button>');
     TuviPaywall.fillPriceSlots(host).then(function(){ _fillVndSlots(host,'cong-so'); });
     document.getElementById('btnNhanh').addEventListener('click',function(){
       TuviPaywall.requireCredits(_slug,moNhanh);
@@ -442,9 +441,9 @@ function dungTuong(){
   mountHookAnon();
   TuviPaywall.lockPreview({
     host:host,
-    title:'⊙ Hồ sơ đầy đủ chưa mở',
+    title:_tvmbT('js.cs.ho-so-day-du-chua-mo', '⊙ Hồ sơ đầy đủ chưa mở'),
     items:HO_SO_KHOA_ANON,
-    cta:'Mở hồ sơ đầy đủ',
+    cta:_tvmbT('js.cs.mo-ho-so-day-du', 'Mở hồ sơ đầy đủ'),
     slug:function(){return _slug;},
     onUnlock:moNhanh
   });
@@ -466,28 +465,28 @@ function mountHookAnon(){
   var top=sorted[0], bot=sorted[sorted.length-1];
   var facts=[{
     tone:'good',
-    title:'Mặt mạnh nhất trong 12 mặt: '+top.nhan,
+    title:_tvmbT('js.cs.mat-manh-nhat-trong-12-mat', 'Mặt mạnh nhất trong 12 mặt: ')+top.nhan,
     value:top.diem,
-    body:'Trên thang 10 điểm — 11 mặt còn lại, lý do từng mặt, và bảng đầy đủ nằm trong hồ sơ đăng ký được xem miễn phí.',
+    body:_tvmbT('js.cs.tren-thang-10-diem-11-mat', 'Trên thang 10 điểm — 11 mặt còn lại, lý do từng mặt, và bảng đầy đủ nằm trong hồ sơ đăng ký được xem miễn phí.'),
     source:'engine · ho.radar'
   }];
   if(bot&&bot.nhan!==top.nhan){
     facts.push({
       tone:'bad',
-      title:'Mặt cần bồi thêm nhất: '+bot.nhan,
+      title:_tvmbT('js.cs.mat-can-boi-them-nhat', 'Mặt cần bồi thêm nhất: ')+bot.nhan,
       value:bot.diem,
-      body:'Trên thang 10 điểm — lý do và cách bồi từng mặt nằm trong hồ sơ đăng ký được xem miễn phí.',
+      body:_tvmbT('js.cs.tren-thang-10-diem-ly-do', 'Trên thang 10 điểm — lý do và cách bồi từng mặt nằm trong hồ sơ đăng ký được xem miễn phí.'),
       source:'engine · ho.radar'
     });
   }
-  var spec={tool:'cong-so',toolLabel:'Tử Vi Công Sở',charts:[],facts:facts};
+  var spec={tool:'cong-so',toolLabel:_tvmbT('js.cs.tu-vi-cong-so-ordd', 'Tử Vi Công Sở'),charts:[],facts:facts};
   window.HookLayer.run(host, spec);
 }
 
 function moNhanh(){
   wsStepsSet(4); // Nhận kết quả — đã trả tiền, bắt đầu mở phần nhánh nghề
   var host=document.getElementById('nhanhHost');
-  host.innerHTML='<div class="cs-note">Đang mở phần nhánh nghề…</div>';
+  host.innerHTML=('<div class="cs-note">' + _tvmbT('js.cs.dang-mo-phan-nhanh-nghe', 'Đang mở phần nhánh nghề…') + '</div>');
   var tt=document.getElementById('trangThai').value;
   var tok=(window.Auth&&Auth.getSession&&Auth.getSession()||{}).access_token||'';
   return CongSoTool.moNhanh(
@@ -500,7 +499,7 @@ function moNhanh(){
       // Lỗi thật thì nói thật, và KHÔNG quẳng người ta về form trống — họ đang
       // nhìn phần tính thử và có thể vừa trả tiền cho phần sau.
       if(r.status===402){dungTuong();return;}
-      _err((r.data&&r.data.error)||'Chưa mở được phần nhánh nghề — vui lòng thử lại.');
+      _err((r.data&&r.data.error)||_tvmbT('js.cs.chua-mo-duoc-phan-nhanh-nghe', 'Chưa mở được phần nhánh nghề — vui lòng thử lại.'));
       dungTuong();
       return;
     }
@@ -517,9 +516,8 @@ function moNhanh(){
       birth:{day:_birth.ngay,month:_birth.thang,year:_birth.nam,hourBranch:_birth.gioIdx,gender:_birth.gioitinh,name:_birth.hoten||undefined,lich:_birth.lich,noiSinh:_birth.noiSinh},
       scenario:{type:'cong-so',data:r.data.rail},
       label:'Tử Vi Công Sở · '+(_birth.hoten||'Hồ sơ')+' · '+_ho.kieu.ten,
-      greeting:'Đã mở phần nhánh nghề. Nhánh hợp nhất với bạn là **'+
-        ((_ho.nhanh.goiY[0]||{}).ten||'—')+'**. Bạn muốn tôi đi sâu nhánh nào, hay hỏi về một ngành cụ thể?',
-      chips:['Tôi có hợp làm ngành X không?','Nhánh đầu tiên cụ thể phải bắt đầu từ đâu?','Tôi còn thiếu gì để vào nhánh đó?','Ba nhánh này khác nhau ở chỗ nào?','Nếu tôi đang làm nghề khác thì sao?']
+      greeting:_tvmbT('js.cs.da-mo-phan-nhanh-nghe-ten', 'Đã mở phần nhánh nghề. Nhánh hợp nhất với bạn là **{ten}**. Bạn muốn tôi đi sâu nhánh nào, hay hỏi về một ngành cụ thể?', {ten: (_ho.nhanh.goiY[0]||{}).ten||'—'}),
+      chips:[_tvmbT('js.cs.toi-co-hop-lam-nganh-x', 'Tôi có hợp làm ngành X không?'),_tvmbT('js.cs.nhanh-dau-tien-cu-the-phai', 'Nhánh đầu tiên cụ thể phải bắt đầu từ đâu?'),_tvmbT('js.cs.toi-con-thieu-gi-de-vao', 'Tôi còn thiếu gì để vào nhánh đó?'),_tvmbT('js.cs.ba-nhanh-nay-khac-nhau-o', 'Ba nhánh này khác nhau ở chỗ nào?'),_tvmbT('js.cs.neu-toi-dang-lam-nghe-khac', 'Nếu tôi đang làm nghề khác thì sao?')]
     });
   });
 }
@@ -544,17 +542,17 @@ function taiAnh(){
   if(!_ho||!window.Poster)return;
   var e=document.getElementById('taiErr');e.classList.remove('active');
   var btn=document.getElementById('taiBtn'),old=btn.textContent;
-  btn.disabled=true;btn.textContent='Đang dựng ảnh…';
+  btn.disabled=true;btn.textContent=_tvmbT('js.cs.dang-dung-anh', 'Đang dựng ảnh…');
   Poster.download({
-    title:'Tử Vi Công Sở',
-    subtitle:'Kiểu '+_ho.kieu.ten+' · '+_ho.trangThaiLabel,
-    quote:'Mạnh nhất: '+manhNhat(),
+    title:_tvmbT('js.cs.tu-vi-cong-so-ordd', 'Tử Vi Công Sở'),
+    subtitle:_tvmbT('js.cs.kieu-4mx9', 'Kiểu ')+CongSoTool.kieuTen(_ho.kieu)+' · '+_ho.trangThaiLabel,
+    quote:_tvmbT('js.cs.manh-nhat', 'Mạnh nhất: ')+manhNhat(),
     draw:CongSoTool.posterDraw(_ho),
     qrUrl:Poster.qrLink('cong-so','/app/cong-so'),
-    qrCaption:'Quét mã — xem kiểu người của bạn'
+    qrCaption:_tvmbT('js.cs.quet-ma-xem-kieu-nguoi-cua', 'Quét mã — xem kiểu người của bạn')
   },'tu-vi-cong-so-tuviminhbao.png')
     .then(function(){if(window.Track)Track.event('poster_download',{tool_id:'cong-so'});})
-    .catch(function(){e.textContent='Chưa dựng được ảnh. Thử lại sau ít giây.';e.classList.add('active');})
+    .catch(function(){e.textContent=_tvmbT('js.cs.chua-dung-duoc-anh-thu-lai', 'Chưa dựng được ảnh. Thử lại sau ít giây.');e.classList.add('active');})
     .then(function(){btn.disabled=false;btn.textContent=old;});
 }
 
