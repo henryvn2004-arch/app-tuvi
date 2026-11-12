@@ -863,7 +863,8 @@ export interface HuongTreKetQua {
    * 🔴 Với trẻ em luật này còn gắt hơn người lớn: cha mẹ đọc "con thiếu kiên
    * trì" rồi tin, thì câu đó theo đứa bé nhiều năm.
    */
-  khongDoiHoi: { ten: string; thap: string }[];
+  /** `ma` (W30a) = id chiều chất, client tra `kdh.<ma>` (câu khuôn `{ai}`) — `thap` vẫn là chữ Việt đã thế xưng hô. */
+  khongDoiHoi: { ten: string; thap: string; ma: string }[];
   /** Không hướng nào vượt ngưỡng — nói thẳng, và đó là lời khuyên đúng. */
   chuaRoNet: boolean;
 }
@@ -941,7 +942,7 @@ export function chonThienHuong(a: Assessment, soLuong = 3): HuongTreKetQua {
       .filter((x) => x.val < -0.5)
       .sort((p, q) => p.val - q.val)
       .slice(0, 2)
-      .map((x) => ({ ten: KHIEU[x.id].ten, thap: CHAT_KHONG_DOI_HOI[x.id] })),
+      .map((x) => ({ ten: KHIEU[x.id].ten, thap: CHAT_KHONG_DOI_HOI[x.id], ma: x.id })),
     chuaRoNet: xep[0].s < NGUONG,
   };
 }
@@ -950,14 +951,17 @@ export function chonThienHuong(a: Assessment, soLuong = 3): HuongTreKetQua {
 // Bốn cung, chọn theo đúng câu hỏi hướng nghiệp. CỐ Ý KHÔNG đọc cung Phụ Mẫu:
 // đó là mặt riêng của `day-con` ("đứa trẻ nhìn cha mẹ thế nào"), để nguyên bên
 // đó thì hai tool không nói chồng lên nhau.
-const MAT_DOC: { cung: string; nhan: string; y: string }[] = [
-  { cung: 'Mệnh', nhan: 'Cốt cách', y: 'Con người gốc — phần không đổi dù đổi trường, đổi bạn' },
-  { cung: 'Quan Lộc', nhan: 'Đường học nghiệp', y: 'Cách con vào việc, và chịu được kỷ luật tới đâu' },
-  { cung: 'Phúc Đức', nhan: 'Thứ khiến con thấy đáng làm', y: 'Cái làm con thấy có nghĩa — nguồn động lực bền nhất' },
-  { cung: 'Thiên Di', nhan: 'Ra khỏi nhà', y: 'Cách con cư xử ở trường, giữa bạn bè, chỗ lạ' },
+// `ma` (W30a) = mã tra bản dịch ở client (`i18n-long/<locale>/hntre.js`, khoá `matdoc.<ma>.nhan`) — KHÔNG hiển thị.
+const MAT_DOC: { ma: string; cung: string; nhan: string; y: string }[] = [
+  { ma: 'menh', cung: 'Mệnh', nhan: 'Cốt cách', y: 'Con người gốc — phần không đổi dù đổi trường, đổi bạn' },
+  { ma: 'quan-loc', cung: 'Quan Lộc', nhan: 'Đường học nghiệp', y: 'Cách con vào việc, và chịu được kỷ luật tới đâu' },
+  { ma: 'phuc-duc', cung: 'Phúc Đức', nhan: 'Thứ khiến con thấy đáng làm', y: 'Cái làm con thấy có nghĩa — nguồn động lực bền nhất' },
+  { ma: 'thien-di', cung: 'Thiên Di', nhan: 'Ra khỏi nhà', y: 'Cách con cư xử ở trường, giữa bạn bè, chỗ lạ' },
 ];
 
 export interface MatDocTre {
+  /** Mã tra bản dịch (W30a) — client tra `matdoc.<ma>.nhan`. */
+  ma: string;
   cung: string;
   nhan: string;
   y: string;
@@ -1033,6 +1037,7 @@ export function computeHuongNghiepTre(
   const matDoc: MatDocTre[] = MAT_DOC.map((m) => {
     const b = majorsOrBorrow(ls, palaceByName(ls, m.cung));
     return {
+      ma: m.ma,
       cung: m.cung,
       nhan: m.nhan,
       y: m.y,
