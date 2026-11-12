@@ -2387,6 +2387,62 @@
   "t": "Annual cycle for ",
   "h": "1979c56a"
  },
+ "js.cns.ai-sinh": {
+  "t": "Who Shares Your Birthday",
+  "h": "33d96a43"
+ },
+ "js.cns.al": {
+  "t": "Lunar {d}/{m} ({cc})",
+  "h": "cc05e85c"
+ },
+ "js.cns.am-ban": {
+  "t": "Your lunar date: <b>{d}/{m} ({cc})</b>.",
+  "h": "5bd9c1aa"
+ },
+ "js.cns.anh": {
+  "t": "Photo: {nguon}",
+  "h": "ac251971"
+ },
+ "js.cns.ghi": {
+  "t": "Only birth date and time facts are shown; no readings are given for other people. Birth times are converted to Vietnam time for comparison. Sources: Wikidata (CC0) · photos from Wikimedia Commons (license listed under each photo) · birth times from Astro-Databank.",
+  "h": "bb2a4862"
+ },
+ "js.cns.gio-chi": {
+  "t": "hour of {chi}",
+  "h": "305f8351"
+ },
+ "js.cns.gio-sinh": {
+  "t": "born at {gio}",
+  "h": "f4e26258"
+ },
+ "js.cns.khung-gio-vn": {
+  "t": "{khung} Vietnam time",
+  "h": "a67644fa"
+ },
+ "js.cns.nam": {
+  "t": "Male",
+  "h": "b580ba1b"
+ },
+ "js.cns.nguoi-noi-tieng": {
+  "t": "Famous people whose birthday matches yours — check the label on each card to see whether the match is by lunar or solar date.",
+  "h": "fbb49f18"
+ },
+ "js.cns.nu": {
+  "t": "Female",
+  "h": "feb92ccd"
+ },
+ "js.cns.rodden": {
+  "t": "Reliability of the birth time on the Rodden scale",
+  "h": "45221bc0"
+ },
+ "js.cns.tim-hieu": {
+  "t": "Learn more",
+  "h": "90b61c50"
+ },
+ "js.cns.trung-ca": {
+  "t": "Some people share <b>both your birth date and birth hour</b> — their chart comes out exactly the same.",
+  "h": "3272dba6"
+ },
  "js.combo.cham-tran": {
   "t": "You've reached the free-trial limit.",
   "h": "2fdb2e1a"
@@ -2951,6 +3007,50 @@
   "t": "Zodiac clash ",
   "h": "e92ab4fa"
  },
+ "js.hooklayer.5-8-giay": {
+  "t": "5–8 seconds",
+  "h": "cbbdee08"
+ },
+ "js.hooklayer.da-lap-xong": {
+  "t": "Chart ready · {n} highlights worth noting",
+  "h": "124b920b"
+ },
+ "js.hooklayer.dang-ky-de-xem": {
+  "t": "Sign up for a free account to get more previews — or top up credits to view without limits right away.",
+  "h": "0c412f92"
+ },
+ "js.hooklayer.dang-ky-mien-phi": {
+  "t": "Sign up free →",
+  "h": "89d5985d"
+ },
+ "js.hooklayer.dang-soan": {
+  "t": "Writing a more engaging opening…",
+  "h": "edd225b5"
+ },
+ "js.hooklayer.dang-soan-eta": {
+  "t": "Writing a more engaging opening… (usually 5–8 seconds)",
+  "h": "96371284"
+ },
+ "js.hooklayer.dieu-quan-trong": {
+  "t": "The {n} most important points in your {tool} <span>(preview)</span>",
+  "h": "bcfab32e"
+ },
+ "js.hooklayer.het-luot": {
+  "t": "You’ve used up your free previews",
+  "h": "7fc6be3c"
+ },
+ "js.hooklayer.mo-ban-day-du": {
+  "t": "Open full version",
+  "h": "84fe9699"
+ },
+ "js.hooklayer.nap-de-xem": {
+  "t": "Top up credits to view this highlighted intro without limits across every tool on the site.",
+  "h": "151e4adb"
+ },
+ "js.hooklayer.nap-luong": {
+  "t": "Top up credits →",
+  "h": "96c6fb5d"
+ },
  "js.kinhdich.bam-de-bat-dau-gieo-que": {
   "t": "Tap to start casting — 6 tosses, each one determines a line",
   "h": "5f61aa02"
@@ -3171,9 +3271,149 @@
   "t": "Export failed: ",
   "h": "b105cd2a"
  },
+ "js.lasochart.am": {
+  "t": "Yin",
+  "h": "99492f1a"
+ },
+ "js.lasochart.am-duong-nam": {
+  "t": "{ad} {gt} · Yin-Yang {tl}",
+  "h": "749576bd"
+ },
+ "js.lasochart.am-lich": {
+  "t": "{ngay} (Lunar) · {chi} hour",
+  "h": "15f51c93"
+ },
+ "js.lasochart.cuc-l": {
+  "t": "Bureau:",
+  "h": "aac31479"
+ },
+ "js.lasochart.dai-van": {
+  "t": "Luck cycle: {chi} (age {a}–{b})",
+  "h": "f2d3551d"
+ },
+ "js.lasochart.diem": {
+  "t": "{n} pts",
+  "h": "295a951c"
+ },
+ "js.lasochart.duong": {
+  "t": "Yang",
+  "h": "0efa2ecf"
+ },
+ "js.lasochart.duong-lich": {
+  "t": "{d}/{m}/{y} (Solar) · {chi} hour",
+  "h": "499f734e"
+ },
+ "js.lasochart.gioi-tinh": {
+  "t": "Gender: {gt}",
+  "h": "72c2c73e"
+ },
+ "js.lasochart.lap-la-so": {
+  "t": "Chart created: {t}",
+  "h": "188a89be"
+ },
+ "js.lasochart.luu-dai-han": {
+  "t": "Flowing luck cycle: {chi} · {cung}",
+  "h": "0ee60780"
+ },
+ "js.lasochart.luu-tip": {
+  "t": "{ten} — only active in the year being read",
+  "h": "e2da452a"
+ },
+ "js.lasochart.luu-tip-sao": {
+  "t": "{ten} ({sao}) — only active in the year being read",
+  "h": "943e2001"
+ },
+ "js.lasochart.menh-l": {
+  "t": "Destiny:",
+  "h": "d24288f5"
+ },
+ "js.lasochart.nam": {
+  "t": "Male",
+  "h": "b580ba1b"
+ },
+ "js.lasochart.nam-l": {
+  "t": "Year:",
+  "h": "3731977b"
+ },
+ "js.lasochart.nam-xem-tuoi": {
+  "t": "Year {chi} — Age {n}",
+  "h": "32dd7a23"
+ },
+ "js.lasochart.nghich-ly": {
+  "t": "Discordant",
+  "h": "7fd88b7f"
+ },
+ "js.lasochart.nu": {
+  "t": "Female",
+  "h": "feb92ccd"
+ },
+ "js.lasochart.than-l": {
+  "t": "Body:",
+  "h": "dfb815b4"
+ },
+ "js.lasochart.thuan-ly": {
+  "t": "Harmonious",
+  "h": "f85a07ab"
+ },
+ "js.lasochart.tieu-han": {
+  "t": "Minor cycle: {chi} · {cung}",
+  "h": "72610665"
+ },
+ "js.lasochart.tieu-han-title": {
+  "t": "Minor cycle of year {y} enters palace {c}",
+  "h": "4d69ee5c"
+ },
+ "js.lasochart.tuoi-al": {
+  "t": "Age {n} (lunar)",
+  "h": "cd4bc076"
+ },
  "js.lienhe.gui-email": {
   "t": "Send email",
   "h": "5901b176"
+ },
+ "js.loading.45-60": {
+  "t": "about 45–60 seconds",
+  "h": "faa5fa7c"
+ },
+ "js.loading.con-1-phut": {
+  "t": "about 1 minute left",
+  "h": "3a0f6379"
+ },
+ "js.loading.con-giay": {
+  "t": "about {n} seconds left",
+  "h": "37f5b771"
+ },
+ "js.loading.con-phut": {
+  "t": "about {n} minutes left",
+  "h": "dd8b53f1"
+ },
+ "js.loading.da-cho": {
+  "t": "Waited {s}s",
+  "h": "6315aab2"
+ },
+ "js.loading.da-cho-dots": {
+  "t": "Waiting {s} seconds…",
+  "h": "a98f17f2"
+ },
+ "js.loading.dang-ve": {
+  "t": "Drawing the picture…",
+  "h": "9806c851"
+ },
+ "js.loading.khoang-giay": {
+  "t": "about {n} seconds",
+  "h": "bd9c1ed0"
+ },
+ "js.loading.lau-hon": {
+  "t": "Taking longer than usual — still drawing, please keep this page open (waited {s}s)",
+  "h": "771e54dd"
+ },
+ "js.loading.thuong-mat": {
+  "t": "Usually takes {eta} · waited {s}s",
+  "h": "31ef12fb"
+ },
+ "js.loading.van-chay": {
+  "t": "Still running — please keep this page open (waited {s}s)",
+  "h": "a61e402a"
  },
  "js.luangiai.10-8-dai-van-con-lai": {
   "t": "/10. The other 8 luck cycles plus the yearly cycles are in Life Cycles.",
@@ -4602,6 +4842,10 @@
  "js.prices.money-moi-luot-sale": {
   "t": "{money} per use ({sale} credits, down from {credits})",
   "h": "7aabe37f"
+ },
+ "js.samplehint.dang-chuan-bi": {
+  "t": "The sample is being prepared — please check back soon!",
+  "h": "992fd7e6"
  },
  "js.shell.an": {
   "t": "Hide",
@@ -9662,6 +9906,138 @@
  "js.thtp.xep-theo-12-chi-so-am": {
   "t": "Classified from the 12 measured acoustic metrics (HNR, sustain, jitter, centroid…). The full meaning by the classical Five Tones method is in the in-depth analysis.",
   "h": "0c3c0a37"
+ },
+ "js.toolsrc.data": {
+  "t": "Uses {name} as a benchmark, not as a displayed catalog.",
+  "h": "acff5b26"
+ },
+ "js.toolsrc.data-mac-dinh": {
+  "t": "an open dataset",
+  "h": "db94840d"
+ },
+ "js.toolsrc.lib": {
+  "t": "Cross-checked with an open-source library (MIT License).",
+  "h": "77e23ad9"
+ },
+ "js.toolsrc.nguon": {
+  "t": "Sources:",
+  "h": "dcd2b5f7"
+ },
+ "js.toolsrc.nguon-du-lieu": {
+  "t": "Data sources →",
+  "h": "78319924"
+ },
+ "js.toolsrc.nm-am-duong-ngu-hanh-bat-quai": {
+  "t": "Yin-Yang, Five Elements, Eight Trigrams",
+  "h": "6a566782"
+ },
+ "js.toolsrc.nm-bat-trach-minh-kinh": {
+  "t": "Ba Zhai Ming Jing",
+  "h": "cc15ba54"
+ },
+ "js.toolsrc.nm-bat-trach-minh-kinh-loan-dau": {
+  "t": "Ba Zhai Ming Jing, Luan Tou",
+  "h": "1998ad34"
+ },
+ "js.toolsrc.nm-boi-bai-tay-truyen-thong-bo-52-la": {
+  "t": "Traditional Western card reading (52-card deck)",
+  "h": "3f744877"
+ },
+ "js.toolsrc.nm-cau-truc-tarot-78-la-major-amp-minor-arcana": {
+  "t": "78-card Tarot structure (Major &amp; Minor Arcana)",
+  "h": "fd0e71e3"
+ },
+ "js.toolsrc.nm-chi-tuong-hoc-phuong-dong": {
+  "t": "Eastern palmistry",
+  "h": "966bd835"
+ },
+ "js.toolsrc.nm-dai-luc-nham": {
+  "t": "Da Liu Ren",
+  "h": "0787f5fc"
+ },
+ "js.toolsrc.nm-dong-tay-y-ket-hop-tuong-hoc-da-mat-phuong-dong": {
+  "t": "Integrated Eastern–Western medicine with Eastern facial-skin physiognomy",
+  "h": "c68a02d7"
+ },
+ "js.toolsrc.nm-hoang-lich": {
+  "t": "Huangli (Chinese almanac)",
+  "h": "06d0c30d"
+ },
+ "js.toolsrc.nm-kim-lau": {
+  "t": "Jin Lou",
+  "h": "fdeb6811"
+ },
+ "js.toolsrc.nm-kinh-dich": {
+  "t": "I Ching",
+  "h": "9e1c199b"
+ },
+ "js.toolsrc.nm-ky-mon-don-giap": {
+  "t": "Qi Men Dun Jia",
+  "h": "857ee290"
+ },
+ "js.toolsrc.nm-luc-thap-hoa-giap": {
+  "t": "The sixty Jiazi cycle",
+  "h": "514b67b8"
+ },
+ "js.toolsrc.nm-ma-y-than-tuong-lieu-trang-than-tuong-thuy-kinh-tap": {
+  "t": "Ma Yi Shen Xiang, Liu Zhuang Shen Xiang, Shui Jing Ji",
+  "h": "c678958d"
+ },
+ "js.toolsrc.nm-ma-y-than-tuong-ngu-am-tuong-phap": {
+  "t": "Ma Yi Shen Xiang, Wu Yin physiognomy",
+  "h": "591efba5"
+ },
+ "js.toolsrc.nm-mai-hoa-dich-so": {
+  "t": "Mei Hua Yi Shu",
+  "h": "9093e560"
+ },
+ "js.toolsrc.nm-ngu-hanh-nap-am-bat-trach": {
+  "t": "Five Elements Na Yin, Ba Zhai",
+  "h": "00ae64d4"
+ },
+ "js.toolsrc.nm-nhan-tuong-hoc-phuong-dong-hinh-tuong-ngu-hanh": {
+  "t": "Eastern physiognomy (Five-Element face shapes)",
+  "h": "a704a7a9"
+ },
+ "js.toolsrc.nm-nhan-tuong-hoc-phuong-dong-nap-am-ngu-hanh": {
+  "t": "Eastern physiognomy, Na Yin Five Elements",
+  "h": "f456450e"
+ },
+ "js.toolsrc.nm-personal-color-phan-tich-mau-sac-ca-nhan": {
+  "t": "Personal Color (personal color analysis)",
+  "h": "6a35b8eb"
+ },
+ "js.toolsrc.nm-than-so-hoc-pythagoras": {
+  "t": "Pythagorean numerology",
+  "h": "8b181ba4"
+ },
+ "js.toolsrc.nm-trung-chau-phai-luc-thap-tinh-he-vuong-dinh-chi": {
+  "t": "Zhongzhou School — Sixty Star Systems (Wang Tingzhi)",
+  "h": "743388f3"
+ },
+ "js.toolsrc.nm-tu-binh": {
+  "t": "Zi Ping",
+  "h": "66c4edf1"
+ },
+ "js.toolsrc.nm-tu-vi-dau-so-tan-bien-van-dang-thai-thu-lang": {
+  "t": "Zi Wei Dou Shu Xin Bian (Van Dang Thai Thu Lang)",
+  "h": "2e7fd5a8"
+ },
+ "js.toolsrc.theo": {
+  "t": "According to <i>{s}</i>.",
+  "h": "e7fd9754"
+ },
+ "js.toolsrc.tvmb": {
+  "t": "Proprietary reference framework built by the <b>Minh Bao Zi Wei Dou Shu expert team</b>.",
+  "h": "43366641"
+ },
+ "js.toolsrc.va": {
+  "t": "{a} and {b}",
+  "h": "cd730a63"
+ },
+ "js.toolsrc.xem-day-du": {
+  "t": "See all data sources →",
+  "h": "833fe188"
  },
  "js.topup.aria-label-thanh-toan": {
   "t": " aria-label=\"Pay ",
