@@ -260,6 +260,8 @@ export interface ChangHoc {
   dangChay: boolean;
   /** Nhãn mô tả chặng đó ứng với quãng nào của việc học. */
   nhan: string;
+  /** Mã tra bản dịch của `nhan` (additive, W30c) — client dịch theo mã, không theo câu Việt. */
+  nhanMa: NhanChangMa;
 }
 
 export interface VoiChaMe {
@@ -301,14 +303,22 @@ export interface DayConProfile {
    kiểu (lấy `mainScore` làm điểm của năm). */
 
 
+/** Nhãn chặng, khoá theo MÃ (W30c): chữ Việt giữ nguyên cho rail/prompt; client tra bản dịch theo `nhanMa`. */
+const NHAN_CHANG = {
+  'tieu-hoc': 'Quãng tiểu học — hình thành nếp',
+  'vao-doi': 'Quãng vào đời — tự chịu trách nhiệm',
+  'day-thi': 'Quãng dậy thì — tách khỏi cha mẹ',
+  'chuyen-cap': 'Quãng chuyển cấp — bắt đầu tự lập',
+} as const;
+type NhanChangMa = keyof typeof NHAN_CHANG;
 /** Nhãn chặng theo TUỔI thật, không theo thứ tự đại vận: mốc đại vận dịch theo
  *  CỤC (thuỷ nhị cục khởi tuổi 2, hoả lục cục khởi tuổi 6) nên lấy chỉ số cứng
  *  là trượt tới bốn năm — cùng cái bẫy `computeCongSo` đã ghi. */
-function nhanChang(tuoiStart: number, tuoiEnd: number): string {
-  if (tuoiEnd <= 12) return 'Quãng tiểu học — hình thành nếp';
-  if (tuoiStart >= 18) return 'Quãng vào đời — tự chịu trách nhiệm';
-  if (tuoiStart >= 13) return 'Quãng dậy thì — tách khỏi cha mẹ';
-  return 'Quãng chuyển cấp — bắt đầu tự lập';
+function nhanChangMa(tuoiStart: number, tuoiEnd: number): NhanChangMa {
+  if (tuoiEnd <= 12) return 'tieu-hoc';
+  if (tuoiStart >= 18) return 'vao-doi';
+  if (tuoiStart >= 13) return 'day-thi';
+  return 'chuyen-cap';
 }
 
 /**
@@ -366,6 +376,7 @@ export function computeDayCon(
       const sc = d.scoring as Rec | undefined;
       const tuoiStart = d.tuoiStart as number;
       const tuoiEnd = d.tuoiEnd as number;
+      const nhanMa = nhanChangMa(tuoiStart, tuoiEnd);
       return {
         tuoiStart,
         tuoiEnd,
@@ -375,7 +386,8 @@ export function computeDayCon(
         sao: b.stars.map(starLabel),
         diem: typeof sc?.tong === 'number' ? (sc.tong as number) : null,
         dangChay: !!dvHienTai && dvHienTai.tuoiStart === tuoiStart,
-        nhan: nhanChang(tuoiStart, tuoiEnd),
+        nhan: NHAN_CHANG[nhanMa],
+        nhanMa,
       };
     });
 

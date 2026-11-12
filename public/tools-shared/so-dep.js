@@ -65,6 +65,22 @@
     return String(soRaw == null ? '' : soRaw).replace(/[^0-9]/g, '');
   }
 
+  // Chữ HIỂN THỊ qua I18n.tv + glossary (trang /<locale>/); vi / Node (check-so-dep) ⇒ chữ Việt nguyên.
+  // `data` (gửi rail/server: sao, quẻ, hành…) GIỮ chữ Việt — chỉ `error` và `*HTML` đổi theo ngôn ngữ.
+  function _tv(key, vi, vars) {
+    var I = root.I18n;
+    if (I && I.tv) return I.tv(key, vi, vars);
+    return vars ? vi.replace(/\{(\w+)\}/g, function (x, n) { return vars[n] !== undefined ? vars[n] : x; }) : vi;
+  }
+  function _g(kind, v) {
+    var g = root.TuviGlossary;
+    return g && v ? g.t(kind, v) : v;
+  }
+  function _long(key, vi) {
+    var I = root.I18n;
+    return I && I.long ? I.long('kinh-dich', key, vi) : vi;
+  }
+
   // ── Mô tả ý nghĩa 8 sao Du Niên — dùng chung cho T1, tách khỏi bat-trach.js
   // vì đây là văn luận cho NGỮ CẢNH số đẹp (khác ngữ cảnh hướng nhà). Không
   // trùng với `STAR_DESC`/`CAT_DESC` nội bộ trong các tool phong thủy khác.
@@ -128,9 +144,9 @@
 
   // ── T2. Quẻ Dịch — chia dãy làm 2 nửa, KHÔNG phụ thuộc giờ hiện tại ─────
   function tinhQueDich(digits) {
-    if (digits.length < 2) return { ok: false, error: 'Cần tối thiểu 2 chữ số để lập quẻ.' };
+    if (digits.length < 2) return { ok: false, error: _tv('js.shellui.sd-err-lap-que', 'Cần tối thiểu 2 chữ số để lập quẻ.') };
     var MH = root.MaiHoaTool, KD = root.KinhDichTool;
-    if (!MH || !KD) return { ok: false, error: 'Chưa nạp được MaiHoaTool/KinhDichTool.' };
+    if (!MH || !KD) return { ok: false, error: _tv('js.shellui.sd-err-nap-que', 'Chưa nạp được MaiHoaTool/KinhDichTool.') };
     var mid = Math.ceil(digits.length / 2);
     var nuaDau = digits.slice(0, mid);
     var nuaSau = digits.slice(mid);
@@ -157,8 +173,8 @@
       thuongQuai: { so: thuongIdx, n: quaiTren.n, zh: quaiTren.zh, hanh: quaiTren.hanh },
       haQuai: { so: haIdx, n: quaiDuoi.n, zh: quaiDuoi.zh, hanh: quaiDuoi.hanh },
       haoDong: haoDong, li6: li6,
-      que: { ten: que.n, zh: que.zh, y: que.m, chiTiet: que.g, catHung: que.f },
-      queBien: { ten: queBien.n, zh: queBien.zh, y: queBien.m },
+      que: { so: idx + 1, ten: que.n, zh: que.zh, y: que.m, chiTiet: que.g, catHung: que.f },
+      queBien: { so: idxBien + 1, ten: queBien.n, zh: queBien.zh, y: queBien.m },
       verdict: verdict,
       moTa: 'Nửa đầu (' + nuaDau.join('') + ') tổng ' + tongDau + ' chia 8 dư ' + thuongIdx + ' → thượng quái ' + quaiTren.n +
         '; nửa sau (' + nuaSau.join('') + ') tổng ' + tongSau + ' chia 8 dư ' + haIdx + ' → hạ quái ' + quaiDuoi.n +
@@ -186,9 +202,9 @@
       if (cung === 5) cung = gioiTinh === 'nam' ? 2 : 8;
       var hanhCungPhi = BT.CUNG_HANH[cung];
       var hanhNapAm = napAm.ok ? napAm.data.hanh : null;
-      var hopMenh = [];
-      if (hanhNapAm && phanBo[hanhNapAm] > 0) hopMenh.push('nạp âm (' + hanhNapAm + ')');
-      if (hanhCungPhi && hanhCungPhi !== hanhNapAm && phanBo[hanhCungPhi] > 0) hopMenh.push('cung phi (' + hanhCungPhi + ')');
+      var hopMenh = [], hopMenhCT = [];
+      if (hanhNapAm && phanBo[hanhNapAm] > 0) { hopMenh.push('nạp âm (' + hanhNapAm + ')'); hopMenhCT.push({ loai: 'napam', hanh: hanhNapAm }); }
+      if (hanhCungPhi && hanhCungPhi !== hanhNapAm && phanBo[hanhCungPhi] > 0) { hopMenh.push('cung phi (' + hanhCungPhi + ')'); hopMenhCT.push({ loai: 'cungphi', hanh: hanhCungPhi }); }
       // ── Verdict: HÀNH TRỘI của dãy so sinh/khắc với hành nạp âm bản mệnh ──
       // 🔴 ĐÃ CẮN (2026-09): luật cũ là `hopMenh.length > 0 ? 'tot' : 'trung'`,
       // mà `hopMenh` chỉ cần dãy CHỨA MỘT chữ số thuộc hành nạp âm hoặc cung
@@ -219,7 +235,7 @@
       out.banMenh = {
         napAm: napAm.ok ? napAm.data.napAm : null, hanhNapAm: hanhNapAm,
         cungPhi: cung, hanhCungPhi: hanhCungPhi,
-        hopMenh: hopMenh,
+        hopMenh: hopMenh, hopMenhCT: hopMenhCT,
         hanhTroi: hanhTroi, quanHeTroi: quanHe,
       };
       out.verdict = quanHe === 'khac-menh' ? 'xau'
@@ -300,8 +316,8 @@
   function danhGia(soRaw, opts) {
     opts = opts || {};
     var soSach = chuanHoa(soRaw);
-    if (!soSach) return { ok: false, error: 'Không tìm thấy chữ số hợp lệ trong chuỗi nhập.' };
-    if (soSach.length > 20) return { ok: false, error: 'Dãy số quá dài — tối đa 20 chữ số.' };
+    if (!soSach) return { ok: false, error: _tv('js.shellui.sd-err-khong-co-so', 'Không tìm thấy chữ số hợp lệ trong chuỗi nhập.') };
+    if (soSach.length > 20) return { ok: false, error: _tv('js.shellui.sd-err-qua-dai', 'Dãy số quá dài — tối đa 20 chữ số.') };
     var digits = soSach.split('').map(Number);
     var t1 = tongHopT1(digits);
     var t2 = tinhQueDich(digits);
@@ -378,20 +394,20 @@
   function goiY(opts) {
     opts = opts || {};
     var BT = root.BatTrachTool;
-    if (!BT) return { ok: false, error: 'Chưa nạp được BatTrachTool.' };
+    if (!BT) return { ok: false, error: _tv('js.shellui.sd-err-nap-bt', 'Chưa nạp được BatTrachTool.') };
 
     var doDai = Math.floor(Number(opts.doDai));
     if (!isFinite(doDai) || doDai < 4 || doDai > 20) {
-      return { ok: false, error: 'Độ dài phải là số nguyên từ 4 đến 20.' };
+      return { ok: false, error: _tv('js.shellui.sd-err-do-dai', 'Độ dài phải là số nguyên từ 4 đến 20.') };
     }
     var mucTieu = opts.mucTieu || 'tu-do';
     var targetSao = MUC_TIEU_SAO[mucTieu];
     if (mucTieu !== 'tu-do' && !targetSao) {
-      return { ok: false, error: 'Mục tiêu không hợp lệ — chỉ nhận: tai-loc, suc-khoe, ben-vung, on-dinh, tu-do.' };
+      return { ok: false, error: _tv('js.shellui.sd-err-muc-tieu', 'Mục tiêu không hợp lệ — chỉ nhận: tai-loc, suc-khoe, ben-vung, on-dinh, tu-do.') };
     }
     var tienTo = chuanHoa(opts.tienTo);
     if (tienTo.length >= doDai) {
-      return { ok: false, error: 'Tiền tố (' + tienTo.length + ' số) phải NGẮN HƠN độ dài mong muốn (' + doDai + ').' };
+      return { ok: false, error: _tv('js.shellui.sd-err-tien-to', 'Tiền tố ({n} số) phải NGẮN HƠN độ dài mong muốn ({d}).', { n: tienTo.length, d: doDai }) };
     }
     var loaiTruSet = {};
     (opts.loaiTru || []).forEach(function (d) {
@@ -402,7 +418,7 @@
 
     var CUNGS = CUNGS_ALL.filter(function (d) { return !loaiTruSet[d]; });
     if (!CUNGS.length) {
-      return { ok: false, error: 'Đã loại trừ hết chữ số 1-9 (trừ 5) — không còn gì để sinh số.' };
+      return { ok: false, error: _tv('js.shellui.sd-err-loai-het', 'Đã loại trừ hết chữ số 1-9 (trừ 5) — không còn gì để sinh số.') };
     }
     var adj = _dungDoThi(targetSao);
     CUNGS.forEach(function (a) {
@@ -440,7 +456,7 @@
       candidates.push(soSach);
     }
     if (!candidates.length) {
-      return { ok: false, error: 'Không sinh được số nào — thử nới độ dài hoặc bớt loại trừ.' };
+      return { ok: false, error: _tv('js.shellui.sd-err-khong-sinh', 'Không sinh được số nào — thử nới độ dài hoặc bớt loại trừ.') };
     }
 
     // Chấm lại bằng CHÍNH danhGia() — generator không tự bịa thang điểm riêng.
@@ -475,8 +491,55 @@
   // QUE[].g/m từ kinh-dich.js, DAN_GIAN_*) — hàm này chỉ LẮP vào khung, không
   // tự sinh câu chữ mới. Vì vậy tool chạy 100% client-side, 0 lượt gọi mạng,
   // 0đ — đúng yêu cầu "free cho tìm kiếm tự nhiên, không tốn API LLM".
+  // ── Chữ giải thích tra theo KHOÁ TĨNH (check:i18n quét được; khoá ghép động bị i18n:prune xoá nhầm).
+  // Gốc Việt luôn lấy từ bảng nguồn (STAR_DESC / DAN_GIAN_*) — không chép câu Việt lần hai.
+  function _starY(sao) {
+    var m = STAR_DESC[sao], vi = m ? m.y : '';
+    switch (sao) {
+      case 'Sinh Khí': return _tv('js.shellui.sd-sy-sinh-khi', vi);
+      case 'Thiên Y': return _tv('js.shellui.sd-sy-thien-y', vi);
+      case 'Diên Niên': return _tv('js.shellui.sd-sy-dien-nien', vi);
+      case 'Phục Vị': return _tv('js.shellui.sd-sy-phuc-vi', vi);
+      case 'Họa Hại': return _tv('js.shellui.sd-sy-hoa-hai', vi);
+      case 'Lục Sát': return _tv('js.shellui.sd-sy-luc-sat', vi);
+      case 'Ngũ Quỷ': return _tv('js.shellui.sd-sy-ngu-quy', vi);
+      case 'Tuyệt Mệnh': return _tv('js.shellui.sd-sy-tuyet-menh', vi);
+    }
+    return vi;
+  }
+  function _dgY(x) {
+    switch (x.mau) {
+      case '49': return _tv('js.shellui.sd-dg-49', x.y);
+      case '53': return _tv('js.shellui.sd-dg-53', x.y);
+      case '4': return _tv('js.shellui.sd-dg-4', x.y);
+      case '13': return _tv('js.shellui.sd-dg-13', x.y);
+      case '6': return _tv('js.shellui.sd-dg-6', x.y);
+      case '8': return _tv('js.shellui.sd-dg-8', x.y);
+      case '9': return _tv('js.shellui.sd-dg-9', x.y);
+      case '68': return _tv('js.shellui.sd-dg-68', x.y);
+      case '39': return _tv('js.shellui.sd-dg-39', x.y);
+      case '79': return _tv('js.shellui.sd-dg-79', x.y);
+    }
+    return x.y;
+  }
+  // Ghi chú ô cặp số (thuộc tính title) — `ghiChu` trong data giữ chữ Việt.
+  function _ghiT(c) {
+    if (c.sao) return _starY(c.sao);
+    switch (c.ghiChu) {
+      case 'Có số 0 — khuếch đại cặp trước, không tự thành sao': return _tv('js.shellui.sd-gc-so-0', c.ghiChu);
+      case 'Trung cung (5) — trung tính, cắt mạch, không tính cát/hung': return _tv('js.shellui.sd-gc-trung-cung', c.ghiChu);
+      case 'Chưa nạp được BatTrachTool': return _tv('js.shellui.sd-gc-chua-nap', c.ghiChu);
+    }
+    return c.ghiChu || c.y || '';
+  }
+  function _saoList(arr) { return arr.map(function (x) { return _g('battrach', x); }).join(', '); }
+  function _hanhList(arr) { return arr.map(function (x) { return _g('hanh', x); }).join(', '); }
+  function _dongThuanT(dt) {
+    return dt.tongPhieu ? _tv('js.shellui.sd-dt-tot', '{t}/{n} trường phái cổ pháp nói tốt', { t: dt.tot, n: dt.tongPhieu })
+      : _tv('js.shellui.sd-dt-ngan', 'Dãy quá ngắn để tính đồng thuận');
+  }
+
   var DIR_TAG = { tot: 'sd-tot', xau: 'sd-xau', trung: 'sd-trung' };
-  var DIR_LABEL = { tot: 'Tốt', xau: 'Xấu', trung: 'Trung bình' };
 
   function _esc(s) {
     return String(s == null ? '' : s).replace(/[&<>"]/g, function (c) {
@@ -503,8 +566,8 @@
     var dinh = Math.max.apply(null, v);
     if (!dinh) return '';
     var svg = root.HookCharts.hexRadar({
-      dims: hs.map(function (h, i) { return { label: h, value: v[i] }; }),
-      max: dinh, size: 220, ariaLabel: 'Vành ngũ hành của dãy số',
+      dims: hs.map(function (h, i) { return { label: _g('hanh', h), value: v[i] }; }),
+      max: dinh, size: 220, ariaLabel: _tv('js.shellui.sd-vanh-aria', 'Vành ngũ hành của dãy số'),
     });
     return svg ? '<div class="sd-vanh">' + svg + '</div>' : '';
   }
@@ -517,83 +580,87 @@
 
     html += '<div class="sd-head">';
     html += '<div class="sd-so">' + _esc(d.soSach) + '</div>';
-    html += '<div class="sd-dongthuan ' + dtTag + '">' + (dt.tongPhieu ? dt.tot + '/' + dt.tongPhieu + ' trường phái cổ pháp nói tốt' : 'Dãy quá ngắn để tính đồng thuận') + '</div>';
+    html += '<div class="sd-dongthuan ' + dtTag + '">' + _esc(_dongThuanT(dt)) + '</div>';
     html += '</div>';
 
     // T1 Bát Tinh
-    html += '<div class="sd-section"><div class="sd-section-head">Bát Tinh <span class="sd-eyebrow">Bát Trạch</span></div>';
+    html += '<div class="sd-section"><div class="sd-section-head">' + _tv('js.shellui.sd-h-bat-tinh', 'Bát Tinh') + ' <span class="sd-eyebrow">' + _tv('js.shellui.sd-e-bat-trach', 'Bát Trạch') + '</span></div>';
     if (d.t1.diem100 != null) {
       html += '<div class="sd-chuoi">';
       d.t1.capSao.forEach(function (c) {
         var cls = c.catHung === 'cat' ? 'sd-cap-cat' : c.catHung === 'hung' ? 'sd-cap-hung' : 'sd-cap-trung';
-        var nhan = c.sao || (c.a === 0 || c.b === 0 ? '0' : '—');
-        html += '<span class="sd-cap ' + cls + '" title="' + _esc(c.ghiChu || c.y || '') + '">' + c.a + c.b + '<b>' + _esc(nhan) + '</b></span>';
+        var nhan = c.sao ? _g('battrach', c.sao) : (c.a === 0 || c.b === 0 ? '0' : '—');
+        html += '<span class="sd-cap ' + cls + '" title="' + _esc(_ghiT(c)) + '">' + c.a + c.b + '<b>' + _esc(nhan) + '</b></span>';
       });
       html += '</div>';
-      html += '<div class="sd-diem">Điểm cát: <b>' + d.t1.diem100 + '/100</b>' + (d.t1.noiBat.length ? ' · Sao nổi bật: ' + _esc(d.t1.noiBat.slice(0, 2).join(', ')) : '') + '</div>';
+      html += '<div class="sd-diem">' + (d.t1.noiBat.length
+        ? _tv('js.shellui.sd-diem-noibat', 'Điểm cát: <b>{d}/100</b> · Sao nổi bật: {s}', { d: d.t1.diem100, s: _esc(_saoList(d.t1.noiBat.slice(0, 2))) })
+        : _tv('js.shellui.sd-diem', 'Điểm cát: <b>{d}/100</b>', { d: d.t1.diem100 })) + '</div>';
       var topStar = d.t1.noiBat[0];
-      if (topStar && STAR_DESC[topStar]) html += '<p class="sd-p">' + _esc(STAR_DESC[topStar].y) + '</p>';
+      if (topStar && STAR_DESC[topStar]) html += '<p class="sd-p">' + _esc(_starY(topStar)) + '</p>';
     } else {
-      html += '<p class="sd-p">Dãy chưa đủ cặp số hợp lệ để xét Bát Tinh (toàn số 0/5, hoặc quá ngắn).</p>';
+      html += '<p class="sd-p">' + _tv('js.shellui.sd-t1-thieu', 'Dãy chưa đủ cặp số hợp lệ để xét Bát Tinh (toàn số 0/5, hoặc quá ngắn).') + '</p>';
     }
     html += '</div>';
 
     // T2 Quẻ Dịch
-    html += '<div class="sd-section"><div class="sd-section-head">Quẻ Dịch <span class="sd-eyebrow">Mai Hoa Dịch Số</span></div>';
+    html += '<div class="sd-section"><div class="sd-section-head">' + _tv('js.shellui.sd-h-que-dich', 'Quẻ Dịch') + ' <span class="sd-eyebrow">' + _tv('js.shellui.sd-e-mai-hoa', 'Mai Hoa Dịch Số') + '</span></div>';
     if (d.t2.ok) {
-      html += '<div class="sd-que-ten">' + _esc(d.t2.que.ten) + ' <span class="sd-zh">' + _esc(d.t2.que.zh) + '</span></div>';
-      html += '<div class="sd-que-meta">' + _esc(d.t2.thuongQuai.n) + ' trên · ' + _esc(d.t2.haQuai.n) + ' dưới · hào ' + d.t2.haoDong + ' động</div>';
-      html += '<p class="sd-p">' + _esc(d.t2.que.chiTiet || d.t2.que.y) + '</p>';
-      html += '<div class="sd-p sd-quebien">Biến sang quẻ <b>' + _esc(d.t2.queBien.ten) + '</b> — ' + _esc(d.t2.queBien.y) + '</div>';
+      html += '<div class="sd-que-ten">' + _esc(_g('que', d.t2.que.ten)) + ' <span class="sd-zh">' + _esc(d.t2.que.zh) + '</span></div>';
+      html += '<div class="sd-que-meta">' + _tv('js.shellui.sd-que-meta', '{t} trên · {h} dưới · hào {n} động', { t: _esc(_g('quai', d.t2.thuongQuai.n)), h: _esc(_g('quai', d.t2.haQuai.n)), n: d.t2.haoDong }) + '</div>';
+      html += '<p class="sd-p">' + _esc(d.t2.que.chiTiet ? _long('que.' + d.t2.que.so + '.g', d.t2.que.chiTiet) : _long('que.' + d.t2.que.so + '.m', d.t2.que.y)) + '</p>';
+      html += '<div class="sd-p sd-quebien">' + _tv('js.shellui.sd-que-bien', 'Biến sang quẻ <b>{q}</b> — {y}', { q: _esc(_g('que', d.t2.queBien.ten)), y: _esc(_long('que.' + d.t2.queBien.so + '.m', d.t2.queBien.y)) }) + '</div>';
     } else {
       html += '<p class="sd-p">' + _esc(d.t2.error) + '</p>';
     }
     html += '</div>';
 
     // T3 Ngũ Hành
-    html += '<div class="sd-section"><div class="sd-section-head">Ngũ Hành <span class="sd-eyebrow">Lạc Thư</span></div>';
+    html += '<div class="sd-section"><div class="sd-section-head">' + _tv('js.shellui.sd-h-ngu-hanh', 'Ngũ Hành') + ' <span class="sd-eyebrow">' + _tv('js.shellui.sd-e-lac-thu', 'Lạc Thư') + '</span></div>';
     html += _vanhNguHanhHTML(d.t3);
     html += '<div class="sd-phanbo">';
     HANH.forEach(function (h) {
-      html += '<span class="sd-hanh">' + h + ' <b>' + (d.t3.phanBo[h] || 0) + '</b></span>';
+      html += '<span class="sd-hanh">' + _esc(_g('hanh', h)) + ' <b>' + (d.t3.phanBo[h] || 0) + '</b></span>';
     });
     html += '</div>';
-    if (d.t3.hanhThieu.length) html += '<div class="sd-p sd-thieu">Thiếu hành: ' + _esc(d.t3.hanhThieu.join(', ')) + '</div>';
+    if (d.t3.hanhThieu.length) html += '<div class="sd-p sd-thieu">' + _tv('js.shellui.sd-thieu-hanh', 'Thiếu hành: {h}', { h: _esc(_hanhList(d.t3.hanhThieu)) }) + '</div>';
     if (d.t3.banMenh) {
       var bm = d.t3.banMenh;
-      html += '<p class="sd-p">Bản mệnh nạp âm <b>' + _esc(bm.napAm) + '</b> (hành ' + _esc(bm.hanhNapAm) + '), cung phi hành ' + _esc(bm.hanhCungPhi) + '. ' +
-        (bm.hopMenh.length ? 'Trong dãy có mặt hành hợp mệnh: ' + _esc(bm.hopMenh.join(', ')) + '.' : 'Trong dãy KHÔNG có mặt hành hợp bản mệnh.') + '</p>';
+      var hopT = (bm.hopMenhCT || []).map(function (x) {
+        return x.loai === 'napam' ? _tv('js.shellui.sd-hop-napam', 'nạp âm ({h})', { h: _g('hanh', x.hanh) }) : _tv('js.shellui.sd-hop-cungphi', 'cung phi ({h})', { h: _g('hanh', x.hanh) });
+      });
+      html += '<p class="sd-p">' + _tv('js.shellui.sd-ban-menh', 'Bản mệnh nạp âm <b>{na}</b> (hành {hn}), cung phi hành {hc}.', { na: _esc(_g('napam', bm.napAm)), hn: _esc(_g('hanh', bm.hanhNapAm)), hc: _esc(_g('hanh', bm.hanhCungPhi)) }) + ' ' +
+        (bm.hopMenh.length ? _tv('js.shellui.sd-hop-co', 'Trong dãy có mặt hành hợp mệnh: {l}.', { l: _esc(hopT.join(', ')) }) : _tv('js.shellui.sd-hop-khong', 'Trong dãy KHÔNG có mặt hành hợp bản mệnh.')) + '</p>';
       // Nói RA vì sao tầng này bỏ phiếu như vậy. Phiếu tính theo HÀNH TRỘI (xem
       // `tinhNguHanh`), không theo câu "có chứa hành hợp mệnh" ngay trên — hai
       // câu đứng cạnh nhau mà không nói rõ thì người đọc tưởng câu trên là lý do.
       var QH = {
-        'khac-menh': ['khắc bản mệnh', 'sd-dg-xau'],
-        'dong-hanh': ['đồng hành với bản mệnh', 'sd-dg-tot'],
-        'sinh-menh': ['sinh bản mệnh', 'sd-dg-tot'],
-        trung: ['không sinh cũng không khắc bản mệnh', ''],
+        'khac-menh': [_tv('js.shellui.sd-qh-khac', 'khắc bản mệnh'), 'sd-dg-xau'],
+        'dong-hanh': [_tv('js.shellui.sd-qh-dong', 'đồng hành với bản mệnh'), 'sd-dg-tot'],
+        'sinh-menh': [_tv('js.shellui.sd-qh-sinh', 'sinh bản mệnh'), 'sd-dg-tot'],
+        trung: [_tv('js.shellui.sd-qh-trung', 'không sinh cũng không khắc bản mệnh'), ''],
       };
       if (bm.hanhTroi && QH[bm.quanHeTroi]) {
-        html += '<div class="sd-p ' + QH[bm.quanHeTroi][1] + '">Hành trội của dãy là <b>' +
-          _esc(bm.hanhTroi) + '</b> — ' + QH[bm.quanHeTroi][0] + ' (' + _esc(bm.hanhNapAm) + '). Phiếu của tầng này tính theo hành trội.</div>';
+        html += '<div class="sd-p ' + QH[bm.quanHeTroi][1] + '">' + _tv('js.shellui.sd-troi', 'Hành trội của dãy là <b>{h}</b> — {qh} ({na}). Phiếu của tầng này tính theo hành trội.', { h: _esc(_g('hanh', bm.hanhTroi)), qh: _esc(QH[bm.quanHeTroi][0]), na: _esc(_g('hanh', bm.hanhNapAm)) }) + '</div>';
       } else if (bm.hanhNapAm) {
-        html += '<div class="sd-p">Không hành nào trội hẳn trong dãy — tầng này không kết luận.</div>';
+        html += '<div class="sd-p">' + _tv('js.shellui.sd-khong-troi', 'Không hành nào trội hẳn trong dãy — tầng này không kết luận.') + '</div>';
       }
     }
     html += '</div>';
 
     // T5 Âm Dương
-    html += '<div class="sd-section"><div class="sd-section-head">Âm Dương <span class="sd-eyebrow">Số học — không phải cổ pháp</span></div>';
-    var t5bits = [d.t5.soLe + ' số lẻ / ' + d.t5.soChan + ' số chẵn', 'số chủ đạo ' + d.t5.soChuDao];
-    if (d.t5.doiXung) t5bits.push('dãy đối xứng (soi gương)');
-    if (d.t5.tienDan) t5bits.push('có đoạn 3 số liên tiếp tăng dần');
-    if (d.t5.soDoiLapLai.length) t5bits.push('số đôi lặp: ' + d.t5.soDoiLapLai.join(', '));
+    html += '<div class="sd-section"><div class="sd-section-head">' + _tv('js.shellui.sd-h-am-duong', 'Âm Dương') + ' <span class="sd-eyebrow">' + _tv('js.shellui.sd-e-so-hoc', 'Số học — không phải cổ pháp') + '</span></div>';
+    var t5bits = [_tv('js.shellui.sd-le-chan', '{l} số lẻ / {c} số chẵn', { l: d.t5.soLe, c: d.t5.soChan }), _tv('js.shellui.sd-chu-dao', 'số chủ đạo {n}', { n: d.t5.soChuDao })];
+    if (d.t5.doiXung) t5bits.push(_tv('js.shellui.sd-doi-xung', 'dãy đối xứng (soi gương)'));
+    if (d.t5.tienDan) t5bits.push(_tv('js.shellui.sd-tien-dan', 'có đoạn 3 số liên tiếp tăng dần'));
+    if (d.t5.soDoiLapLai.length) t5bits.push(_tv('js.shellui.sd-doi-lap', 'số đôi lặp: {l}', { l: d.t5.soDoiLapLai.join(', ') }));
     html += '<p class="sd-p">' + _esc(t5bits.join(' · ')) + '</p></div>';
 
     // T6 Dân gian
     if (d.t6.diem.length || d.t6.canhBao.length) {
-      html += '<div class="sd-section sd-dangian"><div class="sd-section-head">Theo dân gian <span class="sd-eyebrow">KHÔNG phải cổ pháp</span></div>';
-      d.t6.diem.forEach(function (x) { html += '<div class="sd-p sd-dg-tot">+ "' + _esc(x.mau) + '" — ' + _esc(x.y) + '</div>'; });
-      d.t6.canhBao.forEach(function (x) { html += '<div class="sd-p sd-dg-xau">△ "' + _esc(x.mau) + '" — ' + _esc(x.y) + '</div>'; });
+      html += '<div class="sd-section sd-dangian"><div class="sd-section-head">' + _tv('js.shellui.sd-h-dan-gian', 'Theo dân gian') + ' <span class="sd-eyebrow">' + _tv('js.shellui.sd-e-khong-phai', 'KHÔNG phải cổ pháp') + '</span></div>';
+      d.t6.diem.forEach(function (x) { html += '<div class="sd-p sd-dg-tot">+ "' + _esc(x.mau) + '" — ' + _esc(_dgY(x)) + '</div>'; });
+      d.t6.canhBao.forEach(function (x) { html += '<div class="sd-p sd-dg-xau">△ "' + _esc(x.mau) + '" — ' + _esc(_dgY(x)) + '</div>'; });
       html += '</div>';
     }
 
@@ -607,8 +674,8 @@
       var tag = dt.tongPhieu === 0 ? 'sd-trung' : dt.tot > dt.xau ? 'sd-tot' : dt.xau > dt.tot ? 'sd-xau' : 'sd-trung';
       html += '<div class="sd-goiy-item" data-so="' + _esc(item.soSach) + '" role="button" tabindex="0">';
       html += '<div class="sd-goiy-so">' + _esc(item.soSach) + '</div>';
-      html += '<div class="sd-goiy-dt ' + tag + '">' + (dt.tongPhieu ? dt.tot + '/' + dt.tongPhieu + ' tốt' : '—') + '</div>';
-      if (item.t1.noiBat.length) html += '<div class="sd-goiy-sao">' + _esc(item.t1.noiBat.slice(0, 2).join(', ')) + '</div>';
+      html += '<div class="sd-goiy-dt ' + tag + '">' + (dt.tongPhieu ? _esc(_tv('js.shellui.sd-goiy-tot', '{t}/{n} tốt', { t: dt.tot, n: dt.tongPhieu })) : '—') + '</div>';
+      if (item.t1.noiBat.length) html += '<div class="sd-goiy-sao">' + _esc(_saoList(item.t1.noiBat.slice(0, 2))) + '</div>';
       html += '</div>';
     });
     html += '</div>';
