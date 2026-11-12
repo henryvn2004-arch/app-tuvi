@@ -20,6 +20,13 @@
   "zh-tw",
   "zh-cn"
  ],
+ "/app/ca-nha": [
+  "en",
+  "ja",
+  "ko",
+  "zh-tw",
+  "zh-cn"
+ ],
  "/app/chan-dung-tien-kiep": [
   "en",
   "ja",
@@ -126,6 +133,13 @@
   "zh-cn"
  ],
  "/app/nhan-mach": [
+  "en",
+  "ja",
+  "ko",
+  "zh-tw",
+  "zh-cn"
+ ],
+ "/app/sinh-con": [
   "en",
   "ja",
   "ko",

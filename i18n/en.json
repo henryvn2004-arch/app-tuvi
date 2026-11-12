@@ -275,6 +275,62 @@
   "t": "<span class=\"hp-ic\" data-icon=\"calendar\"></span><span>Annual luck<br>for the year</span>",
   "h": "d0e7d2f5"
  },
+ "cn.12-thang-am-toi": {
+  "t": "Next 12 lunar months",
+  "h": "c0166830"
+ },
+ "cn.ca-nha-minh-la-so-cua": {
+  "t": "<b>Our Family</b><span id=\"cnSub\">Everyone's charts side by side, for the next 12 lunar months.</span>",
+  "h": "f42a18f8"
+ },
+ "cn.ca-nha-minh-tu-vi-minh": {
+  "t": "Our Family — Minh Bao Zi Wei Dou Shu",
+  "h": "12013a8d"
+ },
+ "cn.dang-nhap-dang-ky": {
+  "t": "Log in / Sign up",
+  "h": "2bcf279e"
+ },
+ "cn.dang-nhap-de-xem-la-so": {
+  "t": "Log in to see your whole family's charts.",
+  "h": "6ccac799"
+ },
+ "cn.dang-xep-la-so-ca-nha": {
+  "t": "Lining up your family's charts…",
+  "h": "9c8b78a5"
+ },
+ "cn.dua-ngay-tot-va-ngay-xung": {
+  "t": "Put your child's own good days and clashing days into your phone calendar. The calendar updates itself every day.",
+  "h": "b5850267"
+ },
+ "cn.google-lich": {
+  "t": "Google Calendar",
+  "h": "8cdb619a"
+ },
+ "cn.hoi-thay-ve-ca-nha-so": {
+  "t": "<a class=\"go\" id=\"cnAsk\" href=\"/app\">Ask the Master about the family</a> <a class=\"sub\" href=\"/app/so-la-so\">Chart book</a>",
+  "h": "c7bd3311"
+ },
+ "cn.iphone-mac": {
+  "t": "iPhone / Mac",
+  "h": "9a2b7d51"
+ },
+ "cn.lich-rieng": {
+  "t": "Personal calendar",
+  "h": "6ff9fdd9"
+ },
+ "cn.moi-o-la-cung-nguyet-han": {
+  "t": "Each cell is the monthly-limit palace of that month. Yellow cell: a month when two or more people enter the same palace together. Tap a cell to see the stars.",
+  "h": "8a6d6f48"
+ },
+ "cn.so-la-so-chua-co-nguoi": {
+  "t": "Your chart book has no family members yet.<br>Just ask the Master about your husband, child or parents — the Master will invite you to add a chart right in the conversation.<br> Charts you've saved can be moved to the <b>Family</b> group in the <a href=\"/app/so-la-so\">Chart book</a>.",
+  "h": "75422ea1"
+ },
+ "cn.thang-ca-nha-nen-de-y": {
+  "t": "Months the family should watch",
+  "h": "e66184b3"
+ },
  "congcu.3-ngay-toi": {
   "t": "Next 3 days",
   "h": "a9fe9d66"
@@ -2174,6 +2230,110 @@
  "js.chutrinh.tieu-van-nam": {
   "t": "Annual cycle for ",
   "h": "1979c56a"
+ },
+ "js.cn.ai-cung-han-vao": {
+  "t": "{ai} enter <b>{cung}</b> together.",
+  "h": "8f48fa76"
+ },
+ "js.cn.ask": {
+  "t": "How will our family do over the next 12 months? Which months should the whole family watch?",
+  "h": "5106642f"
+ },
+ "js.cn.bai-tinh-ds": {
+  "t": "failing stars: {ds}",
+  "h": "6fbe9f13"
+ },
+ "js.cn.cat-tinh-ds": {
+  "t": "auspicious stars: {ds}",
+  "h": "d335af36"
+ },
+ "js.cn.cham": {
+  "t": ".",
+  "h": "3a52ce78"
+ },
+ "js.cn.chua-co-gio-sinh": {
+  "t": "Without a birth hour, the Zi Wei Dou Shu chart can't be cast yet.",
+  "h": "3d8d3bbd"
+ },
+ "js.cn.chua-tai-duoc-la-so": {
+  "t": "Couldn't load the family's charts. Please reload the page.",
+  "h": "131469d8"
+ },
+ "js.cn.chua-them-duoc-lich": {
+  "t": "Couldn't add the calendar — please try again later.",
+  "h": "6075add3"
+ },
+ "js.cn.han-vao-cung": {
+  "t": "Limit enters the <b>{cung}</b>",
+  "h": "593101c7"
+ },
+ "js.cn.mang-chap-chon": {
+  "t": "The connection is unstable and it couldn't load. Please reload the page.",
+  "h": "2adc56e0"
+ },
+ "js.cn.nam-nay-tieu-han-vao": {
+  "t": "This year the Xiao Xian is in the <b>{th}</b> and the Liu Nian in the <b>{ln}</b>.",
+  "h": "b4b04598"
+ },
+ "js.cn.nguoi": {
+  "t": "Person",
+  "h": "65ae37a4"
+ },
+ "js.cn.nguoi-nha": {
+  "t": "Family member",
+  "h": "447d96d6"
+ },
+ "js.cn.nha-ten-n-nguoi": {
+  "t": "{ten}'s family · {n} people · next 12 lunar months",
+  "h": "174da578"
+ },
+ "js.cn.nhuan-ngan": {
+  "t": "leap",
+  "h": "6eb03d88"
+ },
+ "js.cn.sat-tinh-ds": {
+  "t": "harsh stars: {ds}",
+  "h": "5d9f3071"
+ },
+ "js.cn.thang-ngan": {
+  "t": "M{n}",
+  "h": "efb66afc"
+ },
+ "js.cn.vai-bo": {
+  "t": "Father",
+  "h": "dbbdf270"
+ },
+ "js.cn.vai-chong": {
+  "t": "Husband",
+  "h": "92a6f17f"
+ },
+ "js.cn.vai-con": {
+  "t": "Child",
+  "h": "eb70b34b"
+ },
+ "js.cn.vai-me": {
+  "t": "Mother",
+  "h": "dfc6f90b"
+ },
+ "js.cn.vai-sinh-nam": {
+  "t": "{vai} · born {nam}",
+  "h": "3d5b8ffa"
+ },
+ "js.cn.vai-toi": {
+  "t": "You",
+  "h": "40ffd8d0"
+ },
+ "js.cn.vai-vo": {
+  "t": "Wife",
+  "h": "98c0d1da"
+ },
+ "js.cn.xac-dinh-gio-sinh": {
+  "t": "Find your birth hour →",
+  "h": "5122b0fd"
+ },
+ "js.cn.xong-roi-lich-tu-cap-nhat": {
+  "t": "Done — the calendar updates itself every day.",
+  "h": "d89d8f57"
  },
  "js.cs.ba-nhanh-nay-khac-nhau-o": {
   "t": "How do these three branches differ?",
@@ -6370,6 +6530,102 @@
  "js.prices.money-moi-luot-sale": {
   "t": "{money} per use ({sale} credits, down from {credits})",
   "h": "7aabe37f"
+ },
+ "js.sc.binh-thuong": {
+  "t": "Average ★",
+  "h": "d49b9158"
+ },
+ "js.sc.bo": {
+  "t": "Father",
+  "h": "dbbdf270"
+ },
+ "js.sc.can-luu-y": {
+  "t": "Needs care",
+  "h": "def723aa"
+ },
+ "js.sc.con-tuoi-gi-hop-voi": {
+  "t": "Which zodiac sign suits the parents best for a child?",
+  "h": "702bccb6"
+ },
+ "js.sc.da-cham-hop-xung-dia-chi": {
+  "t": "I've scored the earthly-branch harmony and clash for the next 15 years (father **{bo}** · mother **{me}**). Most favourable year: **{tot}**. What would you like advice on first?",
+  "h": "669ae596"
+ },
+ "js.sc.ket-qua-a-b": {
+  "t": "Results {a} – {b}",
+  "h": "67cbb5f6"
+ },
+ "js.sc.loi": {
+  "t": "Error: ",
+  "h": "471c0087"
+ },
+ "js.sc.luc-hop-voi-bo": {
+  "t": "Six Harmony with father ✓",
+  "h": "e0214f73"
+ },
+ "js.sc.luc-hop-voi-me": {
+  "t": "Six Harmony with mother ✓",
+  "h": "f42895e4"
+ },
+ "js.sc.luc-xung-voi-bo": {
+  "t": "Six Clash with father ✗",
+  "h": "fef3a745"
+ },
+ "js.sc.luc-xung-voi-me": {
+  "t": "Six Clash with mother ✗",
+  "h": "b043bcf2"
+ },
+ "js.sc.me": {
+  "t": "Mother",
+  "h": "dfc6f90b"
+ },
+ "js.sc.nam-nao-nen-tranh-sinh-con": {
+  "t": "Which years should be avoided for having a child?",
+  "h": "45ae05ad"
+ },
+ "js.sc.nam-nao-tot-nhat-de-sinh": {
+  "t": "Which year is best for having a child?",
+  "h": "345bd2a8"
+ },
+ "js.sc.nam-thuan-nhat-top-3": {
+  "t": "Most favourable years (top 3)",
+  "h": "d65badf2"
+ },
+ "js.sc.rat-thuan": {
+  "t": "Very favourable ★★★",
+  "h": "ea8da095"
+ },
+ "js.sc.tam-hinh-voi-bo": {
+  "t": "Three Punishments with father",
+  "h": "0099e1e7"
+ },
+ "js.sc.tam-hinh-voi-me": {
+  "t": "Three Punishments with mother",
+  "h": "996d2b57"
+ },
+ "js.sc.tam-hop-voi-bo": {
+  "t": "Three Harmony with father",
+  "h": "117b9ae6"
+ },
+ "js.sc.tam-hop-voi-me": {
+  "t": "Three Harmony with mother",
+  "h": "5a98a39d"
+ },
+ "js.sc.thuan": {
+  "t": "Favourable ★★",
+  "h": "7a571e7c"
+ },
+ "js.sc.trung-tinh": {
+  "t": "Neutral",
+  "h": "308793c3"
+ },
+ "js.sc.vi-sao-nam-do-hop-ca": {
+  "t": "Why does that year suit both father and mother?",
+  "h": "bc9256b2"
+ },
+ "js.sc.vui-long-nhap-nam-sinh": {
+  "t": "Please enter valid birth years for the father and mother.",
+  "h": "ad827462"
  },
  "js.shell.an": {
   "t": "Hide",
@@ -11938,6 +12194,94 @@
  "privacy.xac-minh-trang-thai-thanh-toan": {
   "t": "Verifying payment status and delivering results",
   "h": "84a1b3b2"
+ },
+ "sc.2-nhan-ket-qua": {
+  "t": "<span class=\"wss-n\">2</span><span class=\"wss-l\">Get your reading</span>",
+  "h": "b0b2f830"
+ },
+ "sc.bang-du-15-nam-toi": {
+  "t": "<span class=\"hp-ic\" data-icon=\"calendar-days\"></span><span>Full table<br>for the next 15 years</span>",
+  "h": "7fd926c3"
+ },
+ "sc.can-chi": {
+  "t": "Stem-Branch",
+  "h": "8b784611"
+ },
+ "sc.cham-diem-luc-hop-tam-hop": {
+  "t": "Scores the six-harmony, three-harmony and six-clash of earthly branches between your child's birth year and the parents' — a table for the next 15 years and the most favourable year. Ask the Master for a deeper reading.",
+  "h": "1e93ec3a"
+ },
+ "sc.danh-gia": {
+  "t": "Rating",
+  "h": "5df137aa"
+ },
+ "sc.ghi-chu-ket-qua-dua-tren": {
+  "t": "<strong style=\"color:#444\">Note:</strong> Results are based on the earthly branch of the birth year (solar calendar). If your child was born in January–February of the solar calendar, the actual branch by the lunar year may differ by one year — it needs a closer look.",
+  "h": "c4463c7c"
+ },
+ "sc.hanh": {
+  "t": "Element",
+  "h": "58608859"
+ },
+ "sc.hoi-thay-luan-sau-nam-nao": {
+  "t": "✦ Ask the Master in depth which year is best to have a child",
+  "h": "665710f8"
+ },
+ "sc.ket-qua-15-nam-dia-chi": {
+  "t": "<span class=\"res-block-title\" id=\"resultTitle\">15-Year Results</span> <span style=\"font-size:11px;color:#666\">Earthly branches · Six Harmony · Three Harmony · Six Clash</span>",
+  "h": "a7874a13"
+ },
+ "sc.luc-hop-tam-hop-luc-xung": {
+  "t": "<span class=\"hp-ic\" data-icon=\"scale\"></span><span>Six Harmony · Three Harmony<br>Six Clash</span>",
+  "h": "3c607a04"
+ },
+ "sc.ly-do": {
+  "t": "Reason",
+  "h": "0cbf3763"
+ },
+ "sc.nam": {
+  "t": "Year",
+  "h": "98926c7e"
+ },
+ "sc.nam-sinh-bo": {
+  "t": "Father's birth year",
+  "h": "a1009c64"
+ },
+ "sc.nam-sinh-cua-bo-va-me": {
+  "t": "Father's and mother's birth years",
+  "h": "0cc92594"
+ },
+ "sc.nam-sinh-me": {
+  "t": "Mother's birth year",
+  "h": "bef8fb8f"
+ },
+ "sc.nam-thuan-nhat-de-sinh-con": {
+  "t": "<span class=\"hp-ic\" data-icon=\"star\"></span><span>Most favourable<br>year to have a child</span>",
+  "h": "456f641b"
+ },
+ "sc.nhap-nam-sinh-bo-va-me": {
+  "t": "Enter the father's and mother's birth years to see a rating table for the next 15 years and the most favourable year.",
+  "h": "0cda7d1e"
+ },
+ "sc.sinh-con-dung-nam-hop-tuoi": {
+  "t": "Many families hope to have a child in a year that suits the parents' signs, but working it out properly isn't easy. Enter both spouses' birth years and find the most favourable year in the next 15 right away.",
+  "h": "34b8b50b"
+ },
+ "sc.xem-15-nam-mien-phi": {
+  "t": "<span class=\"bg-label\"><span class=\"ic\" data-icon=\"hourglass\"></span><b id=\"btnGoLabel\">See 15 years →</b></span> <small>Free</small>",
+  "h": "f03c38c9"
+ },
+ "sc.xem-tuoi-sinh-con": {
+  "t": "Child birth-year compatibility",
+  "h": "2e015092"
+ },
+ "sc.xem-tuoi-sinh-con-nam-sinh": {
+  "t": "<b>Child Birth-Year Compatibility</b><span>The birth year that suits the parents, by earthly branch</span>",
+  "h": "9da380f6"
+ },
+ "sc.xem-tuoi-sinh-con-tu-vi": {
+  "t": "Child Birth-Year Compatibility — Minh Bao Zi Wei Dou Shu",
+  "h": "23026bbb"
  },
  "terms.1-tinh-chat-dich-vu": {
   "t": "1. Nature of the service",

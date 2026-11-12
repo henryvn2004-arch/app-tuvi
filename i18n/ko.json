@@ -275,6 +275,62 @@
   "t": "<span class=\"hp-ic\" data-icon=\"calendar\"></span><span>조회 연도<br>소운</span>",
   "h": "d0e7d2f5"
  },
+ "cn.12-thang-am-toi": {
+  "t": "앞으로 12개월(음력)",
+  "h": "c0166830"
+ },
+ "cn.ca-nha-minh-la-so-cua": {
+  "t": "<b>우리 집</b><span id=\"cnSub\">온 가족의 명반을 나란히 놓고 앞으로 12개월(음력)을 봐요.</span>",
+  "h": "f42a18f8"
+ },
+ "cn.ca-nha-minh-tu-vi-minh": {
+  "t": "우리 집 — 명보 자미두수",
+  "h": "12013a8d"
+ },
+ "cn.dang-nhap-dang-ky": {
+  "t": "로그인 / 가입",
+  "h": "2bcf279e"
+ },
+ "cn.dang-nhap-de-xem-la-so": {
+  "t": "로그인하고 온 가족의 명반을 확인하세요.",
+  "h": "6ccac799"
+ },
+ "cn.dang-xep-la-so-ca-nha": {
+  "t": "온 가족의 명반을 정리하는 중이에요…",
+  "h": "9c8b78a5"
+ },
+ "cn.dua-ngay-tot-va-ngay-xung": {
+  "t": "아이만을 위한 길일과 충일을 휴대폰 캘린더에 넣어 보세요. 캘린더는 매일 자동으로 업데이트돼요.",
+  "h": "b5850267"
+ },
+ "cn.google-lich": {
+  "t": "Google 캘린더",
+  "h": "8cdb619a"
+ },
+ "cn.hoi-thay-ve-ca-nha-so": {
+  "t": "<a class=\"go\" id=\"cnAsk\" href=\"/app\">가족에 대해 선생님께 묻기</a> <a class=\"sub\" href=\"/app/so-la-so\">명반 노트</a>",
+  "h": "c7bd3311"
+ },
+ "cn.iphone-mac": {
+  "t": "iPhone / Mac",
+  "h": "9a2b7d51"
+ },
+ "cn.lich-rieng": {
+  "t": "전용 캘린더",
+  "h": "6ff9fdd9"
+ },
+ "cn.moi-o-la-cung-nguyet-han": {
+  "t": "각 칸은 그 달의 월한 궁이에요. 노란 칸: 두 명 이상이 같은 궁에 함께 한이 드는 달. 칸을 누르면 별을 볼 수 있어요.",
+  "h": "8a6d6f48"
+ },
+ "cn.so-la-so-chua-co-nguoi": {
+  "t": "명반 노트에 아직 가족이 없어요.<br>남편이나 아이, 부모님에 대해 선생님께 물어보세요 — 선생님이 대화 중에 바로 명반 추가를 청해요.<br> 저장된 명반은 <a href=\"/app/so-la-so\">명반 노트</a>의 <b>가족</b> 그룹으로 옮겨 주세요.",
+  "h": "75422ea1"
+ },
+ "cn.thang-ca-nha-nen-de-y": {
+  "t": "온 가족이 눈여겨볼 달",
+  "h": "e66184b3"
+ },
  "congcu.3-ngay-toi": {
   "t": "앞으로 3일",
   "h": "a9fe9d66"
@@ -2174,6 +2230,110 @@
  "js.chutrinh.tieu-van-nam": {
   "t": "소한 ‘ ",
   "h": "1979c56a"
+ },
+ "js.cn.ai-cung-han-vao": {
+  "t": "{ai}은(는) 함께 <b>{cung}</b>에 한이 들어요.",
+  "h": "8f48fa76"
+ },
+ "js.cn.ask": {
+  "t": "우리 집은 앞으로 12개월이 어떨까요? 온 가족이 어느 달을 눈여겨봐야 할까요?",
+  "h": "5106642f"
+ },
+ "js.cn.bai-tinh-ds": {
+  "t": "패성: {ds}",
+  "h": "6fbe9f13"
+ },
+ "js.cn.cat-tinh-ds": {
+  "t": "길성: {ds}",
+  "h": "d335af36"
+ },
+ "js.cn.cham": {
+  "t": ".",
+  "h": "3a52ce78"
+ },
+ "js.cn.chua-co-gio-sinh": {
+  "t": "태어난 시간이 없어서 아직 자미두수 명반을 세울 수 없어요.",
+  "h": "3d8d3bbd"
+ },
+ "js.cn.chua-tai-duoc-la-so": {
+  "t": "온 가족의 명반을 불러오지 못했어요. 페이지를 새로고침해 주세요.",
+  "h": "131469d8"
+ },
+ "js.cn.chua-them-duoc-lich": {
+  "t": "캘린더를 추가하지 못했어요. 잠시 후 다시 시도해 주세요.",
+  "h": "6075add3"
+ },
+ "js.cn.han-vao-cung": {
+  "t": "한이 <b>{cung}</b>에 들어요",
+  "h": "593101c7"
+ },
+ "js.cn.mang-chap-chon": {
+  "t": "네트워크가 불안정해 불러오지 못했어요. 페이지를 새로고침해 주세요.",
+  "h": "2adc56e0"
+ },
+ "js.cn.nam-nay-tieu-han-vao": {
+  "t": "올해 소한은 <b>{th}</b>, 유년은 <b>{ln}</b>에 들어 있어요.",
+  "h": "b4b04598"
+ },
+ "js.cn.nguoi": {
+  "t": "구성원",
+  "h": "65ae37a4"
+ },
+ "js.cn.nguoi-nha": {
+  "t": "가족",
+  "h": "447d96d6"
+ },
+ "js.cn.nha-ten-n-nguoi": {
+  "t": "{ten}가족 · {n}명 · 앞으로 12개월(음력)",
+  "h": "174da578"
+ },
+ "js.cn.nhuan-ngan": {
+  "t": "윤",
+  "h": "6eb03d88"
+ },
+ "js.cn.sat-tinh-ds": {
+  "t": "살성: {ds}",
+  "h": "5d9f3071"
+ },
+ "js.cn.thang-ngan": {
+  "t": "{n}월",
+  "h": "efb66afc"
+ },
+ "js.cn.vai-bo": {
+  "t": "아버지",
+  "h": "dbbdf270"
+ },
+ "js.cn.vai-chong": {
+  "t": "남편",
+  "h": "92a6f17f"
+ },
+ "js.cn.vai-con": {
+  "t": "자녀",
+  "h": "eb70b34b"
+ },
+ "js.cn.vai-me": {
+  "t": "어머니",
+  "h": "dfc6f90b"
+ },
+ "js.cn.vai-sinh-nam": {
+  "t": "{vai} · {nam}년생",
+  "h": "3d5b8ffa"
+ },
+ "js.cn.vai-toi": {
+  "t": "나",
+  "h": "40ffd8d0"
+ },
+ "js.cn.vai-vo": {
+  "t": "아내",
+  "h": "98c0d1da"
+ },
+ "js.cn.xac-dinh-gio-sinh": {
+  "t": "출생 시각 알아보기 →",
+  "h": "5122b0fd"
+ },
+ "js.cn.xong-roi-lich-tu-cap-nhat": {
+  "t": "완료됐어요 — 캘린더는 매일 자동으로 업데이트돼요.",
+  "h": "d89d8f57"
  },
  "js.cs.ba-nhanh-nay-khac-nhau-o": {
   "t": "이 세 갈래는 어디가 다른가요?",
@@ -6370,6 +6530,102 @@
  "js.prices.money-moi-luot-sale": {
   "t": "1회당 {money} ({sale}냥, {credits}냥에서 할인)",
   "h": "7aabe37f"
+ },
+ "js.sc.binh-thuong": {
+  "t": "보통 ★",
+  "h": "d49b9158"
+ },
+ "js.sc.bo": {
+  "t": "아버지",
+  "h": "dbbdf270"
+ },
+ "js.sc.can-luu-y": {
+  "t": "주의 필요",
+  "h": "def723aa"
+ },
+ "js.sc.con-tuoi-gi-hop-voi": {
+  "t": "아이는 어떤 띠가 부모와 가장 잘 맞나요?",
+  "h": "702bccb6"
+ },
+ "js.sc.da-cham-hop-xung-dia-chi": {
+  "t": "앞으로 15년의 지지 합·충을 채점했어요(아버지 **{bo}** · 어머니 **{me}**). 가장 순조로운 해: **{tot}**. 무엇부터 상담해 드릴까요?",
+  "h": "669ae596"
+ },
+ "js.sc.ket-qua-a-b": {
+  "t": "{a} – {b}년 결과",
+  "h": "67cbb5f6"
+ },
+ "js.sc.loi": {
+  "t": "오류: ",
+  "h": "471c0087"
+ },
+ "js.sc.luc-hop-voi-bo": {
+  "t": "아버지와 육합 ✓",
+  "h": "e0214f73"
+ },
+ "js.sc.luc-hop-voi-me": {
+  "t": "어머니와 육합 ✓",
+  "h": "f42895e4"
+ },
+ "js.sc.luc-xung-voi-bo": {
+  "t": "아버지와 육충 ✗",
+  "h": "fef3a745"
+ },
+ "js.sc.luc-xung-voi-me": {
+  "t": "어머니와 육충 ✗",
+  "h": "b043bcf2"
+ },
+ "js.sc.me": {
+  "t": "어머니",
+  "h": "dfc6f90b"
+ },
+ "js.sc.nam-nao-nen-tranh-sinh-con": {
+  "t": "출산을 피해야 할 해는 언제인가요?",
+  "h": "45ae05ad"
+ },
+ "js.sc.nam-nao-tot-nhat-de-sinh": {
+  "t": "출산하기 가장 좋은 해는 언제인가요?",
+  "h": "345bd2a8"
+ },
+ "js.sc.nam-thuan-nhat-top-3": {
+  "t": "가장 순조로운 해 (상위 3개)",
+  "h": "d65badf2"
+ },
+ "js.sc.rat-thuan": {
+  "t": "매우 순조 ★★★",
+  "h": "ea8da095"
+ },
+ "js.sc.tam-hinh-voi-bo": {
+  "t": "아버지와 삼형",
+  "h": "0099e1e7"
+ },
+ "js.sc.tam-hinh-voi-me": {
+  "t": "어머니와 삼형",
+  "h": "996d2b57"
+ },
+ "js.sc.tam-hop-voi-bo": {
+  "t": "아버지와 삼합",
+  "h": "117b9ae6"
+ },
+ "js.sc.tam-hop-voi-me": {
+  "t": "어머니와 삼합",
+  "h": "5a98a39d"
+ },
+ "js.sc.thuan": {
+  "t": "순조 ★★",
+  "h": "7a571e7c"
+ },
+ "js.sc.trung-tinh": {
+  "t": "중립",
+  "h": "308793c3"
+ },
+ "js.sc.vi-sao-nam-do-hop-ca": {
+  "t": "왜 그해가 아버지와 어머니 모두에게 맞나요?",
+  "h": "bc9256b2"
+ },
+ "js.sc.vui-long-nhap-nam-sinh": {
+  "t": "아버지와 어머니의 올바른 태어난 해를 입력해 주세요.",
+  "h": "ad827462"
  },
  "js.shell.an": {
   "t": "숨기기",
@@ -11938,6 +12194,94 @@
  "privacy.xac-minh-trang-thai-thanh-toan": {
   "t": "결제 상태 확인 및 결과 제공",
   "h": "84a1b3b2"
+ },
+ "sc.2-nhan-ket-qua": {
+  "t": "<span class=\"wss-n\">2</span><span class=\"wss-l\">결과 받기</span>",
+  "h": "b0b2f830"
+ },
+ "sc.bang-du-15-nam-toi": {
+  "t": "<span class=\"hp-ic\" data-icon=\"calendar-days\"></span><span>앞으로 15년<br>전체 표</span>",
+  "h": "7fd926c3"
+ },
+ "sc.can-chi": {
+  "t": "간지",
+  "h": "8b784611"
+ },
+ "sc.cham-diem-luc-hop-tam-hop": {
+  "t": "아이의 태어난 해와 부모 사이의 지지 육합·삼합·육충을 채점해요 — 앞으로 15년 표와 가장 순조로운 해. 선생님께 깊이 물어볼 수도 있어요.",
+  "h": "1e93ec3a"
+ },
+ "sc.danh-gia": {
+  "t": "평가",
+  "h": "5df137aa"
+ },
+ "sc.ghi-chu-ket-qua-dua-tren": {
+  "t": "<strong style=\"color:#444\">참고:</strong> 결과는 태어난 해의 지지(양력)를 기준으로 해요. 아이가 양력 1~2월에 태어났다면 음력 해로 계산한 실제 지지가 1년 다를 수 있어요 — 더 꼼꼼한 확인이 필요해요.",
+  "h": "c4463c7c"
+ },
+ "sc.hanh": {
+  "t": "오행",
+  "h": "58608859"
+ },
+ "sc.hoi-thay-luan-sau-nam-nao": {
+  "t": "✦ 어느 해에 낳는 게 좋을지 선생님께 깊이 묻기",
+  "h": "665710f8"
+ },
+ "sc.ket-qua-15-nam-dia-chi": {
+  "t": "<span class=\"res-block-title\" id=\"resultTitle\">15년 결과</span> <span style=\"font-size:11px;color:#666\">지지 · 육합 · 삼합 · 육충</span>",
+  "h": "a7874a13"
+ },
+ "sc.luc-hop-tam-hop-luc-xung": {
+  "t": "<span class=\"hp-ic\" data-icon=\"scale\"></span><span>육합 · 삼합<br>육충</span>",
+  "h": "3c607a04"
+ },
+ "sc.ly-do": {
+  "t": "이유",
+  "h": "0cbf3763"
+ },
+ "sc.nam": {
+  "t": "연도",
+  "h": "98926c7e"
+ },
+ "sc.nam-sinh-bo": {
+  "t": "아버지 태어난 해",
+  "h": "a1009c64"
+ },
+ "sc.nam-sinh-cua-bo-va-me": {
+  "t": "아버지와 어머니의 태어난 해",
+  "h": "0cc92594"
+ },
+ "sc.nam-sinh-me": {
+  "t": "어머니 태어난 해",
+  "h": "bef8fb8f"
+ },
+ "sc.nam-thuan-nhat-de-sinh-con": {
+  "t": "<span class=\"hp-ic\" data-icon=\"star\"></span><span>아이를 낳기<br>가장 좋은 해</span>",
+  "h": "456f641b"
+ },
+ "sc.nhap-nam-sinh-bo-va-me": {
+  "t": "아버지와 어머니의 태어난 해를 입력하면 앞으로 15년 평가표와 가장 순조로운 해를 알 수 있어요.",
+  "h": "0cda7d1e"
+ },
+ "sc.sinh-con-dung-nam-hop-tuoi": {
+  "t": "부모와 띠가 맞는 해에 아이를 낳고 싶어 하는 가정이 많지만, 제대로 따져 보기는 쉽지 않아요. 부부의 태어난 해를 입력하고 앞으로 15년 중 가장 순조로운 해를 바로 찾아보세요.",
+  "h": "34b8b50b"
+ },
+ "sc.xem-15-nam-mien-phi": {
+  "t": "<span class=\"bg-label\"><span class=\"ic\" data-icon=\"hourglass\"></span><b id=\"btnGoLabel\">15년 보기 →</b></span> <small>무료</small>",
+  "h": "f03c38c9"
+ },
+ "sc.xem-tuoi-sinh-con": {
+  "t": "자녀 출산 띠 보기",
+  "h": "2e015092"
+ },
+ "sc.xem-tuoi-sinh-con-nam-sinh": {
+  "t": "<b>자녀 출산 띠 보기</b><span>지지로 보는 부모와 맞는 아이의 출생 연도</span>",
+  "h": "9da380f6"
+ },
+ "sc.xem-tuoi-sinh-con-tu-vi": {
+  "t": "자녀 출산 띠 보기 — 명보 자미두수",
+  "h": "23026bbb"
  },
  "terms.1-tinh-chat-dich-vu": {
   "t": "1. 서비스의 성격",

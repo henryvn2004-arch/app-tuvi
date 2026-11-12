@@ -275,6 +275,62 @@
   "t": "<span class=\"hp-ic\" data-icon=\"calendar\"></span><span>鑑定年の<br>小運</span>",
   "h": "d0e7d2f5"
  },
+ "cn.12-thang-am-toi": {
+  "t": "今後12か月（旧暦）",
+  "h": "c0166830"
+ },
+ "cn.ca-nha-minh-la-so-cua": {
+  "t": "<b>わが家</b><span id=\"cnSub\">家族全員の命盤を並べて、今後12か月（旧暦）を見ます。</span>",
+  "h": "f42a18f8"
+ },
+ "cn.ca-nha-minh-tu-vi-minh": {
+  "t": "わが家 — 明宝紫微斗数",
+  "h": "12013a8d"
+ },
+ "cn.dang-nhap-dang-ky": {
+  "t": "ログイン／新規登録",
+  "h": "2bcf279e"
+ },
+ "cn.dang-nhap-de-xem-la-so": {
+  "t": "ログインして家族全員の命盤をご覧ください。",
+  "h": "6ccac799"
+ },
+ "cn.dang-xep-la-so-ca-nha": {
+  "t": "家族の命盤を並べています…",
+  "h": "9c8b78a5"
+ },
+ "cn.dua-ngay-tot-va-ngay-xung": {
+  "t": "お子さんだけの吉日と相性の悪い日を、スマートフォンのカレンダーに入れましょう。カレンダーは毎日自動で更新されます。",
+  "h": "b5850267"
+ },
+ "cn.google-lich": {
+  "t": "Googleカレンダー",
+  "h": "8cdb619a"
+ },
+ "cn.hoi-thay-ve-ca-nha-so": {
+  "t": "<a class=\"go\" id=\"cnAsk\" href=\"/app\">家族について先生に聞く</a> <a class=\"sub\" href=\"/app/so-la-so\">命盤ノート</a>",
+  "h": "c7bd3311"
+ },
+ "cn.iphone-mac": {
+  "t": "iPhone / Mac",
+  "h": "9a2b7d51"
+ },
+ "cn.lich-rieng": {
+  "t": "専用カレンダー",
+  "h": "6ff9fdd9"
+ },
+ "cn.moi-o-la-cung-nguyet-han": {
+  "t": "各マスは、その月の月限の宮です。黄色のマス：二人以上が同じ宮に同時に限が入る月。マスを押すと星を見られます。",
+  "h": "8a6d6f48"
+ },
+ "cn.so-la-so-chua-co-nguoi": {
+  "t": "命盤ノートに家族はまだいません。<br>夫や子ども、ご両親について先生に聞いてみてください — 先生が会話の中でそのまま命盤の追加をお願いします。<br> 保存した命盤は、<a href=\"/app/so-la-so\">命盤ノート</a>の<b>家族</b>グループに移してください。",
+  "h": "75422ea1"
+ },
+ "cn.thang-ca-nha-nen-de-y": {
+  "t": "家族で注意したい月",
+  "h": "e66184b3"
+ },
  "congcu.3-ngay-toi": {
   "t": "今後3日間",
   "h": "a9fe9d66"
@@ -2174,6 +2230,110 @@
  "js.chutrinh.tieu-van-nam": {
   "t": "小運の年：",
   "h": "1979c56a"
+ },
+ "js.cn.ai-cung-han-vao": {
+  "t": "{ai}は同時に<b>{cung}</b>に限が入ります。",
+  "h": "8f48fa76"
+ },
+ "js.cn.ask": {
+  "t": "わが家の今後12か月はどうなりますか？家族みんなが気をつけるべきなのは何月ですか？",
+  "h": "5106642f"
+ },
+ "js.cn.bai-tinh-ds": {
+  "t": "敗星：{ds}",
+  "h": "6fbe9f13"
+ },
+ "js.cn.cat-tinh-ds": {
+  "t": "吉星：{ds}",
+  "h": "d335af36"
+ },
+ "js.cn.cham": {
+  "t": "。",
+  "h": "3a52ce78"
+ },
+ "js.cn.chua-co-gio-sinh": {
+  "t": "生まれた時刻がないため、紫微斗数の命盤をまだ作成できません。",
+  "h": "3d8d3bbd"
+ },
+ "js.cn.chua-tai-duoc-la-so": {
+  "t": "家族の命盤を読み込めませんでした。ページを再読み込みしてください。",
+  "h": "131469d8"
+ },
+ "js.cn.chua-them-duoc-lich": {
+  "t": "カレンダーを追加できませんでした。あとでもう一度お試しください。",
+  "h": "6075add3"
+ },
+ "js.cn.han-vao-cung": {
+  "t": "限は<b>{cung}</b>に入ります",
+  "h": "593101c7"
+ },
+ "js.cn.mang-chap-chon": {
+  "t": "通信が不安定で読み込めませんでした。ページを再読み込みしてください。",
+  "h": "2adc56e0"
+ },
+ "js.cn.nam-nay-tieu-han-vao": {
+  "t": "今年の小限は<b>{th}</b>、流年は<b>{ln}</b>に入っています。",
+  "h": "b4b04598"
+ },
+ "js.cn.nguoi": {
+  "t": "人物",
+  "h": "65ae37a4"
+ },
+ "js.cn.nguoi-nha": {
+  "t": "家族",
+  "h": "447d96d6"
+ },
+ "js.cn.nha-ten-n-nguoi": {
+  "t": "{ten}家 · {n}人 · 今後12か月（旧暦）",
+  "h": "174da578"
+ },
+ "js.cn.nhuan-ngan": {
+  "t": "閏",
+  "h": "6eb03d88"
+ },
+ "js.cn.sat-tinh-ds": {
+  "t": "殺星：{ds}",
+  "h": "5d9f3071"
+ },
+ "js.cn.thang-ngan": {
+  "t": "{n}月",
+  "h": "efb66afc"
+ },
+ "js.cn.vai-bo": {
+  "t": "父",
+  "h": "dbbdf270"
+ },
+ "js.cn.vai-chong": {
+  "t": "夫",
+  "h": "92a6f17f"
+ },
+ "js.cn.vai-con": {
+  "t": "子ども",
+  "h": "eb70b34b"
+ },
+ "js.cn.vai-me": {
+  "t": "母",
+  "h": "dfc6f90b"
+ },
+ "js.cn.vai-sinh-nam": {
+  "t": "{vai} · {nam}年生まれ",
+  "h": "3d5b8ffa"
+ },
+ "js.cn.vai-toi": {
+  "t": "あなた",
+  "h": "40ffd8d0"
+ },
+ "js.cn.vai-vo": {
+  "t": "妻",
+  "h": "98c0d1da"
+ },
+ "js.cn.xac-dinh-gio-sinh": {
+  "t": "出生時刻を特定する →",
+  "h": "5122b0fd"
+ },
+ "js.cn.xong-roi-lich-tu-cap-nhat": {
+  "t": "完了しました — カレンダーは毎日自動で更新されます。",
+  "h": "d89d8f57"
  },
  "js.cs.ba-nhanh-nay-khac-nhau-o": {
   "t": "この3つの分かれ道は、どこが違いますか？",
@@ -6370,6 +6530,102 @@
  "js.prices.money-moi-luot-sale": {
   "t": "1回 {money}（{sale}両、{credits}両から値下げ）",
   "h": "7aabe37f"
+ },
+ "js.sc.binh-thuong": {
+  "t": "普通 ★",
+  "h": "d49b9158"
+ },
+ "js.sc.bo": {
+  "t": "父",
+  "h": "dbbdf270"
+ },
+ "js.sc.can-luu-y": {
+  "t": "要注意",
+  "h": "def723aa"
+ },
+ "js.sc.con-tuoi-gi-hop-voi": {
+  "t": "お子さまは、何年生まれだと両親に最も合いますか？",
+  "h": "702bccb6"
+ },
+ "js.sc.da-cham-hop-xung-dia-chi": {
+  "t": "今後15年の地支の相性・相克を採点しました（父**{bo}**・母**{me}**）。最も良い年：**{tot}**。まず何をご相談しますか？",
+  "h": "669ae596"
+ },
+ "js.sc.ket-qua-a-b": {
+  "t": "{a} – {b}年の結果",
+  "h": "67cbb5f6"
+ },
+ "js.sc.loi": {
+  "t": "エラー：",
+  "h": "471c0087"
+ },
+ "js.sc.luc-hop-voi-bo": {
+  "t": "父と六合 ✓",
+  "h": "e0214f73"
+ },
+ "js.sc.luc-hop-voi-me": {
+  "t": "母と六合 ✓",
+  "h": "f42895e4"
+ },
+ "js.sc.luc-xung-voi-bo": {
+  "t": "父と六冲 ✗",
+  "h": "fef3a745"
+ },
+ "js.sc.luc-xung-voi-me": {
+  "t": "母と六冲 ✗",
+  "h": "b043bcf2"
+ },
+ "js.sc.me": {
+  "t": "母",
+  "h": "dfc6f90b"
+ },
+ "js.sc.nam-nao-nen-tranh-sinh-con": {
+  "t": "子どもを授かるのを避けるべき年は？",
+  "h": "45ae05ad"
+ },
+ "js.sc.nam-nao-tot-nhat-de-sinh": {
+  "t": "子どもを授かるのに最もよい年は？",
+  "h": "345bd2a8"
+ },
+ "js.sc.nam-thuan-nhat-top-3": {
+  "t": "最も良い年（上位3つ）",
+  "h": "d65badf2"
+ },
+ "js.sc.rat-thuan": {
+  "t": "大変良い ★★★",
+  "h": "ea8da095"
+ },
+ "js.sc.tam-hinh-voi-bo": {
+  "t": "父と三刑",
+  "h": "0099e1e7"
+ },
+ "js.sc.tam-hinh-voi-me": {
+  "t": "母と三刑",
+  "h": "996d2b57"
+ },
+ "js.sc.tam-hop-voi-bo": {
+  "t": "父と三合",
+  "h": "117b9ae6"
+ },
+ "js.sc.tam-hop-voi-me": {
+  "t": "母と三合",
+  "h": "5a98a39d"
+ },
+ "js.sc.thuan": {
+  "t": "良い ★★",
+  "h": "7a571e7c"
+ },
+ "js.sc.trung-tinh": {
+  "t": "中立",
+  "h": "308793c3"
+ },
+ "js.sc.vi-sao-nam-do-hop-ca": {
+  "t": "なぜその年は父母どちらにも合うのですか？",
+  "h": "bc9256b2"
+ },
+ "js.sc.vui-long-nhap-nam-sinh": {
+  "t": "父と母の有効な生まれ年を入力してください。",
+  "h": "ad827462"
  },
  "js.shell.an": {
   "t": "非表示",
@@ -11938,6 +12194,94 @@
  "privacy.xac-minh-trang-thai-thanh-toan": {
   "t": "決済状況の確認と結果のご提供",
   "h": "84a1b3b2"
+ },
+ "sc.2-nhan-ket-qua": {
+  "t": "<span class=\"wss-n\">2</span><span class=\"wss-l\">結果を受け取る</span>",
+  "h": "b0b2f830"
+ },
+ "sc.bang-du-15-nam-toi": {
+  "t": "<span class=\"hp-ic\" data-icon=\"calendar-days\"></span><span>今後15年の<br>完全な表</span>",
+  "h": "7fd926c3"
+ },
+ "sc.can-chi": {
+  "t": "干支",
+  "h": "8b784611"
+ },
+ "sc.cham-diem-luc-hop-tam-hop": {
+  "t": "お子さんの生まれ年と両親の間の地支の六合・三合・六冲を採点 — 今後15年の表と、最も良い年。先生に詳しく聞くこともできます。",
+  "h": "1e93ec3a"
+ },
+ "sc.danh-gia": {
+  "t": "評価",
+  "h": "5df137aa"
+ },
+ "sc.ghi-chu-ket-qua-dua-tren": {
+  "t": "<strong style=\"color:#444\">注記：</strong>結果は生年の地支（西暦）に基づいています。お子さんが西暦の1〜2月に生まれた場合、旧暦の年で数えた実際の地支が1年ずれることがあります — より慎重な確認が必要です。",
+  "h": "c4463c7c"
+ },
+ "sc.hanh": {
+  "t": "五行",
+  "h": "58608859"
+ },
+ "sc.hoi-thay-luan-sau-nam-nao": {
+  "t": "✦ どの年に産むのがよいか、先生に詳しく聞く",
+  "h": "665710f8"
+ },
+ "sc.ket-qua-15-nam-dia-chi": {
+  "t": "<span class=\"res-block-title\" id=\"resultTitle\">15年の結果</span> <span style=\"font-size:11px;color:#666\">地支・六合・三合・六冲</span>",
+  "h": "a7874a13"
+ },
+ "sc.luc-hop-tam-hop-luc-xung": {
+  "t": "<span class=\"hp-ic\" data-icon=\"scale\"></span><span>六合・三合<br>六冲</span>",
+  "h": "3c607a04"
+ },
+ "sc.ly-do": {
+  "t": "理由",
+  "h": "0cbf3763"
+ },
+ "sc.nam": {
+  "t": "年",
+  "h": "98926c7e"
+ },
+ "sc.nam-sinh-bo": {
+  "t": "父の生まれ年",
+  "h": "a1009c64"
+ },
+ "sc.nam-sinh-cua-bo-va-me": {
+  "t": "父と母の生まれ年",
+  "h": "0cc92594"
+ },
+ "sc.nam-sinh-me": {
+  "t": "母の生まれ年",
+  "h": "bef8fb8f"
+ },
+ "sc.nam-thuan-nhat-de-sinh-con": {
+  "t": "<span class=\"hp-ic\" data-icon=\"star\"></span><span>子どもを産むのに<br>最も良い年</span>",
+  "h": "456f641b"
+ },
+ "sc.nhap-nam-sinh-bo-va-me": {
+  "t": "父と母の生まれ年を入力すると、今後15年の評価表と最も良い年が分かります。",
+  "h": "0cda7d1e"
+ },
+ "sc.sinh-con-dung-nam-hop-tuoi": {
+  "t": "両親と相性の合う年に子どもを授かりたいと願う家庭は多いものですが、正しく計算するのは簡単ではありません。ご夫婦の生まれ年を入力して、今後15年で最も良い年を今すぐ探しましょう。",
+  "h": "34b8b50b"
+ },
+ "sc.xem-15-nam-mien-phi": {
+  "t": "<span class=\"bg-label\"><span class=\"ic\" data-icon=\"hourglass\"></span><b id=\"btnGoLabel\">15年を見る →</b></span> <small>無料</small>",
+  "h": "f03c38c9"
+ },
+ "sc.xem-tuoi-sinh-con": {
+  "t": "子どもを産む年の相性",
+  "h": "2e015092"
+ },
+ "sc.xem-tuoi-sinh-con-nam-sinh": {
+  "t": "<b>子どもを産む年の相性</b><span>地支でみる、両親と合うお子さんの生まれ年</span>",
+  "h": "9da380f6"
+ },
+ "sc.xem-tuoi-sinh-con-tu-vi": {
+  "t": "子どもを産む年の相性 — 明宝紫微斗数",
+  "h": "23026bbb"
  },
  "terms.1-tinh-chat-dich-vu": {
   "t": "1. サービスの性質",

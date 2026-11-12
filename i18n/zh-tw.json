@@ -275,6 +275,62 @@
   "t": "<span class=\"hp-ic\" data-icon=\"calendar\"></span><span>流年<br>小運</span>",
   "h": "d0e7d2f5"
  },
+ "cn.12-thang-am-toi": {
+  "t": "未來十二個農曆月",
+  "h": "c0166830"
+ },
+ "cn.ca-nha-minh-la-so-cua": {
+  "t": "<b>我們一家</b><span id=\"cnSub\">把全家人的命盤並排，看未來十二個農曆月。</span>",
+  "h": "f42a18f8"
+ },
+ "cn.ca-nha-minh-tu-vi-minh": {
+  "t": "我們一家——明寶紫微斗數",
+  "h": "12013a8d"
+ },
+ "cn.dang-nhap-dang-ky": {
+  "t": "登入／註冊",
+  "h": "2bcf279e"
+ },
+ "cn.dang-nhap-de-xem-la-so": {
+  "t": "請登入以查看全家人的命盤。",
+  "h": "6ccac799"
+ },
+ "cn.dang-xep-la-so-ca-nha": {
+  "t": "正在排列全家人的命盤…",
+  "h": "9c8b78a5"
+ },
+ "cn.dua-ngay-tot-va-ngay-xung": {
+  "t": "把專屬於孩子的吉日與沖日放進手機行事曆。行事曆會每天自動更新。",
+  "h": "b5850267"
+ },
+ "cn.google-lich": {
+  "t": "Google 日曆",
+  "h": "8cdb619a"
+ },
+ "cn.hoi-thay-ve-ca-nha-so": {
+  "t": "<a class=\"go\" id=\"cnAsk\" href=\"/app\">就全家問問老師</a> <a class=\"sub\" href=\"/app/so-la-so\">命盤簿</a>",
+  "h": "c7bd3311"
+ },
+ "cn.iphone-mac": {
+  "t": "iPhone / Mac",
+  "h": "9a2b7d51"
+ },
+ "cn.lich-rieng": {
+  "t": "專屬行事曆",
+  "h": "6ff9fdd9"
+ },
+ "cn.moi-o-la-cung-nguyet-han": {
+  "t": "每一格是該月的月限宮位。黃色格：兩人以上同時行限入同一宮的月份。點一格可查看星曜。",
+  "h": "8a6d6f48"
+ },
+ "cn.so-la-so-chua-co-nguoi": {
+  "t": "命盤簿裡還沒有任何家人。<br>直接問老師關於丈夫、孩子或父母的事——老師會在對話中順勢邀請您加入命盤。<br> 已儲存的命盤，請移到<a href=\"/app/so-la-so\">命盤簿</a>的<b>家人</b>群組。",
+  "h": "75422ea1"
+ },
+ "cn.thang-ca-nha-nen-de-y": {
+  "t": "全家該留意的月份",
+  "h": "e66184b3"
+ },
  "congcu.3-ngay-toi": {
   "t": "未來 3 天",
   "h": "a9fe9d66"
@@ -2174,6 +2230,110 @@
  "js.chutrinh.tieu-van-nam": {
   "t": "流年小運 ",
   "h": "1979c56a"
+ },
+ "js.cn.ai-cung-han-vao": {
+  "t": "{ai}同時行限入<b>{cung}</b>。",
+  "h": "8f48fa76"
+ },
+ "js.cn.ask": {
+  "t": "我們家未來十二個月會怎樣？全家該留意哪幾個月？",
+  "h": "5106642f"
+ },
+ "js.cn.bai-tinh-ds": {
+  "t": "敗星：{ds}",
+  "h": "6fbe9f13"
+ },
+ "js.cn.cat-tinh-ds": {
+  "t": "吉星：{ds}",
+  "h": "d335af36"
+ },
+ "js.cn.cham": {
+  "t": "。",
+  "h": "3a52ce78"
+ },
+ "js.cn.chua-co-gio-sinh": {
+  "t": "沒有出生時辰，因此還無法排出紫微斗數命盤。",
+  "h": "3d8d3bbd"
+ },
+ "js.cn.chua-tai-duoc-la-so": {
+  "t": "無法載入全家人的命盤，請重新整理頁面。",
+  "h": "131469d8"
+ },
+ "js.cn.chua-them-duoc-lich": {
+  "t": "無法新增行事曆，請稍後再試。",
+  "h": "6075add3"
+ },
+ "js.cn.han-vao-cung": {
+  "t": "行限入<b>{cung}</b>",
+  "h": "593101c7"
+ },
+ "js.cn.mang-chap-chon": {
+  "t": "網路不穩，無法載入，請重新整理頁面。",
+  "h": "2adc56e0"
+ },
+ "js.cn.nam-nay-tieu-han-vao": {
+  "t": "今年小限入<b>{th}</b>，流年入<b>{ln}</b>。",
+  "h": "b4b04598"
+ },
+ "js.cn.nguoi": {
+  "t": "成員",
+  "h": "65ae37a4"
+ },
+ "js.cn.nguoi-nha": {
+  "t": "家人",
+  "h": "447d96d6"
+ },
+ "js.cn.nha-ten-n-nguoi": {
+  "t": "{ten}一家 · {n} 人 · 未來十二個農曆月",
+  "h": "174da578"
+ },
+ "js.cn.nhuan-ngan": {
+  "t": "閏",
+  "h": "6eb03d88"
+ },
+ "js.cn.sat-tinh-ds": {
+  "t": "煞星：{ds}",
+  "h": "5d9f3071"
+ },
+ "js.cn.thang-ngan": {
+  "t": "{n}月",
+  "h": "efb66afc"
+ },
+ "js.cn.vai-bo": {
+  "t": "爸爸",
+  "h": "dbbdf270"
+ },
+ "js.cn.vai-chong": {
+  "t": "丈夫",
+  "h": "92a6f17f"
+ },
+ "js.cn.vai-con": {
+  "t": "子女",
+  "h": "eb70b34b"
+ },
+ "js.cn.vai-me": {
+  "t": "媽媽",
+  "h": "dfc6f90b"
+ },
+ "js.cn.vai-sinh-nam": {
+  "t": "{vai} · {nam} 年出生",
+  "h": "3d5b8ffa"
+ },
+ "js.cn.vai-toi": {
+  "t": "您",
+  "h": "40ffd8d0"
+ },
+ "js.cn.vai-vo": {
+  "t": "妻子",
+  "h": "98c0d1da"
+ },
+ "js.cn.xac-dinh-gio-sinh": {
+  "t": "確認出生時辰 →",
+  "h": "5122b0fd"
+ },
+ "js.cn.xong-roi-lich-tu-cap-nhat": {
+  "t": "完成了——行事曆會每天自動更新。",
+  "h": "d89d8f57"
  },
  "js.cs.ba-nhanh-nay-khac-nhau-o": {
   "t": "這三個分支差在哪裡？",
@@ -6370,6 +6530,102 @@
  "js.prices.money-moi-luot-sale": {
   "t": "每次 {money}（{sale} 兩，原價 {credits}）",
   "h": "7aabe37f"
+ },
+ "js.sc.binh-thuong": {
+  "t": "普通 ★",
+  "h": "d49b9158"
+ },
+ "js.sc.bo": {
+  "t": "爸爸",
+  "h": "dbbdf270"
+ },
+ "js.sc.can-luu-y": {
+  "t": "需留意",
+  "h": "def723aa"
+ },
+ "js.sc.con-tuoi-gi-hop-voi": {
+  "t": "孩子屬什麼生肖與父母最合？",
+  "h": "702bccb6"
+ },
+ "js.sc.da-cham-hop-xung-dia-chi": {
+  "t": "已為未來 15 年的地支合沖評分（父親**{bo}**・母親**{me}**）。最順遂的年份：**{tot}**。您想先諮詢什麼？",
+  "h": "669ae596"
+ },
+ "js.sc.ket-qua-a-b": {
+  "t": "{a} – {b} 年結果",
+  "h": "67cbb5f6"
+ },
+ "js.sc.loi": {
+  "t": "錯誤：",
+  "h": "471c0087"
+ },
+ "js.sc.luc-hop-voi-bo": {
+  "t": "與父親六合 ✓",
+  "h": "e0214f73"
+ },
+ "js.sc.luc-hop-voi-me": {
+  "t": "與母親六合 ✓",
+  "h": "f42895e4"
+ },
+ "js.sc.luc-xung-voi-bo": {
+  "t": "與父親六沖 ✗",
+  "h": "fef3a745"
+ },
+ "js.sc.luc-xung-voi-me": {
+  "t": "與母親六沖 ✗",
+  "h": "b043bcf2"
+ },
+ "js.sc.me": {
+  "t": "媽媽",
+  "h": "dfc6f90b"
+ },
+ "js.sc.nam-nao-nen-tranh-sinh-con": {
+  "t": "哪一年應避免生孩子？",
+  "h": "45ae05ad"
+ },
+ "js.sc.nam-nao-tot-nhat-de-sinh": {
+  "t": "哪一年最適合生孩子？",
+  "h": "345bd2a8"
+ },
+ "js.sc.nam-thuan-nhat-top-3": {
+  "t": "最順遂的年份（前三名）",
+  "h": "d65badf2"
+ },
+ "js.sc.rat-thuan": {
+  "t": "非常順遂 ★★★",
+  "h": "ea8da095"
+ },
+ "js.sc.tam-hinh-voi-bo": {
+  "t": "與父親三刑",
+  "h": "0099e1e7"
+ },
+ "js.sc.tam-hinh-voi-me": {
+  "t": "與母親三刑",
+  "h": "996d2b57"
+ },
+ "js.sc.tam-hop-voi-bo": {
+  "t": "與父親三合",
+  "h": "117b9ae6"
+ },
+ "js.sc.tam-hop-voi-me": {
+  "t": "與母親三合",
+  "h": "5a98a39d"
+ },
+ "js.sc.thuan": {
+  "t": "順遂 ★★",
+  "h": "7a571e7c"
+ },
+ "js.sc.trung-tinh": {
+  "t": "中性",
+  "h": "308793c3"
+ },
+ "js.sc.vi-sao-nam-do-hop-ca": {
+  "t": "為什麼那一年同時適合爸爸和媽媽？",
+  "h": "bc9256b2"
+ },
+ "js.sc.vui-long-nhap-nam-sinh": {
+  "t": "請輸入有效的父親與母親出生年。",
+  "h": "ad827462"
  },
  "js.shell.an": {
   "t": "隱藏",
@@ -11938,6 +12194,94 @@
  "privacy.xac-minh-trang-thai-thanh-toan": {
   "t": "確認付款狀態並提供結果",
   "h": "84a1b3b2"
+ },
+ "sc.2-nhan-ket-qua": {
+  "t": "<span class=\"wss-n\">2</span><span class=\"wss-l\">取得結果</span>",
+  "h": "b0b2f830"
+ },
+ "sc.bang-du-15-nam-toi": {
+  "t": "<span class=\"hp-ic\" data-icon=\"calendar-days\"></span><span>未來 15 年<br>完整表格</span>",
+  "h": "7fd926c3"
+ },
+ "sc.can-chi": {
+  "t": "干支",
+  "h": "8b784611"
+ },
+ "sc.cham-diem-luc-hop-tam-hop": {
+  "t": "為孩子出生年與父母之間的地支六合、三合、六沖評分——未來 15 年的表格與最順遂的一年。也可請老師深入解說。",
+  "h": "1e93ec3a"
+ },
+ "sc.danh-gia": {
+  "t": "評價",
+  "h": "5df137aa"
+ },
+ "sc.ghi-chu-ket-qua-dua-tren": {
+  "t": "<strong style=\"color:#444\">備註：</strong>結果依據出生年的地支（國曆）。若孩子生於國曆 1–2 月，依農曆年計算的實際地支可能相差一年——需要更仔細確認。",
+  "h": "c4463c7c"
+ },
+ "sc.hanh": {
+  "t": "五行",
+  "h": "58608859"
+ },
+ "sc.hoi-thay-luan-sau-nam-nao": {
+  "t": "✦ 請老師深入解說哪一年適合生孩子",
+  "h": "665710f8"
+ },
+ "sc.ket-qua-15-nam-dia-chi": {
+  "t": "<span class=\"res-block-title\" id=\"resultTitle\">15 年結果</span> <span style=\"font-size:11px;color:#666\">地支・六合・三合・六沖</span>",
+  "h": "a7874a13"
+ },
+ "sc.luc-hop-tam-hop-luc-xung": {
+  "t": "<span class=\"hp-ic\" data-icon=\"scale\"></span><span>六合・三合<br>六沖</span>",
+  "h": "3c607a04"
+ },
+ "sc.ly-do": {
+  "t": "理由",
+  "h": "0cbf3763"
+ },
+ "sc.nam": {
+  "t": "年",
+  "h": "98926c7e"
+ },
+ "sc.nam-sinh-bo": {
+  "t": "爸爸的出生年",
+  "h": "a1009c64"
+ },
+ "sc.nam-sinh-cua-bo-va-me": {
+  "t": "父親與母親的出生年",
+  "h": "0cc92594"
+ },
+ "sc.nam-sinh-me": {
+  "t": "媽媽的出生年",
+  "h": "bef8fb8f"
+ },
+ "sc.nam-thuan-nhat-de-sinh-con": {
+  "t": "<span class=\"hp-ic\" data-icon=\"star\"></span><span>最適合<br>生孩子的年份</span>",
+  "h": "456f641b"
+ },
+ "sc.nhap-nam-sinh-bo-va-me": {
+  "t": "輸入父親與母親的出生年，即可看到未來 15 年的評價表與最順遂的一年。",
+  "h": "0cda7d1e"
+ },
+ "sc.sinh-con-dung-nam-hop-tuoi": {
+  "t": "許多家庭都希望在與父母生肖相合的年份生孩子，但要算準並不容易。輸入夫妻兩人的出生年，馬上找出未來 15 年中最順遂的一年。",
+  "h": "34b8b50b"
+ },
+ "sc.xem-15-nam-mien-phi": {
+  "t": "<span class=\"bg-label\"><span class=\"ic\" data-icon=\"hourglass\"></span><b id=\"btnGoLabel\">查看 15 年 →</b></span> <small>免費</small>",
+  "h": "f03c38c9"
+ },
+ "sc.xem-tuoi-sinh-con": {
+  "t": "看生孩子的生肖",
+  "h": "2e015092"
+ },
+ "sc.xem-tuoi-sinh-con-nam-sinh": {
+  "t": "<b>看生孩子的生肖</b><span>依地支看與父母相合的孩子出生年</span>",
+  "h": "9da380f6"
+ },
+ "sc.xem-tuoi-sinh-con-tu-vi": {
+  "t": "看生孩子的生肖——明寶紫微斗數",
+  "h": "23026bbb"
  },
  "terms.1-tinh-chat-dich-vu": {
   "t": "1. 服務性質",
