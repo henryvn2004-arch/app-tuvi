@@ -4002,7 +4002,7 @@
     });
   }
   function runBatTrach(chat, toolId) {
-    ensureScripts(['/tools-shared/bat-trach.js?v=2'], function (err) {
+    ensureScripts(['/tools-shared/bat-trach.js?v=3'], function (err) {
       if (err || typeof BatTrachTool === 'undefined') { inlineErrorBubble(chat, T('js.shellui.khong-nap-duoc-cong-cu-bat', 'không nạp được công cụ Bát Trạch.')); return; }
       inlStep(chat,
         T('js.shellui.cho-thay-xin-nam-sinh-va', '<p>Cho thầy xin năm sinh và giới tính của con nhé.</p>') +
@@ -4026,7 +4026,7 @@
     });
   }
   function runSoDep(chat, toolId) {
-    ensureScripts(['/tools-shared/bat-trach.js?v=2', '/tools-shared/mai-hoa.js?v=6', '/tools-shared/kinh-dich.js?v=8', '/tools-shared/kinh-dich-hao.js?v=2', '/tools-shared/kinh-dich-doc.js?v=2', '/tools-shared/nap-am.js?v=3', '/tools-shared/so-dep.js?v=2'], function (err) {
+    ensureScripts(['/tools-shared/bat-trach.js?v=3', '/tools-shared/mai-hoa.js?v=6', '/tools-shared/kinh-dich.js?v=8', '/tools-shared/kinh-dich-hao.js?v=2', '/tools-shared/kinh-dich-doc.js?v=2', '/tools-shared/nap-am.js?v=3', '/tools-shared/so-dep.js?v=2'], function (err) {
       if (err || typeof SoDepTool === 'undefined') { inlineErrorBubble(chat, T('js.shellui.khong-nap-duoc-cong-cu-so', 'không nạp được công cụ Số Đẹp.')); return; }
       inlStep(chat,
         T('js.shellui.cho-thay-day-so-con-muon', '<p>Cho thầy dãy số con muốn chấm điểm nhé (số điện thoại, biển số…).</p>') +
@@ -4406,7 +4406,7 @@
     });
   }
   function runLucNham(chat, toolId) {
-    ensureScripts(['/tools-shared/luc-nham.js?v=4', '/tools-shared/dai-luc-nham.js?v=1'], function (err) {
+    ensureScripts(['/tools-shared/luc-nham.js?v=5', '/tools-shared/dai-luc-nham.js?v=2'], function (err) {
       if (err || typeof LucNhamTool === 'undefined') { inlineErrorBubble(chat, T('js.shellui.khong-nap-duoc-cong-cu-luc', 'không nạp được công cụ Lục Nhâm.')); return; }
       var t = new Date();
       var curGio = Math.floor(((t.getHours() * 60 + 60) % (24 * 60)) / 120) % 12;
@@ -4785,7 +4785,7 @@
   // 'bat-trach' (bước 17), không chép công thức lần hai.
   var DOOR_DIR_OPTS = [['S', T('js.shellui.huong-nam', 'Nam')], ['N', T('js.shellui.huong-bac', 'Bắc')], ['E', T('js.shellui.huong-dong', 'Đông')], ['W', T('js.shellui.huong-tay', 'Tây')], ['SE', T('js.shellui.huong-dong-nam', 'Đông Nam')], ['SW', T('js.shellui.huong-tay-nam', 'Tây Nam')], ['NE', T('js.shellui.huong-dong-bac', 'Đông Bắc')], ['NW', T('js.shellui.huong-tay-bac', 'Tây Bắc')]];
   function runPhongThuyPhoto(chat, toolId, opts) {
-    ensureScripts(['/auth.js?v=9', '/tuvi-paywall.js?v=44', '/tools-shared/bat-trach.js?v=2'], function (err) {
+    ensureScripts(['/auth.js?v=9', '/tuvi-paywall.js?v=44', '/tools-shared/bat-trach.js?v=3'], function (err) {
       if (err || typeof TuviPaywall === 'undefined' || typeof BatTrachTool === 'undefined') { inlineErrorBubble(chat, T('js.shellui.khong-nap-duoc-cong-thanh-toan', 'không nạp được cổng thanh toán.')); return; }
       Shell.setContext({ toolId: toolId, label: opts.label, placeholder: opts.placeholder, greeting: opts.greeting, chips: opts.chips });
       var extraOpts = opts.extraOptions.map(function (o) { return '<option value="' + esc(o[0]) + '">' + esc(o[1]) + '</option>'; }).join('');
@@ -4945,7 +4945,7 @@
   // ── Trả phí KHÔNG cần ảnh (mau-sac-hop-menh/trang-phuc-theo-ngay) — vẫn
   // qua requireCredits(), chỉ khác chỗ input là field chứ không phải ảnh.
   function runMauSacHopMenh(chat, toolId) {
-    ensureScripts(['/auth.js?v=9', '/tuvi-paywall.js?v=44', '/tools-shared/bat-trach.js?v=2'], function (err) {
+    ensureScripts(['/auth.js?v=9', '/tuvi-paywall.js?v=44', '/tools-shared/bat-trach.js?v=3'], function (err) {
       if (err || typeof TuviPaywall === 'undefined' || typeof BatTrachTool === 'undefined') { inlineErrorBubble(chat, T('js.shellui.khong-nap-duoc-cong-thanh-toan', 'không nạp được cổng thanh toán.')); return; }
       Shell.setContext({
         toolId: toolId, label: T('js.paywall.mau-sac-hop-menh', 'Màu Sắc Hợp Mệnh'), placeholder: T('js.shellui.hoi-thay-ve-mau-sac-hop', 'Hỏi thầy về màu sắc hợp mệnh…'),
