@@ -1595,6 +1595,10 @@
   "t": "에이스",
   "h": "ec2d5348"
  },
+ "js.boibai.ba": {
+  "t": "3",
+  "h": "2fd22ce6"
+ },
  "js.boibai.ban-muon-hoi-them-ve-la": {
   "t": "**. 어떤 카드에 대해 더 물어보고 싶으세요?",
   "h": "436f4393"
@@ -1714,6 +1718,10 @@
  "js.boibai.giai-doan-kho-khan-hoac-canh": {
   "t": "어렵거나 경쟁이 심한 시기예요. 더 유연하게 적응해야 해요.",
   "h": "28710428"
+ },
+ "js.boibai.hai": {
+  "t": "2",
+  "h": "916c7bfc"
  },
  "js.boibai.hai-hoa-ho-tro-trach-nhiem": {
   "t": "조화, 지원, 책임, 균형. 6은 사랑과 책임의 숫자예요.",
