@@ -3,8 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Bói Bài Tây — Tử Vi Minh Bảo</title>
-<meta name="description" content="Rút bài Tây 52 lá ngay trên Tử Vi Minh Bảo — trải 1, 3 hoặc 5 lá, luận theo tình cảm · sự nghiệp · tài chính.">
+<title data-i18n="boibai.boi-bai-tay-tu-vi-minh">Bói Bài Tây — Tử Vi Minh Bảo</title>
+<meta data-i18n-attr="content:boibai.rut-bai-tay-52-la-ngay" name="description" content="Rút bài Tây 52 lá ngay trên Tử Vi Minh Bảo — trải 1, 3 hoặc 5 lá, luận theo tình cảm · sự nghiệp · tài chính.">
 <link rel="icon" type="image/webp" href="/seal.webp">
 <link rel="preload" href="/fonts/noto-serif-latin-400.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="/fonts/noto-serif-vietnamese-400.woff2" as="font" type="font/woff2" crossorigin>
@@ -64,9 +64,9 @@ body.chat-first-live .pcm-topics{grid-template-columns:1fr}
   <main class="ws" id="ws">
     <div class="ws-top">
       <button class="btn mobile-only" onclick="document.getElementById('shell-sidebar').classList.toggle('open');window.shellSyncBackdrop&&shellSyncBackdrop()" aria-label="Menu">☰</button>
-      <div class="ws-title"><b>Bói Bài Tây</b><span>Rút bài 52 lá — tình cảm · sự nghiệp · tài chính — miễn phí</span></div>
+      <div data-i18n="boibai.boi-bai-tay-rut-bai-52" class="ws-title"><b>Bói Bài Tây</b><span>Rút bài 52 lá — tình cảm · sự nghiệp · tài chính — miễn phí</span></div>
       <div class="ws-actions">
-        <button class="btn mobile-only" onclick="Shell.openRail()">✦ Hỏi</button>
+        <button data-i18n="battu.hoi" class="btn mobile-only" onclick="Shell.openRail()">✦ Hỏi</button>
       </div>
     </div>
     <div class="ws-body">
@@ -80,15 +80,15 @@ body.chat-first-live .pcm-topics{grid-template-columns:1fr}
         <img class="intro-avatar" src="/tool-avatars/boi-bai-tay.webp" alt="" onerror="this.remove()">
         <div class="intro-body">
           <div class="intro-text">
-            <div class="intro-t">Bói Bài Tây</div>
-            <div class="intro-d">Không cần hiểu hết 78 lá, chỉ cần một câu hỏi đang vướng trong đầu. Rút một lá theo trực giác, nhận lời đoán ngắn gọn — nhẹ nhàng như những buổi bói bài ngày xưa của bà, của mẹ.</div>
+            <div data-i18n="boibai.boi-bai-tay" class="intro-t">Bói Bài Tây</div>
+            <div data-i18n="boibai.khong-can-hieu-het-78-la" class="intro-d">Không cần hiểu hết 78 lá, chỉ cần một câu hỏi đang vướng trong đầu. Rút một lá theo trực giác, nhận lời đoán ngắn gọn — nhẹ nhàng như những buổi bói bài ngày xưa của bà, của mẹ.</div>
             <div id="introSrc"></div>
           </div>
         </div>
         <div class="hero-pills">
-          <div class="hero-pill"><span class="hp-ic" data-icon="spade"></span><span>Rút 1, 3<br>hay 5 lá</span></div>
-          <div class="hero-pill"><span class="hp-ic" data-icon="heart"></span><span>Tình cảm,<br>sự nghiệp, tài chính</span></div>
-          <div class="hero-pill"><span class="hp-ic" data-icon="compass"></span><span>Lối bói<br>dân gian</span></div>
+          <div data-i18n="boibai.rut-1-3-hay-5-la" class="hero-pill"><span class="hp-ic" data-icon="spade"></span><span>Rút 1, 3<br>hay 5 lá</span></div>
+          <div data-i18n="boibai.tinh-cam-su-nghiep-tai-chinh" class="hero-pill"><span class="hp-ic" data-icon="heart"></span><span>Tình cảm,<br>sự nghiệp, tài chính</span></div>
+          <div data-i18n="boibai.loi-boi-dan-gian" class="hero-pill"><span class="hp-ic" data-icon="compass"></span><span>Lối bói<br>dân gian</span></div>
         </div>
       </div></div>
       <div class="ws-main-col">
@@ -96,32 +96,32 @@ body.chat-first-live .pcm-topics{grid-template-columns:1fr}
            toán; form (chọn kiểu trải) ở lại trên màn hình cả sau khi có kết
            quả (không có bước "sửa thông tin" riêng). -->
       <div class="ws-steps" id="wsSteps">
-        <div class="wss-step active"><span class="wss-n">1</span><span class="wss-l">Nhập thông tin</span></div>
-        <div class="wss-step"><span class="wss-n">2</span><span class="wss-l">Nhận kết quả</span></div>
+        <div data-i18n="battu.1-nhap-thong-tin" class="wss-step active"><span class="wss-n">1</span><span class="wss-l">Nhập thông tin</span></div>
+        <div data-i18n="boibai.2-nhan-ket-qua" class="wss-step"><span class="wss-n">2</span><span class="wss-l">Nhận kết quả</span></div>
       </div>
       <div class="bt-card" id="inputCard">
-        <div class="fc-head"><span class="fc-ic" data-icon="spade"></span><h2>Chọn Kiểu Rút Bài</h2></div>
-        <p class="sub">Chọn kiểu trải (1, 3 hay 5 lá) — hệ thống rút ngẫu nhiên, trả luận giải từng lá theo tình cảm, sự nghiệp và tài chính.</p>
+        <div class="fc-head"><span class="fc-ic" data-icon="spade"></span><h2 data-i18n="boibai.chon-kieu-rut-bai">Chọn Kiểu Rút Bài</h2></div>
+        <p data-i18n="boibai.chon-kieu-trai-1-3-hay" class="sub">Chọn kiểu trải (1, 3 hay 5 lá) — hệ thống rút ngẫu nhiên, trả luận giải từng lá theo tình cảm, sự nghiệp và tài chính.</p>
         <div class="cost-box">
           <div class="cb-l">
             <span class="cb-ic" data-icon="wallet"></span>
             <div>
-              <div class="cb-title">Chi phí sử dụng</div>
+              <div data-i18n="battu.chi-phi-su-dung" class="cb-title">Chi phí sử dụng</div>
               <div class="cb-amt" data-tvp-price-label="boi-bai-tay">…</div>
             </div>
           </div>
         </div>
         <div class="spread-btns">
-          <button class="spread-btn active" onclick="setSpread(1,this)">1 Lá — Thông Điệp Hôm Nay</button>
-          <button class="spread-btn" onclick="setSpread(3,this)">3 Lá — Tình Trạng · Thách Thức · Kết Quả</button>
-          <button class="spread-btn" onclick="setSpread(5,this)">5 Lá — Trải Bài Ngũ Hành</button>
+          <button data-i18n="boibai.1-la-thong-diep-hom-nay" class="spread-btn active" onclick="setSpread(1,this)">1 Lá — Thông Điệp Hôm Nay</button>
+          <button data-i18n="boibai.3-la-tinh-trang-thach-thuc" class="spread-btn" onclick="setSpread(3,this)">3 Lá — Tình Trạng · Thách Thức · Kết Quả</button>
+          <button data-i18n="boibai.5-la-trai-bai-ngu-hanh" class="spread-btn" onclick="setSpread(5,this)">5 Lá — Trải Bài Ngũ Hành</button>
         </div>
         <div class="bt-q">
-          <label>Câu hỏi (tùy chọn)</label>
-          <input type="text" id="question" placeholder="VD: Tình hình tài chính của tôi thời gian tới?" maxlength="120">
+          <label data-i18n="boibai.cau-hoi-tuy-chon">Câu hỏi (tùy chọn)</label>
+          <input data-i18n-attr="placeholder:boibai.vd-tinh-hinh-tai-chinh-cua" type="text" id="question" placeholder="VD: Tình hình tài chính của tôi thời gian tới?" maxlength="120">
         </div>
         <div style="text-align:center">
-          <button class="btn-go" id="drawBtn" onclick="draw()">
+          <button data-i18n="boibai.xao-bai-rut" class="btn-go" id="drawBtn" onclick="draw()">
             <span class="bg-label"><span class="ic" data-icon="spade"></span><b id="drawBtnLabel">Xáo Bài &amp; Rút</b></span>
           </button>
         </div>
@@ -129,9 +129,9 @@ body.chat-first-live .pcm-topics{grid-template-columns:1fr}
       </div>
       <div class="ws-side-col">
       <div class="ws-promo">
-        <div class="wsp-eyebrow"><span class="wsp-ic" data-icon="book-open"></span><span>Giới thiệu</span></div>
-        <div class="wsp-title">Bói Bài Tây</div>
-        <p class="wsp-desc">Bói bài Tây truyền thống dùng bộ 52 lá bài Tây thông thường thay vì bộ bài Tarot chuyên dụng, phổ biến trong văn hoá dân gian ở nhiều nước phương Tây và cả Việt Nam. Mỗi lá được gán một ý nghĩa riêng theo chất và số, dùng để đoán hướng đi sắp tới.</p>
+        <div data-i18n="battu.gioi-thieu" class="wsp-eyebrow"><span class="wsp-ic" data-icon="book-open"></span><span>Giới thiệu</span></div>
+        <div data-i18n="boibai.boi-bai-tay" class="wsp-title">Bói Bài Tây</div>
+        <p data-i18n="boibai.boi-bai-tay-truyen-thong-dung" class="wsp-desc">Bói bài Tây truyền thống dùng bộ 52 lá bài Tây thông thường thay vì bộ bài Tarot chuyên dụng, phổ biến trong văn hoá dân gian ở nhiều nước phương Tây và cả Việt Nam. Mỗi lá được gán một ý nghĩa riêng theo chất và số, dùng để đoán hướng đi sắp tới.</p>
       </div>
       <div id="shellRecent"></div>
       </div>
