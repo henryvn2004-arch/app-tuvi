@@ -191,6 +191,49 @@
    "shell"
   ]
  },
+ "/app/chan-dung-tien-kiep": {
+  "file": "app-chan-dung-tien-kiep.html",
+  "keys": [
+   "battu.1-nhap-thong-tin",
+   "battu.3-thanh-toan",
+   "battu.4-nhan-ket-qua",
+   "battu.chi-phi-su-dung",
+   "battu.gioi-thieu",
+   "battu.hoi",
+   "ctk.2-xem-truoc-chan-dung",
+   "ctk.5-nen-van-minh-co",
+   "ctk.ban-luan-giai-mau-tai-pdf",
+   "ctk.chan-dung-cot-cach",
+   "ctk.chan-dung-tien-kiep",
+   "ctk.chan-dung-tien-kiep-gxr5",
+   "ctk.chan-dung-tien-kiep-la-so",
+   "ctk.chan-dung-tien-kiep-tu-vi",
+   "ctk.chan-dung-va-cau-chuyen-phia",
+   "ctk.chan-dung-ve-rieng",
+   "ctk.da-ve-truoc-do",
+   "ctk.dang-ve-chan-dung-khoang-45",
+   "ctk.dat-chinh-la-so-cua-ban",
+   "ctk.dung-la-so-da-lap-khong",
+   "ctk.khung-5-hoi-o-tren-do",
+   "ctk.la-so-khong-chi-ke-chuyen",
+   "ctk.mo-ta-nhan-vat",
+   "ctk.mo-ta-nhan-vat-ban-mau",
+   "ctk.moi-luot-luong",
+   "ctk.mot-doi-5-hoi",
+   "ctk.mot-doi-nguoi-5-hoi",
+   "ctk.nhap-ngay-sinh-cua-ban-duong",
+   "ctk.xem-tien-kiep-ton-luong",
+   "daycon.co-so-trong-la-so",
+   "duyenno.lam-lai",
+   "duyenno.tai-anh-dang-story",
+   "luangiai.chuyen-khoan-qua-qr-ngan-hang",
+   "luangiai.mua-goi-de-nhan-nhieu-uu",
+   "luangiai.tu-vi-dau-so-la-mot"
+  ],
+  "js": [
+   "shell"
+  ]
+ },
  "/app/chu-trinh-cuoc-doi": {
   "file": "app-chu-trinh-cuoc-doi.html",
   "keys": [
