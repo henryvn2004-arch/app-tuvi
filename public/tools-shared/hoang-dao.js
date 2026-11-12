@@ -5,6 +5,17 @@
    (global từ tuvi-ansao-engine.js). API: HoangDaoTool.compute(ngay,thang,nam).
    ============================================================ */
 (function () {
+  // Chữ HIỂN THỊ qua từ điển trang /<locale>/ (I18n.tv) + glossary; trang vi / /tools/hoang-dao.html không nạp ⇒ chữ Việt nguyên.
+  // `data` (gửi rail/server/thẻ "Vận hôm nay") GIỮ chữ Việt — chỉ `titleText`/`*HTML`/`error` đổi theo ngôn ngữ.
+  function _tv(key, vi, vars) {
+    var I = window.I18n;
+    if (I && I.tv) return I.tv(key, vi, vars);
+    return vars ? vi.replace(/\{(\w+)\}/g, function (x, n) { return vars[n] !== undefined ? vars[n] : x; }) : vi;
+  }
+  function _g(kind, v) {
+    var g = window.TuviGlossary;
+    return g && v ? g.t(kind, v) : v;
+  }
   var CAN = ['Giáp', 'Ất', 'Bính', 'Đinh', 'Mậu', 'Kỷ', 'Canh', 'Tân', 'Nhâm', 'Quý'];
   var CHI = ['Tý', 'Sửu', 'Dần', 'Mão', 'Thìn', 'Tỵ', 'Ngọ', 'Mùi', 'Thân', 'Dậu', 'Tuất', 'Hợi'];
   var GIO_TIME = ['23–01h', '01–03h', '03–05h', '05–07h', '07–09h', '09–11h', '11–13h', '13–15h', '15–17h', '17–19h', '19–21h', '21–23h'];
@@ -29,6 +40,38 @@
     'Thiên Lao': 'Giam cầm, trở ngại', 'Huyền Vũ': 'Trộm cướp, tổn thất',
     'Tư Mệnh': 'Bảo hộ, cầu phúc', 'Câu Trận': 'Vướng mắc, trì trệ'
   };
+  // 12 thần Hoàng/Hắc Đạo + nghĩa: bảng tên → khoá (chỉ hiển thị).
+  var THAN_KEY = {
+    'Thanh Long': 'js.shellui.hdt-tl',
+    'Minh Đường': 'js.shellui.hdt-md',
+    'Thiên Hình': 'js.shellui.hdt-th',
+    'Châu Tước': 'js.shellui.hdt-ct',
+    'Kim Quỹ': 'js.shellui.hdt-kq',
+    'Thiên Đức': 'js.shellui.hdt-td',
+    'Bạch Hổ': 'js.shellui.hdt-bh',
+    'Ngọc Đường': 'js.shellui.hdt-nd',
+    'Thiên Lao': 'js.shellui.hdt-tlao',
+    'Huyền Vũ': 'js.shellui.hdt-hv',
+    'Tư Mệnh': 'js.shellui.hdt-tm',
+    'Câu Trận': 'js.shellui.hdt-cht'
+  };
+  // nghĩa: cùng mã, tiền tố hdd (literal để bộ dò/prune thấy)
+  var THAN_NGHIA_KEY = {
+    'Thanh Long': 'js.shellui.hdd-tl',
+    'Minh Đường': 'js.shellui.hdd-md',
+    'Thiên Hình': 'js.shellui.hdd-th',
+    'Châu Tước': 'js.shellui.hdd-ct',
+    'Kim Quỹ': 'js.shellui.hdd-kq',
+    'Thiên Đức': 'js.shellui.hdd-td',
+    'Bạch Hổ': 'js.shellui.hdd-bh',
+    'Ngọc Đường': 'js.shellui.hdd-nd',
+    'Thiên Lao': 'js.shellui.hdd-tlao',
+    'Huyền Vũ': 'js.shellui.hdd-hv',
+    'Tư Mệnh': 'js.shellui.hdd-tm',
+    'Câu Trận': 'js.shellui.hdd-cht'
+  };
+  function _thanTen(t) { return THAN_KEY[t] ? _tv(THAN_KEY[t], t) : t; }
+  function _thanNghia(t) { return THAN_DESC[t] ? _tv(THAN_NGHIA_KEY[t], THAN_DESC[t]) : ''; }
   function toJDN(y, m, d) { var a = Math.floor((14 - m) / 12), yr = y + 4800 - a, mn = m + 12 * a - 3; return d + Math.floor((153 * mn + 2) / 5) + 365 * yr + Math.floor(yr / 4) - Math.floor(yr / 100) + Math.floor(yr / 400) - 32045; }
   // Can chi NGÀY từ JDN. Chỉ số vòng 60 (Giáp Tý = 0) = (JDN + 49) mod 60.
   // 🔴 Bản cũ dùng `ANCHOR = 2434290` và SAI 19 vị trí trên MỌI ngày — 4/8/2026
@@ -42,35 +85,36 @@
   function compute(ngay, thang, nam) {
     ngay = parseInt(ngay); thang = parseInt(thang); nam = parseInt(nam);
     if (!ngay || ngay < 1 || ngay > 31 || !thang || thang < 1 || thang > 12 || !nam) {
-      return { ok: false, error: 'Vui lòng nhập ngày tháng năm hợp lệ.' };
+      return { ok: false, error: _tv('js.shellui.hd-nhap-ngay-hop-le', 'Vui lòng nhập ngày tháng năm hợp lệ.') };
     }
     // `toJDN` là công thức Julian Day thuần toán học, vẫn "tính ra" một kết
     // quả cho ngày không tồn tại (vd 31/2) mà không báo lỗi — kiểm số ngày
     // tối đa của đúng tháng/năm đó (Date tự xét năm nhuận) trước khi tính.
     if (new Date(nam, thang - 1, ngay).getDate() !== ngay) {
-      return { ok: false, error: 'Tháng ' + thang + '/' + nam + ' không có ngày ' + ngay + ' — vui lòng chọn lại.' };
+      return { ok: false, error: _tv('js.shellui.hd-thang-khong-co-ngay', 'Tháng {m}/{y} không có ngày {d} — vui lòng chọn lại.', { m: thang, y: nam, d: ngay }) };
     }
     var cc = getNgayCanChi(nam, thang, ngay);
     var canChiNgay = CAN[cc.can] + ' ' + CHI[cc.chi];
     var alStr = '';
-    try { var conv = convertDuongToAm(ngay, thang, nam, 0); alStr = ' (AL ' + conv.amLich.day + '/' + conv.amLich.month + ')'; } catch (e) { /* ignore */ }
+    try { var conv = convertDuongToAm(ngay, thang, nam, 0); alStr = _tv('js.shellui.hd-al', ' (AL {d}/{m})', { d: conv.amLich.day, m: conv.amLich.month }); } catch (e) { /* ignore */ }
     var offset = thanhLongHour(cc.chi);
     var hd = [], hac = [], hdData = [], hacData = [];
     for (var g = 0; g < 12; g++) {
       var thanIdx = (g - offset + 12) % 12, than = THAN[thanIdx], isHD = IS_HD[thanIdx];
       var card = '<div class="gio-card ' + (isHD ? 'hd' : 'hd2') + '">' +
-        '<div class="gio-chi">' + CHI[g] + '</div>' +
+        '<div class="gio-chi">' + _g('chi', CHI[g]) + '</div>' +
         '<div class="gio-time">' + GIO_TIME[g] + '</div>' +
-        '<div class="gio-than ' + (isHD ? 'tag-hd' : 'tag-hd2') + '">' + than + '</div>' +
-        '<div class="gio-type ' + (isHD ? 'tag-hd' : 'tag-hd2') + '">' + (isHD ? 'Hoàng Đạo' : 'Hắc Đạo') + '</div>' +
-        '<div style="font-size:10px;color:var(--text-lt);margin-top:4px;line-height:1.4">' + (THAN_DESC[than] || '') + '</div></div>';
+        '<div class="gio-than ' + (isHD ? 'tag-hd' : 'tag-hd2') + '">' + _thanTen(than) + '</div>' +
+        '<div class="gio-type ' + (isHD ? 'tag-hd' : 'tag-hd2') + '">' + _g('lich', isHD ? 'Hoàng Đạo' : 'Hắc Đạo') + '</div>' +
+        '<div style="font-size:10px;color:var(--text-lt);margin-top:4px;line-height:1.4">' + _thanNghia(than) + '</div></div>';
       if (isHD) { hd.push(card); hdData.push(CHI[g] + ' (' + GIO_TIME[g] + ') ' + than); }
       else { hac.push(card); hacData.push(CHI[g] + ' (' + GIO_TIME[g] + ') ' + than); }
     }
     return {
       ok: true,
-      titleText: ngay + '/' + thang + '/' + nam + alStr + ' — Ngày ' + canChiNgay,
-      ngayInfoHTML: '<span class="ngay-item">Ngày <strong>' + canChiNgay + '</strong></span><span class="ngay-item">Can <strong>' + CAN[cc.can] + '</strong> — Ngũ hành <strong>' + CAN_HANH[cc.can] + '</strong></span>',
+      titleText: _tv('js.shellui.hd-title', '{date}{al} — Ngày {cc}', { date: ngay + '/' + thang + '/' + nam, al: alStr, cc: _g('canchi', canChiNgay) }),
+      ngayInfoHTML: '<span class="ngay-item">' + _tv('js.shellui.hd-ngay-cc', 'Ngày <strong>{cc}</strong>', { cc: _g('canchi', canChiNgay) }) + '</span><span class="ngay-item">' +
+        _tv('js.shellui.hd-can-hanh-info', 'Can <strong>{can}</strong> — Ngũ hành <strong>{hanh}</strong>', { can: _g('can', CAN[cc.can]), hanh: _g('hanh', CAN_HANH[cc.can]) }) + '</span>',
       hdListHTML: hd.join(''),
       hd2ListHTML: hac.join(''),
       data: { ngayDL: ngay + '/' + thang + '/' + nam, canChiNgay: canChiNgay, canHanh: CAN_HANH[cc.can], gioHoangDao: hdData.join(' · '), gioHacDao: hacData.join(' · ') }

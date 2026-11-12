@@ -3,8 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Ngũ hành tên — Tử Vi Minh Bảo</title>
-<meta name="description" content="Nhập tên tiếng Việt — tra chữ Hán, số nét và ngũ hành từng chữ, cân bằng ngũ hành, đối chiếu mệnh cục. Hỏi Thầy luận sâu.">
+<title data-i18n="nguhanhten.ngu-hanh-ten-tu-vi-minh">Ngũ hành tên — Tử Vi Minh Bảo</title>
+<meta data-i18n-attr="content:nguhanhten.nhap-ten-tieng-viet-tra-chu" name="description" content="Nhập tên tiếng Việt — tra chữ Hán, số nét và ngũ hành từng chữ, cân bằng ngũ hành, đối chiếu mệnh cục. Hỏi Thầy luận sâu.">
 <link rel="icon" type="image/webp" href="/seal.webp">
 <link rel="preload" href="/fonts/noto-serif-latin-400.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="/fonts/noto-serif-vietnamese-400.woff2" as="font" type="font/woff2" crossorigin>
@@ -93,10 +93,10 @@
   <main class="ws" id="ws">
     <div class="ws-top">
       <button class="btn mobile-only" onclick="document.getElementById('shell-sidebar').classList.toggle('open');window.shellSyncBackdrop&&shellSyncBackdrop()" aria-label="Menu">☰</button>
-      <div class="ws-title"><b>Ngũ hành tên</b><span>Ngũ hành từng chữ & cân bằng</span></div>
+      <div data-i18n="nguhanhten.ngu-hanh-ten-ngu-hanh-tung" class="ws-title"><b>Ngũ hành tên</b><span>Ngũ hành từng chữ & cân bằng</span></div>
       <div class="ws-actions">
-        <button class="btn" id="btnEdit" onclick="showForm()" style="display:none">Sửa</button>
-        <button class="btn mobile-only" onclick="Shell.openRail()">✦ Hỏi</button>
+        <button data-i18n="napam.sua" class="btn" id="btnEdit" onclick="showForm()" style="display:none">Sửa</button>
+        <button data-i18n="battu.hoi" class="btn mobile-only" onclick="Shell.openRail()">✦ Hỏi</button>
       </div>
     </div>
     <div class="ws-body">
@@ -110,15 +110,15 @@
         <img class="intro-avatar" src="/tool-avatars/ngu-hanh-ten.webp" alt="" onerror="this.remove()">
         <div class="intro-body">
           <div class="intro-text">
-            <div class="intro-t">Ngũ hành tên</div>
-            <div class="intro-d">Một cái tên gọi hằng ngày cũng mang ngũ hành riêng — hợp hay khắc với mệnh bạn là điều ít ai từng kiểm tra. Nhập họ tên, nhận điểm ngũ hành và kết luận rõ ràng, miễn phí.</div>
+            <div data-i18n="nguhanhten.ngu-hanh-ten" class="intro-t">Ngũ hành tên</div>
+            <div data-i18n="nguhanhten.mot-cai-ten-goi-hang-ngay" class="intro-d">Một cái tên gọi hằng ngày cũng mang ngũ hành riêng — hợp hay khắc với mệnh bạn là điều ít ai từng kiểm tra. Nhập họ tên, nhận điểm ngũ hành và kết luận rõ ràng, miễn phí.</div>
             <div id="introSrc"></div>
           </div>
         </div>
         <div class="hero-pills">
-          <div class="hero-pill"><span class="hp-ic" data-icon="pen-line"></span><span>Ngũ hành<br>từng chữ</span></div>
-          <div class="hero-pill"><span class="hp-ic" data-icon="bar-chart-3"></span><span>Cân bằng<br>ngũ hành</span></div>
-          <div class="hero-pill"><span class="hp-ic" data-icon="scale"></span><span>Điểm số<br>hợp – khắc</span></div>
+          <div class="hero-pill"><span class="hp-ic" data-icon="pen-line"></span><span data-i18n="nguhanhten.ngu-hanh-tung-chu">Ngũ hành<br>từng chữ</span></div>
+          <div class="hero-pill"><span class="hp-ic" data-icon="bar-chart-3"></span><span data-i18n="nguhanhten.can-bang-ngu-hanh">Cân bằng<br>ngũ hành</span></div>
+          <div class="hero-pill"><span class="hp-ic" data-icon="scale"></span><span data-i18n="nguhanhten.diem-so-hop-khac">Điểm số<br>hợp – khắc</span></div>
         </div>
       </div></div>
       <div class="ws-main-col">
@@ -126,25 +126,25 @@
            chỉ có 2 bước (khớp flow thật: form → kết quả). JS đổi bước ở
            `wsStepsSet` (cuối file), gọi tại calculate()/showForm(). -->
       <div class="ws-steps" id="wsSteps">
-        <div class="wss-step active"><span class="wss-n">1</span><span class="wss-l">Nhập thông tin</span></div>
-        <div class="wss-step"><span class="wss-n">2</span><span class="wss-l">Nhận kết quả</span></div>
+        <div data-i18n="battu.1-nhap-thong-tin" class="wss-step active"><span class="wss-n">1</span><span class="wss-l">Nhập thông tin</span></div>
+        <div data-i18n="ngaytot.2-nhan-ket-qua" class="wss-step"><span class="wss-n">2</span><span class="wss-l">Nhận kết quả</span></div>
       </div>
       <div class="form-card" id="birthPanel">
-        <div class="fc-head"><span class="fc-ic" data-icon="pen-line"></span><h2>Họ và tên đầy đủ</h2></div>
-        <p class="sub">Nhập họ tên đầy đủ, có thể chọn thêm ngũ hành bản mệnh. Nhận về biểu đồ cân bằng ngũ hành, điểm số và kết luận hợp hay khắc mệnh.</p>
+        <div class="fc-head"><span class="fc-ic" data-icon="pen-line"></span><h2 data-i18n="nguhanhten.ho-va-ten-day-du">Họ và tên đầy đủ</h2></div>
+        <p data-i18n="nguhanhten.nhap-ho-ten-day-du-co" class="sub">Nhập họ tên đầy đủ, có thể chọn thêm ngũ hành bản mệnh. Nhận về biểu đồ cân bằng ngũ hành, điểm số và kết luận hợp hay khắc mệnh.</p>
         <div class="frow" style="margin-bottom:4px">
-          <div class="fg" style="flex:1;min-width:200px"><label>Nhập đủ họ + tên, có dấu, cách nhau bằng dấu cách</label><input type="text" id="tenInput" placeholder="VD: Nguyễn Văn An" maxlength="60"></div>
-          <div class="fg" style="width:150px"><label>Ngũ hành bản mệnh (tùy chọn)</label>
+          <div class="fg" style="flex:1;min-width:200px"><label data-i18n="nguhanhten.nhap-du-ho-ten-co-dau">Nhập đủ họ + tên, có dấu, cách nhau bằng dấu cách</label><input data-i18n-attr="placeholder:nguhanhten.vd-nguyen-van-an" type="text" id="tenInput" placeholder="VD: Nguyễn Văn An" maxlength="60"></div>
+          <div class="fg" style="width:150px"><label data-i18n="nguhanhten.ngu-hanh-ban-menh-tuy-chon">Ngũ hành bản mệnh (tùy chọn)</label>
             <select id="menhInput">
-              <option value="">Không rõ / Bỏ qua</option>
-              <option value="Mộc">Mộc</option>
-              <option value="Hỏa">Hỏa</option>
-              <option value="Thổ">Thổ</option>
+              <option data-i18n="nguhanhten.khong-ro-bo-qua" value="">Không rõ / Bỏ qua</option>
+              <option data-i18n="nguhanhten.moc" value="Mộc">Mộc</option>
+              <option data-i18n="nguhanhten.hoa" value="Hỏa">Hỏa</option>
+              <option data-i18n="nguhanhten.tho" value="Thổ">Thổ</option>
               <option value="Kim">Kim</option>
-              <option value="Thủy">Thủy</option>
+              <option data-i18n="nguhanhten.thuy" value="Thủy">Thủy</option>
             </select>
           </div>
-          <button class="btn-go" id="btnGo" onclick="calculate()">
+          <button data-i18n="nguhanhten.tra-ngu-hanh-ten-mien-phi" class="btn-go" id="btnGo" onclick="calculate()">
             <span class="bg-label"><span class="ic" data-icon="pen-line"></span><b>Tra ngũ hành tên →</b></span>
             <small>Miễn phí</small>
           </button>
@@ -153,7 +153,7 @@
           <div class="cb-l">
             <span class="cb-ic" data-icon="wallet"></span>
             <div>
-              <div class="cb-title">Chi phí sử dụng</div>
+              <div data-i18n="battu.chi-phi-su-dung" class="cb-title">Chi phí sử dụng</div>
               <div class="cb-amt" data-tvp-price-label="ngu-hanh-ten">…</div>
             </div>
           </div>
@@ -163,9 +163,9 @@
       </div>
       <div class="ws-side-col">
       <div class="ws-promo">
-        <div class="wsp-eyebrow"><span class="wsp-ic" data-icon="book-open"></span><span>Giới thiệu</span></div>
-        <div class="wsp-title">Ngũ hành tên</div>
-        <p class="wsp-desc">Ngũ Hành (Kim, Mộc, Thủy, Hỏa, Thổ) là học thuyết cổ Trung Hoa mô tả quy luật tương sinh, tương khắc giữa năm nguyên tố cơ bản, làm nền tảng cho nhiều môn mệnh lý phương Đông. Mỗi âm, chữ hay con số đều có thể quy về một hành để đối chiếu hợp – khắc với bản mệnh.</p>
+        <div data-i18n="battu.gioi-thieu" class="wsp-eyebrow"><span class="wsp-ic" data-icon="book-open"></span><span>Giới thiệu</span></div>
+        <div data-i18n="nguhanhten.ngu-hanh-ten" class="wsp-title">Ngũ hành tên</div>
+        <p data-i18n="nguhanhten.ngu-hanh-kim-moc-thuy-hoa" class="wsp-desc">Ngũ Hành (Kim, Mộc, Thủy, Hỏa, Thổ) là học thuyết cổ Trung Hoa mô tả quy luật tương sinh, tương khắc giữa năm nguyên tố cơ bản, làm nền tảng cho nhiều môn mệnh lý phương Đông. Mỗi âm, chữ hay con số đều có thể quy về một hành để đối chiếu hợp – khắc với bản mệnh.</p>
       </div>
       <div id="shellRecent"></div>
       </div>
@@ -177,17 +177,17 @@
           <div class="res-block-body">
             <div class="syl-cards" id="sylCards"></div>
             <div id="unknownSection" class="unk-wrap" style="display:none">
-              <div style="font-size:12px;font-weight:600;color:#444;margin-bottom:10px">⚠ Chưa tìm thấy chữ Hán cho các chữ dưới — nhập số nét thủ công (tra tại <a href="https://hanzii.net" target="_blank" style="color:var(--tx-blue)">hanzii.net</a>):</div>
+              <div data-i18n="nguhanhten.chua-tim-thay-chu-han-cho" style="font-size:12px;font-weight:600;color:#444;margin-bottom:10px">⚠ Chưa tìm thấy chữ Hán cho các chữ dưới — nhập số nét thủ công (tra tại <a href="https://hanzii.net" target="_blank" style="color:var(--tx-blue)">hanzii.net</a>):</div>
               <div id="unknownInputs" style="display:flex;gap:16px;flex-wrap:wrap;align-items:flex-end"></div>
             </div>
-            <div class="uphead">Cân Bằng Ngũ Hành</div>
+            <div data-i18n="nguhanhten.can-bang-ngu-hanh-h4ql" class="uphead">Cân Bằng Ngũ Hành</div>
             <div class="nh-balance" id="nhBalance"></div>
             <div class="nh-legend" id="nhLegend"></div>
             <div id="menhResult"></div>
             <div id="scoreResult"></div>
           </div>
         </div>
-        <div class="ask" data-ask="Phân tích ngũ hành từng chữ trong tên tôi có hợp mệnh không, bồi hay khắc, và nên chỉnh thế nào?">✦ Hỏi Thầy luận sâu ngũ hành tên</div>
+        <div data-i18n="nguhanhten.hoi-thay-luan-sau-ngu-hanh" class="ask" data-ask="Phân tích ngũ hành từng chữ trong tên tôi có hợp mệnh không, bồi hay khắc, và nên chỉnh thế nào?">✦ Hỏi Thầy luận sâu ngũ hành tên</div>
       </div>
     </div>
   </main>

@@ -3,8 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Xác Định Giờ Sinh — Tử Vi Minh Bảo</title>
-<meta name="description" content="Không nhớ giờ sinh? Lập cả 12 lá số khả nghi rồi thu hẹp bằng vài câu hỏi về sức khoẻ và các giai đoạn đã sống qua.">
+<title data-i18n="giosinh.xac-dinh-gio-sinh-tu-vi">Xác Định Giờ Sinh — Tử Vi Minh Bảo</title>
+<meta data-i18n-attr="content:giosinh.khong-nho-gio-sinh-lap-ca" name="description" content="Không nhớ giờ sinh? Lập cả 12 lá số khả nghi rồi thu hẹp bằng vài câu hỏi về sức khoẻ và các giai đoạn đã sống qua.">
 <link rel="icon" type="image/webp" href="/seal.webp">
 <link rel="preload" href="/fonts/noto-serif-latin-400.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="/fonts/noto-serif-vietnamese-400.woff2" as="font" type="font/woff2" crossorigin>
@@ -65,11 +65,11 @@
   <main class="ws" id="ws">
     <div class="ws-top">
       <button class="btn mobile-only" onclick="document.getElementById('shell-sidebar').classList.toggle('open');window.shellSyncBackdrop&&shellSyncBackdrop()" aria-label="Menu">☰</button>
-      <div class="ws-title"><b>Xác Định Giờ Sinh</b><span>Không nhớ giờ sinh thì bắt đầu từ đây</span></div>
+      <div data-i18n="giosinh.xac-dinh-gio-sinh-khong-nho" class="ws-title"><b>Xác Định Giờ Sinh</b><span>Không nhớ giờ sinh thì bắt đầu từ đây</span></div>
       <!-- `.ws-actions` là chỗ shell CHÈN nút Chia sẻ/PDF. `check:share` canh. -->
       <div class="ws-actions">
-        <button class="btn" id="btnEdit" onclick="_reset()" style="display:none">Làm lại</button>
-        <button class="btn mobile-only" onclick="Shell.openRail()">✦ Hỏi</button>
+        <button data-i18n="giosinh.lam-lai" class="btn" id="btnEdit" onclick="_reset()" style="display:none">Làm lại</button>
+        <button data-i18n="battu.hoi" class="btn mobile-only" onclick="Shell.openRail()">✦ Hỏi</button>
       </div>
     </div>
     <div class="ws-body">
@@ -83,15 +83,15 @@
         <img class="intro-avatar" src="/tool-avatars/gio-sinh.webp" alt="" onerror="this.remove()">
         <div class="intro-body">
           <div class="intro-text">
-            <div class="intro-t">Xác Định Giờ Sinh</div>
-            <div class="intro-d">Không nhớ chính xác giờ sinh khiến cả lá số Tử Vi dễ sai lệch ngay từ gốc. Trả lời vài câu hỏi để hệ thống thu hẹp dần trong 12 khung giờ, tìm ra giờ sinh gần đúng nhất.</div>
+            <div data-i18n="giosinh.xac-dinh-gio-sinh" class="intro-t">Xác Định Giờ Sinh</div>
+            <div data-i18n="giosinh.khong-nho-chinh-xac-gio-sinh" class="intro-d">Không nhớ chính xác giờ sinh khiến cả lá số Tử Vi dễ sai lệch ngay từ gốc. Trả lời vài câu hỏi để hệ thống thu hẹp dần trong 12 khung giờ, tìm ra giờ sinh gần đúng nhất.</div>
             <div id="introSrc"></div>
           </div>
         </div>
         <div class="hero-pills">
-          <div class="hero-pill"><span class="hp-ic" data-icon="hourglass"></span><span>12 lá số<br>khả nghi</span></div>
-          <div class="hero-pill"><span class="hp-ic" data-icon="clock"></span><span>Khảo sát<br>thu hẹp</span></div>
-          <div class="hero-pill"><span class="hp-ic" data-icon="bar-chart-3"></span><span>Xếp hạng<br>độ khớp</span></div>
+          <div class="hero-pill"><span class="hp-ic" data-icon="hourglass"></span><span data-i18n="giosinh.12-la-so-kha-nghi">12 lá số<br>khả nghi</span></div>
+          <div class="hero-pill"><span class="hp-ic" data-icon="clock"></span><span data-i18n="giosinh.khao-sat-thu-hep">Khảo sát<br>thu hẹp</span></div>
+          <div class="hero-pill"><span class="hp-ic" data-icon="bar-chart-3"></span><span data-i18n="giosinh.xep-hang-do-khop">Xếp hạng<br>độ khớp</span></div>
         </div>
       </div></div>
       <div class="ws-main-col">
@@ -99,45 +99,45 @@
            chuyển bước ở `wsStepsSet` (cuối file), gọi tại đúng chỗ trạng thái
            đã đổi trong code cũ (start/buildLock/runSurvey/_reset). -->
       <div class="ws-steps" id="gsSteps">
-        <div class="wss-step active"><span class="wss-n">1</span><span class="wss-l">Nhập thông tin</span></div>
-        <div class="wss-step"><span class="wss-n">2</span><span class="wss-l">Xem 12 giờ khả nghi</span></div>
-        <div class="wss-step"><span class="wss-n">3</span><span class="wss-l">Thanh toán</span></div>
-        <div class="wss-step"><span class="wss-n">4</span><span class="wss-l">Nhận kết quả</span></div>
+        <div data-i18n="battu.1-nhap-thong-tin" class="wss-step active"><span class="wss-n">1</span><span class="wss-l">Nhập thông tin</span></div>
+        <div data-i18n="giosinh.2-xem-12-gio-kha-nghi" class="wss-step"><span class="wss-n">2</span><span class="wss-l">Xem 12 giờ khả nghi</span></div>
+        <div data-i18n="battu.3-thanh-toan" class="wss-step"><span class="wss-n">3</span><span class="wss-l">Thanh toán</span></div>
+        <div data-i18n="battu.4-nhan-ket-qua" class="wss-step"><span class="wss-n">4</span><span class="wss-l">Nhận kết quả</span></div>
       </div>
       <div id="birthPanel">
         <div class="form-card">
-          <div class="fc-head"><span class="fc-ic" data-icon="hourglass"></span><h2>Xác Định Giờ Sinh</h2></div>
-          <p class="sub">Nhập <b>ngày tháng năm sinh</b> — giờ sinh chính là thứ cần tìm. Hệ thống lập <b>12 lá số khả nghi</b>, thu hẹp qua khảo sát ngắn, rồi xếp hạng theo độ khớp.</p>
+          <div class="fc-head"><span class="fc-ic" data-icon="hourglass"></span><h2 data-i18n="giosinh.xac-dinh-gio-sinh">Xác Định Giờ Sinh</h2></div>
+          <p data-i18n="giosinh.nhap-ngay-thang-nam-sinh-gio" class="sub">Nhập <b>ngày tháng năm sinh</b> — giờ sinh chính là thứ cần tìm. Hệ thống lập <b>12 lá số khả nghi</b>, thu hẹp qua khảo sát ngắn, rồi xếp hạng theo độ khớp.</p>
           <div class="frow">
-            <div class="fg"><label for="gs-ngay">Ngày</label><select id="gs-ngay"></select></div>
-            <div class="fg"><label for="gs-thang">Tháng</label><select id="gs-thang"></select></div>
-            <div class="fg"><label for="gs-nam">Năm</label><input type="number" id="gs-nam" placeholder="1984" min="1900" max="2030"></div>
-            <div class="fg"><label for="gs-lich">Loại lịch</label><select id="gs-lich"><option value="duong">Dương lịch</option><option value="am">Âm lịch</option></select></div>
-            <div class="fg"><label for="gs-gt">Giới tính</label><select id="gs-gt"><option value="nam">Nam</option><option value="nu">Nữ</option></select></div>
+            <div class="fg"><label data-i18n="giosinh.ngay" for="gs-ngay">Ngày</label><select id="gs-ngay"></select></div>
+            <div class="fg"><label data-i18n="giosinh.thang" for="gs-thang">Tháng</label><select id="gs-thang"></select></div>
+            <div class="fg"><label data-i18n="giosinh.nam" for="gs-nam">Năm</label><input type="number" id="gs-nam" placeholder="1984" min="1900" max="2030"></div>
+            <div class="fg"><label data-i18n="giosinh.loai-lich" for="gs-lich">Loại lịch</label><select id="gs-lich"><option data-i18n="giosinh.duong-lich" value="duong">Dương lịch</option><option data-i18n="giosinh.am-lich" value="am">Âm lịch</option></select></div>
+            <div class="fg"><label data-i18n="giosinh.gioi-tinh" for="gs-gt">Giới tính</label><select id="gs-gt"><option data-i18n="giosinh.nam-gioi" value="nam">Nam</option><option data-i18n="laso.nu" value="nu">Nữ</option></select></div>
           </div>
           <div class="cost-box">
             <div class="cb-l">
               <span class="cb-ic" data-icon="wallet"></span>
               <div>
-                <div class="cb-title">Chi phí sử dụng</div>
-                <div class="cb-amt">Miễn phí</div>
+                <div data-i18n="battu.chi-phi-su-dung" class="cb-title">Chi phí sử dụng</div>
+                <div data-i18n="battu.mien-phi" class="cb-amt">Miễn phí</div>
               </div>
             </div>
           </div>
           <button class="btn-go" id="btnGo" onclick="start()">
-            <span class="bg-label"><span class="ic" data-icon="hourglass"></span><b id="btnGoLabel">Xem 12 giờ khả nghi</b></span>
-            <small>Miễn phí</small>
+            <span class="bg-label"><span class="ic" data-icon="hourglass"></span><b id="btnGoLabel" data-i18n="giosinh.xem-12-gio-kha-nghi">Xem 12 giờ khả nghi</b></span>
+            <small data-i18n="battu.mien-phi">Miễn phí</small>
           </button>
           <div class="err" id="error-msg"></div>
-          <p class="sub" style="margin:12px 0 0">Bước xem 12 lá số khả nghi <b>miễn phí</b>. Khảo sát thu hẹp và bảng xếp hạng mới tính Lượng.</p>
+          <p data-i18n="giosinh.buoc-xem-12-la-so-kha" class="sub" style="margin:12px 0 0">Bước xem 12 lá số khả nghi <b>miễn phí</b>. Khảo sát thu hẹp và bảng xếp hạng mới tính Lượng.</p>
         </div>
       </div>
       </div>
       <div class="ws-side-col">
       <div class="ws-promo">
-        <div class="wsp-eyebrow"><span class="wsp-ic" data-icon="book-open"></span><span>Giới thiệu</span></div>
-        <div class="wsp-title">Xác Định Giờ Sinh</div>
-        <p class="wsp-desc">Tử Vi Đẩu Số là một môn mệnh lý cổ truyền Trung Hoa, lập lá số theo giờ sinh âm lịch với 12 cung và hệ thống chính tinh, phụ tinh chiếu mệnh. Môn học được hệ thống hoá qua nhiều đời, phổ biến tại Việt Nam qua bản dịch <i>Tử Vi Đẩu Số Tân Biên</i> của Vân Đằng Thái Thứ Lang.</p>
+        <div data-i18n="battu.gioi-thieu" class="wsp-eyebrow"><span class="wsp-ic" data-icon="book-open"></span><span>Giới thiệu</span></div>
+        <div data-i18n="giosinh.xac-dinh-gio-sinh" class="wsp-title">Xác Định Giờ Sinh</div>
+        <p data-i18n="luangiai.tu-vi-dau-so-la-mot" class="wsp-desc">Tử Vi Đẩu Số là một môn mệnh lý cổ truyền Trung Hoa, lập lá số theo giờ sinh âm lịch với 12 cung và hệ thống chính tinh, phụ tinh chiếu mệnh. Môn học được hệ thống hoá qua nhiều đời, phổ biến tại Việt Nam qua bản dịch <i>Tử Vi Đẩu Số Tân Biên</i> của Vân Đằng Thái Thứ Lang.</p>
       </div>
       <div id="shellRecent"></div>
       </div>
@@ -148,14 +148,14 @@
         <!-- Tầng MIỄN PHÍ: bày 12 giả thuyết -->
         <div id="freeBlock" style="display:none">
           <div class="sec">
-            <div class="sec-h">Cùng một ngày sinh — 12 lá số hoàn toàn khác nhau</div>
+            <div data-i18n="giosinh.cung-mot-ngay-sinh-12-la" class="sec-h">Cùng một ngày sinh — 12 lá số hoàn toàn khác nhau</div>
             <div class="sec-b">
-              <p class="note" style="margin-bottom:12px">Giờ sinh đổi thì cung Mệnh đổi, cục đổi, kéo theo toàn bộ vị trí sao đổi. Đây là 12 khả năng của <b id="freeLine"></b> — chỉ một trong số này là lá số thật của anh/chị.</p>
+              <p data-i18n="giosinh.gio-sinh-doi-thi-cung-menh" class="note" style="margin-bottom:12px">Giờ sinh đổi thì cung Mệnh đổi, cục đổi, kéo theo toàn bộ vị trí sao đổi. Đây là 12 khả năng của <b id="freeLine"></b> — chỉ một trong số này là lá số thật của anh/chị.</p>
               <div class="grid12" id="grid12"></div>
             </div>
           </div>
           <div class="sec">
-            <div class="sec-h">Bước tiếp theo — thu hẹp bằng khảo sát</div>
+            <div data-i18n="giosinh.buoc-tiep-theo-thu-hep-bang" class="sec-h">Bước tiếp theo — thu hẹp bằng khảo sát</div>
             <div class="sec-b">
               <p class="note" id="surveyPitch"></p>
               <!-- Khối hook (1 fact) — hé ĐÚNG 1 trong 12 ứng viên (ungVien[0])
@@ -170,7 +170,7 @@
 
         <!-- Tầng TRẢ TIỀN: khảo sát -->
         <div id="surveyBlock" class="sec" style="display:none">
-          <div class="sec-h">Khảo sát thu hẹp</div>
+          <div data-i18n="giosinh.khao-sat-thu-hep-ua1r" class="sec-h">Khảo sát thu hẹp</div>
           <div class="sec-b qwrap">
             <div class="qprog" id="qprog"></div>
             <div class="qtitle" id="qtitle"></div>
@@ -182,7 +182,7 @@
         <!-- Tầng TRẢ TIỀN: kết quả -->
         <div id="resultBlock" style="display:none">
           <div class="sec">
-            <div class="sec-h">Giờ sinh khả năng cao nhất</div>
+            <div data-i18n="giosinh.gio-sinh-kha-nang-cao-nhat" class="sec-h">Giờ sinh khả năng cao nhất</div>
             <div class="sec-b">
               <p style="margin-bottom:12px"><span class="badge" id="tcBadge"></span> <span class="note" id="tcNote"></span></p>
               <div id="rankHost"></div>
@@ -195,33 +195,33 @@
                nhớ và gõ lại tay ở mọi tool khác — tức dữ kiện vừa mua bị vứt đi
                ngay tại chỗ. -->
           <div class="sec" id="chotBlock">
-            <div class="sec-h">Chốt giờ và dùng tiếp</div>
+            <div data-i18n="giosinh.chot-gio-va-dung-tiep" class="sec-h">Chốt giờ và dùng tiếp</div>
             <div class="sec-b">
-              <p class="note" style="margin-bottom:11px">Chọn giờ anh/chị muốn dùng. Máy ghi vào <b>Sổ lá số</b> của tài khoản, nên mọi công cụ khác điền sẵn — khỏi gõ lại và khỏi nhớ.</p>
+              <p data-i18n="giosinh.chon-gio-anh-chi-muon-dung" class="note" style="margin-bottom:11px">Chọn giờ anh/chị muốn dùng. Máy ghi vào <b>Sổ lá số</b> của tài khoản, nên mọi công cụ khác điền sẵn — khỏi gõ lại và khỏi nhớ.</p>
               <div class="frow" id="chotRow">
-                <div class="fg"><label for="gs-chot">Giờ muốn dùng</label><select id="gs-chot"></select></div>
-                <button class="btn" id="btnLuu" onclick="luuVaoSo()">Lưu vào sổ lá số</button>
-                <button class="btn-go" id="btnLuan" onclick="sangLuanGiai()">Luận giải lá số này →</button>
+                <div class="fg"><label data-i18n="giosinh.gio-muon-dung" for="gs-chot">Giờ muốn dùng</label><select id="gs-chot"></select></div>
+                <button data-i18n="giosinh.luu-vao-so-la-so" class="btn" id="btnLuu" onclick="luuVaoSo()">Lưu vào sổ lá số</button>
+                <button data-i18n="giosinh.luan-giai-la-so-nay" class="btn-go" id="btnLuan" onclick="sangLuanGiai()">Luận giải lá số này →</button>
               </div>
               <p class="note" id="chotMsg" style="margin-top:2px"></p>
-              <p class="note" id="chotAm" style="margin-top:2px;display:none">Anh/chị nhập ngày sinh theo <b>âm lịch</b>. Các công cụ khác nhận <b>dương lịch</b>, và hệ thống chưa có đường đổi ngược âm → dương, nên chưa bàn giao tự động được. Giờ vừa chốt ở trên vẫn dùng được — nhập tay khi mở công cụ khác.</p>
+              <p data-i18n="giosinh.anh-chi-nhap-ngay-sinh-theo" class="note" id="chotAm" style="margin-top:2px;display:none">Anh/chị nhập ngày sinh theo <b>âm lịch</b>. Các công cụ khác nhận <b>dương lịch</b>, và hệ thống chưa có đường đổi ngược âm → dương, nên chưa bàn giao tự động được. Giờ vừa chốt ở trên vẫn dùng được — nhập tay khi mở công cụ khác.</p>
             </div>
           </div>
 
           <div class="sec">
-            <div class="sec-h">Vì sao không phải một con số chắc nịch</div>
+            <div data-i18n="giosinh.vi-sao-khong-phai-mot-con" class="sec-h">Vì sao không phải một con số chắc nịch</div>
             <div class="sec-b">
-              <p class="note">Cách này thu hẹp bằng mức khớp giữa câu trả lời của anh/chị và từng lá số, nên nó <b>xếp hạng khả năng</b> chứ không chứng minh được giờ nào đúng. Với người trả lời sát thực tế, giờ đúng nằm trong 3 giờ đầu ở phần lớn trường hợp — nhưng giờ đứng đầu thì không chắc bằng. Vì thế trang này đưa cả danh sách kèm bằng chứng để anh/chị tự soát, thay vì đưa một con số nghe cho chắc.</p>
-              <p class="note" style="margin-top:10px">Cách kiểm chắc nhất: lập lá số cho <b>hai giờ đầu bảng</b>, đọc phần vận hạn 5 năm gần đây, giờ nào tả đúng hơn thì lấy giờ đó.</p>
+              <p data-i18n="giosinh.cach-nay-thu-hep-bang-muc" class="note">Cách này thu hẹp bằng mức khớp giữa câu trả lời của anh/chị và từng lá số, nên nó <b>xếp hạng khả năng</b> chứ không chứng minh được giờ nào đúng. Với người trả lời sát thực tế, giờ đúng nằm trong 3 giờ đầu ở phần lớn trường hợp — nhưng giờ đứng đầu thì không chắc bằng. Vì thế trang này đưa cả danh sách kèm bằng chứng để anh/chị tự soát, thay vì đưa một con số nghe cho chắc.</p>
+              <p data-i18n="giosinh.cach-kiem-chac-nhat-lap-la" class="note" style="margin-top:10px">Cách kiểm chắc nhất: lập lá số cho <b>hai giờ đầu bảng</b>, đọc phần vận hạn 5 năm gần đây, giờ nào tả đúng hơn thì lấy giờ đó.</p>
             </div>
           </div>
           <div class="sec">
-            <div class="sec-h">Anh/chị vốn đã biết chắc giờ sinh?</div>
+            <div data-i18n="giosinh.anh-chi-von-da-biet-chac" class="sec-h">Anh/chị vốn đã biết chắc giờ sinh?</div>
             <div class="sec-b">
-              <p class="note" style="margin-bottom:10px">Nếu có giấy khai sinh hoặc người nhà nhớ chắc, cho máy biết giờ đúng — đối chiếu với kết quả vừa rồi giúp chúng tôi hiệu chỉnh phương pháp. Không bắt buộc, và không ảnh hưởng gì tới bản đọc của anh/chị.</p>
+              <p data-i18n="giosinh.neu-co-giay-khai-sinh-hoac" class="note" style="margin-bottom:10px">Nếu có giấy khai sinh hoặc người nhà nhớ chắc, cho máy biết giờ đúng — đối chiếu với kết quả vừa rồi giúp chúng tôi hiệu chỉnh phương pháp. Không bắt buộc, và không ảnh hưởng gì tới bản đọc của anh/chị.</p>
               <div class="frow" style="margin:0">
-                <div class="fg"><label for="gs-that">Giờ đúng (nếu biết)</label><select id="gs-that"></select></div>
-                <button class="btn" id="btnGui" onclick="guiDoiChieu()">Gửi đối chiếu</button>
+                <div class="fg"><label data-i18n="giosinh.gio-dung-neu-biet" for="gs-that">Giờ đúng (nếu biết)</label><select id="gs-that"></select></div>
+                <button data-i18n="giosinh.gui-doi-chieu" class="btn" id="btnGui" onclick="guiDoiChieu()">Gửi đối chiếu</button>
               </div>
               <p class="note" id="gtMsg" style="margin-top:8px"></p>
             </div>
@@ -253,6 +253,7 @@ window.SHELL_INTRO={key:'gio-sinh'};</script>
 <script src="/nav.js?v=49" data-icons-only></script>
 <script src="/shell.js?v=151"></script>
 <script src="/tools-shared/shell-soft-nav.js?v=49"></script>
+<script src="/tools-shared/glossary.js?v=4"></script>
 <script>
 var TOOL_ID='gio-sinh'; // var: chạy lại được qua soft-nav — xem docs/luat/spa-nav.md
 var _birth=null,_answers=[],_pub=null,_lastResult=null,_slug='';
@@ -284,6 +285,11 @@ function _fillVndSlots(host,product){
   els.forEach(function(el){ el.textContent = lbl || ''; });
 }
 
+// Tên sao của engine ở chỗ VẼ → glossary (khoá tính toán giữ chữ Việt); rỗng = "vô chính diệu".
+function _gsStars(a){
+  return (a&&a.length)?a.map(function(s){return _tvmbG(['chinh','sao'],s);}).join(' + '):_tvmbT('js.giosinh.vo-chinh-dieu','vô chính diệu');
+}
+
 // ── Dựng ô nhập ─────────────────────────────────────────────
 (function initForm(){
   const d=document.getElementById('gs-ngay'),m=document.getElementById('gs-thang'),t=document.getElementById('gs-that');
@@ -291,8 +297,8 @@ function _fillVndSlots(host,product){
   for(let i=1;i<=12;i++) m.insertAdjacentHTML('beforeend','<option value="'+i+'">'+i+'</option>');
   const CHI=['Tý','Sửu','Dần','Mão','Thìn','Tỵ','Ngọ','Mùi','Thân','Dậu','Tuất','Hợi'];
   const KH=['23–01h','01–03h','03–05h','05–07h','07–09h','09–11h','11–13h','13–15h','15–17h','17–19h','19–21h','21–23h'];
-  t.insertAdjacentHTML('beforeend','<option value="">— chưa biết —</option>');
-  CHI.forEach((c,i)=>t.insertAdjacentHTML('beforeend','<option value="'+i+'">Giờ '+c+' ('+KH[i]+')</option>'));
+  t.insertAdjacentHTML('beforeend','<option value="">'+_tvmbT('js.giosinh.chua-biet','— chưa biết —')+'</option>');
+  CHI.forEach((c,i)=>t.insertAdjacentHTML('beforeend','<option value="'+i+'">'+_tvmbT('js.giosinh.gio-chi-khung','Giờ {chi} ({khung})',{chi:_tvmbG('chi',c),khung:KH[i]})+'</option>'));
 })();
 
 // ── Quay lại giữa chừng lượt nạp Lượng (QR tại chỗ hoặc /topup.html) ────
@@ -344,7 +350,7 @@ function clearErr(){document.getElementById('error-msg').classList.remove('activ
 
 function readBirth(){
   const y=parseInt(document.getElementById('gs-nam').value,10);
-  if(!y||y<1900||y>2030){showErr('Nhập năm sinh trong khoảng 1900–2030.');return null;}
+  if(!y||y<1900||y>2030){showErr(_tvmbT('js.giosinh.nhap-nam-sinh-trong-khoang-1900','Nhập năm sinh trong khoảng 1900–2030.'));return null;}
   return {day:+document.getElementById('gs-ngay').value,month:+document.getElementById('gs-thang').value,year:y,
     gender:document.getElementById('gs-gt').value,isLunar:document.getElementById('gs-lich').value==='am',hourBranch:0};
 }
@@ -369,21 +375,21 @@ async function start(){
   // Slug MANG ngày sinh: đổi ngày sinh là một lượt trả tiền mới, không dùng
   // lại lượt cũ. Tiền tố phải ĐÚNG `gio-sinh` — server chốt lại chỗ này.
   _slug=TuviPaywall.generateToolSlug(TOOL_ID+'-'+b.day+b.month+b.year+b.gender+(b.isLunar?'a':'d'));
-  const btn=document.getElementById('btnGo'); btn.disabled=true; const _btnGoLb=document.getElementById('btnGoLabel'); if(_btnGoLb) _btnGoLb.textContent='Đang lập 12 lá số…';
+  const btn=document.getElementById('btnGo'); btn.disabled=true; const _btnGoLb=document.getElementById('btnGoLabel'); if(_btnGoLb) _btnGoLb.textContent=_tvmbT('js.giosinh.dang-lap-12-la-so','Đang lập 12 lá số…');
   try{
     const r=await fetch('/api/gio-sinh?preview=1',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({birth:b})});
     const j=await r.json();
-    if(!r.ok||!j.success) throw new Error(j.error||'Không lập được lá số.');
+    if(!r.ok||!j.success) throw new Error(j.error||_tvmbT('js.giosinh.khong-lap-duoc-la-so','Không lập được lá số.'));
     renderFree(j);
     if(window.SHELL_INTRO) Shell.dismissIntro(window.SHELL_INTRO.key);
     document.getElementById('birthPanel').style.display='none';
     document.getElementById('resPanel').style.display='';
     document.getElementById('btnEdit').style.display='';
-    Shell.setContext&&Shell.setContext({birth:b,label:'Xác định giờ sinh',
-      greeting:'Anh/chị chưa chốt được giờ sinh — hỏi tôi về cách phân biệt các giờ khả nghi cũng được.',
-      chips:['Vì sao đổi giờ sinh lại đổi cả lá số?','Cung Tật Ách nói lên điều gì?','Không nhớ giờ sinh thì xem tử vi được không?']});
-  }catch(e){showErr(e.message||'Có lỗi xảy ra.');}
-  finally{btn.disabled=false; const _btnGoLb2=document.getElementById('btnGoLabel'); if(_btnGoLb2) _btnGoLb2.textContent='Xem 12 giờ khả nghi';}
+    Shell.setContext&&Shell.setContext({birth:b,label:_tvmbT('js.giosinh.xac-dinh-gio-sinh','Xác định giờ sinh'),
+      greeting:_tvmbT('js.giosinh.anh-chi-chua-chot-duoc-gio','Anh/chị chưa chốt được giờ sinh — hỏi tôi về cách phân biệt các giờ khả nghi cũng được.'),
+      chips:[_tvmbT('js.giosinh.chip-vi-sao-doi-gio','Vì sao đổi giờ sinh lại đổi cả lá số?'),_tvmbT('js.giosinh.chip-cung-tat-ach','Cung Tật Ách nói lên điều gì?'),_tvmbT('js.giosinh.chip-khong-nho-gio','Không nhớ giờ sinh thì xem tử vi được không?')]});
+  }catch(e){showErr(e.message||_tvmbT('js.giosinh.co-loi-xay-ra','Có lỗi xảy ra.'));}
+  finally{btn.disabled=false; const _btnGoLb2=document.getElementById('btnGoLabel'); if(_btnGoLb2) _btnGoLb2.textContent=_tvmbT('js.giosinh.xem-12-gio-kha-nghi','Xem 12 giờ khả nghi');}
 }
 
 var _lastPreview=null;
@@ -391,9 +397,9 @@ var _lastPreview=null;
 function renderFree(j){
   _lastPreview=j;
   document.getElementById('freeLine').textContent =
-    _birth.day+'/'+_birth.month+'/'+_birth.year+(_birth.isLunar?' (âm lịch)':' (dương lịch)')+' · '+(_birth.gender==='nam'?'Nam':'Nữ');
+    _birth.day+'/'+_birth.month+'/'+_birth.year+(_birth.isLunar?_tvmbT('js.giosinh.am-lich',' (âm lịch)'):_tvmbT('js.giosinh.duong-lich',' (dương lịch)'))+' · '+(_birth.gender==='nam'?_tvmbT('js.shellui.nam','Nam'):_tvmbT('js.shellui.nu','Nữ'));
   document.getElementById('surveyPitch').innerHTML =
-    'Với ngày sinh này máy dựng được <b>'+esc(j.soCauHoi)+' câu hỏi</b> riêng — đáp án là các nhóm giờ có dấu hiệu khác nhau của <b>chính ngày này</b>, nên mỗi người một bộ câu khác nhau. Trả lời xong sẽ ra <b>2–3 giờ khả năng cao nhất kèm bằng chứng từng câu</b>.';
+    _tvmbT('js.giosinh.survey-pitch','Với ngày sinh này máy dựng được <b>{n} câu hỏi</b> riêng — đáp án là các nhóm giờ có dấu hiệu khác nhau của <b>chính ngày này</b>, nên mỗi người một bộ câu khác nhau. Trả lời xong sẽ ra <b>2–3 giờ khả năng cao nhất kèm bằng chứng từng câu</b>.',{n:esc(j.soCauHoi)});
   document.getElementById('freeBlock').style.display='';
   wsStepsSet(2); // Xem 12 giờ khả nghi — bước tính thử miễn phí vừa xong
   mountHook(j);
@@ -423,9 +429,9 @@ function mountHook(j){
 
 function _renderGrid(j){
   document.getElementById('grid12').innerHTML = j.ungVien.map(u=>
-    '<div class="cand"><b>Giờ '+esc(u.chi)+'</b> <span class="k">'+esc(u.khung)+'</span>'+
-    '<div class="s"><span class="k">Mệnh:</span> '+esc(u.menhStars.join(' + ')||'vô chính diệu')+
-    '<br><span class="k">Tật Ách:</span> '+esc(u.tatStars.join(' + ')||'vô chính diệu')+'</div></div>').join('');
+    '<div class="cand"><b>'+_tvmbT('js.giosinh.gio-chi','Giờ {chi}',{chi:esc(_tvmbG('chi',u.chi))})+'</b> <span class="k">'+esc(u.khung)+'</span>'+
+    '<div class="s"><span class="k">'+_tvmbT('js.giosinh.menh-colon','Mệnh:')+'</span> '+esc(_gsStars(u.menhStars))+
+    '<br><span class="k">'+_tvmbT('js.giosinh.tat-ach-colon','Tật Ách:')+'</span> '+esc(_gsStars(u.tatStars))+'</div></div>').join('');
   document.getElementById('grid12').style.display='';
 }
 
@@ -441,14 +447,14 @@ function buildLock(){
   wsStepsSet(3); // Thanh toán — tường đã dựng, chờ mở khoá
   const host=document.getElementById('lockHost');
   if(!window.TuviPaywall||!TuviPaywall.lockPreview){
-    host.innerHTML='<p class="note">Chưa đọc được bảng giá — tải lại trang giúp tôi.</p>';return;
+    host.innerHTML='<p class="note">'+_tvmbT('js.giosinh.chua-doc-duoc-bang-gia','Chưa đọc được bảng giá — tải lại trang giúp tôi.')+'</p>';return;
   }
   // Lưu NGAY khi vừa tính thử xong — không đợi biết trước có hết Lượng hay
   // không, xem `_gsSaveResume`.
   _gsSaveResume();
   if(_daDangNhap()){
     if(_lastPreview) _renderGrid(_lastPreview);
-    host.innerHTML='<button class="btn-go" id="btnKhaoSat"><span class="bg-label"><span class="ic" data-icon="clock"></span><b>Bắt đầu khảo sát thu hẹp →</b></span><small>Tốn <span class="vnd" data-tvp-price-vnd="'+TOOL_ID+'"></span> <span class="cb-sub">(<span data-tvp-price="'+TOOL_ID+'">…</span> Lượng)</span></small></button>';
+    host.innerHTML='<button class="btn-go" id="btnKhaoSat"><span class="bg-label"><span class="ic" data-icon="clock"></span><b>'+_tvmbT('js.giosinh.bat-dau-khao-sat','Bắt đầu khảo sát thu hẹp →')+'</b></span><small>'+_tvmbT('js.giosinh.ton','Tốn')+' <span class="vnd" data-tvp-price-vnd="'+TOOL_ID+'"></span> <span class="cb-sub">(<span data-tvp-price="'+TOOL_ID+'">…</span> '+_tvmbT('js.giosinh.luong','Lượng')+')</span></small></button>';
     TuviPaywall.fillPriceSlots(host).then(function(){ _fillVndSlots(host,TOOL_ID); });
     const runUnlock=function(){return runSurvey();};
     document.getElementById('btnKhaoSat').addEventListener('click',function(){
@@ -464,9 +470,9 @@ function buildLock(){
   document.getElementById('grid12').style.display='none';
   TuviPaywall.lockPreview({
     host:host,
-    title:'⊙ Hồ sơ giờ sinh chưa mở',
-    items:['Đủ 12 lá số khả nghi (Mệnh + Tật Ách từng giờ)','Bộ câu hỏi dựng riêng theo ngày sinh','Xếp hạng 12 giờ theo khả năng','Bằng chứng khớp/lệch từng câu','Mức tin cậy và lời khuyên chốt giờ'],
-    cta:'Mở đủ 12 lá số + khảo sát',
+    title:_tvmbT('js.giosinh.lock-title','⊙ Hồ sơ giờ sinh chưa mở'),
+    items:[_tvmbT('js.giosinh.lock-i1','Đủ 12 lá số khả nghi (Mệnh + Tật Ách từng giờ)'),_tvmbT('js.giosinh.lock-i2','Bộ câu hỏi dựng riêng theo ngày sinh'),_tvmbT('js.giosinh.lock-i3','Xếp hạng 12 giờ theo khả năng'),_tvmbT('js.giosinh.lock-i4','Bằng chứng khớp/lệch từng câu'),_tvmbT('js.giosinh.lock-i5','Mức tin cậy và lời khuyên chốt giờ')],
+    cta:_tvmbT('js.giosinh.lock-cta','Mở đủ 12 lá số + khảo sát'),
     slug:function(){return _slug;},
     onUnlock:function(){return runSurvey();},
   });
@@ -483,7 +489,7 @@ async function post(){
     body:JSON.stringify({birth:_birth,answers:_answers,slug:_slug})});
   const j=await r.json();
   if(!r.ok||!j.success){
-    const e=new Error(j.error||'Có lỗi xảy ra.'); e.status=r.status; throw e;
+    const e=new Error(j.error||_tvmbT('js.giosinh.co-loi-xay-ra','Có lỗi xảy ra.')); e.status=r.status; throw e;
   }
   return j;
 }
@@ -498,7 +504,7 @@ async function runSurvey(){
 function step(j){
   if(j.done){ renderResult(j); return; }
   _pub=j.question;
-  document.getElementById('qprog').textContent='Câu '+(j.daHoi+1)+' / tối đa '+j.tongToiDa;
+  document.getElementById('qprog').textContent=_tvmbT('js.giosinh.cau-n-toi-da','Câu {n} / tối đa {max}',{n:j.daHoi+1,max:j.tongToiDa});
   document.getElementById('qtitle').textContent=j.question.title;
   const h=document.getElementById('qhint'); h.textContent=j.question.hint||''; h.style.display=j.question.hint?'':'none';
   const box=document.getElementById('qopts'); box.innerHTML='';
@@ -507,7 +513,7 @@ function step(j){
     b.onclick=()=>answer(o.value); box.appendChild(b);
   });
   // "Không rõ" LUÔN có: ép người ta chọn bừa là bơm nhiễu vào chính phép suy.
-  const s=document.createElement('button'); s.className='opt opt-skip'; s.textContent='Không rõ / không nhớ — bỏ qua câu này';
+  const s=document.createElement('button'); s.className='opt opt-skip'; s.textContent=_tvmbT('js.giosinh.khong-ro-khong-nho-bo-qua','Không rõ / không nhớ — bỏ qua câu này');
   s.onclick=()=>answer('?'); box.appendChild(s);
   document.getElementById('surveyBlock').scrollIntoView({behavior:'smooth',block:'nearest'});
 }
@@ -515,7 +521,7 @@ function step(j){
 async function answer(v){
   if(!_pub) return;
   _answers.push({id:_pub.id,value:v}); _pub=null;
-  document.getElementById('qopts').innerHTML='<p class="note">Đang tính…</p>';
+  document.getElementById('qopts').innerHTML='<p class="note">'+_tvmbT('js.giosinh.dang-tinh','Đang tính…')+'</p>';
   try{ step(await post()); }catch(e){ onPaidErr(e); }
 }
 
@@ -527,7 +533,7 @@ function onPaidErr(e){
   document.getElementById('surveyBlock').style.display='none';
   document.getElementById('freeBlock').style.display='';
   const host=document.getElementById('lockHost');
-  host.innerHTML='<p class="note" style="color:var(--tx-red)">'+esc(e.message||'Có lỗi xảy ra.')+'</p>';
+  host.innerHTML='<p class="note" style="color:var(--tx-red)">'+esc(e.message||_tvmbT('js.giosinh.co-loi-xay-ra','Có lỗi xảy ra.'))+'</p>';
   if(e.status===402||e.status===401) buildLock();
 }
 
@@ -539,21 +545,21 @@ function renderResult(j){
   document.getElementById('surveyBlock').style.display='none';
   document.getElementById('resultBlock').style.display='';
   const badge=document.getElementById('tcBadge');
-  badge.textContent='Tin cậy: '+k.mucTinCay;
+  badge.textContent=_tvmbT('js.giosinh.tin-cay','Tin cậy: {m}',{m:({'cao':_tvmbT('js.giosinh.tc-cao','cao'),'vừa':_tvmbT('js.giosinh.tc-vua','vừa'),'thấp':_tvmbT('js.giosinh.tc-thap','thấp')})[k.mucTinCay]||k.mucTinCay});
   badge.className='badge '+(k.mucTinCay==='cao'?'cao':k.mucTinCay==='vừa'?'vua':'thap');
   document.getElementById('tcNote').textContent=
-    'Dựa trên '+k.soCauDaHoi+' câu đã trả lời · độ khớp '+Math.round(k.doKhop*100)+'%';
+    _tvmbT('js.giosinh.dua-tren','Dựa trên {n} câu đã trả lời · độ khớp {p}%',{n:k.soCauDaHoi,p:Math.round(k.doKhop*100)});
 
   document.getElementById('rankHost').innerHTML = k.shortlist.map((r,i)=>{
     const ev=[].concat(
       r.khop.slice(0,4).map(x=>'<div class="ev y">✓ '+esc(x)+'</div>'),
       r.lech.slice(0,3).map(x=>'<div class="ev n">✕ '+esc(x)+'</div>'));
     return '<div class="rank'+(i===0?' top':'')+'">'+
-      '<div class="rank-h"><b>Giờ '+esc(r.chi)+'</b><span class="note">'+esc(r.khung)+' · cục '+esc(r.cuc)+'</span>'+
+      '<div class="rank-h"><b>'+_tvmbT('js.giosinh.gio-chi','Giờ {chi}',{chi:esc(_tvmbG('chi',r.chi))})+'</b><span class="note">'+esc(r.khung)+' · '+_tvmbT('js.giosinh.cuc-n','cục {n}',{n:esc(_tvmbG('cuc',r.cuc))})+'</span>'+
       '<span class="rank-pct">'+esc(r.pct)+'%</span></div>'+
       '<div class="bar"><i style="width:'+Math.max(2,Math.min(100,r.pct))+'%"></i></div>'+
-      '<div class="note" style="margin-bottom:6px">Mệnh: '+esc(r.menhStars.join(' + ')||'vô chính diệu')+
-      ' · Tật Ách: '+esc(r.tatStars.join(' + ')||'vô chính diệu')+'</div>'+ev.join('')+'</div>';
+      '<div class="note" style="margin-bottom:6px">'+_tvmbT('js.giosinh.menh-colon','Mệnh:')+' '+esc(_gsStars(r.menhStars))+
+      ' · '+_tvmbT('js.giosinh.tat-ach-colon','Tật Ách:')+' '+esc(_gsStars(r.tatStars))+'</div>'+ev.join('')+'</div>';
   }).join('');
   document.getElementById('loiKhuyen').textContent=k.loiKhuyen;
   renderChot(k);
@@ -573,7 +579,7 @@ function renderResult(j){
 function renderChot(k){
   const sel=document.getElementById('gs-chot');
   sel.innerHTML=k.shortlist.map((r,i)=>
-    '<option value="'+r.gioIdx+'"'+(i===0?' selected':'')+'>Giờ '+esc(r.chi)+' · '+esc(r.khung)+' · '+esc(String(r.pct))+'%</option>').join('');
+    '<option value="'+r.gioIdx+'"'+(i===0?' selected':'')+'>'+_tvmbT('js.giosinh.gio-chi','Giờ {chi}',{chi:esc(_tvmbG('chi',r.chi))})+' · '+esc(r.khung)+' · '+esc(String(r.pct))+'%</option>').join('');
   document.getElementById('chotMsg').textContent='';
   // Âm lịch: không có đường bàn giao. KHÔNG ghi bừa ngày âm vào sổ như thể nó
   // là ngày dương — tool đích sẽ lập một lá số KHÁC mà không có gì báo.
@@ -602,10 +608,10 @@ async function luuVaoSo(){
   // localStorage là đường ghi ĐỒNG BỘ và luôn chạy (kể cả khách chưa đăng nhập).
   Shell.rememberBirth(b);
   if(!_daDangNhap()){
-    msg.textContent='Đã nhớ trên máy này — mở công cụ khác là có sẵn. Đăng nhập thì lá số vào sổ của tài khoản, đổi máy vẫn còn.';
+    msg.textContent=_tvmbT('js.giosinh.da-nho-tren-may-nay','Đã nhớ trên máy này — mở công cụ khác là có sẵn. Đăng nhập thì lá số vào sổ của tài khoản, đổi máy vẫn còn.');
     return;
   }
-  msg.textContent='Đang lưu…';
+  msg.textContent=_tvmbT('js.giosinh.dang-luu','Đang lưu…');
   // Lượt ghi thứ hai, CHỈ để biết ghi được hay không: `rememberBirth` ghi sổ kiểu
   // bắn-và-quên nên không nói được kết quả, mà báo "đã lưu" trong khi hỏng đúng
   // là kiểu nói dối im lặng cần tránh. Cùng khoá (chart_key) + upsert
@@ -613,8 +619,8 @@ async function luuVaoSo(){
   let it=null;
   try{ it=window.UserCharts?await UserCharts.save(b,''):null; }catch(e){ it=null; }
   msg.textContent = it
-    ? 'Đã lưu vào sổ lá số. Các công cụ khác sẽ điền sẵn giờ này.'
-    : 'Chưa ghi được vào sổ (mạng hoặc phiên đăng nhập). Giờ vừa chốt vẫn được nhớ trên máy này.';
+    ? _tvmbT('js.giosinh.da-luu-vao-so','Đã lưu vào sổ lá số. Các công cụ khác sẽ điền sẵn giờ này.')
+    : _tvmbT('js.giosinh.chua-ghi-duoc-vao-so','Chưa ghi được vào sổ (mạng hoặc phiên đăng nhập). Giờ vừa chốt vẫn được nhớ trên máy này.');
 }
 
 function sangLuanGiai(){
@@ -629,8 +635,8 @@ function sangLuanGiai(){
 async function guiDoiChieu(){
   const v=document.getElementById('gs-that').value;
   const msg=document.getElementById('gtMsg');
-  if(v===''){ msg.textContent='Chọn giờ đúng trước đã.'; return; }
-  if(!_lastResult){ msg.textContent='Chưa có kết quả để đối chiếu.'; return; }
+  if(v===''){ msg.textContent=_tvmbT('js.giosinh.chon-gio-dung-truoc','Chọn giờ đúng trước đã.'); return; }
+  if(!_lastResult){ msg.textContent=_tvmbT('js.giosinh.chua-co-ket-qua','Chưa có kết quả để đối chiếu.'); return; }
   const k=_lastResult.ketQua;
   try{
     window.Track&&Track.event&&Track.event('gio_sinh_doi_chieu',{tool_id:TOOL_ID,meta:{
@@ -638,9 +644,9 @@ async function guiDoiChieu(){
       doKhop:k.doKhop, soCau:k.soCauDaHoi, mucTinCay:k.mucTinCay,
       trungTop:k.tatCa[0]&&k.tatCa[0].gioIdx===+v, trungShortlist:k.shortlist.some(x=>x.gioIdx===+v)}});
     const dung=k.shortlist.some(x=>x.gioIdx===+v);
-    msg.textContent=dung?'Cảm ơn anh/chị — giờ đúng nằm trong danh sách máy đưa ra. Ghi nhận rồi.'
-      :'Cảm ơn anh/chị — lần này máy đoán trượt. Đúng loại ca chúng tôi cần để chỉnh lại phương pháp.';
-  }catch(e){ msg.textContent='Không gửi được, nhưng không sao — bản đọc của anh/chị không đổi.'; }
+    msg.textContent=dung?_tvmbT('js.giosinh.cam-on-dung','Cảm ơn anh/chị — giờ đúng nằm trong danh sách máy đưa ra. Ghi nhận rồi.')
+      :_tvmbT('js.giosinh.cam-on-truot','Cảm ơn anh/chị — lần này máy đoán trượt. Đúng loại ca chúng tôi cần để chỉnh lại phương pháp.');
+  }catch(e){ msg.textContent=_tvmbT('js.giosinh.khong-gui-duoc','Không gửi được, nhưng không sao — bản đọc của anh/chị không đổi.'); }
   document.getElementById('btnGui').disabled=true;
 }
 </script>

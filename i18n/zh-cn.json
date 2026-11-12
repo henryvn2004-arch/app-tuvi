@@ -795,9 +795,245 @@
   "t": "<span class=\"bg-label\"><span class=\"ic\" data-icon=\"spade\"></span><b id=\"drawBtnLabel\">洗牌并抽牌</b></span>",
   "h": "e53dcebd"
  },
+ "cdvc.2-xem-truoc-cung-phu-the": {
+  "t": "<span class=\"wss-n\">2</span><span class=\"wss-l\">预览夫妻宫</span>",
+  "h": "108dcc06"
+ },
+ "cdvc.anh-chan-dung-minh-hoa": {
+  "t": "<span class=\"hp-ic\" data-icon=\"image\"></span><span>示意<br>肖像图</span>",
+  "h": "493170c3"
+ },
+ "cdvc.ban-luan-giai-mau-tai-pdf": {
+  "t": "<span class=\"sc-ic\" data-icon=\"file-text\"></span> <span class=\"sc-txt\"><b>范例解读报告</b><span>下载范例命盘的「夫妻肖像」完整 PDF，先预览真实内容。</span></span> <a class=\"sc-btn\" href=\"/tai-mau/mau-chan-dung-vo-chong.pdf\" target=\"_blank\" rel=\"noopener\">下载 PDF →</a>",
+  "h": "53e5a8b4"
+ },
+ "cdvc.bang-tren-la-tra-bang-co": {
+  "t": "上表是依古法查表，对照您自己的命盘得出——尚未经过解读这一步。",
+  "h": "e321a90c"
+ },
+ "cdvc.cach-cuc-dac-biet": {
+  "t": "特殊格局",
+  "h": "f0db7ce5"
+ },
+ "cdvc.chan-dung-nay-chi-mang-tinh": {
+  "t": "<span class=\"ic\" data-icon=\"lightbulb\"></span> 这幅肖像仅供示意与参考，是系统依据您命盘夫妻宫中的主星、辅星所对应的外貌特征模拟而成——并不是照片，也不是对现实中伴侣容貌的准确预测。若要得到更贴近现实的结果，还需要再对照对方本人的命盘。",
+  "h": "38ea85e6"
+ },
+ "cdvc.chan-dung-nguoi-phoi-ngau": {
+  "t": "<span class=\"res-block-title\">配偶肖像</span>",
+  "h": "6c75b667"
+ },
+ "cdvc.chan-dung-nguoi-phoi-ngau-xs4t": {
+  "t": "配偶肖像",
+  "h": "b3c9f474"
+ },
+ "cdvc.chan-dung-vo-chong": {
+  "t": "夫妻肖像",
+  "h": "ed0abbb5"
+ },
+ "cdvc.chan-dung-vo-chong-tu-vi": {
+  "t": "夫妻肖像——明宝紫微斗数",
+  "h": "192e3111"
+ },
+ "cdvc.chan-dung-vo-chong-ve-chan": {
+  "t": "<b>夫妻肖像</b><span>由夫妻宫绘制配偶的肖像</span>",
+  "h": "00184059"
+ },
+ "cdvc.chia-se-cho-ban-be-xem": {
+  "t": "分享给朋友看 →",
+  "h": "d4cae66e"
+ },
+ "cdvc.chinh-tinh": {
+  "t": "<b>主星：</b> <span id=\"ptChinh\">—</span>",
+  "h": "bddb0cff"
+ },
+ "cdvc.cung-phu-the-trong-la-so": {
+  "t": "<span class=\"res-block-title\">您命盘中的夫妻宫</span>",
+  "h": "f96e4460"
+ },
+ "cdvc.hinh-the-suy-tu-sao": {
+  "t": "<span class=\"hp-ic\" data-icon=\"user\"></span><span>由星曜推得的<br>体型外貌</span>",
+  "h": "ca30f981"
+ },
+ "cdvc.hinh-the-suy-tu-sao-tai": {
+  "t": "<span class=\"res-block-title\">由夫妻宫星曜推得的体型外貌</span>",
+  "h": "5207236c"
+ },
+ "cdvc.hoan-canh-gap-go": {
+  "t": "相遇的情境",
+  "h": "084d34b9"
+ },
+ "cdvc.luan-giai-cung-phu-the": {
+  "t": "<span class=\"hp-ic\" data-icon=\"heart\"></span><span>夫妻宫<br>解读</span>",
+  "h": "72f3c0e5"
+ },
+ "cdvc.luan-giai-cung-phu-the-e93e": {
+  "t": "<span class=\"res-block-title\">夫妻宫解读</span>",
+  "h": "a976e83a"
+ },
+ "cdvc.mo-ta": {
+  "t": "描述",
+  "h": "0bf67d8a"
+ },
+ "cdvc.moi-luot-luong": {
+  "t": "<span class=\"vnd\" data-tvp-price-vnd=\"chan-dung-vo-chong\"></span> 每次 <span class=\"cb-sub\">(<span data-tvp-price=\"chan-dung-vo-chong\">…</span> 两)</span>",
+  "h": "32e5c174"
+ },
+ "cdvc.nhap-ngay-sinh-khong-can-them": {
+  "t": "输入出生日期即可，不需要再提供其他数据。系统会读取夫妻宫并绘制肖像——包含由星曜推得的体型外貌、图像与详细解读。",
+  "h": "091107bb"
+ },
+ "cdvc.phan-tich-cung-phu-the-trong": {
+  "t": "分析命盘中的夫妻宫，绘制伴侣的肖像，并附上性格与气质风度的描述。",
+  "h": "b63e4e9d"
+ },
+ "cdvc.phu-tinh": {
+  "t": "<b>辅星：</b> <span id=\"ptPhu\">—</span>",
+  "h": "5e60dcdc"
+ },
+ "cdvc.tra-loi-thay-o-khung-chat": {
+  "t": "请在聊天栏回复老师来绘制肖像——只需要您的出生日期与时辰。",
+  "h": "1933e964"
+ },
+ "cdvc.truoc-khi-gap-dung-nguoi-nhieu": {
+  "t": "在遇见对的人之前，许多人对对方的想像完全走样。命盘中的夫妻宫会描绘出未来伴侣的肖像与气质——比任何揣测都更清楚。",
+  "h": "d009dcc3"
+ },
+ "cdvc.ve-chan-dung-ton-luong": {
+  "t": "<span class=\"bg-label\"><span class=\"ic\" data-icon=\"image\"></span><b id=\"btnGoLabel\">绘制肖像 →</b></span> <small>费用 <span class=\"vnd\" data-tvp-price-vnd=\"chan-dung-vo-chong\"></span> <span class=\"cb-sub\">(<span data-tvp-price=\"chan-dung-vo-chong\">…</span> 两)</span></small>",
+  "h": "33f06010"
+ },
+ "cdvc.ve-lai": {
+  "t": "重新绘制",
+  "h": "fb8e0b72"
+ },
+ "cdvc.y-nghia-co-phap": {
+  "t": "古法的意涵",
+  "h": "c6403cb5"
+ },
  "chat.ke-chuyen-cua-ban-minh-bao": {
   "t": "说说您的故事，明宝团队会从 15 位老师中请出最合适的一位为您解读：紫微斗数命盘、八字、合婚、取名、择日。",
   "h": "0f564294"
+ },
+ "chonngay.2-xem-nen-can-chi": {
+  "t": "<span class=\"wss-n\">2</span><span class=\"wss-l\">查看干支基础</span>",
+  "h": "c95e6f79"
+ },
+ "chonngay.an-hoi-dam-ngo": {
+  "t": "订婚／提亲",
+  "h": "4b11a176"
+ },
+ "chonngay.chon-ngay-chuyen-sau": {
+  "t": "深度择日 →",
+  "h": "9bd6a5ed"
+ },
+ "chonngay.chon-ngay-gio-tot": {
+  "t": "择吉日吉时",
+  "h": "28b27ec4"
+ },
+ "chonngay.chon-ngay-gio-tot-hop-tuoi": {
+  "t": "依天干地支，为婚嫁、开张、入宅、动土等大事择出合生肖的吉日吉时，并请老师论析好日子与该避开的日子。",
+  "h": "a3dfe7f0"
+ },
+ "chonngay.chon-ngay-tot-ngay-gio-hop": {
+  "t": "<b>择吉日</b><span>为人生大事择出合生肖的日子与时辰</span>",
+  "h": "ec08df6d"
+ },
+ "chonngay.chon-ngay-tot-tu-vi-minh": {
+  "t": "择吉日——明宝紫微斗数",
+  "h": "bad6e5eb"
+ },
+ "chonngay.chon-viec-can-xem-ngay-nhap": {
+  "t": "选择要择日的事项，输入主事者的姓名、出生年与想查的月份。系统会推算干支，再比对与您生肖的相合与相冲。",
+  "h": "a51a3cec"
+ },
+ "chonngay.chua-muon-khai-thong-tin-ban": {
+  "t": "<b>还不想填写数据吗？</b><span>您可以先看范例体验一下。</span>",
+  "h": "0a975603"
+ },
+ "chonngay.cuoi-hoi": {
+  "t": "婚嫁",
+  "h": "04a2caa4"
+ },
+ "chonngay.cuoi-hoi-lam-nha-khai-truong": {
+  "t": "婚嫁、盖房、开张——择错日子，往往是许多人一辈子无法弥补的遗憾。选好事项与时间范围，即刻获得合主事者生肖的日期与时辰名单。",
+  "h": "0b16cd85"
+ },
+ "chonngay.danh-sach-ngay-tot": {
+  "t": "吉日<br>清单",
+  "h": "b1bf5886"
+ },
+ "chonngay.doi-chieu-hop-xung": {
+  "t": "相合相冲<br>比对",
+  "h": "c461160d"
+ },
+ "chonngay.dong-tho-khoi-cong": {
+  "t": "动土／开工",
+  "h": "10468f91"
+ },
+ "chonngay.gio-hoang-dao-tung-ngay": {
+  "t": "每日的<br>黄道吉时",
+  "h": "54c78af6"
+ },
+ "chonngay.he-thong-phan-tich-can-chi": {
+  "t": "系统会分析主事者的干支与预定年月，并附上具体理由，建议合适的吉日区间。",
+  "h": "ec5043f6"
+ },
+ "chonngay.ho-ten-nguoi-chu-su": {
+  "t": "主事者姓名",
+  "h": "7d21772a"
+ },
+ "chonngay.hoang-lich-lich-van-nien-la": {
+  "t": "黄历（万年历）是结合干支、二十八宿与吉凶星曜的中国古历体系，用来为各类事项决定适宜的时辰与黄道吉日，是婚嫁、开张、动土择日择时的传统依据。",
+  "h": "0240b883"
+ },
+ "chonngay.hoi-thay-chon-ngay-dep": {
+  "t": "✦ 请老师择吉日",
+  "h": "7d368a1b"
+ },
+ "chonngay.khai-truong": {
+  "t": "开张",
+  "h": "c86ca256"
+ },
+ "chonngay.ky-ket-hop-dong": {
+  "t": "签订合约",
+  "h": "90e0fb9b"
+ },
+ "chonngay.lap-nen": {
+  "t": "创建基础 →",
+  "h": "81b6e6d8"
+ },
+ "chonngay.moi-luot": {
+  "t": "每次",
+  "h": "2a5c5972"
+ },
+ "chonngay.mua-xe": {
+  "t": "购车",
+  "h": "52d4aa77"
+ },
+ "chonngay.nhap-trach-ve-nha-moi": {
+  "t": "入宅（迁入新居）",
+  "h": "fcda52e1"
+ },
+ "chonngay.thong-tin-chon-ngay": {
+  "t": "择日数据",
+  "h": "9d3045db"
+ },
+ "chonngay.ton": {
+  "t": "需",
+  "h": "e603a0b9"
+ },
+ "chonngay.viec-can-chon-ngay": {
+  "t": "要择日的事项",
+  "h": "e84816a6"
+ },
+ "chonngay.xem-ban-mau": {
+  "t": "查看范例 →",
+  "h": "ba3671b1"
+ },
+ "chonngay.xuat-hanh": {
+  "t": "出行",
+  "h": "424fcbb2"
  },
  "chutrinh.9-dai-van-tron-doi": {
   "t": "<span class=\"hp-ic\" data-icon=\"hourglass\"></span><span>一生<br>九大运</span>",
@@ -850,6 +1086,62 @@
  "chutrinh.tieu-van-nam-xem": {
   "t": "<span class=\"hp-ic\" data-icon=\"calendar\"></span><span>流年<br>小运</span>",
   "h": "d0e7d2f5"
+ },
+ "cn.12-thang-am-toi": {
+  "t": "未来十二个农历月",
+  "h": "c0166830"
+ },
+ "cn.ca-nha-minh-la-so-cua": {
+  "t": "<b>我们一家</b><span id=\"cnSub\">把全家人的命盘并排，看未来十二个农历月。</span>",
+  "h": "f42a18f8"
+ },
+ "cn.ca-nha-minh-tu-vi-minh": {
+  "t": "我们一家——明宝紫微斗数",
+  "h": "12013a8d"
+ },
+ "cn.dang-nhap-dang-ky": {
+  "t": "登录／注册",
+  "h": "2bcf279e"
+ },
+ "cn.dang-nhap-de-xem-la-so": {
+  "t": "请登录以查看全家人的命盘。",
+  "h": "6ccac799"
+ },
+ "cn.dang-xep-la-so-ca-nha": {
+  "t": "正在排列全家人的命盘…",
+  "h": "9c8b78a5"
+ },
+ "cn.dua-ngay-tot-va-ngay-xung": {
+  "t": "把专属于孩子的吉日与冲日放进手机行事历。行事历会每天自动更新。",
+  "h": "b5850267"
+ },
+ "cn.google-lich": {
+  "t": "Google 日历",
+  "h": "8cdb619a"
+ },
+ "cn.hoi-thay-ve-ca-nha-so": {
+  "t": "<a class=\"go\" id=\"cnAsk\" href=\"/app\">就全家问问老师</a> <a class=\"sub\" href=\"/app/so-la-so\">命盘簿</a>",
+  "h": "c7bd3311"
+ },
+ "cn.iphone-mac": {
+  "t": "iPhone / Mac",
+  "h": "9a2b7d51"
+ },
+ "cn.lich-rieng": {
+  "t": "专属行事历",
+  "h": "6ff9fdd9"
+ },
+ "cn.moi-o-la-cung-nguyet-han": {
+  "t": "每一格是该月的月限宫位。黄色格：两人以上同时行限入同一宫的月份。点一格可查看星曜。",
+  "h": "8a6d6f48"
+ },
+ "cn.so-la-so-chua-co-nguoi": {
+  "t": "命盘簿里还没有任何家人。<br>直接问老师关于丈夫、孩子或父母的事——老师会在对话中顺势邀请您加入命盘。<br> 已保存的命盘，请移到<a href=\"/app/so-la-so\">命盘簿</a>的<b>家人</b>群组。",
+  "h": "75422ea1"
+ },
+ "cn.thang-ca-nha-nen-de-y": {
+  "t": "全家该留意的月份",
+  "h": "e66184b3"
  },
  "combolt.combo-luan-giai-tu-binh-mua": {
   "t": "<b>组合：命盘解读＋子平八字</b><span>两份完整解读一次购入，比分开买更划算</span>",
@@ -1071,6 +1363,190 @@
   "t": "紫微",
   "h": "f49901f4"
  },
+ "cs.2-xem-truoc-ho-so": {
+  "t": "<span class=\"wss-n\">2</span><span class=\"wss-l\">预览文件</span>",
+  "h": "cdf8b027"
+ },
+ "cs.40-nam-4-chang": {
+  "t": "<span class=\"hp-ic\" data-icon=\"trending-up\"></span><span>40 年<br>分四阶段</span>",
+  "h": "62f02f8b"
+ },
+ "cs.ban-dang-o-vi-tri-nao": {
+  "t": "您目前的位置",
+  "h": "ae96bb68"
+ },
+ "cs.ban-luan-giai-mau-tai-pdf": {
+  "t": "<span class=\"sc-ic\" data-icon=\"file-text\"></span> <span class=\"sc-txt\"><b>范例解读报告</b><span>下载范例命盘的「紫微职场」完整 PDF，先预览真实内容。</span></span> <a class=\"sc-btn\" href=\"/tai-mau/mau-cong-so.pdf\" target=\"_blank\" rel=\"noopener\">下载 PDF →</a>",
+  "h": "2538ba5a"
+ },
+ "cs.bon-ten-goi-khai-sang-lanh": {
+  "t": "<b>开创・领导・辅佐・协作</b>这四个名称，是本页为了方便阅读而订的现代标签，古籍并没有这样的称呼。分法则有古法的根基：把<b>四象</b>（老阳・少阴・少阳・老阴）套到 14 颗主星上，正好落在经典的星曜组合里。<br> 这是<b>一个解读命盘的框架</b>，并不是经过验证的心理测验，背后也没有对照研究。请用来了解自己、引发话题，不要用来招聘或替别人安排工作。",
+  "h": "4b3842bc"
+ },
+ "cs.chu-doanh-nghiep": {
+  "t": "企业主",
+  "h": "0ec2b6b1"
+ },
+ "cs.cung-mot-nang-luc-co-nguoi": {
+  "t": "同样的能力，有人升迁顺利，有人却一直原地踏步——大多取决于选对环境与展现自己的方式。读读您在职场上的类型，让方向更清楚。",
+  "h": "af9f49d9"
+ },
+ "cs.dang-tim-viec-chuyen-huong": {
+  "t": "求职中／转换跑道",
+  "h": "de0479f2"
+ },
+ "cs.doc-la-so-tu-vi-bang": {
+  "t": "用工作的语言解读紫微斗数命盘：您在职场上属于哪种类型、十二个面向的强弱、工作四十年分成的四个阶段，以及该跟谁组队。",
+  "h": "7c9e83ec"
+ },
+ "cs.dung-ho-so-kieu-nguoi-12": {
+  "t": "创建类型 + 12 个面向的文件<b>免费</b>。打开具体职业分支的部分才会扣除两。",
+  "h": "8ad49bf1"
+ },
+ "cs.dung-ho-so-mien-phi": {
+  "t": "<span class=\"bg-label\"><span class=\"ic\" data-icon=\"briefcase\"></span><b id=\"btnGoLabel\">创建文件 →</b></span> <small>免费</small>",
+  "h": "d7386efe"
+ },
+ "cs.hoi-thay-doc-ky-ho-so": {
+  "t": "✦ 请老师细读这份文件",
+  "h": "dfa970e5"
+ },
+ "cs.kieu-nguoi-noi-cong-so": {
+  "t": "<span class=\"hp-ic\" data-icon=\"briefcase\"></span><span>职场<br>类型</span>",
+  "h": "31b69ffd"
+ },
+ "cs.lam-tu-do-nghe-rieng": {
+  "t": "自由工作者／自营",
+  "h": "1d5e99e6"
+ },
+ "cs.ngay-gio-sinh-va-cho-dung": {
+  "t": "出生日期时辰与目前位置",
+  "h": "ade29838"
+ },
+ "cs.nhan-vien-lam-thue": {
+  "t": "受雇员工",
+  "h": "0c9557d1"
+ },
+ "cs.nhanh-nghe-ghep-doi": {
+  "t": "<span class=\"hp-ic\" data-icon=\"users\"></span><span>职业分支、<br>组队</span>",
+  "h": "f7580d7f"
+ },
+ "cs.nhap-ngay-gio-sinh-va-vi": {
+  "t": "输入出生日期时辰与目前位置。系统会对照古法——职场类型、适合的职业分支，以及分成四阶段的 40 年职涯。",
+  "h": "f54c5793"
+ },
+ "cs.quan-ly-lam-thue": {
+  "t": "受雇管理者",
+  "h": "9e6cb7ab"
+ },
+ "cs.tai-anh": {
+  "t": "⬇ 下载图片",
+  "h": "eb8a56af"
+ },
+ "cs.tu-vi-cong-so": {
+  "t": "紫微职场",
+  "h": "9d18a955"
+ },
+ "cs.tu-vi-cong-so-la-so": {
+  "t": "<b>紫微职场</b><span>用工作语言解读的命盘</span>",
+  "h": "af1a1cbe"
+ },
+ "cs.tu-vi-cong-so-tu-vi": {
+  "t": "紫微职场——明宝紫微斗数",
+  "h": "91365f7b"
+ },
+ "ctk.2-xem-truoc-chan-dung": {
+  "t": "<span class=\"wss-n\">2</span><span class=\"wss-l\">预览肖像</span>",
+  "h": "db8c9fa4"
+ },
+ "ctk.5-nen-van-minh-co": {
+  "t": "<span class=\"hp-ic\" data-icon=\"landmark\"></span><span>5 个<br>古文明</span>",
+  "h": "88178537"
+ },
+ "ctk.ban-luan-giai-mau-tai-pdf": {
+  "t": "<span class=\"sc-ic\" data-icon=\"file-text\"></span> <span class=\"sc-txt\"><b>范例解读报告</b><span>下载范例命盘的「前世肖像」完整 PDF，先预览真实内容。</span></span> <a class=\"sc-btn\" href=\"/tai-mau/mau-chan-dung-tien-kiep.pdf\" target=\"_blank\" rel=\"noopener\">下载 PDF →</a>",
+  "h": "d3ec11c0"
+ },
+ "ctk.chan-dung-cot-cach": {
+  "t": "<span class=\"res-block-title\">肖像与风骨</span>",
+  "h": "236dac15"
+ },
+ "ctk.chan-dung-tien-kiep": {
+  "t": "前世肖像",
+  "h": "e7d0f866"
+ },
+ "ctk.chan-dung-tien-kiep-gxr5": {
+  "t": "前世肖像",
+  "h": "7aa2c297"
+ },
+ "ctk.chan-dung-tien-kiep-la-so": {
+  "t": "<b>前世肖像</b><span>如果您的命盘生在古代</span>",
+  "h": "b05fc22e"
+ },
+ "ctk.chan-dung-tien-kiep-tu-vi": {
+  "t": "前世肖像——明宝紫微斗数",
+  "h": "ecf8e25b"
+ },
+ "ctk.chan-dung-va-cau-chuyen-phia": {
+  "t": "<span class=\"ic\" data-icon=\"lightbulb\"></span> 上方的肖像与故事，依据您紫微斗数命盘中的数据，并结合前人留下的研究经验描绘而成，仅供参考与娱乐。",
+  "h": "2e5ddc71"
+ },
+ "ctk.chan-dung-ve-rieng": {
+  "t": "<span class=\"hp-ic\" data-icon=\"image\"></span><span>专属于您的<br>肖像</span>",
+  "h": "bac45794"
+ },
+ "ctk.da-ve-truoc-do": {
+  "t": "<span class=\"res-block-title\">先前绘制过的</span>",
+  "h": "44b01ab4"
+ },
+ "ctk.dang-ve-chan-dung-khoang-45": {
+  "t": "正在绘制肖像…<br>（约 45–60 秒）",
+  "h": "7a762c71"
+ },
+ "ctk.dat-chinh-la-so-cua-ban": {
+  "t": "把您自己的命盘放进古代东亚五大文明之一——透过九个大运讲述一个人一生的肖像与故事。",
+  "h": "9d55b734"
+ },
+ "ctk.dung-la-so-da-lap-khong": {
+  "t": "使用已排好的命盘，不需要再输入任何东西。即可得到肖像、风骨，以及分五回讲述的一生故事。",
+  "h": "1220c601"
+ },
+ "ctk.khung-5-hoi-o-tren-do": {
+  "t": "上方的五回架构由您的命盘决定——每一回的文字都在完整版中。",
+  "h": "9c6e9720"
+ },
+ "ctk.la-so-khong-chi-ke-chuyen": {
+  "t": "命盘不只讲今生——放进一个古文明，它还会透露一则专属于您的前世故事。从现成的命盘，就能得到一幅完整的肖像与故事可读。",
+  "h": "558d4af3"
+ },
+ "ctk.mo-ta-nhan-vat": {
+  "t": "人物描述",
+  "h": "e5b0eb52"
+ },
+ "ctk.mo-ta-nhan-vat-ban-mau": {
+  "t": "人物描述（范例）",
+  "h": "a3b1a797"
+ },
+ "ctk.moi-luot-luong": {
+  "t": "<span class=\"vnd\" data-tvp-price-vnd=\"chan-dung-tien-kiep\"></span> 每次 <span class=\"cb-sub\">(<span data-tvp-price=\"chan-dung-tien-kiep\">…</span> 两)</span>",
+  "h": "a0c1a032"
+ },
+ "ctk.mot-doi-5-hoi": {
+  "t": "<span class=\"hp-ic\" data-icon=\"scroll-text\"></span><span>一生<br>五回</span>",
+  "h": "a838f04e"
+ },
+ "ctk.mot-doi-nguoi-5-hoi": {
+  "t": "<span class=\"res-block-title\">一个人的一生——五回</span>",
+  "h": "a7f7daa3"
+ },
+ "ctk.nhap-ngay-sinh-cua-ban-duong": {
+  "t": "输入您的出生日期（国历）",
+  "h": "1958d7e8"
+ },
+ "ctk.xem-tien-kiep-ton-luong": {
+  "t": "<span class=\"bg-label\"><span class=\"ic\" data-icon=\"temple\"></span><b>查看前世 →</b></span> <small>费用 <span class=\"vnd\" data-tvp-price-vnd=\"chan-dung-tien-kiep\"></span> <span class=\"cb-sub\">(<span data-tvp-price=\"chan-dung-tien-kiep\">…</span> 两)</span></small>",
+  "h": "055f7d8e"
+ },
  "cuahang.anh-khu-vuc-vat-dung-nhan": {
   "t": "<span class=\"ic\" data-icon=\"camera\"></span> 照片与辨识区域／物品",
   "h": "dcd1e25d"
@@ -1143,6 +1619,210 @@
   "t": "公司办公室",
   "h": "d678c2d6"
  },
+ "daycon.2-xem-truoc-chan-dung-con": {
+  "t": "<span class=\"wss-n\">2</span><span class=\"wss-l\">预览孩子的肖像</span>",
+  "h": "d8f50448"
+ },
+ "daycon.5-la-muc-giua-cua-hang": {
+  "t": "<b>5 是中间值</b>，是数千份孩童命盘的中间水准，并不是「10 分得 5 分」。灰色带是孩子两种方式都能适应的范围。轴的两端都各有价值。",
+  "h": "0a475048"
+ },
+ "daycon.5-truc-tinh-khi": {
+  "t": "<span class=\"hp-ic\" data-icon=\"scale\"></span><span>5 条<br>气质轴</span>",
+  "h": "2ee56c76"
+ },
+ "daycon.8-chat-nang-khieu": {
+  "t": "<span class=\"hp-ic\" data-icon=\"star\"></span><span>8 种<br>天赋特质</span>",
+  "h": "a2098312"
+ },
+ "daycon.ban-luan-giai-mau-tai-pdf": {
+  "t": "<span class=\"sc-ic\" data-icon=\"file-text\"></span> <span class=\"sc-txt\"><b>范例解读报告</b><span>下载范例命盘的「依命盘教养孩子」完整 PDF，先预览真实内容。</span></span> <a class=\"sc-btn\" href=\"/tai-mau/mau-day-con.pdf\" target=\"_blank\" rel=\"noopener\">下载 PDF →</a>",
+  "h": "93827cd3"
+ },
+ "daycon.ban-nay-phac-hoa-tu-cac": {
+  "t": "<span class=\"ic\" data-icon=\"lightbulb\"></span> 本解读依据紫微斗数命盘中的数据，并结合前人留下的研究经验描绘而成。<b>教养方式</b>的部分是本页自行的对应与诠释，并非古籍原文，仅供参考。<br><br> <span class=\"ic\" data-icon=\"scale\"></span> 这是一个<b>了解孩子、因材施教</b>的框架。孩子尚未成年，也不在这里，因此本解读刻意<b>不预测考试成败、不断定职业、不谈健康或感情</b>。天生气质没有好坏，只有适合或不适合大人目前的做法。<br><br> <span class=\"ic\" data-icon=\"book-open\"></span> <b>出处：</b>命宫、福德宫、父母宫等，依<i>《紫微斗数新编》</i>（云腾太次郎，Vân Đằng Thái Thứ Lang）排定。5 条轴・8 种特质的框架与依类型而定的教养方式，是<b>明宝紫微斗数专家团队</b>自行创建的方法。<a href=\"/nguon-du-lieu.html\" target=\"_blank\" rel=\"noopener\" style=\"color:#9A7B3A\">查看完整数据出处 →</a>",
+  "h": "77ff2cc9"
+ },
+ "daycon.boi-canh": {
+  "t": "<b>背景</b><i></i>",
+  "h": "a85d826c"
+ },
+ "daycon.buong-cai-lai-noi-khong-nghe": {
+  "t": "倔强、顶嘴、不听话",
+  "h": "76509c43"
+ },
+ "daycon.cac-chang-di-hoc": {
+  "t": "<span class=\"res-block-title\">求学各阶段</span>",
+  "h": "b2c2bb10"
+ },
+ "daycon.cach-day-con-nay": {
+  "t": "<span class=\"res-block-title\">这个孩子的教养方式</span>",
+  "h": "e203e71f"
+ },
+ "daycon.chon-dieu-dang-lo-nhap-ngay": {
+  "t": "选择您担心的事，输入孩子的出生日期与时辰，即可得到适合孩子的教养方式，以及今晚就能做的事。",
+  "h": "b14b84f4"
+ },
+ "daycon.co-la-so-cua-ban-thi": {
+  "t": "若有您自己的命盘，解读会多出<b>「双方关系」</b>一节——亲子容易起冲突之处，以及减少冲突的方法。留空也能看到其余完整内容。",
+  "h": "0ea6e4fe"
+ },
+ "daycon.co-so-trong-la-so": {
+  "t": "<span class=\"res-block-title\">命盘中的依据</span>",
+  "h": "c215623b"
+ },
+ "daycon.con-khong-chiu-noi-chuyen-voi": {
+  "t": "孩子不再愿意跟我说话",
+  "h": "245ca1b1"
+ },
+ "daycon.con-la-nguoi-the-nao": {
+  "t": "<span class=\"res-block-title\">孩子是怎样的人</span>",
+  "h": "d97bd561"
+ },
+ "daycon.cung-mot-cach-day-co-dua": {
+  "t": "同样的教法，有的孩子进步明显，有的孩子却越教越疏远——因为每个孩子吸收的方式不同。从孩子的命盘，看出哪种做法正在适得其反。",
+  "h": "eec3a103"
+ },
+ "daycon.da-xem-truoc-do": {
+  "t": "<span class=\"res-block-title\">先前看过的内容</span>",
+  "h": "5dc13a72"
+ },
+ "daycon.dau-hieu-nhan-ra-o-nha": {
+  "t": "在家中可以辨认的迹象",
+  "h": "a07a9d36"
+ },
+ "daycon.day-con-theo-la-so": {
+  "t": "依命盘教养孩子",
+  "h": "2013a771"
+ },
+ "daycon.day-con-theo-la-so-dua": {
+  "t": "<b>依命盘教养孩子</b><span>这个孩子需要催一把，还是需要静静等待</span>",
+  "h": "89056d92"
+ },
+ "daycon.day-con-theo-la-so-tu": {
+  "t": "依命盘教养孩子——明宝紫微斗数",
+  "h": "43088648"
+ },
+ "daycon.day-la-kieu-moi-truong-hoc": {
+  "t": "这是适合孩子的<b>学习环境类型</b>，刻意不指定科系或职业。",
+  "h": "db05bd75"
+ },
+ "daycon.diem-o-day-la-muc-thuan": {
+  "t": "这里的分数是<b>该阶段顺或逆的程度</b>，不是学业成绩，也不是孩子的分数。",
+  "h": "799bb1dc"
+ },
+ "daycon.dieu-ban-dang-lo": {
+  "t": "您担心的事",
+  "h": "bd0e3bcd"
+ },
+ "daycon.dieu-ban-dang-lo-pjp3": {
+  "t": "<span class=\"res-block-title\" id=\"loTitle\">您担心的事</span>",
+  "h": "86a3d90a"
+ },
+ "daycon.dinh-huong": {
+  "t": "<span class=\"res-block-title\">方向建议</span>",
+  "h": "ee21cc8a"
+ },
+ "daycon.dinh-huong-cach-day": {
+  "t": "<span class=\"hp-ic\" data-icon=\"compass\"></span><span>教养方式<br>的方向</span>",
+  "h": "c22dffe6"
+ },
+ "daycon.do-duoc-gi": {
+  "t": "<b>测得出什么</b><i></i>",
+  "h": "0ae0b676"
+ },
+ "daycon.goi-y-de-thu-khong-phai": {
+  "t": "这些是可以尝试的建议，不是指定。古籍谈的是人的特质，并不知道您所在的地方开了哪些社团或课程。让孩子试上一堂，再观察真实的反应。",
+  "h": "5f3bcee3"
+ },
+ "daycon.hai-ben-voi-nhau": {
+  "t": "<span class=\"res-block-title\">双方关系</span>",
+  "h": "12457260"
+ },
+ "daycon.hoat-dong-nen-cho-con-thu": {
+  "t": "<span class=\"res-block-title\">适合让孩子尝试的活动</span>",
+  "h": "f4d526be"
+ },
+ "daycon.hoc-hanh-sa-sut-ngoi-vao": {
+  "t": "成绩下滑，坐不住、无法坐在书桌前",
+  "h": "fab00484"
+ },
+ "daycon.khong-co-gi-gap-chi-muon": {
+  "t": "没有什么急事，只是想更了解孩子",
+  "h": "cf2efa39"
+ },
+ "daycon.lam-gi-tu-toi-nay": {
+  "t": "<span class=\"res-block-title\">今晚起可以做的事</span>",
+  "h": "1f882975"
+ },
+ "daycon.moi-luot-luong": {
+  "t": "<span class=\"vnd\" data-tvp-price-vnd=\"day-con\"></span> 每次 <span class=\"cb-sub\">(<span data-tvp-price=\"day-con\">…</span> 两)</span>",
+  "h": "10afd8c1"
+ },
+ "daycon.nam-truc-tinh-khi": {
+  "t": "<span class=\"res-block-title\">五条气质轴</span>",
+  "h": "587fa869"
+ },
+ "daycon.nen": {
+  "t": "宜",
+  "h": "078cfc62"
+ },
+ "daycon.nen-lam-gi": {
+  "t": "<b>该怎么做</b><i></i>",
+  "h": "021dc84d"
+ },
+ "daycon.neu-chi-nho-mot-cau": {
+  "t": "<span class=\"res-block-title\">只记住一句话</span>",
+  "h": "6e372478"
+ },
+ "daycon.ngay-sinh-cua-con": {
+  "t": "孩子的出生日期",
+  "h": "3837783b"
+ },
+ "daycon.nhap-la-so-cua-con-nhan": {
+  "t": "输入孩子的命盘，即可知道孩子如何吸收、怎么出作业孩子才肯做、哪种管教会适得其反，以及亲子容易起冲突之处。",
+  "h": "244ebedb"
+ },
+ "daycon.phan-luan-chua-mo": {
+  "t": "<span class=\"res-block-title\">尚未打开的解读</span>",
+  "h": "68cac5d9"
+ },
+ "daycon.rut-re-ngai-dam-dong-it": {
+  "t": "害羞、怕人多、朋友少",
+  "h": "56c6a43d"
+ },
+ "daycon.sap-phai-chon-truong-chon-nganh": {
+  "t": "即将要选学校／选科系",
+  "h": "926ae29e"
+ },
+ "daycon.tam-chat-nang-khieu": {
+  "t": "<span class=\"res-block-title\">八种天赋特质</span>",
+  "h": "8ac0e142"
+ },
+ "daycon.them-la-so-cua-ban-cha": {
+  "t": "加入您自己的命盘——父亲或母亲（非必填）",
+  "h": "e158b2b1"
+ },
+ "daycon.thoi": {
+  "t": "忌",
+  "h": "aa7d2f5d"
+ },
+ "daycon.tra-loi-thay-o-khung-chat": {
+  "t": "请在聊天栏回复老师，告诉老师您担心的事与孩子的出生日期。",
+  "h": "4cf5eddf"
+ },
+ "daycon.vuot-vach-dut-la-chat-dang": {
+  "t": "超过虚线的特质是<b>值得尝试</b>的方向，并非已证实的天赋。请对照在家中看到的迹象——若不吻合，就相信自己的眼睛。",
+  "h": "fbb5fd98"
+ },
+ "daycon.xem-be-khac": {
+  "t": "查看另一个孩子",
+  "h": "3ff33fa6"
+ },
+ "daycon.xem-cach-day-con-ton-luong": {
+  "t": "<span class=\"bg-label\"><span class=\"ic\" data-icon=\"baby\"></span><b>查看教养方式 →</b></span> <small>费用 <span class=\"vnd\" data-tvp-price-vnd=\"day-con\"></span> <span class=\"cb-sub\">(<span data-tvp-price=\"day-con\">…</span> 两)</span></small>",
+  "h": "ccbaaea3"
+ },
  "disclaimer.1-tinh-chat-tham-khao": {
   "t": "1. 仅供参考",
   "h": "99856a52"
@@ -1206,6 +1886,110 @@
  "disclaimer.xem-them-dieu-khoan-day-du": {
   "t": "完整条款请见<a href=\"/dieu-khoan-dich-vu.html\">服务条款</a>（第 2 节——责任限制），服务说明请见<a href=\"/san-pham-dich-vu.html\">产品与服务</a>页面。",
   "h": "dc202339"
+ },
+ "duyenno.2-thanh-toan": {
+  "t": "<span class=\"wss-n\">2</span><span class=\"wss-l\">付款</span>",
+  "h": "67c0b759"
+ },
+ "duyenno.3-nhan-ket-qua": {
+  "t": "<span class=\"wss-n\">3</span><span class=\"wss-l\">取得结果</span>",
+  "h": "5b1e84a0"
+ },
+ "duyenno.ban-luan-giai-mau-tai-pdf": {
+  "t": "<span class=\"sc-ic\" data-icon=\"file-text\"></span> <span class=\"sc-txt\"><b>范例解读报告</b><span>下载范例命盘的「前世缘分」完整 PDF，先预览真实内容。</span></span> <a class=\"sc-btn\" href=\"/tai-mau/mau-duyen-no-tien-kiep.pdf\" target=\"_blank\" rel=\"noopener\">下载 PDF →</a>",
+  "h": "c48f94d9"
+ },
+ "duyenno.buc-tranh-ve-ca-nhom": {
+  "t": "<span class=\"hp-ic\" data-icon=\"image\"></span><span>为全组人<br>绘制的画作</span>",
+  "h": "43567703"
+ },
+ "duyenno.cau-chuyen-4-hoi": {
+  "t": "<span class=\"hp-ic\" data-icon=\"book-open\"></span><span>四回的<br>故事</span>",
+  "h": "824bdaa8"
+ },
+ "duyenno.co-nhung-moi-quan-he-vua": {
+  "t": "有些关系一见如故，有些相遇仿佛早已约定。把两份命盘合在一起，找出这种感觉背后的缘分故事，并附上插画。",
+  "h": "370ab59d"
+ },
+ "duyenno.co-so-trong-la-so": {
+  "t": "命盘中的依据",
+  "h": "43f95044"
+ },
+ "duyenno.dang-ve-buc-tranh-khoang-45": {
+  "t": "正在绘制画作…<br>（约 45–60 秒）",
+  "h": "28b5d982"
+ },
+ "duyenno.duyen-no-tien-kiep": {
+  "t": "前世缘分",
+  "h": "c6b0ccb5"
+ },
+ "duyenno.duyen-no-tien-kiep-kiep-truoc": {
+  "t": "<b>前世缘分</b><span>前世这些人彼此是什么关系</span>",
+  "h": "89867b1c"
+ },
+ "duyenno.duyen-no-tien-kiep-tu-vi": {
+  "t": "前世缘分——明宝紫微斗数",
+  "h": "f1c11bb4"
+ },
+ "duyenno.gui-ket-qua-nay-cho-ho": {
+  "t": "把这份结果传给他们 →",
+  "h": "69958b00"
+ },
+ "duyenno.hai-den-nam-la-so-kiep": {
+  "t": "输入二到五份命盘，解读前世这些人彼此是什么关系。缘分的类型依古法推得，并附上四回故事与一幅为全组人绘制的画作。",
+  "h": "109c47c2"
+ },
+ "duyenno.lam-lai": {
+  "t": "重新来过",
+  "h": "d3a72f2a"
+ },
+ "duyenno.loai-duyen-no-theo-co-phap": {
+  "t": "<span class=\"hp-ic\" data-icon=\"scroll-text\"></span><span>依古法判定的<br>缘分类型</span>",
+  "h": "50fab9c4"
+ },
+ "duyenno.moi-duyen-4-hoi": {
+  "t": "<span class=\"res-block-title\">缘分故事——四回</span>",
+  "h": "d1b7220b"
+ },
+ "duyenno.moi-duyen-kiep-truoc": {
+  "t": "<span class=\"res-block-title\">前世的缘分</span>",
+  "h": "5c0af936"
+ },
+ "duyenno.moi-duyen-va-cau-chuyen-phia": {
+  "t": "<span class=\"ic\" data-icon=\"lightbulb\"></span> 上方的缘分与故事，依据紫微斗数各命盘之间的关系，并结合前人留下的研究经验描绘而成，仅供参考与娱乐。",
+  "h": "e81a1fdc"
+ },
+ "duyenno.moi-luot-luong": {
+  "t": "<span class=\"vnd\" data-tvp-price-vnd=\"duyen-no-tien-kiep\"></span> 每次 <span class=\"cb-sub\">(<span data-tvp-price=\"duyen-no-tien-kiep\">…</span> 两)</span>",
+  "h": "19bc9353"
+ },
+ "duyenno.nhap-ho-ten-gioi-tinh-va": {
+  "t": "输入想查看的人（2–5 人）的姓名、性别与出生日期时辰，即可编写附插画的缘分故事。",
+  "h": "f61856b4"
+ },
+ "duyenno.nhap-ngay-sinh-duong-lich": {
+  "t": "输入出生日期（国历）",
+  "h": "6983427a"
+ },
+ "duyenno.tai-anh-dang-story": {
+  "t": "⬇ 下载限时动态用图片",
+  "h": "2c46ee3c"
+ },
+ "duyenno.them-nguoi": {
+  "t": "+ 添加人物",
+  "h": "79cf4ccf"
+ },
+ "duyenno.tra-loi-thay-o-khung-chat": {
+  "t": "请在聊天栏回复老师，逐一告知每个人的出生日期（2–5 人）。",
+  "h": "672120ed"
+ },
+ "duyenno.tranh-duyen-no-tien-kiep": {
+  "t": "前世缘分画作",
+  "h": "95122c03"
+ },
+ "duyenno.xem-duyen-no-ton-luong": {
+  "t": "<span class=\"bg-label\"><span class=\"ic\" data-icon=\"sparkles\"></span><b id=\"btnGoLabel\">查看缘分 →</b></span> <small>费用 <span class=\"vnd\" data-tvp-price-vnd=\"duyen-no-tien-kiep\"></span> <span class=\"cb-sub\">(<span data-tvp-price=\"duyen-no-tien-kiep\">…</span> 两)</span></small>",
+  "h": "990649b6"
  },
  "faqs.1-chuyen-khoan-ngan-hang-vnd": {
   "t": "<strong>(1) 越南盾银行转帐</strong>（限越南境内）——透过 payOS，用越南银行 App 扫描 QR 码，两会自动存入钱包。",
@@ -1651,6 +2435,162 @@
   "t": "个人因素未被充分反映",
   "h": "4fbc118f"
  },
+ "giosinh.12-la-so-kha-nghi": {
+  "t": "12张候选<br>命盘",
+  "h": "6b8b7bde"
+ },
+ "giosinh.2-xem-12-gio-kha-nghi": {
+  "t": "<span class=\"wss-n\">2</span><span class=\"wss-l\">查看12个候选时辰</span>",
+  "h": "41d140ce"
+ },
+ "giosinh.am-lich": {
+  "t": "农历",
+  "h": "b0246c79"
+ },
+ "giosinh.anh-chi-nhap-ngay-sinh-theo": {
+  "t": "您输入的是<b>农历</b>生日。其他工具接收的是<b>国历</b>，而系统尚无「农历转国历」的反向换算，因此无法自动带入。上方刚确定的时辰仍可使用，打开其他工具时请手动输入。",
+  "h": "edb9dc0c"
+ },
+ "giosinh.anh-chi-von-da-biet-chac": {
+  "t": "已经确定出生时辰了吗？",
+  "h": "d8efb8c1"
+ },
+ "giosinh.buoc-tiep-theo-thu-hep-bang": {
+  "t": "下一步——用问卷逐步缩小范围",
+  "h": "12044ce6"
+ },
+ "giosinh.buoc-xem-12-la-so-kha": {
+  "t": "查看12张候选命盘这一步<b>免费</b>。缩小范围的问卷与排名才会扣两（点数）。",
+  "h": "88e80a48"
+ },
+ "giosinh.cach-kiem-chac-nhat-lap-la": {
+  "t": "最稳当的验证方式：为<b>排名前两名的时辰</b>各排一张命盘，阅读近5年的运势部分，哪个时辰描述得更贴近，就采用哪个。",
+  "h": "9b5f4abc"
+ },
+ "giosinh.cach-nay-thu-hep-bang-muc": {
+  "t": "此方法是依您的回答与各张命盘的吻合度逐步缩小范围，因此只能<b>排出可能性高低</b>，无法证明哪个时辰才是对的。对于回答贴近实际情况的人，多数情况下正确时辰会落在前3名——但排名第一则没有那么确定。所以本页提供附带依据的完整名单让您自行核对，而不是只给一个听起来很肯定的数字。",
+  "h": "eaefa2a0"
+ },
+ "giosinh.chon-gio-anh-chi-muon-dung": {
+  "t": "请选择您要使用的时辰。系统会存入帐号的<b>命盘簿</b>，其他工具都会自动带入——不必重打，也不必牢记。",
+  "h": "36fd6d7b"
+ },
+ "giosinh.chot-gio-va-dung-tiep": {
+  "t": "确定时辰并继续使用",
+  "h": "2c33bc41"
+ },
+ "giosinh.cung-mot-ngay-sinh-12-la": {
+  "t": "同一个生日——12张截然不同的命盘",
+  "h": "92803f8c"
+ },
+ "giosinh.duong-lich": {
+  "t": "国历",
+  "h": "dfac44de"
+ },
+ "giosinh.gio-dung-neu-biet": {
+  "t": "正确时辰（若您知道）",
+  "h": "f70330da"
+ },
+ "giosinh.gio-muon-dung": {
+  "t": "要使用的时辰",
+  "h": "853206cc"
+ },
+ "giosinh.gio-sinh-doi-thi-cung-menh": {
+  "t": "出生时辰一改，命宫就变，五行局也变，所有星曜的位置随之全部改变。这是<b id=\"freeLine\"></b>的12种可能——其中只有一张是您真正的命盘。",
+  "h": "ca364a84"
+ },
+ "giosinh.gio-sinh-kha-nang-cao-nhat": {
+  "t": "最有可能的出生时辰",
+  "h": "449a17e1"
+ },
+ "giosinh.gioi-tinh": {
+  "t": "性别",
+  "h": "80bbce55"
+ },
+ "giosinh.gui-doi-chieu": {
+  "t": "送出比对",
+  "h": "50ad4ad2"
+ },
+ "giosinh.khao-sat-thu-hep": {
+  "t": "缩小范围<br>问卷",
+  "h": "c176396d"
+ },
+ "giosinh.khao-sat-thu-hep-ua1r": {
+  "t": "缩小范围问卷",
+  "h": "0d669868"
+ },
+ "giosinh.khong-nho-chinh-xac-gio-sinh": {
+  "t": "记不清确切的出生时辰，整张紫微斗数命盘很容易从根源就偏掉。回答几个问题，系统会在12个时辰中逐步缩小范围，找出最接近的出生时辰。",
+  "h": "83b0cbd2"
+ },
+ "giosinh.khong-nho-gio-sinh-lap-ca": {
+  "t": "不记得出生时辰吗？先排出全部12张候选命盘，再透过几个关于健康与人生各阶段的问题逐步缩小范围。",
+  "h": "b7c6b615"
+ },
+ "giosinh.lam-lai": {
+  "t": "重新开始",
+  "h": "535fca0d"
+ },
+ "giosinh.loai-lich": {
+  "t": "历法类型",
+  "h": "4f30f6b5"
+ },
+ "giosinh.luan-giai-la-so-nay": {
+  "t": "解读这张命盘 →",
+  "h": "5fea8efd"
+ },
+ "giosinh.luu-vao-so-la-so": {
+  "t": "存入命盘簿",
+  "h": "b9785d51"
+ },
+ "giosinh.nam": {
+  "t": "年",
+  "h": "98926c7e"
+ },
+ "giosinh.nam-gioi": {
+  "t": "男",
+  "h": "b580ba1b"
+ },
+ "giosinh.neu-co-giay-khai-sinh-hoac": {
+  "t": "若您有出生证明或家人清楚记得，请告诉我们正确的时辰——与刚才的结果比对，能帮助我们校正方法。此项为选填，完全不影响您的解读内容。",
+  "h": "31f387ef"
+ },
+ "giosinh.ngay": {
+  "t": "日",
+  "h": "368c4575"
+ },
+ "giosinh.nhap-ngay-thang-nam-sinh-gio": {
+  "t": "请输入<b>出生年月日</b>——出生时辰正是要找的东西。系统会排出<b>12张候选命盘</b>，透过简短问卷缩小范围，再依吻合度排名。",
+  "h": "287c421e"
+ },
+ "giosinh.thang": {
+  "t": "月",
+  "h": "0e2b3099"
+ },
+ "giosinh.vi-sao-khong-phai-mot-con": {
+  "t": "为什么不是一个斩钉截铁的数字",
+  "h": "2bbd8eab"
+ },
+ "giosinh.xac-dinh-gio-sinh": {
+  "t": "确认出生时辰",
+  "h": "2b570401"
+ },
+ "giosinh.xac-dinh-gio-sinh-khong-nho": {
+  "t": "<b>确认出生时辰</b><span>不记得出生时辰，就从这里开始</span>",
+  "h": "1407f5d3"
+ },
+ "giosinh.xac-dinh-gio-sinh-tu-vi": {
+  "t": "确认出生时辰——明宝紫微斗数",
+  "h": "c14e875f"
+ },
+ "giosinh.xem-12-gio-kha-nghi": {
+  "t": "查看12个候选时辰",
+  "h": "3cd9aabf"
+ },
+ "giosinh.xep-hang-do-khop": {
+  "t": "依吻合度<br>排名",
+  "h": "a6655e79"
+ },
  "hdtt.cach-hoat-dong": {
   "t": "使用流程",
   "h": "8ad7f762"
@@ -1758,6 +2698,178 @@
  "hdtt.xem-tuoi-vo-chong": {
   "t": "<span class=\"ic\" data-icon=\"heart-handshake\"></span> 夫妻合婚",
   "h": "177d20f4"
+ },
+ "hnt.2-xem-truoc": {
+  "t": "<span class=\"wss-n\">2</span><span class=\"wss-l\">预览</span>",
+  "h": "93d60bc7"
+ },
+ "hnt.3-huong-dang-thu": {
+  "t": "<span class=\"hp-ic\" data-icon=\"star\"></span><span>3 个<br>值得尝试的方向</span>",
+  "h": "cf93e32b"
+ },
+ "hnt.ba-huong-dang-cho-con-thu": {
+  "t": "<span class=\"res-block-title\">值得让孩子尝试的三个方向</span>",
+  "h": "116b88f2"
+ },
+ "hnt.ban-luan-giai-mau-tai-pdf": {
+  "t": "<span class=\"sc-ic\" data-icon=\"file-text\"></span> <span class=\"sc-txt\"><b>范例解读报告</b><span>下载范例命盘的「孩子的早期职涯方向」完整 PDF，先预览真实内容。</span></span> <a class=\"sc-btn\" href=\"/tai-mau/mau-huong-nghiep-tre.pdf\" target=\"_blank\" rel=\"noopener\">下载 PDF →</a>",
+  "h": "13902c17"
+ },
+ "hnt.ban-nay-phac-hoa-tu-cac": {
+  "t": "<span class=\"ic\" data-icon=\"lightbulb\"></span> 本解读依据紫微斗数命盘中的数据，依<i>《紫微斗数新编》</i>（Vân Đằng Thái Thứ Lang）排定，并结合前人留下的研究经验描绘而成。<b>倾向与活动</b>的部分是<b>明宝紫微斗数专家团队</b>自行创建的方法，并非古籍原文。请参阅<a href=\"/nguon-du-lieu.html\">数据出处</a>。<br><br> <span class=\"ic\" data-icon=\"scale\"></span> 这是<b>供参考的方向建议</b>，并不是替孩子决定人生道路。孩子尚未成年，也不在这里，因此本解读刻意<b>不预测考试成败、不保证成功、不谈健康或感情</b>。倾向所说的是孩子<i>适合尝试什么</i>，而不是孩子<i>必须从事什么职业</i>。",
+  "h": "6a1cfd57"
+ },
+ "hnt.bat-dau-tu-dau": {
+  "t": "<span class=\"res-block-title\" id=\"doTitle\">从哪里开始</span>",
+  "h": "2bb617bb"
+ },
+ "hnt.chat-nguoi-doc-ra-tu-la": {
+  "t": "<span class=\"res-block-title\">从命盘读出的特质</span>",
+  "h": "d983261f"
+ },
+ "hnt.ep-con-hoc-dieu-con-khong": {
+  "t": "硬逼孩子学他没有缘分的事，只会让双方更疲累。从孩子的命盘，看出每个年龄阶段适合让孩子接触哪些活动。",
+  "h": "aa788dd7"
+ },
+ "hnt.huong-nghiep-som-cho-con": {
+  "t": "孩子的早期职涯方向",
+  "h": "2735212c"
+ },
+ "hnt.huong-nghiep-som-cho-con-nen": {
+  "t": "<b>孩子的早期职涯方向</b><span>从现在起该让孩子接触什么</span>",
+  "h": "14295eac"
+ },
+ "hnt.huong-nghiep-som-cho-con-tu": {
+  "t": "孩子的早期职涯方向——明宝紫微斗数",
+  "h": "9c8cd322"
+ },
+ "hnt.lam-trong-thang-nay": {
+  "t": "这个月该做",
+  "h": "a8ab8a7b"
+ },
+ "hnt.may-mat-nay-khong-phai-cho": {
+  "t": "<span class=\"ic\" data-icon=\"alert-triangle\"></span> 这几个面向<b>并不是孩子欠缺的地方</b>，只是代表适合孩子的事不以这些面向来评分。",
+  "h": "c58a74dd"
+ },
+ "hnt.mo-loi-voi-con-the-nao": {
+  "t": "<span class=\"res-block-title\">怎么对孩子开口</span>",
+  "h": "b216c079"
+ },
+ "hnt.moi-luot-luong": {
+  "t": "<span class=\"vnd\" data-tvp-price-vnd=\"huong-nghiep-tre\"></span> 每次 <span class=\"cb-sub\">(<span data-tvp-price=\"huong-nghiep-tre\">…</span> 两)</span>",
+  "h": "bdeef95d"
+ },
+ "hnt.nhap-la-so-cua-con-nhan": {
+  "t": "输入孩子的命盘，即可得到从命盘读出的倾向、适合孩子年龄的接触活动，以及大人该做与该停止的事。",
+  "h": "d1c6abd2"
+ },
+ "hnt.nhap-ngay-gio-sinh-cua-con": {
+  "t": "输入孩子的出生日期与时辰，以及您担心的事，即可得到最突出的倾向、值得尝试的活动，以及从哪里开始。",
+  "h": "3d914a45"
+ },
+ "hnt.nhin-ra-con": {
+  "t": "<span class=\"res-block-title\">看见孩子</span>",
+  "h": "a6d52b8a"
+ },
+ "hnt.noi-nhat": {
+  "t": "最突出",
+  "h": "b4fa86fd"
+ },
+ "hnt.phan-dinh-huong-chua-mo": {
+  "t": "<span class=\"res-block-title\">尚未打开的方向建议</span>",
+  "h": "a76cca13"
+ },
+ "hnt.sang-lua-sau-thi-doi-gi": {
+  "t": "<span class=\"res-block-title\">下一个年龄层会有什么不同</span>",
+  "h": "b5257805"
+ },
+ "hnt.thien-huong-la-xu-huong-de": {
+  "t": "倾向是<b>让孩子尝试接触的方向</b>，并不是已定下的职业。这张表是本页自行的对应与诠释，并非古籍原文。<br> 这个工具以与<a href=\"/app/day-con\">依命盘教养孩子</a>相<b>同的尺度</b>（同样的 5 条气质轴与 8 种天赋特质）来看孩子，但回答的是不同的问题：那边问的是<i>孩子擅长什么科目</i>，这里问的是<i>孩子适合哪种做事方式</i>。因为尺度相同，两边不会说出相反的话；因为问题不同，排序可能不会完全一致。",
+  "h": "fc1b1e95"
+ },
+ "hnt.thien-huong-noi-nhat": {
+  "t": "<span class=\"hp-ic\" data-icon=\"compass\"></span><span>最突出的<br>倾向</span>",
+  "h": "b3d9e48c"
+ },
+ "hnt.thien-huong-noi-nhat-91zz": {
+  "t": "<span class=\"res-block-title\">最突出的倾向</span>",
+  "h": "2954ceff"
+ },
+ "hnt.thoi-lam": {
+  "t": "该停止",
+  "h": "ef8d27c0"
+ },
+ "hnt.viec-hop-voi-con-thuong-khong": {
+  "t": "适合孩子的事通常不要求的",
+  "h": "513e2289"
+ },
+ "hnt.viec-lam-theo-lua-tuoi": {
+  "t": "<span class=\"hp-ic\" data-icon=\"hourglass\"></span><span>依年龄层<br>安排的事</span>",
+  "h": "56da2915"
+ },
+ "hnt.xem-thien-huong-cua-con-ton": {
+  "t": "<span class=\"bg-label\"><span class=\"ic\" data-icon=\"compass\"></span><b>查看孩子的倾向 →</b></span> <small>费用 <span class=\"vnd\" data-tvp-price-vnd=\"huong-nghiep-tre\"></span> <span class=\"cb-sub\">(<span data-tvp-price=\"huong-nghiep-tre\">…</span> 两)</span></small>",
+  "h": "ebca1bd6"
+ },
+ "hoangdao.1-nhap-ngay": {
+  "t": "<span class=\"wss-n\">1</span><span class=\"wss-l\">输入日期</span>",
+  "h": "a99fbfcf"
+ },
+ "hoangdao.6-gio-tot-nen-dung": {
+  "t": "适合使用的<br>6个吉时",
+  "h": "ca3f8fea"
+ },
+ "hoangdao.6-gio-xau-can-tranh": {
+  "t": "需要避开的<br>6个凶时",
+  "h": "4f1e6bfc"
+ },
+ "hoangdao.chon-ngay-thang-nam-duong-lich": {
+  "t": "选择要查找的国历日、月、年。系统会推算黄道时辰，并比对当日的黄历。",
+  "h": "b7dbabb0"
+ },
+ "hoangdao.cung-mot-viec-lam-gio-nay": {
+  "t": "同一件事，在这个时辰顺利，换个时辰却莫名受阻。选好要查的日期，即刻依黄历取得吉时与该避开的时辰清单。",
+  "h": "173c7571"
+ },
+ "hoangdao.gio-hoang-dao": {
+  "t": "黄道吉时",
+  "h": "940fb21d"
+ },
+ "hoangdao.gio-hoang-dao-12-gio-tot": {
+  "t": "<b>黄道吉时</b><span>依干支推算一日12时辰的吉凶</span>",
+  "h": "23839283"
+ },
+ "hoangdao.gio-hoang-dao-tu-vi-minh": {
+  "t": "黄道吉时——明宝紫微斗数",
+  "h": "51a0db68"
+ },
+ "hoangdao.hac-dao-6-gio-can-tranh": {
+  "t": "✗ 黑道——需避开的6个时辰",
+  "h": "39601183"
+ },
+ "hoangdao.hoang-dao-6-gio-tot": {
+  "t": "✦ 黄道——6个吉时",
+  "h": "7263a1c8"
+ },
+ "hoangdao.hoang-lich-day-du": {
+  "t": "完整<br>黄历",
+  "h": "f4d66b7c"
+ },
+ "hoangdao.hoi-thay-nen-lam-viec-vao": {
+  "t": "✦ 请问老师该在哪个时辰做事",
+  "h": "2a9b43ce"
+ },
+ "hoangdao.ngay-can-xem-duong-lich": {
+  "t": "要查找的日期（国历）",
+  "h": "a32fbe04"
+ },
+ "hoangdao.tra-12-gio-hoang-dao-hac": {
+  "t": "依干支查找当日12时辰的黄道／黑道——适合开张、出行、签约的吉时。也可请老师依您的事项论析。",
+  "h": "6f4fa691"
+ },
+ "hoangdao.xem-gio": {
+  "t": "查看时辰 →",
+  "h": "e1db5866"
  },
  "home.270-000-da-quoc-gia-da": {
   "t": "<span><span class=\"ic\" data-icon=\"file-text\"></span>270,000+</span> <span><span class=\"ic\" data-icon=\"globe\"></span>跨国数据</span> <span><span class=\"ic\" data-icon=\"check\"></span>已经查证</span>",
@@ -3139,6 +4251,202 @@
   "t": "即将发生的趋势",
   "h": "6e5a1980"
  },
+ "js.cdvc.anh-dang-tai-co-the-hoi": {
+  "t": "图片加载中，可能稍慢——请稍候，或",
+  "h": "c4e9709b"
+ },
+ "js.cdvc.anh-minh-hoa-chua-mo": {
+  "t": "示意图——尚未打开",
+  "h": "bef5f6d7"
+ },
+ "js.cdvc.anh-minh-hoa-mo-mo-khoa": {
+  "t": "示意图（模糊）——解锁后即可看到真正的肖像",
+  "h": "9e03ce37"
+ },
+ "js.cdvc.ban-da-tao-ket-qua-cho": {
+  "t": "✓ 您已为这张命盘产生过结果——重新打开，不会扣两",
+  "h": "d59efda4"
+ },
+ "js.cdvc.bao-gio-toi-lap-gia-dinh": {
+  "t": "我什么时候会成家？",
+  "h": "359ca64d"
+ },
+ "js.cdvc.cach-cuc-dac-biet": {
+  "t": "特殊格局：",
+  "h": "f4dcacee"
+ },
+ "js.cdvc.chan-dung-nguoi-chong-cua-toi": {
+  "t": "我的丈夫肖像",
+  "h": "8037fff1"
+ },
+ "js.cdvc.chan-dung-nguoi-phoi-ngau": {
+  "t": "配偶肖像",
+  "h": "78b47413"
+ },
+ "js.cdvc.chan-dung-nguoi-phoi-ngau-chua": {
+  "t": "⊙ 配偶肖像尚未打开",
+  "h": "c91a9a69"
+ },
+ "js.cdvc.chan-dung-nguoi-vo-cua-toi": {
+  "t": "我的妻子肖像",
+  "h": "54b4f3b2"
+ },
+ "js.cdvc.chinh-tinh-chu": {
+  "t": "<b>内核主星：</b> ",
+  "h": "a189d8a3"
+ },
+ "js.cdvc.chinh-tinh-ds": {
+  "t": "主星：{ds}",
+  "h": "0594f4e0"
+ },
+ "js.cdvc.chong": {
+  "t": "丈夫",
+  "h": "92a6f17f"
+ },
+ "js.cdvc.cung-phu-the": {
+  "t": "夫妻宫：",
+  "h": "42367865"
+ },
+ "js.cdvc.cung-phu-the-cua-toi-co-gi": {
+  "t": "我的夫妻宫有什么特别之处？",
+  "h": "2ec84146"
+ },
+ "js.cdvc.cung-phu-the-trong-la-so": {
+  "t": "您命盘中的夫妻宫",
+  "h": "cf3fd3a1"
+ },
+ "js.cdvc.da-ve-xong-chan-dung-dua": {
+  "t": "已依据您的夫妻宫绘制完肖像。还想多问关于婚姻、夫妻宫或命盘的什么吗？",
+  "h": "777cc6a3"
+ },
+ "js.cdvc.dang-dung-anh": {
+  "t": "图片制作中…",
+  "h": "7bce9760"
+ },
+ "js.cdvc.dang-ve-chan-dung-thuong-45": {
+  "t": "正在绘制肖像（通常 45–60 秒）",
+  "h": "8fb2076c"
+ },
+ "js.cdvc.dung-gu-ban-chua-gui-anh": {
+  "t": "合不合您的口味？把这张图传给朋友看，再邀他们也来画画看<b>自己未来的另一半</b>。",
+  "h": "d435c12c"
+ },
+ "js.cdvc.hoan-canh-gap-go": {
+  "t": "\n\n相遇的情境：",
+  "h": "7878e939"
+ },
+ "js.cdvc.hon-nhan-cua-toi-co-thuan": {
+  "t": "我的婚姻会顺利吗？",
+  "h": "9c01a229"
+ },
+ "js.cdvc.khong-the-ket-noi-vui-long": {
+  "t": "无法连接，请再试一次。",
+  "h": "bf0b6e7b"
+ },
+ "js.cdvc.lap-la-so-xac-dinh-cung": {
+  "t": "排出命盘并定出夫妻宫",
+  "h": "f8f01348"
+ },
+ "js.cdvc.loi": {
+  "t": "错误 ",
+  "h": "1b80116b"
+ },
+ "js.cdvc.loi-8d72": {
+  "t": "错误：",
+  "h": "471c0087"
+ },
+ "js.cdvc.luan-giai-chua-mo": {
+  "t": "解读——尚未打开",
+  "h": "4c4f7020"
+ },
+ "js.cdvc.luan-giai-cung-phu-the": {
+  "t": "夫妻宫解读",
+  "h": "8e52b135"
+ },
+ "js.cdvc.luan-giai-cung-phu-the-p43z": {
+  "t": "夫妻宫解读",
+  "h": "fee63cc7"
+ },
+ "js.cdvc.luc-giac-cung-phu-the": {
+  "t": "夫妻宫六角图",
+  "h": "c1463a39"
+ },
+ "js.cdvc.luot-ve": {
+  "t": "次绘制",
+  "h": "85f72421"
+ },
+ "js.cdvc.mo-chan-dung-day-du": {
+  "t": "打开完整肖像",
+  "h": "9f515b09"
+ },
+ "js.cdvc.n-tuoi-hist": {
+  "t": "{n} 岁",
+  "h": "25e7a2be"
+ },
+ "js.cdvc.nguoi-chong": {
+  "t": "丈夫",
+  "h": "bce4fcfa"
+ },
+ "js.cdvc.nguoi-vo": {
+  "t": "妻子",
+  "h": "f1b7338b"
+ },
+ "js.cdvc.phac-hoa-tu-cung-phu-the": {
+  "t": "依命盘中的夫妻宫描绘",
+  "h": "adeba7b7"
+ },
+ "js.cdvc.phac-thao-mo-ta-uoc-luong": {
+  "t": "草拟描述并估计伴侣年龄",
+  "h": "7ce20134"
+ },
+ "js.cdvc.phu-tinh-ds": {
+  "t": "辅星：{ds}",
+  "h": "7e63fae4"
+ },
+ "js.cdvc.quet-ma-xem-chan-dung-cua": {
+  "t": "扫描 QR 码——查看您的肖像",
+  "h": "2b62e4a0"
+ },
+ "js.cdvc.sat-tinh-pha-cach": {
+  "t": "（煞星——破格）",
+  "h": "742dce66"
+ },
+ "js.cdvc.sat-tinh-pha-cach-ngay-tu": {
+  "t": " ——煞星，从根本破格",
+  "h": "14fa5401"
+ },
+ "js.cdvc.tai-lai": {
+  "t": "重新加载",
+  "h": "16371241"
+ },
+ "js.cdvc.theo-chinh-tinh": {
+  "t": "依主星 ",
+  "h": "ec1e2e45"
+ },
+ "js.cdvc.theo-phu-tinh": {
+  "t": "依辅星 ",
+  "h": "4c2c8bf3"
+ },
+ "js.cdvc.vo": {
+  "t": "妻子",
+  "h": "98c0d1da"
+ },
+ "js.cdvc.vo-chinh-dieu": {
+  "t": "无主星",
+  "h": "bb1c972d"
+ },
+ "js.cdvc.vui-long-nhap-day-du-ngay": {
+  "t": "请完整输入出生年月日。",
+  "h": "2545b4dd"
+ },
+ "js.cdvc.xem-them-ve-tinh-cach": {
+  "t": "看看更多关于我个性的内容",
+  "h": "0c0df338"
+ },
+ "js.cdvc.y-nghia-co-phap": {
+  "t": "古法的意涵：",
+  "h": "396825c1"
+ },
  "js.chat.chao": {
   "t": "您好 ",
   "h": "35004652"
@@ -3154,6 +4462,98 @@
  "js.chat.ke-vai-dong-thoi-minh-bao": {
   "t": "简单说几句就好。明宝会从团队 15 位老师中，请出最合适的一位为您解读。",
   "h": "e43855cc"
+ },
+ "js.chonngay.ban-mau-note": {
+  "t": "这是用于示范的<b>范例</b>（数据不同）——并非您的结果。",
+  "h": "4dc73cd0"
+ },
+ "js.chonngay.chip1": {
+  "t": "这个月哪一天最好？",
+  "h": "1d6514df"
+ },
+ "js.chonngay.chip2": {
+  "t": "这件事的黄道吉时？",
+  "h": "005ba6f0"
+ },
+ "js.chonngay.chip3": {
+  "t": "哪些日子一定要避开？",
+  "h": "36a0360f"
+ },
+ "js.chonngay.chip4": {
+  "t": "那天出行哪个方位好？",
+  "h": "0ef8b5dc"
+ },
+ "js.chonngay.chua-mo-duoc-ban-mau": {
+  "t": "无法打开范例，请稍后再试。",
+  "h": "05a0f158"
+ },
+ "js.chonngay.dang-mo": {
+  "t": "打开中…",
+  "h": "a3fdeaab"
+ },
+ "js.chonngay.dang-phan-tich": {
+  "t": "正在分析吉日⋯⋯通常需要15–25秒",
+  "h": "2413a48e"
+ },
+ "js.chonngay.greeting": {
+  "t": "已为**{viec}**创建基础（主事者生肖：**{cc}**）。您想先听什么建议？",
+  "h": "37474974"
+ },
+ "js.chonngay.khong-nhan-duoc-ket-qua": {
+  "t": "未收到结果。",
+  "h": "46e8add0"
+ },
+ "js.chonngay.khong-the-ket-noi": {
+  "t": "无法连接，请再试一次。",
+  "h": "bf0b6e7b"
+ },
+ "js.chonngay.label": {
+  "t": "择日：{viec}・{ten}・{n}年{t}月",
+  "h": "c350a6fa"
+ },
+ "js.chonngay.loi-colon": {
+  "t": "错误：",
+  "h": "471c0087"
+ },
+ "js.chonngay.loi-status": {
+  "t": "错误 {s}",
+  "h": "c406c72b"
+ },
+ "js.chonngay.nam-n": {
+  "t": "{n}年",
+  "h": "e2de29f4"
+ },
+ "js.chonngay.nhap-thong-tin-cua-toi": {
+  "t": "输入我的数据 →",
+  "h": "61666cb3"
+ },
+ "js.chonngay.res-note": {
+  "t": "主事者生肖：<b>{cc}</b>（{hanh}）。预定月份为<b>{tcc}</b>，年份为<b>{ncc}</b>。吉日需与主事者生肖<b>相合</b>（六合／三合），并避开<b>相冲／相刑</b>。想知道<b>{viec}</b>的具体日期与黄道吉时，请问老师。",
+  "h": "e946d4da"
+ },
+ "js.chonngay.thang-n": {
+  "t": "{n}月",
+  "h": "4dd9659f"
+ },
+ "js.chonngay.thang-n-m": {
+  "t": "{n}年{t}月",
+  "h": "355a0dcf"
+ },
+ "js.chonngay.tuoi-chu-su": {
+  "t": "主事者生肖",
+  "h": "c6691aae"
+ },
+ "js.chonngay.vui-long-nhap-ho-ten": {
+  "t": "请输入姓名、出生年，以及预定的月份与年份。",
+  "h": "d60f4f07"
+ },
+ "js.chonngay.vui-long-nhap-thong-tin": {
+  "t": "请先输入数据。",
+  "h": "b73d7304"
+ },
+ "js.chonngay.xem-ban-mau": {
+  "t": "查看范例 →",
+  "h": "ba3671b1"
  },
  "js.chutrinh.10-can-can-trong-dieu-gi": {
   "t": "/10) 需要留意什么？",
@@ -3214,6 +4614,110 @@
  "js.chutrinh.tieu-van-nam": {
   "t": "流年小运 ",
   "h": "1979c56a"
+ },
+ "js.cn.ai-cung-han-vao": {
+  "t": "{ai}同时行限入<b>{cung}</b>。",
+  "h": "8f48fa76"
+ },
+ "js.cn.ask": {
+  "t": "我们家未来十二个月会怎样？全家该留意哪几个月？",
+  "h": "5106642f"
+ },
+ "js.cn.bai-tinh-ds": {
+  "t": "败星：{ds}",
+  "h": "6fbe9f13"
+ },
+ "js.cn.cat-tinh-ds": {
+  "t": "吉星：{ds}",
+  "h": "d335af36"
+ },
+ "js.cn.cham": {
+  "t": "。",
+  "h": "3a52ce78"
+ },
+ "js.cn.chua-co-gio-sinh": {
+  "t": "没有出生时辰，因此还无法排出紫微斗数命盘。",
+  "h": "3d8d3bbd"
+ },
+ "js.cn.chua-tai-duoc-la-so": {
+  "t": "无法加载全家人的命盘，请刷新页面。",
+  "h": "131469d8"
+ },
+ "js.cn.chua-them-duoc-lich": {
+  "t": "无法添加行事历，请稍后再试。",
+  "h": "6075add3"
+ },
+ "js.cn.han-vao-cung": {
+  "t": "行限入<b>{cung}</b>",
+  "h": "593101c7"
+ },
+ "js.cn.mang-chap-chon": {
+  "t": "网络不稳，无法加载，请刷新页面。",
+  "h": "2adc56e0"
+ },
+ "js.cn.nam-nay-tieu-han-vao": {
+  "t": "今年小限入<b>{th}</b>，流年入<b>{ln}</b>。",
+  "h": "b4b04598"
+ },
+ "js.cn.nguoi": {
+  "t": "成员",
+  "h": "65ae37a4"
+ },
+ "js.cn.nguoi-nha": {
+  "t": "家人",
+  "h": "447d96d6"
+ },
+ "js.cn.nha-ten-n-nguoi": {
+  "t": "{ten}一家 · {n} 人 · 未来十二个农历月",
+  "h": "174da578"
+ },
+ "js.cn.nhuan-ngan": {
+  "t": "闰",
+  "h": "6eb03d88"
+ },
+ "js.cn.sat-tinh-ds": {
+  "t": "煞星：{ds}",
+  "h": "5d9f3071"
+ },
+ "js.cn.thang-ngan": {
+  "t": "{n}月",
+  "h": "efb66afc"
+ },
+ "js.cn.vai-bo": {
+  "t": "爸爸",
+  "h": "dbbdf270"
+ },
+ "js.cn.vai-chong": {
+  "t": "丈夫",
+  "h": "92a6f17f"
+ },
+ "js.cn.vai-con": {
+  "t": "子女",
+  "h": "eb70b34b"
+ },
+ "js.cn.vai-me": {
+  "t": "妈妈",
+  "h": "dfc6f90b"
+ },
+ "js.cn.vai-sinh-nam": {
+  "t": "{vai} · {nam} 年出生",
+  "h": "3d5b8ffa"
+ },
+ "js.cn.vai-toi": {
+  "t": "您",
+  "h": "40ffd8d0"
+ },
+ "js.cn.vai-vo": {
+  "t": "妻子",
+  "h": "98c0d1da"
+ },
+ "js.cn.xac-dinh-gio-sinh": {
+  "t": "确认出生时辰 →",
+  "h": "5122b0fd"
+ },
+ "js.cn.xong-roi-lich-tu-cap-nhat": {
+  "t": "完成了——行事历会每天自动更新。",
+  "h": "d89d8f57"
  },
  "js.cns.ai-sinh": {
   "t": "与你同日出生的人",
@@ -3375,6 +4879,1726 @@
   "t": "依术数分类：紫微斗数、八字、相学、风水…",
   "h": "cf4f8ecc"
  },
+ "js.cs.ba-nhanh-nay-khac-nhau-o": {
+  "t": "这三个分支差在哪里？",
+  "h": "19e39a35"
+ },
+ "js.cs.ba-nhanh-nghe-cu-the-ben": {
+  "t": "您领域内的三个具体职业分支",
+  "h": "879d2594"
+ },
+ "js.cs.ba-tang-o-tren-noi-ban": {
+  "t": "上面三个层次说的是您适合哪个<b>领域</b>，以及",
+  "h": "d7fe12dc"
+ },
+ "js.cs.bac-chuc-phan": {
+  "t": "职分等级",
+  "h": "73d28e4f"
+ },
+ "js.cs.ban-hop-lam-gi": {
+  "t": "您适合做什么",
+  "h": "7bf8b024"
+ },
+ "js.cs.ban-hop-lam-nganh-gi-linh": {
+  "t": "您适合的行业——领域・角色・规模",
+  "h": "ee981a25"
+ },
+ "js.cs.ban-nghieng-ve-kieu-full": {
+  "t": "您偏向**{kieu}**类型（{tt}）。注册帐号（赠送免费两）即可看到完整的 12 个面向、四阶段路线图与组队——打开那些部分之后，我才能更深入解说。",
+  "h": "711e5f38"
+ },
+ "js.cs.boi-canh-viet-nam-dang-lam": {
+  "t": "针对越南的情境；若您从事的行业不在清单中，请对照 ",
+  "h": "18705d1c"
+ },
+ "js.cs.bon-dai-van-lien-tiep-phu": {
+  "t": "连续四个大运涵盖了工作的岁月。分数是引擎评定的大运分数；",
+  "h": "5fe06b87"
+ },
+ "js.cs.bon-kieu-nguoi-va-cach-goi": {
+  "t": "四种类型与建议行业的方式，是<b>明宝紫微斗数专家团队</b>自行创建的方法。<br><br>",
+  "h": "24a12349"
+ },
+ "js.cs.bon-muoi-nam-di-lam-chia": {
+  "t": "工作四十年分成四阶段",
+  "h": "ae99b53d"
+ },
+ "js.cs.bon-muoi-nam-di-lam-chia-90zk": {
+  "t": "工作四十年分成四个阶段",
+  "h": "ced9f68e"
+ },
+ "js.cs.bon-viec-phai-hoc-khi-bat": {
+  "t": "开始带人时必学的四件事",
+  "h": "d246f547"
+ },
+ "js.cs.cac-nhanh-duoi-day-hop-voi": {
+  "t": "以下这些分支适合您的<b>人格特质</b>，但",
+  "h": "f9533187"
+ },
+ "js.cs.cach-cuc-tai-cung-quan-loc": {
+  "t": "官禄宫的格局",
+  "h": "2c8aa204"
+ },
+ "js.cs.cai-thuc-ban-di": {
+  "t": "驱动您前进的力量",
+  "h": "e34c0d1a"
+ },
+ "js.cs.cau-hoi-chay-ngam-trong-dau": {
+  "t": "脑中暗自运转的问题",
+  "h": "92b9b591"
+ },
+ "js.cs.chang-nghe-tiep-theo-cua-toi": {
+  "t": "我的下一个职涯阶段会是怎样？",
+  "h": "7e97fdda"
+ },
+ "js.cs.chat-nguoi-noi-bat": {
+  "t": "突出的人格特质",
+  "h": "31efa257"
+ },
+ "js.cs.chat-nguoi-noi-bat-va-thu": {
+  "t": "突出的人格特质，以及适合您的行业不要求的事",
+  "h": "5b90f04f"
+ },
+ "js.cs.chat-viec-dung-doc-thanh-ban": {
+  "t": "<b>工作特质</b>；请不要读成「您做错行了」。",
+  "h": "4728caa7"
+ },
+ "js.cs.chat-viec-thay-vi-doi-chieu": {
+  "t": "请对照<i>工作特质</i>，而不是对照行业名称。</p>",
+  "h": "94306405"
+ },
+ "js.cs.chinh-tinh-cung-menh": {
+  "t": "命宫的主星",
+  "h": "dcba7b35"
+ },
+ "js.cs.chinh-tinh-cung-quan-loc": {
+  "t": "官禄宫的主星",
+  "h": "9c8bc6b2"
+ },
+ "js.cs.cho-hay-vap": {
+  "t": "<b>容易绊倒之处</b>",
+  "h": "0fe4ac0b"
+ },
+ "js.cs.cho-nguoi-dang-o-vi-tri": {
+  "t": "给目前处于此位置的人：",
+  "h": "c0aba160"
+ },
+ "js.cs.chua-dung-duoc-anh-thu-lai": {
+  "t": "无法产生图片。请稍后几秒再试。",
+  "h": "f8055429"
+ },
+ "js.cs.chua-dung-duoc-ho-so-luc": {
+  "t": "目前无法创建文件——请再试一次。",
+  "h": "3f85746f"
+ },
+ "js.cs.chua-khop-bac-chuc-phan-hien": {
+  "t": "<b>尚未符合目前的职分等级</b>。请当作努力的方向来读，而不是现在就该站的位置。",
+  "h": "cfa2e82b"
+ },
+ "js.cs.chua-mo-duoc-phan-nhanh-nghe": {
+  "t": "无法打开职业分支的部分——请再试一次。",
+  "h": "f13e7f15"
+ },
+ "js.cs.chuc-phan-theo-loi-co": {
+  "t": "古式职分",
+  "h": "0504275b"
+ },
+ "js.cs.co-so-trong-la-so": {
+  "t": "命盘中的依据",
+  "h": "43f95044"
+ },
+ "js.cs.con-so-phan-tram-la-do": {
+  "t": "百分比数字是<b>人格特质与工作特质的契合度</b>，",
+  "h": "65261dc8"
+ },
+ "js.cs.cung-mot-nganh-nhung-moi-nhanh": {
+  "t": "同一个行业，每个分支需要的人格特质却截然不同。</p>",
+  "h": "b2d6705d"
+ },
+ "js.cs.cung-name": {
+  "t": "{name}",
+  "h": "3cb49303"
+ },
+ "js.cs.da-mo-phan-nhanh-nghe-ten": {
+  "t": "已打开职业分支的部分。最适合您的分支是**{ten}**。您想深入哪个分支，还是想问某个具体行业？",
+  "h": "68b42e6e"
+ },
+ "js.cs.dang-dung": {
+  "t": "创建中…",
+  "h": "88400b94"
+ },
+ "js.cs.dang-dung-anh": {
+  "t": "图片制作中…",
+  "h": "7bce9760"
+ },
+ "js.cs.dang-mo-phan-nhanh-nghe": {
+  "t": "正在打开职业分支的部分…",
+  "h": "f58ba0b1"
+ },
+ "js.cs.dang-o-day": {
+  "t": "目前在此",
+  "h": "aa7d3c7e"
+ },
+ "js.cs.day-la-goi-y-huong-khong": {
+  "t": "这是方向上的建议，不是指定职业。古籍谈的是<b>工作特质</b>",
+  "h": "0573bbbd"
+ },
+ "js.cs.day-la-the-manh-tuong-doi": {
+  "t": "这是您自己各面向之间的<b>相对强项</b>，不是与别人比较的分数。</p>",
+  "h": "3cea3811"
+ },
+ "js.cs.diem": {
+  "t": " · 分数 ",
+  "h": "0ea58cf8"
+ },
+ "js.cs.diem-8vmw": {
+  "t": "分数",
+  "h": "024af419"
+ },
+ "js.cs.diem-do-engine-cham-tren-chinh": {
+  "t": "分数由引擎依您自己的命盘评定（满分 10 分）。",
+  "h": "03be4bad"
+ },
+ "js.cs.doc-ca-hai-phan-dung-ep": {
+  "t": "</b>的色彩也相当明显。两部分都读一读，不要硬把自己塞进一个格子。</div>",
+  "h": "24fcc1c0"
+ },
+ "js.cs.doc-theo-cap-dong-cung": {
+  "t": " ——依同宫的一对来读",
+  "h": "249d9a92"
+ },
+ "js.cs.doc-theo-co-phap-phu-mau": {
+  "t": "依古法来读：<b>父母宫</b>是长辈上位者，<b>兄弟宫</b>是平辈，",
+  "h": "4f1fa3e2"
+ },
+ "js.cs.doi-mat-hay-ban-giay-cam": {
+  "t": "（面对人还是案头工作、带人还是带技艺）；上方的现代行业清单是本页自行对应出来的。",
+  "h": "84acb782"
+ },
+ "js.cs.dung-ngay-bay-gio": {
+  "t": "并不是现在就该站的位置。</div>",
+  "h": "cebffac0"
+ },
+ "js.cs.ghep-doi-ai-do-duoc-ban": {
+  "t": "组队——谁能支撑您",
+  "h": "616debca"
+ },
+ "js.cs.ho-so": {
+  "t": "文件",
+  "h": "ebe439c1"
+ },
+ "js.cs.ho-so-cong-so-da-dung-full": {
+  "t": "职场文件已创建完成——您偏向**{kieu}**类型（{tt}）。目前最强的是**{manh}**。想让我深入哪个部分？",
+  "h": "e1d2fcd1"
+ },
+ "js.cs.ho-so-day-du-chua-mo": {
+  "t": "⊙ 完整文件尚未打开",
+  "h": "7e47b133"
+ },
+ "js.cs.ho-tro": {
+  "t": "支持",
+  "h": "ed2a55ae"
+ },
+ "js.cs.hop-tac": {
+  "t": "协作",
+  "h": "d934a7d7"
+ },
+ "js.cs.huong-tham-khao-dung-doc-nhu": {
+  "t": "只是供参考的方向，请不要读成肯定的论断。</div>",
+  "h": "dede2dae"
+ },
+ "js.cs.khai-sang": {
+  "t": "开创",
+  "h": "b6833673"
+ },
+ "js.cs.khi-duoc-giao-quyen": {
+  "t": "被授予权限时",
+  "h": "90c9e1e0"
+ },
+ "js.cs.khong-co-ten-nganh-ban-dang": {
+  "t": "清单中没有您目前从事的行业名称，<b>并不</b>代表您做错了——请以 ",
+  "h": "e9ea00be"
+ },
+ "js.cs.khong-phai-kha-nang-thanh-cong": {
+  "t": "<b>并不是</b>成功的可能性。行业清单是本页针对越南情境自行对应出来的。",
+  "h": "a0d5aaf7"
+ },
+ "js.cs.khop": {
+  "t": "契合",
+  "h": "06321169"
+ },
+ "js.cs.kieu": {
+  "t": " · 类型 ",
+  "h": "6d81ffdf"
+ },
+ "js.cs.kieu-4mx9": {
+  "t": "类型 ",
+  "h": "6d21ae2a"
+ },
+ "js.cs.kieu-lai-toa-do-cua-ban": {
+  "t": "⚠ <b>混合型。</b>您的座标贴近边界，因此偏向<b>",
+  "h": "11aff2e8"
+ },
+ "js.cs.kieu-nguoi-nay-la-gi": {
+  "t": "这种类型是怎样的人？",
+  "h": "dd192f9f"
+ },
+ "js.cs.kieu-nguoi-o-cho-lam": {
+  "t": "职场类型",
+  "h": "399f87f5"
+ },
+ "js.cs.la-so-cua-ban-khong-chi": {
+  "t": "您的命盘<b>没有指出任何一个突出的分支</b>",
+  "h": "77e78dd8"
+ },
+ "js.cs.lanh-dao": {
+  "t": "领导",
+  "h": "d9b13441"
+ },
+ "js.cs.luong": {
+  "t": "两)",
+  "h": "c99d25aa"
+ },
+ "js.cs.luu-nien-nam-nay": {
+  "t": "今年的流年",
+  "h": "1b558770"
+ },
+ "js.cs.luu-nien-o-cung": {
+  "t": " · 流年在 ",
+  "h": "f72ac853"
+ },
+ "js.cs.manh-nhat": {
+  "t": "最强：",
+  "h": "b67b37ca"
+ },
+ "js.cs.manh-nhat-gixi": {
+  "t": "<b>最强之处</b>",
+  "h": "fe6a0e48"
+ },
+ "js.cs.mat": {
+  "t": "面向",
+  "h": "473db18f"
+ },
+ "js.cs.mat-can-boi-them-nhat": {
+  "t": "最需要加强的面向：",
+  "h": "91c25ad4"
+ },
+ "js.cs.mat-manh-nhat-trong-12-mat": {
+  "t": "12 个面向中最强的：",
+  "h": "01df7a24"
+ },
+ "js.cs.mo-ho-so-day-du": {
+  "t": "打开完整文件",
+  "h": "3757bf2c"
+ },
+ "js.cs.mo-phan-nhanh-nghe": {
+  "t": "<b>打开职业分支的部分 →</b>",
+  "h": "d178dc5c"
+ },
+ "js.cs.moi-truong-hop": {
+  "t": "适合的环境",
+  "h": "14808d08"
+ },
+ "js.cs.moi-truong-ky": {
+  "t": "忌讳的环境",
+  "h": "0edcadd9"
+ },
+ "js.cs.muoi-hai-mat-cua-doi-di": {
+  "t": "工作生涯的十二个面向——各面向的分数与理由",
+  "h": "b36da1b8"
+ },
+ "js.cs.muoi-hai-mat-cua-doi-di-gqoe": {
+  "t": "工作生涯的十二个面向",
+  "h": "7612512c"
+ },
+ "js.cs.muoi-hai-thang-toi-nen-lam": {
+  "t": "接下来十二个月该做什么？",
+  "h": "f98b733c"
+ },
+ "js.cs.muon-cung-xung-chieu": {
+  "t": " ——借对宫",
+  "h": "1fb340ea"
+ },
+ "js.cs.muon-xung-chieu": {
+  "t": "（借对宫）",
+  "h": "7363dfe3"
+ },
+ "js.cs.nam-nay-chieu-kep": {
+  "t": "今年双重照应",
+  "h": "b582a95f"
+ },
+ "js.cs.neu-toi-dang-lam-nghe-khac": {
+  "t": "如果我目前从事别的行业呢？",
+  "h": "efac8cf1"
+ },
+ "js.cs.nghe-hop-voi-ban-thuong-khong": {
+  "t": "适合您的行业通常不要求的",
+  "h": "48816f36"
+ },
+ "js.cs.nguoc-da": {
+  "t": "逆势",
+  "h": "50f7d6cf"
+ },
+ "js.cs.nguon-cach-chia-bon-kieu": {
+  "t": "四种类型分法的出处",
+  "h": "8144bf17"
+ },
+ "js.cs.nguon-du-lieu": {
+  "t": "数据出处 →",
+  "h": "78319924"
+ },
+ "js.cs.nguon-theo-tu-vi-dau-so": {
+  "t": "📚 <b>出处：</b>依<i>《紫微斗数新编》</i>",
+  "h": "0917536a"
+ },
+ "js.cs.nhan-ra-o-cho-lam": {
+  "t": "在职场上可辨认的特征",
+  "h": "b6e2a171"
+ },
+ "js.cs.nhanh-dau-tien-cu-the-phai": {
+  "t": "第一个具体分支该从哪里开始？",
+  "h": "a9550e65"
+ },
+ "js.cs.nhanh-nay-thuong-o-bac-khac": {
+  "t": "这个分支通常所处的等级，与命盘所指的职分等级不同。",
+  "h": "a815d5d0"
+ },
+ "js.cs.nhanh-nghe-hop-voi-ban": {
+  "t": "适合您的职业分支",
+  "h": "488563f6"
+ },
+ "js.cs.nhung-pha-kha-ro": {
+  "t": "</b>，但<b>",
+  "h": "e4d67d67"
+ },
+ "js.cs.nhuong": {
+  "t": "礼让",
+  "h": "c0333abd"
+ },
+ "js.cs.no-boc-la-thuoc-ha-va": {
+  "t": "<b>仆役宫</b>是部属与同行。互补的法则是阴配阳。</p>",
+  "h": "f843e58b"
+ },
+ "js.cs.no-noi-ve": {
+  "t": "说的是什么",
+  "h": "2247dbea"
+ },
+ "js.cs.o-quy-mo-nao-phan-nay": {
+  "t": "在哪种<b>规模</b>最合适。这部分说的是该领域内的<b>具体分支</b>—— ",
+  "h": "ab6aae0b"
+ },
+ "js.cs.phu-tinh-dong-tai-cung-quan": {
+  "t": "官禄宫中的辅星是在上述领域<b>之内缩小范围</b>，并不取代该领域。",
+  "h": "c3fd465d"
+ },
+ "js.cs.quet-ma-xem-kieu-nguoi-cua": {
+  "t": "扫描 QR 码——查看您的类型",
+  "h": "abb7f441"
+ },
+ "js.cs.quy-mo-ganh-duoc-bac": {
+  "t": "能承担的规模——等级 ",
+  "h": "43f37473"
+ },
+ "js.cs.sao-quyet-dinh-linh-vuc": {
+  "t": "决定领域的星",
+  "h": "31023c67"
+ },
+ "js.cs.thuan-da": {
+  "t": "顺势",
+  "h": "c65246fb"
+ },
+ "js.cs.thuan-da-nguoc-da-la-so": {
+  "t": "「顺势／逆势」是把大运的阴阳属性与您本命的类型相比较。</p>",
+  "h": "41c5ce0c"
+ },
+ "js.cs.tieu-han-nam-nay": {
+  "t": "今年的小限",
+  "h": "62da8d5f"
+ },
+ "js.cs.tieu-han-o-cung": {
+  "t": "小限在 ",
+  "h": "aef732f3"
+ },
+ "js.cs.toa-do": {
+  "t": "座标",
+  "h": "6fda44e7"
+ },
+ "js.cs.toi-co-hop-lam-nganh-x": {
+  "t": "我适合从事 X 行业吗？",
+  "h": "ac81904f"
+ },
+ "js.cs.toi-con-thieu-gi-de-vao": {
+  "t": "要进入那个分支，我还缺什么？",
+  "h": "4e41376f"
+ },
+ "js.cs.toi-hop-lam-viec-voi-kieu": {
+  "t": "我适合跟哪种类型的人共事？",
+  "h": "3fbf2004"
+ },
+ "js.cs.toi-nen-tranh-moi-truong-nao": {
+  "t": "我该避开哪种环境？",
+  "h": "14ba354e"
+ },
+ "js.cs.ton": {
+  "t": "<small>需",
+  "h": "ca8d4e90"
+ },
+ "js.cs.tram-on": {
+  "t": "沉稳",
+  "h": "78f14035"
+ },
+ "js.cs.tranh-nhuong": {
+  "t": "争 ↔ 让：",
+  "h": "93f67a9e"
+ },
+ "js.cs.tren-thang-10-diem-11-mat": {
+  "t": "满分 10 分——其余 11 个面向、各面向的理由与完整表格，都在注册后可免费查看的文件中。",
+  "h": "5ada4a9d"
+ },
+ "js.cs.tren-thang-10-diem-ly-do": {
+  "t": "满分 10 分——各面向的理由与加强方式，都在注册后可免费查看的文件中。",
+  "h": "e5560e3d"
+ },
+ "js.cs.trich-dan-co-thu": {
+  "t": "古籍引文",
+  "h": "1a48a14b"
+ },
+ "js.cs.trong-linh-vuc-do-ban-nghieng": {
+  "t": "<b>在该领域内，您偏向哪个分支</b>",
+  "h": "46deb5f7"
+ },
+ "js.cs.trong-linh-vuc-nay-noi-thang": {
+  "t": "——在这个领域内。坦白说，信号还不足以下定论——下面只是 ",
+  "h": "288c730f"
+ },
+ "js.cs.trong-may-nganh-do-toi-nen": {
+  "t": "在那几个行业中，我该选哪一个？",
+  "h": "a94bba40"
+ },
+ "js.cs.tu-cach-theo-cung-menh": {
+  "t": "依命宫所见的资格",
+  "h": "3623d661"
+ },
+ "js.cs.tu-vi-cong-so-kieu": {
+  "t": "紫微职场——类型 ",
+  "h": "910e8c28"
+ },
+ "js.cs.tu-vi-cong-so-ordd": {
+  "t": "紫微职场",
+  "h": "9d18a955"
+ },
+ "js.cs.tuoi": {
+  "t": " 岁",
+  "h": "2e261bf5"
+ },
+ "js.cs.vai-ban-nen-nhan-trong-nganh": {
+  "t": "您在该行业中适合担任的角色",
+  "h": "f8b3215e"
+ },
+ "js.cs.van-dang-thai-thu-lang-va": {
+  "t": "（云腾太次郎）与<i>《中州派 六十星系》</i>（王亭之）。",
+  "h": "77b93310"
+ },
+ "js.cs.van-nam": {
+  "t": "年运 ",
+  "h": "86712c6e"
+ },
+ "js.cs.vi-du-nghieng-chu-nghia-trong": {
+  "t": "例如在医疗领域偏向「文字」，就是教学、研究、专业写作这个分支——仍然是医疗领域。",
+  "h": "db475758"
+ },
+ "js.cs.vi-sao-hop": {
+  "t": "<b>为什么适合：</b>",
+  "h": "6a37b393"
+ },
+ "js.cs.vi-sao-la-so-hop-nhanh": {
+  "t": "为什么命盘适合那个分支——点名指出人格特质",
+  "h": "0ab395f8"
+ },
+ "js.cs.vi-sao-la-so-lai-ra": {
+  "t": "为什么命盘会得出这种类型？",
+  "h": "ed996a33"
+ },
+ "js.cs.viec-lam-duoc-ngay-o-tung": {
+  "t": "各分支马上可做的事（依越南情境）",
+  "h": "3851e61e"
+ },
+ "js.cs.vo-chinh-dieu": {
+  "t": " · 无主星",
+  "h": "46b7d17a"
+ },
+ "js.cs.vo-chinh-dieu-pwt9": {
+  "t": "无正曜",
+  "h": "bd07d7a9"
+ },
+ "js.cs.vui-long-nhap-du-ngay-thang": {
+  "t": "请完整输入出生年月日。",
+  "h": "771ff27f"
+ },
+ "js.cs.xong-pha": {
+  "t": "冲锋",
+  "h": "3b22b749"
+ },
+ "js.cs.xong-tram": {
+  "t": " · 冲 ↔ 稳：",
+  "h": "71afe77a"
+ },
+ "js.ctk.anh-dang-tai-co-the-hoi": {
+  "t": "图片加载中，可能稍慢——请稍候，或",
+  "h": "c4e9709b"
+ },
+ "js.ctk.anh-minh-hoa": {
+  "t": "示意图",
+  "h": "f37e2fa9"
+ },
+ "js.ctk.anh-minh-hoa-mo-mo-khoa": {
+  "t": "示意图（模糊）——解锁后即可看到您真正的肖像",
+  "h": "e7c8b779"
+ },
+ "js.ctk.ba": {
+  "t": "她",
+  "h": "6edcd5c8"
+ },
+ "js.ctk.ba-ay-co-benh-tat-hay-tai": {
+  "t": "{ba}有没有什么疾病或灾厄？",
+  "h": "1df5a238"
+ },
+ "js.ctk.ba-ay-lay-vo-chong-the": {
+  "t": "{ba}的婚姻是怎么样的？",
+  "h": "c22fea33"
+ },
+ "js.ctk.bac-chuc-phan-engine-cham": {
+  "t": "引擎评定的职分等级",
+  "h": "694a2943"
+ },
+ "js.ctk.ban-da-tao-ket-qua-cho": {
+  "t": "✓ 您已为这张命盘产生过结果——重新打开，不会扣两",
+  "h": "d59efda4"
+ },
+ "js.ctk.bien-co": {
+  "t": "▼ 变故",
+  "h": "69c46bc9"
+ },
+ "js.ctk.buc-tranh-chan-dung-ve-rieng": {
+  "t": "依您的命盘专属绘制的肖像画",
+  "h": "998f85c8"
+ },
+ "js.ctk.chan-dung-cau-chuyen-chua-mo": {
+  "t": "⊙ 肖像与故事尚未打开",
+  "h": "2df0a1d7"
+ },
+ "js.ctk.chan-dung-tien-kiep": {
+  "t": "前世肖像",
+  "h": "e7d0f866"
+ },
+ "js.ctk.chan-dung-tien-kiep-cua-toi": {
+  "t": "我的前世肖像",
+  "h": "7f493523"
+ },
+ "js.ctk.chan-dung-tien-kiep-gxr5": {
+  "t": "前世肖像",
+  "h": "7aa2c297"
+ },
+ "js.ctk.chinh-tinh-tai-cung-menh": {
+  "t": "命宫中的主星",
+  "h": "64538c55"
+ },
+ "js.ctk.chinh-tinh-tai-cung-quan-loc": {
+  "t": "官禄宫中的主星",
+  "h": "2a194366"
+ },
+ "js.ctk.chuc-phan-suy-ra": {
+  "t": "推得的职分",
+  "h": "f76c76b7"
+ },
+ "js.ctk.chuyen-doi-nv-het-phan-chinh": {
+  "t": "**{nv}**的一生故事，主要内容到这里。命盘里还有许多故事没说到的事——您想多问关于{short}的什么？",
+  "h": "12c81ad9"
+ },
+ "js.ctk.cung-an-than": {
+  "t": "身宫所在",
+  "h": "778b10ab"
+ },
+ "js.ctk.dang-dung-anh": {
+  "t": "图片制作中…",
+  "h": "7bce9760"
+ },
+ "js.ctk.dang-ve-chan-dung": {
+  "t": "正在绘制肖像…",
+  "h": "8da3d107"
+ },
+ "js.ctk.dinh-cao": {
+  "t": "★ 巅峰",
+  "h": "329f34c6"
+ },
+ "js.ctk.doc-9-dai-van-chia-dong": {
+  "t": "解读九个大运，将人生分为五回",
+  "h": "6d04f8ee"
+ },
+ "js.ctk.khong-the-ket-noi-vui-long": {
+  "t": "无法连接，请再试一次。",
+  "h": "bf0b6e7b"
+ },
+ "js.ctk.khong-ve-duoc-chan-dung-lan": {
+  "t": "这次无法绘制肖像，下方的故事部分仍然完整。",
+  "h": "45ebec08"
+ },
+ "js.ctk.la-so": {
+  "t": "命盘：",
+  "h": "2644d5f2"
+ },
+ "js.ctk.lap-la-so-xac-dinh-chuc": {
+  "t": "排出命盘并判定古代职分",
+  "h": "5bf8b6ae"
+ },
+ "js.ctk.loi": {
+  "t": "错误 ",
+  "h": "1b80116b"
+ },
+ "js.ctk.loi-8d72": {
+  "t": "错误：",
+  "h": "471c0087"
+ },
+ "js.ctk.loi-ket": {
+  "t": "结语",
+  "h": "319ac5e1"
+ },
+ "js.ctk.luc-giac-cung-menh": {
+  "t": "命宫六角图",
+  "h": "e7542de0"
+ },
+ "js.ctk.luot-ve": {
+  "t": "次绘制",
+  "h": "85f72421"
+ },
+ "js.ctk.mat-ket-noi-luc-tai-tranh": {
+  "t": "加载图片时连接中断——正在尝试重新取得…",
+  "h": "48d6deaf"
+ },
+ "js.ctk.mo-chan-dung-day-du": {
+  "t": "打开完整肖像",
+  "h": "9f515b09"
+ },
+ "js.ctk.mo-ta": {
+  "t": "描述 ",
+  "h": "9465dd78"
+ },
+ "js.ctk.mo-ta-nhan-vat-chu-viet": {
+  "t": "人物描述，以及五回中每一回的文字",
+  "h": "da0a1288"
+ },
+ "js.ctk.mot-doi-nguoi-5-hoi": {
+  "t": "一个人的一生——五回",
+  "h": "551d79c7"
+ },
+ "js.ctk.n-tuoi": {
+  "t": "{n} 岁",
+  "h": "25e7a2be"
+ },
+ "js.ctk.nhan-vat": {
+  "t": "人物",
+  "h": "c80feef9"
+ },
+ "js.ctk.nhan-vat-nay": {
+  "t": "这个人物",
+  "h": "6350a62b"
+ },
+ "js.ctk.nv-co-giau-khong": {
+  "t": "{nv}富有吗？",
+  "h": "586c4799"
+ },
+ "js.ctk.ong": {
+  "t": "他",
+  "h": "73f16f79"
+ },
+ "js.ctk.phu-tinh-tai-cung-menh": {
+  "t": "命宫中的辅星",
+  "h": "3d194cb8"
+ },
+ "js.ctk.quet-ma-xem-tien-kiep-cua": {
+  "t": "扫描 QR 码——查看您的前世",
+  "h": "fb7663cd"
+ },
+ "js.ctk.tai-lai": {
+  "t": "重新加载",
+  "h": "16371241"
+ },
+ "js.ctk.thang-tram": {
+  "t": "★▼ 起伏",
+  "h": "3ec8b7b2"
+ },
+ "js.ctk.tuoi-nhan-vat-trong-tranh": {
+  "t": "画中人物的年龄",
+  "h": "f6ab55f4"
+ },
+ "js.ctk.vi-sao-lai-luan-ra-nhu-vay": {
+  "t": "为什么会这样论断？",
+  "h": "ef2cc0e9"
+ },
+ "js.ctk.viet-cau-chuyen-cuoc-doi": {
+  "t": "撰写一生的故事",
+  "h": "2971394d"
+ },
+ "js.ctk.vo-chinh-dieu-muon-cung-xung": {
+  "t": " ——无主星，借对宫",
+  "h": "90aab3d9"
+ },
+ "js.ctk.vui-long-nhap-day-du-ngay": {
+  "t": "请完整输入出生年月日。",
+  "h": "2545b4dd"
+ },
+ "js.daycon.5-la-muc-giua-cua-hang": {
+  "t": "\n\n5 是数千份孩童命盘的中间水准，并不是「10 分得 5 分」。轴的两端都各有价值。",
+  "h": "99fb1a17"
+ },
+ "js.daycon.7-chat-con-lai-5-truc": {
+  "t": "其余 7 种特质、5 条气质轴与教养方向，都在完整版中。",
+  "h": "00fde99c"
+ },
+ "js.daycon.ba-chat-dung-dau-o-duoi": {
+  "t": "排在前面的三种特质是值得优先尝试之处，并不是结论。</p></div>",
+  "h": "fa2636f2"
+ },
+ "js.daycon.ban-co-muon-doi-chieu-them": {
+  "t": "要不要再对照您自己（父亲或母亲）的命盘？这样会多出「双方关系」一节。",
+  "h": "1fea98b9"
+ },
+ "js.daycon.ban-da-xem-ban-nay-roi": {
+  "t": "✓ 您已看过这份解读——再次打开不会扣除两",
+  "h": "7d2c6a5b"
+ },
+ "js.daycon.ban-huong-dan-day-du-chua": {
+  "t": "⊙ 完整教养指南尚未打开",
+  "h": "1e7a8a78"
+ },
+ "js.daycon.ban-luan": {
+  "t": "解读报告",
+  "h": "b6f609bf"
+ },
+ "js.daycon.ban-nay-doc-tu": {
+  "t": "本解读读取了依您输入的出生日期与时辰所排出的<b>",
+  "h": "d989b954"
+ },
+ "js.daycon.ban-se-nhan-cach-ra-bai": {
+  "t": "您将得到：与孩子吸收方式相符的出作业方式与书桌摆设，而不是硬加读书时间。",
+  "h": "49791304"
+ },
+ "js.daycon.ban-se-nhan-chat-viec-hop": {
+  "t": "您将得到：适合孩子的工作特质，以及让孩子自己开口说的提问方式——而不是一个科系名称。",
+  "h": "dd0da12e"
+ },
+ "js.daycon.ban-se-nhan-chuyen-gi-con": {
+  "t": "您将得到：孩子还愿意听什么，以及哪种开口方式会让孩子立刻关上心门。",
+  "h": "20335789"
+ },
+ "js.daycon.ban-se-nhan-dua-nay-can": {
+  "t": "您将得到：这个孩子需要被推一把，还是需要被留在原地。两种孩子外表看起来相似，其实完全不同。",
+  "h": "cd7192ac"
+ },
+ "js.daycon.ban-se-nhan-mot-ban-mo": {
+  "t": "您将得到：一份描述这个孩子是怎样的人的文字，足以让您在日常中认出他／她。",
+  "h": "2846cd50"
+ },
+ "js.daycon.ban-se-nhan-phan-nao-la": {
+  "t": "您将得到：哪些是天生气质、必须顺着引导，哪些是大人说话方式造成的——可以马上调整。",
+  "h": "565f27fd"
+ },
+ "js.daycon.bat-dau-the-nao": {
+  "t": "<b>该怎么开始：</b>",
+  "h": "ac776bdf"
+ },
+ "js.daycon.bay-cua-chat-nay": {
+  "t": "<b>这项特质的陷阱：</b>",
+  "h": "1847b63e"
+ },
+ "js.daycon.be-gai": {
+  "t": "女孩",
+  "h": "af93dba0"
+ },
+ "js.daycon.be-trai": {
+  "t": "男孩",
+  "h": "274225bc"
+ },
+ "js.daycon.bo-qua": {
+  "t": "略过",
+  "h": "861dafde"
+ },
+ "js.daycon.bo-qua-doi-chieu-la-so": {
+  "t": "已略过与您命盘的对照。",
+  "h": "7c25b196"
+ },
+ "js.daycon.cach-choi-ngay-o-nha-hop": {
+  "t": " 种在家就能玩的方式</b> — 具体名称请打开完整版查看。</p>",
+  "h": "4d33ef7d"
+ },
+ "js.daycon.cach-con-tiep-thu": {
+  "t": "孩子如何吸收学习",
+  "h": "d4eac771"
+ },
+ "js.daycon.cach-cuc": {
+  "t": " 种格局、",
+  "h": "a4f8bc9a"
+ },
+ "js.daycon.cat": {
+  "t": "吉 ",
+  "h": "bbbbd4e0"
+ },
+ "js.daycon.chan-dung": {
+  "t": "肖像",
+  "h": "30421728"
+ },
+ "js.daycon.chang-dai-van": {
+  "t": " 个大运阶段。",
+  "h": "0bc2d397"
+ },
+ "js.daycon.chat-can-boi-them-nhat": {
+  "t": "最需要加强的特质：",
+  "h": "4c7acf8e"
+ },
+ "js.daycon.chat-nang-khieu-cao-nhat": {
+  "t": "最突出的天赋特质：",
+  "h": "1018ec48"
+ },
+ "js.daycon.chat-nua-cung-noi": {
+  "t": " 种特质</b>也很突出（",
+  "h": "7f9974ca"
+ },
+ "js.daycon.cho-con-tham-gia-kieu-nao": {
+  "t": "<h5>用什么方式让孩子参与</h5>",
+  "h": "1b74c443"
+ },
+ "js.daycon.cho-nguoi-lon-hay-hieu-nham": {
+  "t": "大人常误解之处",
+  "h": "f78ab78d"
+ },
+ "js.daycon.cho-thay-xin-thong-tin-cua": {
+  "t": "请告诉老师孩子的数据。",
+  "h": "e81463c3"
+ },
+ "js.daycon.chua-cham": {
+  "t": "尚未评分",
+  "h": "a20bbf69"
+ },
+ "js.daycon.chua-chat-nao-noi-han-len": {
+  "t": "目前还没有特别突出的特质",
+  "h": "44a78494"
+ },
+ "js.daycon.chua-chat-nao-noi-han-nen": {
+  "t": " · 目前没有特别突出的特质，所以列出<b>最值得优先尝试的三种特质</b>",
+  "h": "95fc607c"
+ },
+ "js.daycon.chua-chat-nao-vuot-nguong-nen": {
+  "t": "目前没有特质超过门槛——建议让孩子广泛尝试，再观察真实的反应。",
+  "h": "986be904"
+ },
+ "js.daycon.chua-vuot-nguong-nhung-cao-nhat": {
+  "t": "尚未超过门槛，但在 8 种特质中最高。",
+  "h": "7b04f512"
+ },
+ "js.daycon.co-doi-chieu": {
+  "t": "好，来对照 →",
+  "h": "a3846e57"
+ },
+ "js.daycon.cung-an-than": {
+  "t": "<li><b>身宫所在</b>—— ",
+  "h": "23b5a7a9"
+ },
+ "js.daycon.cung-name": {
+  "t": "{name}",
+  "h": "3cb49303"
+ },
+ "js.daycon.cung-tinh-am-duong-de-va": {
+  "t": "阴阳属性相同——容易起冲突",
+  "h": "38ee66ae"
+ },
+ "js.daycon.cung-tu-tuc-cua-ban": {
+  "t": "您的子女宫",
+  "h": "f546ca50"
+ },
+ "js.daycon.da": {
+  "t": "走势 ",
+  "h": "ea471098"
+ },
+ "js.daycon.da-chon-san": {
+  "t": "<p>已为这项特质预先选好 <b>",
+  "h": "0f8b5933"
+ },
+ "js.daycon.dang-o-chang-nay": {
+  "t": " · 目前正处于这个阶段",
+  "h": "dca615be"
+ },
+ "js.daycon.day-con-theo-la-so": {
+  "t": "依命盘教养孩子",
+  "h": "2013a771"
+ },
+ "js.daycon.day-con-theo-la-so-6c04": {
+  "t": "依命盘教养孩子",
+  "h": "80688ea6"
+ },
+ "js.daycon.day-con-theo-la-so-l6v3": {
+  "t": "依命盘教养孩子—— ",
+  "h": "90ccd72e"
+ },
+ "js.daycon.day-la-ban-huong-dan-nuoi-ten": {
+  "t": "这是**{ten}**的教养指南。还想多问哪个情境吗？",
+  "h": "6e9c3d69"
+ },
+ "js.daycon.dieu-ban-dang-lo-ve-con": {
+  "t": "您对孩子最担心的是什么呢？",
+  "h": "75d020b9"
+ },
+ "js.daycon.dieu-ban-dang-lo-viet-rieng": {
+  "t": "针对您担心的事，依孩子的命盘个别撰写",
+  "h": "3f67856e"
+ },
+ "js.daycon.dieu-cha-me-dang-lo": {
+  "t": "父母担心的事：{lo}",
+  "h": "cc98d53f"
+ },
+ "js.daycon.dieu-dang-lo": {
+  "t": "担心的事",
+  "h": "1c1218e7"
+ },
+ "js.daycon.dieu-dang-lo-s1b1": {
+  "t": "担心的事：<b>",
+  "h": "707a2eb1"
+ },
+ "js.daycon.dinh-huong-cach-day": {
+  "t": "教养方向与方式",
+  "h": "fb8a0485"
+ },
+ "js.daycon.dinh-huong-dh": {
+  "t": "方向：{dh}",
+  "h": "c20461b0"
+ },
+ "js.daycon.dinh-huong-moi-truong-hoc-phuong": {
+  "t": "学习环境的方向 + 适合孩子的教养方法",
+  "h": "9673ce91"
+ },
+ "js.daycon.do-5-truc-tinh-khi-va": {
+  "t": "测量 5 条气质轴与 8 种天赋特质",
+  "h": "44451f2e"
+ },
+ "js.daycon.doi-chieu-them-voi-la-so": {
+  "t": "已加入与您命盘的对照 ✓",
+  "h": "65992be6"
+ },
+ "js.daycon.doi-chieu-voi-la-so-cua": {
+  "t": "与您命盘的对照：",
+  "h": "69111647"
+ },
+ "js.daycon.dong-vien-kieu-nay-moi-vao": {
+  "t": "这样的鼓励方式才听得进去",
+  "h": "8615f222"
+ },
+ "js.daycon.du-kien-lap-ra-tu-chinh": {
+  "t": " 笔数据</b> — ",
+  "h": "fdb76ddf"
+ },
+ "js.daycon.gio-sinh-cua-ban-la-may": {
+  "t": "您的出生时辰是几点？",
+  "h": "3e121266"
+ },
+ "js.daycon.gioi-tinh-cua-ban-cha-me": {
+  "t": "请问您的性别（父亲／母亲）是？",
+  "h": "3e7f29e6"
+ },
+ "js.daycon.hai-me-con-hay-va-nhau": {
+  "t": "母子（亲子）两人容易在哪些地方起冲突？",
+  "h": "8121e071"
+ },
+ "js.daycon.hay-bi-doc-nham": {
+  "t": "<p><b>常被误解之处：</b> ",
+  "h": "560ec4eb"
+ },
+ "js.daycon.hoat-dong-de-dang-ky-ra": {
+  "t": " 项需报名／外出的活动</b>与 <b>",
+  "h": "047d6333"
+ },
+ "js.daycon.hoi-nha-truong": {
+  "t": "<b>可以问学校的事：</b>",
+  "h": "2b67b4bb"
+ },
+ "js.daycon.hop": {
+  "t": "<p><b>适合：</b> ",
+  "h": "23262161"
+ },
+ "js.daycon.khac-tinh-am-duong-de-bu": {
+  "t": "阴阳属性不同——容易互补",
+  "h": "b5f77a93"
+ },
+ "js.daycon.khoa": {
+  "t": "锁定",
+  "h": "393cb36a"
+ },
+ "js.daycon.khoang-mot-phan-bay-so-la": {
+  "t": "大约每七份命盘就有一份属于这种情况。</p>",
+  "h": "ff8e890c"
+ },
+ "js.daycon.khong-co-buoc-nao-doan-mo": {
+  "t": "没有任何一步是猜的：出生数据改动一个细节，上面整张表都会跟着变。",
+  "h": "065d23da"
+ },
+ "js.daycon.khong-co-chinh-tinh": {
+  "t": "无主星",
+  "h": "753ded73"
+ },
+ "js.daycon.khong-dat-ten": {
+  "t": "未命名",
+  "h": "295915d5"
+ },
+ "js.daycon.khong-the-ket-noi-vui-long": {
+  "t": "无法连接，请再试一次。",
+  "h": "bf0b6e7b"
+ },
+ "js.daycon.khung-dai-van": {
+  "t": "大运区间 ",
+  "h": "06be9124"
+ },
+ "js.daycon.kieu-cua-ban-kieu": {
+  "t": "您的类型：{kieu}",
+  "h": "1f89ad05"
+ },
+ "js.daycon.ky-luat-kieu-nay-phan-tac": {
+  "t": "会适得其反的管教方式",
+  "h": "0af70e1c"
+ },
+ "js.daycon.ky-luat-phan-tac-dung-kl": {
+  "t": "会适得其反的管教方式：{kl}",
+  "h": "4ed18b67"
+ },
+ "js.daycon.la-so": {
+  "t": "命盘：",
+  "h": "2644d5f2"
+ },
+ "js.daycon.la-so-cua-con-khong-nghieng": {
+  "t": "<p>孩子的命盘<b>没有明显偏向</b>任何领域——这是真实的结果，不是机器漏读。",
+  "h": "4465b58f"
+ },
+ "js.daycon.lam-con-bo-ngang": {
+  "t": "<p><b>会让孩子半途放弃的事：</b> ",
+  "h": "4bfcce62"
+ },
+ "js.daycon.lam-gi-tu-toi-nay-nen": {
+  "t": "今晚起可以做的事——宜做与宜避免的",
+  "h": "fabc2ced"
+ },
+ "js.daycon.lap-la-so-phan-kieu-nguoi": {
+  "t": "排出命盘并判定类型",
+  "h": "61f07874"
+ },
+ "js.daycon.loi": {
+  "t": "错误 ",
+  "h": "1b80116b"
+ },
+ "js.daycon.loi-8d72": {
+  "t": "错误：",
+  "h": "471c0087"
+ },
+ "js.daycon.luong": {
+  "t": "两 →",
+  "h": "36d6704d"
+ },
+ "js.daycon.luu-nien-cung": {
+  "t": "流年宫 ",
+  "h": "8f5a16cc"
+ },
+ "js.daycon.mo-ban-huong-dan-day-du": {
+  "t": "打开完整教养指南",
+  "h": "5b95fbd4"
+ },
+ "js.daycon.muc-trong-la-so": {
+  "t": "项命盘依据",
+  "h": "4e83a32a"
+ },
+ "js.daycon.muon-xung-chieu": {
+  "t": "（借对宫）",
+  "h": "7363dfe3"
+ },
+ "js.daycon.nam-giua-dung-duoc-ca-hai": {
+  "t": "位于中间，两种方式都能用",
+  "h": "88eb619c"
+ },
+ "js.daycon.nam-truc-tinh-khi": {
+  "t": "五条气质轴",
+  "h": "9d3afdaa"
+ },
+ "js.daycon.nam-truc-tinh-khi-tam-chat": {
+  "t": "五条气质轴 + 八种天赋特质，依孩子的命盘评分",
+  "h": "3ff91004"
+ },
+ "js.daycon.nen": {
+  "t": "<p><b>宜：</b> ",
+  "h": "96dd52e2"
+ },
+ "js.daycon.nen-cho-ten-thu-hoat-dong": {
+  "t": "先让{ten}试哪一种活动比较好？",
+  "h": "c13288e1"
+ },
+ "js.daycon.ngay-sinh-duong-lich-cua-ban": {
+  "t": "您的国历（阳历）出生日期是哪一天？",
+  "h": "ef23d3fb"
+ },
+ "js.daycon.nhom-tuoi": {
+  "t": "年龄层：<b>",
+  "h": "974ef95b"
+ },
+ "js.daycon.o-nha": {
+  "t": "<p><b>在家的表现：</b> ",
+  "h": "adc7648c"
+ },
+ "js.daycon.pha-them": {
+  "t": "另外混有",
+  "h": "4b629d3a"
+ },
+ "js.daycon.ra-bai-giao-viec": {
+  "t": "出作业／交办事情的方式",
+  "h": "2dde825d"
+ },
+ "js.daycon.sach-dan-ve-sao": {
+  "t": "——命宫之星「",
+  "h": "7b5e7401"
+ },
+ "js.daycon.sao-an-tren-12-cung": {
+  "t": " 颗星安在十二宫、",
+  "h": "a6914f13"
+ },
+ "js.daycon.sat": {
+  "t": " / 煞 ",
+  "h": "c472d1aa"
+ },
+ "js.daycon.suy-tu": {
+  "t": "</b>——推断依据：",
+  "h": "55a15f14"
+ },
+ "js.daycon.tai-cung-menh": {
+  "t": "」的典籍引文</span></div>",
+  "h": "173c6b01"
+ },
+ "js.daycon.tam-chat-nang-khieu": {
+  "t": "八种天赋特质",
+  "h": "10c9f44e"
+ },
+ "js.daycon.ten-nghieng-ve-kieu-kieu": {
+  "t": "{ten}偏向{kieu}类型（{tutuong}）",
+  "h": "aea15b43"
+ },
+ "js.daycon.thap-nhat-trong-8-chat-cach": {
+  "t": "在 8 种特质中最低——如何加强与具体方向，都在完整版中。",
+  "h": "a2f3c473"
+ },
+ "js.daycon.thu-con-can-duoc-day-them": {
+  "t": "孩子还需要多学的事",
+  "h": "45fd44a4"
+ },
+ "js.daycon.tiep-tuc": {
+  "t": "继续 →",
+  "h": "86f35ed9"
+ },
+ "js.daycon.tieu-han-cung": {
+  "t": "小限宫 ",
+  "h": "4d7ba471"
+ },
+ "js.daycon.toi-nay-ten-lai-khong-chiu": {
+  "t": "今晚{ten}又不肯读书，我该怎么开口？",
+  "h": "5cea25be"
+ },
+ "js.daycon.tuoi": {
+  "t": " 岁</b>",
+  "h": "e5f74880"
+ },
+ "js.daycon.tuoi-3v6h": {
+  "t": " 岁",
+  "h": "2e261bf5"
+ },
+ "js.daycon.tuoi-tuoi-mu": {
+  "t": " 岁（虚岁）",
+  "h": "f62485fd"
+ },
+ "js.daycon.vach-dut-nguong-dang-cho-thu": {
+  "t": "▲ 虚线 = 「值得尝试」的门槛",
+  "h": "16e23b36"
+ },
+ "js.daycon.van-nam": {
+  "t": "<li><b>年运 ",
+  "h": "1192aa32"
+ },
+ "js.daycon.vi-sao-la-so-lai-do": {
+  "t": "为什么命盘能量出这几条轴？",
+  "h": "f65c0dfb"
+ },
+ "js.daycon.viec-dung-luc-nay-la-cho": {
+  "t": "现在最该做的是<b>让孩子广泛尝试，再观察真实的反应</b>，不要替孩子做选择。",
+  "h": "b4af8a17"
+ },
+ "js.daycon.viet-dinh-huong-va-huong-dan": {
+  "t": "撰写方向与教养指南",
+  "h": "10f821e4"
+ },
+ "js.daycon.vui-long-nhap-day-du-ngay": {
+  "t": "请完整输入孩子的出生年、月、日。",
+  "h": "784233ac"
+ },
+ "js.daycon.vuot-nguong-dang-cho-thu": {
+  "t": "已超过门槛（「值得尝试」）。",
+  "h": "ee663dd4"
+ },
+ "js.daycon.vuot-nguong-dang-cho-thu-khong": {
+  "t": "★ = 超过门槛的特质（「值得尝试」），并非已证实的天赋。",
+  "h": "1dec3af7"
+ },
+ "js.daycon.xem-ban-huong-dan-day-du": {
+  "t": "✦ 查看完整教养指南 —",
+  "h": "3a668eed"
+ },
+ "js.daycon.xem-diem-o-bieu-do-tren": {
+  "t": "）——分数请见上方图表，各项特质的详细内容请打开完整版阅读。",
+  "h": "edfabb37"
+ },
+ "js.daycon.xem-them": {
+  "t": "<summary>再看 ",
+  "h": "c5afdcd1"
+ },
+ "js.duyenno.anh-dang-tai-co-the-hoi": {
+  "t": "图片加载中，可能稍慢——请稍候，或",
+  "h": "c4e9709b"
+ },
+ "js.duyenno.anh-minh-hoa-mo": {
+  "t": "示意图（模糊）",
+  "h": "bb4bd552"
+ },
+ "js.duyenno.ban-co-muon-them-who": {
+  "t": "要把{who}加入故事吗？（最多 {max} 人）",
+  "h": "b57078f6"
+ },
+ "js.duyenno.ban-da-xem-duyen-no-cua": {
+  "t": "✓ 您已看过这组命盘的缘分——再次打开不会扣除两",
+  "h": "60fbdfb0"
+ },
+ "js.duyenno.bo-nguoi-nay": {
+  "t": "移除此人",
+  "h": "690b6802"
+ },
+ "js.duyenno.buc-tranh-chung-minh-hoa": {
+  "t": "全组画作——示意",
+  "h": "0e03eaba"
+ },
+ "js.duyenno.cac-dau-hieu-con-lai-va": {
+  "t": " ——其余迹象与所有人之间完整的缘分网络，都在完整版中。",
+  "h": "c9821896"
+ },
+ "js.duyenno.cac-moi-duyen-trong-nhom": {
+  "t": "组内的各段缘分",
+  "h": "d40e26f3"
+ },
+ "js.duyenno.can-it-nhat-hai-la-so": {
+  "t": "至少需要两份命盘。",
+  "h": "4708eed7"
+ },
+ "js.duyenno.cho-thay-xin-thong-tin-cua-who": {
+  "t": "请告诉老师{who}的数据。",
+  "h": "471d6f1e"
+ },
+ "js.duyenno.co-them-nguoi": {
+  "t": "好，添加 →",
+  "h": "ff2cea9c"
+ },
+ "js.duyenno.dang-dung-anh": {
+  "t": "图片制作中…",
+  "h": "7bce9760"
+ },
+ "js.duyenno.dang-ve-buc-tranh-ca-nhom": {
+  "t": "正在为全组人绘制画作…",
+  "h": "dcd60961"
+ },
+ "js.duyenno.dau-hieu-label": {
+  "t": "迹象：{label}",
+  "h": "cae6f731"
+ },
+ "js.duyenno.doi-chieu-dia-chi-ngu-hanh": {
+  "t": "对照地支、五行与主星",
+  "h": "7e76a0f2"
+ },
+ "js.duyenno.du-n-nguoi-xem-ngay": {
+  "t": "就以 {n} 人来看吧。",
+  "h": "fcfd4d3d"
+ },
+ "js.duyenno.du-roi-xem-ngay": {
+  "t": "够了，立即查看 →",
+  "h": "d8de245d"
+ },
+ "js.duyenno.dung-tu-la-so": {
+  "t": "<b>依命盘编写</b><br>",
+  "h": "5de147a7"
+ },
+ "js.duyenno.duyen-no-tien-kiep": {
+  "t": "前世缘分",
+  "h": "c6b0ccb5"
+ },
+ "js.duyenno.duyen-no-tien-kiep-r7a2": {
+  "t": "前世缘分",
+  "h": "fc5445d2"
+ },
+ "js.duyenno.giua-a-va-b-gist": {
+  "t": "{a}与{b}之间：{gist} 四回故事与全组的画作，都在完整版中。",
+  "h": "b21b2737"
+ },
+ "js.duyenno.gui-ket-qua-nay-cho-ca-nhom-names": {
+  "t": "把这份结果传给整组人（{names}）看吧——每个人都会好奇自己扮演的角色，忍不住想查自己的命盘。",
+  "h": "a9813a1c"
+ },
+ "js.duyenno.gui-ket-qua-nay-cho-name-xem": {
+  "t": "把这份结果传给<b>{name}</b>看吧——对方好奇起来，就会想查自己的命盘。",
+  "h": "a89262bb"
+ },
+ "js.duyenno.hai-nguoi-de-va-nhau-o": {
+  "t": "两人容易在哪些地方起冲突？",
+  "h": "7d27557f"
+ },
+ "js.duyenno.khong-the-ket-noi-vui-long": {
+  "t": "无法连接，请再试一次。",
+  "h": "bf0b6e7b"
+ },
+ "js.duyenno.khong-ve-duoc-buc-tranh-lan": {
+  "t": "这次无法绘制画作，下方的故事部分仍然完整。",
+  "h": "8610db8b"
+ },
+ "js.duyenno.kiep-nay-gap-lai-thi-nen": {
+  "t": "今生再次相遇，该保持怎样的距离？",
+  "h": "c7c61218"
+ },
+ "js.duyenno.la-so": {
+  "t": "命盘：",
+  "h": "2644d5f2"
+ },
+ "js.duyenno.la-so-vjrb": {
+  "t": " ——命盘：",
+  "h": "2a79724a"
+ },
+ "js.duyenno.lap-la-so-dung-nhan-vat": {
+  "t": "排出命盘并创建人物",
+  "h": "86c4f80f"
+ },
+ "js.duyenno.loai-duyen-label": {
+  "t": "缘分类型：{label}",
+  "h": "943e47bf"
+ },
+ "js.duyenno.loi": {
+  "t": "错误 ",
+  "h": "1b80116b"
+ },
+ "js.duyenno.loi-8d72": {
+  "t": "错误：",
+  "h": "471c0087"
+ },
+ "js.duyenno.loi-ket": {
+  "t": "结语",
+  "h": "319ac5e1"
+ },
+ "js.duyenno.luot-xem": {
+  "t": "次查看",
+  "h": "980f8057"
+ },
+ "js.duyenno.mac-dinh-hai-nguoi-them-max": {
+  "t": "预设两人，最多可添加至 {max} 人——整组人会一起放进同一个故事与同一幅画作。",
+  "h": "18e1432f"
+ },
+ "js.duyenno.mat-ket-noi-luc-tai-tranh": {
+  "t": "加载图片时连接中断——正在尝试重新取得…",
+  "h": "48d6deaf"
+ },
+ "js.duyenno.moi-duyen": {
+  "t": "缘分",
+  "h": "eb37f74e"
+ },
+ "js.duyenno.moi-duyen-4-hoi": {
+  "t": "缘分故事——四回",
+  "h": "982f3e5a"
+ },
+ "js.duyenno.moi-duyen-giua-names": {
+  "t": "**{names}**的缘分，主要内容到这里。还想多问些什么吗？",
+  "h": "ea285156"
+ },
+ "js.duyenno.nam": {
+  "t": "南",
+  "h": "b580ba1b"
+ },
+ "js.duyenno.name-la-nguoi-the-nao": {
+  "t": "{name}是怎样的人？",
+  "h": "03c43db7"
+ },
+ "js.duyenno.nguoi-ban-muon-xem-duyen-no": {
+  "t": "您想看缘分的那个人",
+  "h": "0f74fdf8"
+ },
+ "js.duyenno.nguoi-thu-ba": {
+  "t": "第三位",
+  "h": "ed014d5c"
+ },
+ "js.duyenno.nguoi-thu-hai": {
+  "t": "第二位",
+  "h": "b330c7a6"
+ },
+ "js.duyenno.nguoi-thu-nam": {
+  "t": "第五位",
+  "h": "b2a0303b"
+ },
+ "js.duyenno.nguoi-thu-nhat": {
+  "t": "第一位",
+  "h": "955e7151"
+ },
+ "js.duyenno.nguoi-thu-tu": {
+  "t": "第四位",
+  "h": "12dadc83"
+ },
+ "js.duyenno.nhan-vat-cua-ban": {
+  "t": "您的角色",
+  "h": "850ad819"
+ },
+ "js.duyenno.nu": {
+  "t": "女",
+  "h": "feb92ccd"
+ },
+ "js.duyenno.quet-ma-xem-duyen-no-cua": {
+  "t": "扫描 QR 码——查看您的缘分",
+  "h": "2d7c866a"
+ },
+ "js.duyenno.tai-lai": {
+  "t": "重新加载",
+  "h": "16371241"
+ },
+ "js.duyenno.them-vao-nhom": {
+  "t": "加入此组",
+  "h": "366d87cc"
+ },
+ "js.duyenno.them-who": {
+  "t": "已加入{who} ✓",
+  "h": "6ed59d06"
+ },
+ "js.duyenno.thuong-la-ban": {
+  "t": "通常是您自己",
+  "h": "a9671f02"
+ },
+ "js.duyenno.toi-da-max-nguoi-mot-luot": {
+  "t": "每次最多 {max} 人。",
+  "h": "05bf983e"
+ },
+ "js.duyenno.trong-nhom-nay-ai-de-va": {
+  "t": "这一组里谁最容易起冲突？",
+  "h": "4deab4cd"
+ },
+ "js.duyenno.truc-cua-cau-chuyen": {
+  "t": "故事的主轴",
+  "h": "1b316be1"
+ },
+ "js.duyenno.truc-cua-cau-chuyen-j6j5": {
+  "t": "（故事的主轴）",
+  "h": "de7a2dcc"
+ },
+ "js.duyenno.vi-sao-lai-luan-ra-moi-duyen": {
+  "t": "为什么会读出这样的缘分？",
+  "h": "1ac5d62d"
+ },
+ "js.duyenno.viet-cau-chuyen-moi-duyen": {
+  "t": "撰写缘分故事",
+  "h": "980f94e2"
+ },
+ "js.duyenno.vui-long-nhap-day-du-ngay-who": {
+  "t": "请完整输入{who}的出生年、月、日。",
+  "h": "5698e85d"
+ },
+ "js.giosinh.am-lich": {
+  "t": "（农历）",
+  "h": "ebf71daf"
+ },
+ "js.giosinh.anh-chi-chua-chot-duoc-gio": {
+  "t": "您还没确定出生时辰——也可以问我如何分辨各个候选时辰。",
+  "h": "fe1408ea"
+ },
+ "js.giosinh.bat-dau-khao-sat": {
+  "t": "开始缩小范围问卷 →",
+  "h": "89663d6e"
+ },
+ "js.giosinh.cam-on-dung": {
+  "t": "谢谢您——正确时辰在系统给出的名单内，已记录。",
+  "h": "816391d2"
+ },
+ "js.giosinh.cam-on-truot": {
+  "t": "谢谢您——这次系统没猜中，正是我们用来调整方法所需要的案例。",
+  "h": "850e32a7"
+ },
+ "js.giosinh.cau-n-toi-da": {
+  "t": "第 {n} 题／最多 {max} 题",
+  "h": "37d9a74f"
+ },
+ "js.giosinh.chip-cung-tat-ach": {
+  "t": "疾厄宫代表什么？",
+  "h": "f6448214"
+ },
+ "js.giosinh.chip-khong-nho-gio": {
+  "t": "不知道出生时辰也能看紫微斗数吗？",
+  "h": "36b87cba"
+ },
+ "js.giosinh.chip-vi-sao-doi-gio": {
+  "t": "为什么出生时辰一改，整张命盘都会变？",
+  "h": "eb87751b"
+ },
+ "js.giosinh.chon-gio-dung-truoc": {
+  "t": "请先选择正确的时辰。",
+  "h": "b1862011"
+ },
+ "js.giosinh.chua-biet": {
+  "t": "— 不清楚 —",
+  "h": "555657b4"
+ },
+ "js.giosinh.chua-co-ket-qua": {
+  "t": "目前还没有可供比对的结果。",
+  "h": "49c0ec23"
+ },
+ "js.giosinh.chua-doc-duoc-bang-gia": {
+  "t": "无法读取价目表——请重新加载页面。",
+  "h": "247f0130"
+ },
+ "js.giosinh.chua-ghi-duoc-vao-so": {
+  "t": "无法写入簿册（网络或登录状态问题）。刚确定的时辰仍会记在这台设备上。",
+  "h": "d599ae15"
+ },
+ "js.giosinh.co-loi-xay-ra": {
+  "t": "发生错误。",
+  "h": "08eddac7"
+ },
+ "js.giosinh.cuc-n": {
+  "t": "{n}",
+  "h": "a0da4ad0"
+ },
+ "js.giosinh.da-luu-vao-so": {
+  "t": "已存入命盘簿，其他工具会自动带入这个时辰。",
+  "h": "c43dc72d"
+ },
+ "js.giosinh.da-nho-tren-may-nay": {
+  "t": "已记在这台设备上——打开其他工具即可直接使用。登录后命盘会进入帐号的簿册，换设备也不会消失。",
+  "h": "10b9b2e9"
+ },
+ "js.giosinh.dang-lap-12-la-so": {
+  "t": "正在排12张命盘…",
+  "h": "1e2ebabc"
+ },
+ "js.giosinh.dang-luu": {
+  "t": "保存中…",
+  "h": "b98712c0"
+ },
+ "js.giosinh.dang-tinh": {
+  "t": "计算中…",
+  "h": "76a9d5f0"
+ },
+ "js.giosinh.dua-tren": {
+  "t": "依据已回答的 {n} 题 · 吻合度 {p}%",
+  "h": "0fb2318b"
+ },
+ "js.giosinh.duong-lich": {
+  "t": "（国历）",
+  "h": "4471b62b"
+ },
+ "js.giosinh.gio-chi": {
+  "t": "{chi}时",
+  "h": "87e9bdfa"
+ },
+ "js.giosinh.gio-chi-khung": {
+  "t": "{chi}时（{khung}）",
+  "h": "86326af7"
+ },
+ "js.giosinh.khong-gui-duoc": {
+  "t": "无法送出，但没关系——您的解读内容不会改变。",
+  "h": "5e875ab2"
+ },
+ "js.giosinh.khong-lap-duoc-la-so": {
+  "t": "无法排出命盘。",
+  "h": "16f828bd"
+ },
+ "js.giosinh.khong-ro-khong-nho-bo-qua": {
+  "t": "不确定／不记得——跳过此题",
+  "h": "538ab29a"
+ },
+ "js.giosinh.lock-cta": {
+  "t": "解锁全部12张命盘＋问卷",
+  "h": "1b686643"
+ },
+ "js.giosinh.lock-i1": {
+  "t": "全部12张候选命盘（每个时辰的命宫＋疾厄宫）",
+  "h": "672803dc"
+ },
+ "js.giosinh.lock-i2": {
+  "t": "依您生日专属编制的问题组",
+  "h": "229e75db"
+ },
+ "js.giosinh.lock-i3": {
+  "t": "12个时辰依可能性排名",
+  "h": "b08e68e7"
+ },
+ "js.giosinh.lock-i4": {
+  "t": "逐题列出吻合／不吻合的依据",
+  "h": "ed0e1963"
+ },
+ "js.giosinh.lock-i5": {
+  "t": "可信度与确定时辰的建议",
+  "h": "4c5e6f1b"
+ },
+ "js.giosinh.lock-title": {
+  "t": "⊙ 出生时辰文件尚未解锁",
+  "h": "75ef5f41"
+ },
+ "js.giosinh.luong": {
+  "t": "两",
+  "h": "6614284e"
+ },
+ "js.giosinh.menh-colon": {
+  "t": "命宫：",
+  "h": "d24288f5"
+ },
+ "js.giosinh.nhap-nam-sinh-trong-khoang-1900": {
+  "t": "请输入1900–2030年之间的出生年份。",
+  "h": "41815a93"
+ },
+ "js.giosinh.survey-pitch": {
+  "t": "系统会依这个生日编出专属的<b>{n}道题</b>——选项是对<b>这一天</b>呈现不同征兆的时辰分组，因此每个人的题组都不一样。作答完毕后，会得到<b>2–3个最有可能的时辰，并附上每一题的依据</b>。",
+  "h": "383cb5d5"
+ },
+ "js.giosinh.tat-ach-colon": {
+  "t": "疾厄宫：",
+  "h": "80b98397"
+ },
+ "js.giosinh.tc-cao": {
+  "t": "高",
+  "h": "db10c479"
+ },
+ "js.giosinh.tc-thap": {
+  "t": "低",
+  "h": "ecd6f14a"
+ },
+ "js.giosinh.tc-vua": {
+  "t": "中",
+  "h": "0467562c"
+ },
+ "js.giosinh.tin-cay": {
+  "t": "可信度：{m}",
+  "h": "90b46fcf"
+ },
+ "js.giosinh.ton": {
+  "t": "需",
+  "h": "e603a0b9"
+ },
+ "js.giosinh.vo-chinh-dieu": {
+  "t": "无正曜",
+  "h": "bd07d7a9"
+ },
+ "js.giosinh.xac-dinh-gio-sinh": {
+  "t": "确认出生时辰",
+  "h": "c3aee594"
+ },
+ "js.giosinh.xem-12-gio-kha-nghi": {
+  "t": "查看12个候选时辰",
+  "h": "3cd9aabf"
+ },
  "js.goi.120": {
   "t": "标准",
   "h": "01d0c63f"
@@ -3410,6 +6634,274 @@
  "js.hdtt.n-luong": {
   "t": "{n} 两",
   "h": "c4904a65"
+ },
+ "js.hnt.ba-huong-dang-cho-con-thu": {
+  "t": "三个值得孩子尝试的方向，附依年龄安排的具体活动",
+  "h": "b8c61ec7"
+ },
+ "js.hnt.ban-da-xem-ban-nay-roi": {
+  "t": "✓ 您已看过这份解读——再次打开不会扣除两",
+  "h": "7d2c6a5b"
+ },
+ "js.hnt.ban-dinh-huong-day-du-chua": {
+  "t": "⊙ 完整方向建议尚未打开",
+  "h": "0cc8ad2a"
+ },
+ "js.hnt.ban-se-nhan-cai-con-me": {
+  "t": "您将得到：孩子着迷的事是不是真正的强项，以及为了平衡还该再打开哪些方向。",
+  "h": "3adee970"
+ },
+ "js.hnt.ban-se-nhan-chat-viec-hop": {
+  "t": "您将得到：适合孩子的工作特质，以及让孩子自己开口说的提问方式——而不是预先决定的科系名称。",
+  "h": "51f3fd6d"
+ },
+ "js.hnt.ban-se-nhan-cho-nen-bay": {
+  "t": "您将得到：先摆出什么，孩子才有机会碰到适合的东西，以及到什么时点就不必再担心。",
+  "h": "120130d2"
+ },
+ "js.hnt.ban-se-nhan-mot-ban-mo": {
+  "t": "您将得到：一份清楚到足以在日常中认出孩子的倾向描述，以及适合让孩子接触的事。",
+  "h": "e48e5660"
+ },
+ "js.hnt.ban-se-nhan-phan-nao-trong": {
+  "t": "您将得到：孩子的想法中哪些是真正的强项，以及不把孩子推得更远的说话方式。",
+  "h": "24a0fdb2"
+ },
+ "js.hnt.be-gai": {
+  "t": "女孩",
+  "h": "af93dba0"
+ },
+ "js.hnt.be-trai": {
+  "t": "男孩",
+  "h": "274225bc"
+ },
+ "js.hnt.cham-21-truc-tinh-khi-chon": {
+  "t": "为 21 条气质轴评分并选出倾向",
+  "h": "f27b81b0"
+ },
+ "js.hnt.chang-dang-o-full": {
+  "t": "<li><b>目前所处阶段</b>：{a}–{b} 岁（{y1}–{y2} 年），{cung}</li>",
+  "h": "894bc892"
+ },
+ "js.hnt.chat-nguoi-noi-nhat": {
+  "t": "最突出的特质：",
+  "h": "5bb97cff"
+ },
+ "js.hnt.chat-nguoi-noi-thu-nhi": {
+  "t": "第二突出的特质：",
+  "h": "cd07e9dc"
+ },
+ "js.hnt.chat-viec-ve-sau": {
+  "t": "日后的工作特质",
+  "h": "614a78bb"
+ },
+ "js.hnt.cho-hay-bi-hieu-nham": {
+  "t": "常被误解之处",
+  "h": "9d96dce2"
+ },
+ "js.hnt.con-chi-me-dung-mot-thu": {
+  "t": "孩子只迷一件事，担心会偏颇",
+  "h": "37b2feb7"
+ },
+ "js.hnt.con-chua-thich-gi-ro-ret": {
+  "t": "孩子没有明显喜欢的事，对什么都淡淡的",
+  "h": "3c4412e1"
+ },
+ "js.hnt.con-thich-huong-ma-minh-khong": {
+  "t": "孩子喜欢的是我不想要的方向",
+  "h": "b2e58212"
+ },
+ "js.hnt.cung-name": {
+  "t": "{name}",
+  "h": "3cb49303"
+ },
+ "js.hnt.cuoi-tuan-nay-toi-nen-cho-ten": {
+  "t": "这个周末我该先让{ten}试什么？",
+  "h": "f2a056eb"
+ },
+ "js.hnt.dau-hieu-o-nha": {
+  "t": "在家中的迹象",
+  "h": "df425a5c"
+ },
+ "js.hnt.day-la-ban-dinh-huong-som-ten": {
+  "t": "这是给**{ten}**的早期方向建议。还想多问些什么吗？",
+  "h": "fa23b364"
+ },
+ "js.hnt.do-nghieng": {
+  "t": "倾斜程度",
+  "h": "f640298c"
+ },
+ "js.hnt.do-nghieng-pct-phan-tram": {
+  "t": "相对于最高倾向，倾斜程度为百分之 {pct}",
+  "h": "c8321ffe"
+ },
+ "js.hnt.huong-nghiep-som": {
+  "t": "早期职涯方向—— ",
+  "h": "9779b5fc"
+ },
+ "js.hnt.huong-nghiep-som-cho-con": {
+  "t": "孩子的早期职涯方向",
+  "h": "2735212c"
+ },
+ "js.hnt.khoa": {
+  "t": "锁定",
+  "h": "393cb36a"
+ },
+ "js.hnt.khong-co-chinh-tinh": {
+  "t": "无主星",
+  "h": "753ded73"
+ },
+ "js.hnt.khong-co-gi-gap-chi-muon": {
+  "t": "没有什么急事，只是想更了解孩子",
+  "h": "cf2efa39"
+ },
+ "js.hnt.khong-ten": {
+  "t": "未命名",
+  "h": "7c5b38ee"
+ },
+ "js.hnt.khong-the-ket-noi-vui-long": {
+  "t": "无法连接，请再试一次。",
+  "h": "bf0b6e7b"
+ },
+ "js.hnt.kieu": {
+  "t": "类型",
+  "h": "17afe1d6"
+ },
+ "js.hnt.la-so": {
+  "t": "命盘：",
+  "h": "2644d5f2"
+ },
+ "js.hnt.la-so-con-chua-nghieng-han-full": {
+  "t": "⚠️ <b>孩子的命盘目前还没有明显偏向任何方向。</b>在这个年纪，这是很正常的事——现在最适合的建议是<b>让孩子广泛尝试</b>，不要太早定案。下面是最偏向的方向，但请当作可以尝试的提示来读，而不是结论。",
+  "h": "f97c9830"
+ },
+ "js.hnt.la-so-nay": {
+  "t": "这份命盘",
+  "h": "9d459fb1"
+ },
+ "js.hnt.la-so-nay-da-tuoi-link": {
+  "t": "<b>这份命盘已是{tuoi}</b>——这已不是<i>孩子的早期方向</i>这个问题，因此家长读孩子的方向建议<b>不在这里打开</b>，也<b>不扣除两</b>。<br><br>上方的倾向部分仍可阅读，且依旧免费——它是从命盘读出的，所以在任何年龄都成立。若想读成年人的职涯方向（领域、角色、规模、职业分支），请使用{link}。",
+  "h": "32842316"
+ },
+ "js.hnt.lap-la-so-phan-kieu-nguoi": {
+  "t": "排出命盘并判定类型",
+  "h": "61f07874"
+ },
+ "js.hnt.loi": {
+  "t": "错误 ",
+  "h": "1b80116b"
+ },
+ "js.hnt.loi-8d72": {
+  "t": "错误：",
+  "h": "471c0087"
+ },
+ "js.hnt.luong": {
+  "t": "两 →",
+  "h": "36d6704d"
+ },
+ "js.hnt.mo-ban-dinh-huong-day-du": {
+  "t": "打开完整方向建议",
+  "h": "88ead889"
+ },
+ "js.hnt.muon-xung-chieu": {
+  "t": " <i>——借对宫</i>",
+  "h": "77b3f2b2"
+ },
+ "js.hnt.nen-cho-lam-quen-hd": {
+  "t": "适合让孩子接触：{hd}",
+  "h": "699e4a26"
+ },
+ "js.hnt.nen-cho-lam-quen-o-lua": {
+  "t": "这个年龄层适合接触的事",
+  "h": "cd2440b6"
+ },
+ "js.hnt.nghe-co-chat-do-chi-de": {
+  "t": "具备该特质的职业——仅供想像",
+  "h": "1377df2f"
+ },
+ "js.hnt.nguoi-lon-nen": {
+  "t": "大人该做的",
+  "h": "f397c75d"
+ },
+ "js.hnt.nguoi-lon-nen-nen": {
+  "t": "大人该做：{nen}",
+  "h": "8198bc18"
+ },
+ "js.hnt.nguoi-lon-tranh": {
+  "t": "大人该避免的",
+  "h": "5dd28891"
+ },
+ "js.hnt.nu": {
+  "t": "女",
+  "h": "feb92ccd"
+ },
+ "js.hnt.sap-phai-chon-mon-to-hop": {
+  "t": "即将要选科目／组合／学校",
+  "h": "8e562a93"
+ },
+ "js.hnt.so-thua-kem-hint": {
+  "t": "您将得到：孩子在哪些地方被用别人的尺来衡量，以及哪一把尺才是属于孩子的。",
+  "h": "94d7dbae"
+ },
+ "js.hnt.so-thua-kem-lbl": {
+  "t": "担心孩子跟不上朋友",
+  "h": "2c7bbfec"
+ },
+ "js.hnt.ten-dang-me-mot-thu-khac": {
+  "t": "{ten}迷上了完全不同的东西——该让他／她去吗？",
+  "h": "b40a573a"
+ },
+ "js.hnt.thien-huong-noi-nhat-ten-chat": {
+  "t": "最突出的倾向：{ten}——{chat}",
+  "h": "208d9982"
+ },
+ "js.hnt.thien-huong-noi-nhat-va-cach": {
+  "t": " ——最突出的倾向，以及如何让孩子开始接触，都在完整方向建议中。",
+  "h": "a193a19d"
+ },
+ "js.hnt.toi-nen-hoi-ten-cau-gi": {
+  "t": "我该问{ten}什么问题，孩子才会自己说出来？",
+  "h": "01a73584"
+ },
+ "js.hnt.truong-thanh": {
+  "t": "成年",
+  "h": "8971ff40"
+ },
+ "js.hnt.tu-vi-cong-so-huong-nghiep": {
+  "t": "紫微斗数 职场与职涯",
+  "h": "45d9ae37"
+ },
+ "js.hnt.tuoi": {
+  "t": " 岁",
+  "h": "2e261bf5"
+ },
+ "js.hnt.tuoi-tuoi-mu": {
+  "t": " 岁（虚岁）",
+  "h": "f62485fd"
+ },
+ "js.hnt.vi": {
+  "t": "<b>原因：</b>",
+  "h": "58409548"
+ },
+ "js.hnt.vi-sao-la-so-lai-nghieng": {
+  "t": "为什么命盘会偏向这个方向？",
+  "h": "11faf439"
+ },
+ "js.hnt.viec-nen-lam-trong-thang-nay": {
+  "t": "这个月该做与该停止的事，以及怎么对孩子开口",
+  "h": "6f97a853"
+ },
+ "js.hnt.viet-ban-dinh-huong-theo-lua": {
+  "t": "撰写依年龄安排的方向建议",
+  "h": "6ca12949"
+ },
+ "js.hnt.vui-long-nhap-day-du-ngay": {
+  "t": "请完整输入孩子的出生年、月、日。",
+  "h": "784233ac"
+ },
+ "js.hnt.xem-ban-dinh-huong-day-du": {
+  "t": "✦ 查看完整方向建议 —",
+  "h": "efa29b24"
  },
  "js.home.3-buoc-dau-tien": {
   "t": "最初的 3 步",
@@ -3954,6 +7446,34 @@
  "js.hooklayer.nap-luong": {
   "t": "储值 →",
   "h": "96c6fb5d"
+ },
+ "js.kimlau.chip1": {
+  "t": "哪一年最适合盖房？",
+  "h": "992ff775"
+ },
+ "js.kimlau.chip2": {
+  "t": "哪一年可以婚嫁？",
+  "h": "5de89c72"
+ },
+ "js.kimlau.chip3": {
+  "t": "犯金楼该如何化解？",
+  "h": "f9c9cb33"
+ },
+ "js.kimlau.chip4": {
+  "t": "三灾期间要忌什么？",
+  "h": "27ba3819"
+ },
+ "js.kimlau.dai-20-nam": {
+  "t": "未来20年——哪些年可行",
+  "h": "bd73ccbd"
+ },
+ "js.kimlau.greeting": {
+  "t": "已查找**{cc}**的金楼・三灾・荒屋（未来20年）。您想问什么？",
+  "h": "cf9daca6"
+ },
+ "js.kimlau.label": {
+  "t": "金楼・{cc}",
+  "h": "2529b317"
  },
  "js.kinhdich.bam-de-bat-dau-gieo-que": {
   "t": "按下开始起卦——共掷 6 次，每次决定一个爻",
@@ -4787,6 +8307,426 @@
   "t": "照片看面相",
   "h": "24c4d64e"
  },
+ "js.ngaytot.chip1": {
+  "t": "哪天适合办婚礼？",
+  "h": "409c6fd4"
+ },
+ "js.ngaytot.chip2": {
+  "t": "哪天适合动土或入宅？",
+  "h": "26db2036"
+ },
+ "js.ngaytot.chip3": {
+  "t": "为什么要避开忌日？",
+  "h": "2cc8c854"
+ },
+ "js.ngaytot.chip4": {
+  "t": "开张该选哪一天？",
+  "h": "b44fce94"
+ },
+ "js.ngaytot.greeting": {
+  "t": "已查看**{y}年{m}月**的历。您打算做什么事，好让我挑选最好的日子？",
+  "h": "3a05f3ac"
+ },
+ "js.ngaytot.label": {
+  "t": "吉日・{y}年{m}月",
+  "h": "cbd777dc"
+ },
+ "js.nguoikhac.ban-cam-nang": {
+  "t": "指南",
+  "h": "a9696c9f"
+ },
+ "js.nguoikhac.ban-co-muon-doi-chieu-them": {
+  "t": "要不要再对照您自己的命盘？这样会多出「此人与您」一节。",
+  "h": "e86dc3aa"
+ },
+ "js.nguoikhac.ban-da-xem-ban-nay-roi": {
+  "t": "✓ 您已看过这份解读——再次打开不会扣除两",
+  "h": "7d2c6a5b"
+ },
+ "js.nguoikhac.ban-dang-can-lam": {
+  "t": "您需要做的事",
+  "h": "91e799f3"
+ },
+ "js.nguoikhac.ban-dang-can-lam-gi-voi": {
+  "t": "您需要对这个人做什么？",
+  "h": "a3a85f1f"
+ },
+ "js.nguoikhac.ban-day-du-se-co-mot": {
+  "t": "完整版有专门针对这件事的独立章节。",
+  "h": "6c907e5e"
+ },
+ "js.nguoikhac.ban-nay-doc-tu": {
+  "t": "本解读读取了依您输入的出生日期与时辰所排出的<b>",
+  "h": "d989b954"
+ },
+ "js.nguoikhac.ban-se-nhan-chia-viec-the": {
+  "t": "您将得到：如何分工才不会互相踩线，以及避免什么才不会伤了和气。",
+  "h": "8824cf10"
+ },
+ "js.nguoikhac.ban-se-nhan-cho-nao-la": {
+  "t": "您将得到：哪些只是个性差异，并不是感情已经消退。",
+  "h": "93bae219"
+ },
+ "js.nguoikhac.ban-se-nhan-dua-tre-nay": {
+  "t": "您将得到：这个孩子需要催一把，还是需要静静等待。",
+  "h": "d6a5344d"
+ },
+ "js.nguoikhac.ban-se-nhan-giao-viec-kieu": {
+  "t": "您将得到：怎么交办事情对方才肯动，怎么提醒对方才听得进去。",
+  "h": "753ebc00"
+ },
+ "js.nguoikhac.ban-se-nhan-ho-quyet-bang": {
+  "t": "您将得到：对方依什么做决定，以及什么会让对方退缩。",
+  "h": "65d83930"
+ },
+ "js.nguoikhac.ban-se-nhan-noi-the-nao": {
+  "t": "您将得到：怎么说话才不会又为了同一件老事吵起来。",
+  "h": "e80b5e7c"
+ },
+ "js.nguoikhac.ban-se-nhan-trinh-bay-the": {
+  "t": "您将得到：怎么提案才能获得核准，以及什么时候不该提。",
+  "h": "ba10c251"
+ },
+ "js.nguoikhac.ban-se-nhan-trong-cay-duoc": {
+  "t": "您将得到：哪些事可以倚靠对方，哪些事不要指望对方。",
+  "h": "19b64bfa"
+ },
+ "js.nguoikhac.bo-qua": {
+  "t": "略过",
+  "h": "861dafde"
+ },
+ "js.nguoikhac.bo-qua-doi-chieu-la-so": {
+  "t": "已略过与您命盘的对照。",
+  "h": "7c25b196"
+ },
+ "js.nguoikhac.cach-cuc": {
+  "t": " 种格局、",
+  "h": "a4f8bc9a"
+ },
+ "js.nguoikhac.cach-cuc-dai-van-van-nam": {
+  "t": "格局、大运、年运，以及对这个人的具体相处方式，都在完整指南中。",
+  "h": "7a23f4d4"
+ },
+ "js.nguoikhac.cach-di-cho-viec": {
+  "t": "这件事的做法：",
+  "h": "36885ebf"
+ },
+ "js.nguoikhac.cam-nang-ung-xu": {
+  "t": "相处指南—— ",
+  "h": "2aba8d61"
+ },
+ "js.nguoikhac.can-giao-viec-nhac-viec-cho": {
+  "t": "需要交办／提醒对方做事",
+  "h": "8a5c5843"
+ },
+ "js.nguoikhac.cat": {
+  "t": "吉 ",
+  "h": "bbbbd4e0"
+ },
+ "js.nguoikhac.chang-dai-van": {
+  "t": " 个大运阶段。",
+  "h": "0bc2d397"
+ },
+ "js.nguoikhac.chinh-tinh-tai-cung": {
+  "t": "主星所在宫位：",
+  "h": "37742cf1"
+ },
+ "js.nguoikhac.cho-thay-xin-thong-tin-cua": {
+  "t": "请告诉老师这个人的数据。",
+  "h": "4704e927"
+ },
+ "js.nguoikhac.chon-mot-viec-cu-the-thi": {
+  "t": "选择具体的事项，解读会多出专属于那件事的「做法」。",
+  "h": "29c1bbf5"
+ },
+ "js.nguoikhac.chua-cham": {
+  "t": "尚未评分",
+  "h": "a20bbf69"
+ },
+ "js.nguoikhac.co-doi-chieu": {
+  "t": "好，来对照 →",
+  "h": "a3846e57"
+ },
+ "js.nguoikhac.con": {
+  "t": "还有 ",
+  "h": "be81ceb0"
+ },
+ "js.nguoikhac.cung-an-than": {
+  "t": "<li><b>身宫所在</b>—— ",
+  "h": "23b5a7a9"
+ },
+ "js.nguoikhac.cung-cung-trong-la-so-cua": {
+  "t": "您命盘中的{cung}",
+  "h": "85ab2993"
+ },
+ "js.nguoikhac.cung-name": {
+  "t": "{name}",
+  "h": "3cb49303"
+ },
+ "js.nguoikhac.cung-tinh-am-duong-de-va": {
+  "t": "阴阳属性相同——容易起冲突",
+  "h": "38ee66ae"
+ },
+ "js.nguoikhac.da": {
+  "t": "走势 ",
+  "h": "ea471098"
+ },
+ "js.nguoikhac.dai-van-dang-chay": {
+  "t": "<li><b>目前的大运</b>—— ",
+  "h": "7e2a0133"
+ },
+ "js.nguoikhac.dang-co-bat-dong-chua-go": {
+  "t": "目前有尚未化解的分歧",
+  "h": "f32b8bb1"
+ },
+ "js.nguoikhac.day-la-ban-cam-nang-ung-ten": {
+  "t": "这是与**{ten}**相处的指南。还想多问哪个情境吗？",
+  "h": "10e397ff"
+ },
+ "js.nguoikhac.doc-menh-phuc-duc-thien-di": {
+  "t": "解读命宫・福德宫・迁移宫・官禄宫・仆役宫",
+  "h": "1a737bb6"
+ },
+ "js.nguoikhac.doi-chieu-them-voi-la-so": {
+  "t": "已加入与您命盘的对照 ✓",
+  "h": "65992be6"
+ },
+ "js.nguoikhac.doi-chieu-voi-la-so-cua": {
+  "t": "与您命盘的对照：",
+  "h": "69111647"
+ },
+ "js.nguoikhac.du-kien-lap-ra-tu-chinh": {
+  "t": " 笔数据</b> — ",
+  "h": "fdb76ddf"
+ },
+ "js.nguoikhac.hai-ben-de-va-nhau-o": {
+  "t": "双方容易在哪些地方起冲突？",
+  "h": "4604fce9"
+ },
+ "js.nguoikhac.ho-coi-trong-cai-gi-va": {
+  "t": "对方重视什么，又怕失去什么",
+  "h": "cb1b27aa"
+ },
+ "js.nguoikhac.khac-tinh-am-duong-de-bu": {
+  "t": "阴阳属性不同——容易互补",
+  "h": "b5f77a93"
+ },
+ "js.nguoikhac.khoa": {
+  "t": "锁定",
+  "h": "393cb36a"
+ },
+ "js.nguoikhac.khong-co-buoc-nao-doan-mo": {
+  "t": "没有任何一步是猜的：出生数据改动一个细节，上面整张表都会跟着变。",
+  "h": "065d23da"
+ },
+ "js.nguoikhac.khong-co-chinh-tinh": {
+  "t": "无主星",
+  "h": "753ded73"
+ },
+ "js.nguoikhac.khong-co-gi-gap-chi-muon": {
+  "t": "没有什么急事，只是想更了解这个人",
+  "h": "7c188ebe"
+ },
+ "js.nguoikhac.khong-dat-ten": {
+  "t": "未命名",
+  "h": "295915d5"
+ },
+ "js.nguoikhac.khong-the-ket-noi-vui-long": {
+  "t": "无法连接，请再试一次。",
+  "h": "bf0b6e7b"
+ },
+ "js.nguoikhac.khung-dai-van": {
+  "t": "大运区间 ",
+  "h": "06be9124"
+ },
+ "js.nguoikhac.la-so": {
+  "t": "命盘：",
+  "h": "2644d5f2"
+ },
+ "js.nguoikhac.la-so-nguoi-khac": {
+  "t": "他人的命盘",
+  "h": "e454923c"
+ },
+ "js.nguoikhac.lap-la-so-phan-kieu-nguoi": {
+  "t": "排出命盘并判定类型",
+  "h": "61f07874"
+ },
+ "js.nguoikhac.loi": {
+  "t": "错误 ",
+  "h": "1b80116b"
+ },
+ "js.nguoikhac.loi-8d72": {
+  "t": "错误：",
+  "h": "471c0087"
+ },
+ "js.nguoikhac.luc-nao-nen-dua-viec-lon": {
+  "t": "何时提出大事",
+  "h": "94a8e09a"
+ },
+ "js.nguoikhac.luong": {
+  "t": "两 →",
+  "h": "36d6704d"
+ },
+ "js.nguoikhac.luu-nien-cung": {
+  "t": "流年宫 ",
+  "h": "8f5a16cc"
+ },
+ "js.nguoikhac.mo-cam-nang-day-du": {
+  "t": "打开完整指南",
+  "h": "1e071c6b"
+ },
+ "js.nguoikhac.mot-cau-chot": {
+  "t": "一句话总结",
+  "h": "9e19232a"
+ },
+ "js.nguoikhac.muc-trong-la-so": {
+  "t": "项命盘依据",
+  "h": "4e83a32a"
+ },
+ "js.nguoikhac.muon-gan-lai-sau-mot-thoi": {
+  "t": "想在疏远一段时间后重新拉近距离",
+  "h": "30e6d4da"
+ },
+ "js.nguoikhac.muon-ru-ho-lam-chung-mot": {
+  "t": "想邀对方一起做一件大事",
+  "h": "9c94c0ef"
+ },
+ "js.nguoikhac.muon-xung-chieu": {
+  "t": "（借对宫）",
+  "h": "7363dfe3"
+ },
+ "js.nguoikhac.nen-noi-gi-3-viec-kem": {
+  "t": "该说什么——三件事，附真实说法",
+  "h": "e6639d28"
+ },
+ "js.nguoikhac.nguoi-ban-muon-hieu-la-ai": {
+  "t": "您想了解的人，与您是什么关系？",
+  "h": "4f8c6227"
+ },
+ "js.nguoikhac.nguoi-nay": {
+  "t": "这个人",
+  "h": "bed03c25"
+ },
+ "js.nguoikhac.nguoi-nay-la": {
+  "t": "这个人是您的",
+  "h": "d70093a0"
+ },
+ "js.nguoikhac.nguoi-nay-la-jle1": {
+  "t": "这个人是：<b>",
+  "h": "bdd5dac7"
+ },
+ "js.nguoikhac.nguoi-nay-rxn3": {
+  "t": "这个人",
+  "h": "794cf474"
+ },
+ "js.nguoikhac.pha-them": {
+  "t": "另外混有",
+  "h": "4b629d3a"
+ },
+ "js.nguoikhac.phai-tu-choi-ho-ma-khong": {
+  "t": "必须拒绝对方，又不想失去这段关系",
+  "h": "c189e09a"
+ },
+ "js.nguoikhac.phan-chua-mo-ve-nguoi-nay": {
+  "t": " 个尚未打开的部分（关于这个人）",
+  "h": "45be6b61"
+ },
+ "js.nguoikhac.sach-dan-ve-sao": {
+  "t": "——命宫之星「",
+  "h": "7b5e7401"
+ },
+ "js.nguoikhac.sao-an-tren-12-cung": {
+  "t": " 颗星安在十二宫、",
+  "h": "a6914f13"
+ },
+ "js.nguoikhac.sap-gap-lam-viec-lan-dau": {
+  "t": "即将初次见面／共事，对对方一无所知",
+  "h": "e36b0cd8"
+ },
+ "js.nguoikhac.sap-nho-ho-mot-viec-trinh": {
+  "t": "即将请对方帮忙／提出提案",
+  "h": "60e6e0e6"
+ },
+ "js.nguoikhac.sap-phai-bao-mot-tin-ho": {
+  "t": "必须告知对方一个他不想听的消息",
+  "h": "0d739532"
+ },
+ "js.nguoikhac.sap-phai-trao-doi-mot-viec-kho": {
+  "t": "我即将要跟{ten}谈一件棘手的事，该怎么开口？",
+  "h": "db0677dd"
+ },
+ "js.nguoikhac.sap-thuong-luong-quyen-loi-luong": {
+  "t": "即将协商权益（薪资、分成）",
+  "h": "93d154e1"
+ },
+ "js.nguoikhac.sat": {
+  "t": " / 煞 ",
+  "h": "c472d1aa"
+ },
+ "js.nguoikhac.tai-cung-menh": {
+  "t": "」的典籍引文</span></div>",
+  "h": "173c6b01"
+ },
+ "js.nguoikhac.tiep-tuc": {
+  "t": "继续 →",
+  "h": "86f35ed9"
+ },
+ "js.nguoikhac.tieu-han-cung": {
+  "t": "小限宫 ",
+  "h": "4d7ba471"
+ },
+ "js.nguoikhac.tranh-noi-gi-3-viec-kem": {
+  "t": "该避免说什么——三件事，附真实说法",
+  "h": "3031b0e9"
+ },
+ "js.nguoikhac.tuoi": {
+  "t": " 岁",
+  "h": "2e261bf5"
+ },
+ "js.nguoikhac.tuoi-cung": {
+  "t": " 岁，",
+  "h": "b6a16394"
+ },
+ "js.nguoikhac.van-nam": {
+  "t": "<li><b>年运 ",
+  "h": "1192aa32"
+ },
+ "js.nguoikhac.vi-sao-la-so-lai-luan-ra": {
+  "t": "为什么命盘能读出这样的个性？",
+  "h": "e91e824f"
+ },
+ "js.nguoikhac.viec-can-lam": {
+  "t": "需要做的事",
+  "h": "33183420"
+ },
+ "js.nguoikhac.viec-can-lam-20zs": {
+  "t": "需要做的事：<b>",
+  "h": "50291106"
+ },
+ "js.nguoikhac.viec-gi-thi-dung-giao-cho": {
+  "t": "哪些事不要交给{ten}？",
+  "h": "3e1787c1"
+ },
+ "js.nguoikhac.viet-cam-nang-ung-xu": {
+  "t": "撰写相处指南",
+  "h": "20a60416"
+ },
+ "js.nguoikhac.vui-long-nhap-day-du-ngay": {
+  "t": "请完整输入您想了解的人的出生年、月、日。",
+  "h": "62f8b003"
+ },
+ "js.nguoikhac.who-nghieng-ve-kieu-kieu": {
+  "t": "{who}偏向{kieu}类型",
+  "h": "03d0db57"
+ },
+ "js.nguoikhac.xem-cam-nang-day-du": {
+  "t": "✦ 查看完整指南 —",
+  "h": "de73e107"
+ },
+ "js.nguoikhac.xem-them": {
+  "t": "<summary>再看 ",
+  "h": "c5afdcd1"
+ },
  "js.nhtg.anh-mat-noi-len-dieu-gi": {
   "t": "眼神代表什么？",
   "h": "dca0ccee"
@@ -4898,6 +8838,242 @@
  "js.nhtg.vui-long-chon-file-anh": {
   "t": "请选择图片档。",
   "h": "71a61127"
+ },
+ "js.nm.ban-be": {
+  "t": "朋友",
+  "h": "159fe485"
+ },
+ "js.nm.ban-doc-nhom": {
+  "t": "群体解读",
+  "h": "fb21922c"
+ },
+ "js.nm.ban-doi": {
+  "t": "另一半",
+  "h": "08ebb385"
+ },
+ "js.nm.ban-nay-doc-tu-full": {
+  "t": "本解读读取了依您输入的 {n} 份命盘所排出的 <b>{tong} 笔数据</b>——各宫中安置的 {sao} 颗星、{cc} 种格局、{dv} 个大运阶段。没有任何一步是猜的：任何一个人的出生数据改动一个细节，上面整张表都会跟着变。",
+  "h": "87d23b00"
+ },
+ "js.nm.bu-nhau": {
+  "t": "互补",
+  "h": "909aca10"
+ },
+ "js.nm.can-dang-nhap-de-luu-vao": {
+  "t": "需要登录才能存入簿中。",
+  "h": "5d26d852"
+ },
+ "js.nm.can-it-nhat-2": {
+  "t": " ——至少需要 2 人。",
+  "h": "724525c8"
+ },
+ "js.nm.cap-duoi": {
+  "t": "部属",
+  "h": "4c2caab8"
+ },
+ "js.nm.cat-sat": {
+  "t": "吉−煞 ",
+  "h": "ba23fbfb"
+ },
+ "js.nm.cha-me": {
+  "t": "父母",
+  "h": "efc7bb83"
+ },
+ "js.nm.chon-it-nhat-2-nguoi-trong": {
+  "t": "请从簿中至少选出 2 人，才能读整个群体。",
+  "h": "49d52946"
+ },
+ "js.nm.chua-cham-van-nam": {
+  "t": " ——年运尚未评分",
+  "h": "e73fd33a"
+ },
+ "js.nm.chua-chon-ai": {
+  "t": "尚未选择任何人。",
+  "h": "21f52574"
+ },
+ "js.nm.chua-luu-duoc": {
+  "t": "无法保存。",
+  "h": "0fe9713c"
+ },
+ "js.nm.chua-luu-duoc-kiem-tra-dang": {
+  "t": "无法保存——请检查登录状态。",
+  "h": "08d31926"
+ },
+ "js.nm.co-nguoi-trong-so-thieu-ngay": {
+  "t": "簿中有人缺少出生日期——请重新选择。",
+  "h": "6e0349ce"
+ },
+ "js.nm.con-cai": {
+  "t": "子女",
+  "h": "eb70b34b"
+ },
+ "js.nm.dang-chon": {
+  "t": "已选 ",
+  "h": "9795c6eb"
+ },
+ "js.nm.dat-ten-goi-de-con-phan": {
+  "t": "请取一个称呼，才能在簿中分辨。",
+  "h": "689ee850"
+ },
+ "js.nm.day-la-ban-doc-n-nguoi": {
+  "t": "这是您簿中 **{n} 人**的解读。想更深入询问哪一位？",
+  "h": "2c925bdc"
+ },
+ "js.nm.de-giam-chan": {
+  "t": "容易踩线",
+  "h": "3cd381b5"
+ },
+ "js.nm.doi-co-du-bon-kieu": {
+  "t": "团队四种类型齐全。",
+  "h": "16d74569"
+ },
+ "js.nm.doi-dang-thieu-kieu-ds": {
+  "t": "团队缺少的类型：{ds}",
+  "h": "60efbac2"
+ },
+ "js.nm.doi-tac-khach": {
+  "t": "合作伙伴／客户",
+  "h": "7e407353"
+ },
+ "js.nm.dong-nghiep": {
+  "t": "同事",
+  "h": "d8e2bdd8"
+ },
+ "js.nm.khong-ai-kieu": {
+  "t": "没有人属于此类型：",
+  "h": "18a19cc7"
+ },
+ "js.nm.khong-the-ket-noi-vui-long": {
+  "t": "无法连接，请再试一次。",
+  "h": "bf0b6e7b"
+ },
+ "js.nm.khung-dai-van": {
+  "t": " · 大运区间 ",
+  "h": "0beb874f"
+ },
+ "js.nm.khung-dai-van-dlx0": {
+  "t": "大运区间 ",
+  "h": "06be9124"
+ },
+ "js.nm.kieu": {
+  "t": " · 类型 ",
+  "h": "6d81ffdf"
+ },
+ "js.nm.la-so-cua-ban": {
+  "t": "您的命盘：",
+  "h": "0202ce58"
+ },
+ "js.nm.lap-la-so-tung-nguoi": {
+  "t": "逐一排出每个人的命盘",
+  "h": "a94af28e"
+ },
+ "js.nm.loi": {
+  "t": "错误 ",
+  "h": "1b80116b"
+ },
+ "js.nm.loi-8d72": {
+  "t": "错误：",
+  "h": "471c0087"
+ },
+ "js.nm.moi-luot-doc-toi-da-8": {
+  "t": "每次最多读 8 人——再多的话，解读就变成通信录了。",
+  "h": "e35f50af"
+ },
+ "js.nm.moi-luot-doc-toi-da-8-l7vo": {
+  "t": "每次最多读 8 人。",
+  "h": "12b66f54"
+ },
+ "js.nm.nam": {
+  "t": "南",
+  "h": "b580ba1b"
+ },
+ "js.nm.nen-tim-them": {
+  "t": "建议再找：",
+  "h": "b500e6d6"
+ },
+ "js.nm.nen-tim-them-kieu-ten": {
+  "t": "建议再找的类型：{ten}",
+  "h": "22272ef1"
+ },
+ "js.nm.nguoi": {
+  "t": " 人",
+  "h": "e4c8f1aa"
+ },
+ "js.nm.nguoi-kgnv": {
+  "t": " 人 — ",
+  "h": "b0f59658"
+ },
+ "js.nm.nhap-du-ngay-thang-nam-sinh": {
+  "t": "请完整输入出生年月日。",
+  "h": "370f8e82"
+ },
+ "js.nm.nhom-dang-thieu-chat-gi-ai": {
+  "t": "这个组缺少什么特质，又是谁在扛？",
+  "h": "760f9c41"
+ },
+ "js.nm.nhom-n-nguoi": {
+  "t": "这个组共 {n} 人。",
+  "h": "8c677b9d"
+ },
+ "js.nm.nu": {
+  "t": "女",
+  "h": "feb92ccd"
+ },
+ "js.nm.phan-kieu-do-cho-trong-cua": {
+  "t": "分类型并找出组内的空缺",
+  "h": "338c1abe"
+ },
+ "js.nm.qua-nua-nhom-la-kieu": {
+  "t": "超过半数的人属于此类型：",
+  "h": "5c247c71"
+ },
+ "js.nm.sep-cap-tren": {
+  "t": "上司／长官",
+  "h": "976d7a60"
+ },
+ "js.nm.so-dang-trong-bam-them-nguoi": {
+  "t": "簿中目前是空的。请按下方的<b>＋ 添加人物到簿中</b>，至少加入 2 人——上司、同事、部属或客户。需要登录，簿才会依帐号保存。",
+  "h": "564308fe"
+ },
+ "js.nm.so-nhan-mach-doc-nhom-n": {
+  "t": "人脉簿——读 {n} 人的群体",
+  "h": "08a560d8"
+ },
+ "js.nm.toi-da-8": {
+  "t": " ——最多 8 人。",
+  "h": "0bccf420"
+ },
+ "js.nm.tuan-nay-nen-gap-ai-truoc": {
+  "t": "这周该先见谁，又该怎么开口？",
+  "h": "9337d347"
+ },
+ "js.nm.van-nam": {
+  "t": " · 年运 ",
+  "h": "357d4194"
+ },
+ "js.nm.van-nam-1z56": {
+  "t": " ——年运 ",
+  "h": "12429204"
+ },
+ "js.nm.vi-sao-hai-nguoi-do-de-giam": {
+  "t": "为什么那两个人容易踩线？",
+  "h": "9fbac3bc"
+ },
+ "js.nm.viec-sap-toi-nen-giao-cho-ai": {
+  "t": "接下来的事该交给这个组里的谁？",
+  "h": "a25cdab3"
+ },
+ "js.nm.viet-ban-doc-ca-so": {
+  "t": "撰写整本簿的解读",
+  "h": "c9c08f4c"
+ },
+ "js.nm.xoa-khoi-so": {
+  "t": "从簿中移除",
+  "h": "4ba4a755"
+ },
+ "js.nm.xoa-la-so-nay-khoi-so": {
+  "t": "要把这份命盘从簿中移除吗？",
+  "h": "d9231d4e"
  },
  "js.noisinh.noi-khac": {
   "t": "其他（选择时区）",
@@ -6931,6 +11107,106 @@
   "t": "范例准备中，请稍后再来！",
   "h": "992fd7e6"
  },
+ "js.sc.binh-thuong": {
+  "t": "普通 ★",
+  "h": "d49b9158"
+ },
+ "js.sc.bo": {
+  "t": "爸爸",
+  "h": "dbbdf270"
+ },
+ "js.sc.can-luu-y": {
+  "t": "需留意",
+  "h": "def723aa"
+ },
+ "js.sc.con-tuoi-gi-hop-voi": {
+  "t": "孩子属什么生肖与父母最合？",
+  "h": "702bccb6"
+ },
+ "js.sc.da-cham-hop-xung-dia-chi": {
+  "t": "已为未来 15 年的地支合冲评分（父亲**{bo}**・母亲**{me}**）。最顺遂的年份：**{tot}**。您想先咨询什么？",
+  "h": "669ae596"
+ },
+ "js.sc.ket-qua-a-b": {
+  "t": "{a} – {b} 年结果",
+  "h": "67cbb5f6"
+ },
+ "js.sc.loi": {
+  "t": "错误：",
+  "h": "471c0087"
+ },
+ "js.sc.luc-hop-voi-bo": {
+  "t": "与父亲六合 ✓",
+  "h": "e0214f73"
+ },
+ "js.sc.luc-hop-voi-me": {
+  "t": "与母亲六合 ✓",
+  "h": "f42895e4"
+ },
+ "js.sc.luc-xung-voi-bo": {
+  "t": "与父亲六冲 ✗",
+  "h": "fef3a745"
+ },
+ "js.sc.luc-xung-voi-me": {
+  "t": "与母亲六冲 ✗",
+  "h": "b043bcf2"
+ },
+ "js.sc.me": {
+  "t": "妈妈",
+  "h": "dfc6f90b"
+ },
+ "js.sc.nam-nao-nen-tranh-sinh-con": {
+  "t": "哪一年应避免生孩子？",
+  "h": "45ae05ad"
+ },
+ "js.sc.nam-nao-tot-nhat-de-sinh": {
+  "t": "哪一年最适合生孩子？",
+  "h": "345bd2a8"
+ },
+ "js.sc.nam-thuan-nhat-top-3": {
+  "t": "最顺遂的年份（前三名）",
+  "h": "d65badf2"
+ },
+ "js.sc.nam-thuan-nhat-top-3-ds": {
+  "t": "最顺遂的年份（前三名）：{ds}",
+  "h": "41c0bad6"
+ },
+ "js.sc.rat-thuan": {
+  "t": "非常顺遂 ★★★",
+  "h": "ea8da095"
+ },
+ "js.sc.tam-hinh-voi-bo": {
+  "t": "与父亲三刑",
+  "h": "0099e1e7"
+ },
+ "js.sc.tam-hinh-voi-me": {
+  "t": "与母亲三刑",
+  "h": "996d2b57"
+ },
+ "js.sc.tam-hop-voi-bo": {
+  "t": "与父亲三合",
+  "h": "117b9ae6"
+ },
+ "js.sc.tam-hop-voi-me": {
+  "t": "与母亲三合",
+  "h": "5a98a39d"
+ },
+ "js.sc.thuan": {
+  "t": "顺遂 ★★",
+  "h": "7a571e7c"
+ },
+ "js.sc.trung-tinh": {
+  "t": "中性",
+  "h": "308793c3"
+ },
+ "js.sc.vi-sao-nam-do-hop-ca": {
+  "t": "为什么那一年同时适合爸爸和妈妈？",
+  "h": "bc9256b2"
+ },
+ "js.sc.vui-long-nhap-nam-sinh": {
+  "t": "请输入有效的父亲与母亲出生年。",
+  "h": "ad827462"
+ },
  "js.shell.an": {
   "t": "隐藏",
   "h": "f4ea7c30"
@@ -8259,9 +12535,25 @@
   "t": "**，还是建议新的名字？",
   "h": "d922a861"
  },
+ "js.shellui.hc-ban-o-day": {
+  "t": "您在这里",
+  "h": "0ed02beb"
+ },
+ "js.shellui.hc-duoc": {
+  "t": "可",
+  "h": "4c144474"
+ },
+ "js.shellui.hd-al": {
+  "t": "（农历{m}/{d}）",
+  "h": "3fd68961"
+ },
  "js.shellui.hd-can-hanh": {
   "t": "，天干五行 ",
   "h": "96563d79"
+ },
+ "js.shellui.hd-can-hanh-info": {
+  "t": "天干 <strong>{can}</strong>——五行 <strong>{hanh}</strong>",
+  "h": "4069d76b"
  },
  "js.shellui.hd-gio-can-tranh-hac-dao": {
   "t": "需避开的时辰（黑道）：",
@@ -8278,6 +12570,118 @@
  "js.shellui.hd-gio-tot-hoang-dao": {
   "t": "吉时（黄道）：",
   "h": "100b31dc"
+ },
+ "js.shellui.hd-ngay-cc": {
+  "t": "日 <strong>{cc}</strong>",
+  "h": "7f416c3a"
+ },
+ "js.shellui.hd-nhap-ngay-hop-le": {
+  "t": "请输入有效的日期。",
+  "h": "11a91c34"
+ },
+ "js.shellui.hd-thang-khong-co-ngay": {
+  "t": "{y}年{m}月没有{d}日——请重新选择。",
+  "h": "da49ec5e"
+ },
+ "js.shellui.hd-title": {
+  "t": "{date}{al}——{cc}日",
+  "h": "593d5baf"
+ },
+ "js.shellui.hdd-bh": {
+  "t": "煞气、灾祸",
+  "h": "28e5f7d8"
+ },
+ "js.shellui.hdd-cht": {
+  "t": "纠缠、停滞",
+  "h": "4363abe5"
+ },
+ "js.shellui.hdd-ct": {
+  "t": "口舌、是非",
+  "h": "845d6380"
+ },
+ "js.shellui.hdd-hv": {
+  "t": "盗贼、损失",
+  "h": "cde5c999"
+ },
+ "js.shellui.hdd-kq": {
+  "t": "财务、进财",
+  "h": "15237468"
+ },
+ "js.shellui.hdd-md": {
+  "t": "贵人相助、顺利",
+  "h": "a8e75ee4"
+ },
+ "js.shellui.hdd-nd": {
+  "t": "名望、成就",
+  "h": "b3890138"
+ },
+ "js.shellui.hdd-td": {
+  "t": "福德、化解凶险",
+  "h": "e3a72954"
+ },
+ "js.shellui.hdd-th": {
+  "t": "官讼、争执、凶",
+  "h": "a6198a39"
+ },
+ "js.shellui.hdd-tl": {
+  "t": "财禄、诸事亨通",
+  "h": "1ae9748a"
+ },
+ "js.shellui.hdd-tlao": {
+  "t": "囚禁、阻碍",
+  "h": "5d6fac43"
+ },
+ "js.shellui.hdd-tm": {
+  "t": "护佑、祈福",
+  "h": "cdb38651"
+ },
+ "js.shellui.hdt-bh": {
+  "t": "白虎",
+  "h": "f6380016"
+ },
+ "js.shellui.hdt-cht": {
+  "t": "勾陈",
+  "h": "36fb04ef"
+ },
+ "js.shellui.hdt-ct": {
+  "t": "朱雀",
+  "h": "90214276"
+ },
+ "js.shellui.hdt-hv": {
+  "t": "玄武",
+  "h": "f27e517b"
+ },
+ "js.shellui.hdt-kq": {
+  "t": "金匮",
+  "h": "6b3e8125"
+ },
+ "js.shellui.hdt-md": {
+  "t": "明堂",
+  "h": "323a8d91"
+ },
+ "js.shellui.hdt-nd": {
+  "t": "玉堂",
+  "h": "2c94d958"
+ },
+ "js.shellui.hdt-td": {
+  "t": "天德",
+  "h": "3c86d12a"
+ },
+ "js.shellui.hdt-th": {
+  "t": "天刑",
+  "h": "51b356df"
+ },
+ "js.shellui.hdt-tl": {
+  "t": "青龙",
+  "h": "deccb086"
+ },
+ "js.shellui.hdt-tlao": {
+  "t": "天牢",
+  "h": "44ad7734"
+ },
+ "js.shellui.hdt-tm": {
+  "t": "司命",
+  "h": "fa69d852"
  },
  "js.shellui.het-phan-dung-thu": {
   "t": "试用内容已用完。",
@@ -8842,6 +13246,74 @@
  "js.shellui.kinh-mat-nao-hop-tuong-mat": {
   "t": "哪种眼镜适合我的脸型？",
   "h": "e2a2a092"
+ },
+ "js.shellui.kl-binh-thuong": {
+  "t": "一般",
+  "h": "7a1fa869"
+ },
+ "js.shellui.kl-cau-hoang-oc": {
+  "t": "今年属荒屋之年——忌买卖与盖房。",
+  "h": "50677d38"
+ },
+ "js.shellui.kl-cau-kim-lau": {
+  "t": "今年属金楼（{loai}）之年——{hai}。忌婚嫁、建筑与大型动土。",
+  "h": "53df32eb"
+ },
+ "js.shellui.kl-cau-tam-tai": {
+  "t": "今年正值三灾运——重大决定务必谨慎。",
+  "h": "72ae51c8"
+ },
+ "js.shellui.kl-con-tam-tai": {
+  "t": "今年又逢三灾，须格外谨慎。",
+  "h": "6d4d5899"
+ },
+ "js.shellui.kl-hai-luc-suc": {
+  "t": "牲畜与财产受影响",
+  "h": "214ff98e"
+ },
+ "js.shellui.kl-hai-than": {
+  "t": "屋主本人受影响",
+  "h": "682a3213"
+ },
+ "js.shellui.kl-hai-the": {
+  "t": "妻子受影响",
+  "h": "09bcf309"
+ },
+ "js.shellui.kl-hai-tu": {
+  "t": "子女受影响",
+  "h": "f3ad84bb"
+ },
+ "js.shellui.kl-loai-luc-suc": {
+  "t": "六畜",
+  "h": "524f4cec"
+ },
+ "js.shellui.kl-loai-than": {
+  "t": "身",
+  "h": "77575b16"
+ },
+ "js.shellui.kl-loai-the": {
+  "t": "妻",
+  "h": "ccd000d4"
+ },
+ "js.shellui.kl-loai-tu": {
+  "t": "子",
+  "h": "bef3174e"
+ },
+ "js.shellui.kl-nam-nay-khong-co": {
+  "t": "今年没有金楼、荒屋或三灾。",
+  "h": "2d212f11"
+ },
+ "js.shellui.kl-nam-tuoi": {
+  "t": "{y}年（虚岁{t}岁）",
+  "h": "511d7f9e"
+ },
+ "js.shellui.kl-nhap-nam-hop-le": {
+  "t": "请输入有效的出生年份（1900–2010）。",
+  "h": "8363c20b"
+ },
+ "js.shellui.kl-title": {
+  "t": "{cc}（{by}）——{na}・{cy}年虚岁：{t}岁",
+  "h": "f6b9127c"
  },
  "js.shellui.km-cuc": {
   "t": "{dun}{n}局",
@@ -9706,6 +14178,38 @@
  "js.shellui.nghe-them-mon-khac": {
   "t": "听听其他领域的意见</span>",
   "h": "abd835bb"
+ },
+ "js.shellui.ngt-al": {
+  "t": "农{m}/{d}",
+  "h": "a38795f8"
+ },
+ "js.shellui.ngt-chon-thang": {
+  "t": "请选择1至12月。",
+  "h": "ad9727eb"
+ },
+ "js.shellui.ngt-duong-cong-ki": {
+  "t": "杨公忌",
+  "h": "a919874b"
+ },
+ "js.shellui.ngt-nguyet-ki": {
+  "t": "月忌",
+  "h": "53f1d21f"
+ },
+ "js.shellui.ngt-nhap-nam-hop-le": {
+  "t": "请输入有效年份（2020–2030）。",
+  "h": "386683dc"
+ },
+ "js.shellui.ngt-tam-nuong": {
+  "t": "三娘",
+  "h": "a82168f4"
+ },
+ "js.shellui.ngt-title": {
+  "t": "{y}年{m}月——吉凶日历",
+  "h": "abd229f8"
+ },
+ "js.shellui.ngt-tot": {
+  "t": "吉",
+  "h": "f716d517"
  },
  "js.shellui.ngu-hanh-net-lien-quan-gi": {
   "t": "笔画的五行与用神有什么关系？",
@@ -15835,6 +20339,78 @@
   "t": "{n} 月",
   "h": "4dd9659f"
  },
+ "kimlau.bang-tra-20-nam-toi": {
+  "t": "未来20年<br>查找表",
+  "h": "ded0c033"
+ },
+ "kimlau.bang-tra-20-nam-toi-9fqx": {
+  "t": "<span class=\"res-block-title\">未来20年查找表</span>",
+  "h": "8e04bf8f"
+ },
+ "kimlau.can-chi": {
+  "t": "干支",
+  "h": "8b784611"
+ },
+ "kimlau.cuoi-hoi-lam-nha": {
+  "t": "婚嫁、<br>盖房",
+  "h": "7e98e435"
+ },
+ "kimlau.hoi-thay-nam-dep-cach-hoa": {
+  "t": "✦ 请问老师吉年与化解之道",
+  "h": "5f76ab82"
+ },
+ "kimlau.ket-luan-ngay-tuc-thi": {
+  "t": "实时<br>结论",
+  "h": "b2797a93"
+ },
+ "kimlau.kim-lau-la-quan-niem-dan": {
+  "t": "金楼是依屋主虚岁（农历）计算的民间观念，认为某些年纪不利于盖房或婚嫁。三灾是相关概念，指十二生肖周期中被认为容易遇到阻碍的连续三年。",
+  "h": "625e5413"
+ },
+ "kimlau.kim-lau-tam-tai": {
+  "t": "金楼与三灾",
+  "h": "cea3719a"
+ },
+ "kimlau.kim-lau-tam-tai-tu-vi": {
+  "t": "金楼与三灾——明宝紫微斗数",
+  "h": "b2ec2af2"
+ },
+ "kimlau.kim-lau-tam-tai-tuoi-lam": {
+  "t": "<b>金楼与三灾</b><span>盖房、婚嫁的年纪是否犯忌</span>",
+  "h": "1fb12a82"
+ },
+ "kimlau.nam-dl": {
+  "t": "国历年",
+  "h": "6c965b9e"
+ },
+ "kimlau.nam-sinh-duong-lich": {
+  "t": "出生年（国历）",
+  "h": "9f8721e0"
+ },
+ "kimlau.nhap-nam-sinh-duong-lich-he": {
+  "t": "输入国历出生年。系统依金楼、三灾、荒屋的古法比对，给出结论与未来20年查找表。",
+  "h": "cca6f199"
+ },
+ "kimlau.pham-kim-lau-tam-tai-ma": {
+  "t": "许多人是在婚嫁、盖房之后才发现自己犯了金楼或三灾，为时已晚。输入出生年，即刻取得结论与现成的未来20年查找表。",
+  "h": "7e987b4a"
+ },
+ "kimlau.tinh-trang": {
+  "t": "状态",
+  "h": "5a46503e"
+ },
+ "kimlau.tra-cuu": {
+  "t": "查找 →",
+  "h": "fd5b08a7"
+ },
+ "kimlau.tuoi-ta": {
+  "t": "虚岁",
+  "h": "536f1746"
+ },
+ "kimlau.xem-tuoi-lam-nha-cuoi-hoi": {
+  "t": "依虚岁查看盖房、婚嫁的年纪是否犯金楼、三灾、荒屋，附未来20年查找表。化解之道可请教老师。",
+  "h": "041eccbd"
+ },
  "kinhdich.1-gieo-que": {
   "t": "<span class=\"wss-n\">1</span><span class=\"wss-l\">起卦</span>",
   "h": "bf868703"
@@ -17259,6 +21835,222 @@
   "t": "<span class=\"hp-ic\" data-icon=\"users\"></span><span>相合、相克<br>的生肖</span>",
   "h": "9a664cc3"
  },
+ "ngaytot.2-nhan-ket-qua": {
+  "t": "<span class=\"wss-n\">2</span><span class=\"wss-l\">取得结果</span>",
+  "h": "b0b2f830"
+ },
+ "ngaytot.chon-thang-nam-duong-lich-he": {
+  "t": "选择国历月份与年份。系统会自动排历并比对吉凶日，回传整个月份，标示为吉、宜留意或宜避忌。",
+  "h": "0ad99575"
+ },
+ "ngaytot.hoi-thay-chon-ngay-dep-trong": {
+  "t": "✦ 请老师挑选本月吉日",
+  "h": "254611c0"
+ },
+ "ngaytot.lich-ngay-tot-xau-ca-thang": {
+  "t": "依农历编制的整月吉凶日历——三娘、月忌、杨公忌。可请老师为婚嫁、动土挑选好日子。",
+  "h": "39fc01f0"
+ },
+ "ngaytot.lich-tot-xau-ca-thang": {
+  "t": "整月<br>吉凶历",
+  "h": "2da65fe3"
+ },
+ "ngaytot.luu-y-nho-duong-cong-ki": {
+  "t": "小提醒（杨公忌）",
+  "h": "72c4ae94"
+ },
+ "ngaytot.muon-len-lich-ca-thang-ma": {
+  "t": "想安排整个月的进程，却不知道哪天该避开、哪天适合开始重要的事？选好月份，即刻取得逐日清楚标示的吉凶日名单。",
+  "h": "b18291cb"
+ },
+ "ngaytot.ngay-ki-tranh-viec-lon": {
+  "t": "忌日——避免办大事",
+  "h": "c5145190"
+ },
+ "ngaytot.ngay-ky-can-tranh": {
+  "t": "需避开的<br>忌日",
+  "h": "22943f84"
+ },
+ "ngaytot.ngay-tot-an-toan": {
+  "t": "吉日——安稳",
+  "h": "3795683e"
+ },
+ "ngaytot.ngay-tot-trong-thang": {
+  "t": "本月吉日",
+  "h": "c2d7afad"
+ },
+ "ngaytot.ngay-tot-trong-thang-lich-van": {
+  "t": "<b>本月吉日</b><span>万年历・依农历的吉凶日</span>",
+  "h": "a5097cc1"
+ },
+ "ngaytot.ngay-tot-trong-thang-tu-vi": {
+  "t": "本月吉日——明宝紫微斗数",
+  "h": "d7f28313"
+ },
+ "ngaytot.thang-can-xem-duong-lich": {
+  "t": "要查找的月份（国历）",
+  "h": "f67dc270"
+ },
+ "ngaytot.truc-nhi-thap-bat-tu": {
+  "t": "建除十二神、<br>二十八宿",
+  "h": "d2ad3351"
+ },
+ "ngaytot.xem-lich": {
+  "t": "查看日历 →",
+  "h": "6fa85107"
+ },
+ "nguoikhac.2-xem-truoc-cam-nang": {
+  "t": "<span class=\"wss-n\">2</span><span class=\"wss-l\">预览相处指南</span>",
+  "h": "f63afb72"
+ },
+ "nguoikhac.ban-be": {
+  "t": "朋友",
+  "h": "159fe485"
+ },
+ "nguoikhac.ban-cam-nang-nay-phac-hoa": {
+  "t": "<span class=\"ic\" data-icon=\"lightbulb\"></span> 本相处指南依据紫微斗数命盘中的数据，并结合前人留下的研究经验描绘而成，仅供参考。<br><br> <span class=\"ic\" data-icon=\"scale\"></span> 这是一个<b>为了好好相处而去了解对方</b>的框架，并非用来操控任何人。被解读的人不在这里，因此本解读刻意<b>不谈对方的健康、个人财务或婚姻</b>。个性没有好坏，只有适合或不适合当下的情境。",
+  "h": "d4cf893e"
+ },
+ "nguoikhac.ban-dang-can-lam-gi-voi": {
+  "t": "您需要对这个人做什么",
+  "h": "c237535b"
+ },
+ "nguoikhac.ban-luan-giai-mau-tai-pdf": {
+  "t": "<span class=\"sc-ic\" data-icon=\"file-text\"></span> <span class=\"sc-txt\"><b>范例解读报告</b><span>下载范例命盘的「他人的命盘」完整 PDF，先预览真实内容。</span></span> <a class=\"sc-btn\" href=\"/tai-mau/mau-nguoi-khac.pdf\" target=\"_blank\" rel=\"noopener\">下载 PDF →</a>",
+  "h": "90ab14f5"
+ },
+ "nguoikhac.cam-nang-ung-xu": {
+  "t": "<span class=\"hp-ic\" data-icon=\"scroll-text\"></span><span>相处<br>指南</span>",
+  "h": "02dec92e"
+ },
+ "nguoikhac.cap-duoi-nguoi-minh-quan": {
+  "t": "部属／我管理的人",
+  "h": "eb2f06ee"
+ },
+ "nguoikhac.cau-hoi-chay-ngam-trong-dau": {
+  "t": "对方脑中暗自运转的问题",
+  "h": "c0934bd9"
+ },
+ "nguoikhac.cha-me-nguoi-lon-trong-nha": {
+  "t": "父母／家中长辈",
+  "h": "5f1e7b56"
+ },
+ "nguoikhac.co-la-so-cua-ban-thi": {
+  "t": "若有您自己的命盘，解读会多出<b>「此人与您」</b>一节——双方容易起冲突之处，以及可以互补之处。留空也能看到其余完整内容。",
+  "h": "cfbb6a2e"
+ },
+ "nguoikhac.con-cai": {
+  "t": "子女",
+  "h": "eb70b34b"
+ },
+ "nguoikhac.con-nguoi-nay-van-hanh-the": {
+  "t": "这个人如何运作",
+  "h": "444d1e25"
+ },
+ "nguoikhac.dieu-ho-coi-trong": {
+  "t": "<span class=\"res-block-title\">对方重视的事</span>",
+  "h": "5656f5b5"
+ },
+ "nguoikhac.dieu-lam-ho-kho-chiu": {
+  "t": "让对方不舒服的事",
+  "h": "754ed7ce"
+ },
+ "nguoikhac.doi-chieu-them-voi-la-so": {
+  "t": "加入与您自己命盘的对照（非必填）",
+  "h": "c04c1f4c"
+ },
+ "nguoikhac.doi-tac-khach-hang": {
+  "t": "合作伙伴／客户",
+  "h": "b39df542"
+ },
+ "nguoikhac.dong-nghiep-ngang-hang": {
+  "t": "同事（平级）",
+  "h": "c2321d8a"
+ },
+ "nguoikhac.hieu-sai-mot-nguoi-quan-trong": {
+  "t": "误解一个重要的人——上司、合作伙伴、情人——往往是许多本不必要的摩擦的根源。输入对方的出生日期与时辰，就能得到该说什么、该避免什么的相处指南。",
+  "h": "f8a6e6f5"
+ },
+ "nguoikhac.la-so-nguoi-khac": {
+  "t": "他人的命盘",
+  "h": "e454923c"
+ },
+ "nguoikhac.la-so-nguoi-khac-cam-nang": {
+  "t": "<b>他人的命盘</b><span>专为某一个人量身打造的相处指南</span>",
+  "h": "fdca2edd"
+ },
+ "nguoikhac.la-so-nguoi-khac-tu-vi": {
+  "t": "他人的命盘——明宝紫微斗数",
+  "h": "b5ba1ea3"
+ },
+ "nguoikhac.luc-nao-nen-dua-viec-lon": {
+  "t": "<span class=\"hp-ic\" data-icon=\"hourglass\"></span><span>何时<br>提出大事</span>",
+  "h": "ff316436"
+ },
+ "nguoikhac.luc-nay-ho-dang-o-dau": {
+  "t": "<span class=\"res-block-title\">对方此刻处于何处</span>",
+  "h": "85151bc9"
+ },
+ "nguoikhac.moi-luot-luong": {
+  "t": "<span class=\"vnd\" data-tvp-price-vnd=\"nguoi-khac\"></span> 每次 <span class=\"cb-sub\">(<span data-tvp-price=\"nguoi-khac\">…</span> 两)</span>",
+  "h": "4e692d79"
+ },
+ "nguoikhac.nen-noi-gi-tranh-noi-gi": {
+  "t": "<span class=\"hp-ic\" data-icon=\"message-circle\"></span><span>该说什么<br>避免说什么</span>",
+  "h": "686a6593"
+ },
+ "nguoikhac.ngay-sinh-cua-nguoi-ban-muon": {
+  "t": "您想了解的人的出生日期",
+  "h": "983c4051"
+ },
+ "nguoikhac.nguoi-nay-la": {
+  "t": "这个人是您的",
+  "h": "d70093a0"
+ },
+ "nguoikhac.nguoi-nay-la-ai": {
+  "t": "<span class=\"res-block-title\">这个人是谁</span>",
+  "h": "22ef9ce3"
+ },
+ "nguoikhac.nguoi-nay-voi-ban": {
+  "t": "<span class=\"res-block-title\">此人与您</span>",
+  "h": "a89f8cc8"
+ },
+ "nguoikhac.nhap-la-so-sep-dong-nghiep": {
+  "t": "输入上司、同事、部属或亲近之人的命盘，就能得到相处指南：对方如何运作、该说什么、避免说什么、何时提出大事。",
+  "h": "95d5f29c"
+ },
+ "nguoikhac.nhap-ngay-gio-sinh-nguoi-do": {
+  "t": "输入对方的出生日期与时辰、与您的关系，以及您需要对对方做的事，即可依您提出的事项来分析命盘。",
+  "h": "8d0d8d61"
+ },
+ "nguoikhac.noi-the-nao": {
+  "t": "<span class=\"res-block-title\">怎么说</span>",
+  "h": "2757978b"
+ },
+ "nguoikhac.sep-cap-tren": {
+  "t": "上司／长官",
+  "h": "976d7a60"
+ },
+ "nguoikhac.tra-loi-thay-o-khung-chat": {
+  "t": "请在聊天栏回复老师，告诉老师您想了解的人是谁，以及对方的出生日期。",
+  "h": "0b35941d"
+ },
+ "nguoikhac.tranh": {
+  "t": "避",
+  "h": "718a6b75"
+ },
+ "nguoikhac.vo-chong-nguoi-yeu": {
+  "t": "配偶／情人",
+  "h": "4165e532"
+ },
+ "nguoikhac.xem-cam-nang-ung-xu-ton": {
+  "t": "<span class=\"bg-label\"><span class=\"ic\" data-icon=\"user\"></span><b id=\"btnGoLabel\">查看相处指南 →</b></span> <small>费用 <span class=\"vnd\" data-tvp-price-vnd=\"nguoi-khac\"></span> <span class=\"cb-sub\">(<span data-tvp-price=\"nguoi-khac\">…</span> 两)</span></small>",
+  "h": "da20bb48"
+ },
+ "nguoikhac.xem-nguoi-khac": {
+  "t": "查看另一个人",
+  "h": "a058d2f4"
+ },
  "nguon.bo-du-lieu-mo": {
   "t": "开放数据集",
   "h": "edc59291"
@@ -17482,6 +22274,130 @@
  "nhtg.xoa-anh": {
   "t": "✕ 删除图片",
   "h": "36e95d9f"
+ },
+ "nm.ban-do-ca-nhom": {
+  "t": "<span class=\"hp-ic\" data-icon=\"users\"></span><span>整组<br>人脉地图</span>",
+  "h": "682f4a1b"
+ },
+ "nm.ban-doc-nay-phac-hoa-tu": {
+  "t": "<span class=\"ic\" data-icon=\"lightbulb\"></span> 本解读依据紫微斗数命盘中的数据，并结合前人留下的研究经验描绘而成，仅供参考。<br><br> <span class=\"ic\" data-icon=\"scale\"></span> 这是一个<b>让事情安排得适合每个人</b>的框架，不是人事考核的评分表。簿中的人不在这里，因此本解读刻意<b>不替任何人排名，不谈他们的健康、个人财务或家庭私事</b>，也<b>不建议换人</b>。个性没有好坏，只有适合或不适合某件事。",
+  "h": "9a54fb99"
+ },
+ "nm.ban-dung-o-dau-trong-nhom": {
+  "t": "<span class=\"res-block-title\">您在组内的位置</span>",
+  "h": "e37f7177"
+ },
+ "nm.ban-luan-giai-mau-tai-pdf": {
+  "t": "<span class=\"sc-ic\" data-icon=\"file-text\"></span> <span class=\"sc-txt\"><b>范例解读报告</b><span>下载范例命盘的「人脉簿」完整 PDF，先预览真实内容。</span></span> <a class=\"sc-btn\" href=\"/tai-mau/mau-nhan-mach.pdf\" target=\"_blank\" rel=\"noopener\">下载 PDF →</a>",
+  "h": "37e05c5a"
+ },
+ "nm.cac-cap-trong-nhom": {
+  "t": "<span class=\"res-block-title\">组内的各对组合</span>",
+  "h": "1f22e684"
+ },
+ "nm.cap-can-de-y": {
+  "t": "<span class=\"res-block-title\">需要留意的组合</span>",
+  "h": "2fbe6792"
+ },
+ "nm.cap-de-giam-chan": {
+  "t": "<span class=\"hp-ic\" data-icon=\"scale\"></span><span>容易<br>踩线的组合</span>",
+  "h": "81f490fb"
+ },
+ "nm.cho-trong-cua-nhom": {
+  "t": "<span class=\"res-block-title\">组内的空缺</span>",
+  "h": "96c373bb"
+ },
+ "nm.chon-lai": {
+  "t": "重新选择",
+  "h": "25ee067e"
+ },
+ "nm.chon-nguoi-trong-so": {
+  "t": "从簿中选人",
+  "h": "fb10fef6"
+ },
+ "nm.co-la-so-cua-ban-thi": {
+  "t": "若有您自己的命盘，解读会多出<b>「您在组内的位置」</b>一节——您容易和谁起冲突、又能补足谁。",
+  "h": "883457f9"
+ },
+ "nm.da-doc-truoc-do": {
+  "t": "<span class=\"res-block-title\">先前读过的内容</span>",
+  "h": "073f164b"
+ },
+ "nm.doc-ca-so-ton-luong": {
+  "t": "<span class=\"bg-label\"><span class=\"ic\" data-icon=\"users\"></span><b id=\"btnGoLabel\">读整本簿 →</b></span> <small>费用 <span class=\"vnd\" data-tvp-price-vnd=\"nhan-mach\"></span> <span class=\"cb-sub\">(<span data-tvp-price=\"nhan-mach\">…</span> 两)</span></small>",
+  "h": "708b8f51"
+ },
+ "nm.dua-ca-doi-hoac-danh-sach": {
+  "t": "把整个团队或客户名单放在一起：这个组缺少哪种类型、谁跟谁容易踩线、这周该先见谁。",
+  "h": "6afc2255"
+ },
+ "nm.goi-la": {
+  "t": "称呼",
+  "h": "1e3d72e2"
+ },
+ "nm.lam-gi-tuan-nay": {
+  "t": "<span class=\"res-block-title\">本周该做的事</span>",
+  "h": "5b333d8e"
+ },
+ "nm.luu-vao-so": {
+  "t": "存入簿中",
+  "h": "e88b1df6"
+ },
+ "nm.moi-luot-luong": {
+  "t": "<span class=\"vnd\" data-tvp-price-vnd=\"nhan-mach\"></span> 每次 <span class=\"cb-sub\">(<span data-tvp-price=\"nhan-mach\">…</span> 两)</span>",
+  "h": "110df12a"
+ },
+ "nm.nhom-nay-hinh-gi": {
+  "t": "<span class=\"res-block-title\">这个组是什么样貌</span>",
+  "h": "f51250a4"
+ },
+ "nm.sep-hung-chi-lan-khach-a": {
+  "t": "兴主管、兰姐、客户 A…",
+  "h": "503be7e7"
+ },
+ "nm.so-nhan-mach": {
+  "t": "人脉簿",
+  "h": "17e83429"
+ },
+ "nm.so-nhan-mach-doc-ca-nhom": {
+  "t": "<b>人脉簿</b><span>一次读整个群体，而不是一个一个看</span>",
+  "h": "3b36ced2"
+ },
+ "nm.so-nhan-mach-tu-vi-minh": {
+  "t": "人脉簿——明宝紫微斗数",
+  "h": "d9d679ab"
+ },
+ "nm.them-la-so-cua-chinh-ban": {
+  "t": "加入您自己的命盘（非必填）",
+  "h": "2423d794"
+ },
+ "nm.them-nguoi-vao-so": {
+  "t": "＋ 添加人物到簿中",
+  "h": "364e14c5"
+ },
+ "nm.them-ten-ngay-sinh-va-gioi": {
+  "t": "把每位成员的姓名、出生日期与性别加入簿中，一次分析整个群体。",
+  "h": "7e27671a"
+ },
+ "nm.thu-tu-goi-y-tiep-can": {
+  "t": "<span class=\"res-block-title\">建议的接触顺序</span>",
+  "h": "d0842a6c"
+ },
+ "nm.trong-mot-doi-nhom-ai-hop": {
+  "t": "在一个团队里，谁跟谁合得来、谁跟谁容易起冲突，往往要事情发生后才看得出来。加入每位成员的出生日期，就能得到人员地图，用来重新安排阵容。",
+  "h": "09e8b31f"
+ },
+ "nm.tung-nguoi": {
+  "t": "<span class=\"res-block-title\">每个人</span>",
+  "h": "d587410c"
+ },
+ "nm.viec-nen-lam-tuan-nay": {
+  "t": "<span class=\"hp-ic\" data-icon=\"hourglass\"></span><span>本周<br>该做的事</span>",
+  "h": "7343e7f5"
+ },
+ "nm.xep-theo-van-nam-cua-tung": {
+  "t": "依<b>每个人的年运</b>排序——处于顺遂之年的人，比较容易谈新事情。这<b>不是</b>重要程度的排名。",
+  "h": "cc8d076f"
  },
  "oracle.1-chon-kieu-rut": {
   "t": "<span class=\"wss-n\">1</span><span class=\"wss-l\">选择抽牌方式</span>",
@@ -18394,6 +23310,94 @@
  "sanpham.xem-tuoi-vo-chong": {
   "t": "夫妻合婚",
   "h": "f3e7b1ed"
+ },
+ "sc.2-nhan-ket-qua": {
+  "t": "<span class=\"wss-n\">2</span><span class=\"wss-l\">取得结果</span>",
+  "h": "b0b2f830"
+ },
+ "sc.bang-du-15-nam-toi": {
+  "t": "<span class=\"hp-ic\" data-icon=\"calendar-days\"></span><span>未来 15 年<br>完整表格</span>",
+  "h": "7fd926c3"
+ },
+ "sc.can-chi": {
+  "t": "干支",
+  "h": "8b784611"
+ },
+ "sc.cham-diem-luc-hop-tam-hop": {
+  "t": "为孩子出生年与父母之间的地支六合、三合、六冲评分——未来 15 年的表格与最顺遂的一年。也可请老师深入解说。",
+  "h": "1e93ec3a"
+ },
+ "sc.danh-gia": {
+  "t": "评价",
+  "h": "5df137aa"
+ },
+ "sc.ghi-chu-ket-qua-dua-tren": {
+  "t": "<strong style=\"color:#444\">备注：</strong>结果依据出生年的地支（国历）。若孩子生于国历 1–2 月，依农历年计算的实际地支可能相差一年——需要更仔细确认。",
+  "h": "c4463c7c"
+ },
+ "sc.hanh": {
+  "t": "五行",
+  "h": "58608859"
+ },
+ "sc.hoi-thay-luan-sau-nam-nao": {
+  "t": "✦ 请老师深入解说哪一年适合生孩子",
+  "h": "665710f8"
+ },
+ "sc.ket-qua-15-nam-dia-chi": {
+  "t": "<span class=\"res-block-title\" id=\"resultTitle\">15 年结果</span> <span style=\"font-size:11px;color:#666\">地支・六合・三合・六冲</span>",
+  "h": "a7874a13"
+ },
+ "sc.luc-hop-tam-hop-luc-xung": {
+  "t": "<span class=\"hp-ic\" data-icon=\"scale\"></span><span>六合・三合<br>六冲</span>",
+  "h": "3c607a04"
+ },
+ "sc.ly-do": {
+  "t": "理由",
+  "h": "0cbf3763"
+ },
+ "sc.nam": {
+  "t": "年",
+  "h": "98926c7e"
+ },
+ "sc.nam-sinh-bo": {
+  "t": "爸爸的出生年",
+  "h": "a1009c64"
+ },
+ "sc.nam-sinh-cua-bo-va-me": {
+  "t": "父亲与母亲的出生年",
+  "h": "0cc92594"
+ },
+ "sc.nam-sinh-me": {
+  "t": "妈妈的出生年",
+  "h": "bef8fb8f"
+ },
+ "sc.nam-thuan-nhat-de-sinh-con": {
+  "t": "<span class=\"hp-ic\" data-icon=\"star\"></span><span>最适合<br>生孩子的年份</span>",
+  "h": "456f641b"
+ },
+ "sc.nhap-nam-sinh-bo-va-me": {
+  "t": "输入父亲与母亲的出生年，即可看到未来 15 年的评价表与最顺遂的一年。",
+  "h": "0cda7d1e"
+ },
+ "sc.sinh-con-dung-nam-hop-tuoi": {
+  "t": "许多家庭都希望在与父母生肖相合的年份生孩子，但要算准并不容易。输入夫妻两人的出生年，马上找出未来 15 年中最顺遂的一年。",
+  "h": "34b8b50b"
+ },
+ "sc.xem-15-nam-mien-phi": {
+  "t": "<span class=\"bg-label\"><span class=\"ic\" data-icon=\"hourglass\"></span><b id=\"btnGoLabel\">查看 15 年 →</b></span> <small>免费</small>",
+  "h": "f03c38c9"
+ },
+ "sc.xem-tuoi-sinh-con": {
+  "t": "看生孩子的生肖",
+  "h": "2e015092"
+ },
+ "sc.xem-tuoi-sinh-con-nam-sinh": {
+  "t": "<b>看生孩子的生肖</b><span>依地支看与父母相合的孩子出生年</span>",
+  "h": "9da380f6"
+ },
+ "sc.xem-tuoi-sinh-con-tu-vi": {
+  "t": "看生孩子的生肖——明宝紫微斗数",
+  "h": "23026bbb"
  },
  "taikhoan.add-mcp-server-chon-streamable-http": {
   "t": "<strong>Add MCP server</strong> → 选择 <strong>Streamable HTTP</strong>。",

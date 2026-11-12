@@ -795,9 +795,245 @@
   "t": "<span class=\"bg-label\"><span class=\"ic\" data-icon=\"spade\"></span><b id=\"drawBtnLabel\">シャッフルして引く</b></span>",
   "h": "e53dcebd"
  },
+ "cdvc.2-xem-truoc-cung-phu-the": {
+  "t": "<span class=\"wss-n\">2</span><span class=\"wss-l\">夫妻宮を先読み</span>",
+  "h": "108dcc06"
+ },
+ "cdvc.anh-chan-dung-minh-hoa": {
+  "t": "<span class=\"hp-ic\" data-icon=\"image\"></span><span>イメージ<br>肖像画</span>",
+  "h": "493170c3"
+ },
+ "cdvc.ban-luan-giai-mau-tai-pdf": {
+  "t": "<span class=\"sc-ic\" data-icon=\"file-text\"></span> <span class=\"sc-txt\"><b>サンプル鑑定書</b><span>サンプル命盤の「夫婦の肖像」フル版PDFをダウンロードして、実際の内容を先にご確認いただけます。</span></span> <a class=\"sc-btn\" href=\"/tai-mau/mau-chan-dung-vo-chong.pdf\" target=\"_blank\" rel=\"noopener\">PDFをダウンロード →</a>",
+  "h": "53e5a8b4"
+ },
+ "cdvc.bang-tren-la-tra-bang-co": {
+  "t": "上の表は、あなた自身の命盤に古法の表を当てて引いたものです — まだ鑑定の段階には入っていません。",
+  "h": "e321a90c"
+ },
+ "cdvc.cach-cuc-dac-biet": {
+  "t": "特別な格局",
+  "h": "f0db7ce5"
+ },
+ "cdvc.chan-dung-nay-chi-mang-tinh": {
+  "t": "<span class=\"ic\" data-icon=\"lightbulb\"></span> この肖像はあくまでイメージと参考であり、あなたの命盤の夫妻宮にある主星・副星に結びつく外見の特徴から、システムが再現したものです — 写真でも、実際のパートナーの容姿を正確に予測したものでもありません。より現実に近い結果を得るには、その方本人の命盤とも照らし合わせる必要があります。",
+  "h": "38ea85e6"
+ },
+ "cdvc.chan-dung-nguoi-phoi-ngau": {
+  "t": "<span class=\"res-block-title\">配偶者の肖像</span>",
+  "h": "6c75b667"
+ },
+ "cdvc.chan-dung-nguoi-phoi-ngau-xs4t": {
+  "t": "配偶者の肖像",
+  "h": "b3c9f474"
+ },
+ "cdvc.chan-dung-vo-chong": {
+  "t": "夫婦の肖像",
+  "h": "ed0abbb5"
+ },
+ "cdvc.chan-dung-vo-chong-tu-vi": {
+  "t": "夫婦の肖像 — 明宝紫微斗数",
+  "h": "192e3111"
+ },
+ "cdvc.chan-dung-vo-chong-ve-chan": {
+  "t": "<b>夫婦の肖像</b><span>夫妻宮から配偶者の肖像を描く</span>",
+  "h": "00184059"
+ },
+ "cdvc.chia-se-cho-ban-be-xem": {
+  "t": "友達にシェアする →",
+  "h": "d4cae66e"
+ },
+ "cdvc.chinh-tinh": {
+  "t": "<b>主星：</b> <span id=\"ptChinh\">—</span>",
+  "h": "bddb0cff"
+ },
+ "cdvc.cung-phu-the-trong-la-so": {
+  "t": "<span class=\"res-block-title\">あなたの命盤の夫妻宮</span>",
+  "h": "f96e4460"
+ },
+ "cdvc.hinh-the-suy-tu-sao": {
+  "t": "<span class=\"hp-ic\" data-icon=\"user\"></span><span>星から読む<br>体つき</span>",
+  "h": "ca30f981"
+ },
+ "cdvc.hinh-the-suy-tu-sao-tai": {
+  "t": "<span class=\"res-block-title\">夫妻宮の星から読む体つき</span>",
+  "h": "5207236c"
+ },
+ "cdvc.hoan-canh-gap-go": {
+  "t": "出会いの状況",
+  "h": "084d34b9"
+ },
+ "cdvc.luan-giai-cung-phu-the": {
+  "t": "<span class=\"hp-ic\" data-icon=\"heart\"></span><span>夫妻宮の<br>鑑定</span>",
+  "h": "72f3c0e5"
+ },
+ "cdvc.luan-giai-cung-phu-the-e93e": {
+  "t": "<span class=\"res-block-title\">夫妻宮の鑑定</span>",
+  "h": "a976e83a"
+ },
+ "cdvc.mo-ta": {
+  "t": "説明",
+  "h": "0bf67d8a"
+ },
+ "cdvc.moi-luot-luong": {
+  "t": "<span class=\"vnd\" data-tvp-price-vnd=\"chan-dung-vo-chong\"></span> / 回 <span class=\"cb-sub\">(<span data-tvp-price=\"chan-dung-vo-chong\">…</span> 両)</span>",
+  "h": "32e5c174"
+ },
+ "cdvc.nhap-ngay-sinh-khong-can-them": {
+  "t": "生年月日を入力するだけで、ほかに必要なものはありません。システムが夫妻宮を読み取り、肖像を描きます — 星から読む体つき、イラスト、そして詳しい鑑定付きです。",
+  "h": "091107bb"
+ },
+ "cdvc.phan-tich-cung-phu-the-trong": {
+  "t": "命盤の夫妻宮を分析し、性格や雰囲気の説明を添えて、パートナーの肖像を描きます。",
+  "h": "b63e4e9d"
+ },
+ "cdvc.phu-tinh": {
+  "t": "<b>副星：</b> <span id=\"ptPhu\">—</span>",
+  "h": "5e60dcdc"
+ },
+ "cdvc.tra-loi-thay-o-khung-chat": {
+  "t": "右のチャット欄で先生に答えて、肖像を描いてもらいましょう — 必要なのはあなたの生年月日と時刻だけです。",
+  "h": "1933e964"
+ },
+ "cdvc.truoc-khi-gap-dung-nguoi-nhieu": {
+  "t": "運命の人に出会う前に、多くの人は相手をまったく違う姿で思い描いています。命盤の夫妻宮は、未来のパートナーの肖像と気質を描き出します — どんな噂話よりもはっきりと。",
+  "h": "d009dcc3"
+ },
+ "cdvc.ve-chan-dung-ton-luong": {
+  "t": "<span class=\"bg-label\"><span class=\"ic\" data-icon=\"image\"></span><b id=\"btnGoLabel\">肖像を描く →</b></span> <small>料金 <span class=\"vnd\" data-tvp-price-vnd=\"chan-dung-vo-chong\"></span> <span class=\"cb-sub\">(<span data-tvp-price=\"chan-dung-vo-chong\">…</span> 両)</span></small>",
+  "h": "33f06010"
+ },
+ "cdvc.ve-lai": {
+  "t": "描き直す",
+  "h": "fb8e0b72"
+ },
+ "cdvc.y-nghia-co-phap": {
+  "t": "古法における意味",
+  "h": "c6403cb5"
+ },
  "chat.ke-chuyen-cua-ban-minh-bao": {
   "t": "お話を聞かせてください。明宝が15人の先生の中から最適な先生をご案内します：紫微斗数の命盤、四柱推命、相性、命名、吉日選び。",
   "h": "0f564294"
+ },
+ "chonngay.2-xem-nen-can-chi": {
+  "t": "<span class=\"wss-n\">2</span><span class=\"wss-l\">干支の土台を見る</span>",
+  "h": "c95e6f79"
+ },
+ "chonngay.an-hoi-dam-ngo": {
+  "t": "結納・顔合わせ",
+  "h": "4b11a176"
+ },
+ "chonngay.chon-ngay-chuyen-sau": {
+  "t": "詳しく日取りを選ぶ →",
+  "h": "9bd6a5ed"
+ },
+ "chonngay.chon-ngay-gio-tot": {
+  "t": "吉日・吉時の選定",
+  "h": "28b27ec4"
+ },
+ "chonngay.chon-ngay-gio-tot-hop-tuoi": {
+  "t": "天干地支にもとづき、結婚式・開業・入居・地鎮祭などに合った吉日・吉時を干支で選びます。先生に、良い日と避けるべき日を読み解いてもらえます。",
+  "h": "a3dfe7f0"
+ },
+ "chonngay.chon-ngay-tot-ngay-gio-hop": {
+  "t": "<b>吉日の選定</b><span>人生の大事に、干支に合う日と時刻を</span>",
+  "h": "ec08df6d"
+ },
+ "chonngay.chon-ngay-tot-tu-vi-minh": {
+  "t": "吉日の選定 — 明宝紫微斗数",
+  "h": "bad6e5eb"
+ },
+ "chonngay.chon-viec-can-xem-ngay-nhap": {
+  "t": "日取りを見たい用件を選び、事主のお名前と生まれ年、見たい月を入力してください。システムが干支を算出し、あなたの干支との相性（合・冲）を照らし合わせます。",
+  "h": "a51a3cec"
+ },
+ "chonngay.chua-muon-khai-thong-tin-ban": {
+  "t": "<b>まだ情報を入力したくありませんか？</b><span>先にサンプルを見て試すこともできます。</span>",
+  "h": "0a975603"
+ },
+ "chonngay.cuoi-hoi": {
+  "t": "結婚式",
+  "h": "04a2caa4"
+ },
+ "chonngay.cuoi-hoi-lam-nha-khai-truong": {
+  "t": "結婚式、家の建築、開業——日取りを誤ると、一生悔やんでも取り返しがつかないこともあります。用件と期間を選べば、事主の干支に合う日と時刻の一覧がすぐに届きます。",
+  "h": "0b16cd85"
+ },
+ "chonngay.danh-sach-ngay-tot": {
+  "t": "吉日の<br>一覧",
+  "h": "b1bf5886"
+ },
+ "chonngay.doi-chieu-hop-xung": {
+  "t": "相性（合・冲）<br>の照合",
+  "h": "c461160d"
+ },
+ "chonngay.dong-tho-khoi-cong": {
+  "t": "地鎮祭・着工",
+  "h": "10468f91"
+ },
+ "chonngay.gio-hoang-dao-tung-ngay": {
+  "t": "日ごとの<br>黄道吉時",
+  "h": "54c78af6"
+ },
+ "chonngay.he-thong-phan-tich-can-chi": {
+  "t": "システムが事主の干支と予定の年月を分析し、具体的な理由を添えて、吉日の期間を提案します。",
+  "h": "ec5043f6"
+ },
+ "chonngay.ho-ten-nguoi-chu-su": {
+  "t": "事主の氏名",
+  "h": "7d21772a"
+ },
+ "chonngay.hoang-lich-lich-van-nien-la": {
+  "t": "黄暦（万年暦）は、干支・二十八宿・吉凶の星を組み合わせ、用件ごとにふさわしい時刻や黄道吉日を定める、中国古来の暦の体系です。結婚式・開業・地鎮祭などの日時選びの伝統的な拠り所となっています。",
+  "h": "0240b883"
+ },
+ "chonngay.hoi-thay-chon-ngay-dep": {
+  "t": "✦ 先生に吉日を選んでもらう",
+  "h": "7d368a1b"
+ },
+ "chonngay.khai-truong": {
+  "t": "開業",
+  "h": "c86ca256"
+ },
+ "chonngay.ky-ket-hop-dong": {
+  "t": "契約の締結",
+  "h": "90e0fb9b"
+ },
+ "chonngay.lap-nen": {
+  "t": "土台を作る →",
+  "h": "81b6e6d8"
+ },
+ "chonngay.moi-luot": {
+  "t": "1回あたり",
+  "h": "2a5c5972"
+ },
+ "chonngay.mua-xe": {
+  "t": "車の購入",
+  "h": "52d4aa77"
+ },
+ "chonngay.nhap-trach-ve-nha-moi": {
+  "t": "入居（新居への引っ越し）",
+  "h": "fcda52e1"
+ },
+ "chonngay.thong-tin-chon-ngay": {
+  "t": "日取りの情報",
+  "h": "9d3045db"
+ },
+ "chonngay.ton": {
+  "t": "費用",
+  "h": "e603a0b9"
+ },
+ "chonngay.viec-can-chon-ngay": {
+  "t": "日取りを選ぶ用件",
+  "h": "e84816a6"
+ },
+ "chonngay.xem-ban-mau": {
+  "t": "サンプルを見る →",
+  "h": "ba3671b1"
+ },
+ "chonngay.xuat-hanh": {
+  "t": "出立（旅立ち）",
+  "h": "424fcbb2"
  },
  "chutrinh.9-dai-van-tron-doi": {
   "t": "<span class=\"hp-ic\" data-icon=\"hourglass\"></span><span>生涯の<br>9つの大運</span>",
@@ -850,6 +1086,62 @@
  "chutrinh.tieu-van-nam-xem": {
   "t": "<span class=\"hp-ic\" data-icon=\"calendar\"></span><span>鑑定年の<br>小運</span>",
   "h": "d0e7d2f5"
+ },
+ "cn.12-thang-am-toi": {
+  "t": "今後12か月（旧暦）",
+  "h": "c0166830"
+ },
+ "cn.ca-nha-minh-la-so-cua": {
+  "t": "<b>わが家</b><span id=\"cnSub\">家族全員の命盤を並べて、今後12か月（旧暦）を見ます。</span>",
+  "h": "f42a18f8"
+ },
+ "cn.ca-nha-minh-tu-vi-minh": {
+  "t": "わが家 — 明宝紫微斗数",
+  "h": "12013a8d"
+ },
+ "cn.dang-nhap-dang-ky": {
+  "t": "ログイン／新規登録",
+  "h": "2bcf279e"
+ },
+ "cn.dang-nhap-de-xem-la-so": {
+  "t": "ログインして家族全員の命盤をご覧ください。",
+  "h": "6ccac799"
+ },
+ "cn.dang-xep-la-so-ca-nha": {
+  "t": "家族の命盤を並べています…",
+  "h": "9c8b78a5"
+ },
+ "cn.dua-ngay-tot-va-ngay-xung": {
+  "t": "お子さんだけの吉日と相性の悪い日を、スマートフォンのカレンダーに入れましょう。カレンダーは毎日自動で更新されます。",
+  "h": "b5850267"
+ },
+ "cn.google-lich": {
+  "t": "Googleカレンダー",
+  "h": "8cdb619a"
+ },
+ "cn.hoi-thay-ve-ca-nha-so": {
+  "t": "<a class=\"go\" id=\"cnAsk\" href=\"/app\">家族について先生に聞く</a> <a class=\"sub\" href=\"/app/so-la-so\">命盤ノート</a>",
+  "h": "c7bd3311"
+ },
+ "cn.iphone-mac": {
+  "t": "iPhone / Mac",
+  "h": "9a2b7d51"
+ },
+ "cn.lich-rieng": {
+  "t": "専用カレンダー",
+  "h": "6ff9fdd9"
+ },
+ "cn.moi-o-la-cung-nguyet-han": {
+  "t": "各マスは、その月の月限の宮です。黄色のマス：二人以上が同じ宮に同時に限が入る月。マスを押すと星を見られます。",
+  "h": "8a6d6f48"
+ },
+ "cn.so-la-so-chua-co-nguoi": {
+  "t": "命盤ノートに家族はまだいません。<br>夫や子ども、ご両親について先生に聞いてみてください — 先生が会話の中でそのまま命盤の追加をお願いします。<br> 保存した命盤は、<a href=\"/app/so-la-so\">命盤ノート</a>の<b>家族</b>グループに移してください。",
+  "h": "75422ea1"
+ },
+ "cn.thang-ca-nha-nen-de-y": {
+  "t": "家族で注意したい月",
+  "h": "e66184b3"
  },
  "combolt.combo-luan-giai-tu-binh-mua": {
   "t": "<b>セット：命盤鑑定＋四柱推命</b><span>二つの完全版鑑定をまとめて購入。別々に買うよりお得です</span>",
@@ -1071,6 +1363,190 @@
   "t": "紫微斗数",
   "h": "f49901f4"
  },
+ "cs.2-xem-truoc-ho-so": {
+  "t": "<span class=\"wss-n\">2</span><span class=\"wss-l\">プロフィールを先読み</span>",
+  "h": "cdf8b027"
+ },
+ "cs.40-nam-4-chang": {
+  "t": "<span class=\"hp-ic\" data-icon=\"trending-up\"></span><span>40年を<br>4つの区間で</span>",
+  "h": "62f02f8b"
+ },
+ "cs.ban-dang-o-vi-tri-nao": {
+  "t": "現在の立場",
+  "h": "ae96bb68"
+ },
+ "cs.ban-luan-giai-mau-tai-pdf": {
+  "t": "<span class=\"sc-ic\" data-icon=\"file-text\"></span> <span class=\"sc-txt\"><b>サンプル鑑定書</b><span>サンプル命盤の「紫微斗数 職場・結婚」フル版PDFをダウンロードして、実際の内容を先にご確認いただけます。</span></span> <a class=\"sc-btn\" href=\"/tai-mau/mau-cong-so.pdf\" target=\"_blank\" rel=\"noopener\">PDFをダウンロード →</a>",
+  "h": "2538ba5a"
+ },
+ "cs.bon-ten-goi-khai-sang-lanh": {
+  "t": "<b>開拓・リーダー・サポート・協調</b>の4つの名称は、読みやすいように当ページが付けた現代的なラベルで、古典にはこうした呼び方はありません。分け方には古法の土台があります：<b>四象</b>（老陽・少陰・少陽・老陰）を14の主星に当てはめると、古典の星の組み合わせにちょうど収まります。<br> これは<b>命盤を読むための一つの枠組み</b>であり、検証済みの心理テストではありません。裏付けとなる対照研究もありません。自分を理解し、話のきっかけにするために使い、人の採用や他人への仕事の割り振りには使わないでください。",
+  "h": "4b3842bc"
+ },
+ "cs.chu-doanh-nghiep": {
+  "t": "事業主",
+  "h": "0ec2b6b1"
+ },
+ "cs.cung-mot-nang-luc-co-nguoi": {
+  "t": "同じ能力でも、順調に昇進する人もいれば、ずっと足踏みする人もいます — その違いの多くは、合う環境を選ぶことと、自分の見せ方にあります。職場でのあなたのタイプを読んで、方向をはっきりさせましょう。",
+  "h": "af9f49d9"
+ },
+ "cs.dang-tim-viec-chuyen-huong": {
+  "t": "求職中／転職を考えている",
+  "h": "de0479f2"
+ },
+ "cs.doc-la-so-tu-vi-bang": {
+  "t": "紫微斗数の命盤を仕事の言葉で読みます：職場でのあなたのタイプ、12の側面の強みと弱み、40年の職業人生を分けた4つの区間、そして誰とチームを組むとよいか。",
+  "h": "7c9e83ec"
+ },
+ "cs.dung-ho-so-kieu-nguoi-12": {
+  "t": "タイプ＋12の側面のプロフィール作成は<b>無料</b>です。具体的な職種の分かれ道を開くときだけ両が差し引かれます。",
+  "h": "8ad49bf1"
+ },
+ "cs.dung-ho-so-mien-phi": {
+  "t": "<span class=\"bg-label\"><span class=\"ic\" data-icon=\"briefcase\"></span><b id=\"btnGoLabel\">プロフィールを作成 →</b></span> <small>無料</small>",
+  "h": "d7386efe"
+ },
+ "cs.hoi-thay-doc-ky-ho-so": {
+  "t": "✦ 先生にこのプロフィールを詳しく読んでもらう",
+  "h": "dfa970e5"
+ },
+ "cs.kieu-nguoi-noi-cong-so": {
+  "t": "<span class=\"hp-ic\" data-icon=\"briefcase\"></span><span>職場での<br>タイプ</span>",
+  "h": "31b69ffd"
+ },
+ "cs.lam-tu-do-nghe-rieng": {
+  "t": "フリーランス／自営",
+  "h": "1d5e99e6"
+ },
+ "cs.ngay-gio-sinh-va-cho-dung": {
+  "t": "生年月日・時刻と現在の立場",
+  "h": "ade29838"
+ },
+ "cs.nhan-vien-lam-thue": {
+  "t": "会社員",
+  "h": "0c9557d1"
+ },
+ "cs.nhanh-nghe-ghep-doi": {
+  "t": "<span class=\"hp-ic\" data-icon=\"users\"></span><span>職種の分かれ道、<br>チーム編成</span>",
+  "h": "f7580d7f"
+ },
+ "cs.nhap-ngay-gio-sinh-va-vi": {
+  "t": "生年月日と時刻、現在の立場を入力してください。システムが古法と照らし合わせます — 職場でのタイプ、合う職種の分かれ道、そして40年のキャリアを4つの区間に分けて。",
+  "h": "f54c5793"
+ },
+ "cs.quan-ly-lam-thue": {
+  "t": "雇われ管理職",
+  "h": "9e6cb7ab"
+ },
+ "cs.tai-anh": {
+  "t": "⬇ 画像を保存",
+  "h": "eb8a56af"
+ },
+ "cs.tu-vi-cong-so": {
+  "t": "紫微斗数 職場・結婚",
+  "h": "9d18a955"
+ },
+ "cs.tu-vi-cong-so-la-so": {
+  "t": "<b>紫微職場</b><span>仕事の言葉で読む命盤</span>",
+  "h": "af1a1cbe"
+ },
+ "cs.tu-vi-cong-so-tu-vi": {
+  "t": "紫微職場 — 明宝紫微斗数",
+  "h": "91365f7b"
+ },
+ "ctk.2-xem-truoc-chan-dung": {
+  "t": "<span class=\"wss-n\">2</span><span class=\"wss-l\">肖像を先読み</span>",
+  "h": "db8c9fa4"
+ },
+ "ctk.5-nen-van-minh-co": {
+  "t": "<span class=\"hp-ic\" data-icon=\"landmark\"></span><span>5つの<br>古代文明</span>",
+  "h": "88178537"
+ },
+ "ctk.ban-luan-giai-mau-tai-pdf": {
+  "t": "<span class=\"sc-ic\" data-icon=\"file-text\"></span> <span class=\"sc-txt\"><b>サンプル鑑定書</b><span>サンプル命盤の「前世の肖像」フル版PDFをダウンロードして、実際の内容を先にご確認いただけます。</span></span> <a class=\"sc-btn\" href=\"/tai-mau/mau-chan-dung-tien-kiep.pdf\" target=\"_blank\" rel=\"noopener\">PDFをダウンロード →</a>",
+  "h": "d3ec11c0"
+ },
+ "ctk.chan-dung-cot-cach": {
+  "t": "<span class=\"res-block-title\">肖像と気骨</span>",
+  "h": "236dac15"
+ },
+ "ctk.chan-dung-tien-kiep": {
+  "t": "前世の肖像",
+  "h": "e7d0f866"
+ },
+ "ctk.chan-dung-tien-kiep-gxr5": {
+  "t": "前世の肖像",
+  "h": "7aa2c297"
+ },
+ "ctk.chan-dung-tien-kiep-la-so": {
+  "t": "<b>前世の肖像</b><span>もしあなたの命盤が古い時代に生まれたものだったら</span>",
+  "h": "b05fc22e"
+ },
+ "ctk.chan-dung-tien-kiep-tu-vi": {
+  "t": "前世の肖像 — 明宝紫微斗数",
+  "h": "ecf8e25b"
+ },
+ "ctk.chan-dung-va-cau-chuyen-phia": {
+  "t": "<span class=\"ic\" data-icon=\"lightbulb\"></span> 上の肖像と物語は、あなたの紫微斗数の命盤のデータに、先人が残した研究の経験を組み合わせて描いたものです。参考および娯楽としてお読みください。",
+  "h": "2e5ddc71"
+ },
+ "ctk.chan-dung-ve-rieng": {
+  "t": "<span class=\"hp-ic\" data-icon=\"image\"></span><span>あなただけの<br>肖像</span>",
+  "h": "bac45794"
+ },
+ "ctk.da-ve-truoc-do": {
+  "t": "<span class=\"res-block-title\">以前に描いたもの</span>",
+  "h": "44b01ab4"
+ },
+ "ctk.dang-ve-chan-dung-khoang-45": {
+  "t": "肖像を描いています…<br>（45～60秒ほど）",
+  "h": "7a762c71"
+ },
+ "ctk.dat-chinh-la-so-cua-ban": {
+  "t": "ご自身の命盤を、古代東アジアの5つの文明のいずれかに置いてみましょう — 9つの大運を通して語られる、一人の人生の肖像と物語です。",
+  "h": "9d55b734"
+ },
+ "ctk.dung-la-so-da-lap-khong": {
+  "t": "すでに作成した命盤を使うので、ほかに入力するものはありません。肖像、気骨、そして5つの章で語られる一生の物語が届きます。",
+  "h": "1220c601"
+ },
+ "ctk.khung-5-hoi-o-tren-do": {
+  "t": "上の5章の枠組みはあなたの命盤によって決まります — 各章の文章はフル版に入っています。",
+  "h": "9c6e9720"
+ },
+ "ctk.la-so-khong-chi-ke-chuyen": {
+  "t": "命盤は今世の話を語るだけではありません — 古代文明に置くと、あなただけの前世の物語がかすかに見えてきます。すでにある命盤から、完成した肖像と物語をお受け取りください。",
+  "h": "558d4af3"
+ },
+ "ctk.mo-ta-nhan-vat": {
+  "t": "人物の説明",
+  "h": "e5b0eb52"
+ },
+ "ctk.mo-ta-nhan-vat-ban-mau": {
+  "t": "人物の説明（サンプル）",
+  "h": "a3b1a797"
+ },
+ "ctk.moi-luot-luong": {
+  "t": "<span class=\"vnd\" data-tvp-price-vnd=\"chan-dung-tien-kiep\"></span> / 回 <span class=\"cb-sub\">(<span data-tvp-price=\"chan-dung-tien-kiep\">…</span> 両)</span>",
+  "h": "a0c1a032"
+ },
+ "ctk.mot-doi-5-hoi": {
+  "t": "<span class=\"hp-ic\" data-icon=\"scroll-text\"></span><span>一生を<br>5つの章で</span>",
+  "h": "a838f04e"
+ },
+ "ctk.mot-doi-nguoi-5-hoi": {
+  "t": "<span class=\"res-block-title\">一人の人生 — 5つの章</span>",
+  "h": "a7f7daa3"
+ },
+ "ctk.nhap-ngay-sinh-cua-ban-duong": {
+  "t": "あなたの生年月日を入力（西暦）",
+  "h": "1958d7e8"
+ },
+ "ctk.xem-tien-kiep-ton-luong": {
+  "t": "<span class=\"bg-label\"><span class=\"ic\" data-icon=\"temple\"></span><b>前世を見る →</b></span> <small>料金 <span class=\"vnd\" data-tvp-price-vnd=\"chan-dung-tien-kiep\"></span> <span class=\"cb-sub\">(<span data-tvp-price=\"chan-dung-tien-kiep\">…</span> 両)</span></small>",
+  "h": "055f7d8e"
+ },
  "cuahang.anh-khu-vuc-vat-dung-nhan": {
   "t": "<span class=\"ic\" data-icon=\"camera\"></span> 写真と認識されたエリア/アイテム",
   "h": "dcd1e25d"
@@ -1143,6 +1619,210 @@
   "t": "会社のオフィス",
   "h": "d678c2d6"
  },
+ "daycon.2-xem-truoc-chan-dung-con": {
+  "t": "<span class=\"wss-n\">2</span><span class=\"wss-l\">お子さんの肖像を先読み</span>",
+  "h": "d8f50448"
+ },
+ "daycon.5-la-muc-giua-cua-hang": {
+  "t": "<b>5は中間値</b>です。数千件の子どもの命盤の中間であり、「10点満点で5点」という意味ではありません。灰色の帯は、どちらのタイプでも対応できる範囲です。軸の両端にはそれぞれ価値があります。",
+  "h": "0a475048"
+ },
+ "daycon.5-truc-tinh-khi": {
+  "t": "<span class=\"hp-ic\" data-icon=\"scale\"></span><span>5つの<br>気質軸</span>",
+  "h": "2ee56c76"
+ },
+ "daycon.8-chat-nang-khieu": {
+  "t": "<span class=\"hp-ic\" data-icon=\"star\"></span><span>8つの<br>才能の素質</span>",
+  "h": "a2098312"
+ },
+ "daycon.ban-luan-giai-mau-tai-pdf": {
+  "t": "<span class=\"sc-ic\" data-icon=\"file-text\"></span> <span class=\"sc-txt\"><b>サンプル鑑定書</b><span>サンプル命盤の「命盤で育てる子育て」フル版PDFをダウンロードして、実際の内容を先にご確認いただけます。</span></span> <a class=\"sc-btn\" href=\"/tai-mau/mau-day-con.pdf\" target=\"_blank\" rel=\"noopener\">PDFをダウンロード →</a>",
+  "h": "93827cd3"
+ },
+ "daycon.ban-nay-phac-hoa-tu-cac": {
+  "t": "<span class=\"ic\" data-icon=\"lightbulb\"></span> この鑑定は、紫微斗数の命盤のデータに、先人が残した研究の経験を組み合わせて描いたものです。<b>子育てのアドバイス</b>の部分は当ページ独自の読み替えであり、古典の原文ではありません。あくまで参考としてお読みください。<br><br> <span class=\"ic\" data-icon=\"scale\"></span> これは<b>その子に合った関わり方を理解するため</b>の枠組みです。お子さんはまだ成長の途中で、ここにはいません。そのため本鑑定は、<b>合否の予想、職業の断定、健康や恋愛の読み取りはあえて行いません</b>。生まれ持った気質に良し悪しはなく、大人のやり方に合うか合わないかがあるだけです。<br><br> <span class=\"ic\" data-icon=\"book-open\"></span> <b>出典：</b>命宮・福徳宮・父母宮など、<i>『紫微斗数新編』</i>（Vân Đằng Thái Thứ Lang）に基づき作成。5つの軸・8つの素質の枠組みと、タイプ別の関わり方は、<b>明宝紫微斗数の専門家チーム</b>が独自に構築した手法です。<a href=\"/nguon-du-lieu.html\" target=\"_blank\" rel=\"noopener\" style=\"color:#9A7B3A\">データの出典をすべて見る →</a>",
+  "h": "77ff2cc9"
+ },
+ "daycon.boi-canh": {
+  "t": "<b>背景</b><i></i>",
+  "h": "a85d826c"
+ },
+ "daycon.buong-cai-lai-noi-khong-nghe": {
+  "t": "反抗的で、口答えして、言うことを聞かない",
+  "h": "76509c43"
+ },
+ "daycon.cac-chang-di-hoc": {
+  "t": "<span class=\"res-block-title\">就学の各段階</span>",
+  "h": "b2c2bb10"
+ },
+ "daycon.cach-day-con-nay": {
+  "t": "<span class=\"res-block-title\">この子への関わり方</span>",
+  "h": "e203e71f"
+ },
+ "daycon.chon-dieu-dang-lo-nhap-ngay": {
+  "t": "気がかりなことを選び、お子さんの生年月日と時刻を入力してください。その子に合った関わり方と、今夜からできることが分かります。",
+  "h": "b14b84f4"
+ },
+ "daycon.co-la-so-cua-ban-thi": {
+  "t": "あなた自身の命盤があれば、鑑定に<b>「二人の関係」</b>の項目が加わります。親と子がぶつかりやすいところと、ぶつかりを減らす方法です。空欄でも、それ以外の部分はすべてご覧いただけます。",
+  "h": "0ea6e4fe"
+ },
+ "daycon.co-so-trong-la-so": {
+  "t": "<span class=\"res-block-title\">命盤上の根拠</span>",
+  "h": "c215623b"
+ },
+ "daycon.con-khong-chiu-noi-chuyen-voi": {
+  "t": "子どもが話をしてくれなくなった",
+  "h": "245ca1b1"
+ },
+ "daycon.con-la-nguoi-the-nao": {
+  "t": "<span class=\"res-block-title\">どんな子か</span>",
+  "h": "d97bd561"
+ },
+ "daycon.cung-mot-cach-day-co-dua": {
+  "t": "同じ教え方でも、目に見えて伸びる子もいれば、教えるほど距離ができる子もいます。子どもによって吸収の仕方が違うからです。お子さんの命盤から、どのやり方が逆効果になっているかを読み取りましょう。",
+  "h": "eec3a103"
+ },
+ "daycon.da-xem-truoc-do": {
+  "t": "<span class=\"res-block-title\">以前に見た内容</span>",
+  "h": "5dc13a72"
+ },
+ "daycon.dau-hieu-nhan-ra-o-nha": {
+  "t": "家庭で気づけるサイン",
+  "h": "a07a9d36"
+ },
+ "daycon.day-con-theo-la-so": {
+  "t": "命盤で育てる子育て",
+  "h": "2013a771"
+ },
+ "daycon.day-con-theo-la-so-dua": {
+  "t": "<b>命盤で育てる子育て</b><span>この子には、背中を押すべきか、そっとしておくべきか</span>",
+  "h": "89056d92"
+ },
+ "daycon.day-con-theo-la-so-tu": {
+  "t": "命盤で育てる子育て — 明宝紫微斗数",
+  "h": "43088648"
+ },
+ "daycon.day-la-kieu-moi-truong-hoc": {
+  "t": "これはお子さんに合う<b>学びの環境のタイプ</b>であり、学部や職業はあえて断定しません。",
+  "h": "db05bd75"
+ },
+ "daycon.diem-o-day-la-muc-thuan": {
+  "t": "ここでの点数は<b>その時期の順調さ／逆風の度合い</b>であり、学力の点数でも、子どもの点数でもありません。",
+  "h": "799bb1dc"
+ },
+ "daycon.dieu-ban-dang-lo": {
+  "t": "気がかりなこと",
+  "h": "bd0e3bcd"
+ },
+ "daycon.dieu-ban-dang-lo-pjp3": {
+  "t": "<span class=\"res-block-title\" id=\"loTitle\">気がかりなこと</span>",
+  "h": "86a3d90a"
+ },
+ "daycon.dinh-huong": {
+  "t": "<span class=\"res-block-title\">進路の方向性</span>",
+  "h": "ee21cc8a"
+ },
+ "daycon.dinh-huong-cach-day": {
+  "t": "<span class=\"hp-ic\" data-icon=\"compass\"></span><span>関わり方の<br>方向性</span>",
+  "h": "c22dffe6"
+ },
+ "daycon.do-duoc-gi": {
+  "t": "<b>測れること</b><i></i>",
+  "h": "0ae0b676"
+ },
+ "daycon.goi-y-de-thu-khong-phai": {
+  "t": "試してみるための提案であり、指示ではありません。古典が語るのは人の資質であって、あなたの地域でどの教室が開いているかまでは知りません。まず一度体験させて、実際の反応を見てください。",
+  "h": "5f3bcee3"
+ },
+ "daycon.hai-ben-voi-nhau": {
+  "t": "<span class=\"res-block-title\">二人の関係</span>",
+  "h": "12457260"
+ },
+ "daycon.hoat-dong-nen-cho-con-thu": {
+  "t": "<span class=\"res-block-title\">試させたい活動</span>",
+  "h": "f4d526be"
+ },
+ "daycon.hoc-hanh-sa-sut-ngoi-vao": {
+  "t": "成績が落ちて、机に向かえない",
+  "h": "fab00484"
+ },
+ "daycon.khong-co-gi-gap-chi-muon": {
+  "t": "急ぎではなく、ただ子どもをもっと理解したい",
+  "h": "cf2efa39"
+ },
+ "daycon.lam-gi-tu-toi-nay": {
+  "t": "<span class=\"res-block-title\">今夜からできること</span>",
+  "h": "1f882975"
+ },
+ "daycon.moi-luot-luong": {
+  "t": "<span class=\"vnd\" data-tvp-price-vnd=\"day-con\"></span> / 回 <span class=\"cb-sub\">(<span data-tvp-price=\"day-con\">…</span> 両)</span>",
+  "h": "10afd8c1"
+ },
+ "daycon.nam-truc-tinh-khi": {
+  "t": "<span class=\"res-block-title\">5つの気質軸</span>",
+  "h": "587fa869"
+ },
+ "daycon.nen": {
+  "t": "すること",
+  "h": "078cfc62"
+ },
+ "daycon.nen-lam-gi": {
+  "t": "<b>すべきこと</b><i></i>",
+  "h": "021dc84d"
+ },
+ "daycon.neu-chi-nho-mot-cau": {
+  "t": "<span class=\"res-block-title\">一言だけ覚えるなら</span>",
+  "h": "6e372478"
+ },
+ "daycon.ngay-sinh-cua-con": {
+  "t": "お子さんの生年月日",
+  "h": "3837783b"
+ },
+ "daycon.nhap-la-so-cua-con-nhan": {
+  "t": "お子さんの命盤を入力すると、吸収の仕方、課題を出すときのコツ、逆効果になる叱り方、そして親子がぶつかりやすいところが分かります。",
+  "h": "244ebedb"
+ },
+ "daycon.phan-luan-chua-mo": {
+  "t": "<span class=\"res-block-title\">未開封の鑑定部分</span>",
+  "h": "68cac5d9"
+ },
+ "daycon.rut-re-ngai-dam-dong-it": {
+  "t": "内気で、人前が苦手で、友達が少ない",
+  "h": "56c6a43d"
+ },
+ "daycon.sap-phai-chon-truong-chon-nganh": {
+  "t": "もうすぐ学校／進路を選ばなければならない",
+  "h": "926ae29e"
+ },
+ "daycon.tam-chat-nang-khieu": {
+  "t": "<span class=\"res-block-title\">8つの才能の素質</span>",
+  "h": "8ac0e142"
+ },
+ "daycon.them-la-so-cua-ban-cha": {
+  "t": "あなたの命盤を追加 — 父親または母親（任意）",
+  "h": "e158b2b1"
+ },
+ "daycon.thoi": {
+  "t": "避ける",
+  "h": "aa7d2f5d"
+ },
+ "daycon.tra-loi-thay-o-khung-chat": {
+  "t": "右のチャット欄で先生に、気がかりなこととお子さんの生年月日をお伝えください。",
+  "h": "4cf5eddf"
+ },
+ "daycon.vuot-vach-dut-la-chat-dang": {
+  "t": "点線を超えた素質は<b>試してみる価値がある</b>ものであり、才能が確認されたわけではありません。家庭で見られるサインと照らし合わせ、合わなければご自身の目を信じてください。",
+  "h": "fbb5fd98"
+ },
+ "daycon.xem-be-khac": {
+  "t": "別の子を見る",
+  "h": "3ff33fa6"
+ },
+ "daycon.xem-cach-day-con-ton-luong": {
+  "t": "<span class=\"bg-label\"><span class=\"ic\" data-icon=\"baby\"></span><b>子育ての方法を見る →</b></span> <small>料金 <span class=\"vnd\" data-tvp-price-vnd=\"day-con\"></span> <span class=\"cb-sub\">(<span data-tvp-price=\"day-con\">…</span> 両)</span></small>",
+  "h": "ccbaaea3"
+ },
  "disclaimer.1-tinh-chat-tham-khao": {
   "t": "1. 参考情報としての性質",
   "h": "99856a52"
@@ -1206,6 +1886,110 @@
  "disclaimer.xem-them-dieu-khoan-day-du": {
   "t": "利用規約の全文は<a href=\"/dieu-khoan-dich-vu.html\">利用規約</a>（第2項 — 責任の制限）に、サービスの説明は<a href=\"/san-pham-dich-vu.html\">商品・サービス</a>ページに掲載しています。",
   "h": "dc202339"
+ },
+ "duyenno.2-thanh-toan": {
+  "t": "<span class=\"wss-n\">2</span><span class=\"wss-l\">お支払い</span>",
+  "h": "67c0b759"
+ },
+ "duyenno.3-nhan-ket-qua": {
+  "t": "<span class=\"wss-n\">3</span><span class=\"wss-l\">結果を受け取る</span>",
+  "h": "5b1e84a0"
+ },
+ "duyenno.ban-luan-giai-mau-tai-pdf": {
+  "t": "<span class=\"sc-ic\" data-icon=\"file-text\"></span> <span class=\"sc-txt\"><b>サンプル鑑定書</b><span>サンプル命盤の「前世の縁」フル版PDFをダウンロードして、実際の内容を先にご確認いただけます。</span></span> <a class=\"sc-btn\" href=\"/tai-mau/mau-duyen-no-tien-kiep.pdf\" target=\"_blank\" rel=\"noopener\">PDFをダウンロード →</a>",
+  "h": "c48f94d9"
+ },
+ "duyenno.buc-tranh-ve-ca-nhom": {
+  "t": "<span class=\"hp-ic\" data-icon=\"image\"></span><span>グループ全員を<br>描いた一枚の絵</span>",
+  "h": "43567703"
+ },
+ "duyenno.cau-chuyen-4-hoi": {
+  "t": "<span class=\"hp-ic\" data-icon=\"book-open\"></span><span>4章からなる<br>物語</span>",
+  "h": "824bdaa8"
+ },
+ "duyenno.co-nhung-moi-quan-he-vua": {
+  "t": "初めて会ったのに懐かしく感じる関係や、前から約束していたような出会いがあります。二つの命盤を重ねて、その感覚の背後にある縁の物語を探します。イラスト付きです。",
+  "h": "370ab59d"
+ },
+ "duyenno.co-so-trong-la-so": {
+  "t": "命盤上の根拠",
+  "h": "43f95044"
+ },
+ "duyenno.dang-ve-buc-tranh-khoang-45": {
+  "t": "絵を描いています…<br>（45～60秒ほど）",
+  "h": "28b5d982"
+ },
+ "duyenno.duyen-no-tien-kiep": {
+  "t": "前世の縁",
+  "h": "c6b0ccb5"
+ },
+ "duyenno.duyen-no-tien-kiep-kiep-truoc": {
+  "t": "<b>前世の縁</b><span>前世でこの人たちはどんな関係だったのか</span>",
+  "h": "89867b1c"
+ },
+ "duyenno.duyen-no-tien-kiep-tu-vi": {
+  "t": "前世の縁 — 明宝紫微斗数",
+  "h": "f1c11bb4"
+ },
+ "duyenno.gui-ket-qua-nay-cho-ho": {
+  "t": "この結果をその人たちに送る →",
+  "h": "69958b00"
+ },
+ "duyenno.hai-den-nam-la-so-kiep": {
+  "t": "2〜5人の命盤から、前世でこの人たちがどんな関係だったのかを読み解きます。縁の種類は古法から導き、4章の物語と、グループ全員を描いた一枚の絵が付きます。",
+  "h": "109c47c2"
+ },
+ "duyenno.lam-lai": {
+  "t": "やり直す",
+  "h": "d3a72f2a"
+ },
+ "duyenno.loai-duyen-no-theo-co-phap": {
+  "t": "<span class=\"hp-ic\" data-icon=\"scroll-text\"></span><span>古法による<br>縁の種類</span>",
+  "h": "50fab9c4"
+ },
+ "duyenno.moi-duyen-4-hoi": {
+  "t": "<span class=\"res-block-title\">縁の物語 — 4章</span>",
+  "h": "d1b7220b"
+ },
+ "duyenno.moi-duyen-kiep-truoc": {
+  "t": "<span class=\"res-block-title\">前世の縁</span>",
+  "h": "5c0af936"
+ },
+ "duyenno.moi-duyen-va-cau-chuyen-phia": {
+  "t": "<span class=\"ic\" data-icon=\"lightbulb\"></span> 上の縁と物語は、紫微斗数の命盤どうしの関係に、先人が残した研究の経験を組み合わせて描いたものです。参考および娯楽としてお読みください。",
+  "h": "e81a1fdc"
+ },
+ "duyenno.moi-luot-luong": {
+  "t": "<span class=\"vnd\" data-tvp-price-vnd=\"duyen-no-tien-kiep\"></span> / 回 <span class=\"cb-sub\">(<span data-tvp-price=\"duyen-no-tien-kiep\">…</span> 両)</span>",
+  "h": "19bc9353"
+ },
+ "duyenno.nhap-ho-ten-gioi-tinh-va": {
+  "t": "見たい方々の氏名、性別、生年月日と時刻（2〜5人）を入力すると、イラスト付きの縁の物語を作成します。",
+  "h": "f61856b4"
+ },
+ "duyenno.nhap-ngay-sinh-duong-lich": {
+  "t": "生年月日を入力（西暦）",
+  "h": "6983427a"
+ },
+ "duyenno.tai-anh-dang-story": {
+  "t": "⬇ ストーリー投稿用の画像を保存",
+  "h": "2c46ee3c"
+ },
+ "duyenno.them-nguoi": {
+  "t": "＋ 人を追加",
+  "h": "79cf4ccf"
+ },
+ "duyenno.tra-loi-thay-o-khung-chat": {
+  "t": "右のチャット欄で先生に、一人ずつの生年月日（2〜5人）をお伝えください。",
+  "h": "672120ed"
+ },
+ "duyenno.tranh-duyen-no-tien-kiep": {
+  "t": "前世の縁の絵",
+  "h": "95122c03"
+ },
+ "duyenno.xem-duyen-no-ton-luong": {
+  "t": "<span class=\"bg-label\"><span class=\"ic\" data-icon=\"sparkles\"></span><b id=\"btnGoLabel\">縁を見る →</b></span> <small>料金 <span class=\"vnd\" data-tvp-price-vnd=\"duyen-no-tien-kiep\"></span> <span class=\"cb-sub\">(<span data-tvp-price=\"duyen-no-tien-kiep\">…</span> 両)</span></small>",
+  "h": "990649b6"
  },
  "faqs.1-chuyen-khoan-ngan-hang-vnd": {
   "t": "<strong>(1) ベトナムドンでの銀行振込</strong>（ベトナム国内向け）— payOS経由。ベトナムの銀行アプリでQRコードを読み取ると、両が自動でウォレットに入ります。",
@@ -1651,6 +2435,162 @@
   "t": "個人的な要素が十分に反映されていない",
   "h": "4fbc118f"
  },
+ "giosinh.12-la-so-kha-nghi": {
+  "t": "候補の命盤<br>12枚",
+  "h": "6b8b7bde"
+ },
+ "giosinh.2-xem-12-gio-kha-nghi": {
+  "t": "<span class=\"wss-n\">2</span><span class=\"wss-l\">候補の12時刻を見る</span>",
+  "h": "41d140ce"
+ },
+ "giosinh.am-lich": {
+  "t": "旧暦（太陰暦）",
+  "h": "b0246c79"
+ },
+ "giosinh.anh-chi-nhap-ngay-sinh-theo": {
+  "t": "生年月日を<b>旧暦</b>で入力されました。ほかのツールは<b>新暦</b>で受け付けており、旧暦から新暦への逆変換にはまだ対応していないため、自動で引き継ぐことはできません。上で確定した時刻はそのままお使いいただけます。ほかのツールを開いたときは手入力してください。",
+  "h": "edb9dc0c"
+ },
+ "giosinh.anh-chi-von-da-biet-chac": {
+  "t": "出生時刻がすでに確かな方へ",
+  "h": "d8efb8c1"
+ },
+ "giosinh.buoc-tiep-theo-thu-hep-bang": {
+  "t": "次のステップ：質問で絞り込む",
+  "h": "12044ce6"
+ },
+ "giosinh.buoc-xem-12-la-so-kha": {
+  "t": "12枚の候補命盤を見るステップは<b>無料</b>です。絞り込みの質問とランキングには両（クレジット）がかかります。",
+  "h": "88e80a48"
+ },
+ "giosinh.cach-kiem-chac-nhat-lap-la": {
+  "t": "最も確実な確かめ方：<b>上位2つの時刻</b>で命盤を作り、直近5年の運勢の部分を読んで、より当てはまるほうの時刻を採用してください。",
+  "h": "9b5f4abc"
+ },
+ "giosinh.cach-nay-thu-hep-bang-muc": {
+  "t": "この方法は、あなたの回答と各命盤との一致度で絞り込むため、<b>可能性を順位づけ</b>するもので、どの時刻が正しいかを証明するものではありません。実際に近い回答をした方の場合、多くのケースで正しい時刻は上位3つに入りますが、1位かどうかはそこまで確実ではありません。そのため、このページは断定的に聞こえる数字ひとつではなく、根拠つきのリスト全体をお見せし、ご自身で確かめていただく形にしています。",
+  "h": "eaefa2a0"
+ },
+ "giosinh.chon-gio-anh-chi-muon-dung": {
+  "t": "使いたい時刻を選んでください。アカウントの<b>命盤ノート</b>に保存されるので、ほかのツールにも自動で入力されます。打ち直しも、覚えておく必要もありません。",
+  "h": "36fd6d7b"
+ },
+ "giosinh.chot-gio-va-dung-tiep": {
+  "t": "時刻を確定して次へ",
+  "h": "2c33bc41"
+ },
+ "giosinh.cung-mot-ngay-sinh-12-la": {
+  "t": "同じ生年月日でも、12枚の命盤はまったく異なる",
+  "h": "92803f8c"
+ },
+ "giosinh.duong-lich": {
+  "t": "新暦（太陽暦）",
+  "h": "dfac44de"
+ },
+ "giosinh.gio-dung-neu-biet": {
+  "t": "正しい時刻（わかる場合）",
+  "h": "f70330da"
+ },
+ "giosinh.gio-muon-dung": {
+  "t": "使う時刻",
+  "h": "853206cc"
+ },
+ "giosinh.gio-sinh-doi-thi-cung-menh": {
+  "t": "出生時刻が変わると命宮が変わり、局が変わり、星の配置もすべて変わります。これは<b id=\"freeLine\"></b>の12通りの可能性で、本当の命盤はそのうちの1枚だけです。",
+  "h": "ca364a84"
+ },
+ "giosinh.gio-sinh-kha-nang-cao-nhat": {
+  "t": "最も可能性の高い出生時刻",
+  "h": "449a17e1"
+ },
+ "giosinh.gioi-tinh": {
+  "t": "性別",
+  "h": "80bbce55"
+ },
+ "giosinh.gui-doi-chieu": {
+  "t": "照合を送信",
+  "h": "50ad4ad2"
+ },
+ "giosinh.khao-sat-thu-hep": {
+  "t": "絞り込みの<br>質問",
+  "h": "c176396d"
+ },
+ "giosinh.khao-sat-thu-hep-ua1r": {
+  "t": "絞り込みの質問",
+  "h": "0d669868"
+ },
+ "giosinh.khong-nho-chinh-xac-gio-sinh": {
+  "t": "出生時刻を正確に覚えていないと、紫微斗数の命盤は根本からずれやすくなります。いくつかの質問に答えると、システムが12の時間帯の中から段階的に絞り込み、最も近い出生時刻を探し出します。",
+  "h": "83b0cbd2"
+ },
+ "giosinh.khong-nho-gio-sinh-lap-ca": {
+  "t": "出生時刻を覚えていませんか？候補の命盤12枚をすべて作り、健康状態やこれまでの人生の時期に関するいくつかの質問で絞り込みます。",
+  "h": "b7c6b615"
+ },
+ "giosinh.lam-lai": {
+  "t": "やり直す",
+  "h": "535fca0d"
+ },
+ "giosinh.loai-lich": {
+  "t": "暦の種類",
+  "h": "4f30f6b5"
+ },
+ "giosinh.luan-giai-la-so-nay": {
+  "t": "この命盤を鑑定する →",
+  "h": "5fea8efd"
+ },
+ "giosinh.luu-vao-so-la-so": {
+  "t": "命盤ノートに保存",
+  "h": "b9785d51"
+ },
+ "giosinh.nam": {
+  "t": "年",
+  "h": "98926c7e"
+ },
+ "giosinh.nam-gioi": {
+  "t": "男性",
+  "h": "b580ba1b"
+ },
+ "giosinh.neu-co-giay-khai-sinh-hoac": {
+  "t": "出生証明書や、はっきり覚えているご家族がいれば、正しい時刻を教えてください。先ほどの結果と照らし合わせることで、方法の調整に役立ちます。任意であり、あなたの鑑定結果には一切影響しません。",
+  "h": "31f387ef"
+ },
+ "giosinh.ngay": {
+  "t": "日",
+  "h": "368c4575"
+ },
+ "giosinh.nhap-ngay-thang-nam-sinh-gio": {
+  "t": "<b>生年月日</b>を入力してください。出生時刻こそが探したいものです。システムが<b>12枚の候補命盤</b>を作り、短い質問で絞り込み、一致度の順に並べます。",
+  "h": "287c421e"
+ },
+ "giosinh.thang": {
+  "t": "月",
+  "h": "0e2b3099"
+ },
+ "giosinh.vi-sao-khong-phai-mot-con": {
+  "t": "なぜ断定的な数字ひとつではないのか",
+  "h": "2bbd8eab"
+ },
+ "giosinh.xac-dinh-gio-sinh": {
+  "t": "出生時刻の特定",
+  "h": "2b570401"
+ },
+ "giosinh.xac-dinh-gio-sinh-khong-nho": {
+  "t": "<b>出生時刻の特定</b><span>覚えていなければここから</span>",
+  "h": "1407f5d3"
+ },
+ "giosinh.xac-dinh-gio-sinh-tu-vi": {
+  "t": "出生時刻の特定 — 明宝紫微斗数",
+  "h": "c14e875f"
+ },
+ "giosinh.xem-12-gio-kha-nghi": {
+  "t": "候補の12時刻を見る",
+  "h": "3cd9aabf"
+ },
+ "giosinh.xep-hang-do-khop": {
+  "t": "一致度で<br>ランキング",
+  "h": "a6655e79"
+ },
  "hdtt.cach-hoat-dong": {
   "t": "ご利用の流れ",
   "h": "8ad7f762"
@@ -1758,6 +2698,178 @@
  "hdtt.xem-tuoi-vo-chong": {
   "t": "<span class=\"ic\" data-icon=\"heart-handshake\"></span> 夫婦の相性",
   "h": "177d20f4"
+ },
+ "hnt.2-xem-truoc": {
+  "t": "<span class=\"wss-n\">2</span><span class=\"wss-l\">先読み</span>",
+  "h": "93d60bc7"
+ },
+ "hnt.3-huong-dang-thu": {
+  "t": "<span class=\"hp-ic\" data-icon=\"star\"></span><span>試す価値のある<br>3つの方向</span>",
+  "h": "cf93e32b"
+ },
+ "hnt.ba-huong-dang-cho-con-thu": {
+  "t": "<span class=\"res-block-title\">お子さんに試させたい3つの方向</span>",
+  "h": "116b88f2"
+ },
+ "hnt.ban-luan-giai-mau-tai-pdf": {
+  "t": "<span class=\"sc-ic\" data-icon=\"file-text\"></span> <span class=\"sc-txt\"><b>サンプル鑑定書</b><span>サンプル命盤の「子どもの早期進路鑑定」フル版PDFをダウンロードして、実際の内容を先にご確認いただけます。</span></span> <a class=\"sc-btn\" href=\"/tai-mau/mau-huong-nghiep-tre.pdf\" target=\"_blank\" rel=\"noopener\">PDFをダウンロード →</a>",
+  "h": "13902c17"
+ },
+ "hnt.ban-nay-phac-hoa-tu-cac": {
+  "t": "<span class=\"ic\" data-icon=\"lightbulb\"></span> この鑑定は、紫微斗数の命盤のデータを、<i>『紫微斗数新編』</i>（Vân Đằng Thái Thứ Lang）に従って立て、先人が残した研究の経験を組み合わせて描いたものです。<b>適性の傾向と活動</b>の部分は<b>明宝紫微斗数の専門家チーム</b>が独自に構築した手法であり、古典の原文ではありません。<a href=\"/nguon-du-lieu.html\">データの出典</a>をご覧ください。<br><br> <span class=\"ic\" data-icon=\"scale\"></span> これは<b>参考のための方向づけ</b>であり、お子さんの進む道を決めるものではありません。お子さんはまだ成長の途中で、ここにはいません。そのため本鑑定は、<b>合否の予想、成功の約束、健康や恋愛の読み取りはあえて行いません</b>。適性の傾向が示すのは、お子さんに<i>何を試させるとよいか</i>であって、お子さんが<i>どんな職業に就くべきか</i>ではありません。",
+  "h": "6a1cfd57"
+ },
+ "hnt.bat-dau-tu-dau": {
+  "t": "<span class=\"res-block-title\" id=\"doTitle\">どこから始めるか</span>",
+  "h": "2bb617bb"
+ },
+ "hnt.chat-nguoi-doc-ra-tu-la": {
+  "t": "<span class=\"res-block-title\">命盤から読み取れる素質</span>",
+  "h": "d983261f"
+ },
+ "hnt.ep-con-hoc-dieu-con-khong": {
+  "t": "縁のないことを子どもに無理強いしても、親子ともに疲れるだけです。お子さんの命盤から、年齢の段階ごとにどんな活動に触れさせるとよいかを読み取りましょう。",
+  "h": "aa788dd7"
+ },
+ "hnt.huong-nghiep-som-cho-con": {
+  "t": "子どもの早期進路鑑定",
+  "h": "2735212c"
+ },
+ "hnt.huong-nghiep-som-cho-con-nen": {
+  "t": "<b>子どもの早期進路鑑定</b><span>今から何に触れさせるとよいか</span>",
+  "h": "14295eac"
+ },
+ "hnt.huong-nghiep-som-cho-con-tu": {
+  "t": "子どもの早期進路鑑定 — 明宝紫微斗数",
+  "h": "9c8cd322"
+ },
+ "hnt.lam-trong-thang-nay": {
+  "t": "今月やること",
+  "h": "a8ab8a7b"
+ },
+ "hnt.may-mat-nay-khong-phai-cho": {
+  "t": "<span class=\"ic\" data-icon=\"alert-triangle\"></span> これらの面は<b>お子さんに欠けているところではありません</b>。お子さんに合う仕事は、その面を評価の基準にしない、というだけのことです。",
+  "h": "c58a74dd"
+ },
+ "hnt.mo-loi-voi-con-the-nao": {
+  "t": "<span class=\"res-block-title\">お子さんへの切り出し方</span>",
+  "h": "b216c079"
+ },
+ "hnt.moi-luot-luong": {
+  "t": "<span class=\"vnd\" data-tvp-price-vnd=\"huong-nghiep-tre\"></span> / 回 <span class=\"cb-sub\">(<span data-tvp-price=\"huong-nghiep-tre\">…</span> 両)</span>",
+  "h": "bdeef95d"
+ },
+ "hnt.nhap-la-so-cua-con-nhan": {
+  "t": "お子さんの命盤を入力すると、命盤から読み取れる適性の傾向、年齢に合った触れさせたい活動、そして大人がすべきこと・やめるべきことが分かります。",
+  "h": "d1c6abd2"
+ },
+ "hnt.nhap-ngay-gio-sinh-cua-con": {
+  "t": "お子さんの生年月日と時刻、そして気がかりなことを入力してください。最も際立った適性の傾向、試すとよい活動、そしてどこから始めるかが分かります。",
+  "h": "3d914a45"
+ },
+ "hnt.nhin-ra-con": {
+  "t": "<span class=\"res-block-title\">お子さんを知る</span>",
+  "h": "a6d52b8a"
+ },
+ "hnt.noi-nhat": {
+  "t": "最も際立つ",
+  "h": "b4fa86fd"
+ },
+ "hnt.phan-dinh-huong-chua-mo": {
+  "t": "<span class=\"res-block-title\">未開封の方向づけ部分</span>",
+  "h": "a76cca13"
+ },
+ "hnt.sang-lua-sau-thi-doi-gi": {
+  "t": "<span class=\"res-block-title\">次の年齢層で何が変わるか</span>",
+  "h": "b5257805"
+ },
+ "hnt.thien-huong-la-xu-huong-de": {
+  "t": "適性の傾向は<b>触れさせてみるための傾向</b>であり、決まった職業ではありません。この表は当ページ独自の読み替えであり、古典の原文ではありません。<br> このツールは、<a href=\"/app/day-con\">命盤で育てる子育て</a>と<b>同じ物差し</b>（同じ5つの気質軸と8つの才能の素質）でお子さんを読みますが、答える問いは別です。あちらは<i>何が得意か</i>、こちらは<i>どんな働き方が合うか</i>を問います。物差しが同じなので両者が食い違うことはなく、問いが違うので順位が完全には一致しないこともあります。",
+  "h": "fc1b1e95"
+ },
+ "hnt.thien-huong-noi-nhat": {
+  "t": "<span class=\"hp-ic\" data-icon=\"compass\"></span><span>最も際立つ<br>傾向</span>",
+  "h": "b3d9e48c"
+ },
+ "hnt.thien-huong-noi-nhat-91zz": {
+  "t": "<span class=\"res-block-title\">最も際立つ適性の傾向</span>",
+  "h": "2954ceff"
+ },
+ "hnt.thoi-lam": {
+  "t": "やめること",
+  "h": "ef8d27c0"
+ },
+ "hnt.viec-hop-voi-con-thuong-khong": {
+  "t": "お子さんに合う仕事が、たいてい求めないこと",
+  "h": "513e2289"
+ },
+ "hnt.viec-lam-theo-lua-tuoi": {
+  "t": "<span class=\"hp-ic\" data-icon=\"hourglass\"></span><span>年齢層ごとの<br>取り組み</span>",
+  "h": "56da2915"
+ },
+ "hnt.xem-thien-huong-cua-con-ton": {
+  "t": "<span class=\"bg-label\"><span class=\"ic\" data-icon=\"compass\"></span><b>お子さんの傾向を見る →</b></span> <small>料金 <span class=\"vnd\" data-tvp-price-vnd=\"huong-nghiep-tre\"></span> <span class=\"cb-sub\">(<span data-tvp-price=\"huong-nghiep-tre\">…</span> 両)</span></small>",
+  "h": "ebca1bd6"
+ },
+ "hoangdao.1-nhap-ngay": {
+  "t": "<span class=\"wss-n\">1</span><span class=\"wss-l\">日付を入力</span>",
+  "h": "a99fbfcf"
+ },
+ "hoangdao.6-gio-tot-nen-dung": {
+  "t": "使うべき<br>吉時6つ",
+  "h": "ca3f8fea"
+ },
+ "hoangdao.6-gio-xau-can-tranh": {
+  "t": "避けるべき<br>凶時6つ",
+  "h": "4f1e6bfc"
+ },
+ "hoangdao.chon-ngay-thang-nam-duong-lich": {
+  "t": "確認したい新暦の日・月・年を選んでください。システムが黄道吉時を算出し、その日の暦と照らし合わせます。",
+  "h": "b7dbabb0"
+ },
+ "hoangdao.cung-mot-viec-lam-gio-nay": {
+  "t": "同じことでも、この時刻なら順調で、別の時刻だとなぜかつまずくことがあります。見たい日を選べば、暦にもとづく吉時と避けるべき時刻の一覧がすぐに届きます。",
+  "h": "173c7571"
+ },
+ "hoangdao.gio-hoang-dao": {
+  "t": "黄道吉時",
+  "h": "940fb21d"
+ },
+ "hoangdao.gio-hoang-dao-12-gio-tot": {
+  "t": "<b>黄道吉時</b><span>干支で見る、その日の吉凶12の時刻</span>",
+  "h": "23839283"
+ },
+ "hoangdao.gio-hoang-dao-tu-vi-minh": {
+  "t": "黄道吉時 — 明宝紫微斗数",
+  "h": "51a0db68"
+ },
+ "hoangdao.hac-dao-6-gio-can-tranh": {
+  "t": "✗ 黒道 — 避けるべき6つの時刻",
+  "h": "39601183"
+ },
+ "hoangdao.hoang-dao-6-gio-tot": {
+  "t": "✦ 黄道 — 吉の6つの時刻",
+  "h": "7263a1c8"
+ },
+ "hoangdao.hoang-lich-day-du": {
+  "t": "黄暦<br>フル版",
+  "h": "f4d66b7c"
+ },
+ "hoangdao.hoi-thay-nen-lam-viec-vao": {
+  "t": "✦ 先生に、何時に行うのがよいか聞く",
+  "h": "2a9b43ce"
+ },
+ "hoangdao.ngay-can-xem-duong-lich": {
+  "t": "確認したい日（新暦）",
+  "h": "a32fbe04"
+ },
+ "hoangdao.tra-12-gio-hoang-dao-hac": {
+  "t": "その日の黄道・黒道12の時刻を干支で調べます。開業・出立・契約に向く吉時がわかります。あなたの用件に合わせて先生に読み解いてもらえます。",
+  "h": "6f4fa691"
+ },
+ "hoangdao.xem-gio": {
+  "t": "時刻を見る →",
+  "h": "e1db5866"
  },
  "home.270-000-da-quoc-gia-da": {
   "t": "<span><span class=\"ic\" data-icon=\"file-text\"></span>270,000+</span> <span><span class=\"ic\" data-icon=\"globe\"></span>多国籍</span> <span><span class=\"ic\" data-icon=\"check\"></span>検証済み</span>",
@@ -3139,6 +4251,202 @@
   "t": "これから起こる流れ",
   "h": "6e5a1980"
  },
+ "js.cdvc.anh-dang-tai-co-the-hoi": {
+  "t": "画像を読み込み中です。少し時間がかかることがあります — しばらくお待ちいただくか、",
+  "h": "c4e9709b"
+ },
+ "js.cdvc.anh-minh-hoa-chua-mo": {
+  "t": "イメージ画像 — ロック中",
+  "h": "bef5f6d7"
+ },
+ "js.cdvc.anh-minh-hoa-mo-mo-khoa": {
+  "t": "参考イラスト（ぼかし） — ロックを解除すると、本来の肖像をご覧いただけます",
+  "h": "9e03ce37"
+ },
+ "js.cdvc.ban-da-tao-ket-qua-cho": {
+  "t": "✓ この命盤の結果は作成済みです。再度開いても両は差し引かれません",
+  "h": "d59efda4"
+ },
+ "js.cdvc.bao-gio-toi-lap-gia-dinh": {
+  "t": "私はいつ結婚しますか？",
+  "h": "359ca64d"
+ },
+ "js.cdvc.cach-cuc-dac-biet": {
+  "t": "特別な格局：",
+  "h": "f4dcacee"
+ },
+ "js.cdvc.chan-dung-nguoi-chong-cua-toi": {
+  "t": "私の夫の肖像",
+  "h": "8037fff1"
+ },
+ "js.cdvc.chan-dung-nguoi-phoi-ngau": {
+  "t": "配偶者の肖像",
+  "h": "78b47413"
+ },
+ "js.cdvc.chan-dung-nguoi-phoi-ngau-chua": {
+  "t": "⊙ 配偶者の肖像はまだ開かれていません",
+  "h": "c91a9a69"
+ },
+ "js.cdvc.chan-dung-nguoi-vo-cua-toi": {
+  "t": "私の妻の肖像",
+  "h": "54b4f3b2"
+ },
+ "js.cdvc.chinh-tinh-chu": {
+  "t": "<b>中心となる主星：</b> ",
+  "h": "a189d8a3"
+ },
+ "js.cdvc.chinh-tinh-ds": {
+  "t": "主星：{ds}",
+  "h": "0594f4e0"
+ },
+ "js.cdvc.chong": {
+  "t": "夫",
+  "h": "92a6f17f"
+ },
+ "js.cdvc.cung-phu-the": {
+  "t": "夫妻宮：",
+  "h": "42367865"
+ },
+ "js.cdvc.cung-phu-the-cua-toi-co-gi": {
+  "t": "私の夫妻宮には何か特別なところがありますか？",
+  "h": "2ec84146"
+ },
+ "js.cdvc.cung-phu-the-trong-la-so": {
+  "t": "あなたの命盤の夫妻宮",
+  "h": "cf3fd3a1"
+ },
+ "js.cdvc.da-ve-xong-chan-dung-dua": {
+  "t": "あなたの夫妻宮をもとに肖像を描き終えました。結婚や夫妻宮、命盤についてさらに聞きたいことはありますか？",
+  "h": "777cc6a3"
+ },
+ "js.cdvc.dang-dung-anh": {
+  "t": "画像を作成中…",
+  "h": "7bce9760"
+ },
+ "js.cdvc.dang-ve-chan-dung-thuong-45": {
+  "t": "肖像を描いています（通常45〜60秒）",
+  "h": "8fb2076c"
+ },
+ "js.cdvc.dung-gu-ban-chua-gui-anh": {
+  "t": "あなたの好みにぴったりでしたか？この画像を友達に送って、<b>それぞれの未来のパートナー</b>も描いてみようと誘いましょう。",
+  "h": "d435c12c"
+ },
+ "js.cdvc.hoan-canh-gap-go": {
+  "t": "\n\n出会いの状況：",
+  "h": "7878e939"
+ },
+ "js.cdvc.hon-nhan-cua-toi-co-thuan": {
+  "t": "私の結婚はうまくいきますか？",
+  "h": "9c01a229"
+ },
+ "js.cdvc.khong-the-ket-noi-vui-long": {
+  "t": "接続できませんでした。もう一度お試しください。",
+  "h": "bf0b6e7b"
+ },
+ "js.cdvc.lap-la-so-xac-dinh-cung": {
+  "t": "命盤を作成し、夫妻宮を割り出す",
+  "h": "f8f01348"
+ },
+ "js.cdvc.loi": {
+  "t": "エラー ",
+  "h": "1b80116b"
+ },
+ "js.cdvc.loi-8d72": {
+  "t": "エラー：",
+  "h": "471c0087"
+ },
+ "js.cdvc.luan-giai-chua-mo": {
+  "t": "鑑定 — ロック中",
+  "h": "4c4f7020"
+ },
+ "js.cdvc.luan-giai-cung-phu-the": {
+  "t": "夫妻宮の鑑定",
+  "h": "8e52b135"
+ },
+ "js.cdvc.luan-giai-cung-phu-the-p43z": {
+  "t": "夫妻宮の鑑定",
+  "h": "fee63cc7"
+ },
+ "js.cdvc.luc-giac-cung-phu-the": {
+  "t": "夫妻宮の六角形",
+  "h": "c1463a39"
+ },
+ "js.cdvc.luot-ve": {
+  "t": "描画",
+  "h": "85f72421"
+ },
+ "js.cdvc.mo-chan-dung-day-du": {
+  "t": "フル版の肖像を開く",
+  "h": "9f515b09"
+ },
+ "js.cdvc.n-tuoi-hist": {
+  "t": "{n}歳",
+  "h": "25e7a2be"
+ },
+ "js.cdvc.nguoi-chong": {
+  "t": "夫",
+  "h": "bce4fcfa"
+ },
+ "js.cdvc.nguoi-vo": {
+  "t": "妻",
+  "h": "f1b7338b"
+ },
+ "js.cdvc.phac-hoa-tu-cung-phu-the": {
+  "t": "命盤の夫妻宮から描く",
+  "h": "adeba7b7"
+ },
+ "js.cdvc.phac-thao-mo-ta-uoc-luong": {
+  "t": "説明のスケッチとパートナーの年齢の推定",
+  "h": "7ce20134"
+ },
+ "js.cdvc.phu-tinh-ds": {
+  "t": "副星：{ds}",
+  "h": "7e63fae4"
+ },
+ "js.cdvc.quet-ma-xem-chan-dung-cua": {
+  "t": "QRコードを読み取って、あなたの肖像を見る",
+  "h": "2b62e4a0"
+ },
+ "js.cdvc.sat-tinh-pha-cach": {
+  "t": "（殺星 — 格を破る）",
+  "h": "742dce66"
+ },
+ "js.cdvc.sat-tinh-pha-cach-ngay-tu": {
+  "t": " — 殺星、根本から格を破る",
+  "h": "14fa5401"
+ },
+ "js.cdvc.tai-lai": {
+  "t": "再読み込み",
+  "h": "16371241"
+ },
+ "js.cdvc.theo-chinh-tinh": {
+  "t": "主星に基づく：",
+  "h": "ec1e2e45"
+ },
+ "js.cdvc.theo-phu-tinh": {
+  "t": "副星に基づく：",
+  "h": "4c2c8bf3"
+ },
+ "js.cdvc.vo": {
+  "t": "妻",
+  "h": "98c0d1da"
+ },
+ "js.cdvc.vo-chinh-dieu": {
+  "t": "主星なし",
+  "h": "bb1c972d"
+ },
+ "js.cdvc.vui-long-nhap-day-du-ngay": {
+  "t": "生年月日をすべて入力してください。",
+  "h": "2545b4dd"
+ },
+ "js.cdvc.xem-them-ve-tinh-cach": {
+  "t": "私の性格についてもっと見る",
+  "h": "0c0df338"
+ },
+ "js.cdvc.y-nghia-co-phap": {
+  "t": "古法における意味：",
+  "h": "396825c1"
+ },
  "js.chat.chao": {
   "t": "こんにちは、",
   "h": "35004652"
@@ -3154,6 +4462,98 @@
  "js.chat.ke-vai-dong-thoi-minh-bao": {
   "t": "数行で大丈夫です。明宝が、15人の先生のチームからぴったりの先生をご案内します。",
   "h": "e43855cc"
+ },
+ "js.chonngay.ban-mau-note": {
+  "t": "これは説明用の<b>サンプル</b>（別のデータ）で、あなたの結果ではありません。",
+  "h": "4dc73cd0"
+ },
+ "js.chonngay.chip1": {
+  "t": "今月で一番良い日はいつですか？",
+  "h": "1d6514df"
+ },
+ "js.chonngay.chip2": {
+  "t": "この件に向く黄道吉時は？",
+  "h": "005ba6f0"
+ },
+ "js.chonngay.chip3": {
+  "t": "絶対に避けるべき日はいつですか？",
+  "h": "36a0360f"
+ },
+ "js.chonngay.chip4": {
+  "t": "その日、出立に良い方角は？",
+  "h": "0ef8b5dc"
+ },
+ "js.chonngay.chua-mo-duoc-ban-mau": {
+  "t": "サンプルを開けませんでした。しばらくしてからもう一度お試しください。",
+  "h": "05a0f158"
+ },
+ "js.chonngay.dang-mo": {
+  "t": "開いています…",
+  "h": "a3fdeaab"
+ },
+ "js.chonngay.dang-phan-tich": {
+  "t": "吉日を分析中…通常15〜25秒かかります",
+  "h": "2413a48e"
+ },
+ "js.chonngay.greeting": {
+  "t": "**{viec}** の土台ができました（事主の干支：**{cc}**）。まず何についてアドバイスしましょうか？",
+  "h": "37474974"
+ },
+ "js.chonngay.khong-nhan-duoc-ket-qua": {
+  "t": "結果を受け取れませんでした。",
+  "h": "46e8add0"
+ },
+ "js.chonngay.khong-the-ket-noi": {
+  "t": "接続できませんでした。もう一度お試しください。",
+  "h": "bf0b6e7b"
+ },
+ "js.chonngay.label": {
+  "t": "日取り：{viec}・{ten}・{n}年{t}月",
+  "h": "c350a6fa"
+ },
+ "js.chonngay.loi-colon": {
+  "t": "エラー：",
+  "h": "471c0087"
+ },
+ "js.chonngay.loi-status": {
+  "t": "エラー {s}",
+  "h": "c406c72b"
+ },
+ "js.chonngay.nam-n": {
+  "t": "{n}年",
+  "h": "e2de29f4"
+ },
+ "js.chonngay.nhap-thong-tin-cua-toi": {
+  "t": "自分の情報を入力する →",
+  "h": "61666cb3"
+ },
+ "js.chonngay.res-note": {
+  "t": "事主の干支は<b>{cc}</b>（{hanh}）。予定の月は<b>{tcc}</b>、年は<b>{ncc}</b>。吉日は、事主の干支と<b>合</b>（六合・三合）であり、<b>冲・刑</b>を避けるものです。<b>{viec}</b>に向く具体的な日付と黄道吉時は、先生にお尋ねください。",
+  "h": "e946d4da"
+ },
+ "js.chonngay.thang-n": {
+  "t": "{n}月",
+  "h": "4dd9659f"
+ },
+ "js.chonngay.thang-n-m": {
+  "t": "{n}年{t}月",
+  "h": "355a0dcf"
+ },
+ "js.chonngay.tuoi-chu-su": {
+  "t": "事主の干支",
+  "h": "c6691aae"
+ },
+ "js.chonngay.vui-long-nhap-ho-ten": {
+  "t": "氏名、生まれ年、予定の月と年を入力してください。",
+  "h": "d60f4f07"
+ },
+ "js.chonngay.vui-long-nhap-thong-tin": {
+  "t": "先に情報を入力してください。",
+  "h": "b73d7304"
+ },
+ "js.chonngay.xem-ban-mau": {
+  "t": "サンプルを見る →",
+  "h": "ba3671b1"
  },
  "js.chutrinh.10-can-can-trong-dieu-gi": {
   "t": "/10) 注意すべき点は何ですか？",
@@ -3214,6 +4614,110 @@
  "js.chutrinh.tieu-van-nam": {
   "t": "小運の年：",
   "h": "1979c56a"
+ },
+ "js.cn.ai-cung-han-vao": {
+  "t": "{ai}は同時に<b>{cung}</b>に限が入ります。",
+  "h": "8f48fa76"
+ },
+ "js.cn.ask": {
+  "t": "わが家の今後12か月はどうなりますか？家族みんなが気をつけるべきなのは何月ですか？",
+  "h": "5106642f"
+ },
+ "js.cn.bai-tinh-ds": {
+  "t": "敗星：{ds}",
+  "h": "6fbe9f13"
+ },
+ "js.cn.cat-tinh-ds": {
+  "t": "吉星：{ds}",
+  "h": "d335af36"
+ },
+ "js.cn.cham": {
+  "t": "。",
+  "h": "3a52ce78"
+ },
+ "js.cn.chua-co-gio-sinh": {
+  "t": "生まれた時刻がないため、紫微斗数の命盤をまだ作成できません。",
+  "h": "3d8d3bbd"
+ },
+ "js.cn.chua-tai-duoc-la-so": {
+  "t": "家族の命盤を読み込めませんでした。ページを再読み込みしてください。",
+  "h": "131469d8"
+ },
+ "js.cn.chua-them-duoc-lich": {
+  "t": "カレンダーを追加できませんでした。あとでもう一度お試しください。",
+  "h": "6075add3"
+ },
+ "js.cn.han-vao-cung": {
+  "t": "限は<b>{cung}</b>に入ります",
+  "h": "593101c7"
+ },
+ "js.cn.mang-chap-chon": {
+  "t": "通信が不安定で読み込めませんでした。ページを再読み込みしてください。",
+  "h": "2adc56e0"
+ },
+ "js.cn.nam-nay-tieu-han-vao": {
+  "t": "今年の小限は<b>{th}</b>、流年は<b>{ln}</b>に入っています。",
+  "h": "b4b04598"
+ },
+ "js.cn.nguoi": {
+  "t": "人物",
+  "h": "65ae37a4"
+ },
+ "js.cn.nguoi-nha": {
+  "t": "家族",
+  "h": "447d96d6"
+ },
+ "js.cn.nha-ten-n-nguoi": {
+  "t": "{ten}家 · {n}人 · 今後12か月（旧暦）",
+  "h": "174da578"
+ },
+ "js.cn.nhuan-ngan": {
+  "t": "閏",
+  "h": "6eb03d88"
+ },
+ "js.cn.sat-tinh-ds": {
+  "t": "殺星：{ds}",
+  "h": "5d9f3071"
+ },
+ "js.cn.thang-ngan": {
+  "t": "{n}月",
+  "h": "efb66afc"
+ },
+ "js.cn.vai-bo": {
+  "t": "父",
+  "h": "dbbdf270"
+ },
+ "js.cn.vai-chong": {
+  "t": "夫",
+  "h": "92a6f17f"
+ },
+ "js.cn.vai-con": {
+  "t": "子ども",
+  "h": "eb70b34b"
+ },
+ "js.cn.vai-me": {
+  "t": "母",
+  "h": "dfc6f90b"
+ },
+ "js.cn.vai-sinh-nam": {
+  "t": "{vai} · {nam}年生まれ",
+  "h": "3d5b8ffa"
+ },
+ "js.cn.vai-toi": {
+  "t": "あなた",
+  "h": "40ffd8d0"
+ },
+ "js.cn.vai-vo": {
+  "t": "妻",
+  "h": "98c0d1da"
+ },
+ "js.cn.xac-dinh-gio-sinh": {
+  "t": "出生時刻を特定する →",
+  "h": "5122b0fd"
+ },
+ "js.cn.xong-roi-lich-tu-cap-nhat": {
+  "t": "完了しました — カレンダーは毎日自動で更新されます。",
+  "h": "d89d8f57"
  },
  "js.cns.ai-sinh": {
   "t": "あなたと同じ日に生まれた人",
@@ -3375,6 +4879,1726 @@
   "t": "術別に並べています:紫微斗数、四柱推命、人相占い、風水…",
   "h": "cf4f8ecc"
  },
+ "js.cs.ba-nhanh-nay-khac-nhau-o": {
+  "t": "この3つの分かれ道は、どこが違いますか？",
+  "h": "19e39a35"
+ },
+ "js.cs.ba-nhanh-nghe-cu-the-ben": {
+  "t": "あなたの分野の中にある3つの具体的な職種の分かれ道",
+  "h": "879d2594"
+ },
+ "js.cs.ba-tang-o-tren-noi-ban": {
+  "t": "上の3つの層は、あなたがどの<b>分野</b>に合うか、そして",
+  "h": "d7fe12dc"
+ },
+ "js.cs.bac-chuc-phan": {
+  "t": "職分の等級",
+  "h": "73d28e4f"
+ },
+ "js.cs.ban-hop-lam-gi": {
+  "t": "あなたに合う仕事",
+  "h": "7bf8b024"
+ },
+ "js.cs.ban-hop-lam-nganh-gi-linh": {
+  "t": "あなたに合う職業 — 分野・役割・規模",
+  "h": "ee981a25"
+ },
+ "js.cs.ban-nghieng-ve-kieu-full": {
+  "t": "あなたは**{kieu}**タイプ寄りです（{tt}）。アカウント登録（無料の両をプレゼント）をすると、12の側面、4つの区間のロードマップ、チーム編成がすべて見られます — その部分を開いたあとで、私が詳しく掘り下げます。",
+  "h": "711e5f38"
+ },
+ "js.cs.boi-canh-viet-nam-dang-lam": {
+  "t": "ベトナムの事情に合わせて作ったものです。リストにない仕事をしている場合は、",
+  "h": "18705d1c"
+ },
+ "js.cs.bon-dai-van-lien-tiep-phu": {
+  "t": "連続する4つの大運が職業人生の期間を覆っています。点数はエンジンが採点した大運の点数で、",
+  "h": "5fe06b87"
+ },
+ "js.cs.bon-kieu-nguoi-va-cach-goi": {
+  "t": "4つのタイプと職種の提案の仕方は、<b>明宝紫微斗数の専門家チーム</b>が独自に構築した手法です。<br><br>",
+  "h": "24a12349"
+ },
+ "js.cs.bon-muoi-nam-di-lam-chia": {
+  "t": "働く40年を4つの区間に",
+  "h": "ae99b53d"
+ },
+ "js.cs.bon-muoi-nam-di-lam-chia-90zk": {
+  "t": "働く40年を4つの区間に分ける",
+  "h": "ced9f68e"
+ },
+ "js.cs.bon-viec-phai-hoc-khi-bat": {
+  "t": "人を率い始めるときに学ぶべき4つのこと",
+  "h": "d246f547"
+ },
+ "js.cs.cac-nhanh-duoi-day-hop-voi": {
+  "t": "以下の分かれ道は、あなたの<b>人としての資質</b>には合いますが、",
+  "h": "f9533187"
+ },
+ "js.cs.cach-cuc-tai-cung-quan-loc": {
+  "t": "官禄宮の格局",
+  "h": "2c8aa204"
+ },
+ "js.cs.cai-thuc-ban-di": {
+  "t": "あなたを突き動かすもの",
+  "h": "e34c0d1a"
+ },
+ "js.cs.cau-hoi-chay-ngam-trong-dau": {
+  "t": "頭の中で働いている問い",
+  "h": "92b9b591"
+ },
+ "js.cs.chang-nghe-tiep-theo-cua-toi": {
+  "t": "私の次のキャリアの区間はどうなりますか？",
+  "h": "7e97fdda"
+ },
+ "js.cs.chat-nguoi-noi-bat": {
+  "t": "際立つ人としての資質",
+  "h": "31efa257"
+ },
+ "js.cs.chat-nguoi-noi-bat-va-thu": {
+  "t": "際立つ人としての資質と、あなたに合う仕事が求めないこと",
+  "h": "5b90f04f"
+ },
+ "js.cs.chat-viec-dung-doc-thanh-ban": {
+  "t": "<b>仕事の性質</b>で照らし合わせてください。「あなたは職業を間違えている」とは読まないでください。",
+  "h": "4728caa7"
+ },
+ "js.cs.chat-viec-thay-vi-doi-chieu": {
+  "t": "業種名ではなく、<i>仕事の性質</i>で照らし合わせてください。</p>",
+  "h": "94306405"
+ },
+ "js.cs.chinh-tinh-cung-menh": {
+  "t": "命宮の主星",
+  "h": "dcba7b35"
+ },
+ "js.cs.chinh-tinh-cung-quan-loc": {
+  "t": "官禄宮の主星",
+  "h": "9c8bc6b2"
+ },
+ "js.cs.cho-hay-vap": {
+  "t": "<b>つまずきやすいところ</b>",
+  "h": "0fe4ac0b"
+ },
+ "js.cs.cho-nguoi-dang-o-vi-tri": {
+  "t": "この立場にいる人へ：",
+  "h": "c0aba160"
+ },
+ "js.cs.chua-dung-duoc-anh-thu-lai": {
+  "t": "画像を作成できませんでした。少し待ってから、もう一度お試しください。",
+  "h": "f8055429"
+ },
+ "js.cs.chua-dung-duoc-ho-so-luc": {
+  "t": "今はプロフィールを作成できませんでした — もう一度お試しください。",
+  "h": "3f85746f"
+ },
+ "js.cs.chua-khop-bac-chuc-phan-hien": {
+  "t": "<b>現在の職分の等級とはまだ合っていません</b>。今すぐの居場所ではなく、進む方向として読んでください。",
+  "h": "cfa2e82b"
+ },
+ "js.cs.chua-mo-duoc-phan-nhanh-nghe": {
+  "t": "職種の分かれ道の部分を開けませんでした — もう一度お試しください。",
+  "h": "f13e7f15"
+ },
+ "js.cs.chuc-phan-theo-loi-co": {
+  "t": "古式の職分",
+  "h": "0504275b"
+ },
+ "js.cs.co-so-trong-la-so": {
+  "t": "命盤上の根拠",
+  "h": "43f95044"
+ },
+ "js.cs.con-so-phan-tram-la-do": {
+  "t": "パーセントの数字は、<b>人の資質と仕事の性質の合致度</b>です。",
+  "h": "65261dc8"
+ },
+ "js.cs.cung-mot-nganh-nhung-moi-nhanh": {
+  "t": "同じ業種でも、枝分かれごとに必要な人の資質はまったく異なります。</p>",
+  "h": "b2d6705d"
+ },
+ "js.cs.cung-name": {
+  "t": "{name}",
+  "h": "3cb49303"
+ },
+ "js.cs.da-mo-phan-nhanh-nghe-ten": {
+  "t": "職種の分かれ道の部分を開きました。あなたに最も合う分かれ道は**{ten}**です。どの分かれ道を詳しく見たいですか？それとも特定の職業について聞きますか？",
+  "h": "68b42e6e"
+ },
+ "js.cs.dang-dung": {
+  "t": "作成中…",
+  "h": "88400b94"
+ },
+ "js.cs.dang-dung-anh": {
+  "t": "画像を作成中…",
+  "h": "7bce9760"
+ },
+ "js.cs.dang-mo-phan-nhanh-nghe": {
+  "t": "職種の分かれ道の部分を開いています…",
+  "h": "f58ba0b1"
+ },
+ "js.cs.dang-o-day": {
+  "t": "現在ここ",
+  "h": "aa7d3c7e"
+ },
+ "js.cs.day-la-goi-y-huong-khong": {
+  "t": "これは方向の提案であり、職業の指定ではありません。古典が語るのは<b>仕事の性質</b>です",
+  "h": "0573bbbd"
+ },
+ "js.cs.day-la-the-manh-tuong-doi": {
+  "t": "これは、あなた自身の中での<b>各側面の相対的な強み</b>であり、他の人と比べた点数ではありません。</p>",
+  "h": "3cea3811"
+ },
+ "js.cs.diem": {
+  "t": " · 点数 ",
+  "h": "0ea58cf8"
+ },
+ "js.cs.diem-8vmw": {
+  "t": "点数",
+  "h": "024af419"
+ },
+ "js.cs.diem-do-engine-cham-tren-chinh": {
+  "t": "あなたの命盤に基づきエンジンが採点した点数です（10点満点）。",
+  "h": "03be4bad"
+ },
+ "js.cs.doc-ca-hai-phan-dung-ep": {
+  "t": "</b>の影響もかなりはっきり出ています。両方の部分を読み、自分を一つの枠に押し込めないでください。</div>",
+  "h": "24fcc1c0"
+ },
+ "js.cs.doc-theo-cap-dong-cung": {
+  "t": " — 同宮のペアとして読む",
+  "h": "249d9a92"
+ },
+ "js.cs.doc-theo-co-phap-phu-mau": {
+  "t": "古法による読み方：<b>父母宮</b>は目上、<b>兄弟宮</b>は同じ立場の人、",
+  "h": "4f1fa3e2"
+ },
+ "js.cs.doi-mat-hay-ban-giay-cam": {
+  "t": "（対面か事務か、人を率いるか技を磨くか）。上にある現代の職業リストは、当ページが読み替えたものです。",
+  "h": "84acb782"
+ },
+ "js.cs.dung-ngay-bay-gio": {
+  "t": "現在すぐ立つ場所ではありません。</div>",
+  "h": "cebffac0"
+ },
+ "js.cs.ghep-doi-ai-do-duoc-ban": {
+  "t": "チーム編成 — 誰があなたを支えてくれるか",
+  "h": "616debca"
+ },
+ "js.cs.ho-so": {
+  "t": "プロフィール",
+  "h": "ebe439c1"
+ },
+ "js.cs.ho-so-cong-so-da-dung-full": {
+  "t": "職場プロフィールが完成しました — あなたは**{kieu}**タイプ寄りです（{tt}）。最も強いのは**{manh}**です。どの部分を詳しく掘り下げましょうか？",
+  "h": "e1d2fcd1"
+ },
+ "js.cs.ho-so-day-du-chua-mo": {
+  "t": "⊙ フル版のプロフィールはまだ開かれていません",
+  "h": "7e47b133"
+ },
+ "js.cs.ho-tro": {
+  "t": "サポート",
+  "h": "ed2a55ae"
+ },
+ "js.cs.hop-tac": {
+  "t": "協調",
+  "h": "d934a7d7"
+ },
+ "js.cs.huong-tham-khao-dung-doc-nhu": {
+  "t": "あくまで参考の方向であり、断定として読まないでください。</div>",
+  "h": "dede2dae"
+ },
+ "js.cs.khai-sang": {
+  "t": "開拓",
+  "h": "b6833673"
+ },
+ "js.cs.khi-duoc-giao-quyen": {
+  "t": "権限を任されたとき",
+  "h": "90c9e1e0"
+ },
+ "js.cs.khong-co-ten-nganh-ban-dang": {
+  "t": "あなたが就いている職業名がリストにないことは、あなたが間違っているという意味では<b>ありません</b> — ",
+  "h": "e9ea00be"
+ },
+ "js.cs.khong-phai-kha-nang-thanh-cong": {
+  "t": "<b>成功の可能性ではありません</b>。職業リストは、ベトナムの事情に合わせて当ページが読み替えたものです。",
+  "h": "a0d5aaf7"
+ },
+ "js.cs.khop": {
+  "t": "合致",
+  "h": "06321169"
+ },
+ "js.cs.kieu": {
+  "t": " · タイプ ",
+  "h": "6d81ffdf"
+ },
+ "js.cs.kieu-4mx9": {
+  "t": "タイプ ",
+  "h": "6d21ae2a"
+ },
+ "js.cs.kieu-lai-toa-do-cua-ban": {
+  "t": "⚠ <b>ハイブリッド型。</b>あなたの座標は境界線に近いため<b>",
+  "h": "11aff2e8"
+ },
+ "js.cs.kieu-nguoi-nay-la-gi": {
+  "t": "このタイプとはどんな人ですか？",
+  "h": "dd192f9f"
+ },
+ "js.cs.kieu-nguoi-o-cho-lam": {
+  "t": "職場でのタイプ",
+  "h": "399f87f5"
+ },
+ "js.cs.la-so-cua-ban-khong-chi": {
+  "t": "あなたの命盤には、<b>際立った分かれ道が一つも示されていません</b>",
+  "h": "77e78dd8"
+ },
+ "js.cs.lanh-dao": {
+  "t": "リーダー",
+  "h": "d9b13441"
+ },
+ "js.cs.luong": {
+  "t": "両)",
+  "h": "c99d25aa"
+ },
+ "js.cs.luu-nien-nam-nay": {
+  "t": "今年の流年",
+  "h": "1b558770"
+ },
+ "js.cs.luu-nien-o-cung": {
+  "t": " · 流年は ",
+  "h": "f72ac853"
+ },
+ "js.cs.manh-nhat": {
+  "t": "最も強い：",
+  "h": "b67b37ca"
+ },
+ "js.cs.manh-nhat-gixi": {
+  "t": "<b>最も強いところ</b>",
+  "h": "fe6a0e48"
+ },
+ "js.cs.mat": {
+  "t": "側面",
+  "h": "473db18f"
+ },
+ "js.cs.mat-can-boi-them-nhat": {
+  "t": "最も補いたい側面：",
+  "h": "91c25ad4"
+ },
+ "js.cs.mat-manh-nhat-trong-12-mat": {
+  "t": "12の側面の中で最も強いもの：",
+  "h": "01df7a24"
+ },
+ "js.cs.mo-ho-so-day-du": {
+  "t": "フル版のプロフィールを開く",
+  "h": "3757bf2c"
+ },
+ "js.cs.mo-phan-nhanh-nghe": {
+  "t": "<b>職種の分かれ道の部分を開く →</b>",
+  "h": "d178dc5c"
+ },
+ "js.cs.moi-truong-hop": {
+  "t": "合う環境",
+  "h": "14808d08"
+ },
+ "js.cs.moi-truong-ky": {
+  "t": "避けたい環境",
+  "h": "0edcadd9"
+ },
+ "js.cs.muoi-hai-mat-cua-doi-di": {
+  "t": "働く人生の12の側面 — 各側面の点数と理由",
+  "h": "b36da1b8"
+ },
+ "js.cs.muoi-hai-mat-cua-doi-di-gqoe": {
+  "t": "働く人生の12の側面",
+  "h": "7612512c"
+ },
+ "js.cs.muoi-hai-thang-toi-nen-lam": {
+  "t": "これからの12か月は何をすべきですか？",
+  "h": "f98b733c"
+ },
+ "js.cs.muon-cung-xung-chieu": {
+  "t": " — 対宮を借りる",
+  "h": "1fb340ea"
+ },
+ "js.cs.muon-xung-chieu": {
+  "t": "（対宮を借りる）",
+  "h": "7363dfe3"
+ },
+ "js.cs.nam-nay-chieu-kep": {
+  "t": "今年は二重に照らされる",
+  "h": "b582a95f"
+ },
+ "js.cs.neu-toi-dang-lam-nghe-khac": {
+  "t": "今別の仕事をしている場合はどうなりますか？",
+  "h": "efac8cf1"
+ },
+ "js.cs.nghe-hop-voi-ban-thuong-khong": {
+  "t": "あなたに合う仕事がたいてい求めないこと",
+  "h": "48816f36"
+ },
+ "js.cs.nguoc-da": {
+  "t": "勢いに逆らう",
+  "h": "50f7d6cf"
+ },
+ "js.cs.nguon-cach-chia-bon-kieu": {
+  "t": "4つのタイプの分け方の出典",
+  "h": "8144bf17"
+ },
+ "js.cs.nguon-du-lieu": {
+  "t": "データの出典 →",
+  "h": "78319924"
+ },
+ "js.cs.nguon-theo-tu-vi-dau-so": {
+  "t": "📚 <b>出典：</b><i>『紫微斗数新編』</i>に基づく",
+  "h": "0917536a"
+ },
+ "js.cs.nhan-ra-o-cho-lam": {
+  "t": "職場で見分けられるサイン",
+  "h": "b6e2a171"
+ },
+ "js.cs.nhanh-dau-tien-cu-the-phai": {
+  "t": "最初の具体的な分かれ道は、どこから始めればよいですか？",
+  "h": "a9550e65"
+ },
+ "js.cs.nhanh-nay-thuong-o-bac-khac": {
+  "t": "この分かれ道は、命盤が示す職分の等級とは通常別の等級にあります。",
+  "h": "a815d5d0"
+ },
+ "js.cs.nhanh-nghe-hop-voi-ban": {
+  "t": "あなたに合う職種の分かれ道",
+  "h": "488563f6"
+ },
+ "js.cs.nhung-pha-kha-ro": {
+  "t": "</b>寄りですが、<b>",
+  "h": "e4d67d67"
+ },
+ "js.cs.nhuong": {
+  "t": "譲る",
+  "h": "c0333abd"
+ },
+ "js.cs.no-boc-la-thuoc-ha-va": {
+  "t": "<b>僕役宮</b>は部下や仕事仲間です。補い合いの法則は、陰と陽を組み合わせることです。</p>",
+  "h": "f843e58b"
+ },
+ "js.cs.no-noi-ve": {
+  "t": "何についてか",
+  "h": "2247dbea"
+ },
+ "js.cs.o-quy-mo-nao-phan-nay": {
+  "t": "どの<b>規模</b>で合うかを示します。この部分は、その分野の中の<b>具体的な分かれ道</b>を示します — ",
+  "h": "ab6aae0b"
+ },
+ "js.cs.phu-tinh-dong-tai-cung-quan": {
+  "t": "官禄宮にある副星は、上の分野の<b>内側で絞り込む</b>ものであり、分野そのものを置き換えるものではありません。",
+  "h": "c3fd465d"
+ },
+ "js.cs.quet-ma-xem-kieu-nguoi-cua": {
+  "t": "QRコードを読み取って、あなたのタイプを見る",
+  "h": "abb7f441"
+ },
+ "js.cs.quy-mo-ganh-duoc-bac": {
+  "t": "担える規模 — 等級 ",
+  "h": "43f37473"
+ },
+ "js.cs.sao-quyet-dinh-linh-vuc": {
+  "t": "分野を決める星",
+  "h": "31023c67"
+ },
+ "js.cs.thuan-da": {
+  "t": "勢いに乗る",
+  "h": "c65246fb"
+ },
+ "js.cs.thuan-da-nguoc-da-la-so": {
+  "t": "「勢いに乗る／逆らう」は、大運の陰陽の性質をあなたの本命のタイプと比べたものです。</p>",
+  "h": "41c5ce0c"
+ },
+ "js.cs.tieu-han-nam-nay": {
+  "t": "今年の小限",
+  "h": "62da8d5f"
+ },
+ "js.cs.tieu-han-o-cung": {
+  "t": "小限は ",
+  "h": "aef732f3"
+ },
+ "js.cs.toa-do": {
+  "t": "座標",
+  "h": "6fda44e7"
+ },
+ "js.cs.toi-co-hop-lam-nganh-x": {
+  "t": "私は業種Xに向いていますか？",
+  "h": "ac81904f"
+ },
+ "js.cs.toi-con-thieu-gi-de-vao": {
+  "t": "その分かれ道に入るには、あと何が足りませんか？",
+  "h": "4e41376f"
+ },
+ "js.cs.toi-hop-lam-viec-voi-kieu": {
+  "t": "私はどんなタイプの人と働くのが合いますか？",
+  "h": "3fbf2004"
+ },
+ "js.cs.toi-nen-tranh-moi-truong-nao": {
+  "t": "どんな環境を避けるべきですか？",
+  "h": "14ba354e"
+ },
+ "js.cs.ton": {
+  "t": "<small>必要：",
+  "h": "ca8d4e90"
+ },
+ "js.cs.tram-on": {
+  "t": "落ち着き",
+  "h": "78f14035"
+ },
+ "js.cs.tranh-nhuong": {
+  "t": "競う ↔ 譲る：",
+  "h": "93f67a9e"
+ },
+ "js.cs.tren-thang-10-diem-11-mat": {
+  "t": "10点満点 — 残り11の側面、それぞれの理由、そして完全な表は、無料で閲覧できる登録後のプロフィールにあります。",
+  "h": "5ada4a9d"
+ },
+ "js.cs.tren-thang-10-diem-ly-do": {
+  "t": "10点満点 — 各側面の理由と補い方は、無料で閲覧できる登録後のプロフィールにあります。",
+  "h": "e5560e3d"
+ },
+ "js.cs.trich-dan-co-thu": {
+  "t": "古典からの引用",
+  "h": "1a48a14b"
+ },
+ "js.cs.trong-linh-vuc-do-ban-nghieng": {
+  "t": "<b>その分野の中で、あなたはどの分かれ道に傾いているか</b>",
+  "h": "46deb5f7"
+ },
+ "js.cs.trong-linh-vuc-nay-noi-thang": {
+  "t": "この分野の中で。率直に言うと、決めるには信号が足りません — 以下はあくまで ",
+  "h": "288c730f"
+ },
+ "js.cs.trong-may-nganh-do-toi-nen": {
+  "t": "そのいくつかの業種の中で、私はどれを選ぶべきですか？",
+  "h": "a94bba40"
+ },
+ "js.cs.tu-cach-theo-cung-menh": {
+  "t": "命宮から見た立場",
+  "h": "3623d661"
+ },
+ "js.cs.tu-vi-cong-so-kieu": {
+  "t": "紫微職場 — タイプ ",
+  "h": "910e8c28"
+ },
+ "js.cs.tu-vi-cong-so-ordd": {
+  "t": "紫微職場",
+  "h": "9d18a955"
+ },
+ "js.cs.tuoi": {
+  "t": " 歳",
+  "h": "2e261bf5"
+ },
+ "js.cs.vai-ban-nen-nhan-trong-nganh": {
+  "t": "その業界であなたが引き受けるとよい役割",
+  "h": "f8b3215e"
+ },
+ "js.cs.van-dang-thai-thu-lang-va": {
+  "t": "（雲騰太次郎）と<i>『中州派 六十星系』</i>（王亭之）。",
+  "h": "77b93310"
+ },
+ "js.cs.van-nam": {
+  "t": "年運 ",
+  "h": "86712c6e"
+ },
+ "js.cs.vi-du-nghieng-chu-nghia-trong": {
+  "t": "たとえば医療分野で「言葉・文章」に傾くなら、教育、研究、専門的な執筆の道です — それでも医療分野です。",
+  "h": "db475758"
+ },
+ "js.cs.vi-sao-hop": {
+  "t": "<b>合う理由：</b>",
+  "h": "6a37b393"
+ },
+ "js.cs.vi-sao-la-so-hop-nhanh": {
+  "t": "なぜ命盤がその分かれ道に合うのか — 人の資質を名指しで",
+  "h": "0ab395f8"
+ },
+ "js.cs.vi-sao-la-so-lai-ra": {
+  "t": "なぜ命盤からこのタイプになるのですか？",
+  "h": "ed996a33"
+ },
+ "js.cs.viec-lam-duoc-ngay-o-tung": {
+  "t": "各分かれ道ですぐにできること（ベトナムの事情に合わせて）",
+  "h": "3851e61e"
+ },
+ "js.cs.vo-chinh-dieu": {
+  "t": " · 主星なし",
+  "h": "46b7d17a"
+ },
+ "js.cs.vo-chinh-dieu-pwt9": {
+  "t": "無正曜",
+  "h": "bd07d7a9"
+ },
+ "js.cs.vui-long-nhap-du-ngay-thang": {
+  "t": "生年月日をすべて入力してください。",
+  "h": "771ff27f"
+ },
+ "js.cs.xong-pha": {
+  "t": "攻める",
+  "h": "3b22b749"
+ },
+ "js.cs.xong-tram": {
+  "t": " · 攻める ↔ 落ち着き：",
+  "h": "71afe77a"
+ },
+ "js.ctk.anh-dang-tai-co-the-hoi": {
+  "t": "画像を読み込み中です。少し時間がかかることがあります — しばらくお待ちいただくか、",
+  "h": "c4e9709b"
+ },
+ "js.ctk.anh-minh-hoa": {
+  "t": "イメージ画像",
+  "h": "f37e2fa9"
+ },
+ "js.ctk.anh-minh-hoa-mo-mo-khoa": {
+  "t": "参考イラスト（ぼかし） — ロックを解除すると、あなた本来の肖像をご覧いただけます",
+  "h": "e7c8b779"
+ },
+ "js.ctk.ba": {
+  "t": "彼女",
+  "h": "6edcd5c8"
+ },
+ "js.ctk.ba-ay-co-benh-tat-hay-tai": {
+  "t": "{ba}は病気や災難に見舞われることはありますか？",
+  "h": "1df5a238"
+ },
+ "js.ctk.ba-ay-lay-vo-chong-the": {
+  "t": "{ba}の結婚生活はどのようなものでしたか？",
+  "h": "c22fea33"
+ },
+ "js.ctk.bac-chuc-phan-engine-cham": {
+  "t": "エンジンが採点した職分の等級",
+  "h": "694a2943"
+ },
+ "js.ctk.ban-da-tao-ket-qua-cho": {
+  "t": "✓ この命盤の結果は作成済みです。再度開いても両は差し引かれません",
+  "h": "d59efda4"
+ },
+ "js.ctk.bien-co": {
+  "t": "▼ 転機",
+  "h": "69c46bc9"
+ },
+ "js.ctk.buc-tranh-chan-dung-ve-rieng": {
+  "t": "あなたの命盤に合わせて描き下ろす肖像画",
+  "h": "998f85c8"
+ },
+ "js.ctk.chan-dung-cau-chuyen-chua-mo": {
+  "t": "⊙ 肖像と物語はまだ開かれていません",
+  "h": "2df0a1d7"
+ },
+ "js.ctk.chan-dung-tien-kiep": {
+  "t": "前世の肖像",
+  "h": "e7d0f866"
+ },
+ "js.ctk.chan-dung-tien-kiep-cua-toi": {
+  "t": "私の前世の肖像",
+  "h": "7f493523"
+ },
+ "js.ctk.chan-dung-tien-kiep-gxr5": {
+  "t": "前世の肖像",
+  "h": "7aa2c297"
+ },
+ "js.ctk.chinh-tinh-tai-cung-menh": {
+  "t": "命宮にある主星",
+  "h": "64538c55"
+ },
+ "js.ctk.chinh-tinh-tai-cung-quan-loc": {
+  "t": "官禄宮にある主星",
+  "h": "2a194366"
+ },
+ "js.ctk.chuc-phan-suy-ra": {
+  "t": "導かれる職分",
+  "h": "f76c76b7"
+ },
+ "js.ctk.chuyen-doi-nv-het-phan-chinh": {
+  "t": "**{nv}**の人生物語は、ここまでが本編です。物語が語っていない命盤の中身はまだたくさんあります — {short}について何を聞きたいですか？",
+  "h": "12c81ad9"
+ },
+ "js.ctk.cung-an-than": {
+  "t": "身宮の位置",
+  "h": "778b10ab"
+ },
+ "js.ctk.dang-dung-anh": {
+  "t": "画像を作成中…",
+  "h": "7bce9760"
+ },
+ "js.ctk.dang-ve-chan-dung": {
+  "t": "肖像を描いています…",
+  "h": "8da3d107"
+ },
+ "js.ctk.dinh-cao": {
+  "t": "★ 頂点",
+  "h": "329f34c6"
+ },
+ "js.ctk.doc-9-dai-van-chia-dong": {
+  "t": "9つの大運を読み、人生の流れを5つの章に分ける",
+  "h": "6d04f8ee"
+ },
+ "js.ctk.khong-the-ket-noi-vui-long": {
+  "t": "接続できませんでした。もう一度お試しください。",
+  "h": "bf0b6e7b"
+ },
+ "js.ctk.khong-ve-duoc-chan-dung-lan": {
+  "t": "今回は肖像を描けませんでした。下の物語部分はすべてご覧いただけます。",
+  "h": "45ebec08"
+ },
+ "js.ctk.la-so": {
+  "t": "命盤：",
+  "h": "2644d5f2"
+ },
+ "js.ctk.lap-la-so-xac-dinh-chuc": {
+  "t": "命盤を作成し、古代の職分を割り出す",
+  "h": "5bf8b6ae"
+ },
+ "js.ctk.loi": {
+  "t": "エラー ",
+  "h": "1b80116b"
+ },
+ "js.ctk.loi-8d72": {
+  "t": "エラー：",
+  "h": "471c0087"
+ },
+ "js.ctk.loi-ket": {
+  "t": "結び",
+  "h": "319ac5e1"
+ },
+ "js.ctk.luc-giac-cung-menh": {
+  "t": "命宮の六角形",
+  "h": "e7542de0"
+ },
+ "js.ctk.luot-ve": {
+  "t": "描画",
+  "h": "85f72421"
+ },
+ "js.ctk.mat-ket-noi-luc-tai-tranh": {
+  "t": "画像の読み込み中に接続が切れました — 再取得を試みています…",
+  "h": "48d6deaf"
+ },
+ "js.ctk.mo-chan-dung-day-du": {
+  "t": "フル版の肖像を開く",
+  "h": "9f515b09"
+ },
+ "js.ctk.mo-ta": {
+  "t": "人物の説明：",
+  "h": "9465dd78"
+ },
+ "js.ctk.mo-ta-nhan-vat-chu-viet": {
+  "t": "人物の説明と、5つの章それぞれの文章",
+  "h": "da0a1288"
+ },
+ "js.ctk.mot-doi-nguoi-5-hoi": {
+  "t": "一人の人生 — 5つの章",
+  "h": "551d79c7"
+ },
+ "js.ctk.n-tuoi": {
+  "t": "{n}歳",
+  "h": "25e7a2be"
+ },
+ "js.ctk.nhan-vat": {
+  "t": "人物",
+  "h": "c80feef9"
+ },
+ "js.ctk.nhan-vat-nay": {
+  "t": "この人物",
+  "h": "6350a62b"
+ },
+ "js.ctk.nv-co-giau-khong": {
+  "t": "{nv}は裕福でしたか？",
+  "h": "586c4799"
+ },
+ "js.ctk.ong": {
+  "t": "彼",
+  "h": "73f16f79"
+ },
+ "js.ctk.phu-tinh-tai-cung-menh": {
+  "t": "命宮にある副星",
+  "h": "3d194cb8"
+ },
+ "js.ctk.quet-ma-xem-tien-kiep-cua": {
+  "t": "QRコードを読み取って、あなたの前世を見る",
+  "h": "fb7663cd"
+ },
+ "js.ctk.tai-lai": {
+  "t": "再読み込み",
+  "h": "16371241"
+ },
+ "js.ctk.thang-tram": {
+  "t": "★▼ 浮き沈み",
+  "h": "3ec8b7b2"
+ },
+ "js.ctk.tuoi-nhan-vat-trong-tranh": {
+  "t": "絵の人物の年齢",
+  "h": "f6ab55f4"
+ },
+ "js.ctk.vi-sao-lai-luan-ra-nhu-vay": {
+  "t": "なぜそう読み取れるのですか？",
+  "h": "ef2cc0e9"
+ },
+ "js.ctk.viet-cau-chuyen-cuoc-doi": {
+  "t": "人生の物語を書く",
+  "h": "2971394d"
+ },
+ "js.ctk.vo-chinh-dieu-muon-cung-xung": {
+  "t": " — 主星なし、対宮を借りる",
+  "h": "90aab3d9"
+ },
+ "js.ctk.vui-long-nhap-day-du-ngay": {
+  "t": "生年月日をすべて入力してください。",
+  "h": "2545b4dd"
+ },
+ "js.daycon.5-la-muc-giua-cua-hang": {
+  "t": "\n\n5は、数千件の子どもの命盤の中間値であり、「10点満点で5点」という意味ではありません。軸の両端にはそれぞれ価値があります。",
+  "h": "99fb1a17"
+ },
+ "js.daycon.7-chat-con-lai-5-truc": {
+  "t": "残り7つの素質、5つの気質軸、そして関わり方の方向性はフル版に入っています。",
+  "h": "00fde99c"
+ },
+ "js.daycon.ba-chat-dung-dau-o-duoi": {
+  "t": "上位3つの素質は、結論ではなく、まず試してみる価値のあるところです。</p></div>",
+  "h": "fa2636f2"
+ },
+ "js.daycon.ban-co-muon-doi-chieu-them": {
+  "t": "あなた自身の命盤（父親または母親）も照らし合わせますか？「二人の関係」の項目が加わります。",
+  "h": "1fea98b9"
+ },
+ "js.daycon.ban-da-xem-ban-nay-roi": {
+  "t": "✓ この鑑定はすでにご覧になっています — 再度開いても両は差し引かれません",
+  "h": "7d2c6a5b"
+ },
+ "js.daycon.ban-huong-dan-day-du-chua": {
+  "t": "⊙ フル版の子育てガイドはまだ開かれていません",
+  "h": "1e7a8a78"
+ },
+ "js.daycon.ban-luan": {
+  "t": "鑑定書",
+  "h": "b6f609bf"
+ },
+ "js.daycon.ban-nay-doc-tu": {
+  "t": "この鑑定は、ご入力の生年月日時から立てた<b>",
+  "h": "d989b954"
+ },
+ "js.daycon.ban-se-nhan-cach-ra-bai": {
+  "t": "受け取れる内容：勉強時間を増やすのではなく、お子さんの吸収の仕方に合った課題の出し方と学習机の整え方。",
+  "h": "49791304"
+ },
+ "js.daycon.ban-se-nhan-chat-viec-hop": {
+  "t": "受け取れる内容：お子さんに合う「仕事の質」と、本人が自分で話し出せるような問いかけ方 — 学部名ではありません。",
+  "h": "dd0da12e"
+ },
+ "js.daycon.ban-se-nhan-chuyen-gi-con": {
+  "t": "受け取れる内容：お子さんがまだ聞いてくれる話題と、切り出し方のうちすぐに心を閉ざさせてしまうもの。",
+  "h": "20335789"
+ },
+ "js.daycon.ban-se-nhan-dua-nay-can": {
+  "t": "受け取れる内容：この子は背中を押すべきか、そっとしておくべきか。外から見ると同じでも、二つはまったく違うタイプの子です。",
+  "h": "cd7192ac"
+ },
+ "js.daycon.ban-se-nhan-mot-ban-mo": {
+  "t": "受け取れる内容：この子がどんな人なのかを描いた文章。日常の中でその子だと気づけるほどの内容です。",
+  "h": "2846cd50"
+ },
+ "js.daycon.ban-se-nhan-phan-nao-la": {
+  "t": "受け取れる内容：どこが生まれ持った気質で、どこが大人の言い方によるものか — すぐに直せるところが分かります。",
+  "h": "565f27fd"
+ },
+ "js.daycon.bat-dau-the-nao": {
+  "t": "<b>始め方：</b>",
+  "h": "ac776bdf"
+ },
+ "js.daycon.bay-cua-chat-nay": {
+  "t": "<b>この素質の落とし穴：</b>",
+  "h": "1847b63e"
+ },
+ "js.daycon.be-gai": {
+  "t": "女の子",
+  "h": "af93dba0"
+ },
+ "js.daycon.be-trai": {
+  "t": "男の子",
+  "h": "274225bc"
+ },
+ "js.daycon.bo-qua": {
+  "t": "スキップ",
+  "h": "861dafde"
+ },
+ "js.daycon.bo-qua-doi-chieu-la-so": {
+  "t": "あなたの命盤との照合はスキップしました。",
+  "h": "7c25b196"
+ },
+ "js.daycon.cach-choi-ngay-o-nha-hop": {
+  "t": " 件の家でできる遊び方</b>をあらかじめ選んであります — 具体的な名前はフル版でご覧いただけます。</p>",
+  "h": "4d33ef7d"
+ },
+ "js.daycon.cach-con-tiep-thu": {
+  "t": "お子さんの吸収の仕方",
+  "h": "d4eac771"
+ },
+ "js.daycon.cach-cuc": {
+  "t": " つの格局、",
+  "h": "a4f8bc9a"
+ },
+ "js.daycon.cat": {
+  "t": "吉 ",
+  "h": "bbbbd4e0"
+ },
+ "js.daycon.chan-dung": {
+  "t": "肖像",
+  "h": "30421728"
+ },
+ "js.daycon.chang-dai-van": {
+  "t": " つの大運の区間があります。",
+  "h": "0bc2d397"
+ },
+ "js.daycon.chat-can-boi-them-nhat": {
+  "t": "最も補いたい素質：",
+  "h": "4c7acf8e"
+ },
+ "js.daycon.chat-nang-khieu-cao-nhat": {
+  "t": "最も高い才能の素質：",
+  "h": "1018ec48"
+ },
+ "js.daycon.chat-nua-cung-noi": {
+  "t": " つの素質</b>も目立っています（",
+  "h": "7f9974ca"
+ },
+ "js.daycon.cho-con-tham-gia-kieu-nao": {
+  "t": "<h5>どんな関わり方で参加させるか</h5>",
+  "h": "1b74c443"
+ },
+ "js.daycon.cho-nguoi-lon-hay-hieu-nham": {
+  "t": "大人がよく誤解するところ",
+  "h": "f78ab78d"
+ },
+ "js.daycon.cho-thay-xin-thong-tin-cua": {
+  "t": "お子さんの情報を教えてください。",
+  "h": "e81463c3"
+ },
+ "js.daycon.chua-cham": {
+  "t": "未採点",
+  "h": "a20bbf69"
+ },
+ "js.daycon.chua-chat-nao-noi-han-len": {
+  "t": "際立った素質はまだありません",
+  "h": "44a78494"
+ },
+ "js.daycon.chua-chat-nao-noi-han-nen": {
+  "t": " · 際立った素質がないため、<b>まず試す価値のある上位3つの素質</b>を挙げています",
+  "h": "95fc607c"
+ },
+ "js.daycon.chua-chat-nao-vuot-nguong-nen": {
+  "t": "閾値を超えた素質はまだありません — 幅広く試させて、実際の反応を見てください。",
+  "h": "986be904"
+ },
+ "js.daycon.chua-vuot-nguong-nhung-cao-nhat": {
+  "t": "まだ閾値は超えていませんが、8つの素質の中では最も高い値です。",
+  "h": "7b04f512"
+ },
+ "js.daycon.co-doi-chieu": {
+  "t": "はい、照らし合わせる →",
+  "h": "a3846e57"
+ },
+ "js.daycon.cung-an-than": {
+  "t": "<li><b>身宮の位置</b> — ",
+  "h": "23b5a7a9"
+ },
+ "js.daycon.cung-name": {
+  "t": "{name}",
+  "h": "3cb49303"
+ },
+ "js.daycon.cung-tinh-am-duong-de-va": {
+  "t": "陰陽の性質が同じ — ぶつかりやすい",
+  "h": "38ee66ae"
+ },
+ "js.daycon.cung-tu-tuc-cua-ban": {
+  "t": "あなたの子女宮",
+  "h": "f546ca50"
+ },
+ "js.daycon.da": {
+  "t": "勢い ",
+  "h": "ea471098"
+ },
+ "js.daycon.da-chon-san": {
+  "t": "<p>この素質に合うものとして、<b>",
+  "h": "0f8b5933"
+ },
+ "js.daycon.dang-o-chang-nay": {
+  "t": " · 現在この区間にいます",
+  "h": "dca615be"
+ },
+ "js.daycon.day-con-theo-la-so": {
+  "t": "命盤で育てる子育て",
+  "h": "2013a771"
+ },
+ "js.daycon.day-con-theo-la-so-6c04": {
+  "t": "命盤で育てる子育て",
+  "h": "80688ea6"
+ },
+ "js.daycon.day-con-theo-la-so-l6v3": {
+  "t": "命盤で育てる子育て — ",
+  "h": "90ccd72e"
+ },
+ "js.daycon.day-la-ban-huong-dan-nuoi-ten": {
+  "t": "**{ten}**さんの子育てガイドです。さらに知りたい場面はありますか？",
+  "h": "6e9c3d69"
+ },
+ "js.daycon.dieu-ban-dang-lo-ve-con": {
+  "t": "お子さんについて、気がかりなことは何ですか？",
+  "h": "75d020b9"
+ },
+ "js.daycon.dieu-ban-dang-lo-viet-rieng": {
+  "t": "気がかりなことを、お子さんの命盤に沿って個別に記述",
+  "h": "3f67856e"
+ },
+ "js.daycon.dieu-cha-me-dang-lo": {
+  "t": "親が気にしていること：{lo}",
+  "h": "cc98d53f"
+ },
+ "js.daycon.dieu-dang-lo": {
+  "t": "気がかりなこと",
+  "h": "1c1218e7"
+ },
+ "js.daycon.dieu-dang-lo-s1b1": {
+  "t": "気がかりなこと：<b>",
+  "h": "707a2eb1"
+ },
+ "js.daycon.dinh-huong-cach-day": {
+  "t": "関わり方の方向性とアドバイス",
+  "h": "fb8a0485"
+ },
+ "js.daycon.dinh-huong-dh": {
+  "t": "方向性：{dh}",
+  "h": "c20461b0"
+ },
+ "js.daycon.dinh-huong-moi-truong-hoc-phuong": {
+  "t": "学びの環境の方向性 + その子に合った関わり方",
+  "h": "9673ce91"
+ },
+ "js.daycon.do-5-truc-tinh-khi-va": {
+  "t": "5つの気質軸と8つの才能の素質を測定",
+  "h": "44451f2e"
+ },
+ "js.daycon.doi-chieu-them-voi-la-so": {
+  "t": "あなたの命盤との照合も追加しました ✓",
+  "h": "65992be6"
+ },
+ "js.daycon.doi-chieu-voi-la-so-cua": {
+  "t": "あなたの命盤との照合：",
+  "h": "69111647"
+ },
+ "js.daycon.dong-vien-kieu-nay-moi-vao": {
+  "t": "このやり方なら響く励まし方",
+  "h": "8615f222"
+ },
+ "js.daycon.du-kien-lap-ra-tu-chinh": {
+  "t": " 件のデータ</b>を読み取っています — ",
+  "h": "fdb76ddf"
+ },
+ "js.daycon.gio-sinh-cua-ban-la-may": {
+  "t": "あなたの生まれた時刻は何時ですか？",
+  "h": "3e121266"
+ },
+ "js.daycon.gioi-tinh-cua-ban-cha-me": {
+  "t": "あなたの性別（父親／母親）を教えてください。",
+  "h": "3e7f29e6"
+ },
+ "js.daycon.hai-me-con-hay-va-nhau": {
+  "t": "二人の母子（親子）はどこでぶつかりやすいですか？",
+  "h": "8121e071"
+ },
+ "js.daycon.hay-bi-doc-nham": {
+  "t": "<p><b>よく誤読されること：</b> ",
+  "h": "560ec4eb"
+ },
+ "js.daycon.hoat-dong-de-dang-ky-ra": {
+  "t": " 件の教室・外出して参加する活動</b>と<b>",
+  "h": "047d6333"
+ },
+ "js.daycon.hoi-nha-truong": {
+  "t": "<b>学校に聞くこと：</b>",
+  "h": "2b67b4bb"
+ },
+ "js.daycon.hop": {
+  "t": "<p><b>合うもの：</b> ",
+  "h": "23262161"
+ },
+ "js.daycon.khac-tinh-am-duong-de-bu": {
+  "t": "陰陽の性質が違う — 補い合いやすい",
+  "h": "b5f77a93"
+ },
+ "js.daycon.khoa": {
+  "t": "ロック",
+  "h": "393cb36a"
+ },
+ "js.daycon.khoang-mot-phan-bay-so-la": {
+  "t": "約7人に1人の命盤がこのケースに当てはまります。</p>",
+  "h": "ff8e890c"
+ },
+ "js.daycon.khong-co-buoc-nao-doan-mo": {
+  "t": "当て推量の工程は一切ありません。生年月日時のどれか一つを変えると、上の表全体が変わります。",
+  "h": "065d23da"
+ },
+ "js.daycon.khong-co-chinh-tinh": {
+  "t": "主星なし",
+  "h": "753ded73"
+ },
+ "js.daycon.khong-dat-ten": {
+  "t": "名前なし",
+  "h": "295915d5"
+ },
+ "js.daycon.khong-the-ket-noi-vui-long": {
+  "t": "接続できませんでした。もう一度お試しください。",
+  "h": "bf0b6e7b"
+ },
+ "js.daycon.khung-dai-van": {
+  "t": "大運の区間 ",
+  "h": "06be9124"
+ },
+ "js.daycon.kieu-cua-ban-kieu": {
+  "t": "あなたのタイプ：{kieu}",
+  "h": "1f89ad05"
+ },
+ "js.daycon.ky-luat-kieu-nay-phan-tac": {
+  "t": "逆効果になる叱り方",
+  "h": "0af70e1c"
+ },
+ "js.daycon.ky-luat-phan-tac-dung-kl": {
+  "t": "逆効果になる叱り方：{kl}",
+  "h": "4ed18b67"
+ },
+ "js.daycon.la-so": {
+  "t": "命盤：",
+  "h": "2644d5f2"
+ },
+ "js.daycon.la-so-cua-con-khong-nghieng": {
+  "t": "<p>お子さんの命盤は、どの領域にも<b>はっきりとは偏っていません</b>。これは機械の読み取り漏れではなく、れっきとした結果です。",
+  "h": "4465b58f"
+ },
+ "js.daycon.lam-con-bo-ngang": {
+  "t": "<p><b>子どもが途中でやめてしまうこと：</b> ",
+  "h": "4bfcce62"
+ },
+ "js.daycon.lam-gi-tu-toi-nay-nen": {
+  "t": "今夜からできること — すべきこと・避けること",
+  "h": "fabc2ced"
+ },
+ "js.daycon.lap-la-so-phan-kieu-nguoi": {
+  "t": "命盤を立て、タイプを分類",
+  "h": "61f07874"
+ },
+ "js.daycon.loi": {
+  "t": "エラー ",
+  "h": "1b80116b"
+ },
+ "js.daycon.loi-8d72": {
+  "t": "エラー：",
+  "h": "471c0087"
+ },
+ "js.daycon.luong": {
+  "t": "両 →",
+  "h": "36d6704d"
+ },
+ "js.daycon.luu-nien-cung": {
+  "t": "流年の宮 ",
+  "h": "8f5a16cc"
+ },
+ "js.daycon.mo-ban-huong-dan-day-du": {
+  "t": "フル版の子育てガイドを開く",
+  "h": "5b95fbd4"
+ },
+ "js.daycon.muc-trong-la-so": {
+  "t": "件見る",
+  "h": "4e83a32a"
+ },
+ "js.daycon.muon-xung-chieu": {
+  "t": "（対宮を借りる）",
+  "h": "7363dfe3"
+ },
+ "js.daycon.nam-giua-dung-duoc-ca-hai": {
+  "t": "中間で、どちらのやり方も使える",
+  "h": "88eb619c"
+ },
+ "js.daycon.nam-truc-tinh-khi": {
+  "t": "5つの気質軸",
+  "h": "9d3afdaa"
+ },
+ "js.daycon.nam-truc-tinh-khi-tam-chat": {
+  "t": "5つの気質軸 + 8つの才能の素質を、お子さんの命盤から採点",
+  "h": "3ff91004"
+ },
+ "js.daycon.nen": {
+  "t": "<p><b>すること：</b> ",
+  "h": "96dd52e2"
+ },
+ "js.daycon.nen-cho-ten-thu-hoat-dong": {
+  "t": "最初に{ten}さんにどんな活動を試させるのがよいですか？",
+  "h": "c13288e1"
+ },
+ "js.daycon.ngay-sinh-duong-lich-cua-ban": {
+  "t": "あなたの西暦（陽暦）の生年月日はいつですか？",
+  "h": "ef23d3fb"
+ },
+ "js.daycon.nhom-tuoi": {
+  "t": "年齢層：<b>",
+  "h": "974ef95b"
+ },
+ "js.daycon.o-nha": {
+  "t": "<p><b>家での様子：</b> ",
+  "h": "adc7648c"
+ },
+ "js.daycon.pha-them": {
+  "t": "さらに混ざる要素：",
+  "h": "4b629d3a"
+ },
+ "js.daycon.ra-bai-giao-viec": {
+  "t": "課題の出し方・任せ方",
+  "h": "2dde825d"
+ },
+ "js.daycon.sach-dan-ve-sao": {
+  "t": "— 命宮にある星「",
+  "h": "7b5e7401"
+ },
+ "js.daycon.sao-an-tren-12-cung": {
+  "t": " 個の星を12宮に配置、",
+  "h": "a6914f13"
+ },
+ "js.daycon.sat": {
+  "t": " / 殺 ",
+  "h": "c472d1aa"
+ },
+ "js.daycon.suy-tu": {
+  "t": "</b> — 根拠となる星：",
+  "h": "55a15f14"
+ },
+ "js.daycon.tai-cung-menh": {
+  "t": "」についての古典の引用</span></div>",
+  "h": "173c6b01"
+ },
+ "js.daycon.tam-chat-nang-khieu": {
+  "t": "8つの才能の素質",
+  "h": "10c9f44e"
+ },
+ "js.daycon.ten-nghieng-ve-kieu-kieu": {
+  "t": "{ten}さんは{kieu}タイプ寄りです（{tutuong}）",
+  "h": "aea15b43"
+ },
+ "js.daycon.thap-nhat-trong-8-chat-cach": {
+  "t": "8つの素質の中で最も低い値です — 補い方と具体的な方向性はフル版に入っています。",
+  "h": "a2f3c473"
+ },
+ "js.daycon.thu-con-can-duoc-day-them": {
+  "t": "お子さんにもっと教えるべきこと",
+  "h": "45fd44a4"
+ },
+ "js.daycon.tiep-tuc": {
+  "t": "続ける →",
+  "h": "86f35ed9"
+ },
+ "js.daycon.tieu-han-cung": {
+  "t": "小限の宮 ",
+  "h": "4d7ba471"
+ },
+ "js.daycon.toi-nay-ten-lai-khong-chiu": {
+  "t": "今夜、{ten}がまた勉強したがりません。どう声をかければよいでしょうか？",
+  "h": "5cea25be"
+ },
+ "js.daycon.tuoi": {
+  "t": " 歳</b>",
+  "h": "e5f74880"
+ },
+ "js.daycon.tuoi-3v6h": {
+  "t": " 歳",
+  "h": "2e261bf5"
+ },
+ "js.daycon.tuoi-tuoi-mu": {
+  "t": " 歳（数え年）",
+  "h": "f62485fd"
+ },
+ "js.daycon.vach-dut-nguong-dang-cho-thu": {
+  "t": "▲ 点線 = 「試してみる価値がある」基準",
+  "h": "16e23b36"
+ },
+ "js.daycon.van-nam": {
+  "t": "<li><b>年運 ",
+  "h": "1192aa32"
+ },
+ "js.daycon.vi-sao-la-so-lai-do": {
+  "t": "なぜ命盤からこれらの軸が測れるのですか？",
+  "h": "f65c0dfb"
+ },
+ "js.daycon.viec-dung-luc-nay-la-cho": {
+  "t": "今大事なのは、<b>幅広く試させて、実際の反応を見る</b>こと。お子さんの代わりに選ばないでください。",
+  "h": "b4af8a17"
+ },
+ "js.daycon.viet-dinh-huong-va-huong-dan": {
+  "t": "方向性と子育てガイドを作成",
+  "h": "10f821e4"
+ },
+ "js.daycon.vui-long-nhap-day-du-ngay": {
+  "t": "お子さんの生年月日を、年・月・日まですべてご入力ください。",
+  "h": "784233ac"
+ },
+ "js.daycon.vuot-nguong-dang-cho-thu": {
+  "t": "閾値を超えています（「試してみる価値がある」）。",
+  "h": "ee663dd4"
+ },
+ "js.daycon.vuot-nguong-dang-cho-thu-khong": {
+  "t": "★ = 閾値を超えた素質（「試してみる価値がある」）であり、才能が確認されたわけではありません。",
+  "h": "1dec3af7"
+ },
+ "js.daycon.xem-ban-huong-dan-day-du": {
+  "t": "✦ フル版の子育てガイドを見る —",
+  "h": "3a668eed"
+ },
+ "js.daycon.xem-diem-o-bieu-do-tren": {
+  "t": "）— 点数は上のグラフでご覧ください。各素質の詳細はフル版でお読みいただけます。",
+  "h": "edfabb37"
+ },
+ "js.daycon.xem-them": {
+  "t": "<summary>命盤の項目をさらに ",
+  "h": "c5afdcd1"
+ },
+ "js.duyenno.anh-dang-tai-co-the-hoi": {
+  "t": "画像を読み込み中です。少し時間がかかることがあります — しばらくお待ちいただくか、",
+  "h": "c4e9709b"
+ },
+ "js.duyenno.anh-minh-hoa-mo": {
+  "t": "参考イラスト（ぼかし）",
+  "h": "bb4bd552"
+ },
+ "js.duyenno.ban-co-muon-them-who": {
+  "t": "{who}を物語に加えますか？（最大{max}人）",
+  "h": "b57078f6"
+ },
+ "js.duyenno.ban-da-xem-duyen-no-cua": {
+  "t": "✓ このグループの命盤による縁はすでにご覧になっています — 再度開いても両は差し引かれません",
+  "h": "60fbdfb0"
+ },
+ "js.duyenno.bo-nguoi-nay": {
+  "t": "この人を削除",
+  "h": "690b6802"
+ },
+ "js.duyenno.buc-tranh-chung-minh-hoa": {
+  "t": "全員の絵 — イメージ",
+  "h": "0e03eaba"
+ },
+ "js.duyenno.cac-dau-hieu-con-lai-va": {
+  "t": " — 残りのサインと、全員の間の縁のネットワーク全体はフル版に入っています。",
+  "h": "c9821896"
+ },
+ "js.duyenno.cac-moi-duyen-trong-nhom": {
+  "t": "グループ内の縁",
+  "h": "d40e26f3"
+ },
+ "js.duyenno.can-it-nhat-hai-la-so": {
+  "t": "命盤は少なくとも2つ必要です。",
+  "h": "4708eed7"
+ },
+ "js.duyenno.cho-thay-xin-thong-tin-cua-who": {
+  "t": "{who}の情報を教えてください。",
+  "h": "471d6f1e"
+ },
+ "js.duyenno.co-them-nguoi": {
+  "t": "はい、追加する →",
+  "h": "ff2cea9c"
+ },
+ "js.duyenno.dang-dung-anh": {
+  "t": "画像を作成中…",
+  "h": "7bce9760"
+ },
+ "js.duyenno.dang-ve-buc-tranh-ca-nhom": {
+  "t": "グループ全員の絵を描いています…",
+  "h": "dcd60961"
+ },
+ "js.duyenno.dau-hieu-label": {
+  "t": "サイン：{label}",
+  "h": "cae6f731"
+ },
+ "js.duyenno.doi-chieu-dia-chi-ngu-hanh": {
+  "t": "地支・五行・主星を照らし合わせる",
+  "h": "7e76a0f2"
+ },
+ "js.duyenno.du-n-nguoi-xem-ngay": {
+  "t": "{n}人で、見てみましょう。",
+  "h": "fcfd4d3d"
+ },
+ "js.duyenno.du-roi-xem-ngay": {
+  "t": "これで十分、今すぐ見る →",
+  "h": "d8de245d"
+ },
+ "js.duyenno.dung-tu-la-so": {
+  "t": "<b>命盤から作成</b><br>",
+  "h": "5de147a7"
+ },
+ "js.duyenno.duyen-no-tien-kiep": {
+  "t": "前世の縁",
+  "h": "c6b0ccb5"
+ },
+ "js.duyenno.duyen-no-tien-kiep-r7a2": {
+  "t": "前世の縁",
+  "h": "fc5445d2"
+ },
+ "js.duyenno.giua-a-va-b-gist": {
+  "t": "{a}と{b}の間：{gist} 4章の物語と全員の絵はフル版に入っています。",
+  "h": "b21b2737"
+ },
+ "js.duyenno.gui-ket-qua-nay-cho-ca-nhom-names": {
+  "t": "このグループ全員（{names}）にこの結果を送りましょう — 誰もが自分の役柄が気になって、すぐに自分の命盤も調べたくなります。",
+  "h": "a9813a1c"
+ },
+ "js.duyenno.gui-ket-qua-nay-cho-name-xem": {
+  "t": "この結果を<b>{name}</b>さんに送りましょう — 気になって、きっとご自身の命盤も調べたくなります。",
+  "h": "a89262bb"
+ },
+ "js.duyenno.hai-nguoi-de-va-nhau-o": {
+  "t": "二人がぶつかりやすいのはどこですか？",
+  "h": "7d27557f"
+ },
+ "js.duyenno.khong-the-ket-noi-vui-long": {
+  "t": "接続できませんでした。もう一度お試しください。",
+  "h": "bf0b6e7b"
+ },
+ "js.duyenno.khong-ve-duoc-buc-tranh-lan": {
+  "t": "今回は絵を描けませんでした。下の物語部分はすべてご覧いただけます。",
+  "h": "8610db8b"
+ },
+ "js.duyenno.kiep-nay-gap-lai-thi-nen": {
+  "t": "今世でまた会ったとき、どのくらいの距離を保つのがよいですか？",
+  "h": "c7c61218"
+ },
+ "js.duyenno.la-so": {
+  "t": "命盤：",
+  "h": "2644d5f2"
+ },
+ "js.duyenno.la-so-vjrb": {
+  "t": " — 命盤：",
+  "h": "2a79724a"
+ },
+ "js.duyenno.lap-la-so-dung-nhan-vat": {
+  "t": "命盤を作成し、登場人物を組み立てる",
+  "h": "86c4f80f"
+ },
+ "js.duyenno.loai-duyen-label": {
+  "t": "縁の種類：{label}",
+  "h": "943e47bf"
+ },
+ "js.duyenno.loi": {
+  "t": "エラー ",
+  "h": "1b80116b"
+ },
+ "js.duyenno.loi-8d72": {
+  "t": "エラー：",
+  "h": "471c0087"
+ },
+ "js.duyenno.loi-ket": {
+  "t": "結び",
+  "h": "319ac5e1"
+ },
+ "js.duyenno.luot-xem": {
+  "t": "閲覧",
+  "h": "980f8057"
+ },
+ "js.duyenno.mac-dinh-hai-nguoi-them-max": {
+  "t": "初期設定は2人です。最大{max}人まで追加できます — グループ全員がひとつの物語と一枚の絵に入ります。",
+  "h": "18e1432f"
+ },
+ "js.duyenno.mat-ket-noi-luc-tai-tranh": {
+  "t": "画像の読み込み中に接続が切れました — 再取得を試みています…",
+  "h": "48d6deaf"
+ },
+ "js.duyenno.moi-duyen": {
+  "t": "縁",
+  "h": "eb37f74e"
+ },
+ "js.duyenno.moi-duyen-4-hoi": {
+  "t": "縁の物語 — 4章",
+  "h": "982f3e5a"
+ },
+ "js.duyenno.moi-duyen-giua-names": {
+  "t": "**{names}**の縁についてはここまでが本編です。ほかに聞きたいことはありますか？",
+  "h": "ea285156"
+ },
+ "js.duyenno.nam": {
+  "t": "南",
+  "h": "b580ba1b"
+ },
+ "js.duyenno.name-la-nguoi-the-nao": {
+  "t": "{name}はどんな人ですか？",
+  "h": "03c43db7"
+ },
+ "js.duyenno.nguoi-ban-muon-xem-duyen-no": {
+  "t": "縁を見たい方",
+  "h": "0f74fdf8"
+ },
+ "js.duyenno.nguoi-thu-ba": {
+  "t": "3人目",
+  "h": "ed014d5c"
+ },
+ "js.duyenno.nguoi-thu-hai": {
+  "t": "2人目",
+  "h": "b330c7a6"
+ },
+ "js.duyenno.nguoi-thu-nam": {
+  "t": "5人目",
+  "h": "b2a0303b"
+ },
+ "js.duyenno.nguoi-thu-nhat": {
+  "t": "1人目",
+  "h": "955e7151"
+ },
+ "js.duyenno.nguoi-thu-tu": {
+  "t": "4人目",
+  "h": "12dadc83"
+ },
+ "js.duyenno.nhan-vat-cua-ban": {
+  "t": "あなたの登場人物",
+  "h": "850ad819"
+ },
+ "js.duyenno.nu": {
+  "t": "女性",
+  "h": "feb92ccd"
+ },
+ "js.duyenno.quet-ma-xem-duyen-no-cua": {
+  "t": "QRコードを読み取って、あなたの縁を見る",
+  "h": "2d7c866a"
+ },
+ "js.duyenno.tai-lai": {
+  "t": "再読み込み",
+  "h": "16371241"
+ },
+ "js.duyenno.them-vao-nhom": {
+  "t": "グループに追加",
+  "h": "366d87cc"
+ },
+ "js.duyenno.them-who": {
+  "t": "{who}を追加 ✓",
+  "h": "6ed59d06"
+ },
+ "js.duyenno.thuong-la-ban": {
+  "t": "たいていはあなた自身",
+  "h": "a9671f02"
+ },
+ "js.duyenno.toi-da-max-nguoi-mot-luot": {
+  "t": "一度に最大{max}人までです。",
+  "h": "05bf983e"
+ },
+ "js.duyenno.trong-nhom-nay-ai-de-va": {
+  "t": "このグループで一番ぶつかりやすいのは誰ですか？",
+  "h": "4deab4cd"
+ },
+ "js.duyenno.truc-cua-cau-chuyen": {
+  "t": "物語の軸",
+  "h": "1b316be1"
+ },
+ "js.duyenno.truc-cua-cau-chuyen-j6j5": {
+  "t": "（物語の軸）",
+  "h": "de7a2dcc"
+ },
+ "js.duyenno.vi-sao-lai-luan-ra-moi-duyen": {
+  "t": "なぜこの縁が読み取れるのですか？",
+  "h": "1ac5d62d"
+ },
+ "js.duyenno.viet-cau-chuyen-moi-duyen": {
+  "t": "縁の物語を作成",
+  "h": "980f94e2"
+ },
+ "js.duyenno.vui-long-nhap-day-du-ngay-who": {
+  "t": "{who}の生年月日を、年・月・日まですべてご入力ください。",
+  "h": "5698e85d"
+ },
+ "js.giosinh.am-lich": {
+  "t": "（旧暦）",
+  "h": "ebf71daf"
+ },
+ "js.giosinh.anh-chi-chua-chot-duoc-gio": {
+  "t": "出生時刻がまだ決まっていないのですね。候補の時刻の見分け方について私に聞いてもかまいません。",
+  "h": "fe1408ea"
+ },
+ "js.giosinh.bat-dau-khao-sat": {
+  "t": "絞り込みの質問を始める →",
+  "h": "89663d6e"
+ },
+ "js.giosinh.cam-on-dung": {
+  "t": "ありがとうございます。正しい時刻はシステムが示した一覧に入っていました。記録しました。",
+  "h": "816391d2"
+ },
+ "js.giosinh.cam-on-truot": {
+  "t": "ありがとうございます。今回はシステムの推定が外れました。まさに方法を改善するために必要な事例です。",
+  "h": "850e32a7"
+ },
+ "js.giosinh.cau-n-toi-da": {
+  "t": "質問 {n} / 最大 {max} 問",
+  "h": "37d9a74f"
+ },
+ "js.giosinh.chip-cung-tat-ach": {
+  "t": "疾厄宮は何を表しますか？",
+  "h": "f6448214"
+ },
+ "js.giosinh.chip-khong-nho-gio": {
+  "t": "出生時刻がわからなくても占えますか？",
+  "h": "36b87cba"
+ },
+ "js.giosinh.chip-vi-sao-doi-gio": {
+  "t": "出生時刻が変わると、なぜ命盤全体が変わるのですか？",
+  "h": "eb87751b"
+ },
+ "js.giosinh.chon-gio-dung-truoc": {
+  "t": "先に正しい時刻を選んでください。",
+  "h": "b1862011"
+ },
+ "js.giosinh.chua-biet": {
+  "t": "— わからない —",
+  "h": "555657b4"
+ },
+ "js.giosinh.chua-co-ket-qua": {
+  "t": "照合する結果がまだありません。",
+  "h": "49c0ec23"
+ },
+ "js.giosinh.chua-doc-duoc-bang-gia": {
+  "t": "料金表を読み込めませんでした。ページを再読み込みしてください。",
+  "h": "247f0130"
+ },
+ "js.giosinh.chua-ghi-duoc-vao-so": {
+  "t": "ノートに保存できませんでした（ネットワークまたはログインセッションの問題）。確定した時刻はこの端末には保存されています。",
+  "h": "d599ae15"
+ },
+ "js.giosinh.co-loi-xay-ra": {
+  "t": "エラーが発生しました。",
+  "h": "08eddac7"
+ },
+ "js.giosinh.cuc-n": {
+  "t": "{n}",
+  "h": "a0da4ad0"
+ },
+ "js.giosinh.da-luu-vao-so": {
+  "t": "命盤ノートに保存しました。ほかのツールにもこの時刻が自動で入力されます。",
+  "h": "c43dc72d"
+ },
+ "js.giosinh.da-nho-tren-may-nay": {
+  "t": "この端末に記憶しました。ほかのツールを開けばそのまま使えます。ログインすれば命盤はアカウントのノートに入り、端末を変えても残ります。",
+  "h": "10b9b2e9"
+ },
+ "js.giosinh.dang-lap-12-la-so": {
+  "t": "命盤12枚を作成中…",
+  "h": "1e2ebabc"
+ },
+ "js.giosinh.dang-luu": {
+  "t": "保存中…",
+  "h": "b98712c0"
+ },
+ "js.giosinh.dang-tinh": {
+  "t": "計算中…",
+  "h": "76a9d5f0"
+ },
+ "js.giosinh.dua-tren": {
+  "t": "回答済み{n}問に基づく · 一致度 {p}%",
+  "h": "0fb2318b"
+ },
+ "js.giosinh.duong-lich": {
+  "t": "（新暦）",
+  "h": "4471b62b"
+ },
+ "js.giosinh.gio-chi": {
+  "t": "{chi}の刻",
+  "h": "87e9bdfa"
+ },
+ "js.giosinh.gio-chi-khung": {
+  "t": "{chi}の刻（{khung}）",
+  "h": "86326af7"
+ },
+ "js.giosinh.khong-gui-duoc": {
+  "t": "送信できませんでしたが、ご心配なく。鑑定結果は変わりません。",
+  "h": "5e875ab2"
+ },
+ "js.giosinh.khong-lap-duoc-la-so": {
+  "t": "命盤を作成できませんでした。",
+  "h": "16f828bd"
+ },
+ "js.giosinh.khong-ro-khong-nho-bo-qua": {
+  "t": "わからない／覚えていない — この質問をスキップ",
+  "h": "538ab29a"
+ },
+ "js.giosinh.lock-cta": {
+  "t": "12枚の命盤すべて＋質問を開く",
+  "h": "1b686643"
+ },
+ "js.giosinh.lock-i1": {
+  "t": "候補の命盤12枚すべて（各時刻の命宮＋疾厄宮）",
+  "h": "672803dc"
+ },
+ "js.giosinh.lock-i2": {
+  "t": "生年月日に合わせて作られる質問セット",
+  "h": "229e75db"
+ },
+ "js.giosinh.lock-i3": {
+  "t": "12の時刻を可能性の高さで順位づけ",
+  "h": "b08e68e7"
+ },
+ "js.giosinh.lock-i4": {
+  "t": "各質問ごとの一致・不一致の根拠",
+  "h": "ed0e1963"
+ },
+ "js.giosinh.lock-i5": {
+  "t": "信頼度と、時刻を確定するためのアドバイス",
+  "h": "4c5e6f1b"
+ },
+ "js.giosinh.lock-title": {
+  "t": "⊙ 出生時刻のレポートは未開封です",
+  "h": "75ef5f41"
+ },
+ "js.giosinh.luong": {
+  "t": "両",
+  "h": "6614284e"
+ },
+ "js.giosinh.menh-colon": {
+  "t": "命宮：",
+  "h": "d24288f5"
+ },
+ "js.giosinh.nhap-nam-sinh-trong-khoang-1900": {
+  "t": "出生年は1900〜2030年の範囲で入力してください。",
+  "h": "41815a93"
+ },
+ "js.giosinh.survey-pitch": {
+  "t": "この生年月日に合わせて、システムが専用の<b>{n}問</b>を作成します。選択肢は<b>この日そのもの</b>で異なる兆候を示す時刻のグループなので、質問セットは人によって異なります。回答が終わると、<b>可能性の高い2〜3つの時刻と、各回答ごとの根拠</b>が表示されます。",
+  "h": "383cb5d5"
+ },
+ "js.giosinh.tat-ach-colon": {
+  "t": "疾厄宮：",
+  "h": "80b98397"
+ },
+ "js.giosinh.tc-cao": {
+  "t": "高",
+  "h": "db10c479"
+ },
+ "js.giosinh.tc-thap": {
+  "t": "低",
+  "h": "ecd6f14a"
+ },
+ "js.giosinh.tc-vua": {
+  "t": "中",
+  "h": "0467562c"
+ },
+ "js.giosinh.tin-cay": {
+  "t": "信頼度：{m}",
+  "h": "90b46fcf"
+ },
+ "js.giosinh.ton": {
+  "t": "費用",
+  "h": "e603a0b9"
+ },
+ "js.giosinh.vo-chinh-dieu": {
+  "t": "主星なし",
+  "h": "bd07d7a9"
+ },
+ "js.giosinh.xac-dinh-gio-sinh": {
+  "t": "出生時刻の特定",
+  "h": "c3aee594"
+ },
+ "js.giosinh.xem-12-gio-kha-nghi": {
+  "t": "候補の12時刻を見る",
+  "h": "3cd9aabf"
+ },
  "js.goi.120": {
   "t": "スタンダード",
   "h": "01d0c63f"
@@ -3410,6 +6634,274 @@
  "js.hdtt.n-luong": {
   "t": "{n} 両",
   "h": "c4904a65"
+ },
+ "js.hnt.ba-huong-dang-cho-con-thu": {
+  "t": "試す価値のある3つの方向と、年齢に応じた具体的な活動",
+  "h": "b8c61ec7"
+ },
+ "js.hnt.ban-da-xem-ban-nay-roi": {
+  "t": "✓ この鑑定はすでにご覧になっています — 再度開いても両は差し引かれません",
+  "h": "7d2c6a5b"
+ },
+ "js.hnt.ban-dinh-huong-day-du-chua": {
+  "t": "⊙ フル版の方向づけはまだ開かれていません",
+  "h": "0cc8ad2a"
+ },
+ "js.hnt.ban-se-nhan-cai-con-me": {
+  "t": "受け取れる内容：お子さんが夢中になっているものが本当に強みなのか、バランスのためにほかにどんな方向を開くとよいか。",
+  "h": "3adee970"
+ },
+ "js.hnt.ban-se-nhan-chat-viec-hop": {
+  "t": "受け取れる内容：お子さんに合う「仕事の質」と、本人が自分で話し出せるような問いかけ方 — あらかじめ決められた学部名ではありません。",
+  "h": "51f3fd6d"
+ },
+ "js.hnt.ban-se-nhan-cho-nen-bay": {
+  "t": "受け取れる内容：まず何を並べて見せればお子さんが合うものに触れられるか、そしてどの時点で心配をやめてよいか。",
+  "h": "120130d2"
+ },
+ "js.hnt.ban-se-nhan-mot-ban-mo": {
+  "t": "受け取れる内容：日常の中でお子さんだと気づけるほど明確な適性の傾向の描写と、触れさせたいこと。",
+  "h": "e48e5660"
+ },
+ "js.hnt.ban-se-nhan-phan-nao-trong": {
+  "t": "受け取れる内容：お子さんの意見のうち本当に強みと言えるのはどこか、そして子どもを遠ざけない話し方。",
+  "h": "24a0fdb2"
+ },
+ "js.hnt.be-gai": {
+  "t": "女の子",
+  "h": "af93dba0"
+ },
+ "js.hnt.be-trai": {
+  "t": "男の子",
+  "h": "274225bc"
+ },
+ "js.hnt.cham-21-truc-tinh-khi-chon": {
+  "t": "21の気質軸を採点し、適性の傾向を選ぶ",
+  "h": "f27b81b0"
+ },
+ "js.hnt.chang-dang-o-full": {
+  "t": "<li><b>現在の区間</b>：{a}–{b}歳（{y1}–{y2}年）、{cung}</li>",
+  "h": "894bc892"
+ },
+ "js.hnt.chat-nguoi-noi-nhat": {
+  "t": "最も際立つ素質：",
+  "h": "5bb97cff"
+ },
+ "js.hnt.chat-nguoi-noi-thu-nhi": {
+  "t": "2番目に際立つ素質：",
+  "h": "cd07e9dc"
+ },
+ "js.hnt.chat-viec-ve-sau": {
+  "t": "後の仕事の質",
+  "h": "614a78bb"
+ },
+ "js.hnt.cho-hay-bi-hieu-nham": {
+  "t": "よく誤解されること",
+  "h": "9d96dce2"
+ },
+ "js.hnt.con-chi-me-dung-mot-thu": {
+  "t": "一つのことにしか夢中にならず、偏らないか心配",
+  "h": "37b2feb7"
+ },
+ "js.hnt.con-chua-thich-gi-ro-ret": {
+  "t": "これといって好きなことがなく、何にも淡白",
+  "h": "3c4412e1"
+ },
+ "js.hnt.con-thich-huong-ma-minh-khong": {
+  "t": "親の望まない方向を好む",
+  "h": "b2e58212"
+ },
+ "js.hnt.cung-name": {
+  "t": "{name}",
+  "h": "3cb49303"
+ },
+ "js.hnt.cuoi-tuan-nay-toi-nen-cho-ten": {
+  "t": "今週末は{ten}さんに何を最初に試させるとよいでしょうか？",
+  "h": "f2a056eb"
+ },
+ "js.hnt.dau-hieu-o-nha": {
+  "t": "家庭でのサイン",
+  "h": "df425a5c"
+ },
+ "js.hnt.day-la-ban-dinh-huong-som-ten": {
+  "t": "**{ten}**さんの早期の方向づけです。ほかに聞きたいことはありますか？",
+  "h": "fa23b364"
+ },
+ "js.hnt.do-nghieng": {
+  "t": "傾斜の度合い",
+  "h": "f640298c"
+ },
+ "js.hnt.do-nghieng-pct-phan-tram": {
+  "t": "最上位の傾向に対して{pct}パーセントの傾き",
+  "h": "c8321ffe"
+ },
+ "js.hnt.huong-nghiep-som": {
+  "t": "早期の進路 — ",
+  "h": "9779b5fc"
+ },
+ "js.hnt.huong-nghiep-som-cho-con": {
+  "t": "子どもの早期進路鑑定",
+  "h": "2735212c"
+ },
+ "js.hnt.khoa": {
+  "t": "ロック",
+  "h": "393cb36a"
+ },
+ "js.hnt.khong-co-chinh-tinh": {
+  "t": "主星なし",
+  "h": "753ded73"
+ },
+ "js.hnt.khong-co-gi-gap-chi-muon": {
+  "t": "急ぎではなく、ただ子どもをもっと理解したい",
+  "h": "cf2efa39"
+ },
+ "js.hnt.khong-ten": {
+  "t": "名前なし",
+  "h": "7c5b38ee"
+ },
+ "js.hnt.khong-the-ket-noi-vui-long": {
+  "t": "接続できませんでした。もう一度お試しください。",
+  "h": "bf0b6e7b"
+ },
+ "js.hnt.kieu": {
+  "t": "タイプ",
+  "h": "17afe1d6"
+ },
+ "js.hnt.la-so": {
+  "t": "命盤：",
+  "h": "2644d5f2"
+ },
+ "js.hnt.la-so-con-chua-nghieng-han-full": {
+  "t": "⚠️ <b>お子さんの命盤は、まだどの方向にもはっきりとは傾いていません。</b>この年齢ではごく普通のことです — 今ふさわしい助言は、早く決めずに<b>幅広く試させる</b>ことです。以下は最も傾いている方向ですが、結論ではなく、試してみるためのヒントとして読んでください。",
+  "h": "f97c9830"
+ },
+ "js.hnt.la-so-nay": {
+  "t": "この命盤",
+  "h": "9d459fb1"
+ },
+ "js.hnt.la-so-nay-da-tuoi-link": {
+  "t": "<b>この命盤は{tuoi}</b> — これは<i>子どもの早期の方向づけ</i>という問いではなくなっているため、親がお子さんについて読む方向づけの部分は<b>ここでは開かれず</b>、<b>両も差し引かれません</b>。<br><br>上の適性の傾向の部分は引き続きご覧いただけて、無料のままです — 命盤から読み取るため、どの年齢でも成り立ちます。成人の進路（分野、役割、規模、職種の分かれ道）を読みたい場合は{link}をご利用ください。",
+  "h": "32842316"
+ },
+ "js.hnt.lap-la-so-phan-kieu-nguoi": {
+  "t": "命盤を立て、タイプを分類",
+  "h": "61f07874"
+ },
+ "js.hnt.loi": {
+  "t": "エラー ",
+  "h": "1b80116b"
+ },
+ "js.hnt.loi-8d72": {
+  "t": "エラー：",
+  "h": "471c0087"
+ },
+ "js.hnt.luong": {
+  "t": "両 →",
+  "h": "36d6704d"
+ },
+ "js.hnt.mo-ban-dinh-huong-day-du": {
+  "t": "フル版の方向づけを開く",
+  "h": "88ead889"
+ },
+ "js.hnt.muon-xung-chieu": {
+  "t": " <i>— 対宮を借りる</i>",
+  "h": "77b3f2b2"
+ },
+ "js.hnt.nen-cho-lam-quen-hd": {
+  "t": "触れさせたいこと：{hd}",
+  "h": "699e4a26"
+ },
+ "js.hnt.nen-cho-lam-quen-o-lua": {
+  "t": "この年齢層で触れさせたいこと",
+  "h": "cd2440b6"
+ },
+ "js.hnt.nghe-co-chat-do-chi-de": {
+  "t": "そうした質を持つ仕事 — イメージのためだけに",
+  "h": "1377df2f"
+ },
+ "js.hnt.nguoi-lon-nen": {
+  "t": "大人がすべきこと",
+  "h": "f397c75d"
+ },
+ "js.hnt.nguoi-lon-nen-nen": {
+  "t": "大人がすべきこと：{nen}",
+  "h": "8198bc18"
+ },
+ "js.hnt.nguoi-lon-tranh": {
+  "t": "大人が避けること",
+  "h": "5dd28891"
+ },
+ "js.hnt.nu": {
+  "t": "女性",
+  "h": "feb92ccd"
+ },
+ "js.hnt.sap-phai-chon-mon-to-hop": {
+  "t": "これから科目／コース／学校を選ばなければならない",
+  "h": "8e562a93"
+ },
+ "js.hnt.so-thua-kem-hint": {
+  "t": "受け取れる内容：お子さんが他の子の物差しで測られているのはどこか、そしてどの物差しがお子さんの物差しなのか。",
+  "h": "94d7dbae"
+ },
+ "js.hnt.so-thua-kem-lbl": {
+  "t": "子どもが友達についていけないのではと心配",
+  "h": "2c7bbfec"
+ },
+ "js.hnt.ten-dang-me-mot-thu-khac": {
+  "t": "{ten}さんがまったく別のものに夢中です — やらせてもよいでしょうか？",
+  "h": "b40a573a"
+ },
+ "js.hnt.thien-huong-noi-nhat-ten-chat": {
+  "t": "最も際立つ傾向：{ten} — {chat}",
+  "h": "208d9982"
+ },
+ "js.hnt.thien-huong-noi-nhat-va-cach": {
+  "t": " — 最も際立つ傾向と、お子さんに触れさせ始める方法はフル版の方向づけに入っています。",
+  "h": "a193a19d"
+ },
+ "js.hnt.toi-nen-hoi-ten-cau-gi": {
+  "t": "お子さんが自分から話し出すには、{ten}さんにどんな質問をすればよいでしょうか？",
+  "h": "01a73584"
+ },
+ "js.hnt.truong-thanh": {
+  "t": "成人",
+  "h": "8971ff40"
+ },
+ "js.hnt.tu-vi-cong-so-huong-nghiep": {
+  "t": "紫微斗数 職場・進路",
+  "h": "45d9ae37"
+ },
+ "js.hnt.tuoi": {
+  "t": " 歳",
+  "h": "2e261bf5"
+ },
+ "js.hnt.tuoi-tuoi-mu": {
+  "t": " 歳（数え年）",
+  "h": "f62485fd"
+ },
+ "js.hnt.vi": {
+  "t": "<b>理由：</b>",
+  "h": "58409548"
+ },
+ "js.hnt.vi-sao-la-so-lai-nghieng": {
+  "t": "なぜ命盤はこの方向に傾いているのですか？",
+  "h": "11faf439"
+ },
+ "js.hnt.viec-nen-lam-trong-thang-nay": {
+  "t": "今月すること・やめること、そしてお子さんへの切り出し方",
+  "h": "6f97a853"
+ },
+ "js.hnt.viet-ban-dinh-huong-theo-lua": {
+  "t": "年齢に応じた方向づけを作成",
+  "h": "6ca12949"
+ },
+ "js.hnt.vui-long-nhap-day-du-ngay": {
+  "t": "お子さんの生年月日を、年・月・日まですべてご入力ください。",
+  "h": "784233ac"
+ },
+ "js.hnt.xem-ban-dinh-huong-day-du": {
+  "t": "✦ フル版の方向づけを見る —",
+  "h": "efa29b24"
  },
  "js.home.3-buoc-dau-tien": {
   "t": "最初の3ステップ",
@@ -3954,6 +7446,34 @@
  "js.hooklayer.nap-luong": {
   "t": "チャージする →",
   "h": "96c6fb5d"
+ },
+ "js.kimlau.chip1": {
+  "t": "家を建てるのに一番良い年はいつですか？",
+  "h": "992ff775"
+ },
+ "js.kimlau.chip2": {
+  "t": "結婚できる年はいつですか？",
+  "h": "5de89c72"
+ },
+ "js.kimlau.chip3": {
+  "t": "金楼にあたったときの対処法は？",
+  "h": "f9c9cb33"
+ },
+ "js.kimlau.chip4": {
+  "t": "三災のあいだ、何を避けるべきですか？",
+  "h": "27ba3819"
+ },
+ "js.kimlau.dai-20-nam": {
+  "t": "今後20年 — 進めてよい年",
+  "h": "bd73ccbd"
+ },
+ "js.kimlau.greeting": {
+  "t": "**{cc}**の金楼・三災・荒屋（今後20年）を調べました。何を聞きたいですか？",
+  "h": "cf9daca6"
+ },
+ "js.kimlau.label": {
+  "t": "金楼・{cc}",
+  "h": "2529b317"
  },
  "js.kinhdich.bam-de-bat-dau-gieo-que": {
   "t": "押すと卦立てを開始します——6回投げ、1回につき1つの爻が決まります",
@@ -4787,6 +8307,426 @@
   "t": "写真で相を見る",
   "h": "24c4d64e"
  },
+ "js.ngaytot.chip1": {
+  "t": "結婚式に良い日はいつですか？",
+  "h": "409c6fd4"
+ },
+ "js.ngaytot.chip2": {
+  "t": "着工や入居に良い日はいつですか？",
+  "h": "26db2036"
+ },
+ "js.ngaytot.chip3": {
+  "t": "なぜ忌日は避けるのですか？",
+  "h": "2cc8c854"
+ },
+ "js.ngaytot.chip4": {
+  "t": "開業にはどの日を選べばよいですか？",
+  "h": "b44fce94"
+ },
+ "js.ngaytot.greeting": {
+  "t": "**{y}年{m}月**の暦を確認しました。何をなさる予定ですか？最適な日をお選びします。",
+  "h": "3a05f3ac"
+ },
+ "js.ngaytot.label": {
+  "t": "吉日・{y}年{m}月",
+  "h": "cbd777dc"
+ },
+ "js.nguoikhac.ban-cam-nang": {
+  "t": "ガイド",
+  "h": "a9696c9f"
+ },
+ "js.nguoikhac.ban-co-muon-doi-chieu-them": {
+  "t": "あなた自身の命盤も照らし合わせますか？「この方とあなた」の項目が加わります。",
+  "h": "e86dc3aa"
+ },
+ "js.nguoikhac.ban-da-xem-ban-nay-roi": {
+  "t": "✓ この鑑定はすでにご覧になっています — 再度開いても両は差し引かれません",
+  "h": "7d2c6a5b"
+ },
+ "js.nguoikhac.ban-dang-can-lam": {
+  "t": "必要なこと",
+  "h": "91e799f3"
+ },
+ "js.nguoikhac.ban-dang-can-lam-gi-voi": {
+  "t": "この方とのことで、何をする必要がありますか？",
+  "h": "a3a85f1f"
+ },
+ "js.nguoikhac.ban-day-du-se-co-mot": {
+  "t": "フル版には、まさにこの用件だけを扱う専用の項目があります。",
+  "h": "6c907e5e"
+ },
+ "js.nguoikhac.ban-nay-doc-tu": {
+  "t": "この鑑定は、ご入力の生年月日時から立てた<b>",
+  "h": "d989b954"
+ },
+ "js.nguoikhac.ban-se-nhan-chia-viec-the": {
+  "t": "受け取れる内容：足を踏み合わないための仕事の分け方と、気まずくならないために避けること。",
+  "h": "8824cf10"
+ },
+ "js.nguoikhac.ban-se-nhan-cho-nao-la": {
+  "t": "受け取れる内容：どこが性格の違いで、どこが愛情が冷めたわけではないのか。",
+  "h": "93bae219"
+ },
+ "js.nguoikhac.ban-se-nhan-dua-tre-nay": {
+  "t": "受け取れる内容：この子は背中を押すべきか、そっとしておくべきか。",
+  "h": "d6a5344d"
+ },
+ "js.nguoikhac.ban-se-nhan-giao-viec-kieu": {
+  "t": "受け取れる内容：どんな任せ方なら動いてくれて、どんな声かけなら聞いてくれるか。",
+  "h": "753ebc00"
+ },
+ "js.nguoikhac.ban-se-nhan-ho-quyet-bang": {
+  "t": "受け取れる内容：相手が何を基準に決めるのか、そして何が相手をひるませるのか。",
+  "h": "65d83930"
+ },
+ "js.nguoikhac.ban-se-nhan-noi-the-nao": {
+  "t": "受け取れる内容：同じ昔の話でのけんかにならないための話し方。",
+  "h": "e80b5e7c"
+ },
+ "js.nguoikhac.ban-se-nhan-trinh-bay-the": {
+  "t": "受け取れる内容：承認を得るためにどう提示するか、そして提示してはいけない時期。",
+  "h": "ba10c251"
+ },
+ "js.nguoikhac.ban-se-nhan-trong-cay-duoc": {
+  "t": "受け取れる内容：何なら頼りにでき、何は頼りにしてはいけないか。",
+  "h": "19b64bfa"
+ },
+ "js.nguoikhac.bo-qua": {
+  "t": "スキップ",
+  "h": "861dafde"
+ },
+ "js.nguoikhac.bo-qua-doi-chieu-la-so": {
+  "t": "あなたの命盤との照合はスキップしました。",
+  "h": "7c25b196"
+ },
+ "js.nguoikhac.cach-cuc": {
+  "t": " つの格局、",
+  "h": "a4f8bc9a"
+ },
+ "js.nguoikhac.cach-cuc-dai-van-van-nam": {
+  "t": "格局、大運、年運、そしてこの方への具体的な接し方は、フル版のガイドに入っています。",
+  "h": "7a23f4d4"
+ },
+ "js.nguoikhac.cach-di-cho-viec": {
+  "t": "この用件の進め方：",
+  "h": "36885ebf"
+ },
+ "js.nguoikhac.cam-nang-ung-xu": {
+  "t": "接し方ガイド — ",
+  "h": "2aba8d61"
+ },
+ "js.nguoikhac.can-giao-viec-nhac-viec-cho": {
+  "t": "仕事を任せる／声をかける必要がある",
+  "h": "8a5c5843"
+ },
+ "js.nguoikhac.cat": {
+  "t": "吉 ",
+  "h": "bbbbd4e0"
+ },
+ "js.nguoikhac.chang-dai-van": {
+  "t": " つの大運の区間があります。",
+  "h": "0bc2d397"
+ },
+ "js.nguoikhac.chinh-tinh-tai-cung": {
+  "t": "命宮・主星の位置：",
+  "h": "37742cf1"
+ },
+ "js.nguoikhac.cho-thay-xin-thong-tin-cua": {
+  "t": "この方の情報を教えてください。",
+  "h": "4704e927"
+ },
+ "js.nguoikhac.chon-mot-viec-cu-the-thi": {
+  "t": "具体的な用件を選ぶと、その用件だけの「進め方」が鑑定に加わります。",
+  "h": "29c1bbf5"
+ },
+ "js.nguoikhac.chua-cham": {
+  "t": "未採点",
+  "h": "a20bbf69"
+ },
+ "js.nguoikhac.co-doi-chieu": {
+  "t": "はい、照らし合わせる →",
+  "h": "a3846e57"
+ },
+ "js.nguoikhac.con": {
+  "t": "残り ",
+  "h": "be81ceb0"
+ },
+ "js.nguoikhac.cung-an-than": {
+  "t": "<li><b>身宮の位置</b> — ",
+  "h": "23b5a7a9"
+ },
+ "js.nguoikhac.cung-cung-trong-la-so-cua": {
+  "t": "あなたの命盤の{cung}",
+  "h": "85ab2993"
+ },
+ "js.nguoikhac.cung-name": {
+  "t": "{name}",
+  "h": "3cb49303"
+ },
+ "js.nguoikhac.cung-tinh-am-duong-de-va": {
+  "t": "陰陽の性質が同じ — ぶつかりやすい",
+  "h": "38ee66ae"
+ },
+ "js.nguoikhac.da": {
+  "t": "勢い ",
+  "h": "ea471098"
+ },
+ "js.nguoikhac.dai-van-dang-chay": {
+  "t": "<li><b>現在の大運</b> — ",
+  "h": "7e2a0133"
+ },
+ "js.nguoikhac.dang-co-bat-dong-chua-go": {
+  "t": "解決できていない意見の食い違いがある",
+  "h": "f32b8bb1"
+ },
+ "js.nguoikhac.day-la-ban-cam-nang-ung-ten": {
+  "t": "**{ten}**さんへの接し方ガイドです。さらに知りたい場面はありますか？",
+  "h": "10e397ff"
+ },
+ "js.nguoikhac.doc-menh-phuc-duc-thien-di": {
+  "t": "命宮・福徳宮・遷移宮・官禄宮・僕役宮を読む",
+  "h": "1a737bb6"
+ },
+ "js.nguoikhac.doi-chieu-them-voi-la-so": {
+  "t": "あなたの命盤との照合も追加しました ✓",
+  "h": "65992be6"
+ },
+ "js.nguoikhac.doi-chieu-voi-la-so-cua": {
+  "t": "あなたの命盤との照合：",
+  "h": "69111647"
+ },
+ "js.nguoikhac.du-kien-lap-ra-tu-chinh": {
+  "t": " 件のデータ</b>を読み取っています — ",
+  "h": "fdb76ddf"
+ },
+ "js.nguoikhac.hai-ben-de-va-nhau-o": {
+  "t": "二人がぶつかりやすいのはどこですか？",
+  "h": "4604fce9"
+ },
+ "js.nguoikhac.ho-coi-trong-cai-gi-va": {
+  "t": "何を大切にし、何を失うことを恐れているか",
+  "h": "cb1b27aa"
+ },
+ "js.nguoikhac.khac-tinh-am-duong-de-bu": {
+  "t": "陰陽の性質が違う — 補い合いやすい",
+  "h": "b5f77a93"
+ },
+ "js.nguoikhac.khoa": {
+  "t": "ロック",
+  "h": "393cb36a"
+ },
+ "js.nguoikhac.khong-co-buoc-nao-doan-mo": {
+  "t": "当て推量の工程は一切ありません。生年月日時のどれか一つを変えると、上の表全体が変わります。",
+  "h": "065d23da"
+ },
+ "js.nguoikhac.khong-co-chinh-tinh": {
+  "t": "主星なし",
+  "h": "753ded73"
+ },
+ "js.nguoikhac.khong-co-gi-gap-chi-muon": {
+  "t": "急ぎではなく、ただこの方をもっと理解したい",
+  "h": "7c188ebe"
+ },
+ "js.nguoikhac.khong-dat-ten": {
+  "t": "名前なし",
+  "h": "295915d5"
+ },
+ "js.nguoikhac.khong-the-ket-noi-vui-long": {
+  "t": "接続できませんでした。もう一度お試しください。",
+  "h": "bf0b6e7b"
+ },
+ "js.nguoikhac.khung-dai-van": {
+  "t": "大運の区間 ",
+  "h": "06be9124"
+ },
+ "js.nguoikhac.la-so": {
+  "t": "命盤：",
+  "h": "2644d5f2"
+ },
+ "js.nguoikhac.la-so-nguoi-khac": {
+  "t": "他の人の命盤",
+  "h": "e454923c"
+ },
+ "js.nguoikhac.lap-la-so-phan-kieu-nguoi": {
+  "t": "命盤を立て、タイプを分類",
+  "h": "61f07874"
+ },
+ "js.nguoikhac.loi": {
+  "t": "エラー ",
+  "h": "1b80116b"
+ },
+ "js.nguoikhac.loi-8d72": {
+  "t": "エラー：",
+  "h": "471c0087"
+ },
+ "js.nguoikhac.luc-nao-nen-dua-viec-lon": {
+  "t": "大きな話を切り出す時期",
+  "h": "94a8e09a"
+ },
+ "js.nguoikhac.luong": {
+  "t": "両 →",
+  "h": "36d6704d"
+ },
+ "js.nguoikhac.luu-nien-cung": {
+  "t": "流年の宮 ",
+  "h": "8f5a16cc"
+ },
+ "js.nguoikhac.mo-cam-nang-day-du": {
+  "t": "フル版のガイドを開く",
+  "h": "1e071c6b"
+ },
+ "js.nguoikhac.mot-cau-chot": {
+  "t": "ひとことで言うと",
+  "h": "9e19232a"
+ },
+ "js.nguoikhac.muc-trong-la-so": {
+  "t": "件見る",
+  "h": "4e83a32a"
+ },
+ "js.nguoikhac.muon-gan-lai-sau-mot-thoi": {
+  "t": "しばらく疎遠だった後で、また距離を縮めたい",
+  "h": "30e6d4da"
+ },
+ "js.nguoikhac.muon-ru-ho-lam-chung-mot": {
+  "t": "一緒に大きなことに取り組もうと誘いたい",
+  "h": "9c94c0ef"
+ },
+ "js.nguoikhac.muon-xung-chieu": {
+  "t": "（対宮を借りる）",
+  "h": "7363dfe3"
+ },
+ "js.nguoikhac.nen-noi-gi-3-viec-kem": {
+  "t": "何を言うべきか — 実際の言い回し付きの3つのこと",
+  "h": "e6639d28"
+ },
+ "js.nguoikhac.nguoi-ban-muon-hieu-la-ai": {
+  "t": "相手があなたにとってどんな人なのか、教えてください。",
+  "h": "4f8c6227"
+ },
+ "js.nguoikhac.nguoi-nay": {
+  "t": "この方",
+  "h": "bed03c25"
+ },
+ "js.nguoikhac.nguoi-nay-la": {
+  "t": "この方は",
+  "h": "d70093a0"
+ },
+ "js.nguoikhac.nguoi-nay-la-jle1": {
+  "t": "この方は：<b>",
+  "h": "bdd5dac7"
+ },
+ "js.nguoikhac.nguoi-nay-rxn3": {
+  "t": "この方",
+  "h": "794cf474"
+ },
+ "js.nguoikhac.pha-them": {
+  "t": "さらに混ざる要素：",
+  "h": "4b629d3a"
+ },
+ "js.nguoikhac.phai-tu-choi-ho-ma-khong": {
+  "t": "関係を壊さずに断らなければならない",
+  "h": "c189e09a"
+ },
+ "js.nguoikhac.phan-chua-mo-ve-nguoi-nay": {
+  "t": " 件の未開封の項目（この方について）",
+  "h": "45be6b61"
+ },
+ "js.nguoikhac.sach-dan-ve-sao": {
+  "t": "— 命宮にある星「",
+  "h": "7b5e7401"
+ },
+ "js.nguoikhac.sao-an-tren-12-cung": {
+  "t": " 個の星を12宮に配置、",
+  "h": "a6914f13"
+ },
+ "js.nguoikhac.sap-gap-lam-viec-lan-dau": {
+  "t": "初めて会う／一緒に仕事をする予定で、相手のことは何も知らない",
+  "h": "e36b0cd8"
+ },
+ "js.nguoikhac.sap-nho-ho-mot-viec-trinh": {
+  "t": "これから頼みごとをする／提案を出す予定がある",
+  "h": "60e6e0e6"
+ },
+ "js.nguoikhac.sap-phai-bao-mot-tin-ho": {
+  "t": "相手が聞きたくない知らせを伝えなければならない",
+  "h": "0d739532"
+ },
+ "js.nguoikhac.sap-phai-trao-doi-mot-viec-kho": {
+  "t": "{ten}さんに難しい話を切り出さなければなりません。どう口を開けばよいでしょうか？",
+  "h": "db0677dd"
+ },
+ "js.nguoikhac.sap-thuong-luong-quyen-loi-luong": {
+  "t": "待遇（給与、取り分）の交渉をする予定がある",
+  "h": "93d154e1"
+ },
+ "js.nguoikhac.sat": {
+  "t": " / 殺 ",
+  "h": "c472d1aa"
+ },
+ "js.nguoikhac.tai-cung-menh": {
+  "t": "」についての古典の引用</span></div>",
+  "h": "173c6b01"
+ },
+ "js.nguoikhac.tiep-tuc": {
+  "t": "続ける →",
+  "h": "86f35ed9"
+ },
+ "js.nguoikhac.tieu-han-cung": {
+  "t": "小限の宮 ",
+  "h": "4d7ba471"
+ },
+ "js.nguoikhac.tranh-noi-gi-3-viec-kem": {
+  "t": "何を避けるべきか — 実際の言い回し付きの3つのこと",
+  "h": "3031b0e9"
+ },
+ "js.nguoikhac.tuoi": {
+  "t": " 歳",
+  "h": "2e261bf5"
+ },
+ "js.nguoikhac.tuoi-cung": {
+  "t": " 歳、",
+  "h": "b6a16394"
+ },
+ "js.nguoikhac.van-nam": {
+  "t": "<li><b>年運 ",
+  "h": "1192aa32"
+ },
+ "js.nguoikhac.vi-sao-la-so-lai-luan-ra": {
+  "t": "なぜ命盤からこの性格が読み取れるのですか？",
+  "h": "e91e824f"
+ },
+ "js.nguoikhac.viec-can-lam": {
+  "t": "必要なこと",
+  "h": "33183420"
+ },
+ "js.nguoikhac.viec-can-lam-20zs": {
+  "t": "必要なこと：<b>",
+  "h": "50291106"
+ },
+ "js.nguoikhac.viec-gi-thi-dung-giao-cho": {
+  "t": "{ten}さんに任せてはいけないことは何ですか？",
+  "h": "3e1787c1"
+ },
+ "js.nguoikhac.viet-cam-nang-ung-xu": {
+  "t": "接し方ガイドを作成",
+  "h": "20a60416"
+ },
+ "js.nguoikhac.vui-long-nhap-day-du-ngay": {
+  "t": "理解したい方の生年月日を、年・月・日まですべてご入力ください。",
+  "h": "62f8b003"
+ },
+ "js.nguoikhac.who-nghieng-ve-kieu-kieu": {
+  "t": "{who}は{kieu}タイプ寄りです",
+  "h": "03d0db57"
+ },
+ "js.nguoikhac.xem-cam-nang-day-du": {
+  "t": "✦ フル版のガイドを見る —",
+  "h": "de73e107"
+ },
+ "js.nguoikhac.xem-them": {
+  "t": "<summary>命盤の項目をさらに ",
+  "h": "c5afdcd1"
+ },
  "js.nhtg.anh-mat-noi-len-dieu-gi": {
   "t": "まなざしは何を表しますか？",
   "h": "dca0ccee"
@@ -4898,6 +8838,242 @@
  "js.nhtg.vui-long-chon-file-anh": {
   "t": "画像ファイルを選んでください。",
   "h": "71a61127"
+ },
+ "js.nm.ban-be": {
+  "t": "友人",
+  "h": "159fe485"
+ },
+ "js.nm.ban-doc-nhom": {
+  "t": "グループ鑑定",
+  "h": "fb21922c"
+ },
+ "js.nm.ban-doi": {
+  "t": "パートナー",
+  "h": "08ebb385"
+ },
+ "js.nm.ban-nay-doc-tu-full": {
+  "t": "この鑑定は、ご入力の{n}件の命盤から立てた<b>{tong}件のデータ</b>を読み取っています — 各宮に配置された{sao}個の星、{cc}つの格局、{dv}つの大運の区間。当て推量の工程は一切ありません。誰か一人の生年月日のどれか一つを変えると、上の表全体が変わります。",
+  "h": "87d23b00"
+ },
+ "js.nm.bu-nhau": {
+  "t": "補い合う",
+  "h": "909aca10"
+ },
+ "js.nm.can-dang-nhap-de-luu-vao": {
+  "t": "ノートに保存するにはログインが必要です。",
+  "h": "5d26d852"
+ },
+ "js.nm.can-it-nhat-2": {
+  "t": " — 最低2人必要です。",
+  "h": "724525c8"
+ },
+ "js.nm.cap-duoi": {
+  "t": "部下",
+  "h": "4c2caab8"
+ },
+ "js.nm.cat-sat": {
+  "t": "吉−殺 ",
+  "h": "ba23fbfb"
+ },
+ "js.nm.cha-me": {
+  "t": "親",
+  "h": "efc7bb83"
+ },
+ "js.nm.chon-it-nhat-2-nguoi-trong": {
+  "t": "グループを読むには、ノートから少なくとも2人を選んでください。",
+  "h": "49d52946"
+ },
+ "js.nm.chua-cham-van-nam": {
+  "t": " — 年運はまだ採点されていません",
+  "h": "e73fd33a"
+ },
+ "js.nm.chua-chon-ai": {
+  "t": "まだ誰も選ばれていません。",
+  "h": "21f52574"
+ },
+ "js.nm.chua-luu-duoc": {
+  "t": "保存できませんでした。",
+  "h": "0fe9713c"
+ },
+ "js.nm.chua-luu-duoc-kiem-tra-dang": {
+  "t": "保存できませんでした — ログイン状態をご確認ください。",
+  "h": "08d31926"
+ },
+ "js.nm.co-nguoi-trong-so-thieu-ngay": {
+  "t": "ノートの中に生年月日が足りない人がいます — 選び直してください。",
+  "h": "6e0349ce"
+ },
+ "js.nm.con-cai": {
+  "t": "子ども",
+  "h": "eb70b34b"
+ },
+ "js.nm.dang-chon": {
+  "t": "選択中：",
+  "h": "9795c6eb"
+ },
+ "js.nm.dat-ten-goi-de-con-phan": {
+  "t": "ノートの中で区別できるよう、呼び名を付けてください。",
+  "h": "689ee850"
+ },
+ "js.nm.day-la-ban-doc-n-nguoi": {
+  "t": "ノートの**{n}人**についての鑑定です。誰についてさらに詳しく聞きたいですか？",
+  "h": "2c925bdc"
+ },
+ "js.nm.de-giam-chan": {
+  "t": "ぶつかりやすい",
+  "h": "3cd381b5"
+ },
+ "js.nm.doi-co-du-bon-kieu": {
+  "t": "チームには4つのタイプがそろっています。",
+  "h": "16d74569"
+ },
+ "js.nm.doi-dang-thieu-kieu-ds": {
+  "t": "チームに足りないタイプ：{ds}",
+  "h": "60efbac2"
+ },
+ "js.nm.doi-tac-khach": {
+  "t": "取引先／顧客",
+  "h": "7e407353"
+ },
+ "js.nm.dong-nghiep": {
+  "t": "同僚",
+  "h": "d8e2bdd8"
+ },
+ "js.nm.khong-ai-kieu": {
+  "t": "このタイプの人はいません：",
+  "h": "18a19cc7"
+ },
+ "js.nm.khong-the-ket-noi-vui-long": {
+  "t": "接続できませんでした。もう一度お試しください。",
+  "h": "bf0b6e7b"
+ },
+ "js.nm.khung-dai-van": {
+  "t": " · 大運の区間 ",
+  "h": "0beb874f"
+ },
+ "js.nm.khung-dai-van-dlx0": {
+  "t": "大運の区間 ",
+  "h": "06be9124"
+ },
+ "js.nm.kieu": {
+  "t": " · タイプ ",
+  "h": "6d81ffdf"
+ },
+ "js.nm.la-so-cua-ban": {
+  "t": "あなたの命盤：",
+  "h": "0202ce58"
+ },
+ "js.nm.lap-la-so-tung-nguoi": {
+  "t": "一人ずつ命盤を作成",
+  "h": "a94af28e"
+ },
+ "js.nm.loi": {
+  "t": "エラー ",
+  "h": "1b80116b"
+ },
+ "js.nm.loi-8d72": {
+  "t": "エラー：",
+  "h": "471c0087"
+ },
+ "js.nm.moi-luot-doc-toi-da-8": {
+  "t": "一度に読めるのは最大8人までです — それ以上になると鑑定が名簿になってしまいます。",
+  "h": "e35f50af"
+ },
+ "js.nm.moi-luot-doc-toi-da-8-l7vo": {
+  "t": "一度に読めるのは最大8人までです。",
+  "h": "12b66f54"
+ },
+ "js.nm.nam": {
+  "t": "南",
+  "h": "b580ba1b"
+ },
+ "js.nm.nen-tim-them": {
+  "t": "追加で探したいタイプ：",
+  "h": "b500e6d6"
+ },
+ "js.nm.nen-tim-them-kieu-ten": {
+  "t": "追加で探したいタイプ：{ten}",
+  "h": "22272ef1"
+ },
+ "js.nm.nguoi": {
+  "t": " 人",
+  "h": "e4c8f1aa"
+ },
+ "js.nm.nguoi-kgnv": {
+  "t": " 人 — ",
+  "h": "b0f59658"
+ },
+ "js.nm.nhap-du-ngay-thang-nam-sinh": {
+  "t": "生年月日をすべて入力してください。",
+  "h": "370f8e82"
+ },
+ "js.nm.nhom-dang-thieu-chat-gi-ai": {
+  "t": "このグループに足りないものは何で、誰がそれを負担していますか？",
+  "h": "760f9c41"
+ },
+ "js.nm.nhom-n-nguoi": {
+  "t": "{n}人のグループです。",
+  "h": "8c677b9d"
+ },
+ "js.nm.nu": {
+  "t": "女性",
+  "h": "feb92ccd"
+ },
+ "js.nm.phan-kieu-do-cho-trong-cua": {
+  "t": "タイプを分類し、グループの空きを探る",
+  "h": "338c1abe"
+ },
+ "js.nm.qua-nua-nhom-la-kieu": {
+  "t": "グループの半数超がこのタイプ：",
+  "h": "5c247c71"
+ },
+ "js.nm.sep-cap-tren": {
+  "t": "上司／目上の人",
+  "h": "976d7a60"
+ },
+ "js.nm.so-dang-trong-bam-them-nguoi": {
+  "t": "ノートは空です。下の<b>＋ ノートに人を追加</b>を押して、上司、同僚、部下、顧客など、少なくとも2人を追加してください。ノートをアカウントに保存するにはログインが必要です。",
+  "h": "564308fe"
+ },
+ "js.nm.so-nhan-mach-doc-nhom-n": {
+  "t": "人脈ノート — {n}人のグループを読む",
+  "h": "08a560d8"
+ },
+ "js.nm.toi-da-8": {
+  "t": " — 最大8人。",
+  "h": "0bccf420"
+ },
+ "js.nm.tuan-nay-nen-gap-ai-truoc": {
+  "t": "今週は誰から先に会うべきで、どう切り出せばよいですか？",
+  "h": "9337d347"
+ },
+ "js.nm.van-nam": {
+  "t": " · 年運 ",
+  "h": "357d4194"
+ },
+ "js.nm.van-nam-1z56": {
+  "t": " — 年運 ",
+  "h": "12429204"
+ },
+ "js.nm.vi-sao-hai-nguoi-do-de-giam": {
+  "t": "なぜその二人はぶつかりやすいのですか？",
+  "h": "9fbac3bc"
+ },
+ "js.nm.viec-sap-toi-nen-giao-cho-ai": {
+  "t": "近いうちの仕事は、このグループの誰に任せるのがよいですか？",
+  "h": "a25cdab3"
+ },
+ "js.nm.viet-ban-doc-ca-so": {
+  "t": "ノート全体の鑑定を書く",
+  "h": "c9c08f4c"
+ },
+ "js.nm.xoa-khoi-so": {
+  "t": "ノートから削除",
+  "h": "4ba4a755"
+ },
+ "js.nm.xoa-la-so-nay-khoi-so": {
+  "t": "この命盤をノートから削除しますか？",
+  "h": "d9231d4e"
  },
  "js.noisinh.noi-khac": {
   "t": "その他（タイムゾーンを選択）",
@@ -6931,6 +11107,106 @@
   "t": "サンプルは準備中です。しばらくしてからまたお越しください。",
   "h": "992fd7e6"
  },
+ "js.sc.binh-thuong": {
+  "t": "普通 ★",
+  "h": "d49b9158"
+ },
+ "js.sc.bo": {
+  "t": "父",
+  "h": "dbbdf270"
+ },
+ "js.sc.can-luu-y": {
+  "t": "要注意",
+  "h": "def723aa"
+ },
+ "js.sc.con-tuoi-gi-hop-voi": {
+  "t": "お子さまは、何年生まれだと両親に最も合いますか？",
+  "h": "702bccb6"
+ },
+ "js.sc.da-cham-hop-xung-dia-chi": {
+  "t": "今後15年の地支の相性・相克を採点しました（父**{bo}**・母**{me}**）。最も良い年：**{tot}**。まず何をご相談しますか？",
+  "h": "669ae596"
+ },
+ "js.sc.ket-qua-a-b": {
+  "t": "{a} – {b}年の結果",
+  "h": "67cbb5f6"
+ },
+ "js.sc.loi": {
+  "t": "エラー：",
+  "h": "471c0087"
+ },
+ "js.sc.luc-hop-voi-bo": {
+  "t": "父と六合 ✓",
+  "h": "e0214f73"
+ },
+ "js.sc.luc-hop-voi-me": {
+  "t": "母と六合 ✓",
+  "h": "f42895e4"
+ },
+ "js.sc.luc-xung-voi-bo": {
+  "t": "父と六冲 ✗",
+  "h": "fef3a745"
+ },
+ "js.sc.luc-xung-voi-me": {
+  "t": "母と六冲 ✗",
+  "h": "b043bcf2"
+ },
+ "js.sc.me": {
+  "t": "母",
+  "h": "dfc6f90b"
+ },
+ "js.sc.nam-nao-nen-tranh-sinh-con": {
+  "t": "子どもを授かるのを避けるべき年は？",
+  "h": "45ae05ad"
+ },
+ "js.sc.nam-nao-tot-nhat-de-sinh": {
+  "t": "子どもを授かるのに最もよい年は？",
+  "h": "345bd2a8"
+ },
+ "js.sc.nam-thuan-nhat-top-3": {
+  "t": "最も良い年（上位3つ）",
+  "h": "d65badf2"
+ },
+ "js.sc.nam-thuan-nhat-top-3-ds": {
+  "t": "最も良い年（上位3つ）：{ds}",
+  "h": "41c0bad6"
+ },
+ "js.sc.rat-thuan": {
+  "t": "大変良い ★★★",
+  "h": "ea8da095"
+ },
+ "js.sc.tam-hinh-voi-bo": {
+  "t": "父と三刑",
+  "h": "0099e1e7"
+ },
+ "js.sc.tam-hinh-voi-me": {
+  "t": "母と三刑",
+  "h": "996d2b57"
+ },
+ "js.sc.tam-hop-voi-bo": {
+  "t": "父と三合",
+  "h": "117b9ae6"
+ },
+ "js.sc.tam-hop-voi-me": {
+  "t": "母と三合",
+  "h": "5a98a39d"
+ },
+ "js.sc.thuan": {
+  "t": "良い ★★",
+  "h": "7a571e7c"
+ },
+ "js.sc.trung-tinh": {
+  "t": "中立",
+  "h": "308793c3"
+ },
+ "js.sc.vi-sao-nam-do-hop-ca": {
+  "t": "なぜその年は父母どちらにも合うのですか？",
+  "h": "bc9256b2"
+ },
+ "js.sc.vui-long-nhap-nam-sinh": {
+  "t": "父と母の有効な生まれ年を入力してください。",
+  "h": "ad827462"
+ },
  "js.shell.an": {
   "t": "非表示",
   "h": "f4ea7c30"
@@ -8259,9 +12535,25 @@
   "t": "**。それとも、新しい名前を提案しましょうか？",
   "h": "d922a861"
  },
+ "js.shellui.hc-ban-o-day": {
+  "t": "現在地",
+  "h": "0ed02beb"
+ },
+ "js.shellui.hc-duoc": {
+  "t": "可",
+  "h": "4c144474"
+ },
+ "js.shellui.hd-al": {
+  "t": "（旧暦{m}/{d}）",
+  "h": "3fd68961"
+ },
  "js.shellui.hd-can-hanh": {
   "t": "、干の五行：",
   "h": "96563d79"
+ },
+ "js.shellui.hd-can-hanh-info": {
+  "t": "天干 <strong>{can}</strong> — 五行 <strong>{hanh}</strong>",
+  "h": "4069d76b"
  },
  "js.shellui.hd-gio-can-tranh-hac-dao": {
   "t": "避けたい時刻（黒道）：",
@@ -8278,6 +12570,118 @@
  "js.shellui.hd-gio-tot-hoang-dao": {
   "t": "吉時（黄道）：",
   "h": "100b31dc"
+ },
+ "js.shellui.hd-ngay-cc": {
+  "t": "日 <strong>{cc}</strong>",
+  "h": "7f416c3a"
+ },
+ "js.shellui.hd-nhap-ngay-hop-le": {
+  "t": "有効な日付を入力してください。",
+  "h": "11a91c34"
+ },
+ "js.shellui.hd-thang-khong-co-ngay": {
+  "t": "{y}年{m}月に{d}日はありません。選び直してください。",
+  "h": "da49ec5e"
+ },
+ "js.shellui.hd-title": {
+  "t": "{date}{al} — {cc}の日",
+  "h": "593d5baf"
+ },
+ "js.shellui.hdd-bh": {
+  "t": "殺気、災い",
+  "h": "28e5f7d8"
+ },
+ "js.shellui.hdd-cht": {
+  "t": "もつれ、停滞",
+  "h": "4363abe5"
+ },
+ "js.shellui.hdd-ct": {
+  "t": "口論、いざこざ",
+  "h": "845d6380"
+ },
+ "js.shellui.hdd-hv": {
+  "t": "盗難、損失",
+  "h": "cde5c999"
+ },
+ "js.shellui.hdd-kq": {
+  "t": "金運、収入",
+  "h": "15237468"
+ },
+ "js.shellui.hdd-md": {
+  "t": "貴人の助け、順調",
+  "h": "a8e75ee4"
+ },
+ "js.shellui.hdd-nd": {
+  "t": "名声、成就",
+  "h": "b3890138"
+ },
+ "js.shellui.hdd-td": {
+  "t": "福徳、凶を和らげる",
+  "h": "e3a72954"
+ },
+ "js.shellui.hdd-th": {
+  "t": "訴訟、争い、凶",
+  "h": "a6198a39"
+ },
+ "js.shellui.hdd-tl": {
+  "t": "財運、万事順調",
+  "h": "1ae9748a"
+ },
+ "js.shellui.hdd-tlao": {
+  "t": "拘束、障害",
+  "h": "5d6fac43"
+ },
+ "js.shellui.hdd-tm": {
+  "t": "守護、祈福",
+  "h": "cdb38651"
+ },
+ "js.shellui.hdt-bh": {
+  "t": "白虎",
+  "h": "f6380016"
+ },
+ "js.shellui.hdt-cht": {
+  "t": "勾陳",
+  "h": "36fb04ef"
+ },
+ "js.shellui.hdt-ct": {
+  "t": "朱雀",
+  "h": "90214276"
+ },
+ "js.shellui.hdt-hv": {
+  "t": "玄武",
+  "h": "f27e517b"
+ },
+ "js.shellui.hdt-kq": {
+  "t": "金匱",
+  "h": "6b3e8125"
+ },
+ "js.shellui.hdt-md": {
+  "t": "明堂",
+  "h": "323a8d91"
+ },
+ "js.shellui.hdt-nd": {
+  "t": "玉堂",
+  "h": "2c94d958"
+ },
+ "js.shellui.hdt-td": {
+  "t": "天徳",
+  "h": "3c86d12a"
+ },
+ "js.shellui.hdt-th": {
+  "t": "天刑",
+  "h": "51b356df"
+ },
+ "js.shellui.hdt-tl": {
+  "t": "青竜",
+  "h": "deccb086"
+ },
+ "js.shellui.hdt-tlao": {
+  "t": "天牢",
+  "h": "44ad7734"
+ },
+ "js.shellui.hdt-tm": {
+  "t": "司命",
+  "h": "fa69d852"
  },
  "js.shellui.het-phan-dung-thu": {
   "t": "お試しはここまでです。",
@@ -8842,6 +13246,74 @@
  "js.shellui.kinh-mat-nao-hop-tuong-mat": {
   "t": "どんなメガネが私の顔に合いますか？",
   "h": "e2a2a092"
+ },
+ "js.shellui.kl-binh-thuong": {
+  "t": "平常",
+  "h": "7a1fa869"
+ },
+ "js.shellui.kl-cau-hoang-oc": {
+  "t": "今年は荒屋の年です。売買や家の建築は避けましょう。",
+  "h": "50677d38"
+ },
+ "js.shellui.kl-cau-kim-lau": {
+  "t": "今年は金楼（{loai}）の年で、{hai}。結婚、建築、大きな着工は避けましょう。",
+  "h": "53df32eb"
+ },
+ "js.shellui.kl-cau-tam-tai": {
+  "t": "今年は三災の運にあたります。大きな決断には慎重に。",
+  "h": "72ae51c8"
+ },
+ "js.shellui.kl-con-tam-tai": {
+  "t": "今年は三災とも重なるため、特に慎重さが必要です。",
+  "h": "6d4d5899"
+ },
+ "js.shellui.kl-hai-luc-suc": {
+  "t": "家畜や財産に影響する",
+  "h": "214ff98e"
+ },
+ "js.shellui.kl-hai-than": {
+  "t": "家主本人に影響する",
+  "h": "682a3213"
+ },
+ "js.shellui.kl-hai-the": {
+  "t": "妻に影響する",
+  "h": "09bcf309"
+ },
+ "js.shellui.kl-hai-tu": {
+  "t": "子どもに影響する",
+  "h": "f3ad84bb"
+ },
+ "js.shellui.kl-loai-luc-suc": {
+  "t": "六畜",
+  "h": "524f4cec"
+ },
+ "js.shellui.kl-loai-than": {
+  "t": "身",
+  "h": "77575b16"
+ },
+ "js.shellui.kl-loai-the": {
+  "t": "妻",
+  "h": "ccd000d4"
+ },
+ "js.shellui.kl-loai-tu": {
+  "t": "子",
+  "h": "bef3174e"
+ },
+ "js.shellui.kl-nam-nay-khong-co": {
+  "t": "今年は金楼・荒屋・三災のいずれにもあたりません。",
+  "h": "2d212f11"
+ },
+ "js.shellui.kl-nam-tuoi": {
+  "t": "{y}年（数え年{t}歳）",
+  "h": "511d7f9e"
+ },
+ "js.shellui.kl-nhap-nam-hop-le": {
+  "t": "有効な生まれ年（1900〜2010）を入力してください。",
+  "h": "8363c20b"
+ },
+ "js.shellui.kl-title": {
+  "t": "{cc}（{by}）— {na} · {cy}年の数え年：{t}歳",
+  "h": "f6b9127c"
  },
  "js.shellui.km-cuc": {
   "t": "{dun}{n}局",
@@ -9706,6 +14178,38 @@
  "js.shellui.nghe-them-mon-khac": {
   "t": "他の分野も聞く</span>",
   "h": "abd835bb"
+ },
+ "js.shellui.ngt-al": {
+  "t": "旧{m}/{d}",
+  "h": "a38795f8"
+ },
+ "js.shellui.ngt-chon-thang": {
+  "t": "月は1〜12から選んでください。",
+  "h": "ad9727eb"
+ },
+ "js.shellui.ngt-duong-cong-ki": {
+  "t": "楊公忌",
+  "h": "a919874b"
+ },
+ "js.shellui.ngt-nguyet-ki": {
+  "t": "月忌",
+  "h": "53f1d21f"
+ },
+ "js.shellui.ngt-nhap-nam-hop-le": {
+  "t": "有効な年（2020〜2030）を入力してください。",
+  "h": "386683dc"
+ },
+ "js.shellui.ngt-tam-nuong": {
+  "t": "三娘",
+  "h": "a82168f4"
+ },
+ "js.shellui.ngt-title": {
+  "t": "{y}年{m}月 — 吉凶日カレンダー",
+  "h": "abd229f8"
+ },
+ "js.shellui.ngt-tot": {
+  "t": "吉",
+  "h": "f716d517"
  },
  "js.shellui.ngu-hanh-net-lien-quan-gi": {
   "t": "筆跡の五行は、用神とどう関係しますか？",
@@ -15835,6 +20339,78 @@
   "t": "{n}月",
   "h": "4dd9659f"
  },
+ "kimlau.bang-tra-20-nam-toi": {
+  "t": "今後20年の<br>早見表",
+  "h": "ded0c033"
+ },
+ "kimlau.bang-tra-20-nam-toi-9fqx": {
+  "t": "<span class=\"res-block-title\">今後20年の早見表</span>",
+  "h": "8e04bf8f"
+ },
+ "kimlau.can-chi": {
+  "t": "干支",
+  "h": "8b784611"
+ },
+ "kimlau.cuoi-hoi-lam-nha": {
+  "t": "結婚式・<br>家の建築",
+  "h": "7e98e435"
+ },
+ "kimlau.hoi-thay-nam-dep-cach-hoa": {
+  "t": "✦ 先生に、良い年と対処法を聞く",
+  "h": "5f76ab82"
+ },
+ "kimlau.ket-luan-ngay-tuc-thi": {
+  "t": "その場で<br>結論",
+  "h": "b2797a93"
+ },
+ "kimlau.kim-lau-la-quan-niem-dan": {
+  "t": "金楼は、家主の数え年にもとづく民間信仰で、特定の年齢は家の建築や結婚に向かないとされます。三災は関連する概念で、十二支の周期のなかで障害に遭いやすいとされる連続3年を指します。",
+  "h": "625e5413"
+ },
+ "kimlau.kim-lau-tam-tai": {
+  "t": "金楼と三災",
+  "h": "cea3719a"
+ },
+ "kimlau.kim-lau-tam-tai-tu-vi": {
+  "t": "金楼と三災 — 明宝紫微斗数",
+  "h": "b2ec2af2"
+ },
+ "kimlau.kim-lau-tam-tai-tuoi-lam": {
+  "t": "<b>金楼と三災</b><span>家の建築・結婚に障りのある年齢かどうか</span>",
+  "h": "1fb12a82"
+ },
+ "kimlau.nam-dl": {
+  "t": "西暦年",
+  "h": "6c965b9e"
+ },
+ "kimlau.nam-sinh-duong-lich": {
+  "t": "生まれ年（新暦）",
+  "h": "9f8721e0"
+ },
+ "kimlau.nhap-nam-sinh-duong-lich-he": {
+  "t": "生まれ年（新暦）を入力してください。システムが金楼・三災・荒屋の古法に照らして確認し、結論と今後20年の早見表を返します。",
+  "h": "cca6f199"
+ },
+ "kimlau.pham-kim-lau-tam-tai-ma": {
+  "t": "金楼や三災にあたっていると知らないまま、結婚や家の建築をしてしまい、手遅れになってから気づく人は少なくありません。生まれ年を入力すれば、すぐに結論と今後20年の早見表が届きます。",
+  "h": "7e987b4a"
+ },
+ "kimlau.tinh-trang": {
+  "t": "状態",
+  "h": "5a46503e"
+ },
+ "kimlau.tra-cuu": {
+  "t": "調べる →",
+  "h": "fd5b08a7"
+ },
+ "kimlau.tuoi-ta": {
+  "t": "数え年",
+  "h": "536f1746"
+ },
+ "kimlau.xem-tuoi-lam-nha-cuoi-hoi": {
+  "t": "家の建築や結婚の年齢が、数え年で金楼・三災・荒屋にあたるかを調べ、今後20年の早見表を示します。対処法は先生に聞けます。",
+  "h": "041eccbd"
+ },
  "kinhdich.1-gieo-que": {
   "t": "<span class=\"wss-n\">1</span><span class=\"wss-l\">卦を立てる</span>",
   "h": "bf868703"
@@ -17259,6 +21835,222 @@
   "t": "<span class=\"hp-ic\" data-icon=\"users\"></span><span>相性の良い年<br>悪い年</span>",
   "h": "9a664cc3"
  },
+ "ngaytot.2-nhan-ket-qua": {
+  "t": "<span class=\"wss-n\">2</span><span class=\"wss-l\">結果を受け取る</span>",
+  "h": "b0b2f830"
+ },
+ "ngaytot.chon-thang-nam-duong-lich-he": {
+  "t": "新暦の月と年を選んでください。システムが暦を算出して吉凶の日を照合し、ひと月分を「吉」「要注意」「忌避」に色分けして返します。",
+  "h": "0ad99575"
+ },
+ "ngaytot.hoi-thay-chon-ngay-dep-trong": {
+  "t": "✦ 先生に今月の吉日を選んでもらう",
+  "h": "254611c0"
+ },
+ "ngaytot.lich-ngay-tot-xau-ca-thang": {
+  "t": "旧暦にもとづく、ひと月分の吉凶日カレンダー。三娘・月忌・楊公忌がわかります。結婚式や着工に向く日を先生に選んでもらえます。",
+  "h": "39fc01f0"
+ },
+ "ngaytot.lich-tot-xau-ca-thang": {
+  "t": "ひと月分の<br>吉凶カレンダー",
+  "h": "2da65fe3"
+ },
+ "ngaytot.luu-y-nho-duong-cong-ki": {
+  "t": "軽い注意（楊公忌）",
+  "h": "72c4ae94"
+ },
+ "ngaytot.muon-len-lich-ca-thang-ma": {
+  "t": "ひと月の予定を立てたいけれど、避けるべき日や、大事なことを始めるのに都合のよい日がわからない。そんなときは月を選ぶだけで、吉凶の日を一日ずつ見やすく並べた一覧が届きます。",
+  "h": "b18291cb"
+ },
+ "ngaytot.ngay-ki-tranh-viec-lon": {
+  "t": "忌日 — 大事は避ける",
+  "h": "c5145190"
+ },
+ "ngaytot.ngay-ky-can-tranh": {
+  "t": "避けるべき<br>忌日",
+  "h": "22943f84"
+ },
+ "ngaytot.ngay-tot-an-toan": {
+  "t": "吉日 — 安心",
+  "h": "3795683e"
+ },
+ "ngaytot.ngay-tot-trong-thang": {
+  "t": "今月の吉日",
+  "h": "c2d7afad"
+ },
+ "ngaytot.ngay-tot-trong-thang-lich-van": {
+  "t": "<b>今月の吉日</b><span>万年暦 · 旧暦にもとづく吉凶日</span>",
+  "h": "a5097cc1"
+ },
+ "ngaytot.ngay-tot-trong-thang-tu-vi": {
+  "t": "今月の吉日 — 明宝紫微斗数",
+  "h": "d7f28313"
+ },
+ "ngaytot.thang-can-xem-duong-lich": {
+  "t": "確認したい月（新暦）",
+  "h": "f67dc270"
+ },
+ "ngaytot.truc-nhi-thap-bat-tu": {
+  "t": "十二直・<br>二十八宿",
+  "h": "d2ad3351"
+ },
+ "ngaytot.xem-lich": {
+  "t": "カレンダーを見る →",
+  "h": "6fa85107"
+ },
+ "nguoikhac.2-xem-truoc-cam-nang": {
+  "t": "<span class=\"wss-n\">2</span><span class=\"wss-l\">ガイドを先読み</span>",
+  "h": "f63afb72"
+ },
+ "nguoikhac.ban-be": {
+  "t": "友人",
+  "h": "159fe485"
+ },
+ "nguoikhac.ban-cam-nang-nay-phac-hoa": {
+  "t": "<span class=\"ic\" data-icon=\"lightbulb\"></span> この接し方ガイドは、紫微斗数の命盤のデータに、先人が残した研究の経験を組み合わせて描いたものです。あくまで参考としてお読みください。<br><br> <span class=\"ic\" data-icon=\"scale\"></span> これは<b>うまく付き合っていくために理解する</b>ための枠組みであり、誰かを操るためのものではありません。見られる側の方はここにいないため、本鑑定はその方の<b>健康、個人的なお金、結婚については、あえて読みません</b>。性格に良し悪しはなく、場面に合うか合わないかがあるだけです。",
+  "h": "d4cf893e"
+ },
+ "nguoikhac.ban-dang-can-lam-gi-voi": {
+  "t": "この方とのことで、何をする必要がありますか",
+  "h": "c237535b"
+ },
+ "nguoikhac.ban-luan-giai-mau-tai-pdf": {
+  "t": "<span class=\"sc-ic\" data-icon=\"file-text\"></span> <span class=\"sc-txt\"><b>サンプル鑑定書</b><span>サンプル命盤の「他の人の命盤」フル版PDFをダウンロードして、実際の内容を先にご確認いただけます。</span></span> <a class=\"sc-btn\" href=\"/tai-mau/mau-nguoi-khac.pdf\" target=\"_blank\" rel=\"noopener\">PDFをダウンロード →</a>",
+  "h": "90ab14f5"
+ },
+ "nguoikhac.cam-nang-ung-xu": {
+  "t": "<span class=\"hp-ic\" data-icon=\"scroll-text\"></span><span>接し方<br>ガイド</span>",
+  "h": "02dec92e"
+ },
+ "nguoikhac.cap-duoi-nguoi-minh-quan": {
+  "t": "部下／自分が管理する人",
+  "h": "eb2f06ee"
+ },
+ "nguoikhac.cau-hoi-chay-ngam-trong-dau": {
+  "t": "頭の中で働いている問い",
+  "h": "c0934bd9"
+ },
+ "nguoikhac.cha-me-nguoi-lon-trong-nha": {
+  "t": "親／家の年長者",
+  "h": "5f1e7b56"
+ },
+ "nguoikhac.co-la-so-cua-ban-thi": {
+  "t": "あなた自身の命盤があれば、鑑定に<b>「この方とあなた」</b>の項目が加わります。二人がぶつかりやすいところと、補い合えるところです。空欄でも、それ以外の部分はすべてご覧いただけます。",
+  "h": "cfbb6a2e"
+ },
+ "nguoikhac.con-cai": {
+  "t": "子ども",
+  "h": "eb70b34b"
+ },
+ "nguoikhac.con-nguoi-nay-van-hanh-the": {
+  "t": "この人がどう動くか",
+  "h": "444d1e25"
+ },
+ "nguoikhac.dieu-ho-coi-trong": {
+  "t": "<span class=\"res-block-title\">大切にしていること</span>",
+  "h": "5656f5b5"
+ },
+ "nguoikhac.dieu-lam-ho-kho-chiu": {
+  "t": "不快に感じること",
+  "h": "754ed7ce"
+ },
+ "nguoikhac.doi-chieu-them-voi-la-so": {
+  "t": "あなた自身の命盤も照らし合わせる（任意）",
+  "h": "c04c1f4c"
+ },
+ "nguoikhac.doi-tac-khach-hang": {
+  "t": "取引先／顧客",
+  "h": "b39df542"
+ },
+ "nguoikhac.dong-nghiep-ngang-hang": {
+  "t": "同僚（同じ立場）",
+  "h": "c2321d8a"
+ },
+ "nguoikhac.hieu-sai-mot-nguoi-quan-trong": {
+  "t": "大切な人を誤解することが、避けられたはずの衝突の根っこになりがちです。上司、取引先、恋人 — 相手の生年月日と時刻を入力すると、何を言うべきか、何を避けるべきかのガイドが届きます。",
+  "h": "f8a6e6f5"
+ },
+ "nguoikhac.la-so-nguoi-khac": {
+  "t": "他の人の命盤",
+  "h": "e454923c"
+ },
+ "nguoikhac.la-so-nguoi-khac-cam-nang": {
+  "t": "<b>他の人の命盤</b><span>ひとりの相手に合わせた接し方ガイド</span>",
+  "h": "fdca2edd"
+ },
+ "nguoikhac.la-so-nguoi-khac-tu-vi": {
+  "t": "他の人の命盤 — 明宝紫微斗数",
+  "h": "b5ba1ea3"
+ },
+ "nguoikhac.luc-nao-nen-dua-viec-lon": {
+  "t": "<span class=\"hp-ic\" data-icon=\"hourglass\"></span><span>大きな話を<br>切り出す時期</span>",
+  "h": "ff316436"
+ },
+ "nguoikhac.luc-nay-ho-dang-o-dau": {
+  "t": "<span class=\"res-block-title\">今、相手はどこにいるか</span>",
+  "h": "85151bc9"
+ },
+ "nguoikhac.moi-luot-luong": {
+  "t": "<span class=\"vnd\" data-tvp-price-vnd=\"nguoi-khac\"></span> / 回 <span class=\"cb-sub\">(<span data-tvp-price=\"nguoi-khac\">…</span> 両)</span>",
+  "h": "4e692d79"
+ },
+ "nguoikhac.nen-noi-gi-tranh-noi-gi": {
+  "t": "<span class=\"hp-ic\" data-icon=\"message-circle\"></span><span>言うべきこと<br>避けること</span>",
+  "h": "686a6593"
+ },
+ "nguoikhac.ngay-sinh-cua-nguoi-ban-muon": {
+  "t": "理解したい相手の生年月日",
+  "h": "983c4051"
+ },
+ "nguoikhac.nguoi-nay-la": {
+  "t": "この方は",
+  "h": "d70093a0"
+ },
+ "nguoikhac.nguoi-nay-la-ai": {
+  "t": "<span class=\"res-block-title\">この人はどんな人か</span>",
+  "h": "22ef9ce3"
+ },
+ "nguoikhac.nguoi-nay-voi-ban": {
+  "t": "<span class=\"res-block-title\">この方とあなた</span>",
+  "h": "a89f8cc8"
+ },
+ "nguoikhac.nhap-la-so-sep-dong-nghiep": {
+  "t": "上司、同僚、部下、身近な人の命盤を入力すると、接し方ガイドが届きます：相手がどう動くか、何を言うべきか、避けるべきか、大きな話はいつ切り出すか。",
+  "h": "95d5f29c"
+ },
+ "nguoikhac.nhap-ngay-gio-sinh-nguoi-do": {
+  "t": "相手の生年月日と時刻、あなたとの関係、その方とのことで必要なことを入力すると、挙げていただいた用件に沿って命盤を読み解きます。",
+  "h": "8d0d8d61"
+ },
+ "nguoikhac.noi-the-nao": {
+  "t": "<span class=\"res-block-title\">どう伝えるか</span>",
+  "h": "2757978b"
+ },
+ "nguoikhac.sep-cap-tren": {
+  "t": "上司／目上の人",
+  "h": "976d7a60"
+ },
+ "nguoikhac.tra-loi-thay-o-khung-chat": {
+  "t": "右のチャット欄で先生に、理解したい方が誰か、その方の生年月日をお伝えください。",
+  "h": "0b35941d"
+ },
+ "nguoikhac.tranh": {
+  "t": "避",
+  "h": "718a6b75"
+ },
+ "nguoikhac.vo-chong-nguoi-yeu": {
+  "t": "配偶者／恋人",
+  "h": "4165e532"
+ },
+ "nguoikhac.xem-cam-nang-ung-xu-ton": {
+  "t": "<span class=\"bg-label\"><span class=\"ic\" data-icon=\"user\"></span><b id=\"btnGoLabel\">接し方ガイドを見る →</b></span> <small>料金 <span class=\"vnd\" data-tvp-price-vnd=\"nguoi-khac\"></span> <span class=\"cb-sub\">(<span data-tvp-price=\"nguoi-khac\">…</span> 両)</span></small>",
+  "h": "da20bb48"
+ },
+ "nguoikhac.xem-nguoi-khac": {
+  "t": "別の人を見る",
+  "h": "a058d2f4"
+ },
  "nguon.bo-du-lieu-mo": {
   "t": "オープンデータセット",
   "h": "edc59291"
@@ -17482,6 +22274,130 @@
  "nhtg.xoa-anh": {
   "t": "✕ 画像を削除",
   "h": "36e95d9f"
+ },
+ "nm.ban-do-ca-nhom": {
+  "t": "<span class=\"hp-ic\" data-icon=\"users\"></span><span>グループ全体の<br>マップ</span>",
+  "h": "682f4a1b"
+ },
+ "nm.ban-doc-nay-phac-hoa-tu": {
+  "t": "<span class=\"ic\" data-icon=\"lightbulb\"></span> この鑑定は、紫微斗数の命盤のデータに、先人が残した研究の経験を組み合わせて描いたものです。あくまで参考としてお読みください。<br><br> <span class=\"ic\" data-icon=\"scale\"></span> これは<b>人に合わせて仕事を割り振る</b>ための枠組みであり、人事評価の採点表ではありません。ノートに入っている方々はここにいないため、本鑑定は<b>誰かの順位づけ、健康、個人的なお金、家庭の事情はあえて読まず</b>、<b>人の入れ替えも勧めません</b>。性格に良し悪しはなく、ある仕事に合うか合わないかがあるだけです。",
+  "h": "9a54fb99"
+ },
+ "nm.ban-dung-o-dau-trong-nhom": {
+  "t": "<span class=\"res-block-title\">グループの中でのあなたの立ち位置</span>",
+  "h": "e37f7177"
+ },
+ "nm.ban-luan-giai-mau-tai-pdf": {
+  "t": "<span class=\"sc-ic\" data-icon=\"file-text\"></span> <span class=\"sc-txt\"><b>サンプル鑑定書</b><span>サンプル命盤の「人脈ノート」フル版PDFをダウンロードして、実際の内容を先にご確認いただけます。</span></span> <a class=\"sc-btn\" href=\"/tai-mau/mau-nhan-mach.pdf\" target=\"_blank\" rel=\"noopener\">PDFをダウンロード →</a>",
+  "h": "37e05c5a"
+ },
+ "nm.cac-cap-trong-nhom": {
+  "t": "<span class=\"res-block-title\">グループ内のペア</span>",
+  "h": "1f22e684"
+ },
+ "nm.cap-can-de-y": {
+  "t": "<span class=\"res-block-title\">注意したいペア</span>",
+  "h": "2fbe6792"
+ },
+ "nm.cap-de-giam-chan": {
+  "t": "<span class=\"hp-ic\" data-icon=\"scale\"></span><span>ぶつかりやすい<br>ペア</span>",
+  "h": "81f490fb"
+ },
+ "nm.cho-trong-cua-nhom": {
+  "t": "<span class=\"res-block-title\">グループに足りないところ</span>",
+  "h": "96c373bb"
+ },
+ "nm.chon-lai": {
+  "t": "選び直す",
+  "h": "25ee067e"
+ },
+ "nm.chon-nguoi-trong-so": {
+  "t": "ノートから人を選ぶ",
+  "h": "fb10fef6"
+ },
+ "nm.co-la-so-cua-ban-thi": {
+  "t": "あなた自身の命盤があれば、鑑定に<b>「グループの中でのあなたの立ち位置」</b>の項目が加わります — 誰とぶつかりやすく、誰を補えるか。",
+  "h": "883457f9"
+ },
+ "nm.da-doc-truoc-do": {
+  "t": "<span class=\"res-block-title\">以前に読んだ内容</span>",
+  "h": "073f164b"
+ },
+ "nm.doc-ca-so-ton-luong": {
+  "t": "<span class=\"bg-label\"><span class=\"ic\" data-icon=\"users\"></span><b id=\"btnGoLabel\">ノート全体を読む →</b></span> <small>料金 <span class=\"vnd\" data-tvp-price-vnd=\"nhan-mach\"></span> <span class=\"cb-sub\">(<span data-tvp-price=\"nhan-mach\">…</span> 両)</span></small>",
+  "h": "708b8f51"
+ },
+ "nm.dua-ca-doi-hoac-danh-sach": {
+  "t": "チーム全員や顧客リストをひとつにまとめましょう：このグループに足りないタイプは何か、誰と誰がぶつかりやすいか、今週は誰から会うべきか。",
+  "h": "6afc2255"
+ },
+ "nm.goi-la": {
+  "t": "呼び名",
+  "h": "1e3d72e2"
+ },
+ "nm.lam-gi-tuan-nay": {
+  "t": "<span class=\"res-block-title\">今週やること</span>",
+  "h": "5b333d8e"
+ },
+ "nm.luu-vao-so": {
+  "t": "ノートに保存",
+  "h": "e88b1df6"
+ },
+ "nm.moi-luot-luong": {
+  "t": "<span class=\"vnd\" data-tvp-price-vnd=\"nhan-mach\"></span> / 回 <span class=\"cb-sub\">(<span data-tvp-price=\"nhan-mach\">…</span> 両)</span>",
+  "h": "110df12a"
+ },
+ "nm.nhom-nay-hinh-gi": {
+  "t": "<span class=\"res-block-title\">このグループはどんな姿か</span>",
+  "h": "f51250a4"
+ },
+ "nm.sep-hung-chi-lan-khach-a": {
+  "t": "上司のフン、ランさん、顧客A…",
+  "h": "503be7e7"
+ },
+ "nm.so-nhan-mach": {
+  "t": "人脈ノート",
+  "h": "17e83429"
+ },
+ "nm.so-nhan-mach-doc-ca-nhom": {
+  "t": "<b>人脈ノート</b><span>一人ずつではなく、グループ全体をまとめて読む</span>",
+  "h": "3b36ced2"
+ },
+ "nm.so-nhan-mach-tu-vi-minh": {
+  "t": "人脈ノート — 明宝紫微斗数",
+  "h": "d9d679ab"
+ },
+ "nm.them-la-so-cua-chinh-ban": {
+  "t": "あなた自身の命盤を追加（任意）",
+  "h": "2423d794"
+ },
+ "nm.them-nguoi-vao-so": {
+  "t": "＋ ノートに人を追加",
+  "h": "364e14c5"
+ },
+ "nm.them-ten-ngay-sinh-va-gioi": {
+  "t": "各メンバーの名前、生年月日、性別をノートに追加して、グループ全体を一度に分析します。",
+  "h": "7e27671a"
+ },
+ "nm.thu-tu-goi-y-tiep-can": {
+  "t": "<span class=\"res-block-title\">声をかける順番の提案</span>",
+  "h": "d0842a6c"
+ },
+ "nm.trong-mot-doi-nhom-ai-hop": {
+  "t": "チームの中で誰と誰が合い、誰と誰がぶつかりやすいかは、問題が起きてからようやく見えてくることが多いものです。各メンバーの生年月日を追加すると、チームの配置を組み直すための人材マップが届きます。",
+  "h": "09e8b31f"
+ },
+ "nm.tung-nguoi": {
+  "t": "<span class=\"res-block-title\">一人ずつ</span>",
+  "h": "d587410c"
+ },
+ "nm.viec-nen-lam-tuan-nay": {
+  "t": "<span class=\"hp-ic\" data-icon=\"hourglass\"></span><span>今週<br>やること</span>",
+  "h": "7343e7f5"
+ },
+ "nm.xep-theo-van-nam-cua-tung": {
+  "t": "<b>一人ひとりの年運</b>の順に並べています — 良い年にいる人のほうが、新しい話を切り出しやすいからです。これは重要度の順位では<b>ありません</b>。",
+  "h": "cc8d076f"
  },
  "oracle.1-chon-kieu-rut": {
   "t": "<span class=\"wss-n\">1</span><span class=\"wss-l\">引き方を選ぶ</span>",
@@ -18394,6 +23310,94 @@
  "sanpham.xem-tuoi-vo-chong": {
   "t": "夫婦の相性",
   "h": "f3e7b1ed"
+ },
+ "sc.2-nhan-ket-qua": {
+  "t": "<span class=\"wss-n\">2</span><span class=\"wss-l\">結果を受け取る</span>",
+  "h": "b0b2f830"
+ },
+ "sc.bang-du-15-nam-toi": {
+  "t": "<span class=\"hp-ic\" data-icon=\"calendar-days\"></span><span>今後15年の<br>完全な表</span>",
+  "h": "7fd926c3"
+ },
+ "sc.can-chi": {
+  "t": "干支",
+  "h": "8b784611"
+ },
+ "sc.cham-diem-luc-hop-tam-hop": {
+  "t": "お子さんの生まれ年と両親の間の地支の六合・三合・六冲を採点 — 今後15年の表と、最も良い年。先生に詳しく聞くこともできます。",
+  "h": "1e93ec3a"
+ },
+ "sc.danh-gia": {
+  "t": "評価",
+  "h": "5df137aa"
+ },
+ "sc.ghi-chu-ket-qua-dua-tren": {
+  "t": "<strong style=\"color:#444\">注記：</strong>結果は生年の地支（西暦）に基づいています。お子さんが西暦の1〜2月に生まれた場合、旧暦の年で数えた実際の地支が1年ずれることがあります — より慎重な確認が必要です。",
+  "h": "c4463c7c"
+ },
+ "sc.hanh": {
+  "t": "五行",
+  "h": "58608859"
+ },
+ "sc.hoi-thay-luan-sau-nam-nao": {
+  "t": "✦ どの年に産むのがよいか、先生に詳しく聞く",
+  "h": "665710f8"
+ },
+ "sc.ket-qua-15-nam-dia-chi": {
+  "t": "<span class=\"res-block-title\" id=\"resultTitle\">15年の結果</span> <span style=\"font-size:11px;color:#666\">地支・六合・三合・六冲</span>",
+  "h": "a7874a13"
+ },
+ "sc.luc-hop-tam-hop-luc-xung": {
+  "t": "<span class=\"hp-ic\" data-icon=\"scale\"></span><span>六合・三合<br>六冲</span>",
+  "h": "3c607a04"
+ },
+ "sc.ly-do": {
+  "t": "理由",
+  "h": "0cbf3763"
+ },
+ "sc.nam": {
+  "t": "年",
+  "h": "98926c7e"
+ },
+ "sc.nam-sinh-bo": {
+  "t": "父の生まれ年",
+  "h": "a1009c64"
+ },
+ "sc.nam-sinh-cua-bo-va-me": {
+  "t": "父と母の生まれ年",
+  "h": "0cc92594"
+ },
+ "sc.nam-sinh-me": {
+  "t": "母の生まれ年",
+  "h": "bef8fb8f"
+ },
+ "sc.nam-thuan-nhat-de-sinh-con": {
+  "t": "<span class=\"hp-ic\" data-icon=\"star\"></span><span>子どもを産むのに<br>最も良い年</span>",
+  "h": "456f641b"
+ },
+ "sc.nhap-nam-sinh-bo-va-me": {
+  "t": "父と母の生まれ年を入力すると、今後15年の評価表と最も良い年が分かります。",
+  "h": "0cda7d1e"
+ },
+ "sc.sinh-con-dung-nam-hop-tuoi": {
+  "t": "両親と相性の合う年に子どもを授かりたいと願う家庭は多いものですが、正しく計算するのは簡単ではありません。ご夫婦の生まれ年を入力して、今後15年で最も良い年を今すぐ探しましょう。",
+  "h": "34b8b50b"
+ },
+ "sc.xem-15-nam-mien-phi": {
+  "t": "<span class=\"bg-label\"><span class=\"ic\" data-icon=\"hourglass\"></span><b id=\"btnGoLabel\">15年を見る →</b></span> <small>無料</small>",
+  "h": "f03c38c9"
+ },
+ "sc.xem-tuoi-sinh-con": {
+  "t": "子どもを産む年の相性",
+  "h": "2e015092"
+ },
+ "sc.xem-tuoi-sinh-con-nam-sinh": {
+  "t": "<b>子どもを産む年の相性</b><span>地支でみる、両親と合うお子さんの生まれ年</span>",
+  "h": "9da380f6"
+ },
+ "sc.xem-tuoi-sinh-con-tu-vi": {
+  "t": "子どもを産む年の相性 — 明宝紫微斗数",
+  "h": "23026bbb"
  },
  "taikhoan.add-mcp-server-chon-streamable-http": {
   "t": "<strong>Add MCP server</strong> → <strong>Streamable HTTP</strong> を選択。",

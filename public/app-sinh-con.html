@@ -3,8 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Xem tuổi sinh con — Tử Vi Minh Bảo</title>
-<meta name="description" content="Chấm điểm lục hợp/tam hợp/lục xung địa chi giữa năm sinh con và bố mẹ — bảng 15 năm tới, năm thuận nhất. Hỏi Thầy luận sâu.">
+<title data-i18n="sc.xem-tuoi-sinh-con-tu-vi">Xem tuổi sinh con — Tử Vi Minh Bảo</title>
+<meta data-i18n-attr="content:sc.cham-diem-luc-hop-tam-hop" name="description" content="Chấm điểm lục hợp/tam hợp/lục xung địa chi giữa năm sinh con và bố mẹ — bảng 15 năm tới, năm thuận nhất. Hỏi Thầy luận sâu.">
 <link rel="icon" type="image/webp" href="/seal.webp">
 <link rel="preload" href="/fonts/noto-serif-latin-400.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="/fonts/noto-serif-vietnamese-400.woff2" as="font" type="font/woff2" crossorigin>
@@ -65,10 +65,10 @@
   <main class="ws" id="ws">
     <div class="ws-top">
       <button class="btn mobile-only" onclick="document.getElementById('shell-sidebar').classList.toggle('open');window.shellSyncBackdrop&&shellSyncBackdrop()" aria-label="Menu">☰</button>
-      <div class="ws-title"><b>Xem tuổi sinh con</b><span>Năm sinh con hợp tuổi bố mẹ theo địa chi</span></div>
+      <div data-i18n="sc.xem-tuoi-sinh-con-nam-sinh" class="ws-title"><b>Xem tuổi sinh con</b><span>Năm sinh con hợp tuổi bố mẹ theo địa chi</span></div>
       <div class="ws-actions">
-        <button class="btn" id="btnEdit" onclick="showForm()" style="display:none">Sửa thông tin</button>
-        <button class="btn mobile-only" onclick="Shell.openRail()">✦ Hỏi</button>
+        <button data-i18n="battu.sua-thong-tin" class="btn" id="btnEdit" onclick="showForm()" style="display:none">Sửa thông tin</button>
+        <button data-i18n="battu.hoi" class="btn mobile-only" onclick="Shell.openRail()">✦ Hỏi</button>
       </div>
     </div>
     <div class="ws-body">
@@ -82,15 +82,15 @@
         <img class="intro-avatar" src="/tool-avatars/xem-tuoi-sinh-con.webp" alt="" onerror="this.remove()">
         <div class="intro-body">
           <div class="intro-text">
-            <div class="intro-t">Xem tuổi sinh con</div>
-            <div class="intro-d">Sinh con đúng năm hợp tuổi bố mẹ là mong muốn của nhiều gia đình, nhưng tính sao cho đúng lại không dễ. Nhập năm sinh hai vợ chồng, tìm ngay năm thuận nhất trong 15 năm tới.</div>
+            <div data-i18n="sc.xem-tuoi-sinh-con" class="intro-t">Xem tuổi sinh con</div>
+            <div data-i18n="sc.sinh-con-dung-nam-hop-tuoi" class="intro-d">Sinh con đúng năm hợp tuổi bố mẹ là mong muốn của nhiều gia đình, nhưng tính sao cho đúng lại không dễ. Nhập năm sinh hai vợ chồng, tìm ngay năm thuận nhất trong 15 năm tới.</div>
             <div id="introSrc"></div>
           </div>
         </div>
         <div class="hero-pills">
-          <div class="hero-pill"><span class="hp-ic" data-icon="scale"></span><span>Lục Hợp · Tam Hợp<br>Lục Xung</span></div>
-          <div class="hero-pill"><span class="hp-ic" data-icon="calendar-days"></span><span>Bảng đủ<br>15 năm tới</span></div>
-          <div class="hero-pill"><span class="hp-ic" data-icon="star"></span><span>Năm thuận nhất<br>để sinh con</span></div>
+          <div data-i18n="sc.luc-hop-tam-hop-luc-xung" class="hero-pill"><span class="hp-ic" data-icon="scale"></span><span>Lục Hợp · Tam Hợp<br>Lục Xung</span></div>
+          <div data-i18n="sc.bang-du-15-nam-toi" class="hero-pill"><span class="hp-ic" data-icon="calendar-days"></span><span>Bảng đủ<br>15 năm tới</span></div>
+          <div data-i18n="sc.nam-thuan-nhat-de-sinh-con" class="hero-pill"><span class="hp-ic" data-icon="star"></span><span>Năm thuận nhất<br>để sinh con</span></div>
         </div>
       </div></div>
       <div class="ws-main-col">
@@ -98,27 +98,27 @@
            tại đúng chỗ trạng thái đã đổi trong flow cũ (doSinhCon/showForm).
            Tool này MIỄN PHÍ, không có bước Thanh toán — chỉ 2 bước. -->
       <div class="ws-steps" id="wsSteps">
-        <div class="wss-step active"><span class="wss-n">1</span><span class="wss-l">Nhập thông tin</span></div>
-        <div class="wss-step"><span class="wss-n">2</span><span class="wss-l">Nhận kết quả</span></div>
+        <div data-i18n="battu.1-nhap-thong-tin" class="wss-step active"><span class="wss-n">1</span><span class="wss-l">Nhập thông tin</span></div>
+        <div data-i18n="sc.2-nhan-ket-qua" class="wss-step"><span class="wss-n">2</span><span class="wss-l">Nhận kết quả</span></div>
       </div>
       <div class="form-card" id="birthPanel">
-        <div class="fc-head"><span class="fc-ic" data-icon="baby"></span><h2>Năm sinh của bố và mẹ</h2></div>
-        <p class="sub">Nhập năm sinh bố và mẹ để xem bảng đánh giá 15 năm tới và năm thuận nhất.</p>
+        <div class="fc-head"><span class="fc-ic" data-icon="baby"></span><h2 data-i18n="sc.nam-sinh-cua-bo-va-me">Năm sinh của bố và mẹ</h2></div>
+        <p data-i18n="sc.nhap-nam-sinh-bo-va-me" class="sub">Nhập năm sinh bố và mẹ để xem bảng đánh giá 15 năm tới và năm thuận nhất.</p>
         <div class="cost-box">
           <div class="cb-l">
             <span class="cb-ic" data-icon="wallet"></span>
             <div>
-              <div class="cb-title">Chi phí sử dụng</div>
+              <div data-i18n="battu.chi-phi-su-dung" class="cb-title">Chi phí sử dụng</div>
               <div class="cb-amt" data-tvp-price-label="xem-tuoi-sinh-con">…</div>
             </div>
           </div>
         </div>
         <div class="frow" style="margin-bottom:4px">
-          <div class="fg" style="width:130px"><label>Năm sinh bố</label><input type="number" id="inpNamBo" placeholder="1990" min="1900" max="2100"></div>
-          <div class="fg" style="width:130px"><label>Năm sinh mẹ</label><input type="number" id="inpNamMe" placeholder="1992" min="1900" max="2100"></div>
+          <div class="fg" style="width:130px"><label data-i18n="sc.nam-sinh-bo">Năm sinh bố</label><input type="number" id="inpNamBo" placeholder="1990" min="1900" max="2100"></div>
+          <div class="fg" style="width:130px"><label data-i18n="sc.nam-sinh-me">Năm sinh mẹ</label><input type="number" id="inpNamMe" placeholder="1992" min="1900" max="2100"></div>
         </div>
         <div class="err" id="error-msg"></div>
-        <button class="btn-go" id="btnGo" onclick="doSinhCon()">
+        <button data-i18n="sc.xem-15-nam-mien-phi" class="btn-go" id="btnGo" onclick="doSinhCon()">
           <span class="bg-label"><span class="ic" data-icon="hourglass"></span><b id="btnGoLabel">Xem 15 năm →</b></span>
           <small>Miễn phí</small>
         </button>
@@ -126,9 +126,9 @@
       </div>
       <div class="ws-side-col">
       <div class="ws-promo">
-        <div class="wsp-eyebrow"><span class="wsp-ic" data-icon="book-open"></span><span>Giới thiệu</span></div>
-        <div class="wsp-title">Xem tuổi sinh con</div>
-        <p class="wsp-desc">Tử Vi Đẩu Số là một môn mệnh lý cổ truyền Trung Hoa, lập lá số theo giờ sinh âm lịch với 12 cung và hệ thống chính tinh, phụ tinh chiếu mệnh. Môn học được hệ thống hoá qua nhiều đời, phổ biến tại Việt Nam qua bản dịch <i>Tử Vi Đẩu Số Tân Biên</i> của Vân Đằng Thái Thứ Lang.</p>
+        <div data-i18n="battu.gioi-thieu" class="wsp-eyebrow"><span class="wsp-ic" data-icon="book-open"></span><span>Giới thiệu</span></div>
+        <div data-i18n="sc.xem-tuoi-sinh-con" class="wsp-title">Xem tuổi sinh con</div>
+        <p data-i18n="luangiai.tu-vi-dau-so-la-mot" class="wsp-desc">Tử Vi Đẩu Số là một môn mệnh lý cổ truyền Trung Hoa, lập lá số theo giờ sinh âm lịch với 12 cung và hệ thống chính tinh, phụ tinh chiếu mệnh. Môn học được hệ thống hoá qua nhiều đời, phổ biến tại Việt Nam qua bản dịch <i>Tử Vi Đẩu Số Tân Biên</i> của Vân Đằng Thái Thứ Lang.</p>
       </div>
       <div id="shellRecent"></div>
       </div>
@@ -137,20 +137,20 @@
       <div id="resPanel" data-ws-result>
         <div class="cc-row" id="ccRow"></div>
         <div class="res-block">
-          <div class="res-block-header">
+          <div data-i18n="sc.ket-qua-15-nam-dia-chi" class="res-block-header">
             <span class="res-block-title" id="resultTitle">Kết Quả 15 Năm</span>
             <span style="font-size:11px;color:#666">Địa chi · Lục Hợp · Tam Hợp · Lục Xung</span>
           </div>
           <div class="res-block-body" style="overflow-x:auto;padding:24px">
             <div id="topRecommend" style="margin-bottom:16px"></div>
             <table class="year-table">
-              <thead><tr><th>Năm</th><th>Can Chi</th><th>Hành</th><th>Đánh Giá</th><th>Lý Do</th></tr></thead>
+              <thead><tr><th data-i18n="sc.nam">Năm</th><th data-i18n="sc.can-chi">Can Chi</th><th data-i18n="sc.hanh">Hành</th><th data-i18n="sc.danh-gia">Đánh Giá</th><th data-i18n="sc.ly-do">Lý Do</th></tr></thead>
               <tbody id="yearTableBody"></tbody>
             </table>
-            <div class="tbl-note"><strong style="color:#444">Ghi chú:</strong> Kết quả dựa trên địa chi năm sinh (lịch dương). Nếu con sinh vào tháng 1–2 dương lịch, địa chi thực tế tính theo năm âm lịch có thể khác 1 năm — cần xem xét kỹ hơn.</div>
+            <div data-i18n="sc.ghi-chu-ket-qua-dua-tren" class="tbl-note"><strong style="color:#444">Ghi chú:</strong> Kết quả dựa trên địa chi năm sinh (lịch dương). Nếu con sinh vào tháng 1–2 dương lịch, địa chi thực tế tính theo năm âm lịch có thể khác 1 năm — cần xem xét kỹ hơn.</div>
           </div>
         </div>
-        <div class="ask" data-ask="Trong 15 năm tới, năm nào tốt nhất để sinh con hợp tuổi cả bố và mẹ? Nêu vài năm cụ thể kèm lý do và năm nào nên tránh.">✦ Hỏi Thầy luận sâu năm nào nên sinh con</div>
+        <div data-i18n="sc.hoi-thay-luan-sau-nam-nao" class="ask" data-ask="Trong 15 năm tới, năm nào tốt nhất để sinh con hợp tuổi cả bố và mẹ? Nêu vài năm cụ thể kèm lý do và năm nào nên tránh.">✦ Hỏi Thầy luận sâu năm nào nên sinh con</div>
       </div>
     </div>
   </main>
@@ -163,12 +163,15 @@
 // khong lat som luc boot, va vung ket qua khong tran o ca cot artifact 420px lan man 393px.
 window.SHELL_CHATFIRST=true;
 window.SHELL_INTRO={key:'sinh-con'};</script>
-<script src="/tools-shared/xem-tuoi-sinh-con.js?v=1"></script>
+<script src="/tools-shared/glossary.js?v=4"></script>
+<script src="/tools-shared/xem-tuoi-sinh-con.js?v=2"></script>
 <script src="/auth.js?v=9"></script>
   <script src="/nav.js?v=49" data-icons-only></script>
 <script src="/shell.js?v=151"></script>
 <script>
 function esc(s){return String(s==null?'':s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
+// Hiển thị: tên can chi/nạp âm/hành qua glossary (vi trả nguyên); HANH_COLOR/ HTML class giữ chữ Việt.
+function _g(kind,v){return typeof _tvmbG==='function'&&v?_tvmbG(kind,v):v;}
 var HANH_COLOR={'Mộc':'var(--green)','Hỏa':'var(--red)','Thổ':'var(--gold-soft)','Kim':'#8a8a8a','Thủy':'var(--blue)'};
 
 // Ô giữa dùng CHUNG module /tools-shared/xem-tuoi-sinh-con.js với trang standalone.
@@ -183,8 +186,8 @@ function doSinhCon(){
   wsStepsSet(2); // Nhận kết quả — miễn phí, không có bước Thanh toán
   try{
     var iBo=r.previewBo,iMe=r.previewMe;
-    function ccCard(who,i){ return '<div class="cc-card"><div class="who">'+esc(who)+'</div><div class="cc">'+esc(i.canChi)+'</div><div class="na" style="--hanh:'+HANH_COLOR[i.hanh]+'">'+esc(i.napAm)+' · <b>'+esc(i.hanh)+'</b></div></div>'; }
-    document.getElementById('ccRow').innerHTML=ccCard('Bố',iBo)+ccCard('Mẹ',iMe);
+    function ccCard(who,i){ return '<div class="cc-card"><div class="who">'+esc(who)+'</div><div class="cc">'+esc(_g('canchi',i.canChi))+'</div><div class="na" style="--hanh:'+HANH_COLOR[i.hanh]+'">'+esc(_g('napam',i.napAm))+' · <b>'+esc(_g('hanh',i.hanh))+'</b></div></div>'; }
+    document.getElementById('ccRow').innerHTML=ccCard(_tvmbT('js.sc.bo','Bố'),iBo)+ccCard(_tvmbT('js.sc.me','Mẹ'),iMe);
     document.getElementById('yearTableBody').innerHTML=r.tableRowsHTML;
     document.getElementById('topRecommend').innerHTML=r.topRecommendHTML;
     document.getElementById('resultTitle').textContent=r.resultTitle;
@@ -195,16 +198,16 @@ function doSinhCon(){
     Shell.setContext({
       scenario:{type:'xem-tuoi-sinh-con',data:{namBo:namBo,namMe:namMe}},
       label:'Sinh con · bố '+iBo.canChi+' × mẹ '+iMe.canChi,
-      greeting:'Đã chấm hợp/xung địa chi 15 năm tới (bố **'+esc(iBo.canChi)+'** · mẹ **'+esc(iMe.canChi)+'**). Năm thuận nhất: **'+esc(r.data.namTot)+'**. Bạn muốn tôi tư vấn gì trước?',
-      chips:['Năm nào tốt nhất để sinh con?','Vì sao năm đó hợp cả bố lẫn mẹ?','Năm nào nên tránh sinh con?','Con tuổi gì hợp với bố mẹ nhất?']
+      greeting:_tvmbT('js.sc.da-cham-hop-xung-dia-chi', 'Đã chấm hợp/xung địa chi 15 năm tới (bố **{bo}** · mẹ **{me}**). Năm thuận nhất: **{tot}**. Bạn muốn tôi tư vấn gì trước?', {bo:esc(_g('canchi',iBo.canChi)), me:esc(_g('canchi',iMe.canChi)), tot:esc(r.data.namTotHienThi||r.data.namTot)}),
+      chips:[_tvmbT('js.sc.nam-nao-tot-nhat-de-sinh','Năm nào tốt nhất để sinh con?'),_tvmbT('js.sc.vi-sao-nam-do-hop-ca','Vì sao năm đó hợp cả bố lẫn mẹ?'),_tvmbT('js.sc.nam-nao-nen-tranh-sinh-con','Năm nào nên tránh sinh con?'),_tvmbT('js.sc.con-tuoi-gi-hop-voi','Con tuổi gì hợp với bố mẹ nhất?')]
     });
     var _scLines=['Xem tuổi sinh con · bố '+iBo.canChi+' ('+iBo.napAm+', '+iBo.hanh+') · mẹ '+iMe.canChi+' ('+iMe.napAm+', '+iMe.hanh+')'];
     _scLines.push(r.resultTitle);
-    _scLines.push('Năm thuận nhất (Top 3): '+r.data.namTot);
+    _scLines.push(_tvmbT('js.sc.nam-thuan-nhat-top-3-ds','Năm thuận nhất (Top 3): {ds}',{ds:r.data.namTotHienThi||r.data.namTot}));
     Shell.setShareable({ kind:'text', toolId:'sinh-con', title:'Xem tuổi sinh con · bố '+iBo.canChi+' × mẹ '+iMe.canChi, text:_scLines.join('\n') });
     document.querySelectorAll('#resPanel [data-ask]').forEach(function(el){ el.addEventListener('click',function(){ Shell.ask(el.getAttribute('data-ask')); }); });
   }catch(e){
-    document.getElementById('ccRow').innerHTML='<div class="laso-error">Lỗi: '+esc(e.message)+'</div>';
+    document.getElementById('ccRow').innerHTML='<div class="laso-error">'+_tvmbT('js.sc.loi','Lỗi: ')+esc(e.message)+'</div>';
     document.getElementById('birthPanel').style.display='none';
     document.getElementById('resPanel').style.display='block';
     document.getElementById('btnEdit').style.display='';

@@ -62,6 +62,34 @@
   "zh-tw",
   "zh-cn"
  ],
+ "/app/ca-nha": [
+  "en",
+  "ja",
+  "ko",
+  "zh-tw",
+  "zh-cn"
+ ],
+ "/app/chan-dung-tien-kiep": [
+  "en",
+  "ja",
+  "ko",
+  "zh-tw",
+  "zh-cn"
+ ],
+ "/app/chan-dung-vo-chong": [
+  "en",
+  "ja",
+  "ko",
+  "zh-tw",
+  "zh-cn"
+ ],
+ "/app/chon-ngay": [
+  "en",
+  "ja",
+  "ko",
+  "zh-tw",
+  "zh-cn"
+ ],
  "/app/chu-trinh-cuoc-doi": [
   "en",
   "ja",
@@ -90,6 +118,13 @@
   "zh-tw",
   "zh-cn"
  ],
+ "/app/cong-so": [
+  "en",
+  "ja",
+  "ko",
+  "zh-tw",
+  "zh-cn"
+ ],
  "/app/cua-hang-phong-thuy": [
   "en",
   "ja",
@@ -97,7 +132,49 @@
   "zh-tw",
   "zh-cn"
  ],
+ "/app/day-con": [
+  "en",
+  "ja",
+  "ko",
+  "zh-tw",
+  "zh-cn"
+ ],
+ "/app/duyen-no-tien-kiep": [
+  "en",
+  "ja",
+  "ko",
+  "zh-tw",
+  "zh-cn"
+ ],
+ "/app/gio-sinh": [
+  "en",
+  "ja",
+  "ko",
+  "zh-tw",
+  "zh-cn"
+ ],
  "/app/ho-so": [
+  "en",
+  "ja",
+  "ko",
+  "zh-tw",
+  "zh-cn"
+ ],
+ "/app/hoang-dao": [
+  "en",
+  "ja",
+  "ko",
+  "zh-tw",
+  "zh-cn"
+ ],
+ "/app/huong-nghiep-tre": [
+  "en",
+  "ja",
+  "ko",
+  "zh-tw",
+  "zh-cn"
+ ],
+ "/app/kim-lau": [
   "en",
   "ja",
   "ko",
@@ -146,6 +223,27 @@
   "zh-tw",
   "zh-cn"
  ],
+ "/app/ngay-tot": [
+  "en",
+  "ja",
+  "ko",
+  "zh-tw",
+  "zh-cn"
+ ],
+ "/app/nguoi-khac": [
+  "en",
+  "ja",
+  "ko",
+  "zh-tw",
+  "zh-cn"
+ ],
+ "/app/nhan-mach": [
+  "en",
+  "ja",
+  "ko",
+  "zh-tw",
+  "zh-cn"
+ ],
  "/app/nhan-tuong": [
   "en",
   "ja",
@@ -161,6 +259,13 @@
   "zh-cn"
  ],
  "/app/phong-thuy": [
+  "en",
+  "ja",
+  "ko",
+  "zh-tw",
+  "zh-cn"
+ ],
+ "/app/sinh-con": [
   "en",
   "ja",
   "ko",
