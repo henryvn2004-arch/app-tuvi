@@ -307,6 +307,114 @@
   "t": "See the full terms in the <a href=\"/dieu-khoan-dich-vu.html\">Terms of Service</a> (section 2 — Limitation of liability) and the service description on the <a href=\"/san-pham-dich-vu.html\">Products &amp; Services</a> page.",
   "h": "dc202339"
  },
+ "hdtt.cach-hoat-dong": {
+  "t": "How it works",
+  "h": "8ad7f762"
+ },
+ "hdtt.cau-hoi-thuong-gap": {
+  "t": "Frequently asked questions",
+  "h": "ef0eb919"
+ },
+ "hdtt.chi-phi": {
+  "t": "Cost",
+  "h": "3c453110"
+ },
+ "hdtt.chon-goi-nap-luong": {
+  "t": "Choose a credit pack",
+  "h": "a8809b21"
+ },
+ "hdtt.cong-cu": {
+  "t": "Tool",
+  "h": "6029ffef"
+ },
+ "hdtt.dang-ky-tai-khoan-mien-phi": {
+  "t": "Create a free account",
+  "h": "dc9cfb39"
+ },
+ "hdtt.gia-doc-truc-tiep-tu-he": {
+  "t": "Prices are read live from the system and may change. Full list of packs on the <a href=\"/topup.html\">Top up credits</a> page.",
+  "h": "40462886"
+ },
+ "hdtt.he-thong-luong-nap-1-lan": {
+  "t": "Credits · Top up once, use on every tool · No expiry · Last updated: September 2026",
+  "h": "393b8272"
+ },
+ "hdtt.ho-tro": {
+  "t": "Support",
+  "h": "01dbe5e4"
+ },
+ "hdtt.huong-dan-nap-luong-va-su": {
+  "t": "How to top up credits and use Minh Bao Zi Wei Dou Shu — top up once, use on every tool, no expiry.",
+  "h": "24909177"
+ },
+ "hdtt.huong-dan-thanh-toan": {
+  "t": "Payment Guide",
+  "h": "52fb0da5"
+ },
+ "hdtt.huong-dan-thanh-toan-tu-vi": {
+  "t": "Payment Guide — Minh Bao Zi Wei Dou Shu",
+  "h": "68863047"
+ },
+ "hdtt.luan-giai-la-so-24-phan": {
+  "t": "<span class=\"ic\" data-icon=\"sparkles\"></span> Chart Reading (24 parts)",
+  "h": "5f257ac9"
+ },
+ "hdtt.luong-co-het-han-khong-khong": {
+  "t": "<strong>Do credits expire?</strong><br> No. Credits never expire.",
+  "h": "fa64598b"
+ },
+ "hdtt.moi-ket-qua-chi-tru-luong": {
+  "t": "✓ Each result deducts credits <strong>only once</strong>. You can view it again for free at any time from your Profile page.",
+  "h": "70edf1aa"
+ },
+ "hdtt.nap-xong-luong-nhung-chua-thay": {
+  "t": "<strong>Topped up but the credits aren't showing in your account?</strong><br> Try refreshing the page (F5) or go to <a href=\"/app/ho-so\">Profile</a> → the <strong>Credit wallet</strong> tab to check. If they still aren't there, contact us via the <a href=\"/contact.html\">Contact page</a> with your transaction ID.",
+  "h": "2751c285"
+ },
+ "hdtt.neu-gap-bat-ky-van-de": {
+  "t": "If you run into any problem with a payment, please contact us before trying the transaction again, to avoid being charged twice.",
+  "h": "be148f9d"
+ },
+ "hdtt.nhan-dang-nhap-o-goc-tren": {
+  "t": "Click <strong>Sign in</strong> in the top-right corner. Use Google, Facebook, or email/password. Your account keeps your balance and usage history.",
+  "h": "74382ed3"
+ },
+ "hdtt.quy-doi": {
+  "t": "Equivalent",
+  "h": "7fedefea"
+ },
+ "hdtt.sau-khi-nap-xong-quay-lai": {
+  "t": "Once you've topped up, go back to any tool and click <strong>Unlock</strong>. Credits are deducted instantly and automatically — no redirect, no waiting for confirmation.",
+  "h": "68a4a3c2"
+ },
+ "hdtt.su-dung-cong-cu": {
+  "t": "Use a tool",
+  "h": "db5111aa"
+ },
+ "hdtt.toi-co-the-chuyen-luong-cho": {
+  "t": "<strong>Can I transfer credits to someone else?</strong><br> No. Credits are tied to your personal account and cannot be transferred.",
+  "h": "8fa6a001"
+ },
+ "hdtt.toi-co-the-dung-luong-cho": {
+  "t": "<strong>Can I use credits across several tools?</strong><br> Yes. One top-up works for every tool: the chart, marriage compatibility, business compatibility and every tool launched later.",
+  "h": "efdd8796"
+ },
+ "hdtt.toi-co-the-thanh-toan-bang": {
+  "t": "<strong>Can I pay by card without a PayPal account?</strong><br> Yes. On the Top up page choose <strong>Visa / Mastercard</strong> — PayPal opens the card form directly, no PayPal login needed.",
+  "h": "07387ee6"
+ },
+ "hdtt.vao-trang-nap-luong-va-chon": {
+  "t": "Go to the <a href=\"/topup.html\"><strong>Top up credits</strong></a> page and pick one of the packs below. Pay in <strong>USD</strong> via <strong>PayPal</strong> or <strong>Visa / Mastercard</strong> (no PayPal account needed); credits land in your account automatically.",
+  "h": "0cf8596a"
+ },
+ "hdtt.xem-tuoi-lam-an": {
+  "t": "<span class=\"ic\" data-icon=\"briefcase\"></span> Business Compatibility",
+  "h": "d5dec0bd"
+ },
+ "hdtt.xem-tuoi-vo-chong": {
+  "t": "<span class=\"ic\" data-icon=\"heart-handshake\"></span> Marriage Compatibility",
+  "h": "177d20f4"
+ },
  "home.270-000-da-quoc-gia-da": {
   "t": "<span><span class=\"ic\" data-icon=\"file-text\"></span>270,000+</span> <span><span class=\"ic\" data-icon=\"globe\"></span>Worldwide</span> <span><span class=\"ic\" data-icon=\"check\"></span>Verified</span>",
   "h": "4d77621e"
@@ -1258,6 +1366,26 @@
  "js.chutrinh.tieu-van-nam": {
   "t": "Annual cycle for ",
   "h": "1979c56a"
+ },
+ "js.hdtt.goi-cao-cap": {
+  "t": "Premium",
+  "h": "12f26fd0"
+ },
+ "js.hdtt.goi-khoi-dau": {
+  "t": "Starter",
+  "h": "fd7bbfc8"
+ },
+ "js.hdtt.goi-n": {
+  "t": "Pack {n}",
+  "h": "dde5589f"
+ },
+ "js.hdtt.goi-pho-thong": {
+  "t": "Standard",
+  "h": "01d0c63f"
+ },
+ "js.hdtt.n-luong": {
+  "t": "{n} credits",
+  "h": "c4904a65"
  },
  "js.home.3-buoc-dau-tien": {
   "t": "First 3 steps",

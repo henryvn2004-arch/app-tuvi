@@ -307,6 +307,114 @@
   "t": "利用規約の全文は<a href=\"/dieu-khoan-dich-vu.html\">利用規約</a>（第2項 — 責任の制限）に、サービスの説明は<a href=\"/san-pham-dich-vu.html\">商品・サービス</a>ページに掲載しています。",
   "h": "dc202339"
  },
+ "hdtt.cach-hoat-dong": {
+  "t": "ご利用の流れ",
+  "h": "8ad7f762"
+ },
+ "hdtt.cau-hoi-thuong-gap": {
+  "t": "よくある質問",
+  "h": "ef0eb919"
+ },
+ "hdtt.chi-phi": {
+  "t": "料金",
+  "h": "3c453110"
+ },
+ "hdtt.chon-goi-nap-luong": {
+  "t": "両のチャージパックを選ぶ",
+  "h": "a8809b21"
+ },
+ "hdtt.cong-cu": {
+  "t": "ツール",
+  "h": "6029ffef"
+ },
+ "hdtt.dang-ky-tai-khoan-mien-phi": {
+  "t": "無料でアカウント登録",
+  "h": "dc9cfb39"
+ },
+ "hdtt.gia-doc-truc-tiep-tu-he": {
+  "t": "料金はシステムから直接読み込んでおり、変更される場合があります。全パックの一覧は<a href=\"/topup.html\">両をチャージ</a>ページをご覧ください。",
+  "h": "40462886"
+ },
+ "hdtt.he-thong-luong-nap-1-lan": {
+  "t": "両（クレジット）· 一度のチャージで全ツールに · 有効期限なし · 最終更新：2026年9月",
+  "h": "393b8272"
+ },
+ "hdtt.ho-tro": {
+  "t": "サポート",
+  "h": "01dbe5e4"
+ },
+ "hdtt.huong-dan-nap-luong-va-su": {
+  "t": "両のチャージ方法と明宝紫微斗数の使い方——一度チャージすれば全ツールで使え、有効期限はありません。",
+  "h": "24909177"
+ },
+ "hdtt.huong-dan-thanh-toan": {
+  "t": "お支払いガイド",
+  "h": "52fb0da5"
+ },
+ "hdtt.huong-dan-thanh-toan-tu-vi": {
+  "t": "お支払いガイド — 明宝紫微斗数",
+  "h": "68863047"
+ },
+ "hdtt.luan-giai-la-so-24-phan": {
+  "t": "<span class=\"ic\" data-icon=\"sparkles\"></span> 命盤鑑定（24章）",
+  "h": "5f257ac9"
+ },
+ "hdtt.luong-co-het-han-khong-khong": {
+  "t": "<strong>両に有効期限はありますか？</strong><br> いいえ。両に有効期限はありません。",
+  "h": "fa64598b"
+ },
+ "hdtt.moi-ket-qua-chi-tru-luong": {
+  "t": "✓ 両が差し引かれるのは一つの結果につき<strong>一度だけ</strong>です。プロフィールページからいつでも無料で見直せます。",
+  "h": "70edf1aa"
+ },
+ "hdtt.nap-xong-luong-nhung-chua-thay": {
+  "t": "<strong>チャージしたのに両がアカウントに反映されない場合は？</strong><br> ページを再読み込み（F5）するか、<a href=\"/app/ho-so\">プロフィール</a> → <strong>両ウォレット</strong>タブで確認してください。それでも見当たらない場合は、取引IDを添えて<a href=\"/contact.html\">お問い合わせページ</a>からご連絡ください。",
+  "h": "2751c285"
+ },
+ "hdtt.neu-gap-bat-ky-van-de": {
+  "t": "お支払いで問題が起きた場合は、二重請求を避けるため、もう一度決済する前に必ずご連絡ください。",
+  "h": "be148f9d"
+ },
+ "hdtt.nhan-dang-nhap-o-goc-tren": {
+  "t": "右上の<strong>ログイン</strong>を押します。Google、Facebook、またはメールアドレスとパスワードでご利用いただけます。アカウントには残高と利用履歴が保存されます。",
+  "h": "74382ed3"
+ },
+ "hdtt.quy-doi": {
+  "t": "換算",
+  "h": "7fedefea"
+ },
+ "hdtt.sau-khi-nap-xong-quay-lai": {
+  "t": "チャージが済んだら、お好きなツールに戻って<strong>ロック解除</strong>を押してください。両はその場で自動的に差し引かれます——リダイレクトや確認待ちはありません。",
+  "h": "68a4a3c2"
+ },
+ "hdtt.su-dung-cong-cu": {
+  "t": "ツールを使う",
+  "h": "db5111aa"
+ },
+ "hdtt.toi-co-the-chuyen-luong-cho": {
+  "t": "<strong>両を他の人に譲ることはできますか？</strong><br> いいえ。両は個人のアカウントに紐づいており、譲渡できません。",
+  "h": "8fa6a001"
+ },
+ "hdtt.toi-co-the-dung-luong-cho": {
+  "t": "<strong>両は複数のツールに使えますか？</strong><br> はい。一度のチャージで、命盤、夫婦の相性、ビジネスの相性、そして今後登場するすべてのツールに使えます。",
+  "h": "efdd8796"
+ },
+ "hdtt.toi-co-the-thanh-toan-bang": {
+  "t": "<strong>PayPalアカウントなしでカード払いはできますか？</strong><br> はい。両のチャージページで<strong>Visa / Mastercardカード</strong>を選ぶと、PayPalがカード入力フォームを直接開きます。PayPalへのログインは不要です。",
+  "h": "07387ee6"
+ },
+ "hdtt.vao-trang-nap-luong-va-chon": {
+  "t": "<a href=\"/topup.html\"><strong>両をチャージ</strong></a>ページで、下のいずれかのパックを選びます。お支払いは<strong>米ドル</strong>で、<strong>PayPal</strong>または<strong>Visa / Mastercardカード</strong>（PayPalアカウント不要）をご利用いただけます。両は自動でアカウントに入ります。",
+  "h": "0cf8596a"
+ },
+ "hdtt.xem-tuoi-lam-an": {
+  "t": "<span class=\"ic\" data-icon=\"briefcase\"></span> ビジネスの相性",
+  "h": "d5dec0bd"
+ },
+ "hdtt.xem-tuoi-vo-chong": {
+  "t": "<span class=\"ic\" data-icon=\"heart-handshake\"></span> 夫婦の相性",
+  "h": "177d20f4"
+ },
  "home.270-000-da-quoc-gia-da": {
   "t": "<span><span class=\"ic\" data-icon=\"file-text\"></span>270,000+</span> <span><span class=\"ic\" data-icon=\"globe\"></span>多国籍</span> <span><span class=\"ic\" data-icon=\"check\"></span>検証済み</span>",
   "h": "4d77621e"
@@ -1258,6 +1366,26 @@
  "js.chutrinh.tieu-van-nam": {
   "t": "小運の年：",
   "h": "1979c56a"
+ },
+ "js.hdtt.goi-cao-cap": {
+  "t": "プレミアム",
+  "h": "12f26fd0"
+ },
+ "js.hdtt.goi-khoi-dau": {
+  "t": "スターター",
+  "h": "fd7bbfc8"
+ },
+ "js.hdtt.goi-n": {
+  "t": "パック {n}",
+  "h": "dde5589f"
+ },
+ "js.hdtt.goi-pho-thong": {
+  "t": "スタンダード",
+  "h": "01d0c63f"
+ },
+ "js.hdtt.n-luong": {
+  "t": "{n} 両",
+  "h": "c4904a65"
  },
  "js.home.3-buoc-dau-tien": {
   "t": "最初の3ステップ",

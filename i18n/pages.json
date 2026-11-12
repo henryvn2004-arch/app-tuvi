@@ -685,6 +685,45 @@
    "nav"
   ]
  },
+ "/huong-dan-thanh-toan.html": {
+  "file": "huong-dan-thanh-toan.html",
+  "keys": [
+   "hdtt.cach-hoat-dong",
+   "hdtt.cau-hoi-thuong-gap",
+   "hdtt.chi-phi",
+   "hdtt.chon-goi-nap-luong",
+   "hdtt.cong-cu",
+   "hdtt.dang-ky-tai-khoan-mien-phi",
+   "hdtt.gia-doc-truc-tiep-tu-he",
+   "hdtt.he-thong-luong-nap-1-lan",
+   "hdtt.ho-tro",
+   "hdtt.huong-dan-nap-luong-va-su",
+   "hdtt.huong-dan-thanh-toan",
+   "hdtt.huong-dan-thanh-toan-tu-vi",
+   "hdtt.luan-giai-la-so-24-phan",
+   "hdtt.luong-co-het-han-khong-khong",
+   "hdtt.moi-ket-qua-chi-tru-luong",
+   "hdtt.nap-xong-luong-nhung-chua-thay",
+   "hdtt.neu-gap-bat-ky-van-de",
+   "hdtt.nhan-dang-nhap-o-goc-tren",
+   "hdtt.quy-doi",
+   "hdtt.sau-khi-nap-xong-quay-lai",
+   "hdtt.su-dung-cong-cu",
+   "hdtt.toi-co-the-chuyen-luong-cho",
+   "hdtt.toi-co-the-dung-luong-cho",
+   "hdtt.toi-co-the-thanh-toan-bang",
+   "hdtt.vao-trang-nap-luong-va-chon",
+   "hdtt.xem-tuoi-lam-an",
+   "hdtt.xem-tuoi-vo-chong",
+   "sanpham.gia-doc-truc-tiep-tu-he",
+   "sanpham.luong",
+   "sanpham.luong-tuy0",
+   "sanpham.luong-w5we"
+  ],
+  "js": [
+   "nav"
+  ]
+ },
  "/la-so": {
   "file": "la-so.html",
   "keys": [

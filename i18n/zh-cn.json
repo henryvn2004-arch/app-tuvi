@@ -307,6 +307,114 @@
   "t": "完整条款请见<a href=\"/dieu-khoan-dich-vu.html\">服务条款</a>（第 2 节——责任限制），服务说明请见<a href=\"/san-pham-dich-vu.html\">产品与服务</a>页面。",
   "h": "dc202339"
  },
+ "hdtt.cach-hoat-dong": {
+  "t": "使用流程",
+  "h": "8ad7f762"
+ },
+ "hdtt.cau-hoi-thuong-gap": {
+  "t": "常见问题",
+  "h": "ef0eb919"
+ },
+ "hdtt.chi-phi": {
+  "t": "费用",
+  "h": "3c453110"
+ },
+ "hdtt.chon-goi-nap-luong": {
+  "t": "选择两的储值方案",
+  "h": "a8809b21"
+ },
+ "hdtt.cong-cu": {
+  "t": "工具",
+  "h": "6029ffef"
+ },
+ "hdtt.dang-ky-tai-khoan-mien-phi": {
+  "t": "免费注册帐号",
+  "h": "dc9cfb39"
+ },
+ "hdtt.gia-doc-truc-tiep-tu-he": {
+  "t": "价格直接读取自系统，可能会调整。完整方案请见<a href=\"/topup.html\">储值两</a>页面。",
+  "h": "40462886"
+ },
+ "hdtt.he-thong-luong-nap-1-lan": {
+  "t": "两（点数）· 储值一次，所有工具通用 · 永不过期 · 最后更新：2026 年 9 月",
+  "h": "393b8272"
+ },
+ "hdtt.ho-tro": {
+  "t": "支持",
+  "h": "01dbe5e4"
+ },
+ "hdtt.huong-dan-nap-luong-va-su": {
+  "t": "储值两与使用明宝紫微斗数的说明——储值一次，所有工具通用，永不过期。",
+  "h": "24909177"
+ },
+ "hdtt.huong-dan-thanh-toan": {
+  "t": "付款指南",
+  "h": "52fb0da5"
+ },
+ "hdtt.huong-dan-thanh-toan-tu-vi": {
+  "t": "付款指南 — 明宝紫微斗数",
+  "h": "68863047"
+ },
+ "hdtt.luan-giai-la-so-24-phan": {
+  "t": "<span class=\"ic\" data-icon=\"sparkles\"></span> 命盘解读（24 部分）",
+  "h": "5f257ac9"
+ },
+ "hdtt.luong-co-het-han-khong-khong": {
+  "t": "<strong>两会过期吗？</strong><br> 不会。两永远不会过期。",
+  "h": "fa64598b"
+ },
+ "hdtt.moi-ket-qua-chi-tru-luong": {
+  "t": "✓ 每个结果只扣<strong>一次</strong>两。您随时可以从个人文件页免费再次查看。",
+  "h": "70edf1aa"
+ },
+ "hdtt.nap-xong-luong-nhung-chua-thay": {
+  "t": "<strong>储值完成却在帐号中看不到两？</strong><br> 请刷新页面（F5），或前往<a href=\"/app/ho-so\">个人文件</a> → <strong>两钱包</strong>分页查看。若仍看不到，请附上交易编号，透过<a href=\"/contact.html\">联系我们页面</a>与我们联系。",
+  "h": "2751c285"
+ },
+ "hdtt.neu-gap-bat-ky-van-de": {
+  "t": "付款若遇到任何问题，请先联系我们再重新交易，以免被重复扣款。",
+  "h": "be148f9d"
+ },
+ "hdtt.nhan-dang-nhap-o-goc-tren": {
+  "t": "点右上角的<strong>登录</strong>。可使用 Google、Facebook，或电子邮件／密码。帐号会保存您的余额与使用纪录。",
+  "h": "74382ed3"
+ },
+ "hdtt.quy-doi": {
+  "t": "换算",
+  "h": "7fedefea"
+ },
+ "hdtt.sau-khi-nap-xong-quay-lai": {
+  "t": "储值完成后，回到任一工具并点<strong>解锁</strong>。两会立即自动扣除——不需跳转，也不必等待确认。",
+  "h": "68a4a3c2"
+ },
+ "hdtt.su-dung-cong-cu": {
+  "t": "使用工具",
+  "h": "db5111aa"
+ },
+ "hdtt.toi-co-the-chuyen-luong-cho": {
+  "t": "<strong>可以把两转给别人吗？</strong><br> 不行。两绑定个人帐号，无法转让。",
+  "h": "8fa6a001"
+ },
+ "hdtt.toi-co-the-dung-luong-cho": {
+  "t": "<strong>两可以用在多个工具上吗？</strong><br> 可以。储值一次即可用于所有工具：命盘、夫妻合婚、合伙合盘，以及日后推出的所有工具。",
+  "h": "efdd8796"
+ },
+ "hdtt.toi-co-the-thanh-toan-bang": {
+  "t": "<strong>没有 PayPal 帐号可以刷卡吗？</strong><br> 可以。在储值两页面选择<strong>Visa / Mastercard 信用卡</strong>——PayPal 会直接打开刷卡表单，不需登录 PayPal。",
+  "h": "07387ee6"
+ },
+ "hdtt.vao-trang-nap-luong-va-chon": {
+  "t": "前往<a href=\"/topup.html\"><strong>储值两</strong></a>页面，选择下方任一方案。以<strong>美元</strong>透过<strong>PayPal</strong>或<strong>Visa / Mastercard 信用卡</strong>（不需 PayPal 帐号）付款，两会自动存入帐号。",
+  "h": "0cf8596a"
+ },
+ "hdtt.xem-tuoi-lam-an": {
+  "t": "<span class=\"ic\" data-icon=\"briefcase\"></span> 合伙合盘",
+  "h": "d5dec0bd"
+ },
+ "hdtt.xem-tuoi-vo-chong": {
+  "t": "<span class=\"ic\" data-icon=\"heart-handshake\"></span> 夫妻合婚",
+  "h": "177d20f4"
+ },
  "home.270-000-da-quoc-gia-da": {
   "t": "<span><span class=\"ic\" data-icon=\"file-text\"></span>270,000+</span> <span><span class=\"ic\" data-icon=\"globe\"></span>跨国数据</span> <span><span class=\"ic\" data-icon=\"check\"></span>已经查证</span>",
   "h": "4d77621e"
@@ -1258,6 +1366,26 @@
  "js.chutrinh.tieu-van-nam": {
   "t": "流年小运 ",
   "h": "1979c56a"
+ },
+ "js.hdtt.goi-cao-cap": {
+  "t": "高级",
+  "h": "12f26fd0"
+ },
+ "js.hdtt.goi-khoi-dau": {
+  "t": "入门",
+  "h": "fd7bbfc8"
+ },
+ "js.hdtt.goi-n": {
+  "t": "方案 {n}",
+  "h": "dde5589f"
+ },
+ "js.hdtt.goi-pho-thong": {
+  "t": "标准",
+  "h": "01d0c63f"
+ },
+ "js.hdtt.n-luong": {
+  "t": "{n} 两",
+  "h": "c4904a65"
  },
  "js.home.3-buoc-dau-tien": {
   "t": "最初的 3 步",

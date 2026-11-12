@@ -307,6 +307,114 @@
   "t": "完整條款請見<a href=\"/dieu-khoan-dich-vu.html\">服務條款</a>（第 2 節——責任限制），服務說明請見<a href=\"/san-pham-dich-vu.html\">產品與服務</a>頁面。",
   "h": "dc202339"
  },
+ "hdtt.cach-hoat-dong": {
+  "t": "使用流程",
+  "h": "8ad7f762"
+ },
+ "hdtt.cau-hoi-thuong-gap": {
+  "t": "常見問題",
+  "h": "ef0eb919"
+ },
+ "hdtt.chi-phi": {
+  "t": "費用",
+  "h": "3c453110"
+ },
+ "hdtt.chon-goi-nap-luong": {
+  "t": "選擇兩的儲值方案",
+  "h": "a8809b21"
+ },
+ "hdtt.cong-cu": {
+  "t": "工具",
+  "h": "6029ffef"
+ },
+ "hdtt.dang-ky-tai-khoan-mien-phi": {
+  "t": "免費註冊帳號",
+  "h": "dc9cfb39"
+ },
+ "hdtt.gia-doc-truc-tiep-tu-he": {
+  "t": "價格直接讀取自系統，可能會調整。完整方案請見<a href=\"/topup.html\">儲值兩</a>頁面。",
+  "h": "40462886"
+ },
+ "hdtt.he-thong-luong-nap-1-lan": {
+  "t": "兩（點數）· 儲值一次，所有工具通用 · 永不過期 · 最後更新：2026 年 9 月",
+  "h": "393b8272"
+ },
+ "hdtt.ho-tro": {
+  "t": "支援",
+  "h": "01dbe5e4"
+ },
+ "hdtt.huong-dan-nap-luong-va-su": {
+  "t": "儲值兩與使用明寶紫微斗數的說明——儲值一次，所有工具通用，永不過期。",
+  "h": "24909177"
+ },
+ "hdtt.huong-dan-thanh-toan": {
+  "t": "付款指南",
+  "h": "52fb0da5"
+ },
+ "hdtt.huong-dan-thanh-toan-tu-vi": {
+  "t": "付款指南 — 明寶紫微斗數",
+  "h": "68863047"
+ },
+ "hdtt.luan-giai-la-so-24-phan": {
+  "t": "<span class=\"ic\" data-icon=\"sparkles\"></span> 命盤解讀（24 部分）",
+  "h": "5f257ac9"
+ },
+ "hdtt.luong-co-het-han-khong-khong": {
+  "t": "<strong>兩會過期嗎？</strong><br> 不會。兩永遠不會過期。",
+  "h": "fa64598b"
+ },
+ "hdtt.moi-ket-qua-chi-tru-luong": {
+  "t": "✓ 每個結果只扣<strong>一次</strong>兩。您隨時可以從個人檔案頁免費再次查看。",
+  "h": "70edf1aa"
+ },
+ "hdtt.nap-xong-luong-nhung-chua-thay": {
+  "t": "<strong>儲值完成卻在帳號中看不到兩？</strong><br> 請重新整理頁面（F5），或前往<a href=\"/app/ho-so\">個人檔案</a> → <strong>兩錢包</strong>分頁查看。若仍看不到，請附上交易編號，透過<a href=\"/contact.html\">聯絡我們頁面</a>與我們聯繫。",
+  "h": "2751c285"
+ },
+ "hdtt.neu-gap-bat-ky-van-de": {
+  "t": "付款若遇到任何問題，請先聯絡我們再重新交易，以免被重複扣款。",
+  "h": "be148f9d"
+ },
+ "hdtt.nhan-dang-nhap-o-goc-tren": {
+  "t": "點右上角的<strong>登入</strong>。可使用 Google、Facebook，或電子郵件／密碼。帳號會保存您的餘額與使用紀錄。",
+  "h": "74382ed3"
+ },
+ "hdtt.quy-doi": {
+  "t": "換算",
+  "h": "7fedefea"
+ },
+ "hdtt.sau-khi-nap-xong-quay-lai": {
+  "t": "儲值完成後，回到任一工具並點<strong>解鎖</strong>。兩會立即自動扣除——不需跳轉，也不必等待確認。",
+  "h": "68a4a3c2"
+ },
+ "hdtt.su-dung-cong-cu": {
+  "t": "使用工具",
+  "h": "db5111aa"
+ },
+ "hdtt.toi-co-the-chuyen-luong-cho": {
+  "t": "<strong>可以把兩轉給別人嗎？</strong><br> 不行。兩綁定個人帳號，無法轉讓。",
+  "h": "8fa6a001"
+ },
+ "hdtt.toi-co-the-dung-luong-cho": {
+  "t": "<strong>兩可以用在多個工具上嗎？</strong><br> 可以。儲值一次即可用於所有工具：命盤、夫妻合婚、合夥合盤，以及日後推出的所有工具。",
+  "h": "efdd8796"
+ },
+ "hdtt.toi-co-the-thanh-toan-bang": {
+  "t": "<strong>沒有 PayPal 帳號可以刷卡嗎？</strong><br> 可以。在儲值兩頁面選擇<strong>Visa / Mastercard 信用卡</strong>——PayPal 會直接開啟刷卡表單，不需登入 PayPal。",
+  "h": "07387ee6"
+ },
+ "hdtt.vao-trang-nap-luong-va-chon": {
+  "t": "前往<a href=\"/topup.html\"><strong>儲值兩</strong></a>頁面，選擇下方任一方案。以<strong>美元</strong>透過<strong>PayPal</strong>或<strong>Visa / Mastercard 信用卡</strong>（不需 PayPal 帳號）付款，兩會自動存入帳號。",
+  "h": "0cf8596a"
+ },
+ "hdtt.xem-tuoi-lam-an": {
+  "t": "<span class=\"ic\" data-icon=\"briefcase\"></span> 合夥合盤",
+  "h": "d5dec0bd"
+ },
+ "hdtt.xem-tuoi-vo-chong": {
+  "t": "<span class=\"ic\" data-icon=\"heart-handshake\"></span> 夫妻合婚",
+  "h": "177d20f4"
+ },
  "home.270-000-da-quoc-gia-da": {
   "t": "<span><span class=\"ic\" data-icon=\"file-text\"></span>270,000+</span> <span><span class=\"ic\" data-icon=\"globe\"></span>跨國資料</span> <span><span class=\"ic\" data-icon=\"check\"></span>已經查證</span>",
   "h": "4d77621e"
@@ -1258,6 +1366,26 @@
  "js.chutrinh.tieu-van-nam": {
   "t": "流年小運 ",
   "h": "1979c56a"
+ },
+ "js.hdtt.goi-cao-cap": {
+  "t": "高級",
+  "h": "12f26fd0"
+ },
+ "js.hdtt.goi-khoi-dau": {
+  "t": "入門",
+  "h": "fd7bbfc8"
+ },
+ "js.hdtt.goi-n": {
+  "t": "方案 {n}",
+  "h": "dde5589f"
+ },
+ "js.hdtt.goi-pho-thong": {
+  "t": "標準",
+  "h": "01d0c63f"
+ },
+ "js.hdtt.n-luong": {
+  "t": "{n} 兩",
+  "h": "c4904a65"
  },
  "js.home.3-buoc-dau-tien": {
   "t": "最初的 3 步",
