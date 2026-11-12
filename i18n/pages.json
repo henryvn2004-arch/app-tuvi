@@ -920,6 +920,20 @@
    "shell"
   ]
  },
+ "/app/so-la-so": {
+  "file": "app-so-la-so.html",
+  "keys": [
+   "solaso.chua-co-la-so-nao-trong",
+   "solaso.dang-nhap-dang-ky",
+   "solaso.dang-nhap-de-xem-so-la",
+   "solaso.la-so-da-luu-so-la",
+   "solaso.la-so-da-luu-tu-vi",
+   "topup.dang-tai"
+  ],
+  "js": [
+   "shell"
+  ]
+ },
  "/app/van-han-nam": {
   "file": "app-van-han-nam.html",
   "keys": [

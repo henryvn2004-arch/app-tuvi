@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>Lá số đã lưu — Tử Vi Minh Bảo</title>
+<title data-i18n="solaso.la-so-da-luu-tu-vi">Lá số đã lưu — Tử Vi Minh Bảo</title>
 <link rel="icon" type="image/webp" href="/seal.webp"/>
 <link rel="preload" href="/fonts/noto-serif-latin-400.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="/fonts/noto-serif-vietnamese-400.woff2" as="font" type="font/woff2" crossorigin>
@@ -56,15 +56,15 @@
   <main class="ws" id="ws">
     <div class="ws-top">
       <button class="btn mobile-only" onclick="document.getElementById('shell-sidebar').classList.toggle('open');window.shellSyncBackdrop&&shellSyncBackdrop()" aria-label="Menu">☰</button>
-      <div class="ws-title"><b>Lá số đã lưu</b><span>Sổ lá số theo tài khoản — xếp theo nhóm quan hệ. Bấm "Báo cáo" trên một lá số để xem/tạo report cho lá số đó.</span></div>
+      <div data-i18n="solaso.la-so-da-luu-so-la" class="ws-title"><b>Lá số đã lưu</b><span>Sổ lá số theo tài khoản — xếp theo nhóm quan hệ. Bấm "Báo cáo" trên một lá số để xem/tạo report cho lá số đó.</span></div>
     </div>
     <div class="ws-body">
-      <div id="lsLoading" style="padding:3rem 0;text-align:center;color:var(--text-lt);font-size:13px">Đang tải…</div>
+      <div data-i18n="topup.dang-tai" id="lsLoading" style="padding:3rem 0;text-align:center;color:var(--text-lt);font-size:13px">Đang tải…</div>
       <div id="lsGuest" style="display:none;padding:3rem 1rem;text-align:center">
-        <p style="color:var(--text-lt);margin-bottom:1rem;font-size:13.5px">Đăng nhập để xem sổ lá số đã lưu.</p>
-        <button class="btn" type="button" onclick="window.showAuthModal && showAuthModal(function(){location.reload();})">Đăng nhập / Đăng ký</button>
+        <p data-i18n="solaso.dang-nhap-de-xem-so-la" style="color:var(--text-lt);margin-bottom:1rem;font-size:13.5px">Đăng nhập để xem sổ lá số đã lưu.</p>
+        <button data-i18n="solaso.dang-nhap-dang-ky" class="btn" type="button" onclick="window.showAuthModal && showAuthModal(function(){location.reload();})">Đăng nhập / Đăng ký</button>
       </div>
-      <div id="lsEmpty" style="display:none;padding:2.5rem 1rem;text-align:center;color:var(--text-lt);font-size:13.5px;line-height:1.7">
+      <div data-i18n="solaso.chua-co-la-so-nao-trong" id="lsEmpty" style="display:none;padding:2.5rem 1rem;text-align:center;color:var(--text-lt);font-size:13.5px;line-height:1.7">
         Chưa có lá số nào trong sổ.<br>Lá số sẽ tự vào đây sau khi bạn nhập ngày sinh ở bất kỳ công cụ nào.
       </div>
       <div id="lsGroups"></div>
@@ -79,10 +79,10 @@
 <script>
 (function(){
   var RELATIONS = [
-    { key:'gia_dinh',    label:'Gia đình',    icon:'home' },
-    { key:'ban_be',      label:'Bạn bè',      icon:'users' },
-    { key:'dong_nghiep', label:'Đồng nghiệp', icon:'briefcase' },
-    { key:'khac',        label:'Khác',        icon:'folder' },
+    { key:'gia_dinh', get label(){ return _tvmbT('js.solaso.rel-gia-dinh','Gia đình'); },    icon:'home' },
+    { key:'ban_be', get label(){ return _tvmbT('js.solaso.rel-ban-be','Bạn bè'); },      icon:'users' },
+    { key:'dong_nghiep', get label(){ return _tvmbT('js.solaso.rel-dong-nghiep','Đồng nghiệp'); }, icon:'briefcase' },
+    { key:'khac', get label(){ return _tvmbT('js.solaso.rel-khac','Khác'); },        icon:'folder' },
   ];
   // Tủ Báo Cáo — 11 tool ăn ngày/giờ sinh. URL khớp next.config.mjs rewrites.
   // 7 tool ĐẦU có badge "Đã có" thật (owns{} từ /api/reports?withCharts=1 —
@@ -90,22 +90,22 @@
   // lib/reports/chartMatch.ts). 4 tool CUỐI slug nhúng canChiNam/gioChi (SUY
   // RA từ việc an sao) nên KHÔNG đoán report_key ở đây — luôn hiện "Xem/Tạo".
   var REPORT_TOOLS = [
-    { id:'chan-dung-vo-chong', label:'Chân Dung Vợ/Chồng',  url:'/app/chan-dung-vo-chong', badge:true },
-    { id:'chan-dung-tien-kiep', label:'Chân Dung Tiền Kiếp', url:'/app/chan-dung-tien-kiep', badge:true },
-    { id:'duyen-no-tien-kiep', label:'Duyên Nợ Tiền Kiếp',  url:'/app/duyen-no-tien-kiep', badge:true },
-    { id:'nguoi-khac',        label:'Người Khác',          url:'/app/nguoi-khac',        badge:true },
-    { id:'day-con',           label:'Dạy Con',             url:'/app/day-con',           badge:true },
-    { id:'nhan-mach',         label:'Nhân Mạch',           url:'/app/nhan-mach',         badge:true },
-    { id:'huong-nghiep-tre',  label:'Hướng Nghiệp Trẻ',    url:'/app/huong-nghiep-tre',  badge:true },
-    { id:'laso',              label:'Luận Giải Tử Vi',     url:'/app/luan-giai',         badge:false },
-    { id:'tu-binh',           label:'Tử Bình Bát Tự',      url:'/app/bat-tu',            badge:false },
-    { id:'chu-trinh-cuoc-doi',label:'Chu Trình Cuộc Đời',  url:'/app/chu-trinh-cuoc-doi',badge:false },
-    { id:'van-han-nam',       label:'Vận Hạn Năm',         url:'/app/van-han-nam',       badge:false },
+    { id:'chan-dung-vo-chong', get label(){ return _tvmbT('js.solaso.tool-cdvc','Chân Dung Vợ/Chồng'); },  url:'/app/chan-dung-vo-chong', badge:true },
+    { id:'chan-dung-tien-kiep', get label(){ return _tvmbT('js.solaso.tool-cdtk','Chân Dung Tiền Kiếp'); }, url:'/app/chan-dung-tien-kiep', badge:true },
+    { id:'duyen-no-tien-kiep', get label(){ return _tvmbT('js.solaso.tool-dntk','Duyên Nợ Tiền Kiếp'); },  url:'/app/duyen-no-tien-kiep', badge:true },
+    { id:'nguoi-khac',        get label(){ return _tvmbT('js.solaso.tool-nk','Người Khác'); },          url:'/app/nguoi-khac',        badge:true },
+    { id:'day-con',           get label(){ return _tvmbT('js.solaso.tool-dc','Dạy Con'); },             url:'/app/day-con',           badge:true },
+    { id:'nhan-mach',         get label(){ return _tvmbT('js.solaso.tool-nm','Nhân Mạch'); },           url:'/app/nhan-mach',         badge:true },
+    { id:'huong-nghiep-tre',  get label(){ return _tvmbT('js.solaso.tool-hnt','Hướng Nghiệp Trẻ'); },    url:'/app/huong-nghiep-tre',  badge:true },
+    { id:'laso',              get label(){ return _tvmbT('js.solaso.tool-lg','Luận Giải Tử Vi'); },     url:'/app/luan-giai',         badge:false },
+    { id:'tu-binh',           get label(){ return _tvmbT('js.solaso.tool-tb','Tử Bình Bát Tự'); },      url:'/app/bat-tu',            badge:false },
+    { id:'chu-trinh-cuoc-doi',get label(){ return _tvmbT('js.solaso.tool-ctcd','Chu Trình Cuộc Đời'); },  url:'/app/chu-trinh-cuoc-doi',badge:false },
+    { id:'van-han-nam',       get label(){ return _tvmbT('js.solaso.tool-vhn','Vận Hạn Năm'); },         url:'/app/van-han-nam',       badge:false },
   ];
   function esc(s){ return String(s==null?'':s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
   function birthShort(b){
     if(!b) return '';
-    var g = b.gioitinh==='nu' ? 'Nữ' : 'Nam';
+    var g = b.gioitinh==='nu' ? _tvmbT('js.shellui.nu','Nữ') : _tvmbT('js.shellui.nam','Nam');
     return g + ' · ' + (b.ngay||'?') + '/' + (b.thang||'?') + '/' + (b.nam||'?');
   }
   // NULL/giá trị lạ đều gộp về "khac" khi HIỂN THỊ — dữ liệu gốc trên server
@@ -132,19 +132,19 @@
       h += '<section class="ls-group" id="lsg-' + g.key + '">';
       h += '<h2 class="ls-gh"><span class="ls-ic" data-icon="' + g.icon + '"></span>' + esc(g.label) + ' <span class="ls-count">' + rows.length + '</span></h2>';
       if (!rows.length) {
-        h += '<p class="ls-empty-g">Chưa có lá số nào trong nhóm này.</p>';
+        h += '<p class="ls-empty-g">' + _tvmbT('js.solaso.chua-co-la-so-nhom','Chưa có lá số nào trong nhóm này.') + '</p>';
       } else {
         h += '<div class="ls-rows">';
         rows.forEach(function(it){
-          var name = it.label || (it.birth && it.birth.hoten) || 'Chưa đặt tên';
+          var name = it.label || (it.birth && it.birth.hoten) || _tvmbT('js.solaso.chua-dat-ten','Chưa đặt tên');
           h += '<div class="ls-row">' +
                '<div class="ls-ava">' + esc((name[0] || '?').toUpperCase()) + '</div>' +
                '<div class="ls-tx"><b>' + esc(name) + '</b><span>' + esc(birthShort(it.birth)) + '</span></div>' +
-               '<button type="button" class="ls-rep-btn" data-rep="' + it.id + '">Báo cáo</button>' +
+               '<button type="button" class="ls-rep-btn" data-rep="' + it.id + '">' + _tvmbT('js.solaso.bao-cao','Báo cáo') + '</button>' +
                '<select class="ls-sel" data-id="' + it.id + '">' +
                  RELATIONS.map(function(g2){ return '<option value="' + g2.key + '"' + (g2.key === groupKey(it) ? ' selected' : '') + '>' + esc(g2.label) + '</option>'; }).join('') +
                '</select>' +
-               '<button type="button" class="ls-del" data-id="' + it.id + '" title="Xoá khỏi sổ"><span class="ls-ic" data-icon="trash-2"></span></button>' +
+               '<button type="button" class="ls-del" data-id="' + it.id + '" title="' + esc(_tvmbT('js.solaso.xoa-khoi-so','Xoá khỏi sổ')) + '"><span class="ls-ic" data-icon="trash-2"></span></button>' +
                '<div class="ls-rep-wrap" id="lsRep-' + it.id + '" style="display:none"></div>' +
                '</div>';
         });
@@ -167,17 +167,17 @@
       var isOwned = t.badge && owns[t.id];
       return '<button type="button" class="ls-rep-tile' + (isOwned ? ' owned' : '') + '" data-goto="' + t.url + '" data-chart="' + it.id + '">' +
              '<b>' + esc(t.label) + '</b>' +
-             '<span>' + (isOwned ? '✓ Đã có · Xem lại' : 'Xem / Tạo') + '</span>' +
+             '<span>' + (isOwned ? _tvmbT('js.solaso.da-co-xem-lai','✓ Đã có · Xem lại') : _tvmbT('js.solaso.xem-tao','Xem / Tạo')) + '</span>' +
              '</button>';
     }).join('') + '</div>' +
     // Combo mua gộp (Đợt 4 phần 2+4, 2026-09). Luôn hiện, không kiểm owns:
     // mua lại (nếu đã sở hữu đủ) chỉ trả về `alreadyPaid`, không mất Lượng —
     // xem handleDeduct::comboSlugs trong app/api/payment/route.ts.
     '<button type="button" class="ls-rep-tile" data-goto="/app/combo-laso-tubinh" data-chart="' + it.id + '" style="grid-column:1/-1;border-color:var(--gold-soft)">' +
-    '<b>🎁 Combo: Luận Giải + Tử Bình</b><span>Mua gộp cả hai, giá rẻ hơn mua rời</span>' +
+    '<b>🎁 ' + _tvmbT('js.solaso.combo-1-t','Combo: Luận Giải + Tử Bình') + '</b><span>' + _tvmbT('js.solaso.combo-1-s','Mua gộp cả hai, giá rẻ hơn mua rời') + '</span>' +
     '</button>' +
     '<button type="button" class="ls-rep-tile" data-goto="/app/combo-tron-bo" data-chart="' + it.id + '" style="grid-column:1/-1;border-color:var(--gold-soft)">' +
-    '<b>🎁 Combo: Trọn Bộ 4 Tool</b><span>Luận Giải + Tử Bình + Chu Trình Cuộc Đời + Vận Hạn Năm</span>' +
+    '<b>🎁 ' + _tvmbT('js.solaso.combo-2-t','Combo: Trọn Bộ 4 Tool') + '</b><span>' + _tvmbT('js.solaso.combo-2-s','Luận Giải + Tử Bình + Chu Trình Cuộc Đời + Vận Hạn Năm') + '</span>' +
     '</button>';
   }
 
@@ -216,7 +216,7 @@
   }
   function onDelete(e){
     var btn = e.target.closest('.ls-del'); if (!btn) return;
-    if (!window.confirm('Xoá lá số này khỏi sổ?')) return;
+    if (!window.confirm(_tvmbT('js.solaso.xoa-la-so-nay','Xoá lá số này khỏi sổ?'))) return;
     var id = btn.getAttribute('data-id');
     btn.disabled = true;
     token().then(function(tok){
