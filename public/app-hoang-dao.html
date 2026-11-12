@@ -145,10 +145,10 @@ window.SHELL_CHATFIRST=true;
 window.SHELL_INTRO={key:'hoang-dao'};</script>
 <script src="/tuvi-ansao-engine.js"></script>
 <script src="/tools-shared/hoang-dao.js?v=4"></script>
-<script src="/tools-shared/hoang-lich.js?v=1"></script>
+<script src="/tools-shared/hoang-lich.js?v=2"></script>
 <script src="/auth.js?v=9"></script>
   <script src="/nav.js?v=49" data-icons-only></script>
-<script src="/shell.js?v=152"></script>
+<script src="/shell.js?v=153"></script>
 <script src="/tools-shared/shell-soft-nav.js?v=49"></script>
 <script>
 // Thanh tiến trình (`.ws-steps`, xem shell.css) — chỉ phản ánh trạng thái đã
@@ -206,9 +206,9 @@ function calculate(){
     var lab={'cát':_tvmbT('js.shellui.hl-cat','cát'),'hung':_tvmbT('js.shellui.hl-hung','hung'),'bình':_tvmbT('js.shellui.hl-binh','bình')};
     return _tvmbG(kind,m[1])+' ('+lab[m[2]]+')';
   }
-  // Hoàng lịch bổ sung (nghi/kỵ · thần sát · Bành Tổ · hướng năm) do /api/almanac trả chữ Việt (lib/almanac/terms.ts, chưa có bản dịch)
-  // ⇒ chỉ dựng ở bản vi; /<locale>/ giữ phần tự tính (12 giờ + can chi) đã dịch đủ — không lẫn hai ngôn ngữ.
-  (!window.I18n||I18n.locale==='vi'?HoangLich.gan(document.getElementById('hoangLich'),+_d,+_m,+_y):Promise.resolve(null)).then(function(hl){
+  // Hoàng lịch bổ sung (nghi/kỵ · thần sát · Bành Tổ · hướng năm): /api/almanac trả chữ Việt + mã Hán, hoang-lich.js
+  // dịch ở chỗ vẽ theo i18n-long/<locale>/almanac.js (W28) — mọi ngôn ngữ đều dựng.
+  HoangLich.gan(document.getElementById('hoangLich'),+_d,+_m,+_y).then(function(hl){
     var extra=HoangLich.railData(hl); if(!extra)return;
     // ⚠️ `extractGenericContext` BỎ QUA mọi giá trị là object → payload phải PHẲNG.
     Shell.setContext({

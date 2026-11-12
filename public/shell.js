@@ -4087,7 +4087,7 @@
     });
   }
   function runHoangDao(chat, toolId) {
-    ensureScripts(['/tools-shared/hoang-dao.js?v=4', '/tools-shared/hoang-lich.js?v=1'], function (err) {
+    ensureScripts(['/tools-shared/hoang-dao.js?v=4', '/tools-shared/hoang-lich.js?v=2'], function (err) {
       if (err || typeof HoangDaoTool === 'undefined') { inlineErrorBubble(chat, T('js.shellui.khong-nap-duoc-cong-cu-gio', 'không nạp được công cụ Giờ Hoàng Đạo.')); return; }
       var t = new Date();
       inlStep(chat,
