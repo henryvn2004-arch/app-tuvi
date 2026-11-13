@@ -13,7 +13,19 @@
       dùng bấm chip và trang tự lo phần luận giải người thứ hai (đi qua đúng
       paywall của chính trang đó). */
 (function (root) {
+  // Nhãn chip là DỮ LIỆU (`data-nt` → onPick, nhãn người thân lưu theo lá số) — giữ tiếng Việt; chỉ chữ HIỂN THỊ đi qua
+  // từ điển (ns js.luangiai — trang duy nhất nạp file này là app-luan-giai.html). W32A.
   var CHIPS = ['Vợ/Chồng', 'Bố', 'Mẹ', 'Con', 'Người khác'];
+  function _tv(k, d) {
+    return typeof root._tvmbT === 'function' ? root._tvmbT(k, d) : d;
+  }
+  var CHIP_T = {
+    'Vợ/Chồng': function () { return _tv('js.luangiai.nt-vo-chong', 'Vợ/Chồng'); },
+    'Bố': function () { return _tv('js.luangiai.nt-bo', 'Bố'); },
+    'Mẹ': function () { return _tv('js.luangiai.nt-me', 'Mẹ'); },
+    'Con': function () { return _tv('js.luangiai.nt-con', 'Con'); },
+    'Người khác': function () { return _tv('js.luangiai.nt-nguoi-khac', 'Người khác'); },
+  };
 
   function esc(s) {
     return String(s == null ? '' : s).replace(/[&<>"']/g, function (c) {
@@ -45,11 +57,11 @@
       injectCss();
       el.innerHTML =
         '<section class="nt">' +
-        '<h3><span class="ic" data-icon="users"></span> Xem lá số cho người thân</h3>' +
-        '<p>Đọc xong bản này rồi thì xem tiếp cho vợ/chồng, bố mẹ hay con — mỗi người một bản riêng.</p>' +
+        '<h3><span class="ic" data-icon="users"></span> ' + _tv('js.luangiai.nt-title', 'Xem lá số cho người thân') + '</h3>' +
+        '<p>' + _tv('js.luangiai.nt-desc', 'Đọc xong bản này rồi thì xem tiếp cho vợ/chồng, bố mẹ hay con — mỗi người một bản riêng.') + '</p>' +
         '<div class="nt-chips">' +
         CHIPS.map(function (c) {
-          return '<button type="button" class="nt-chip" data-nt="' + esc(c) + '">' + esc(c) + '</button>';
+          return '<button type="button" class="nt-chip" data-nt="' + esc(c) + '">' + esc(CHIP_T[c] ? CHIP_T[c]() : c) + '</button>';
         }).join('') +
         '</div></section>';
       if (root.mountIcons) root.mountIcons(el);
@@ -58,7 +70,7 @@
         if (!btn) return;
         var label = btn.getAttribute('data-nt');
         if (label === 'Người khác') {
-          label = root.prompt ? root.prompt('Người này là ai (vd: Sếp, Bạn thân):', '') : '';
+          label = root.prompt ? root.prompt(_tv('js.luangiai.nt-prompt', 'Người này là ai (vd: Sếp, Bạn thân):'), '') : '';
           if (!label) return;
         }
         try {

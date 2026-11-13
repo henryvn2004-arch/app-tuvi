@@ -5791,6 +5791,10 @@
   "t": "九大運各階段，柱高依引擎評分，每階段一個關鍵詞",
   "h": "6b87e20d"
  },
+ "js.chutrinh.chip-ca-doi": {
+  "t": "我這一生哪些階段上升、哪些階段下滑？",
+  "h": "0fd14b86"
+ },
  "js.chutrinh.chu-trinh-cuoc-doi": {
   "t": "人生週期 ",
   "h": "c3a39296"
@@ -5815,6 +5819,22 @@
   "t": " · 目前處於階段 ",
   "h": "3d0545d0"
  },
+ "js.chutrinh.lock-8-dv": {
+  "t": "其餘 8 個大運 — 依古法逐段解讀",
+  "h": "4ec27b83"
+ },
+ "js.chutrinh.lock-cta": {
+  "t": "開啟完整解讀",
+  "h": "f25984b4"
+ },
+ "js.chutrinh.lock-tieu-van": {
+  "t": "流年小運 — 依古法獨立解讀",
+  "h": "647e634b"
+ },
+ "js.chutrinh.lock-title": {
+  "t": "⊙ 完整解讀尚未開啟",
+  "h": "58312cbd"
+ },
  "js.chutrinh.luan-giai": {
   "t": "解讀 →",
   "h": "a03abb8e"
@@ -5827,6 +5847,38 @@
   "t": "✦ 開啟完整解讀 —",
   "h": "438bc666"
  },
+ "js.chutrinh.poster-loi": {
+  "t": "圖片尚未產生，請幾秒後再試。",
+  "h": "f8055429"
+ },
+ "js.chutrinh.poster-qr": {
+  "t": "掃描 — 查看你的人生週期",
+  "h": "9dc941f8"
+ },
+ "js.chutrinh.poster-quote": {
+  "t": "柱高依引擎評定的大運分數 — 不是推測的數字。",
+  "h": "961570c5"
+ },
+ "js.chutrinh.poster-title": {
+  "t": "人生 9 個階段",
+  "h": "619cd7f3"
+ },
+ "js.chutrinh.rel-luan-giai": {
+  "t": "紫微斗數解讀",
+  "h": "ab5a4607"
+ },
+ "js.chutrinh.rel-luan-giai-note": {
+  "t": "查看命盤總論與十二宮逐宮解讀",
+  "h": "734368f8"
+ },
+ "js.chutrinh.rel-van-han": {
+  "t": "未來 12 個月運勢",
+  "h": "f265e49d"
+ },
+ "js.chutrinh.rel-van-han-note": {
+  "t": "依農曆月份逐月細看未來 12 個月",
+  "h": "ce8ee944"
+ },
  "js.chutrinh.roi-vao-cung": {
   "t": " 落在宮位 ",
   "h": "d242aa04"
@@ -5834,6 +5886,14 @@
  "js.chutrinh.tieu-van-nam": {
   "t": "流年小運 ",
   "h": "1979c56a"
+ },
+ "js.chutrinh.viet-rieng": {
+  "t": "依古法為這張命盤專門撰寫 11 個部分：大運總論、9 個大運逐一解讀，以及流年小運。附 PDF 下載或寄到信箱。",
+  "h": "38ebd1a1"
+ },
+ "js.chutrinh.xem-9-dai-van": {
+  "t": "查看 9 個大運 →",
+  "h": "ee069d41"
  },
  "js.cn.ai-cung-han-vao": {
   "t": "{ai}同時行限入<b>{cung}</b>。",
@@ -10071,6 +10131,370 @@
   "t": "{n} 歲（虛歲）",
   "h": "cd4bc076"
  },
+ "js.lgcore.bai-tinh": {
+  "t": "敗星：{sao}",
+  "h": "724a9aa9"
+ },
+ "js.lgcore.bd-ghi-chu": {
+  "t": "點為分數，金色區間為波動幅度。幅度 = 分數 ×（1 ± 限宮三方四正中動星的比例），動星依星曜等級加權。",
+  "h": "87d9e115"
+ },
+ "js.lgcore.bo-menh": {
+  "t": "命宮星組：<span style=\"color:#aaa\">{a}</span> → 大運星組：<span style=\"color:#aaa\">{b}</span>",
+  "h": "2fb64232"
+ },
+ "js.lgcore.cach-cuc-dac-biet": {
+  "t": "特殊格局",
+  "h": "f0db7ce5"
+ },
+ "js.lgcore.cach-cuc-lien-quan": {
+  "t": "相關格局",
+  "h": "9fcce5d2"
+ },
+ "js.lgcore.cat-tinh": {
+  "t": "吉星：{sao}",
+  "h": "39744fd1"
+ },
+ "js.lgcore.cd-aria": {
+  "t": "四個主題在 9 個大運中的走勢",
+  "h": "8de1a0f4"
+ },
+ "js.lgcore.cd-dang-di": {
+  "t": "目前走 {a}–{b} 歲大運（暫時命宮在{chi}）：最強是<b>{manh}</b>，最弱是<b>{yeu}</b>。",
+  "h": "ace243b1"
+ },
+ "js.lgcore.cd-ghi-chu": {
+  "t": "以大運宮為暫時命宮，其他宮隨之移位並借用移入宮位的星曜。事業畫到 65 歲；財運、感情從成年起畫。",
+  "h": "47b240d7"
+ },
+ "js.lgcore.cd-su-nghiep": {
+  "t": "事業",
+  "h": "6302fbab"
+ },
+ "js.lgcore.cd-suc-khoe": {
+  "t": "健康",
+  "h": "77e26a9a"
+ },
+ "js.lgcore.cd-tai-loc": {
+  "t": "財運",
+  "h": "5d21666f"
+ },
+ "js.lgcore.cd-tinh-duyen": {
+  "t": "感情婚姻",
+  "h": "818b8e8a"
+ },
+ "js.lgcore.cd-title": {
+  "t": "9 個大運中的人生四件大事",
+  "h": "45690f76"
+ },
+ "js.lgcore.cham-diem-dv": {
+  "t": "大運評分 — {cung}（{chi}）",
+  "h": "00eb81e5"
+ },
+ "js.lgcore.chinh-tinh-cung": {
+  "t": "本宮主星",
+  "h": "2ff2de45"
+ },
+ "js.lgcore.chinh-tinh-dv": {
+  "t": "大運宮主星",
+  "h": "d424e884"
+ },
+ "js.lgcore.cn-binh-hoa": {
+  "t": "中和",
+  "h": "09ccb244"
+ },
+ "js.lgcore.cn-cuc-nhuoc": {
+  "t": "極弱",
+  "h": "86e91daa"
+ },
+ "js.lgcore.cn-cuc-vuong": {
+  "t": "極旺",
+  "h": "442c349d"
+ },
+ "js.lgcore.cn-nhuoc": {
+  "t": "弱",
+  "h": "64c831c7"
+ },
+ "js.lgcore.cn-vuong": {
+  "t": "旺",
+  "h": "0cd97e28"
+ },
+ "js.lgcore.dang-o-day": {
+  "t": "目前位置",
+  "h": "28f89609"
+ },
+ "js.lgcore.danh-gia-6": {
+  "t": "六個面向評分",
+  "h": "1dd610c0"
+ },
+ "js.lgcore.dia-loi": {
+  "t": "地利",
+  "h": "dd0f73a6"
+ },
+ "js.lgcore.dv9-title": {
+  "t": "9 個大運 — 分數圖",
+  "h": "a893e2f4"
+ },
+ "js.lgcore.hien-tai-dv": {
+  "t": "· 目前：第{n}大運（{cc}，{a}-{b}歲）",
+  "h": "d3fab46a"
+ },
+ "js.lgcore.khoi-van": {
+  "t": "· 起運：{tuoi} 歲 · 方向：{huong}",
+  "h": "3f3b6343"
+ },
+ "js.lgcore.khong-sao-dong": {
+  "t": "沒有動星",
+  "h": "77575d09"
+ },
+ "js.lgcore.luan-doan": {
+  "t": "運限論斷",
+  "h": "d3b202d1"
+ },
+ "js.lgcore.luu-sao": {
+  "t": "流{sao}",
+  "h": "db80d9b7"
+ },
+ "js.lgcore.manh": {
+  "t": "強",
+  "h": "36090ada"
+ },
+ "js.lgcore.manh-nhat": {
+  "t": "最強：{ds}",
+  "h": "aa4c3ac4"
+ },
+ "js.lgcore.manh-yeu": {
+  "t": "突出的強項／弱項",
+  "h": "8f14d466"
+ },
+ "js.lgcore.menh-o": {
+  "t": "命在{chi}",
+  "h": "058ae0b9"
+ },
+ "js.lgcore.muoi-hai-thang": {
+  "t": "{cc}年（{nam}）農曆十二個月",
+  "h": "3e050ead"
+ },
+ "js.lgcore.muoi-hai-thang-aria": {
+  "t": "{nam} 年農曆十二個月的分數與波動幅度",
+  "h": "f09eedd4"
+ },
+ "js.lgcore.muoi-nam-aria": {
+  "t": "{a} 年至 {b} 年的分數與波動幅度",
+  "h": "68dd4ba4"
+ },
+ "js.lgcore.muoi-nam-title": {
+  "t": "未來十年 — 年分數與波動幅度",
+  "h": "43c9ff41"
+ },
+ "js.lgcore.muon-xung": {
+  "t": " — 借對宮星曜：<span style=\"color:#5FA8D3\">{sao}</span>",
+  "h": "306f7570"
+ },
+ "js.lgcore.mv-ben-vung": {
+  "t": "穩固",
+  "h": "aced35c7"
+ },
+ "js.lgcore.mv-binh-yen": {
+  "t": "平安",
+  "h": "4677d1ae"
+ },
+ "js.lgcore.mv-can-co": {
+  "t": "根基",
+  "h": "621afbd9"
+ },
+ "js.lgcore.mv-may-man": {
+  "t": "幸運",
+  "h": "d56f590a"
+ },
+ "js.lgcore.mv-phu-tro": {
+  "t": "扶助",
+  "h": "34da24cc"
+ },
+ "js.lgcore.mv-thien-van": {
+  "t": "天運",
+  "h": "4cede149"
+ },
+ "js.lgcore.nam-dong-nhat": {
+  "t": "波動最大：<b>{nam}</b> 年（±{p}，小限 {cung}）— {ds}。",
+  "h": "157f8832"
+ },
+ "js.lgcore.nam-xem-dong": {
+  "t": "<b>{nam}</b> 年（{cc}，小限 {cung}）：分數 <b>{d}</b>，波動 {lo}–{hi}（±{p}）。動星：{ds}。",
+  "h": "19369c2f"
+ },
+ "js.lgcore.nghich": {
+  "t": "逆行",
+  "h": "3ccd4363"
+ },
+ "js.lgcore.nh-aria": {
+  "t": "四柱五行比例",
+  "h": "ab12e894"
+ },
+ "js.lgcore.nh-dung-than": {
+  "t": " 用神<b>{a}</b>",
+  "h": "04d37af8"
+ },
+ "js.lgcore.nh-ghi-chu": {
+  "t": "以子平八字引擎計算：天干每個計 1，地支藏干依藏干權重計入。",
+  "h": "52810c99"
+ },
+ "js.lgcore.nh-hy-than": {
+  "t": "，喜神{a}",
+  "h": "a4ea3273"
+ },
+ "js.lgcore.nh-than": {
+  "t": " 日主{can}，身{cn}",
+  "h": "c0729f51"
+ },
+ "js.lgcore.nh-title": {
+  "t": "四柱五行",
+  "h": "433df54e"
+ },
+ "js.lgcore.nh-vuong-thieu": {
+  "t": "最旺為<b>{a}</b>，最缺為<b>{b}</b>。",
+  "h": "08060d77"
+ },
+ "js.lgcore.nhan-hoa": {
+  "t": "人和",
+  "h": "2d5692ff"
+ },
+ "js.lgcore.nhat-chu": {
+  "t": "日主",
+  "h": "c60a7143"
+ },
+ "js.lgcore.phan-cung": {
+  "t": "{cung}",
+  "h": "7f204b89"
+ },
+ "js.lgcore.phan-dv": {
+  "t": "第{n}大運",
+  "h": "4969b7f0"
+ },
+ "js.lgcore.phan-dv-tuoi": {
+  "t": "第{n}大運（{a}–{b}歲）",
+  "h": "2a4b7cc3"
+ },
+ "js.lgcore.phan-tich-sao": {
+  "t": "星曜分析",
+  "h": "c580881f"
+ },
+ "js.lgcore.phan-tieu-van": {
+  "t": "流年小運",
+  "h": "c0c9a816"
+ },
+ "js.lgcore.phan-tong-quan": {
+  "t": "命盤總論",
+  "h": "c65f03ec"
+ },
+ "js.lgcore.phan-tq-dv": {
+  "t": "大運總論",
+  "h": "655ab451"
+ },
+ "js.lgcore.phi-nhap": {
+  "t": "{hoa}：<b>{sao}</b> → 飛入<b>{cung}</b>（{chi}）",
+  "h": "c1d3bd83"
+ },
+ "js.lgcore.radar-aria": {
+  "t": "十二宮雷達圖，軸越粗代表該宮越強",
+  "h": "3e7f78f4"
+ },
+ "js.lgcore.sat-tinh": {
+  "t": "煞星：{sao}",
+  "h": "7eaf46b7"
+ },
+ "js.lgcore.tam-phuong": {
+  "t": "三方四正星曜",
+  "h": "6e974aa8"
+ },
+ "js.lgcore.th-ngan": {
+  "t": "{n}月",
+  "h": "b3fc323a"
+ },
+ "js.lgcore.thang-dong-nhat": {
+  "t": "波動最大：<b>{t}月</b>（月限 {cung}，±{p}）— {ds}。",
+  "h": "d96d074b"
+ },
+ "js.lgcore.thang-noi-suy": {
+  "t": "月分數由各年分數內插而得。",
+  "h": "ab0b95ef"
+ },
+ "js.lgcore.thang-yen-nhat": {
+  "t": "最平穩：<b>{t}月</b>（月限 {cung}，±{p}）。",
+  "h": "dc56896b"
+ },
+ "js.lgcore.thien-thoi": {
+  "t": "天時",
+  "h": "ebcbebc4"
+ },
+ "js.lgcore.thuan": {
+  "t": "順行",
+  "h": "ee315dcc"
+ },
+ "js.lgcore.tong": {
+  "t": "總分",
+  "h": "de995d83"
+ },
+ "js.lgcore.triet-cung": {
+  "t": "截空阻擋本宮",
+  "h": "146d86f2"
+ },
+ "js.lgcore.triet-cung-dv": {
+  "t": "截空阻擋大運宮",
+  "h": "224bd87b"
+ },
+ "js.lgcore.tru-gio": {
+  "t": "時",
+  "h": "75f92388"
+ },
+ "js.lgcore.tru-nam": {
+  "t": "年",
+  "h": "98926c7e"
+ },
+ "js.lgcore.tru-ngay": {
+  "t": "日",
+  "h": "368c4575"
+ },
+ "js.lgcore.tru-thang": {
+  "t": "月",
+  "h": "0e2b3099"
+ },
+ "js.lgcore.tu-hoa": {
+  "t": "［自化］",
+  "h": "d151626d"
+ },
+ "js.lgcore.tuan-cung": {
+  "t": "旬空阻擋本宮",
+  "h": "4b4590e3"
+ },
+ "js.lgcore.tuan-cung-dv": {
+  "t": "旬空阻擋大運宮",
+  "h": "2eba5ede"
+ },
+ "js.lgcore.tuhoa-title": {
+  "t": "四化飛星（宮干 {can}）",
+  "h": "69ab67ee"
+ },
+ "js.lgcore.tuoi-khoang": {
+  "t": "{a}-{b} 歲",
+  "h": "f8dda7a6"
+ },
+ "js.lgcore.vo-chinh-dieu": {
+  "t": "無正曜",
+  "h": "bb1c972d"
+ },
+ "js.lgcore.xem-co-so": {
+  "t": "查看計算依據",
+  "h": "0fb87c33"
+ },
+ "js.lgcore.yeu": {
+  "t": "弱",
+  "h": "1a462424"
+ },
+ "js.lgcore.yeu-nhat": {
+  "t": "最弱：{ds}",
+  "h": "0d623c66"
+ },
  "js.lienhe.gui-email": {
   "t": "寄送電子郵件",
   "h": "5901b176"
@@ -10139,6 +10563,10 @@
   "t": "▾ 收起命盤",
   "h": "9f28e998"
  },
+ "js.luangiai.anh-minh-hoa": {
+  "t": "示意圖",
+  "h": "f37e2fa9"
+ },
  "js.luangiai.bam-thu-lai-o-tung-phan": {
   "t": "— 請在各部分按「↻ 重試」，再重新載入頁面。",
   "h": "e7534682"
@@ -10162,6 +10590,10 @@
  "js.luangiai.chi-phi-su-dung": {
   "t": "使用費用",
   "h": "c2d36be8"
+ },
+ "js.luangiai.chua-doc-gia": {
+  "t": "無法讀取此部分的價格，請再試一次。",
+  "h": "86f02e35"
  },
  "js.luangiai.con-tiep-mo-khoa-de-doc": {
   "t": "未完待續——解鎖以讀完全文",
@@ -10195,6 +10627,10 @@
   "t": "目前大運 ",
   "h": "7cf01e2f"
  },
+ "js.luangiai.dang-ky-luu": {
+  "t": "註冊並儲存 →",
+  "h": "b2ef6ce1"
+ },
  "js.luangiai.dang-lap-la-so": {
   "t": "正在排命盤…",
   "h": "fba688db"
@@ -10206,6 +10642,34 @@
  "js.luangiai.dang-luan-giai-phan-1": {
   "t": "正在解讀第 1 部分 / ",
   "h": "559646ca"
+ },
+ "js.luangiai.dang-luan-phan": {
+  "t": "正在解讀部分",
+  "h": "6315d472"
+ },
+ "js.luangiai.doc-sau-hon": {
+  "t": "深入閱讀",
+  "h": "2822ae47"
+ },
+ "js.luangiai.gate-11-cung": {
+  "t": "其餘 11 宮 — 每宮依古法獨立解讀",
+  "h": "8b8167db"
+ },
+ "js.luangiai.gate-cach-cuc": {
+  "t": "各宮的格局、四化與規則",
+  "h": "ab223e81"
+ },
+ "js.luangiai.gate-tieu-de": {
+  "t": "完整版回答「該怎麼運用它」",
+  "h": "c7fe8199"
+ },
+ "js.luangiai.khoa": {
+  "t": "已鎖定",
+  "h": "393cb36a"
+ },
+ "js.luangiai.khong-du-luong": {
+  "t": "兩不足 — 請儲值。",
+  "h": "1d9e17da"
  },
  "js.luangiai.la-so": {
   "t": "命盤",
@@ -10219,9 +10683,33 @@
   "t": "立即排命盤並解讀 →",
   "h": "edbdb6fc"
  },
+ "js.luangiai.lap-la-so-luan-ngay": {
+  "t": "立即排盤並解讀 →",
+  "h": "7d7efd95"
+ },
+ "js.luangiai.lock-12-cung": {
+  "t": "其餘 12 宮 — 每宮依古法獨立解讀",
+  "h": "c7949691"
+ },
+ "js.luangiai.lock-cta": {
+  "t": "開啟完整解讀 →",
+  "h": "2ff464b0"
+ },
+ "js.luangiai.lock-pdf": {
+  "t": "完整版 PDF — 幾分鐘內下載或寄到信箱",
+  "h": "28ae9177"
+ },
+ "js.luangiai.lock-title": {
+  "t": "⊙ 還有 12 個部分鎖定中",
+  "h": "19ab2722"
+ },
  "js.luangiai.loi-khi-luan-giai": {
   "t": "解讀時發生錯誤：",
   "h": "b251ca2c"
+ },
+ "js.luangiai.loi-mo-phan": {
+  "t": "開啟此部分時發生錯誤，請再試一次。",
+  "h": "8c34a861"
  },
  "js.luangiai.loi-phan": {
   "t": "部分發生錯誤",
@@ -10238,6 +10726,10 @@
  "js.luangiai.luan-giai-tu-vi": {
   "t": "紫微斗數解讀",
   "h": "ab5a4607"
+ },
+ "js.luangiai.luc-giac-menh": {
+  "t": "命宮六角圖",
+  "h": "e7542de0"
  },
  "js.luangiai.luong": {
   "t": "兩 →",
@@ -10275,9 +10767,45 @@
   "t": "該怎麼做？",
   "h": "feedfe50"
  },
+ "js.luangiai.nhap-du-ngay": {
+  "t": "請完整輸入出生年、月、日。",
+  "h": "075a6b15"
+ },
  "js.luangiai.noi-vi-sao-no-bung-ra": {
   "t": " 說明原因、在哪個階段爆發，以及如何化解。",
   "h": "2b510636"
+ },
+ "js.luangiai.nt-bo": {
+  "t": "父親",
+  "h": "dbbdf270"
+ },
+ "js.luangiai.nt-con": {
+  "t": "子女",
+  "h": "f6b38904"
+ },
+ "js.luangiai.nt-desc": {
+  "t": "讀完這份後，接著看配偶、父母或子女 — 每人一份專屬解讀。",
+  "h": "d76d2c28"
+ },
+ "js.luangiai.nt-me": {
+  "t": "母親",
+  "h": "dfc6f90b"
+ },
+ "js.luangiai.nt-nguoi-khac": {
+  "t": "其他人",
+  "h": "585a5df1"
+ },
+ "js.luangiai.nt-prompt": {
+  "t": "這個人是誰（例如：主管、好友）：",
+  "h": "4f351258"
+ },
+ "js.luangiai.nt-title": {
+  "t": "查看家人的命盤",
+  "h": "515da066"
+ },
+ "js.luangiai.nt-vo-chong": {
+  "t": "配偶",
+  "h": "ee59b76c"
  },
  "js.luangiai.p-ba-cham": {
   "t": "…",
@@ -10299,6 +10827,82 @@
   "t": " 個部分出錯（部分 ",
   "h": "3d3d4b5b"
  },
+ "js.luangiai.phan-tong-the": {
+  "t": "此部分依整張命盤論斷 — 按下方按鈕請老師深入解讀。",
+  "h": "a10845f5"
+ },
+ "js.luangiai.rel-bat-trach": {
+  "t": "八宅方位",
+  "h": "a9176f82"
+ },
+ "js.luangiai.rel-bat-trach-note": {
+  "t": "從這個命宮再看 8 個方位的吉凶",
+  "h": "eb903977"
+ },
+ "js.luangiai.rel-cdvc": {
+  "t": "夫妻肖像",
+  "h": "ed0abbb5"
+ },
+ "js.luangiai.rel-cdvc-note": {
+  "t": "從這個宮位描繪配偶的肖像",
+  "h": "277f3e1b"
+ },
+ "js.luangiai.rel-chu-trinh": {
+  "t": "人生週期",
+  "h": "38c0c6ce"
+ },
+ "js.luangiai.rel-chu-trinh-note": {
+  "t": "深入解讀 9 個大運與流年小運 — 獨立的 11 個部分，與本命盤的 13 個部分分開",
+  "h": "49d1879a"
+ },
+ "js.luangiai.rel-cong-so": {
+  "t": "紫微職場",
+  "h": "9d18a955"
+ },
+ "js.luangiai.rel-cong-so-note": {
+  "t": "用工作的語言重讀同一張命盤",
+  "h": "c33dffa1"
+ },
+ "js.luangiai.rel-day-con": {
+  "t": "依命盤教養孩子",
+  "h": "2013a771"
+ },
+ "js.luangiai.rel-day-con-note": {
+  "t": "孩子適合哪種教法？該推一把還是放手",
+  "h": "ac17fe75"
+ },
+ "js.luangiai.rel-duyen-no": {
+  "t": "前世緣分",
+  "h": "c6b0ccb5"
+ },
+ "js.luangiai.rel-duyen-no-note": {
+  "t": "前世兩人是什麼關係",
+  "h": "30e3786b"
+ },
+ "js.luangiai.rel-hnt": {
+  "t": "孩子的早期職涯方向",
+  "h": "2735212c"
+ },
+ "js.luangiai.rel-hnt-note": {
+  "t": "從現在起讓孩子接觸什麼",
+  "h": "a9892440"
+ },
+ "js.luangiai.rel-phong-thuy": {
+  "t": "室內風水",
+  "h": "3f80b53f"
+ },
+ "js.luangiai.rel-phong-thuy-note": {
+  "t": "拍下房間照片，由系統為擺設評分",
+  "h": "f41bead6"
+ },
+ "js.luangiai.rel-xem-tuoi": {
+  "t": "夫妻合婚",
+  "h": "f3e7b1ed"
+ },
+ "js.luangiai.rel-xem-tuoi-note": {
+  "t": "與對方的命盤相互對照",
+  "h": "2f6b9398"
+ },
  "js.luangiai.trong-12-cung-cua-la-so": {
   "t": "在這張命盤的 12 宮中，<b> ",
   "h": "c69f5267"
@@ -10314,6 +10918,10 @@
  "js.luangiai.vi-sao-cung": {
   "t": "為什麼 ",
   "h": "32e135e7"
+ },
+ "js.luangiai.xem-la-so-12-cung": {
+  "t": "查看命盤十二宮 →",
+  "h": "e1cc82d1"
  },
  "js.luangiai.xem-la-so-day-du": {
   "t": "▸ 查看完整命盤",
@@ -24991,6 +25599,10 @@
   "t": "兩不足 — 請先儲值。",
   "h": "1d9e17da"
  },
+ "js.vanhannam.khong-dung-khung": {
+  "t": "無法建立 12 個月的框架。",
+  "h": "d749d844"
+ },
  "js.vanhannam.khung-12-thang-am": {
   "t": "農曆 12 個月架構",
   "h": "761916e9"
@@ -24998,6 +25610,38 @@
  "js.vanhannam.khung-12-thang-am-lich-toi": {
   "t": "未來 **12 個農曆月** 的架構 (",
   "h": "5f685658"
+ },
+ "js.vanhannam.lb-dv": {
+  "t": "目前大運",
+  "h": "96f5f4af"
+ },
+ "js.vanhannam.lb-dv-tuoi": {
+  "t": "目前大運（{a}–{b}歲）",
+  "h": "09578f83"
+ },
+ "js.vanhannam.lb-hanh-trinh": {
+  "t": "人生歷程",
+  "h": "1e1b88c4"
+ },
+ "js.vanhannam.lb-tieu-van": {
+  "t": "今年小運",
+  "h": "7ddc6d12"
+ },
+ "js.vanhannam.lb-tong-quan": {
+  "t": "命盤總論",
+  "h": "84ed13e5"
+ },
+ "js.vanhannam.loai-tot": {
+  "t": "吉",
+  "h": "a6f70ec0"
+ },
+ "js.vanhannam.loai-trung": {
+  "t": "中",
+  "h": "71889ba3"
+ },
+ "js.vanhannam.loai-xau": {
+  "t": "凶",
+  "h": "3efce654"
  },
  "js.vanhannam.lock-cta": {
   "t": "開啟完整解讀",
@@ -25103,6 +25747,14 @@
   "t": "煞星：",
   "h": "6db93931"
  },
+ "js.vanhannam.thang-al": {
+  "t": "農曆{n}月",
+  "h": "27aed2d5"
+ },
+ "js.vanhannam.thang-al-nhuan": {
+  "t": "農曆閏{n}月",
+  "h": "2b2df525"
+ },
  "js.vanhannam.thang-am-toi-moi-o-mot": {
   "t": " 個農曆月，每格一個關鍵詞",
   "h": "33508d52"
@@ -25110,6 +25762,10 @@
  "js.vanhannam.tieu-han-cung": {
   "t": "：小限宮 ",
   "h": "cb20c10d"
+ },
+ "js.vanhannam.to-hop-title": {
+  "t": "限宮中的星曜組合",
+  "h": "2ef7afa1"
  },
  "js.vanhannam.toi-nen-tap-trung-viec-gi": {
   "t": " 我該專注於什麼事？",
