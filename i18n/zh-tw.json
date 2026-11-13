@@ -11391,6 +11391,82 @@
   "t": "請參考上方的主色。",
   "h": "95e8229c"
  },
+ "js.nap-am.chip-huong": {
+  "t": "適合哪個房屋或書桌方位？",
+  "h": "e1e3d123"
+ },
+ "js.nap-am.chip-mau": {
+  "t": "適合什麼顏色、忌什麼顏色？",
+  "h": "3af5cdfc"
+ },
+ "js.nap-am.chip-tuoi": {
+  "t": "哪些年份相合、哪些相剋？",
+  "h": "06343f22"
+ },
+ "js.nap-am.chip-vatpham": {
+  "t": "適合佩戴哪些風水物品？",
+  "h": "024bffb6"
+ },
+ "js.nap-am.greeting": {
+  "t": "{nam} 年 — 本命為 **{na}**（五行：{hanh}）。想請我解讀哪方面？",
+  "h": "e825090f"
+ },
+ "js.nap-am.hl-canchi": {
+  "t": "干支",
+  "h": "8b784611"
+ },
+ "js.nap-am.hl-hanh": {
+  "t": "五行",
+  "h": "58608859"
+ },
+ "js.nap-am.hl-napam": {
+  "t": "納音",
+  "h": "006a48d6"
+ },
+ "js.nap-am.label": {
+  "t": "納音 {cc}・{na}",
+  "h": "fa12a15b"
+ },
+ "js.nap-am.share-1": {
+  "t": "納音五行 — {nam} 年（{cc}，屬{cg}）",
+  "h": "8f377500"
+ },
+ "js.nap-am.share-2": {
+  "t": "本命：{na} — {hanh}",
+  "h": "682b9b66"
+ },
+ "js.nap-am.share-mauhop": {
+  "t": "適合的顏色：{v}",
+  "h": "1c21689f"
+ },
+ "js.nap-am.share-mauky": {
+  "t": "宜少用的顏色：{v}",
+  "h": "b6303d72"
+ },
+ "js.nap-am.share-pv": {
+  "t": "五行方位：{v}",
+  "h": "e30548a9"
+ },
+ "js.nap-am.share-so": {
+  "t": "吉數：{v}",
+  "h": "93258f0f"
+ },
+ "js.nap-am.share-title": {
+  "t": "納音 {na} — {nam} 年",
+  "h": "e8151650"
+ },
+ "js.nap-am.share-tuoi": {
+  "t": "納音相合：{hop}命之人・需斟酌：{ky}命之人",
+  "h": "f382ceb9"
+ },
+ "js.nap-am.sheet-title": {
+  "t": "納音 {na}・{nam} 年",
+  "h": "1862358a"
+ },
+ "js.nap-am.xem-day-du": {
+  "t": "查看完整內容 →",
+  "h": "e330670d"
+ },
  "js.nav.brand": {
   "t": "明寶紫微斗數",
   "h": "33336b26"
