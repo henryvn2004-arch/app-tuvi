@@ -2,9 +2,65 @@
   "_ghiChu": "Nhân vật HƯ CẤU cho văn mẫu mờ theo từng ngôn ngữ (Henry chốt 2026-11-13: mỗi nước một bộ mẫu riêng, không dịch bản Việt). Số liệu lá số do engine thật sinh — scripts/sample-locale-data.mjs; văn mẫu viết thẳng bằng ngôn ngữ đó. zh-cn dùng CÙNG giờ sinh với zh-tw (văn sinh bằng OpenCC rồi thay tên/nơi sinh).",
   "namXem": 2026,
   "khungTu": { "ngay": 13, "thang": 11, "nam": 2026 },
-  "ja": { "ten": "佐藤 健一", "noiSinh": "東京都", "gioitinh": "nam", "ngay": 12, "thang": 4, "nam": 1988, "gio": 8, "phut": 20, "gioIdx": 4, "lich": "jp" },
-  "ko": { "ten": "이서연", "noiSinh": "부산광역시", "gioitinh": "nu", "ngay": 5, "thang": 10, "nam": 1992, "gio": 14, "phut": 10, "gioIdx": 7, "lich": "kr" },
-  "zh-tw": { "ten": "林家豪", "noiSinh": "臺中市", "gioitinh": "nam", "ngay": 28, "thang": 2, "nam": 1985, "gio": 21, "phut": 30, "gioIdx": 11, "lich": "cn" },
-  "zh-cn": { "ten": "陈家豪", "noiSinh": "广州市", "gioitinh": "nam", "ngay": 28, "thang": 2, "nam": 1985, "gio": 21, "phut": 30, "gioIdx": 11, "lich": "cn", "tuZhTw": { "林家豪": "陈家豪", "臺中市": "广州市", "台中": "广州" } },
-  "en": { "ten": "Emily Carter", "noiSinh": "Toronto", "gioitinh": "nu", "ngay": 19, "thang": 7, "nam": 1994, "gio": 10, "phut": 15, "gioIdx": 5, "lich": "vn" }
+  "ja": {
+    "ten": "佐藤 健一",
+    "noiSinh": "東京都",
+    "gioitinh": "nam",
+    "ngay": 12,
+    "thang": 4,
+    "nam": 1988,
+    "gio": 8,
+    "phut": 20,
+    "gioIdx": 4,
+    "lich": "jp"
+  },
+  "ko": {
+    "ten": "이서연",
+    "noiSinh": "부산광역시",
+    "gioitinh": "nu",
+    "ngay": 5,
+    "thang": 10,
+    "nam": 1992,
+    "gio": 14,
+    "phut": 10,
+    "gioIdx": 7,
+    "lich": "kr"
+  },
+  "zh-tw": {
+    "ten": "林家豪",
+    "noiSinh": "臺中市",
+    "gioitinh": "nam",
+    "ngay": 28,
+    "thang": 2,
+    "nam": 1985,
+    "gio": 21,
+    "phut": 30,
+    "gioIdx": 11,
+    "lich": "cn"
+  },
+  "zh-cn": {
+    "ten": "陈家豪",
+    "noiSinh": "广州市",
+    "gioitinh": "nam",
+    "ngay": 28,
+    "thang": 2,
+    "nam": 1985,
+    "gio": 21,
+    "phut": 30,
+    "gioIdx": 11,
+    "lich": "cn",
+    "tuZhTw": { "林家豪": "陈家豪", "臺中市": "广州市", "台中": "广州" }
+  },
+  "en": {
+    "ten": "Emily Carter",
+    "noiSinh": "Toronto",
+    "gioitinh": "nu",
+    "ngay": 19,
+    "thang": 7,
+    "nam": 1994,
+    "gio": 10,
+    "phut": 15,
+    "gioIdx": 5,
+    "lich": "vn"
+  }
 }

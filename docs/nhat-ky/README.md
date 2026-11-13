@@ -1,6 +1,6 @@
 # Nhật ký phát triển — mục lục
 
-600 mục ghi chép từng PR, tách khỏi `CLAUDE.md` để nó thôi ngốn ~350k token mỗi lượt.
+601 mục ghi chép từng PR, tách khỏi `CLAUDE.md` để nó thôi ngốn ~350k token mỗi lượt.
 
 **Sáu file dưới đây KHÔNG được nạp tự động.** Cần thì tra:
 
@@ -28,6 +28,7 @@ Luật rút ra từ các mục này đã được cô đọng lên `CLAUDE.md`. 
 
 | # | tháng | file | mục |
 |---:|---|---|---|
+| 1 | 2026-11 | `2026-11.md` | 🎭 W32A-3 — Văn mẫu mờ THEO NƯỚC lô 1 (Luận Giải · Chu Trình · Vận Hạn): nhân vật hư cấu ja/ko/zh-tw/zh-cn/en, số liệu engine thật (`sample-locale-data.mjs`), `/samples/<locale>/` + `loadSampleJson` rơi về vi, check:i18n 0d |
 | 1 | 2026-11 | `2026-11.md` | 🔎 W31 — Rà soát i18n đợt 7: 95 trang × 5 ngôn ngữ × desktop/mobile (chạy form, engine thật); 2.610 → 2.306 chuỗi Việt; DB_NS `nhom`, thẻ Hôm nay, Hỏi Thầy, PWA, trang nạp; lô A–F ở `docs/i18n/audit-2026-11.md` |
 | 1 | 2026-11 | `2026-11.md` | ✏️ Sửa 2 lỗi gõ còn lại trong câu engine (Kỵ→Tỵ xung chiếu · tự tối→tự ải), dịch lại 3 câu, engine `?v=3` |
 | 1 | 2026-11 | `2026-11.md` | 🧿 W30f-9 — Rail Chân Dung/Duyên Nợ Tiền Kiếp: tên + danh xưng đã dịch vào USER message (`runAgent` `wrapNhanVat` + `khoiTenTheoNgonNgu(…,'rail')`; system giữ tên Việt; tracing `/api/v1/chat`; vi byte-giống) |

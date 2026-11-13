@@ -161,10 +161,22 @@ for (const f of fs.readdirSync(PUBLIC).filter((x) => x.endsWith('.html'))) {
 {
   const pw = fs.readFileSync(path.join(PUBLIC, 'tuvi-paywall.js'), 'utf8');
   const mm = /const SAMPLE_THEO_NUOC = (\[[^\]]*\]);/.exec(pw);
-  if (!mm) fail('public/tuvi-paywall.js: không thấy SAMPLE_THEO_NUOC (đổi tên thì sửa check.mjs 0d)');
+  if (!mm)
+    fail('public/tuvi-paywall.js: không thấy SAMPLE_THEO_NUOC (đổi tên thì sửa check.mjs 0d)');
   const ds = mm ? JSON.parse(mm[1].replace(/'/g, '"')) : [];
   const LOCS = ['en', 'ja', 'ko', 'zh-tw', 'zh-cn'];
-  const TOPIC = ['ban-than', 'hon-nhan', 'su-nghiep', 'tai-chinh', 'con-cai', 'gia-dinh', 'nha-cua', 'suc-khoe', 'van-han', 'ten-goi'];
+  const TOPIC = [
+    'ban-than',
+    'hon-nhan',
+    'su-nghiep',
+    'tai-chinh',
+    'con-cai',
+    'gia-dinh',
+    'nha-cua',
+    'suc-khoe',
+    'van-han',
+    'ten-goi',
+  ];
   const VI_RE = /[ăâđêôơưàáảãạằắẳẵặầấẩẫậèéẻẽẹềếểễệìíỉĩịòóỏõọồốổỗộờớởỡợùúủũụừứửữựỳýỷỹỵ]/i;
   const { buildSampleZhCn } = await import('./samples-zhcn.mjs');
   const zhcn = buildSampleZhCn();
@@ -187,14 +199,20 @@ for (const f of fs.readdirSync(PUBLIC).filter((x) => x.endsWith('.html'))) {
       for (const [k, v] of Object.entries(phan)) {
         for (const line of String(v).split('\n')) {
           if (!line.startsWith('[')) {
-            if (VI_RE.test(line)) fail(`public/samples/${l}/${f} phần ${k}: còn chữ Việt — ${line.slice(0, 50)}`);
+            if (VI_RE.test(line))
+              fail(`public/samples/${l}/${f} phần ${k}: còn chữ Việt — ${line.slice(0, 50)}`);
             continue;
           }
-          const h = /^\[(TỐT|CẢNH BÁO|TRUNG TÍNH)\|([^\]|]{1,40})\|([a-z-]+)\]\s*\*\*(.+?)\*\*/.exec(line);
+          const h =
+            /^\[(TỐT|CẢNH BÁO|TRUNG TÍNH)\|([^\]|]{1,40})\|([a-z-]+)\]\s*\*\*(.+?)\*\*/.exec(line);
           if (!h || !TOPIC.includes(h[3]))
-            fail(`public/samples/${l}/${f} phần ${k}: dòng hook sai khuôn [NHÃN|từ khoá|chủ đề] **…** — ${line.slice(0, 50)}`);
+            fail(
+              `public/samples/${l}/${f} phần ${k}: dòng hook sai khuôn [NHÃN|từ khoá|chủ đề] **…** — ${line.slice(0, 50)}`
+            );
           else if (VI_RE.test(line.slice(h[0].length - h[4].length - 4)))
-            fail(`public/samples/${l}/${f} phần ${k}: còn chữ Việt sau nhãn — ${line.slice(0, 50)}`);
+            fail(
+              `public/samples/${l}/${f} phần ${k}: còn chữ Việt sau nhãn — ${line.slice(0, 50)}`
+            );
         }
       }
       if (l === 'zh-cn' && zhcn[f] !== raw)
@@ -205,7 +223,10 @@ for (const f of fs.readdirSync(PUBLIC).filter((x) => x.endsWith('.html'))) {
     const dir = path.join(PUBLIC, 'samples', l);
     if (fs.existsSync(dir))
       for (const f of fs.readdirSync(dir))
-        if (!ds.includes(f)) fail(`public/samples/${l}/${f}: không có trong SAMPLE_THEO_NUOC — client không bao giờ đọc`);
+        if (!ds.includes(f))
+          fail(
+            `public/samples/${l}/${f}: không có trong SAMPLE_THEO_NUOC — client không bao giờ đọc`
+          );
   }
 }
 

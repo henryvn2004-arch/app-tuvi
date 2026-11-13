@@ -11,11 +11,15 @@ const ROOT = path.join(path.dirname(new URL(import.meta.url).pathname), '..', '.
 const conv = OpenCC.Converter({ from: 'twp', to: 'cn' });
 
 export function buildSampleZhCn(root = ROOT) {
-  const P = JSON.parse(fs.readFileSync(path.join(root, 'scripts/fixtures/sample-personas.json'), 'utf8'));
+  const P = JSON.parse(
+    fs.readFileSync(path.join(root, 'scripts/fixtures/sample-personas.json'), 'utf8')
+  );
   const thay = Object.entries(P['zh-cn'].tuZhTw || {}).map(([a, b]) => [conv(a), b]);
   const dir = path.join(root, 'public/samples/zh-tw');
   const out = {};
-  for (const f of fs.existsSync(dir) ? fs.readdirSync(dir).filter((x) => x.endsWith('.json')) : []) {
+  for (const f of fs.existsSync(dir)
+    ? fs.readdirSync(dir).filter((x) => x.endsWith('.json'))
+    : []) {
     const src = JSON.parse(fs.readFileSync(path.join(dir, f), 'utf8'));
     const o = {};
     for (const [k, v] of Object.entries(src)) {
