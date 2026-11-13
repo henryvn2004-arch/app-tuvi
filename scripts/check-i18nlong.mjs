@@ -179,6 +179,26 @@ for (const ns of Object.keys(ENGINE_NS)) {
   for (const t of ["'kdh.' + c.ma", "'matdoc.' + m.ma", "'huong.' + h.id", "'lop.' + lopId"])
     if (!page.includes(t)) fail(`${LONG_MODULE.hntre}: trang không tra ${t}`);
 }
+// van-ngay (W34c, thẻ Hôm nay): câu chốt do `nhanDanhGia` dựng bằng khuôn `NHAN_VAN` và trả `danhGia.ma`; trang tra đúng cửa
+// (`vnNhan` → `ma.k` + tên ngày kỵ/màu/lĩnh vực cung theo CHÍNH chữ engine). Gỡ `ma` ⇒ /ja lùi về chữ Việt ở câu chốt, im lặng.
+{
+  const eng = fs.readFileSync(path.join(ROOT, ENGINE_NS['van-ngay']), 'utf8');
+  for (const [snip, y] of [
+    ['dungMau(NHAN_VAN[k]!, bien)', 'câu chốt dựng từ khuôn NHAN_VAN'],
+    ['ma: { k, v:', 'danhGia.ma'],
+    ['danhGia: { tinhChat, ...nhanDanhGia(info) }', 'payload mang danhGia.ma'],
+  ])
+    if (!eng.includes(snip)) fail(`${ENGINE_NS['van-ngay']}: thiếu ${y} — "${snip}"`);
+  const page = fs.readFileSync(path.join(ROOT, LONG_MODULE['van-ngay']), 'utf8');
+  for (const t of [
+    "'ky.'+n",
+    "'mau.'+m",
+    "'vuc.'+cung",
+    "ma.k.indexOf('nhan.')",
+    'TuviToHop.tomTat',
+  ])
+    if (!page.includes(t)) fail(`${LONG_MODULE['van-ngay']}: trang không tra ${t}`);
+}
 // past-life (W30f-3): mã `ma` do `resolveCareerBase`/`cong-so.ts` gắn thêm + trang tra đúng cửa. Gỡ mã khỏi engine ⇒ /ja lặng
 // lẽ lùi về chữ Việt ở khối "Cơ sở trong lá số" — không bộ dò nào khác thấy, nên canh ở đây.
 {

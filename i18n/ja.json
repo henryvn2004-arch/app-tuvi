@@ -9331,6 +9331,34 @@
   "t": "あなただけの運勢",
   "h": "378b38f4"
  },
+ "js.home.viec-cuoi-hoi": {
+  "t": "結婚",
+  "h": "04a2caa4"
+ },
+ "js.home.viec-di-xa": {
+  "t": "遠出",
+  "h": "07f707c7"
+ },
+ "js.home.viec-khai-truong": {
+  "t": "開業",
+  "h": "c86ca256"
+ },
+ "js.home.viec-ky-ket": {
+  "t": "契約",
+  "h": "de74d03a"
+ },
+ "js.home.viec-nha-moi": {
+  "t": "新居",
+  "h": "505e7857"
+ },
+ "js.home.viec-sua-nha": {
+  "t": "家の修繕",
+  "h": "0ef7e12d"
+ },
+ "js.home.viec-xay-nha": {
+  "t": "建築",
+  "h": "84154a71"
+ },
  "js.home.vo-chinh-dieu": {
   "t": " — 無正曜",
   "h": "44a2723b"

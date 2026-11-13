@@ -9331,6 +9331,34 @@
   "t": "나만의 운세",
   "h": "378b38f4"
  },
+ "js.home.viec-cuoi-hoi": {
+  "t": "혼례",
+  "h": "04a2caa4"
+ },
+ "js.home.viec-di-xa": {
+  "t": "장거리 이동",
+  "h": "07f707c7"
+ },
+ "js.home.viec-khai-truong": {
+  "t": "개업",
+  "h": "c86ca256"
+ },
+ "js.home.viec-ky-ket": {
+  "t": "계약",
+  "h": "de74d03a"
+ },
+ "js.home.viec-nha-moi": {
+  "t": "새집",
+  "h": "505e7857"
+ },
+ "js.home.viec-sua-nha": {
+  "t": "집수리",
+  "h": "0ef7e12d"
+ },
+ "js.home.viec-xay-nha": {
+  "t": "건축",
+  "h": "84154a71"
+ },
  "js.home.vo-chinh-dieu": {
   "t": " ・무정요",
   "h": "44a2723b"

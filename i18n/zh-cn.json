@@ -9331,6 +9331,34 @@
   "t": "您的专属运势",
   "h": "378b38f4"
  },
+ "js.home.viec-cuoi-hoi": {
+  "t": "婚嫁",
+  "h": "04a2caa4"
+ },
+ "js.home.viec-di-xa": {
+  "t": "远行",
+  "h": "07f707c7"
+ },
+ "js.home.viec-khai-truong": {
+  "t": "开业",
+  "h": "c86ca256"
+ },
+ "js.home.viec-ky-ket": {
+  "t": "签约",
+  "h": "de74d03a"
+ },
+ "js.home.viec-nha-moi": {
+  "t": "入宅",
+  "h": "505e7857"
+ },
+ "js.home.viec-sua-nha": {
+  "t": "修缮房屋",
+  "h": "0ef7e12d"
+ },
+ "js.home.viec-xay-nha": {
+  "t": "动土兴建",
+  "h": "84154a71"
+ },
  "js.home.vo-chinh-dieu": {
   "t": " — 无正曜",
   "h": "44a2723b"
