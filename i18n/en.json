@@ -23195,6 +23195,10 @@
   "t": "Preview a render of your room after feng shui changes. You hear renovation advice but can't picture how it will look. Use it to see a concrete image before actually changing anything.",
   "h": "d66a90e1"
  },
+ "js.tool-desc.rail-message": {
+  "t": "Each question you send to the masters in Ask the Master.",
+  "h": "dc611f51"
+ },
  "js.tool-desc.sao-nam": {
   "t": "A quick look at your Life palace and the main stars in your chart. You're curious what your chart says but don't want to go through all 12 palaces. Use it for an overview before digging deeper.",
   "h": "dcff1a6d"
@@ -23677,7 +23681,7 @@
  },
  "js.tool.rail-message": {
   "t": "Ask the Master — per message",
-  "h": "730dc918"
+  "h": "a4a45cc0"
  },
  "js.tool.so-dep": {
   "t": "Lucky Numbers",
