@@ -351,7 +351,7 @@ function doCongSo(){
         birth:{day:fd.ngay,month:fd.thang,year:fd.nam,hourBranch:fd.gioIdx,gender:fd.gioitinh,name:fd.hoten||undefined,lich:fd.lich,noiSinh:fd.noiSinh},
         scenario:{type:'cong-so',data:j.rail},
         label:_tvmbT('js.cs.rail-nhan','Tử Vi Công Sở')+' · '+ten+' · '+CongSoTool.kieuTen(_ho.kieu),
-        greeting:_tvmbT('js.cs.ho-so-cong-so-da-dung-full', 'Hồ sơ công sở đã dựng xong — bạn nghiêng về kiểu **{kieu}** ({tt}). Mạnh nhất đang là **{manh}**. Bạn muốn tôi đi sâu phần nào?', {kieu: CongSoTool.kieuTen(_ho.kieu), tt: _ho.kieu.tuTuong.split('(')[0].trim(), manh: manhNhat()}),
+        greeting:_tvmbT('js.cs.ho-so-cong-so-da-dung-full', 'Hồ sơ công sở đã dựng xong — bạn nghiêng về kiểu **{kieu}** ({tt}). Mạnh nhất đang là **{manh}**. Bạn muốn tôi đi sâu phần nào?', {kieu: CongSoTool.kieuTen(_ho.kieu), tt: _ttNgan(_ho.kieu), manh: manhNhat()}),
         chips:[_tvmbT('js.cs.trong-may-nganh-do-toi-nen', 'Trong mấy ngành đó tôi nên chọn ngành nào?'),_tvmbT('js.cs.toi-nen-tranh-moi-truong-nao', 'Tôi nên tránh môi trường nào?'),_tvmbT('js.cs.muoi-hai-thang-toi-nen-lam', 'Mười hai tháng tới nên làm gì?'),_tvmbT('js.cs.toi-hop-lam-viec-voi-kieu', 'Tôi hợp làm việc với kiểu người nào?'),_tvmbT('js.cs.chang-nghe-tiep-theo-cua-toi', 'Chặng nghề tiếp theo của tôi ra sao?')]
       });
       Shell.setShareable({
@@ -372,7 +372,7 @@ function doCongSo(){
         birth:{day:fd.ngay,month:fd.thang,year:fd.nam,hourBranch:fd.gioIdx,gender:fd.gioitinh,name:fd.hoten||undefined,lich:fd.lich,noiSinh:fd.noiSinh},
         scenario:{type:'cong-so',data:{kieu:_ho.kieu.ten,tuTuong:_ho.kieu.tuTuong,motCau:_ho.kieu.motCau,daDangKy:false}},
         label:_tvmbT('js.cs.rail-nhan','Tử Vi Công Sở')+' · '+ten+' · '+CongSoTool.kieuTen(_ho.kieu),
-        greeting:_tvmbT('js.cs.ban-nghieng-ve-kieu-full', 'Bạn nghiêng về kiểu **{kieu}** ({tt}). Đăng ký tài khoản (được tặng Lượng miễn phí) để xem đủ 12 mặt, lộ trình 4 chặng và ghép đội — tôi sẽ đi sâu được sau khi bạn mở phần đó.', {kieu: CongSoTool.kieuTen(_ho.kieu), tt: _ho.kieu.tuTuong.split('(')[0].trim()}),
+        greeting:_tvmbT('js.cs.ban-nghieng-ve-kieu-full', 'Bạn nghiêng về kiểu **{kieu}** ({tt}). Đăng ký tài khoản (được tặng Lượng miễn phí) để xem đủ 12 mặt, lộ trình 4 chặng và ghép đội — tôi sẽ đi sâu được sau khi bạn mở phần đó.', {kieu: CongSoTool.kieuTen(_ho.kieu), tt: _ttNgan(_ho.kieu)}),
         chips:[_tvmbT('js.cs.kieu-nguoi-nay-la-gi', 'Kiểu người này là gì?'),_tvmbT('js.cs.vi-sao-la-so-lai-ra', 'Vì sao lá số lại ra kiểu này?')]
       });
       Shell.setShareable(null);
@@ -524,6 +524,8 @@ function moNhanh(){
   });
 }
 
+// Tứ tượng NGẮN để hiển thị ("Lão dương" · "老陽" · "Young Yin") — bản dịch ns cong-so (W31); vi giữ nguyên phép cắt cũ.
+function _ttNgan(k){ var v=(k&&k.id&&window.I18n&&I18n.long)?I18n.long('cong-so','kieu.'+k.id+'.tuTuong',k.tuTuong):k.tuTuong; return String(v||'').split('(')[0].split(' — ')[0].trim(); }
 function manhNhat(){
   if(!_ho)return '—';
   var t=_ho.radar.slice().sort(function(a,b){return b.diem-a.diem;})[0];
