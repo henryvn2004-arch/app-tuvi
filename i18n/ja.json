@@ -11363,6 +11363,82 @@
   "t": "上のメインカラーを参考にしてください。",
   "h": "95e8229c"
  },
+ "js.nap-am.chip-huong": {
+  "t": "合う家や机の向きは？",
+  "h": "e1e3d123"
+ },
+ "js.nap-am.chip-mau": {
+  "t": "合う色・避けたい色は？",
+  "h": "3af5cdfc"
+ },
+ "js.nap-am.chip-tuoi": {
+  "t": "相性のよい年・ぶつかる年は？",
+  "h": "06343f22"
+ },
+ "js.nap-am.chip-vatpham": {
+  "t": "身につけるとよい風水アイテムは？",
+  "h": "024bffb6"
+ },
+ "js.nap-am.greeting": {
+  "t": "{nam}年 — 本命は **{na}**（五行：{hanh}）です。どんなことを読み解きましょうか？",
+  "h": "e825090f"
+ },
+ "js.nap-am.hl-canchi": {
+  "t": "干支",
+  "h": "8b784611"
+ },
+ "js.nap-am.hl-hanh": {
+  "t": "五行",
+  "h": "58608859"
+ },
+ "js.nap-am.hl-napam": {
+  "t": "納音",
+  "h": "006a48d6"
+ },
+ "js.nap-am.label": {
+  "t": "納音 {cc} · {na}",
+  "h": "fa12a15b"
+ },
+ "js.nap-am.share-1": {
+  "t": "納音五行 — {nam}年（{cc}、{cg}年）",
+  "h": "8f377500"
+ },
+ "js.nap-am.share-2": {
+  "t": "本命：{na} — {hanh}",
+  "h": "682b9b66"
+ },
+ "js.nap-am.share-mauhop": {
+  "t": "合う色：{v}",
+  "h": "1c21689f"
+ },
+ "js.nap-am.share-mauky": {
+  "t": "控えたい色：{v}",
+  "h": "b6303d72"
+ },
+ "js.nap-am.share-pv": {
+  "t": "五行の方位：{v}",
+  "h": "e30548a9"
+ },
+ "js.nap-am.share-so": {
+  "t": "吉数：{v}",
+  "h": "93258f0f"
+ },
+ "js.nap-am.share-title": {
+  "t": "納音 {na} — {nam}年",
+  "h": "e8151650"
+ },
+ "js.nap-am.share-tuoi": {
+  "t": "納音で相性のよい人：{hop}の人 · 慎重に考えたい人：{ky}の人",
+  "h": "f382ceb9"
+ },
+ "js.nap-am.sheet-title": {
+  "t": "納音 {na} · {nam}年",
+  "h": "1862358a"
+ },
+ "js.nap-am.xem-day-du": {
+  "t": "詳しく見る →",
+  "h": "e330670d"
+ },
  "js.nav.brand": {
   "t": "明宝紫微斗数",
   "h": "33336b26"
