@@ -16,7 +16,7 @@
 <meta property="og:image" content="https://www.tuviminhbao.com/seal.webp">
 <meta property="og:url" content="https://www.tuviminhbao.com/cong-cu">
 <meta property="og:type" content="website">
-<meta property="og:site_name" content="Tử Vi Minh Bảo">
+<meta data-i18n-attr="content:laso.tu-vi-minh-bao" property="og:site_name" content="Tử Vi Minh Bảo">
 <meta property="og:locale" content="vi_VN">
 <meta name="twitter:card" content="summary">
 <meta data-i18n-attr="content:home.tu-vi-minh-bao-cong-menh-b1dq" name="twitter:title" content="Tử Vi Minh Bảo — Cổng Mệnh Lý">
@@ -570,7 +570,7 @@ a { color: var(--blue); text-decoration: none; }
 <script src="/auth.js?v=10"></script>
 <script src="/tool-prices.js?v=12"></script>
 <script src="/tuvi-paywall.js?v=44"></script>
-<script src="/nav.js?v=49"></script><script src="/referral.js?v=1"></script>
+<script src="/nav.js?v=50"></script><script src="/referral.js?v=1"></script>
 <script src="/tools-shared/tool-icons.js?v=1"></script>
 
 <script>
@@ -726,8 +726,8 @@ function needBlockHtml(g, items) {
   return '<div class="need-block" id="need-' + g.key + '">' +
     '<div class="need-head">' +
       '<span class="nh-ic" data-icon="' + esc(g.icon || 'layout-grid') + '"></span>' +
-      '<span class="need-title">' + esc(g.title) + '</span>' +
-      '<span class="need-sub">' + esc(g.subtitle || '') + ' · ' + items.length + _tvmbT('js.congcutr.cong-cu', ' công cụ</span>') +
+      '<span class="need-title">' + esc(nhomLb('js.nhom.' + g.key, g.title)) + '</span>' +
+      '<span class="need-sub">' + esc(nhomLb('js.nhom.' + g.key + '.sub', g.subtitle || '')) + ' · ' + items.length + _tvmbT('js.congcutr.cong-cu', ' công cụ</span>') +
     '</div>' +
     '<div class="tools-grid">' + items.map(t => toolCardHtml(t, true)).join('') + '</div>' +
   '</div>';
@@ -830,6 +830,8 @@ function toolCardHtml(t, byNeed) {
 // Nhãn/mô tả/câu hỏi đều do admin gõ tay dưới DB ⇒ đổ thẳng vào innerHTML là mở
 // đường chèn thẻ bằng chính quyền của người đang xem trang.
 // Nhãn công cụ từ DB (tool_pricing.label) theo ngôn ngữ trang — I18n.db dịch chỉ khi nhãn DB còn trùng câu gốc (W27). Chỉ hiển thị.
+// Tên/phụ đề nhóm từ DB (tool_groups.title/subtitle) — cùng lối I18n.db, chỉ hiển thị (W31).
+function nhomLb(k, v) { return v && window.I18n && I18n.db ? I18n.db(k, v) : v; }
 function toolLb(r) { return window.I18n && I18n.db ? I18n.db('js.tool.' + r.tool_id, r.label) : r.label; }
 // Mô tả / câu hỏi từ DB (tool_pricing.description · question) — cùng cơ chế: dịch chỉ khi chữ DB còn trùng câu gốc (W29). Chỉ hiển thị.
 function toolDesc(r) { return window.I18n && I18n.db ? I18n.db('js.tool-desc.' + r.tool_id, r.description) : r.description; }

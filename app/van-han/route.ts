@@ -99,7 +99,7 @@ h1 em{font-style:italic;color:var(--gold)}
   </div>
   ${yearBlocks}
 </div>
-<script src="/track.js?v=8" defer></script><script src="/nav.js?v=49" defer></script>
+<script src="/track.js?v=8" defer></script><script src="/nav.js?v=50" defer></script>
 </body>
 </html>`;
 
