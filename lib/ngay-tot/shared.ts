@@ -1,6 +1,10 @@
-// app/ngay-tot/_shared.ts — common HTML helpers cho ngày tốt routes
+// lib/ngay-tot/shared.ts — common HTML helpers cho ngày tốt routes (vi + bản dịch /<locale>/ngay-tot)
 
-export const BASE = 'https://www.tuviminhbao.com';
+import { NextResponse } from 'next/server';
+import { HREFLANG, localePrefix, type Locale } from '@/lib/i18n/locales';
+import { alternatesHtml, localeHead, BASE as SITE, type Ctx } from './dich';
+
+export const BASE = SITE;
 export const YEAR_FROM = 2020;
 export const YEAR_TO = 2036;
 export const YEARS = Array.from({ length: YEAR_TO - YEAR_FROM + 1 }, (_, i) => YEAR_FROM + i);
@@ -118,13 +122,28 @@ h1 em{font-style:italic;color:var(--gold)}
 export interface PageOpts {
   title: string;
   desc: string;
-  canonical: string;
+  /** Đường dẫn trang KHÔNG tiền tố ngôn ngữ (vd `/ngay-tot/lich/2026`) — canonical/hreflang dựng từ đây. */
+  path: string;
   schema: object;
   breadcrumbs: Array<{ name: string; url?: string }>;
   body: string; // raw HTML for .page content
+  /** Trang /ngay-tot/** truyền ctx (ngôn ngữ + hreflang). Không truyền ⇒ trang chỉ-vi (vd /xem-ngay-hom-nay): KHÔNG hreflang. */
+  ctx?: Ctx;
 }
 
+const OG_LOCALE: Record<Locale, string> = {
+  vi: 'vi_VN',
+  en: 'en_US',
+  ja: 'ja_JP',
+  ko: 'ko_KR',
+  'zh-tw': 'zh_TW',
+  'zh-cn': 'zh_CN',
+};
+
 export function renderPage(opts: PageOpts): string {
+  const { ctx } = opts;
+  const locale = ctx?.locale ?? 'vi';
+  const canonical = `${BASE}${localePrefix(locale)}${opts.path}`;
   const bcHTML = opts.breadcrumbs
     .map((b, i) => {
       const sep = i < opts.breadcrumbs.length - 1 ? '<span>›</span>' : '';
@@ -135,17 +154,20 @@ export function renderPage(opts: PageOpts): string {
     })
     .join('');
 
-  return `<!DOCTYPE html>
-<html lang="vi"><head>
+  // Bản ngoại ngữ hụt một khoá dịch ⇒ noindex, không hreflang (luật QUY-UOC: không để crawler thấy chữ Việt dưới URL ngoại ngữ).
+  const complete = !ctx || ctx.miss.size === 0;
+  const seo = !ctx ? '' : complete ? alternatesHtml(opts.path) : '<meta name="robots" content="noindex, follow">\n';
+
+  const page = `<!DOCTYPE html>
+<html lang="${HREFLANG[locale]}"><head>
 <meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
 <title>${esc(opts.title)}</title>
 <meta name="description" content="${esc(opts.desc)}">
 <meta property="og:title" content="${esc(opts.title)}">
 <meta property="og:description" content="${esc(opts.desc)}">
 <meta property="og:type" content="website">
-<meta property="og:url" content="${esc(opts.canonical)}">
-<link rel="canonical" href="${esc(opts.canonical)}">
-<link rel="icon" type="image/webp" href="/seal.webp">
+<meta property="og:url" content="${esc(canonical)}">
+${locale === 'vi' ? '' : `<meta property="og:locale" content="${OG_LOCALE[locale]}">\n`}${complete ? `<link rel="canonical" href="${esc(canonical)}">\n` : ''}${seo}<link rel="icon" type="image/webp" href="/seal.webp">
 <script type="application/ld+json">${JSON.stringify(opts.schema)}</script>
 <style>${CSS}</style>
 <script src="/auth.js" defer></script>
@@ -155,6 +177,16 @@ export function renderPage(opts: PageOpts): string {
 <div class="page">${opts.body}</div>
 <script src="/nav.js?v=50" defer></script>
 </body></html>`;
+  return locale === 'vi'
+    ? page
+    : page.replace('<script src="/auth.js" defer></script>', (m) => localeHead(locale, opts.path) + m);
+}
+
+/** Out của `pages.ts` → Response (redirect giữ 307 mặc định như route cũ). */
+export function toResponse(out: { html: string } | { redirect: string }): NextResponse {
+  return 'redirect' in out
+    ? NextResponse.redirect(out.redirect)
+    : new NextResponse(out.html, { headers: CACHE_HEADERS });
 }
 
 export const ACTIVITY_DISPLAY: Record<string, string> = {

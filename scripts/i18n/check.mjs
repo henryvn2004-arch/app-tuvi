@@ -35,7 +35,12 @@ import {
 } from '../../lib/i18n/dict.mjs';
 import { buildZhCn } from './zhcn.mjs';
 import { SINGLE_LOCALE_PAGES } from '../../lib/i18n/single-locale.mjs';
-import { SELF_MANAGED_PREFIXES, isSelfManaged } from '../../lib/i18n/self-managed.mjs';
+import {
+  SELF_MANAGED_PREFIXES,
+  isSelfManaged,
+  LOCALIZED_SSR,
+} from '../../lib/i18n/self-managed.mjs';
+import { KHUNG } from '../../lib/ngay-tot/khung.mjs';
 import { VI_ONLY_PREFIXES, isViOnly } from '../../lib/i18n/vi-only.mjs';
 import { REF_RE } from './ns-refs.mjs';
 
@@ -423,6 +428,46 @@ if (
   )
 )
   fail('package.json: "prebuild" không gọi scripts/i18n/fonts.mjs — build prod sẽ thiếu font CJK');
+
+// ── 9. route SSR ĐÃ DỊCH (W33b `/ngay-tot`, lib/i18n/self-managed.mjs LOCALIZED_SSR) ─────────
+// Chữ khung ở lib/ngay-tot/khung.mjs (nguồn duy nhất) ↔ vi.json `ssr-ngay-tot.*` ↔ bản dịch đủ 5 ngôn ngữ (zh-cn do mục 3 soi);
+// mỗi khoá phải có chỗ dùng (dịch chữ không ai vẽ là chữ chết). Văn engine của route soi ở check:i18nlong (ns `ngay-tot`).
+{
+  const PRE = 'ssr-ngay-tot.';
+  const read = (f) => fs.readFileSync(path.join(ROOT, f), 'utf8');
+  const code = read('lib/ngay-tot/pages.ts');
+  for (const [k, v] of Object.entries(KHUNG)) {
+    if (vi[PRE + k] !== v)
+      fail(`vi.json: "${PRE + k}" lệch lib/ngay-tot/khung.mjs — chạy: npm run i18n:khung`);
+    for (const l of TRANSLATED) {
+      const e = dicts[l][PRE + k];
+      if (!e || typeof e.t !== 'string' || !e.t)
+        fail(`${l}.json: thiếu "${PRE + k}" (chữ khung /ngay-tot) — npm run i18n:next → i18n:save`);
+    }
+    if (!code.includes(`'${k}'`))
+      fail(
+        `lib/ngay-tot/khung.mjs: khoá "${k}" không được lib/ngay-tot/pages.ts dùng — gỡ khỏi bảng`
+      );
+  }
+  for (const k of Object.keys(vi))
+    if (k.startsWith(PRE) && !(k.slice(PRE.length) in KHUNG))
+      fail(`vi.json: "${k}" mồ côi — không còn trong lib/ngay-tot/khung.mjs (npm run i18n:khung)`);
+  for (const [x, dir] of Object.entries(LOCALIZED_SSR)) {
+    if (isSelfManaged(x)) fail(`${x}: vừa tự quản vừa LOCALIZED_SSR — chọn một`);
+    if (isViOnly(x))
+      fail(
+        `${x}: vừa nằm trong vi-only.mjs vừa LOCALIZED_SSR — đã dịch thì gỡ khỏi danh sách giữ-vi (cả bản sao VI_ONLY ở tools-shared/i18n.js)`
+      );
+    if (avail[x] || Object.keys(pages).some((u) => u === x || u.startsWith(x + '/')))
+      fail(`${x}: route SSR đã dịch không được đăng ký trong pages.json/availability.json`);
+    if (!fs.existsSync(path.join(ROOT, 'app', dir.slice(1), '[locale]')))
+      fail(`${x}: thiếu cây nội bộ app${dir}/[locale]`);
+    if (!read('proxy.ts').includes('localizedSsrTarget('))
+      fail(
+        'proxy.ts: không gọi localizedSsrTarget — /<locale>/ngay-tot sẽ rơi về i18n-render (noindex)'
+      );
+  }
+}
 
 if (errors.length) {
   console.error(`check:i18n — ${errors.length} lỗi:\n` + errors.map((e) => ' ✗ ' + e).join('\n'));

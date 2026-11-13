@@ -13,7 +13,7 @@
 import { NextResponse, type NextRequest } from 'next/server';
 import { isLocale, LOCALE_HEADER } from '@/lib/i18n/locales';
 import { linkHeaderForVi, normPath } from '@/lib/i18n/links.mjs';
-import { isSelfManaged } from '@/lib/i18n/self-managed.mjs';
+import { isSelfManaged, localizedSsrTarget, LOCALIZED_SSR } from '@/lib/i18n/self-managed.mjs';
 import { singleLocaleOf } from '@/lib/i18n/single-locale.mjs';
 import availability from '@/i18n/availability.json';
 
@@ -24,7 +24,8 @@ export function proxy(req: NextRequest) {
   const seg = pathname.split('/')[1] || '';
 
   // Cổng nội bộ không được gọi thẳng từ ngoài.
-  if (seg === 'i18n-render') return new NextResponse('Not found', { status: 404 });
+  if (seg === 'i18n-render' || Object.values(LOCALIZED_SSR).includes('/' + seg))
+    return new NextResponse('Not found', { status: 404 });
 
   if (isLocale(seg)) {
     const rest = pathname.slice(seg.length + 1) || '/';
@@ -40,7 +41,10 @@ export function proxy(req: NextRequest) {
     if (only && only !== seg) return new NextResponse('Not found', { status: 404 });
     const url = req.nextUrl.clone();
     // Route tự dịch + tự quản SEO (lib/i18n/self-managed.mjs): chỉ bóc tiền tố + gắn header.
-    url.pathname = only || isSelfManaged(rest) ? rest : `/i18n-render/${seg}${rest === '/' ? '' : rest}`;
+    // Route SSR đã dịch (`/ngay-tot`): rewrite sang cây nội bộ có ngôn ngữ trong đường dẫn.
+    url.pathname =
+      localizedSsrTarget(seg, rest) ??
+      (only || isSelfManaged(rest) ? rest : `/i18n-render/${seg}${rest === '/' ? '' : rest}`);
     const headers = new Headers(req.headers);
     headers.set(LOCALE_HEADER, seg);
     return NextResponse.rewrite(url, { request: { headers } });

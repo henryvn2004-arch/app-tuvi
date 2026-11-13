@@ -27,6 +27,7 @@ import {
   LONG_MODULE,
   LONG_COMPLETE,
   ENGINE_NS,
+  SERVER_NS,
   loadSources,
   readLong,
   longDir,
@@ -133,6 +134,16 @@ if (LONG_COMPLETE.includes('zh-cn') !== LONG_COMPLETE.includes('zh-tw'))
 for (const ns of LONG_NS) {
   const f = LONG_MODULE[ns];
   const code = fs.readFileSync(path.join(ROOT, f), 'utf8');
+  if (SERVER_NS[ns]) {
+    // Chỗ vẽ phía SERVER (W33b `/ngay-tot`): file dịch được nạp bằng `readLongNs(locale, '<ns>')` ở module nạp, tra bằng `c.long(`.
+    const loader = fs.readFileSync(path.join(ROOT, SERVER_NS[ns]), 'utf8');
+    if (!loader.includes(`readLongNs(locale, '${ns}')`))
+      fail(
+        `${SERVER_NS[ns]}: không gọi readLongNs(locale, '${ns}') — file bản dịch sẽ không bao giờ được nạp`
+      );
+    if (!/\bc\.long\(/.test(code)) fail(`${f}: không có chỗ tra bản dịch (c.long) cho '${ns}'`);
+    continue;
+  }
   if (!code.includes(`loadLong('${ns}')`))
     fail(`${f}: không gọi loadLong('${ns}') — file bản dịch sẽ không bao giờ được nạp`);
   if (!code.includes(`'${ns}'`) || !/I18n\.long|_long\(/.test(code))
