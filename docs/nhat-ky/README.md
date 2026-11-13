@@ -1,6 +1,6 @@
 # Nhật ký phát triển — mục lục
 
-610 mục ghi chép từng PR, tách khỏi `CLAUDE.md` để nó thôi ngốn ~350k token mỗi lượt.
+612 mục ghi chép từng PR, tách khỏi `CLAUDE.md` để nó thôi ngốn ~350k token mỗi lượt.
 
 **Sáu file dưới đây KHÔNG được nạp tự động.** Cần thì tra:
 
@@ -12,7 +12,7 @@ sed -n '120,190p' docs/nhat-ky/2026-08.md    # đọc đúng đoạn, đừng ca
 
 | file | số mục | dung lượng |
 |---|---:|---:|
-| `2026-11.md` | 69 | 269,436 B |
+| `2026-11.md` | 71 | 273,920 B |
 | `2026-10.md` | 16 | 39,635 B |
 | `2026-09.md` | 360 | 1,241,867 B |
 | `2026-08.md` | 148 | 1,024,027 B |
@@ -28,6 +28,8 @@ Luật rút ra từ các mục này đã được cô đọng lên `CLAUDE.md`. 
 
 | # | tháng | file | mục |
 |---:|---|---|---|
+| 1 | 2026-11 | `2026-11.md` | 📅 W34c — Thẻ "Hôm nay": văn engine `van-ngay.ts` theo ngôn ngữ (ns `van-ngay` 31 mục · `danhGia.ma` additive · khuôn `NHAN_VAN`; vi byte-giống 400 ngày) |
+| 1 | 2026-11 | `2026-11.md` | 🧮 W34b — Nạp Âm: bảng chữ theo hành + khuôn UI + con giáp (ns `nap-am` 56 mục · nap-am.js?v=4 · shell.js?v=160; vi byte-giống 1895–2105) |
 | 1 | 2026-11 | `2026-11.md` | 🧒 W34d — Hướng Nghiệp Trẻ phần dư: `vi[]` · chất người · chất không đòi hỏi · tên kiểu theo ngôn ngữ (mã `viMa`/`ma` additive, nối ns day-con-assess + cong-so; BUMP SHAPE 6→7; vi byte-giống 300 hồ sơ) |
 | 1 | 2026-11 | `2026-11.md` | 🎭 W32A-5 — Văn mẫu mờ THEO NƯỚC lô 3 (Dạy Con · Hướng Nghiệp Sớm · Người Khác): bộ dò 0d + zh-cn đi sâu vào trường lồng (trước đó `String(mảng)` làm bộ dò đỏ oan và mù phần bên trong), nhân vật `con` |
 | 1 | 2026-11 | `2026-11.md` | 🎭 W32A-4 — Văn mẫu mờ THEO NƯỚC lô 2 (Chân Dung Tiền Kiếp · Vợ Chồng · Duyên Nợ): engine server qua `sample-locale-portrait.ts`, tên tiền kiếp theo ns `past-life-ten`, `banDoi` cho 2 lá số |

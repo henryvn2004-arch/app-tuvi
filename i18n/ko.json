@@ -9343,6 +9343,34 @@
   "t": "나만의 운세",
   "h": "378b38f4"
  },
+ "js.home.viec-cuoi-hoi": {
+  "t": "혼례",
+  "h": "04a2caa4"
+ },
+ "js.home.viec-di-xa": {
+  "t": "장거리 이동",
+  "h": "07f707c7"
+ },
+ "js.home.viec-khai-truong": {
+  "t": "개업",
+  "h": "c86ca256"
+ },
+ "js.home.viec-ky-ket": {
+  "t": "계약",
+  "h": "de74d03a"
+ },
+ "js.home.viec-nha-moi": {
+  "t": "새집",
+  "h": "505e7857"
+ },
+ "js.home.viec-sua-nha": {
+  "t": "집수리",
+  "h": "0ef7e12d"
+ },
+ "js.home.viec-xay-nha": {
+  "t": "건축",
+  "h": "84154a71"
+ },
  "js.home.vo-chinh-dieu": {
   "t": " ・무정요",
   "h": "44a2723b"
@@ -11374,6 +11402,82 @@
  "js.mshm.xem-mau-chinh": {
   "t": "위의 메인 컬러를 참고하세요.",
   "h": "95e8229c"
+ },
+ "js.nap-am.chip-huong": {
+  "t": "어울리는 집·책상 방향은?",
+  "h": "e1e3d123"
+ },
+ "js.nap-am.chip-mau": {
+  "t": "어울리는 색과 피할 색은?",
+  "h": "3af5cdfc"
+ },
+ "js.nap-am.chip-tuoi": {
+  "t": "잘 맞는 해와 부딪히는 해는?",
+  "h": "06343f22"
+ },
+ "js.nap-am.chip-vatpham": {
+  "t": "지니면 좋은 풍수 물건은?",
+  "h": "024bffb6"
+ },
+ "js.nap-am.greeting": {
+  "t": "{nam}년 — 본명은 **{na}**(오행: {hanh})입니다. 어떤 점을 풀어 드릴까요?",
+  "h": "e825090f"
+ },
+ "js.nap-am.hl-canchi": {
+  "t": "간지",
+  "h": "8b784611"
+ },
+ "js.nap-am.hl-hanh": {
+  "t": "오행",
+  "h": "58608859"
+ },
+ "js.nap-am.hl-napam": {
+  "t": "납음",
+  "h": "006a48d6"
+ },
+ "js.nap-am.label": {
+  "t": "납음 {cc} · {na}",
+  "h": "fa12a15b"
+ },
+ "js.nap-am.share-1": {
+  "t": "납음오행 — {nam}년({cc}, {cg}해)",
+  "h": "8f377500"
+ },
+ "js.nap-am.share-2": {
+  "t": "본명: {na} — {hanh}",
+  "h": "682b9b66"
+ },
+ "js.nap-am.share-mauhop": {
+  "t": "어울리는 색: {v}",
+  "h": "1c21689f"
+ },
+ "js.nap-am.share-mauky": {
+  "t": "줄이면 좋은 색: {v}",
+  "h": "b6303d72"
+ },
+ "js.nap-am.share-pv": {
+  "t": "오행의 방위: {v}",
+  "h": "e30548a9"
+ },
+ "js.nap-am.share-so": {
+  "t": "길수: {v}",
+  "h": "93258f0f"
+ },
+ "js.nap-am.share-title": {
+  "t": "납음 {na} — {nam}년",
+  "h": "e8151650"
+ },
+ "js.nap-am.share-tuoi": {
+  "t": "납음 기준 궁합이 좋은 사람: {hop} 사람 · 신중히 볼 사람: {ky} 사람",
+  "h": "f382ceb9"
+ },
+ "js.nap-am.sheet-title": {
+  "t": "납음 {na} · {nam}년",
+  "h": "1862358a"
+ },
+ "js.nap-am.xem-day-du": {
+  "t": "전체 보기 →",
+  "h": "e330670d"
  },
  "js.nav.brand": {
   "t": "명보 자미두수",
