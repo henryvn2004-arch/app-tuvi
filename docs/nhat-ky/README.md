@@ -1,6 +1,6 @@
 # Nhật ký phát triển — mục lục
 
-598 mục ghi chép từng PR, tách khỏi `CLAUDE.md` để nó thôi ngốn ~350k token mỗi lượt.
+599 mục ghi chép từng PR, tách khỏi `CLAUDE.md` để nó thôi ngốn ~350k token mỗi lượt.
 
 **Sáu file dưới đây KHÔNG được nạp tự động.** Cần thì tra:
 
@@ -12,7 +12,7 @@ sed -n '120,190p' docs/nhat-ky/2026-08.md    # đọc đúng đoạn, đừng ca
 
 | file | số mục | dung lượng |
 |---|---:|---:|
-| `2026-11.md` | 55 | 224,571 B |
+| `2026-11.md` | 58 | 236,344 B |
 | `2026-10.md` | 16 | 39,635 B |
 | `2026-09.md` | 360 | 1,241,867 B |
 | `2026-08.md` | 148 | 1,024,027 B |
@@ -28,6 +28,7 @@ Luật rút ra từ các mục này đã được cô đọng lên `CLAUDE.md`. 
 
 | # | tháng | file | mục |
 |---:|---|---|---|
+| 1 | 2026-11 | `2026-11.md` | ✏️ Sửa 2 lỗi gõ còn lại trong câu engine (Kỵ→Tỵ xung chiếu · tự tối→tự ải), dịch lại 3 câu, engine `?v=3` |
 | 1 | 2026-11 | `2026-11.md` | 🧿 W30f-9 — Rail Chân Dung/Duyên Nợ Tiền Kiếp: tên + danh xưng đã dịch vào USER message (`runAgent` `wrapNhanVat` + `khoiTenTheoNgonNgu(…,'rail')`; system giữ tên Việt; tracing `/api/v1/chat`; vi byte-giống) |
 | 1 | 2026-11 | `2026-11.md` | 🧿 W30f-8 — Chân Dung / Duyên Nợ Tiền Kiếp: tên nhân vật + danh xưng nghề theo ngôn ngữ (mã additive `characterMa`/`titleMa`/`tenMa`, BUMP `SHAPE` 5→6, ns `past-life-ten` 522; prompt truyện nhận tên đã dịch qua `long-server.ts`; sửa câu sai của W30f-7; `cacheshape` không thấy `pastLifeMeta`) |
 | 1 | 2026-11 | `2026-11.md` | ✏️ Sửa 4 lỗi gõ trong câu engine lá số (Quý · sáng suốt · bất lợi · tai nạn về) + engine `?v=2` ở 19 trang; khoá dịch `cach-cuc` chuyển theo |
