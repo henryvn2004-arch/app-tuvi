@@ -8908,7 +8908,7 @@
   "h": "07132e46"
  },
  "js.home.chinh-tinh": {
-  "t": " — 主星 ",
+  "t": "，主星：",
   "h": "595c5e1b"
  },
  "js.home.chu-dong-ton-cong": {
@@ -9176,7 +9176,7 @@
   "h": "5ecc6134"
  },
  "js.home.ngay-hom-nay-roi-vao-cung": {
-  "t": "今天落在宮位：",
+  "t": "今天落在 ",
   "h": "567ca88d"
  },
  "js.home.ngay-ky": {
@@ -9412,7 +9412,7 @@
   "h": "84154a71"
  },
  "js.home.vo-chinh-dieu": {
-  "t": " — 無正曜",
+  "t": "，無正曜",
   "h": "44a2723b"
  },
  "js.home.vo-chinh-dieu-pwt9": {
