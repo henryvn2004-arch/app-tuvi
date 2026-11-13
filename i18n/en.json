@@ -29967,6 +29967,34 @@
   "t": "Year {y}",
   "h": "8a3268fc"
  },
+ "ssr.laso.bc": {
+  "t": "{canchi} {gioi} — Life Palace in {cung}",
+  "h": "0094aee9"
+ },
+ "ssr.laso.chi-tieng-viet": {
+  "t": "This chart reading is currently available only in Vietnamese.",
+  "h": "05845ed0"
+ },
+ "ssr.laso.desc": {
+  "t": "Zi Wei Dou Shu chart for a {gioi_thuong} born in a {canchi_raw} year: Life Palace in {cung_raw}, main stars {chinh}, Na Yin element {napam}.",
+  "h": "cf210ec9"
+ },
+ "ssr.laso.home": {
+  "t": "Home",
+  "h": "fca04858"
+ },
+ "ssr.laso.kho": {
+  "t": "Chart Vault",
+  "h": "2de2772c"
+ },
+ "ssr.laso.title": {
+  "t": "{canchi} {gioi} Zi Wei Chart — Life Palace in {cung} — Minh Bao Zi Wei Dou Shu",
+  "h": "ec5b3b65"
+ },
+ "ssr.laso.xem-ban-viet": {
+  "t": "View the Vietnamese version",
+  "h": "d0a972c9"
+ },
  "taikhoan.add-mcp-server-chon-streamable-http": {
   "t": "<strong>Add MCP server</strong> → choose <strong>Streamable HTTP</strong>.",
   "h": "f63db93e"

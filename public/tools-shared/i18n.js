@@ -65,7 +65,7 @@
   /** Đường dẫn cùng ngôn ngữ: I18n.href('/topup.html') → '/ja/topup.html' (vi giữ nguyên). */
   // Route SSR chỉ có tiếng Việt (W31b) — bản sao của VI_ONLY_PREFIXES (lib/i18n/vi-only.mjs; check:i18n soi khớp).
   // Mục kết thúc '/' = chỉ trang con. Link tới đây giữ bản vi, không gắn tiền tố ngôn ngữ.
-  var VI_ONLY = ['/van-dap', '/thu-vien', '/tu-dien', '/tac-gia', '/bao-chi', '/nghien-cuu', '/xem-ngay-hom-nay', '/kim-lau', '/menh-kho/', '/van-han', '/tu-vi', '/du-lieu', '/xong-dat', '/la-so/'];
+  var VI_ONLY = ['/van-dap', '/thu-vien', '/tu-dien', '/tac-gia', '/bao-chi', '/nghien-cuu', '/xem-ngay-hom-nay', '/kim-lau', '/menh-kho/', '/van-han', '/tu-vi', '/du-lieu', '/xong-dat'];
   function viOnly(path) {
     var p = path.replace(/[?#].*$/, '');
     for (var i = 0; i < VI_ONLY.length; i++) {
