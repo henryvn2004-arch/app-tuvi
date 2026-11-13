@@ -5643,6 +5643,30 @@
   "t": "您好 ",
   "h": "35004652"
  },
+ "js.chat.chip-dat-ten": {
+  "t": "幫快出生的孩子取名",
+  "h": "67981026"
+ },
+ "js.chat.chip-hom-nay": {
+  "t": "今天宜做什麼、忌什麼？",
+  "h": "6eabefa5"
+ },
+ "js.chat.chip-khai-truong": {
+  "t": "幫店面挑開業日",
+  "h": "6e3668fd"
+ },
+ "js.chat.chip-nguoi-yeu": {
+  "t": "另一半對我是真心的嗎？",
+  "h": "73e51e72"
+ },
+ "js.chat.chip-nhay-viec": {
+  "t": "今年該不該換工作？",
+  "h": "40bf460e"
+ },
+ "js.chat.hoi-thay": {
+  "t": "問老師",
+  "h": "c9ffbbaf"
+ },
  "js.chat.hom-nay-ban-co-chuyen-gi": {
   "t": "今天有什麼想聊的嗎？",
   "h": "769148cd"
@@ -5650,6 +5674,10 @@
  "js.chat.hom-nay-co-chuyen-gi": {
   "t": "，今天有什麼事嗎？",
   "h": "7674f1e6"
+ },
+ "js.chat.ke-chuyen": {
+  "t": "說說你的故事…",
+  "h": "1e5088ad"
  },
  "js.chat.ke-vai-dong-thoi-minh-bao": {
   "t": "簡單說幾句就好。明寶會從團隊 15 位老師中，請出最合適的一位為您解讀。",
@@ -6511,6 +6539,10 @@
   "t": "能承擔的規模——等級 ",
   "h": "43f37473"
  },
+ "js.cs.rail-nhan": {
+  "t": "職場紫微",
+  "h": "9d18a955"
+ },
  "js.cs.sao-quyet-dinh-linh-vuc": {
   "t": "決定領域的星",
   "h": "31023c67"
@@ -6834,6 +6866,26 @@
  "js.ctk.quet-ma-xem-tien-kiep-cua": {
   "t": "掃描 QR 碼——查看您的前世",
   "h": "fb7663cd"
+ },
+ "js.ctk.stage-0": {
+  "t": "少年時",
+  "h": "ff279531"
+ },
+ "js.ctk.stage-1": {
+  "t": "立身",
+  "h": "ee6c1f1b"
+ },
+ "js.ctk.stage-2": {
+  "t": "中年",
+  "h": "75ff45ff"
+ },
+ "js.ctk.stage-3": {
+  "t": "後運",
+  "h": "21c8cf6b"
+ },
+ "js.ctk.stage-4": {
+  "t": "晚年",
+  "h": "732ca553"
  },
  "js.ctk.tai-lai": {
   "t": "重新載入",
@@ -8759,6 +8811,26 @@
   "t": "宜避免",
   "h": "84eadc4e"
  },
+ "js.home.cc-chon-ngay": {
+  "t": "為大事挑日子",
+  "h": "5c92148a"
+ },
+ "js.home.cc-cong-viec": {
+  "t": "工作、事業",
+  "h": "89985ff5"
+ },
+ "js.home.cc-hom-nay": {
+  "t": "今天宜做什麼、忌什麼？",
+  "h": "6eabefa5"
+ },
+ "js.home.cc-lap-la-so": {
+  "t": "排命盤看自己的運",
+  "h": "12ea021e"
+ },
+ "js.home.cc-tinh-duyen": {
+  "t": "感情、婚姻的事",
+  "h": "ebe0f09d"
+ },
  "js.home.chao-con": {
   "t": "你好{comma_name}。老師在這裡——想聊什麼都可以：工作上的事、家裡的事，或只是今天覺得累。如果想看今天 **{cc}** 日的運勢，老師也順便幫你看。",
   "h": "07132e46"
@@ -8935,6 +9007,10 @@
   "t": "取消",
   "h": "34ca764c"
  },
+ "js.home.ke-cho-thay-nghe": {
+  "t": "說給老師聽…",
+  "h": "2f7af49a"
+ },
  "js.home.khong-chac-gio-sinh-sai-gio": {
   "t": "不確定出生時辰？時辰一錯，命盤幾乎全部偏離——重新核對一次比較安心。",
   "h": "124df32a"
@@ -9087,6 +9163,10 @@
   "t": "至於日常事務，",
   "h": "e7d64dd0"
  },
+ "js.home.sinh-nam": {
+  "t": "出生 ",
+  "h": "6c03a564"
+ },
  "js.home.sinh-nam-xung": {
   "t": "（出生 ",
   "h": "dc7c4691"
@@ -9098,6 +9178,18 @@
  "js.home.tai-than": {
   "t": "財神 ",
   "h": "e5ed4f68"
+ },
+ "js.home.tc-binh": {
+  "t": "平",
+  "h": "3318401b"
+ },
+ "js.home.tc-tot": {
+  "t": "吉",
+  "h": "a6f70ec0"
+ },
+ "js.home.tc-xau": {
+  "t": "凶",
+  "h": "3efce654"
  },
  "js.home.thay-day": {
   "t": "老師在這裡{comma_name}。還有什麼想問的，或有什麼事想說嗎？",
@@ -9191,6 +9283,34 @@
   "t": "✓ 剛加入 <b>+",
   "h": "716106fa"
  },
+ "js.home.wd-0": {
+  "t": "星期日",
+  "h": "5f78bbed"
+ },
+ "js.home.wd-1": {
+  "t": "星期一",
+  "h": "ac5e5917"
+ },
+ "js.home.wd-2": {
+  "t": "星期二",
+  "h": "eac69a92"
+ },
+ "js.home.wd-3": {
+  "t": "星期三",
+  "h": "9e958113"
+ },
+ "js.home.wd-4": {
+  "t": "星期四",
+  "h": "aaf12f0c"
+ },
+ "js.home.wd-5": {
+  "t": "星期五",
+  "h": "b5ab06d1"
+ },
+ "js.home.wd-6": {
+  "t": "星期六",
+  "h": "51daab33"
+ },
  "js.home.xau": {
   "t": "凶",
   "h": "5a8d08f3"
@@ -9210,6 +9330,14 @@
  "js.home.xung-chinh-tuoi-ban": {
   "t": "沖到您的生肖",
   "h": "7fec1ccf"
+ },
+ "js.home.xung-hoa": {
+  "t": "沖",
+  "h": "79ed9467"
+ },
+ "js.home.xung-thuong": {
+  "t": "沖",
+  "h": "c9f88395"
  },
  "js.home.xung-tuoi": {
   "t": "沖生肖",
@@ -10747,6 +10875,26 @@
   "t": "方法與可信度",
   "h": "c16eaaee"
  },
+ "js.nav.pwa-ios-huong-dan": {
+  "t": "點下方列的<strong style=\"color:#9A7B3A\">⎙ 分享</strong> → 選擇<strong style=\"color:#9A7B3A\">「加入主畫面」</strong>",
+  "h": "1edab7e9"
+ },
+ "js.nav.pwa-ten": {
+  "t": "明寶紫微斗數",
+  "h": "33336b26"
+ },
+ "js.nav.pwa-them": {
+  "t": "加入",
+  "h": "cc88682f"
+ },
+ "js.nav.pwa-them-de-tra-nhanh": {
+  "t": "加入主畫面，查詢更快",
+  "h": "e8f8a167"
+ },
+ "js.nav.pwa-them-vao-mh": {
+  "t": "加入主畫面",
+  "h": "0011d9c4"
+ },
  "js.nav.see-detail": {
   "t": "查看詳情",
   "h": "e30c9371"
@@ -11274,6 +11422,78 @@
  "js.nguoikhac.xem-them": {
   "t": "<summary>再看 ",
   "h": "c5afdcd1"
+ },
+ "js.nhom.ban-than": {
+  "t": "認識自己",
+  "h": "4f7993d5"
+ },
+ "js.nhom.ban-than.sub": {
+  "t": "個性、優缺點、一生走向",
+  "h": "dc0d5911"
+ },
+ "js.nhom.chon-ngay": {
+  "t": "擇吉日良時",
+  "h": "d0c8c0b0"
+ },
+ "js.nhom.chon-ngay.sub": {
+  "t": "嫁娶、建屋、開業、簽約",
+  "h": "7de86843"
+ },
+ "js.nhom.con-cai": {
+  "t": "子女與教養",
+  "h": "dd5d8a75"
+ },
+ "js.nhom.con-cai.sub": {
+  "t": "生子、取名、適合怎樣的教養方式",
+  "h": "bca2419b"
+ },
+ "js.nhom.hoi-nhanh": {
+  "t": "快問一件事",
+  "h": "4bfd4f46"
+ },
+ "js.nhom.hoi-nhanh.sub": {
+  "t": "猶豫不決時 — 起一卦、抽一張牌",
+  "h": "e4045f43"
+ },
+ "js.nhom.nha-cua": {
+  "t": "居家風水",
+  "h": "e0fe823b"
+ },
+ "js.nhom.nha-cua.sub": {
+  "t": "房屋座向、房間佈置、店面",
+  "h": "8a0444da"
+ },
+ "js.nhom.su-nghiep": {
+  "t": "事業與同事",
+  "h": "21adebf8"
+ },
+ "js.nhom.su-nghiep.sub": {
+  "t": "換工作、升遷、合夥、團隊",
+  "h": "cffc76ec"
+ },
+ "js.nhom.tinh-cam": {
+  "t": "感情與婚姻",
+  "h": "402b538e"
+ },
+ "js.nhom.tinh-cam.sub": {
+  "t": "合婚、伴侶、緣分",
+  "h": "1ae648e3"
+ },
+ "js.nhom.tuong-mao": {
+  "t": "相貌與神態",
+  "h": "29eaf774"
+ },
+ "js.nhom.tuong-mao.sub": {
+  "t": "面相、眼睛、手、聲音、氣色",
+  "h": "846d74e2"
+ },
+ "js.nhom.van-han": {
+  "t": "各時期的運勢",
+  "h": "ec1a65ef"
+ },
+ "js.nhom.van-han.sub": {
+  "t": "今年、本月、未來十年",
+  "h": "43967279"
  },
  "js.nhtg.anh-mat-noi-len-dieu-gi": {
   "t": "眼神代表什麼？",
@@ -23675,6 +23895,26 @@
   "t": "有新工具時會自動更新。",
   "h": "6d165b81"
  },
+ "js.topup.cat-dat-ten-ngay": {
+  "t": "取名・擇日",
+  "h": "e9af649e"
+ },
+ "js.topup.cat-luan-giai": {
+  "t": "論命",
+  "h": "4e36b042"
+ },
+ "js.topup.cat-phong-cach": {
+  "t": "風格",
+  "h": "43486931"
+ },
+ "js.topup.cat-phong-thuy": {
+  "t": "風水",
+  "h": "181a3d4e"
+ },
+ "js.topup.cat-xem-tuong": {
+  "t": "看相",
+  "h": "ae8ee50b"
+ },
  "js.topup.chi-cac-cong-cu-luan-giai": {
   "t": "只有深入解讀類工具才會收費。",
   "h": "9cf1c314"
@@ -24679,6 +24919,18 @@
   "t": "主星：",
   "h": "aa58ba11"
  },
+ "js.vanhannam.chip-thang-thuan": {
+  "t": "未來 12 個月中，哪個月最順？",
+  "h": "a2e98d9a"
+ },
+ "js.vanhannam.chip-tieu-van": {
+  "t": "今年小限說了什麼？",
+  "h": "0aa6c153"
+ },
+ "js.vanhannam.chua-doc-gia": {
+  "t": "無法讀取這部分的價格，請再試一次。",
+  "h": "86f02e35"
+ },
  "js.vanhannam.co-gi-can-ne": {
   "t": " 有什麼需要避開的？",
   "h": "c9f61757"
@@ -24699,6 +24951,10 @@
   "t": "解讀中 ",
   "h": "31f99758"
  },
+ "js.vanhannam.dang-luan-phan": {
+  "t": "正在解讀部分",
+  "h": "60eb13d1"
+ },
  "js.vanhannam.dang-luan-phan-1": {
   "t": "正在解讀第 1 部分 / ",
   "h": "9020516d"
@@ -24706,6 +24962,10 @@
  "js.vanhannam.dang-tinh": {
   "t": "計算中…",
   "h": "76a9d5f0"
+ },
+ "js.vanhannam.duong-doi-dai-van": {
+  "t": "歷經各大限的人生路",
+  "h": "c5814252"
  },
  "js.vanhannam.duong-lich": {
   "t": " 國曆</div>",
@@ -24719,6 +24979,18 @@
   "t": " 國曆) 已準備好。可以問我任何一個月。",
   "h": "078774b9"
  },
+ "js.vanhannam.fm-sub": {
+  "t": "依農曆月份看未來 12 個月：每月的限宮、星曜、格局 — 附對應的國曆日期區間。",
+  "h": "49d95950"
+ },
+ "js.vanhannam.khong-du-lieu-thang": {
+  "t": "這個月沒有資料。",
+  "h": "a67ec748"
+ },
+ "js.vanhannam.khong-du-luong": {
+  "t": "兩不足 — 請先儲值。",
+  "h": "1d9e17da"
+ },
  "js.vanhannam.khung-12-thang-am": {
   "t": "農曆 12 個月架構",
   "h": "761916e9"
@@ -24727,6 +24999,26 @@
   "t": "未來 **12 個農曆月** 的架構 (",
   "h": "5f685658"
  },
+ "js.vanhannam.lock-cta": {
+  "t": "開啟完整解讀",
+  "h": "f25984b4"
+ },
+ "js.vanhannam.lock-item-1": {
+  "t": "未來 12 個月，逐月個別解讀",
+  "h": "682af4b0"
+ },
+ "js.vanhannam.lock-item-2": {
+  "t": "命盤總論、大限歷程與今年小限",
+  "h": "ddc12eae"
+ },
+ "js.vanhannam.lock-title": {
+  "t": "⊙ 運勢解讀尚未開啟",
+  "h": "11dc1add"
+ },
+ "js.vanhannam.loi-anh": {
+  "t": "無法產生圖片，請幾秒後再試。",
+  "h": "f8055429"
+ },
  "js.vanhannam.loi-khi-luan-phan": {
   "t": "解讀這一部分時發生錯誤",
   "h": "1ea71e16"
@@ -24734,6 +25026,10 @@
  "js.vanhannam.loi-khi-tinh-van-han": {
   "t": "計算運勢時發生錯誤：",
   "h": "831b40e0"
+ },
+ "js.vanhannam.loi-mo-phan": {
+  "t": "開啟這部分時發生錯誤，請再試一次。",
+  "h": "8c34a861"
  },
  "js.vanhannam.luan-van-han-12-thang": {
   "t": "<b>論未來 12 個月運勢 →</b>",
@@ -24771,6 +25067,10 @@
   "t": "月限：宮",
   "h": "13dbb374"
  },
+ "js.vanhannam.nhap-du-ngay": {
+  "t": "請完整輸入出生日、月、年。",
+  "h": "075a6b15"
+ },
  "js.vanhannam.p-ba-cham": {
   "t": "…",
   "h": "6eae3a5b"
@@ -24782,6 +25082,22 @@
  "js.vanhannam.phan": {
   "t": "部分 ",
   "h": "291674f4"
+ },
+ "js.vanhannam.phan-tong-the": {
+  "t": "這部分依整張命盤論斷 — 按下方按鈕請老師深入解讀。",
+  "h": "a10845f5"
+ },
+ "js.vanhannam.poster-qr": {
+  "t": "掃碼 — 看看你的 12 個月",
+  "h": "c222049e"
+ },
+ "js.vanhannam.poster-quote": {
+  "t": "每一格是一個農曆月 — 國曆日期區間寫在解讀中。",
+  "h": "ce58d28a"
+ },
+ "js.vanhannam.poster-title": {
+  "t": "12 個月運勢",
+  "h": "cbe43952"
  },
  "js.vanhannam.sat-tinh": {
   "t": "煞星：",
@@ -24834,6 +25150,10 @@
  "js.vanhannam.van-han-12-thang-cua": {
   "t": "12 個月運勢：",
   "h": "afa6d79f"
+ },
+ "js.vanhannam.viet-rieng": {
+  "t": "專為這張命盤而寫：總論、大限歷程、目前的大限與小限，再逐月解讀未來 12 個月。",
+  "h": "7b419dd9"
  },
  "js.vanhannam.vo-chinh-dieu-muon-cung-xung": {
   "t": "無正曜（借對宮星曜）",
@@ -29136,7 +29456,7 @@
   "h": "58cc1874"
  },
  "sodep.xem-so-dep-tu-vi-minh": {
-  "t": "查看吉祥號碼 — Tử Vi Minh Bảo",
+  "t": "查看吉祥號碼 — 明寶紫微斗數",
   "h": "beb7ef68"
  },
  "solaso.chua-co-la-so-nao-trong": {

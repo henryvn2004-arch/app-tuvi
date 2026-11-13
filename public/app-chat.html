@@ -32,9 +32,9 @@
 </div>
 
 <script>window.SHELL_ACTIVE='home';window.SHELL_CHAT_HOME=true;window.SHELL_HISTORY=true;</script>
-<script src="/nav.js?v=49" data-icons-only></script>
+<script src="/nav.js?v=50" data-icons-only></script>
 <script src="/auth.js?v=10"></script>
-<script src="/shell.js?v=155"></script>
+<script src="/shell.js?v=156"></script>
 <script src="/tools-shared/shell-soft-nav.js?v=49"></script>
 <script>
 (function(){
@@ -53,8 +53,9 @@
 
   // Câu mở hội thoại: người ta BẤM là gửi, và câu nào cũng đi qua Minh Bảo
   // dẫn đường trước (mời đúng thầy), nên trộn cả mở lòng lẫn tra cứu.
-  var CHIPS=['Người yêu có thật lòng với mình không?','Năm nay có nên nhảy việc?',
-             'Chọn ngày khai trương cửa hàng','Đặt tên cho con sắp sinh','Hôm nay nên làm gì, tránh gì?'];
+  // Chip = câu khách GỬI (hiện trên màn hình + đi vào tin user) ⇒ theo ngôn ngữ trang (W31).
+  var CHIPS=[_tvmbT('js.chat.chip-nguoi-yeu','Người yêu có thật lòng với mình không?'),_tvmbT('js.chat.chip-nhay-viec','Năm nay có nên nhảy việc?'),
+             _tvmbT('js.chat.chip-khai-truong','Chọn ngày khai trương cửa hàng'),_tvmbT('js.chat.chip-dat-ten','Đặt tên cho con sắp sinh'),_tvmbT('js.chat.chip-hom-nay','Hôm nay nên làm gì, tránh gì?')];
 
   // `?q=…&thay=…` — câu hỏi mang từ trang chủ tĩnh `/` (đã chọn thầy ở đó
   // qua /api/thay-hoi): vào thẳng thầy đó; `laso=1` = chủ đề cung, thầy xin
@@ -75,8 +76,8 @@
   var today=vnToday();
 
   var base={
-    label:'Hỏi Thầy',
-    placeholder:'Kể chuyện của bạn…',
+    label:_tvmbT('js.chat.hoi-thay','Hỏi Thầy'),
+    placeholder:_tvmbT('js.chat.ke-chuyen','Kể chuyện của bạn…'),
     hero:nm?(_tvmbT('js.chat.chao', 'Chào ')+nm+_tvmbT('js.chat.hom-nay-co-chuyen-gi', ', hôm nay có chuyện gì?')):_tvmbT('js.chat.hom-nay-ban-co-chuyen-gi', 'Hôm nay bạn có chuyện gì?'),
     heroSub:_tvmbT('js.chat.ke-vai-dong-thoi-minh-bao', 'Kể vài dòng thôi. Minh Bảo sẽ mời đúng thầy trong nhóm 15 thầy vào xem cho bạn.'),
     chips:CHIPS,
