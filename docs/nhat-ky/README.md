@@ -28,6 +28,7 @@ Luật rút ra từ các mục này đã được cô đọng lên `CLAUDE.md`. 
 
 | # | tháng | file | mục |
 |---:|---|---|---|
+| 1 | 2026-11 | `2026-11.md` | 🎭 W32A-6 — Văn mẫu THEO NƯỚC lô 4: nút "Xem bản mẫu" Chọn Ngày Tốt + Đặt Tên DN mở 5 nước (`hasLocaleSample`); sửa nút cũ luôn hiện ở /<locale>/ và mở văn Việt; `dat-ten-con` vi-only có chủ đích |
 | 1 | 2026-11 | `2026-11.md` | 📅 W34c — Thẻ "Hôm nay": văn engine `van-ngay.ts` theo ngôn ngữ (ns `van-ngay` 31 mục · `danhGia.ma` additive · khuôn `NHAN_VAN`; vi byte-giống 400 ngày) |
 | 1 | 2026-11 | `2026-11.md` | 🧮 W34b — Nạp Âm: bảng chữ theo hành + khuôn UI + con giáp (ns `nap-am` 56 mục · nap-am.js?v=4 · shell.js?v=160; vi byte-giống 1895–2105) |
 | 1 | 2026-11 | `2026-11.md` | 🧒 W34d — Hướng Nghiệp Trẻ phần dư: `vi[]` · chất người · chất không đòi hỏi · tên kiểu theo ngôn ngữ (mã `viMa`/`ma` additive, nối ns day-con-assess + cong-so; BUMP SHAPE 6→7; vi byte-giống 300 hồ sơ) |
