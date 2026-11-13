@@ -404,8 +404,9 @@ window.SHELL_INTRO={key:'luan-giai'};</script>
 <script src="/tuvi-ansao-engine.js?v=2"></script>
 <script src="/tools-shared/glossary.js?v=5"></script>
 <script src="/tools-shared/cach-cuc.js?v=1"></script>
+<script src="/tools-shared/dv-rules.js?v=1"></script>
 <script src="/laso-chart.js?v=12"></script>
-<script src="/luan-giai-core.js?v=12"></script>
+<script src="/luan-giai-core.js?v=13"></script>
 <!-- Engine Tử Bình cho khối "Ngũ hành theo Tứ Trụ" (phần 1). PHẢI là thẻ tĩnh,
      đúng URL `?v=5` như app-bat-tu.html: soft-nav chỉ khử trùng theo URL đã thấy
      trong DOM — chèn bằng JS thì sang trang Bát Tự sẽ nạp lại, trùng `const`. -->
@@ -492,7 +493,7 @@ function showNamxemStep(){
     ('<div class="cb-title">' + _tvmbT('js.luangiai.chi-phi-su-dung', 'Chi phí sử dụng') + '</div>')+
     ('<div class="cb-amt">' + _tvmbT('js.luangiai.mien-phi-xem-tong-quan-1', 'Miễn phí — xem tổng quan &amp; 1 phần trước, tính tiền khi mở bản đầy đủ') + '</div>')+
     '</div></div></div>'+
-    '<button class="btn-go" type="button" id="namxemNext" style="width:auto;padding:9px 16px;font-size:13px;margin-top:8px">Lập lá số &amp; Luận giải ngay →</button></div>';
+    '<button class="btn-go" type="button" id="namxemNext" style="width:auto;padding:9px 16px;font-size:13px;margin-top:8px">'+_tvmbT('js.luangiai.lap-la-so-luan-ngay','Lập lá số &amp; Luận giải ngay →')+'</button></div>';
   chat.appendChild(el); chat.scrollTop=chat.scrollHeight;
   if(window.mountIcons) window.mountIcons(el); // icon ví của hộp "Chi phí sử dụng" — dựng bằng innerHTML
   NamLuanSelect.mount('cInpNamxem');
@@ -668,7 +669,7 @@ function appendHookHighlightCard(){
   el.innerHTML='<img class="msg-ava" src="'+av+'" alt="">'+
     '<div class="msg-body"><div class="chat-hl"><div class="chat-hl-h">'+boxes.length+_tvmbT('js.battu.dieu-quan-trong-nhat', ' điều quan trọng nhất</div>')+
     '<div class="chat-hl-boxes">'+rows+'</div>'+
-    '<button type="button" class="chat-hl-cta" id="lgOpenResult">Xem lá số 12 cung →</button></div></div>';
+    '<button type="button" class="chat-hl-cta" id="lgOpenResult">'+_tvmbT('js.luangiai.xem-la-so-12-cung','Xem lá số 12 cung →')+'</button></div></div>';
   chat.appendChild(el);
   document.getElementById('lgOpenResult').addEventListener('click',function(){
     var ab=document.querySelector('[data-act="artifact"]');
@@ -684,7 +685,7 @@ async function doLuan(){
   var namxem=parseInt(document.getElementById('inpNamxem').value)||new Date().getFullYear();
   var fdIn=TuviForm.getData();
   var name=fdIn.hoten, gioitinh=fdIn.gioitinh, dd=fdIn.ngay, mm=fdIn.thang, yyyy=fdIn.nam, hh=fdIn.gioHour, pp=fdIn.gioPhut, gioAmIdx=fdIn.gioIdx;
-  if(!dd||!mm||!yyyy){ alert('Vui lòng nhập đầy đủ ngày, tháng, năm sinh.'); return; }
+  if(!dd||!mm||!yyyy){ alert(_tvmbT('js.luangiai.nhap-du-ngay','Vui lòng nhập đầy đủ ngày, tháng, năm sinh.')); return; }
   // Khoá nút NGAY (trước await) — chặn double-submit trong lúc chờ văn mẫu
   // (thường đã có sẵn trong cache, xem `_lasoDummyPromise()` mồi ở trên).
   btn.disabled=true; var _btnGoLb=document.getElementById('btnGoLabel'); if(_btnGoLb) _btnGoLb.textContent=_tvmbT('js.luangiai.dang-luan', 'Đang luận…');
@@ -828,7 +829,7 @@ function renderLuan(ls,fd,namxem,forceUnlocked){
   // phải chờ bản xem trước — cùng dữ liệu buildLuanChips đã hiện công khai
   // ở trên, không phải tín hiệu mới.
   var _worst=_worstCung(ls);
-  renderJump(LABELS,_worst?CUNG_ORDER.indexOf(_worst.cn)+2:null);
+  renderJump(LuanGiaiCore.phanLabelsT?LuanGiaiCore.phanLabelsT(ls):LABELS,_worst?CUNG_ORDER.indexOf(_worst.cn)+2:null);
   wirePhanAsk(document.getElementById('lgBody'));
 }
 
@@ -868,12 +869,12 @@ function mountHook(ls){
       toolLabel:_tvmbT('js.luangiai.luan-giai-tu-vi', 'Luận Giải Tử Vi'),
       illus:illus,
       charts:[
-        hexDims?{type:'hexRadar',data:{dims:hexDims},title:'Lục Giác cung Mệnh'}:null
+        hexDims?{type:'hexRadar',data:{dims:hexDims},title:_tvmbT('js.luangiai.luc-giac-menh','Lục Giác cung Mệnh')}:null
       ].filter(Boolean),
       facts:facts,
       gate:{
-        tieuDe:'Bản đầy đủ trả lời làm gì với nó',
-        items:['11 cung còn lại — mỗi cung một phần luận riêng, viết theo cổ pháp','Cách cục, tứ hoá và quy tắc của từng cung'],
+        tieuDe:_tvmbT('js.luangiai.gate-tieu-de','Bản đầy đủ trả lời làm gì với nó'),
+        items:[_tvmbT('js.luangiai.gate-11-cung','11 cung còn lại — mỗi cung một phần luận riêng, viết theo cổ pháp'),_tvmbT('js.luangiai.gate-cach-cuc','Cách cục, tứ hoá và quy tắc của từng cung')],
         onUnlock:function(){ return initiateLuanGiaiChuyenSau('hook'); }
       },
       // 3 box cột phụ (Giới thiệu/Bản luận giải mẫu/Phiên gần đây) đã bị
@@ -909,7 +910,7 @@ var CUNG_TOOL_LINKS={
     // rồi mới mời sang tool khác xem 8 đại vận còn lại — cùng triết lý hook
     // như buildTeaserHtml(), không lộ thêm gì ngoài con số cũng thấy ở thẻ
     // "Đại vận" phía trên đầu trang.
-    {path:'/app/chu-trinh-cuoc-doi',label:'Chu Trình Cuộc Đời',note:'Luận sâu 9 đại vận và tiểu vận năm xem — 11 phần riêng, tách khỏi 13 phần lá số này',
+    {path:'/app/chu-trinh-cuoc-doi',label:_tvmbT('js.luangiai.rel-chu-trinh','Chu Trình Cuộc Đời'),note:_tvmbT('js.luangiai.rel-chu-trinh-note','Luận sâu 9 đại vận và tiểu vận năm xem — 11 phần riêng, tách khỏi 13 phần lá số này'),
       noteFn:function(ls){
         var dv=ls&&ls.daiVanHienTai;
         var t=dv&&dv.scoring?dv.scoring.tong:null;
@@ -918,28 +919,28 @@ var CUNG_TOOL_LINKS={
       }}
   ],
   'Cung Mệnh':[
-    {path:'/app/bat-trach',label:'Hướng Bát Trạch',note:'Soi thêm 8 hướng tốt xấu từ chính cung Mệnh này'}
+    {path:'/app/bat-trach',label:_tvmbT('js.luangiai.rel-bat-trach','Hướng Bát Trạch'),note:_tvmbT('js.luangiai.rel-bat-trach-note','Soi thêm 8 hướng tốt xấu từ chính cung Mệnh này')}
   ],
   'Cung Điền Trạch':[
-    {path:'/app/phong-thuy',label:'Phong Thủy Nội Thất',note:'Chụp ảnh phòng để hệ thống chấm điểm bố trí'}
+    {path:'/app/phong-thuy',label:_tvmbT('js.luangiai.rel-phong-thuy','Phong Thủy Nội Thất'),note:_tvmbT('js.luangiai.rel-phong-thuy-note','Chụp ảnh phòng để hệ thống chấm điểm bố trí')}
   ],
   'Cung Quan Lộc':[
-    {path:'/app/cong-so',label:'Tử Vi Công Sở',note:'Đọc lại đúng lá số này bằng ngôn ngữ công việc'}
+    {path:'/app/cong-so',label:_tvmbT('js.luangiai.rel-cong-so','Tử Vi Công Sở'),note:_tvmbT('js.luangiai.rel-cong-so-note','Đọc lại đúng lá số này bằng ngôn ngữ công việc')}
   ],
   'Cung Tử Tức':[
-    {path:'/app/day-con',label:'Dạy Con Theo Lá Số',note:'Con hợp cách dạy nào, nên thúc hay nên để yên'},
-    {path:'/app/huong-nghiep-tre',label:'Hướng Nghiệp Sớm Cho Con',note:'Nên cho con làm quen với thứ gì từ bây giờ'}
+    {path:'/app/day-con',label:_tvmbT('js.luangiai.rel-day-con','Dạy Con Theo Lá Số'),note:_tvmbT('js.luangiai.rel-day-con-note','Con hợp cách dạy nào, nên thúc hay nên để yên')},
+    {path:'/app/huong-nghiep-tre',label:_tvmbT('js.luangiai.rel-hnt','Hướng Nghiệp Sớm Cho Con'),note:_tvmbT('js.luangiai.rel-hnt-note','Nên cho con làm quen với thứ gì từ bây giờ')}
   ],
   'Cung Phu Thê':[
-    {path:'/app/xem-tuoi',label:'Xem Tuổi Vợ Chồng',note:'Đối chiếu với lá số người kia'},
-    {path:'/app/chan-dung-vo-chong',label:'Chân Dung Vợ Chồng',note:'Vẽ chân dung người phối ngẫu từ chính cung này'},
-    {path:'/app/duyen-no-tien-kiep',label:'Duyên Nợ Tiền Kiếp',note:'Kiếp trước hai người là gì của nhau'}
+    {path:'/app/xem-tuoi',label:_tvmbT('js.luangiai.rel-xem-tuoi','Xem Tuổi Vợ Chồng'),note:_tvmbT('js.luangiai.rel-xem-tuoi-note','Đối chiếu với lá số người kia')},
+    {path:'/app/chan-dung-vo-chong',label:_tvmbT('js.luangiai.rel-cdvc','Chân Dung Vợ Chồng'),note:_tvmbT('js.luangiai.rel-cdvc-note','Vẽ chân dung người phối ngẫu từ chính cung này')},
+    {path:'/app/duyen-no-tien-kiep',label:_tvmbT('js.luangiai.rel-duyen-no','Duyên Nợ Tiền Kiếp'),note:_tvmbT('js.luangiai.rel-duyen-no-note','Kiếp trước hai người là gì của nhau')}
   ]
 };
 function cungRelatedHtml(label,ls){
   var links=CUNG_TOOL_LINKS[label];
   if(!links||!links.length) return '';
-  return '<div class="lg-related"><div class="lg-related-h">Đọc sâu hơn</div>'
+  return '<div class="lg-related"><div class="lg-related-h">'+_tvmbT('js.luangiai.doc-sau-hon','Đọc sâu hơn')+'</div>'
     +links.map(function(l){
       var note=(l.noteFn&&l.noteFn(ls))||l.note;
       return '<a class="lg-related-link" href="'+l.path+'"><b>'+esc(l.label)+'</b><span>'+esc(note)+'</span></a>';
@@ -998,9 +999,9 @@ var LOCK_ILLUS_URL='https://dciwkfdqhhddeymlisey.supabase.co/storage/v1/object/p
 function lockedIllusHtml(phan,ls,label){
   var real=illusBannerHtml(phan,ls,label);
   if(real) return real.replace('<figure class="lg-illus"','<figure class="lg-illus lg-illus-lock"')
-    .replace('</figure>','<span class="lg-illus-tag">'+TuviPaywall.lockBadge('Ảnh minh hoạ')+'</span></figure>');
+    .replace('</figure>','<span class="lg-illus-tag">'+TuviPaywall.lockBadge(_tvmbT('js.luangiai.anh-minh-hoa','Ảnh minh hoạ'))+'</span></figure>');
   return '<figure class="lg-illus lg-illus-lock"><img src="'+LOCK_ILLUS_URL+'" alt="" loading="lazy"'+
-    ' onerror="this.closest(\'.lg-illus\').remove()"><span class="lg-illus-tag">'+TuviPaywall.lockBadge('Ảnh minh hoạ')+'</span></figure>';
+    ' onerror="this.closest(\'.lg-illus\').remove()"><span class="lg-illus-tag">'+TuviPaywall.lockBadge(_tvmbT('js.luangiai.anh-minh-hoa','Ảnh minh hoạ'))+'</span></figure>';
 }
 function buildPhanSection(phan,label,ls,locked){
   var bodyHtml,tag;
@@ -1009,14 +1010,14 @@ function buildPhanSection(phan,label,ls,locked){
     // (2026-09-17): nội dung mờ giờ là văn MẪU của một lá số KHÁC (thật, không
     // phải vạch giả) — xem `buildLockedPlaceholderHtml`.
     bodyHtml=buildLockedPlaceholderHtml(phan);
-    tag=TuviPaywall.lockBadge('Khoá');
+    tag=TuviPaywall.lockBadge(_tvmbT('js.luangiai.khoa','Khoá'));
   }else{
     // Khối TÍNH TOÁN (cách cục/điểm số/quy tắc) — Pha 4 (2026-09-17): ĐẢO NGƯỢC
     // quyết định thu gọn cũ (Henry lúc đó lo user đọc nhầm khối này thành luận
     // giải AI). Henry chốt lại: bung sẵn luôn, vẫn giữ `<details>` để ai muốn
     // vẫn gập lại được — chỉ đổi trạng thái MẶC ĐỊNH. 2026-10-01: CHART đứng
     // NGOÀI khối gập, khối chữ GẬP sẵn — `buildCalcSectionHtml`.
-    bodyHtml=LuanGiaiCore.buildCalcSectionHtml(phan,ls)||'<div class="phan-empty">Phần này luận theo tổng thể lá số — bấm nút dưới để Thầy luận sâu.</div>';
+    bodyHtml=LuanGiaiCore.buildCalcSectionHtml(phan,ls)||('<div class="phan-empty">'+_tvmbT('js.luangiai.phan-tong-the','Phần này luận theo tổng thể lá số — bấm nút dưới để Thầy luận sâu.')+'</div>');
     tag='';
   }
   // CTA lặp lại (ẨN mặc định, bật bởi `_paintSecLocks` khi `_renderUnlockBlock`
@@ -1054,7 +1055,9 @@ function buildPhanSection(phan,label,ls,locked){
   var cutStub=(phan===FREE_PHAN)
     ? '<div class="lg-cut-continue" id="lg-cut-'+phan+('" style="display:none"><div class="lg-cut-note">' + _tvmbT('js.luangiai.phan-5h00', 'Phần') + ' ')+phan+(' ' + _tvmbT('js.luangiai.con-tiep-mo-khoa-de-doc', 'còn tiếp — mở khoá để đọc trọn vẹn') + '</div><div class="lg-cut-bars" aria-hidden="true"><i></i><i></i><i></i></div></div>')
     : '';
-  return sec(phan,label,tag,banner+'<div class="card">'+bodyHtml+lock+'<div class="claude-content" id="claude-content-'+phan+'" style="display:none"></div>'+cutStub+related+ask(_tvmbT('js.battu.luan-sau-phan', 'Luận sâu phần: ')+label)+'</div>');
+  // Nhãn HIỂN THỊ theo ngôn ngữ (W32A) — `label` Việt vẫn là khoá CUNG_TOOL_LINKS/ảnh minh hoạ.
+  var labelT=(LuanGiaiCore.phanLabelsT&&LuanGiaiCore.phanLabelsT(ls)[phan])||label;
+  return sec(phan,labelT,tag,banner+'<div class="card">'+bodyHtml+lock+'<div class="claude-content" id="claude-content-'+phan+'" style="display:none"></div>'+cutStub+related+ask(_tvmbT('js.battu.luan-sau-phan', 'Luận sâu phần: ')+labelT)+'</div>');
 }
 // Ô GIỮ CHỖ của một phần đang khoá (hard paywall 2026-09-06).
 //
@@ -1465,7 +1468,7 @@ function _renderSavePrompt(){
   host.className='lg-save-prompt';
   host.style.display='flex';
   host.innerHTML=('<div class="lsp-txt">' + _tvmbT('js.luangiai.luu-la-so-nay-de-xem', '✦ <b>Lưu lá số này</b> để xem lại bất cứ lúc nào — miễn phí, không cần trả gì.') + '</div>')+
-    '<button type="button" id="lgSaveBtn">Đăng ký lưu →</button>';
+    '<button type="button" id="lgSaveBtn">'+_tvmbT('js.luangiai.dang-ky-luu','Đăng ký lưu →')+'</button>';
   document.getElementById('lgSaveBtn').addEventListener('click', function(){
     if(window.showAuthModal){
       window.showAuthModal(function(){
@@ -1618,9 +1621,9 @@ function _renderUnlockBlock(){
   host.innerHTML='';
   TuviPaywall.lockPreview({
     host:host,
-    title:'⊙ Còn 12 phần nữa đang khoá',
-    items:['Bản PDF đầy đủ — tải về hoặc gửi qua email trong vài phút','12 cung còn lại — mỗi cung một phần luận riêng, viết theo cổ pháp','Cách cục, tứ hoá và quy tắc của từng cung'],
-    cta:'Mở bản luận đầy đủ →',
+    title:_tvmbT('js.luangiai.lock-title','⊙ Còn 12 phần nữa đang khoá'),
+    items:[_tvmbT('js.luangiai.lock-pdf','Bản PDF đầy đủ — tải về hoặc gửi qua email trong vài phút'),_tvmbT('js.luangiai.lock-12-cung','12 cung còn lại — mỗi cung một phần luận riêng, viết theo cổ pháp'),_tvmbT('js.luangiai.gate-cach-cuc','Cách cục, tứ hoá và quy tắc của từng cung')],
+    cta:_tvmbT('js.luangiai.lock-cta','Mở bản luận đầy đủ →'),
     slug:function(){return _pendingSlug;},
     onUnlock:function(){ return _startLuanGiaiAI(); },
   });
@@ -1697,7 +1700,7 @@ async function _unlockOnePart(phan){
   var partPrice=window.ToolPrices?window.ToolPrices.partPrice('laso'):null;
   // Đọc hụt giá → TỪ CHỐI chạy, không đoán (luật cứng CLAUDE.md — số cũ/bịa
   // nguy hiểm hơn hẳn một lượt phải bấm lại).
-  if(partPrice==null){ alert('Chưa đọc được giá phần này, vui lòng thử lại.'); return; }
+  if(partPrice==null){ alert(_tvmbT('js.luangiai.chua-doc-gia','Chưa đọc được giá phần này, vui lòng thử lại.')); return; }
 
   var gate=await TuviPaywall.ensureCredits({product:'laso', cost:partPrice});
   if(!gate.ok) return; // ensureCredits đã tự hiện UI đăng nhập/thiếu Lượng/giá chưa đọc được
@@ -1711,13 +1714,13 @@ async function _unlockOnePart(phan){
         slug:_partSlug(phan), description:'Luận Giải Lá Số — '+labelForDesc})});
     var data=await res.json();
     if(!data.success){
-      alert(data.insufficientBalance?'Không đủ Lượng — vui lòng nạp thêm.':'Có lỗi khi mở phần này, thử lại.');
+      alert(data.insufficientBalance?_tvmbT('js.luangiai.khong-du-luong','Không đủ Lượng — vui lòng nạp thêm.'):_tvmbT('js.luangiai.loi-mo-phan','Có lỗi khi mở phần này, thử lại.'));
       return;
     }
     window.refreshNavCredits&&window.refreshNavCredits();
     _paintPartUnlocked(phan);
     await _runPhanLuanGiai(phan);
-  }catch(e){ alert('Có lỗi khi mở phần này, thử lại.'); }
+  }catch(e){ alert(_tvmbT('js.luangiai.loi-mo-phan','Có lỗi khi mở phần này, thử lại.')); }
 }
 
 // Pha 0 (vá phễu 2026-09) — nguồn DUY NHẤT bắn `unlock_click` cho khách ĐÃ
@@ -1794,7 +1797,7 @@ async function _startLuanGiaiAI(){
     total:TONG_PHAN,
     concurrency:PHAN_CONCURRENCY,
     progressEl:'lgProgress',
-    progressPrefix:'Đang luận giải phần',
+    progressPrefix:_tvmbT('js.luangiai.dang-luan-phan','Đang luận giải phần'),
     pace:_pace,
     onProgress:function(done,total){ _reportHandle&&_reportHandle.tick(done,total); },
     // Phần 1 đã chạy ở lượt mồi trên — bể chỉ cần TRẢ LẠI kết quả đó, không

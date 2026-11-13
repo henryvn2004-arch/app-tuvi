@@ -5763,6 +5763,10 @@
   "t": "Nine major luck cycles, bar height by engine score, one keyword per cycle",
   "h": "6b87e20d"
  },
+ "js.chutrinh.chip-ca-doi": {
+  "t": "Across my whole life, which stages go up and which go down?",
+  "h": "0fd14b86"
+ },
  "js.chutrinh.chu-trinh-cuoc-doi": {
   "t": "Life Cycles ",
   "h": "c3a39296"
@@ -5787,6 +5791,22 @@
   "t": " · currently in stage ",
   "h": "3d0545d0"
  },
+ "js.chutrinh.lock-8-dv": {
+  "t": "The other 8 luck cycles — each stage read separately by the classical method",
+  "h": "4ec27b83"
+ },
+ "js.chutrinh.lock-cta": {
+  "t": "Open the full reading",
+  "h": "f25984b4"
+ },
+ "js.chutrinh.lock-tieu-van": {
+  "t": "This year's minor cycle — read separately by the classical method",
+  "h": "647e634b"
+ },
+ "js.chutrinh.lock-title": {
+  "t": "⊙ The full reading isn't open yet",
+  "h": "58312cbd"
+ },
  "js.chutrinh.luan-giai": {
   "t": "Read →",
   "h": "a03abb8e"
@@ -5799,6 +5819,38 @@
   "t": "✦ Unlock the full reading —",
   "h": "438bc666"
  },
+ "js.chutrinh.poster-loi": {
+  "t": "Couldn't create the image. Please try again in a few seconds.",
+  "h": "f8055429"
+ },
+ "js.chutrinh.poster-qr": {
+  "t": "Scan — see your own life cycles",
+  "h": "9dc941f8"
+ },
+ "js.chutrinh.poster-quote": {
+  "t": "Bar heights follow the luck-cycle scores computed by the engine — not guesses.",
+  "h": "961570c5"
+ },
+ "js.chutrinh.poster-title": {
+  "t": "9 stages of life",
+  "h": "619cd7f3"
+ },
+ "js.chutrinh.rel-luan-giai": {
+  "t": "Zi Wei Reading",
+  "h": "ab5a4607"
+ },
+ "js.chutrinh.rel-luan-giai-note": {
+  "t": "See the chart overview and a separate reading for each of the 12 palaces",
+  "h": "734368f8"
+ },
+ "js.chutrinh.rel-van-han": {
+  "t": "Next 12 Months",
+  "h": "f265e49d"
+ },
+ "js.chutrinh.rel-van-han-note": {
+  "t": "Look at the next 12 months one by one, following the lunar months exactly",
+  "h": "ce8ee944"
+ },
  "js.chutrinh.roi-vao-cung": {
   "t": " falls in the palace ",
   "h": "d242aa04"
@@ -5806,6 +5858,14 @@
  "js.chutrinh.tieu-van-nam": {
   "t": "Annual cycle for ",
   "h": "1979c56a"
+ },
+ "js.chutrinh.viet-rieng": {
+  "t": "Written for this chart by the classical method — 11 parts: a luck-cycles overview, a separate reading for each of the 9 luck cycles, and this year's minor cycle. Comes with a PDF to download or receive by email.",
+  "h": "38ebd1a1"
+ },
+ "js.chutrinh.xem-9-dai-van": {
+  "t": "See the 9 luck cycles →",
+  "h": "ee069d41"
  },
  "js.cn.ai-cung-han-vao": {
   "t": "{ai} enter <b>{cung}</b> together.",
@@ -9943,6 +10003,370 @@
   "t": "Age {n} (lunar)",
   "h": "cd4bc076"
  },
+ "js.lgcore.bai-tinh": {
+  "t": "Destructive stars: {sao}",
+  "h": "724a9aa9"
+ },
+ "js.lgcore.bd-ghi-chu": {
+  "t": "The dot is the score; the gold bar is the range of swing. Range = score × (1 ± share of moving stars in the period palace's three sides and four directions), with moving stars weighted by rank.",
+  "h": "87d9e115"
+ },
+ "js.lgcore.bo-menh": {
+  "t": "Life star group: <span style=\"color:#aaa\">{a}</span> → Cycle star group: <span style=\"color:#aaa\">{b}</span>",
+  "h": "2fb64232"
+ },
+ "js.lgcore.cach-cuc-dac-biet": {
+  "t": "Special patterns",
+  "h": "f0db7ce5"
+ },
+ "js.lgcore.cach-cuc-lien-quan": {
+  "t": "Related patterns",
+  "h": "9fcce5d2"
+ },
+ "js.lgcore.cat-tinh": {
+  "t": "Benefic stars: {sao}",
+  "h": "39744fd1"
+ },
+ "js.lgcore.cd-aria": {
+  "t": "Four theme lines across 9 luck cycles",
+  "h": "8de1a0f4"
+ },
+ "js.lgcore.cd-dang-di": {
+  "t": "Now in the {a}–{b} luck cycle (temporary Life palace at {chi}): strongest is <b>{manh}</b>, weakest is <b>{yeu}</b>.",
+  "h": "ace243b1"
+ },
+ "js.lgcore.cd-ghi-chu": {
+  "t": "The cycle palace acts as a temporary Life palace; the other palaces shift with it and borrow the stars of the palace they land on. Career is drawn to age 65; wealth and love from adulthood on.",
+  "h": "47b240d7"
+ },
+ "js.lgcore.cd-su-nghiep": {
+  "t": "Career",
+  "h": "6302fbab"
+ },
+ "js.lgcore.cd-suc-khoe": {
+  "t": "Health",
+  "h": "77e26a9a"
+ },
+ "js.lgcore.cd-tai-loc": {
+  "t": "Wealth",
+  "h": "5d21666f"
+ },
+ "js.lgcore.cd-tinh-duyen": {
+  "t": "Love",
+  "h": "818b8e8a"
+ },
+ "js.lgcore.cd-title": {
+  "t": "Life's four big themes across 9 luck cycles",
+  "h": "45690f76"
+ },
+ "js.lgcore.cham-diem-dv": {
+  "t": "Luck cycle score — {cung} ({chi})",
+  "h": "00eb81e5"
+ },
+ "js.lgcore.chinh-tinh-cung": {
+  "t": "Major stars of the palace",
+  "h": "2ff2de45"
+ },
+ "js.lgcore.chinh-tinh-dv": {
+  "t": "Major stars of the cycle palace",
+  "h": "d424e884"
+ },
+ "js.lgcore.cn-binh-hoa": {
+  "t": "balanced",
+  "h": "09ccb244"
+ },
+ "js.lgcore.cn-cuc-nhuoc": {
+  "t": "very weak",
+  "h": "86e91daa"
+ },
+ "js.lgcore.cn-cuc-vuong": {
+  "t": "very strong",
+  "h": "442c349d"
+ },
+ "js.lgcore.cn-nhuoc": {
+  "t": "weak",
+  "h": "64c831c7"
+ },
+ "js.lgcore.cn-vuong": {
+  "t": "strong",
+  "h": "0cd97e28"
+ },
+ "js.lgcore.dang-o-day": {
+  "t": "You are here",
+  "h": "28f89609"
+ },
+ "js.lgcore.danh-gia-6": {
+  "t": "Six-dimension rating",
+  "h": "1dd610c0"
+ },
+ "js.lgcore.dia-loi": {
+  "t": "Right place",
+  "h": "dd0f73a6"
+ },
+ "js.lgcore.dv9-title": {
+  "t": "9 luck cycles — score chart",
+  "h": "a893e2f4"
+ },
+ "js.lgcore.hien-tai-dv": {
+  "t": "· Now: cycle {n} ({cc}, ages {a}-{b})",
+  "h": "d3fab46a"
+ },
+ "js.lgcore.khoi-van": {
+  "t": "· Cycles start: age {tuoi} · Direction: {huong}",
+  "h": "3f3b6343"
+ },
+ "js.lgcore.khong-sao-dong": {
+  "t": "no moving stars",
+  "h": "77575d09"
+ },
+ "js.lgcore.luan-doan": {
+  "t": "Fortune judgments",
+  "h": "d3b202d1"
+ },
+ "js.lgcore.luu-sao": {
+  "t": "Flowing {sao}",
+  "h": "db80d9b7"
+ },
+ "js.lgcore.manh": {
+  "t": "strong",
+  "h": "36090ada"
+ },
+ "js.lgcore.manh-nhat": {
+  "t": "Strongest: {ds}",
+  "h": "aa4c3ac4"
+ },
+ "js.lgcore.manh-yeu": {
+  "t": "Standout strengths / weaknesses",
+  "h": "8f14d466"
+ },
+ "js.lgcore.menh-o": {
+  "t": "Life at {chi}",
+  "h": "058ae0b9"
+ },
+ "js.lgcore.muoi-hai-thang": {
+  "t": "Twelve lunar months of the {cc} year {nam}",
+  "h": "3e050ead"
+ },
+ "js.lgcore.muoi-hai-thang-aria": {
+  "t": "Score and range for the twelve lunar months of {nam}",
+  "h": "f09eedd4"
+ },
+ "js.lgcore.muoi-nam-aria": {
+  "t": "Score and range from {a} to {b}",
+  "h": "68dd4ba4"
+ },
+ "js.lgcore.muoi-nam-title": {
+  "t": "The next ten years — yearly score and range",
+  "h": "43c9ff41"
+ },
+ "js.lgcore.muon-xung": {
+  "t": " — borrowed from the opposite palace: <span style=\"color:#5FA8D3\">{sao}</span>",
+  "h": "306f7570"
+ },
+ "js.lgcore.mv-ben-vung": {
+  "t": "Durability",
+  "h": "aced35c7"
+ },
+ "js.lgcore.mv-binh-yen": {
+  "t": "Peace",
+  "h": "4677d1ae"
+ },
+ "js.lgcore.mv-can-co": {
+  "t": "Foundation",
+  "h": "621afbd9"
+ },
+ "js.lgcore.mv-may-man": {
+  "t": "Fortune",
+  "h": "d56f590a"
+ },
+ "js.lgcore.mv-phu-tro": {
+  "t": "Support",
+  "h": "34da24cc"
+ },
+ "js.lgcore.mv-thien-van": {
+  "t": "Heavenly luck",
+  "h": "4cede149"
+ },
+ "js.lgcore.nam-dong-nhat": {
+  "t": "Most volatile: <b>{nam}</b> (±{p}, minor-limit palace {cung}) — {ds}.",
+  "h": "157f8832"
+ },
+ "js.lgcore.nam-xem-dong": {
+  "t": "<b>{nam}</b> ({cc}, minor-limit palace {cung}): score <b>{d}</b>, range {lo}–{hi} (±{p}). Moving stars: {ds}.",
+  "h": "19369c2f"
+ },
+ "js.lgcore.nghich": {
+  "t": "reverse",
+  "h": "3ccd4363"
+ },
+ "js.lgcore.nh-aria": {
+  "t": "Five Elements proportions of the Four Pillars",
+  "h": "ab12e894"
+ },
+ "js.lgcore.nh-dung-than": {
+  "t": " Useful element <b>{a}</b>",
+  "h": "04d37af8"
+ },
+ "js.lgcore.nh-ghi-chu": {
+  "t": "Computed with the Four Pillars engine: each visible stem counts 1; hidden stems in the branches count by their hidden-stem weights.",
+  "h": "52810c99"
+ },
+ "js.lgcore.nh-hy-than": {
+  "t": ", favorable element {a}",
+  "h": "a4ea3273"
+ },
+ "js.lgcore.nh-than": {
+  "t": " Day master {can}, self {cn}",
+  "h": "c0729f51"
+ },
+ "js.lgcore.nh-title": {
+  "t": "Five Elements of the Four Pillars",
+  "h": "433df54e"
+ },
+ "js.lgcore.nh-vuong-thieu": {
+  "t": "Most abundant: <b>{a}</b>; most lacking: <b>{b}</b>.",
+  "h": "08060d77"
+ },
+ "js.lgcore.nhan-hoa": {
+  "t": "Right people",
+  "h": "2d5692ff"
+ },
+ "js.lgcore.nhat-chu": {
+  "t": "day master",
+  "h": "c60a7143"
+ },
+ "js.lgcore.phan-cung": {
+  "t": "{cung}",
+  "h": "7f204b89"
+ },
+ "js.lgcore.phan-dv": {
+  "t": "Luck Cycle {n}",
+  "h": "4969b7f0"
+ },
+ "js.lgcore.phan-dv-tuoi": {
+  "t": "Luck Cycle {n} (ages {a}–{b})",
+  "h": "2a4b7cc3"
+ },
+ "js.lgcore.phan-tich-sao": {
+  "t": "Star analysis",
+  "h": "c580881f"
+ },
+ "js.lgcore.phan-tieu-van": {
+  "t": "Minor Cycle of the Year Read",
+  "h": "c0c9a816"
+ },
+ "js.lgcore.phan-tong-quan": {
+  "t": "Chart Overview",
+  "h": "c65f03ec"
+ },
+ "js.lgcore.phan-tq-dv": {
+  "t": "Luck cycles overview",
+  "h": "655ab451"
+ },
+ "js.lgcore.phi-nhap": {
+  "t": "{hoa}: <b>{sao}</b> → flies into <b>{cung}</b> ({chi})",
+  "h": "c1d3bd83"
+ },
+ "js.lgcore.radar-aria": {
+  "t": "Twelve-palace radar — the thicker an axis, the stronger that palace",
+  "h": "3e7f78f4"
+ },
+ "js.lgcore.sat-tinh": {
+  "t": "Malefic stars: {sao}",
+  "h": "7eaf46b7"
+ },
+ "js.lgcore.tam-phuong": {
+  "t": "Stars in the three-sides-four-directions",
+  "h": "6e974aa8"
+ },
+ "js.lgcore.th-ngan": {
+  "t": "M{n}",
+  "h": "b3fc323a"
+ },
+ "js.lgcore.thang-dong-nhat": {
+  "t": "Most volatile: <b>month {t}</b> (monthly limit {cung}, ±{p}) — {ds}.",
+  "h": "d96d074b"
+ },
+ "js.lgcore.thang-noi-suy": {
+  "t": "Monthly scores are interpolated from the yearly scores. ",
+  "h": "ab0b95ef"
+ },
+ "js.lgcore.thang-yen-nhat": {
+  "t": "Calmest: <b>month {t}</b> (monthly limit {cung}, ±{p}).",
+  "h": "dc56896b"
+ },
+ "js.lgcore.thien-thoi": {
+  "t": "Right time",
+  "h": "ebcbebc4"
+ },
+ "js.lgcore.thuan": {
+  "t": "forward",
+  "h": "ee315dcc"
+ },
+ "js.lgcore.tong": {
+  "t": "Total",
+  "h": "de995d83"
+ },
+ "js.lgcore.triet-cung": {
+  "t": "Jie Kong blocks the palace",
+  "h": "146d86f2"
+ },
+ "js.lgcore.triet-cung-dv": {
+  "t": "Jie Kong blocks the cycle palace",
+  "h": "224bd87b"
+ },
+ "js.lgcore.tru-gio": {
+  "t": "Hour",
+  "h": "75f92388"
+ },
+ "js.lgcore.tru-nam": {
+  "t": "Year",
+  "h": "98926c7e"
+ },
+ "js.lgcore.tru-ngay": {
+  "t": "Day",
+  "h": "368c4575"
+ },
+ "js.lgcore.tru-thang": {
+  "t": "Month",
+  "h": "0e2b3099"
+ },
+ "js.lgcore.tu-hoa": {
+  "t": "[SELF-TRANSFORM]",
+  "h": "d151626d"
+ },
+ "js.lgcore.tuan-cung": {
+  "t": "Xun Kong blocks the palace",
+  "h": "4b4590e3"
+ },
+ "js.lgcore.tuan-cung-dv": {
+  "t": "Xun Kong blocks the cycle palace",
+  "h": "2eba5ede"
+ },
+ "js.lgcore.tuhoa-title": {
+  "t": "Four Transformations in flight (palace stem {can})",
+  "h": "69ab67ee"
+ },
+ "js.lgcore.tuoi-khoang": {
+  "t": "ages {a}-{b}",
+  "h": "f8dda7a6"
+ },
+ "js.lgcore.vo-chinh-dieu": {
+  "t": "No major star",
+  "h": "bb1c972d"
+ },
+ "js.lgcore.xem-co-so": {
+  "t": "See how this was calculated",
+  "h": "0fb87c33"
+ },
+ "js.lgcore.yeu": {
+  "t": "weak",
+  "h": "1a462424"
+ },
+ "js.lgcore.yeu-nhat": {
+  "t": "Weakest: {ds}",
+  "h": "0d623c66"
+ },
  "js.lienhe.gui-email": {
   "t": "Send email",
   "h": "5901b176"
@@ -10011,6 +10435,10 @@
   "t": "▾ Hide chart",
   "h": "9f28e998"
  },
+ "js.luangiai.anh-minh-hoa": {
+  "t": "Illustration",
+  "h": "f37e2fa9"
+ },
  "js.luangiai.bam-thu-lai-o-tung-phan": {
   "t": "— press ↻ Retry on each part, then reload the page.",
   "h": "e7534682"
@@ -10034,6 +10462,10 @@
  "js.luangiai.chi-phi-su-dung": {
   "t": "Cost",
   "h": "c2d36be8"
+ },
+ "js.luangiai.chua-doc-gia": {
+  "t": "Couldn't load the price for this part. Please try again.",
+  "h": "86f02e35"
  },
  "js.luangiai.con-tiep-mo-khoa-de-doc": {
   "t": "to be continued — unlock to read in full",
@@ -10067,6 +10499,10 @@
   "t": "Current luck cycle ",
   "h": "7cf01e2f"
  },
+ "js.luangiai.dang-ky-luu": {
+  "t": "Sign up to save →",
+  "h": "b2ef6ce1"
+ },
  "js.luangiai.dang-lap-la-so": {
   "t": "Casting your chart…",
   "h": "fba688db"
@@ -10078,6 +10514,34 @@
  "js.luangiai.dang-luan-giai-phan-1": {
   "t": "Reading part 1 / ",
   "h": "559646ca"
+ },
+ "js.luangiai.dang-luan-phan": {
+  "t": "Reading part",
+  "h": "6315d472"
+ },
+ "js.luangiai.doc-sau-hon": {
+  "t": "Read deeper",
+  "h": "2822ae47"
+ },
+ "js.luangiai.gate-11-cung": {
+  "t": "The other 11 palaces — a separate reading for each, written by the classical method",
+  "h": "8b8167db"
+ },
+ "js.luangiai.gate-cach-cuc": {
+  "t": "Patterns, transformations and rules for every palace",
+  "h": "ab223e81"
+ },
+ "js.luangiai.gate-tieu-de": {
+  "t": "The full reading answers what to do with it",
+  "h": "c7fe8199"
+ },
+ "js.luangiai.khoa": {
+  "t": "Locked",
+  "h": "393cb36a"
+ },
+ "js.luangiai.khong-du-luong": {
+  "t": "Not enough credits — please top up.",
+  "h": "1d9e17da"
  },
  "js.luangiai.la-so": {
   "t": "chart",
@@ -10091,9 +10555,33 @@
   "t": "Cast Chart & Read Now →",
   "h": "edbdb6fc"
  },
+ "js.luangiai.lap-la-so-luan-ngay": {
+  "t": "Cast the chart &amp; read it now →",
+  "h": "7d7efd95"
+ },
+ "js.luangiai.lock-12-cung": {
+  "t": "The other 12 palaces — a separate reading for each, written by the classical method",
+  "h": "c7949691"
+ },
+ "js.luangiai.lock-cta": {
+  "t": "Open the full reading →",
+  "h": "2ff464b0"
+ },
+ "js.luangiai.lock-pdf": {
+  "t": "The full PDF — download it or get it by email in a few minutes",
+  "h": "28ae9177"
+ },
+ "js.luangiai.lock-title": {
+  "t": "⊙ 12 more parts are locked",
+  "h": "19ab2722"
+ },
  "js.luangiai.loi-khi-luan-giai": {
   "t": "Error while reading:",
   "h": "b251ca2c"
+ },
+ "js.luangiai.loi-mo-phan": {
+  "t": "Something went wrong opening this part. Please try again.",
+  "h": "8c34a861"
  },
  "js.luangiai.loi-phan": {
   "t": "Error in part",
@@ -10110,6 +10598,10 @@
  "js.luangiai.luan-giai-tu-vi": {
   "t": "Zi Wei Reading",
   "h": "ab5a4607"
+ },
+ "js.luangiai.luc-giac-menh": {
+  "t": "Life Palace hexagon",
+  "h": "e7542de0"
  },
  "js.luangiai.luong": {
   "t": "credits →",
@@ -10147,6 +10639,10 @@
   "t": "what should I do?",
   "h": "feedfe50"
  },
+ "js.luangiai.nhap-du-ngay": {
+  "t": "Please enter the full date of birth (day, month, year).",
+  "h": "075a6b15"
+ },
  "js.luangiai.noi-vi-sao-no-bung-ra": {
   "t": " explains why, which stage it breaks out in, and how to resolve it.",
   "h": "2b510636"
@@ -10171,6 +10667,82 @@
   "t": " parts failed (part ",
   "h": "3d3d4b5b"
  },
+ "js.luangiai.phan-tong-the": {
+  "t": "This part is read from the chart as a whole — tap the button below for a master's in-depth reading.",
+  "h": "a10845f5"
+ },
+ "js.luangiai.rel-bat-trach": {
+  "t": "Eight Mansions Directions",
+  "h": "a9176f82"
+ },
+ "js.luangiai.rel-bat-trach-note": {
+  "t": "See the 8 good and bad directions from this same Life Palace",
+  "h": "eb903977"
+ },
+ "js.luangiai.rel-cdvc": {
+  "t": "Couple Portrait",
+  "h": "ed0abbb5"
+ },
+ "js.luangiai.rel-cdvc-note": {
+  "t": "Paint your spouse's portrait from this very palace",
+  "h": "277f3e1b"
+ },
+ "js.luangiai.rel-chu-trinh": {
+  "t": "Life Cycles",
+  "h": "38c0c6ce"
+ },
+ "js.luangiai.rel-chu-trinh-note": {
+  "t": "A deep reading of the 9 luck cycles and this year's minor cycle — 11 separate parts, apart from this chart's 13",
+  "h": "49d1879a"
+ },
+ "js.luangiai.rel-cong-so": {
+  "t": "Zi Wei Workplace",
+  "h": "9d18a955"
+ },
+ "js.luangiai.rel-cong-so-note": {
+  "t": "Read this very chart again in the language of work",
+  "h": "c33dffa1"
+ },
+ "js.luangiai.rel-day-con": {
+  "t": "Parenting by the Chart",
+  "h": "2013a771"
+ },
+ "js.luangiai.rel-day-con-note": {
+  "t": "Which way of raising suits your child — push or let be",
+  "h": "ac17fe75"
+ },
+ "js.luangiai.rel-duyen-no": {
+  "t": "Past-Life Karmic Bonds",
+  "h": "c6b0ccb5"
+ },
+ "js.luangiai.rel-duyen-no-note": {
+  "t": "What you two were to each other in a past life",
+  "h": "30e3786b"
+ },
+ "js.luangiai.rel-hnt": {
+  "t": "Early Career Guidance for Your Child",
+  "h": "2735212c"
+ },
+ "js.luangiai.rel-hnt-note": {
+  "t": "What your child should get to know from now on",
+  "h": "a9892440"
+ },
+ "js.luangiai.rel-phong-thuy": {
+  "t": "Interior Feng Shui",
+  "h": "3f80b53f"
+ },
+ "js.luangiai.rel-phong-thuy-note": {
+  "t": "Photograph a room and have its layout scored",
+  "h": "f41bead6"
+ },
+ "js.luangiai.rel-xem-tuoi": {
+  "t": "Marriage Compatibility",
+  "h": "f3e7b1ed"
+ },
+ "js.luangiai.rel-xem-tuoi-note": {
+  "t": "Compare with the other person's chart",
+  "h": "2f6b9398"
+ },
  "js.luangiai.trong-12-cung-cua-la-so": {
   "t": "Among the 12 palaces of this chart, <b>the palace of ",
   "h": "c69f5267"
@@ -10186,6 +10758,10 @@
  "js.luangiai.vi-sao-cung": {
   "t": "Why is the palace of ",
   "h": "32e135e7"
+ },
+ "js.luangiai.xem-la-so-12-cung": {
+  "t": "See the 12-palace chart →",
+  "h": "e1cc82d1"
  },
  "js.luangiai.xem-la-so-day-du": {
   "t": "▸ View full chart",
@@ -24715,6 +25291,10 @@
   "t": " solar) is ready. Ask me about any month.",
   "h": "078774b9"
  },
+ "js.vanhannam.khong-dung-khung": {
+  "t": "Couldn't build the 12-month frame.",
+  "h": "d749d844"
+ },
  "js.vanhannam.khung-12-thang-am": {
   "t": "Framework of 12 lunar months",
   "h": "761916e9"
@@ -24722,6 +25302,38 @@
  "js.vanhannam.khung-12-thang-am-lich-toi": {
   "t": "Framework of the **next 12 lunar months** (",
   "h": "5f685658"
+ },
+ "js.vanhannam.lb-dv": {
+  "t": "Current luck cycle",
+  "h": "96f5f4af"
+ },
+ "js.vanhannam.lb-dv-tuoi": {
+  "t": "Current luck cycle (ages {a}–{b})",
+  "h": "09578f83"
+ },
+ "js.vanhannam.lb-hanh-trinh": {
+  "t": "Life journey",
+  "h": "1e1b88c4"
+ },
+ "js.vanhannam.lb-tieu-van": {
+  "t": "This year's minor cycle",
+  "h": "7ddc6d12"
+ },
+ "js.vanhannam.lb-tong-quan": {
+  "t": "Chart overview",
+  "h": "84ed13e5"
+ },
+ "js.vanhannam.loai-tot": {
+  "t": "good",
+  "h": "a6f70ec0"
+ },
+ "js.vanhannam.loai-trung": {
+  "t": "neutral",
+  "h": "71889ba3"
+ },
+ "js.vanhannam.loai-xau": {
+  "t": "bad",
+  "h": "3efce654"
  },
  "js.vanhannam.loi-khi-luan-phan": {
   "t": "Error while reading part",
@@ -24783,6 +25395,14 @@
   "t": "Malefic stars:",
   "h": "6db93931"
  },
+ "js.vanhannam.thang-al": {
+  "t": "Lunar month {n}",
+  "h": "27aed2d5"
+ },
+ "js.vanhannam.thang-al-nhuan": {
+  "t": "Leap lunar month {n}",
+  "h": "2b2df525"
+ },
  "js.vanhannam.thang-am-toi-moi-o-mot": {
   "t": " lunar months ahead, one keyword per cell",
   "h": "33508d52"
@@ -24790,6 +25410,10 @@
  "js.vanhannam.tieu-han-cung": {
   "t": ": annual limit palace ",
   "h": "cb20c10d"
+ },
+ "js.vanhannam.to-hop-title": {
+  "t": "Star combinations across the period palaces",
+  "h": "2ef7afa1"
  },
  "js.vanhannam.toi-nen-tap-trung-viec-gi": {
   "t": " what should I focus on?",

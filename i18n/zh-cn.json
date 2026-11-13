@@ -5763,6 +5763,10 @@
   "t": "九大运各阶段，柱高依引擎评分，每阶段一个关键词",
   "h": "6b87e20d"
  },
+ "js.chutrinh.chip-ca-doi": {
+  "t": "我这一生哪些阶段上升、哪些阶段下滑？",
+  "h": "0fd14b86"
+ },
  "js.chutrinh.chu-trinh-cuoc-doi": {
   "t": "人生周期 ",
   "h": "c3a39296"
@@ -5787,6 +5791,22 @@
   "t": " · 目前处于阶段 ",
   "h": "3d0545d0"
  },
+ "js.chutrinh.lock-8-dv": {
+  "t": "其余 8 个大运 — 依古法逐段解读",
+  "h": "4ec27b83"
+ },
+ "js.chutrinh.lock-cta": {
+  "t": "打开完整解读",
+  "h": "f25984b4"
+ },
+ "js.chutrinh.lock-tieu-van": {
+  "t": "流年小运 — 依古法独立解读",
+  "h": "647e634b"
+ },
+ "js.chutrinh.lock-title": {
+  "t": "⊙ 完整解读尚未打开",
+  "h": "58312cbd"
+ },
  "js.chutrinh.luan-giai": {
   "t": "解读 →",
   "h": "a03abb8e"
@@ -5799,6 +5819,38 @@
   "t": "✦ 打开完整解读 —",
   "h": "438bc666"
  },
+ "js.chutrinh.poster-loi": {
+  "t": "图片尚未产生，请几秒后再试。",
+  "h": "f8055429"
+ },
+ "js.chutrinh.poster-qr": {
+  "t": "扫描 — 查看你的人生周期",
+  "h": "9dc941f8"
+ },
+ "js.chutrinh.poster-quote": {
+  "t": "柱高依引擎评定的大运分数 — 不是推测的数字。",
+  "h": "961570c5"
+ },
+ "js.chutrinh.poster-title": {
+  "t": "人生 9 个阶段",
+  "h": "619cd7f3"
+ },
+ "js.chutrinh.rel-luan-giai": {
+  "t": "紫微斗数解读",
+  "h": "ab5a4607"
+ },
+ "js.chutrinh.rel-luan-giai-note": {
+  "t": "查看命盘总论与十二宫逐宫解读",
+  "h": "734368f8"
+ },
+ "js.chutrinh.rel-van-han": {
+  "t": "未来 12 个月运势",
+  "h": "f265e49d"
+ },
+ "js.chutrinh.rel-van-han-note": {
+  "t": "依农历月份逐月细看未来 12 个月",
+  "h": "ce8ee944"
+ },
  "js.chutrinh.roi-vao-cung": {
   "t": " 落在宫位 ",
   "h": "d242aa04"
@@ -5806,6 +5858,14 @@
  "js.chutrinh.tieu-van-nam": {
   "t": "流年小运 ",
   "h": "1979c56a"
+ },
+ "js.chutrinh.viet-rieng": {
+  "t": "依古法为这张命盘专门撰写 11 个部分：大运总论、9 个大运逐一解读，以及流年小运。附 PDF 下载或寄到信箱。",
+  "h": "38ebd1a1"
+ },
+ "js.chutrinh.xem-9-dai-van": {
+  "t": "查看 9 个大运 →",
+  "h": "ee069d41"
  },
  "js.cn.ai-cung-han-vao": {
   "t": "{ai}同时行限入<b>{cung}</b>。",
@@ -9943,6 +10003,370 @@
   "t": "{n} 岁（虚岁）",
   "h": "cd4bc076"
  },
+ "js.lgcore.bai-tinh": {
+  "t": "败星：{sao}",
+  "h": "724a9aa9"
+ },
+ "js.lgcore.bd-ghi-chu": {
+  "t": "点为分数，金色区间为波动幅度。幅度 = 分数 ×（1 ± 限宫三方四正中动星的比例），动星依星曜等级加权。",
+  "h": "87d9e115"
+ },
+ "js.lgcore.bo-menh": {
+  "t": "命宫星组：<span style=\"color:#aaa\">{a}</span> → 大运星组：<span style=\"color:#aaa\">{b}</span>",
+  "h": "2fb64232"
+ },
+ "js.lgcore.cach-cuc-dac-biet": {
+  "t": "特殊格局",
+  "h": "f0db7ce5"
+ },
+ "js.lgcore.cach-cuc-lien-quan": {
+  "t": "相关格局",
+  "h": "9fcce5d2"
+ },
+ "js.lgcore.cat-tinh": {
+  "t": "吉星：{sao}",
+  "h": "39744fd1"
+ },
+ "js.lgcore.cd-aria": {
+  "t": "四个主题在 9 个大运中的走势",
+  "h": "8de1a0f4"
+ },
+ "js.lgcore.cd-dang-di": {
+  "t": "目前走 {a}–{b} 岁大运（暂时命宫在{chi}）：最强是<b>{manh}</b>，最弱是<b>{yeu}</b>。",
+  "h": "ace243b1"
+ },
+ "js.lgcore.cd-ghi-chu": {
+  "t": "以大运宫为暂时命宫，其他宫随之移位并借用移入宫位的星曜。事业画到 65 岁；财运、感情从成年起画。",
+  "h": "47b240d7"
+ },
+ "js.lgcore.cd-su-nghiep": {
+  "t": "事业",
+  "h": "6302fbab"
+ },
+ "js.lgcore.cd-suc-khoe": {
+  "t": "健康",
+  "h": "77e26a9a"
+ },
+ "js.lgcore.cd-tai-loc": {
+  "t": "财运",
+  "h": "5d21666f"
+ },
+ "js.lgcore.cd-tinh-duyen": {
+  "t": "感情婚姻",
+  "h": "818b8e8a"
+ },
+ "js.lgcore.cd-title": {
+  "t": "9 个大运中的人生四件大事",
+  "h": "45690f76"
+ },
+ "js.lgcore.cham-diem-dv": {
+  "t": "大运评分 — {cung}（{chi}）",
+  "h": "00eb81e5"
+ },
+ "js.lgcore.chinh-tinh-cung": {
+  "t": "本宫主星",
+  "h": "2ff2de45"
+ },
+ "js.lgcore.chinh-tinh-dv": {
+  "t": "大运宫主星",
+  "h": "d424e884"
+ },
+ "js.lgcore.cn-binh-hoa": {
+  "t": "中和",
+  "h": "09ccb244"
+ },
+ "js.lgcore.cn-cuc-nhuoc": {
+  "t": "极弱",
+  "h": "86e91daa"
+ },
+ "js.lgcore.cn-cuc-vuong": {
+  "t": "极旺",
+  "h": "442c349d"
+ },
+ "js.lgcore.cn-nhuoc": {
+  "t": "弱",
+  "h": "64c831c7"
+ },
+ "js.lgcore.cn-vuong": {
+  "t": "旺",
+  "h": "0cd97e28"
+ },
+ "js.lgcore.dang-o-day": {
+  "t": "目前位置",
+  "h": "28f89609"
+ },
+ "js.lgcore.danh-gia-6": {
+  "t": "六个面向评分",
+  "h": "1dd610c0"
+ },
+ "js.lgcore.dia-loi": {
+  "t": "地利",
+  "h": "dd0f73a6"
+ },
+ "js.lgcore.dv9-title": {
+  "t": "9 个大运 — 分数图",
+  "h": "a893e2f4"
+ },
+ "js.lgcore.hien-tai-dv": {
+  "t": "· 目前：第{n}大运（{cc}，{a}-{b}岁）",
+  "h": "d3fab46a"
+ },
+ "js.lgcore.khoi-van": {
+  "t": "· 起运：{tuoi} 岁 · 方向：{huong}",
+  "h": "3f3b6343"
+ },
+ "js.lgcore.khong-sao-dong": {
+  "t": "没有动星",
+  "h": "77575d09"
+ },
+ "js.lgcore.luan-doan": {
+  "t": "运限论断",
+  "h": "d3b202d1"
+ },
+ "js.lgcore.luu-sao": {
+  "t": "流{sao}",
+  "h": "db80d9b7"
+ },
+ "js.lgcore.manh": {
+  "t": "强",
+  "h": "36090ada"
+ },
+ "js.lgcore.manh-nhat": {
+  "t": "最强：{ds}",
+  "h": "aa4c3ac4"
+ },
+ "js.lgcore.manh-yeu": {
+  "t": "突出的强项／弱项",
+  "h": "8f14d466"
+ },
+ "js.lgcore.menh-o": {
+  "t": "命在{chi}",
+  "h": "058ae0b9"
+ },
+ "js.lgcore.muoi-hai-thang": {
+  "t": "{cc}年（{nam}）农历十二个月",
+  "h": "3e050ead"
+ },
+ "js.lgcore.muoi-hai-thang-aria": {
+  "t": "{nam} 年农历十二个月的分数与波动幅度",
+  "h": "f09eedd4"
+ },
+ "js.lgcore.muoi-nam-aria": {
+  "t": "{a} 年至 {b} 年的分数与波动幅度",
+  "h": "68dd4ba4"
+ },
+ "js.lgcore.muoi-nam-title": {
+  "t": "未来十年 — 年分数与波动幅度",
+  "h": "43c9ff41"
+ },
+ "js.lgcore.muon-xung": {
+  "t": " — 借对宫星曜：<span style=\"color:#5FA8D3\">{sao}</span>",
+  "h": "306f7570"
+ },
+ "js.lgcore.mv-ben-vung": {
+  "t": "稳固",
+  "h": "aced35c7"
+ },
+ "js.lgcore.mv-binh-yen": {
+  "t": "平安",
+  "h": "4677d1ae"
+ },
+ "js.lgcore.mv-can-co": {
+  "t": "根基",
+  "h": "621afbd9"
+ },
+ "js.lgcore.mv-may-man": {
+  "t": "幸运",
+  "h": "d56f590a"
+ },
+ "js.lgcore.mv-phu-tro": {
+  "t": "扶助",
+  "h": "34da24cc"
+ },
+ "js.lgcore.mv-thien-van": {
+  "t": "天运",
+  "h": "4cede149"
+ },
+ "js.lgcore.nam-dong-nhat": {
+  "t": "波动最大：<b>{nam}</b> 年（±{p}，小限 {cung}）— {ds}。",
+  "h": "157f8832"
+ },
+ "js.lgcore.nam-xem-dong": {
+  "t": "<b>{nam}</b> 年（{cc}，小限 {cung}）：分数 <b>{d}</b>，波动 {lo}–{hi}（±{p}）。动星：{ds}。",
+  "h": "19369c2f"
+ },
+ "js.lgcore.nghich": {
+  "t": "逆行",
+  "h": "3ccd4363"
+ },
+ "js.lgcore.nh-aria": {
+  "t": "四柱五行比例",
+  "h": "ab12e894"
+ },
+ "js.lgcore.nh-dung-than": {
+  "t": " 用神<b>{a}</b>",
+  "h": "04d37af8"
+ },
+ "js.lgcore.nh-ghi-chu": {
+  "t": "以子平八字引擎计算：天干每个计 1，地支藏干依藏干权重计入。",
+  "h": "52810c99"
+ },
+ "js.lgcore.nh-hy-than": {
+  "t": "，喜神{a}",
+  "h": "a4ea3273"
+ },
+ "js.lgcore.nh-than": {
+  "t": " 日主{can}，身{cn}",
+  "h": "c0729f51"
+ },
+ "js.lgcore.nh-title": {
+  "t": "四柱五行",
+  "h": "433df54e"
+ },
+ "js.lgcore.nh-vuong-thieu": {
+  "t": "最旺为<b>{a}</b>，最缺为<b>{b}</b>。",
+  "h": "08060d77"
+ },
+ "js.lgcore.nhan-hoa": {
+  "t": "人和",
+  "h": "2d5692ff"
+ },
+ "js.lgcore.nhat-chu": {
+  "t": "日主",
+  "h": "c60a7143"
+ },
+ "js.lgcore.phan-cung": {
+  "t": "{cung}",
+  "h": "7f204b89"
+ },
+ "js.lgcore.phan-dv": {
+  "t": "第{n}大运",
+  "h": "4969b7f0"
+ },
+ "js.lgcore.phan-dv-tuoi": {
+  "t": "第{n}大运（{a}–{b}岁）",
+  "h": "2a4b7cc3"
+ },
+ "js.lgcore.phan-tich-sao": {
+  "t": "星曜分析",
+  "h": "c580881f"
+ },
+ "js.lgcore.phan-tieu-van": {
+  "t": "流年小运",
+  "h": "c0c9a816"
+ },
+ "js.lgcore.phan-tong-quan": {
+  "t": "命盘总论",
+  "h": "c65f03ec"
+ },
+ "js.lgcore.phan-tq-dv": {
+  "t": "大运总论",
+  "h": "655ab451"
+ },
+ "js.lgcore.phi-nhap": {
+  "t": "{hoa}：<b>{sao}</b> → 飞入<b>{cung}</b>（{chi}）",
+  "h": "c1d3bd83"
+ },
+ "js.lgcore.radar-aria": {
+  "t": "十二宫雷达图，轴越粗代表该宫越强",
+  "h": "3e7f78f4"
+ },
+ "js.lgcore.sat-tinh": {
+  "t": "煞星：{sao}",
+  "h": "7eaf46b7"
+ },
+ "js.lgcore.tam-phuong": {
+  "t": "三方四正星曜",
+  "h": "6e974aa8"
+ },
+ "js.lgcore.th-ngan": {
+  "t": "{n}月",
+  "h": "b3fc323a"
+ },
+ "js.lgcore.thang-dong-nhat": {
+  "t": "波动最大：<b>{t}月</b>（月限 {cung}，±{p}）— {ds}。",
+  "h": "d96d074b"
+ },
+ "js.lgcore.thang-noi-suy": {
+  "t": "月分数由各年分数内插而得。",
+  "h": "ab0b95ef"
+ },
+ "js.lgcore.thang-yen-nhat": {
+  "t": "最平稳：<b>{t}月</b>（月限 {cung}，±{p}）。",
+  "h": "dc56896b"
+ },
+ "js.lgcore.thien-thoi": {
+  "t": "天时",
+  "h": "ebcbebc4"
+ },
+ "js.lgcore.thuan": {
+  "t": "顺行",
+  "h": "ee315dcc"
+ },
+ "js.lgcore.tong": {
+  "t": "总分",
+  "h": "de995d83"
+ },
+ "js.lgcore.triet-cung": {
+  "t": "截空阻挡本宫",
+  "h": "146d86f2"
+ },
+ "js.lgcore.triet-cung-dv": {
+  "t": "截空阻挡大运宫",
+  "h": "224bd87b"
+ },
+ "js.lgcore.tru-gio": {
+  "t": "时",
+  "h": "75f92388"
+ },
+ "js.lgcore.tru-nam": {
+  "t": "年",
+  "h": "98926c7e"
+ },
+ "js.lgcore.tru-ngay": {
+  "t": "日",
+  "h": "368c4575"
+ },
+ "js.lgcore.tru-thang": {
+  "t": "月",
+  "h": "0e2b3099"
+ },
+ "js.lgcore.tu-hoa": {
+  "t": "［自化］",
+  "h": "d151626d"
+ },
+ "js.lgcore.tuan-cung": {
+  "t": "旬空阻挡本宫",
+  "h": "4b4590e3"
+ },
+ "js.lgcore.tuan-cung-dv": {
+  "t": "旬空阻挡大运宫",
+  "h": "2eba5ede"
+ },
+ "js.lgcore.tuhoa-title": {
+  "t": "四化飞星（宫干 {can}）",
+  "h": "69ab67ee"
+ },
+ "js.lgcore.tuoi-khoang": {
+  "t": "{a}-{b} 岁",
+  "h": "f8dda7a6"
+ },
+ "js.lgcore.vo-chinh-dieu": {
+  "t": "无正曜",
+  "h": "bb1c972d"
+ },
+ "js.lgcore.xem-co-so": {
+  "t": "查看计算依据",
+  "h": "0fb87c33"
+ },
+ "js.lgcore.yeu": {
+  "t": "弱",
+  "h": "1a462424"
+ },
+ "js.lgcore.yeu-nhat": {
+  "t": "最弱：{ds}",
+  "h": "0d623c66"
+ },
  "js.lienhe.gui-email": {
   "t": "寄送电子邮件",
   "h": "5901b176"
@@ -10011,6 +10435,10 @@
   "t": "▾ 收起命盘",
   "h": "9f28e998"
  },
+ "js.luangiai.anh-minh-hoa": {
+  "t": "示意图",
+  "h": "f37e2fa9"
+ },
  "js.luangiai.bam-thu-lai-o-tung-phan": {
   "t": "— 请在各部分按「↻ 重试」，再重新加载页面。",
   "h": "e7534682"
@@ -10034,6 +10462,10 @@
  "js.luangiai.chi-phi-su-dung": {
   "t": "使用费用",
   "h": "c2d36be8"
+ },
+ "js.luangiai.chua-doc-gia": {
+  "t": "无法读取此部分的价格，请再试一次。",
+  "h": "86f02e35"
  },
  "js.luangiai.con-tiep-mo-khoa-de-doc": {
   "t": "未完待续——解锁以读完全文",
@@ -10067,6 +10499,10 @@
   "t": "目前大运 ",
   "h": "7cf01e2f"
  },
+ "js.luangiai.dang-ky-luu": {
+  "t": "注册并保存 →",
+  "h": "b2ef6ce1"
+ },
  "js.luangiai.dang-lap-la-so": {
   "t": "正在排命盘…",
   "h": "fba688db"
@@ -10078,6 +10514,34 @@
  "js.luangiai.dang-luan-giai-phan-1": {
   "t": "正在解读第 1 部分 / ",
   "h": "559646ca"
+ },
+ "js.luangiai.dang-luan-phan": {
+  "t": "正在解读部分",
+  "h": "6315d472"
+ },
+ "js.luangiai.doc-sau-hon": {
+  "t": "深入阅读",
+  "h": "2822ae47"
+ },
+ "js.luangiai.gate-11-cung": {
+  "t": "其余 11 宫 — 每宫依古法独立解读",
+  "h": "8b8167db"
+ },
+ "js.luangiai.gate-cach-cuc": {
+  "t": "各宫的格局、四化与规则",
+  "h": "ab223e81"
+ },
+ "js.luangiai.gate-tieu-de": {
+  "t": "完整版回答「该怎么运用它」",
+  "h": "c7fe8199"
+ },
+ "js.luangiai.khoa": {
+  "t": "已锁定",
+  "h": "393cb36a"
+ },
+ "js.luangiai.khong-du-luong": {
+  "t": "两不足 — 请储值。",
+  "h": "1d9e17da"
  },
  "js.luangiai.la-so": {
   "t": "命盘",
@@ -10091,9 +10555,33 @@
   "t": "立即排命盘并解读 →",
   "h": "edbdb6fc"
  },
+ "js.luangiai.lap-la-so-luan-ngay": {
+  "t": "立即排盘并解读 →",
+  "h": "7d7efd95"
+ },
+ "js.luangiai.lock-12-cung": {
+  "t": "其余 12 宫 — 每宫依古法独立解读",
+  "h": "c7949691"
+ },
+ "js.luangiai.lock-cta": {
+  "t": "打开完整解读 →",
+  "h": "2ff464b0"
+ },
+ "js.luangiai.lock-pdf": {
+  "t": "完整版 PDF — 几分钟内下载或寄到信箱",
+  "h": "28ae9177"
+ },
+ "js.luangiai.lock-title": {
+  "t": "⊙ 还有 12 个部分锁定中",
+  "h": "19ab2722"
+ },
  "js.luangiai.loi-khi-luan-giai": {
   "t": "解读时发生错误：",
   "h": "b251ca2c"
+ },
+ "js.luangiai.loi-mo-phan": {
+  "t": "打开此部分时发生错误，请再试一次。",
+  "h": "8c34a861"
  },
  "js.luangiai.loi-phan": {
   "t": "部分发生错误",
@@ -10110,6 +10598,10 @@
  "js.luangiai.luan-giai-tu-vi": {
   "t": "紫微斗数解读",
   "h": "ab5a4607"
+ },
+ "js.luangiai.luc-giac-menh": {
+  "t": "命宫六角图",
+  "h": "e7542de0"
  },
  "js.luangiai.luong": {
   "t": "两 →",
@@ -10147,6 +10639,10 @@
   "t": "该怎么做？",
   "h": "feedfe50"
  },
+ "js.luangiai.nhap-du-ngay": {
+  "t": "请完整输入出生年、月、日。",
+  "h": "075a6b15"
+ },
  "js.luangiai.noi-vi-sao-no-bung-ra": {
   "t": " 说明原因、在哪个阶段爆发，以及如何化解。",
   "h": "2b510636"
@@ -10171,6 +10667,82 @@
   "t": " 个部分出错（部分 ",
   "h": "3d3d4b5b"
  },
+ "js.luangiai.phan-tong-the": {
+  "t": "此部分依整张命盘论断 — 按下方按钮请老师深入解读。",
+  "h": "a10845f5"
+ },
+ "js.luangiai.rel-bat-trach": {
+  "t": "八宅方位",
+  "h": "a9176f82"
+ },
+ "js.luangiai.rel-bat-trach-note": {
+  "t": "从这个命宫再看 8 个方位的吉凶",
+  "h": "eb903977"
+ },
+ "js.luangiai.rel-cdvc": {
+  "t": "夫妻肖像",
+  "h": "ed0abbb5"
+ },
+ "js.luangiai.rel-cdvc-note": {
+  "t": "从这个宫位描绘配偶的肖像",
+  "h": "277f3e1b"
+ },
+ "js.luangiai.rel-chu-trinh": {
+  "t": "人生周期",
+  "h": "38c0c6ce"
+ },
+ "js.luangiai.rel-chu-trinh-note": {
+  "t": "深入解读 9 个大运与流年小运 — 独立的 11 个部分，与本命盘的 13 个部分分开",
+  "h": "49d1879a"
+ },
+ "js.luangiai.rel-cong-so": {
+  "t": "紫微职场",
+  "h": "9d18a955"
+ },
+ "js.luangiai.rel-cong-so-note": {
+  "t": "用工作的语言重读同一张命盘",
+  "h": "c33dffa1"
+ },
+ "js.luangiai.rel-day-con": {
+  "t": "依命盘教养孩子",
+  "h": "2013a771"
+ },
+ "js.luangiai.rel-day-con-note": {
+  "t": "孩子适合哪种教法？该推一把还是放手",
+  "h": "ac17fe75"
+ },
+ "js.luangiai.rel-duyen-no": {
+  "t": "前世缘分",
+  "h": "c6b0ccb5"
+ },
+ "js.luangiai.rel-duyen-no-note": {
+  "t": "前世两人是什么关系",
+  "h": "30e3786b"
+ },
+ "js.luangiai.rel-hnt": {
+  "t": "孩子的早期职涯方向",
+  "h": "2735212c"
+ },
+ "js.luangiai.rel-hnt-note": {
+  "t": "从现在起让孩子接触什么",
+  "h": "a9892440"
+ },
+ "js.luangiai.rel-phong-thuy": {
+  "t": "室内风水",
+  "h": "3f80b53f"
+ },
+ "js.luangiai.rel-phong-thuy-note": {
+  "t": "拍下房间照片，由系统为摆设评分",
+  "h": "f41bead6"
+ },
+ "js.luangiai.rel-xem-tuoi": {
+  "t": "夫妻合婚",
+  "h": "f3e7b1ed"
+ },
+ "js.luangiai.rel-xem-tuoi-note": {
+  "t": "与对方的命盘相互对照",
+  "h": "2f6b9398"
+ },
  "js.luangiai.trong-12-cung-cua-la-so": {
   "t": "在这张命盘的 12 宫中，<b> ",
   "h": "c69f5267"
@@ -10186,6 +10758,10 @@
  "js.luangiai.vi-sao-cung": {
   "t": "为什么 ",
   "h": "32e135e7"
+ },
+ "js.luangiai.xem-la-so-12-cung": {
+  "t": "查看命盘十二宫 →",
+  "h": "e1cc82d1"
  },
  "js.luangiai.xem-la-so-day-du": {
   "t": "▸ 查看完整命盘",
@@ -24715,6 +25291,10 @@
   "t": " 国历) 已准备好。可以问我任何一个月。",
   "h": "078774b9"
  },
+ "js.vanhannam.khong-dung-khung": {
+  "t": "无法创建 12 个月的框架。",
+  "h": "d749d844"
+ },
  "js.vanhannam.khung-12-thang-am": {
   "t": "农历 12 个月架构",
   "h": "761916e9"
@@ -24722,6 +25302,38 @@
  "js.vanhannam.khung-12-thang-am-lich-toi": {
   "t": "未来 **12 个农历月** 的架构 (",
   "h": "5f685658"
+ },
+ "js.vanhannam.lb-dv": {
+  "t": "目前大运",
+  "h": "96f5f4af"
+ },
+ "js.vanhannam.lb-dv-tuoi": {
+  "t": "目前大运（{a}–{b}岁）",
+  "h": "09578f83"
+ },
+ "js.vanhannam.lb-hanh-trinh": {
+  "t": "人生历程",
+  "h": "1e1b88c4"
+ },
+ "js.vanhannam.lb-tieu-van": {
+  "t": "今年小运",
+  "h": "7ddc6d12"
+ },
+ "js.vanhannam.lb-tong-quan": {
+  "t": "命盘总论",
+  "h": "84ed13e5"
+ },
+ "js.vanhannam.loai-tot": {
+  "t": "吉",
+  "h": "a6f70ec0"
+ },
+ "js.vanhannam.loai-trung": {
+  "t": "中",
+  "h": "71889ba3"
+ },
+ "js.vanhannam.loai-xau": {
+  "t": "凶",
+  "h": "3efce654"
  },
  "js.vanhannam.loi-khi-luan-phan": {
   "t": "解读这一部分时发生错误",
@@ -24783,6 +25395,14 @@
   "t": "煞星：",
   "h": "6db93931"
  },
+ "js.vanhannam.thang-al": {
+  "t": "农历{n}月",
+  "h": "27aed2d5"
+ },
+ "js.vanhannam.thang-al-nhuan": {
+  "t": "农历闰{n}月",
+  "h": "2b2df525"
+ },
  "js.vanhannam.thang-am-toi-moi-o-mot": {
   "t": " 个农历月，每格一个关键词",
   "h": "33508d52"
@@ -24790,6 +25410,10 @@
  "js.vanhannam.tieu-han-cung": {
   "t": "：小限宫 ",
   "h": "cb20c10d"
+ },
+ "js.vanhannam.to-hop-title": {
+  "t": "限宫中的星曜组合",
+  "h": "2ef7afa1"
  },
  "js.vanhannam.toi-nen-tap-trung-viec-gi": {
   "t": " 我该专注于什么事？",
