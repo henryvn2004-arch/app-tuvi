@@ -32,6 +32,11 @@ const nextConfig = {
     '/xac-dinh-gio-sinh': ['./data/nghiem-chung/manifest.json'],
     '/xac-dinh-gio-sinh/[slug]': ['./data/nghiem-chung/**', './public/laso-chart.js'],
     '/sitemap-xac-dinh-gio-sinh': ['./data/nghiem-chung/manifest.json'],
+    // /<locale>/ngay-tot/** (W33b): từ điển khung `i18n/*.json` (+ vi.json cho khoá nhúng nav) và văn dài `ngay-tot.js` đọc bằng fs lúc chạy.
+    '/ngay-tot-i18n/[locale]/[[...path]]': [
+      './i18n/*.json',
+      './public/tools-shared/i18n-long/*/ngay-tot.js',
+    ],
     // IndexNow + llms theo ngôn ngữ đọc i18n/*.json và manifest bằng fs lúc chạy (W10).
     '/api/cron/indexnow': ['./i18n/*.json', './data/nghiem-chung/manifest.json'],
     '/llms/[locale]': ['./i18n/availability.json', './data/nghiem-chung/manifest.json'],
