@@ -8086,5 +8086,8 @@
  "js.luangiai.nt-nguoi-khac": "Người khác",
  "js.luangiai.nt-title": "Xem lá số cho người thân",
  "js.luangiai.nt-desc": "Đọc xong bản này rồi thì xem tiếp cho vợ/chồng, bố mẹ hay con — mỗi người một bản riêng.",
- "js.luangiai.nt-prompt": "Người này là ai (vd: Sếp, Bạn thân):"
+ "js.luangiai.nt-prompt": "Người này là ai (vd: Sếp, Bạn thân):",
+ "js.hnt.label-huong-nghiep-som-cho-con": "Hướng nghiệp sớm cho con",
+ "js.hnt.pha": "pha",
+ "js.hnt.con-ten-mac-dinh": "Con"
 }

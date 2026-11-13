@@ -173,10 +173,24 @@ for (const ns of Object.keys(ENGINE_NS)) {
   for (const [snip, y] of [
     ['ma: m.ma,', 'matDoc[].ma (cơ sở lá số)'],
     ['ma: x.id })', 'khongDoiHoi[].ma (câu khuôn {ai})'],
+    ['viMa = chon.map((x) => maChieu(x.i, x.val))', 'huong[].viMa (W34d)'],
+    ['ma: maChieu(x.i, x.val) }', 'chatNguoi[].ma (W34d)'],
   ])
     if (!eng.includes(snip)) fail(`${ENGINE_NS.hntre}: thiếu mã tra ${y} — "${snip}"`);
   const page = fs.readFileSync(path.join(ROOT, LONG_MODULE.hntre), 'utf8');
-  for (const t of ["'kdh.' + c.ma", "'matdoc.' + m.ma", "'huong.' + h.id", "'lop.' + lopId"])
+  for (const t of [
+    "'kdh.' + c.ma",
+    "'matdoc.' + m.ma",
+    "'huong.' + h.id",
+    "'lop.' + lopId",
+    // W34d: phần dư dịch theo MÃ từ ns Dạy Con (`day-con-assess`) + tên kiểu theo `kieu.id` (ns `cong-so`).
+    '_hntChieu(h.viMa[i])',
+    '_hntChieu(c.ma)',
+    "'khieu.' + c.ma + '.ten'",
+    "_csl('kieu.' + d[f].id + '.ten'",
+    "I18n.loadLong('day-con-assess')",
+    "I18n.loadLong('cong-so')",
+  ])
     if (!page.includes(t)) fail(`${LONG_MODULE.hntre}: trang không tra ${t}`);
 }
 // past-life (W30f-3): mã `ma` do `resolveCareerBase`/`cong-so.ts` gắn thêm + trang tra đúng cửa. Gỡ mã khỏi engine ⇒ /ja lặng

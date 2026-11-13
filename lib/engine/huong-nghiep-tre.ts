@@ -852,12 +852,14 @@ export interface HuongGoiY {
   diem: number;
   /** Chiều kéo hướng này lên, đọc theo ĐÚNG cực mà đứa trẻ đang đứng. */
   vi: string[];
+  /** Mã tra bản dịch (additive, W34d) song song `vi`: `truc.<id>.cao|thap` hoặc `khieu.<id>` — xem `maChieu`. */
+  viMa: string[];
 }
 
 export interface HuongTreKetQua {
   goiY: HuongGoiY[];
   /** Ba chiều nổi nhất của chính lá số (trục đọc theo cực, chất đọc khi CAO). */
-  chatNguoi: { ten: string; cao: string }[];
+  chatNguoi: { ten: string; cao: string; ma: string }[];
   /**
    * Trục thấp — đọc theo mặt "việc không đòi hỏi", KHÔNG đọc là "con thiếu".
    * 🔴 Với trẻ em luật này còn gắt hơn người lớn: cha mẹ đọc "con thiếu kiên
@@ -867,6 +869,17 @@ export interface HuongTreKetQua {
   khongDoiHoi: { ten: string; thap: string; ma: string }[];
   /** Không hướng nào vượt ngưỡng — nói thẳng, và đó là lời khuyên đúng. */
   chuaRoNet: boolean;
+}
+
+/**
+ * Mã tra bản dịch của chiều thứ `i` đọc theo cực đứa trẻ đang đứng (W34d, additive): khoá GỐC của nguồn Dạy Con
+ * (`truc.<id>.cao|thap` → ns `day-con-assess` `.ten` + `.<cực>.nhan` + `.<cực>.bieuHien`; `khieu.<id>` → `.ten` + `.motCau`).
+ * Chữ Việt của `nhanChieu` KHÔNG đổi — nó còn vào rail/prompt.
+ */
+function maChieu(i: number, val: number): string {
+  return i < TRUC_IDS.length
+    ? `truc.${TRUC_IDS[i]}.${val >= 0 ? 'cao' : 'thap'}`
+    : `khieu.${KHIEU_IDS[i - TRUC_IDS.length]}`;
 }
 
 /** Nhãn của chiều thứ `i`, đọc theo ĐÚNG cực đứa trẻ đang đứng. */
@@ -901,15 +914,16 @@ export function chonThienHuong(a: Assessment, soLuong = 3): HuongTreKetQua {
     // hai vế CÙNG ÂM, nên thiếu nó thì một chiều đứa trẻ gần mức giữa vẫn lọt
     // vào phần giải thích và bản đọc tự mâu thuẫn ngay trong một màn hình. Đã
     // vấp đúng lỗi này ở tầng nhánh nghề của Công Sở.
-    const vi = v
+    const chon = v
       .map((val, i) => ({ i, val, gop: val * hv[i] }))
       .filter((x) => x.gop > 0.15 && Math.abs(x.val) > 0.25)
       .sort((p, q) => q.gop - p.gop)
-      .slice(0, 3)
-      .map((x) => {
-        const n = nhanChieu(x.i, x.val);
-        return `${n.ten} — ${n.mo}`;
-      });
+      .slice(0, 3);
+    const vi = chon.map((x) => {
+      const n = nhanChieu(x.i, x.val);
+      return `${n.ten} — ${n.mo}`;
+    });
+    const viMa = chon.map((x) => maChieu(x.i, x.val));
     return {
       id,
       ten: h.ten,
@@ -917,6 +931,7 @@ export function chonThienHuong(a: Assessment, soLuong = 3): HuongTreKetQua {
       dauHieu: h.dauHieu,
       diem: Math.round(Math.max(0, Math.min(1, (s + 1) / 2)) * 100),
       vi,
+      viMa,
     };
   });
 
@@ -933,7 +948,7 @@ export function chonThienHuong(a: Assessment, soLuong = 3): HuongTreKetQua {
       .slice(0, 3)
       .map((x) => {
         const n = nhanChieu(x.i, x.val);
-        return { ten: n.ten, cao: n.mo };
+        return { ten: n.ten, cao: n.mo, ma: maChieu(x.i, x.val) };
       }),
     // 🔴 CHỈ lấy từ CHẤT, và chỉ khi chất đó thấp rõ. Trục thì hai cực đều có
     // nội dung nên không có "không đòi hỏi" nào để nói; ép trục vào đây là bịa
@@ -1105,6 +1120,7 @@ export interface HuongTinhThu {
   dauHieu: string[];
   diem: number;
   vi: string[];
+  viMa: string[];
 }
 
 /**
@@ -1140,6 +1156,7 @@ export function hoSoTinhThu(p: HuongNghiepTreProfile) {
           dauHieu: p.huong.goiY[0].dauHieu,
           diem: p.huong.goiY[0].diem,
           vi: p.huong.goiY[0].vi,
+          viMa: p.huong.goiY[0].viMa,
         } as HuongTinhThu)
       : null,
     /** Tên các hướng còn lại — để biết đang khoá cái gì, không kèm nội dung. */
