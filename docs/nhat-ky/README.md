@@ -1,6 +1,6 @@
 # Nhật ký phát triển — mục lục
 
-611 mục ghi chép từng PR, tách khỏi `CLAUDE.md` để nó thôi ngốn ~350k token mỗi lượt.
+612 mục ghi chép từng PR, tách khỏi `CLAUDE.md` để nó thôi ngốn ~350k token mỗi lượt.
 
 **Sáu file dưới đây KHÔNG được nạp tự động.** Cần thì tra:
 
@@ -28,6 +28,7 @@ Luật rút ra từ các mục này đã được cô đọng lên `CLAUDE.md`. 
 
 | # | tháng | file | mục |
 |---:|---|---|---|
+| 1 | 2026-11 | `2026-11.md` | 🎭 W32A-6 — Văn mẫu THEO NƯỚC lô 4: nút "Xem bản mẫu" Chọn Ngày Tốt + Đặt Tên DN mở 5 nước (`hasLocaleSample`); sửa nút cũ luôn hiện ở /<locale>/ và mở văn Việt; `dat-ten-con` vi-only có chủ đích |
 | 1 | 2026-11 | `2026-11.md` | 📅 W34c — Thẻ "Hôm nay": văn engine `van-ngay.ts` theo ngôn ngữ (ns `van-ngay` 31 mục · `danhGia.ma` additive · khuôn `NHAN_VAN`; vi byte-giống 400 ngày) |
 | 1 | 2026-11 | `2026-11.md` | 🧮 W34b — Nạp Âm: bảng chữ theo hành + khuôn UI + con giáp (ns `nap-am` 56 mục · nap-am.js?v=4 · shell.js?v=160; vi byte-giống 1895–2105) |
 | 1 | 2026-11 | `2026-11.md` | 🎭 W32A-5 — Văn mẫu mờ THEO NƯỚC lô 3 (Dạy Con · Hướng Nghiệp Sớm · Người Khác): bộ dò 0d + zh-cn đi sâu vào trường lồng (trước đó `String(mảng)` làm bộ dò đỏ oan và mù phần bên trong), nhân vật `con` |
