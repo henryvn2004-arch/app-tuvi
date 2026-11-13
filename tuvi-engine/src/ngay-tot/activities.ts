@@ -7,12 +7,47 @@
 import type { NgayTotInfo } from './engine.js';
 import { type ActivityKey, type Truc, ACTIVITY_META } from './constants.js';
 
+/**
+ * Mã tra song song với từng dòng `reasons`/`warnings` (additive — chữ Việt vẫn do engine dựng, còn vào
+ * rail/prompt/cache). `k` = khoá của `LY_DO`; `v` = biến THÔ (tên trực/tú/sao/mã việc/ngày âm) — nơi vẽ
+ * dịch từng biến rồi thay vào khuôn đã dịch cùng khoá (`I18n.long('ngay-tot', 'ly.' + k, …)`).
+ */
+export interface LyDoMa {
+  k: keyof typeof LY_DO;
+  v?: Record<string, string>;
+}
+
 export interface ActivityScore {
   activity: ActivityKey;
   score: number;          // 0-10 (10 = xuất sắc)
   level: 'rất tốt' | 'tốt' | 'bình thường' | 'xấu' | 'rất xấu';
   reasons: string[];      // lý do điểm cộng
   warnings: string[];     // lý do điểm trừ (việc kiêng)
+  reasonsMa: LyDoMa[];    // song song với `reasons`
+  warningsMa: LyDoMa[];   // song song với `warnings`
+}
+
+// ─── Khuôn câu lý do / cảnh báo ─────────────────────────────
+// Bảng khuôn phẳng (W28 loại b): engine dựng chữ Việt bằng CHÍNH bảng này, bản dịch dùng cùng khoá.
+// {viec} = tên việc viết thường · {truc} {tu} {sao} {y} = tên engine · {ngay} = ngày âm lịch.
+export const LY_DO = {
+  'truc.hop': 'Trực {truc} hợp {viec}',
+  'truc.khong': 'Trực {truc} không hợp {viec}',
+  'hoang': 'Hoàng đạo (sao {sao} — {y})',
+  'hac': 'Hắc đạo (sao {sao} — {y})',
+  'tu.cat': 'Sao {tu} (cát tinh trong 28 tú)',
+  'tu.hung': 'Sao {tu} (hung tinh trong 28 tú)',
+  'tamnuong': 'Ngày Tam Nương (mùng {ngay} ÂL)',
+  'nguyetky': 'Ngày Nguyệt Kỵ (mùng {ngay} ÂL)',
+  'duongcong': 'Ngày Dương Công kỵ nhật',
+  'cam.truc': 'CẤM TUYỆT ĐỐI: trực {truc} đại kỵ {viec}',
+  'cam.tamnuong': 'CẤM TUYỆT ĐỐI: Tam Nương kỵ {viec}',
+  'cam.nguyetky': 'CẤM TUYỆT ĐỐI: Nguyệt Kỵ kỵ {viec}',
+  'cam.duongcong': 'CẤM TUYỆT ĐỐI: Dương Công kỵ {viec}',
+} as const;
+
+function dung(mau: string, bien: Record<string, string>): string {
+  return mau.replace(/\{(\w+)\}/g, (m, n: string) => (bien[n] !== undefined ? bien[n] : m));
 }
 
 // ─── Rules theo từng activity ───────────────────────────────
@@ -97,66 +132,76 @@ export function scoreActivity(info: NgayTotInfo, activity: ActivityKey): Activit
   const rule = RULES[activity];
   const reasons: string[] = [];
   const warnings: string[] = [];
+  const reasonsMa: LyDoMa[] = [];
+  const warningsMa: LyDoMa[] = [];
+  const viec = ACTIVITY_META[activity].name.toLowerCase();
+  // `ghi` dựng câu Việt từ khuôn + ghi mã song song; `v` là biến THÔ cho bản dịch, `bien` là biến chữ Việt.
+  const cong = (k: LyDoMa['k'], v: Record<string, string>, bien: Record<string, string>) => {
+    reasons.push(dung(LY_DO[k], bien)); reasonsMa.push({ k, v });
+  };
+  const tru = (k: LyDoMa['k'], v: Record<string, string>, bien: Record<string, string>) => {
+    warnings.push(dung(LY_DO[k], bien)); warningsMa.push({ k, v });
+  };
   let score = 5; // base
 
   // Trực
   if (rule.trucTot.includes(info.truc)) {
     score += 2;
-    reasons.push(`Trực ${info.truc} hợp ${ACTIVITY_META[activity].name.toLowerCase()}`);
+    cong('truc.hop', { truc: info.truc, viec: activity }, { truc: info.truc, viec });
   }
   if (rule.trucXau.includes(info.truc)) {
     score -= 2;
-    warnings.push(`Trực ${info.truc} không hợp ${ACTIVITY_META[activity].name.toLowerCase()}`);
+    tru('truc.khong', { truc: info.truc, viec: activity }, { truc: info.truc, viec });
   }
 
   // Hoàng đạo bonus
   if (info.hoangDao) {
     score += 2;
-    reasons.push(`Hoàng đạo (sao ${info.saoNgay} — ${info.saoYNghia})`);
+    cong('hoang', { sao: info.saoNgay }, { sao: info.saoNgay, y: info.saoYNghia });
   } else {
     score -= 1;
-    warnings.push(`Hắc đạo (sao ${info.saoNgay} — ${info.saoYNghia})`);
+    tru('hac', { sao: info.saoNgay }, { sao: info.saoNgay, y: info.saoYNghia });
   }
 
   // 28 tú
   if (info.tuTinhChat === 'cát') {
     score += 1;
-    reasons.push(`Sao ${info.tu} (cát tinh trong 28 tú)`);
+    cong('tu.cat', { tu: info.tu }, { tu: info.tu });
   } else {
     score -= 1;
-    warnings.push(`Sao ${info.tu} (hung tinh trong 28 tú)`);
+    tru('tu.hung', { tu: info.tu }, { tu: info.tu });
   }
 
   // Cấm kỵ
   if (info.kyTamNuong) {
     score -= 2;
-    warnings.push(`Ngày Tam Nương (mùng ${info.amLich.day} ÂL)`);
+    tru('tamnuong', { ngay: String(info.amLich.day) }, { ngay: String(info.amLich.day) });
   }
   if (info.kyNguyetKy) {
     score -= 2;
-    warnings.push(`Ngày Nguyệt Kỵ (mùng ${info.amLich.day} ÂL)`);
+    tru('nguyetky', { ngay: String(info.amLich.day) }, { ngay: String(info.amLich.day) });
   }
   if (info.kyDuongCong) {
     score -= 3;
-    warnings.push(`Ngày Dương Công kỵ nhật`);
+    tru('duongcong', {}, {});
   }
 
   // Hard blocks
   if (rule.hardBlockTrucs?.includes(info.truc)) {
     score = Math.min(score, 1);
-    warnings.push(`CẤM TUYỆT ĐỐI: trực ${info.truc} đại kỵ ${ACTIVITY_META[activity].name.toLowerCase()}`);
+    tru('cam.truc', { truc: info.truc, viec: activity }, { truc: info.truc, viec });
   }
   if (rule.hardBlockKy?.includes('tamNuong') && info.kyTamNuong) {
     score = Math.min(score, 1);
-    warnings.push(`CẤM TUYỆT ĐỐI: Tam Nương kỵ ${ACTIVITY_META[activity].name.toLowerCase()}`);
+    tru('cam.tamnuong', { viec: activity }, { viec });
   }
   if (rule.hardBlockKy?.includes('nguyetKy') && info.kyNguyetKy) {
     score = Math.min(score, 1);
-    warnings.push(`CẤM TUYỆT ĐỐI: Nguyệt Kỵ kỵ ${ACTIVITY_META[activity].name.toLowerCase()}`);
+    tru('cam.nguyetky', { viec: activity }, { viec });
   }
   if (rule.hardBlockKy?.includes('duongCong') && info.kyDuongCong) {
     score = Math.min(score, 1);
-    warnings.push(`CẤM TUYỆT ĐỐI: Dương Công kỵ ${ACTIVITY_META[activity].name.toLowerCase()}`);
+    tru('cam.duongcong', { viec: activity }, { viec });
   }
 
   // Clamp 0-10
@@ -168,7 +213,7 @@ export function scoreActivity(info: NgayTotInfo, activity: ActivityKey): Activit
     score >= 4 ? 'bình thường' :
     score >= 2 ? 'xấu' : 'rất xấu';
 
-  return { activity, score, level, reasons, warnings };
+  return { activity, score, level, reasons, warnings, reasonsMa, warningsMa };
 }
 
 // ─── Batch: score 1 ngày cho TẤT CẢ 10 activities ──────────

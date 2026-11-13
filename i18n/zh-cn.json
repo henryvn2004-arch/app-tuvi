@@ -29479,6 +29479,494 @@
   "t": "已保存的命盘——明宝紫微斗数",
   "h": "183c05e5"
  },
+ "ssr-ngay-tot.act.desc": {
+  "t": "依月份查找 2020-2036 年的{viecl}吉日。{mota}。依古法十二建星、黄道、三娘／月忌／杨公忌日推算。",
+  "h": "2f9a4d12"
+ },
+ "ssr-ngay-tot.act.eyebrow": {
+  "t": "吉日 · {viec}",
+  "h": "2c825163"
+ },
+ "ssr-ngay-tot.act.h1": {
+  "t": "<em>{viec}</em>吉日",
+  "h": "5022c74e"
+ },
+ "ssr-ngay-tot.act.lg-bad": {
+  "t": "多数为忌日",
+  "h": "4d59e7ef"
+ },
+ "ssr-ngay-tot.act.lg-good": {
+  "t": "有吉日（≥ 4）",
+  "h": "160d4413"
+ },
+ "ssr-ngay-tot.act.lg-great": {
+  "t": "吉日多（≥ 8）",
+  "h": "b796981a"
+ },
+ "ssr-ngay-tot.act.lg-soso": {
+  "t": "吉日少",
+  "h": "0e54fb65"
+ },
+ "ssr-ngay-tot.act.mlabel": {
+  "t": "{m}月",
+  "h": "d52534dc"
+ },
+ "ssr-ngay-tot.act.p": {
+  "t": "{mota}。选择年份与月份，即可查看最佳吉日，并附十二建星、黄道星、干支与吉时详情。",
+  "h": "58e3b5d0"
+ },
+ "ssr-ngay-tot.act.rel": {
+  "t": "其他事项",
+  "h": "3d6555a4"
+ },
+ "ssr-ngay-tot.act.sec": {
+  "t": "选择年份与月份",
+  "h": "c2c91944"
+ },
+ "ssr-ngay-tot.act.tip": {
+  "t": "{y}年{m}月：吉日 {good} 天、忌日 {bad} 天（共 {total} 天）",
+  "h": "491d720c"
+ },
+ "ssr-ngay-tot.act.title": {
+  "t": "{viec} — 吉日 2020-2036 | {brand}",
+  "h": "15ab65e5"
+ },
+ "ssr-ngay-tot.actm.all-years": {
+  "t": "所有年份",
+  "h": "b97f711f"
+ },
+ "ssr-ngay-tot.actm.desc": {
+  "t": "{mota}。{y}年{m}月最佳吉日，附干支、十二建星、黄道星、吉时与选日理由。",
+  "h": "d91d2389"
+ },
+ "ssr-ngay-tot.actm.eyebrow": {
+  "t": "吉日 · {viec}",
+  "h": "2c825163"
+ },
+ "ssr-ngay-tot.actm.h1": {
+  "t": "<em>{viec}</em>吉日 {y}年{m}月",
+  "h": "88d611d1"
+ },
+ "ssr-ngay-tot.actm.intro": {
+  "t": "以下是{y}年{m}月最适合{viecl}的 <strong>{n} 个吉日</strong>，依十二建星、二十八宿、黄道黑道星，以及传统忌日（三娘、月忌、杨公忌日）评分。",
+  "h": "4fe2533e"
+ },
+ "ssr-ngay-tot.actm.link-viec": {
+  "t": "{y}年{m}月{viec}",
+  "h": "868c6acb"
+ },
+ "ssr-ngay-tot.actm.none-h": {
+  "t": "没有合适的日子",
+  "h": "fbacc2eb"
+ },
+ "ssr-ngay-tot.actm.none-p": {
+  "t": "{y}年{m}月没有任何一天在{viecl}项目达到 6 分以上。建议查看其他月份。",
+  "h": "45d4b07c"
+ },
+ "ssr-ngay-tot.actm.p": {
+  "t": "{mota}。{y}年{m}月最佳吉日。",
+  "h": "049d3df2"
+ },
+ "ssr-ngay-tot.actm.rel-thang": {
+  "t": "其他月份的{viec}",
+  "h": "d7afecfc"
+ },
+ "ssr-ngay-tot.actm.rel-viec": {
+  "t": "{y}年{m}月的其他事项",
+  "h": "04c4de0b"
+ },
+ "ssr-ngay-tot.actm.score": {
+  "t": "{score}/10 · {level}",
+  "h": "59d603de"
+ },
+ "ssr-ngay-tot.actm.sec": {
+  "t": "{y}年{m}月{viecl}最佳吉日",
+  "h": "9c9d5157"
+ },
+ "ssr-ngay-tot.actm.title": {
+  "t": "{seo} | {brand}",
+  "h": "c9d73e80"
+ },
+ "ssr-ngay-tot.bc.root": {
+  "t": "查找吉日",
+  "h": "8b0b6818"
+ },
+ "ssr-ngay-tot.brand": {
+  "t": "明宝紫微斗数",
+  "h": "33336b26"
+ },
+ "ssr-ngay-tot.date.al": {
+  "t": "农历{m}月{d}日",
+  "h": "b577a1c8"
+ },
+ "ssr-ngay-tot.date.dmy": {
+  "t": "{y}年{m}月{d}日",
+  "h": "51e959ba"
+ },
+ "ssr-ngay-tot.date.full": {
+  "t": "{y}年{m}月{d}日（{thu}）",
+  "h": "13d11d28"
+ },
+ "ssr-ngay-tot.day.c-gio": {
+  "t": "12 时辰 — 黄道（绿）／黑道（红）",
+  "h": "2b2d22a2"
+ },
+ "ssr-ngay-tot.day.c-ky": {
+  "t": "禁忌",
+  "h": "38427f1d"
+ },
+ "ssr-ngay-tot.day.c-sao": {
+  "t": "十二建星・星・宿",
+  "h": "3c6b13be"
+ },
+ "ssr-ngay-tot.day.c-tongquan": {
+  "t": "总览",
+  "h": "286a38e3"
+ },
+ "ssr-ngay-tot.day.c-viec": {
+  "t": "10 类事项评分",
+  "h": "1195d1e2"
+ },
+ "ssr-ngay-tot.day.canhbao": {
+  "t": "<strong>⚠ 禁忌警示：</strong>这天正逢{v}——宜避开嫁娶、开业、入宅、安葬等重大事项。",
+  "h": "5fd0efc5"
+ },
+ "ssr-ngay-tot.day.co-daiky": {
+  "t": "是 — 大忌",
+  "h": "5631a693"
+ },
+ "ssr-ngay-tot.day.co-ky": {
+  "t": "是 — 忌",
+  "h": "d2480709"
+ },
+ "ssr-ngay-tot.day.desc": {
+  "t": "{y}年{m}月{d}日（农历{am}月{ad}日，{canchi}）详细分析：十二建星 {truc}、{sao}星、{tu}宿、10 类事项评分。",
+  "h": "8dcd4b96"
+ },
+ "ssr-ngay-tot.day.eyebrow": {
+  "t": "{thu} · {canchi}",
+  "h": "b8dc00bb"
+ },
+ "ssr-ngay-tot.day.h1": {
+  "t": "<em>{y}年{m}月{d}日</em>是好日子吗？",
+  "h": "45e976bb"
+ },
+ "ssr-ngay-tot.day.khong": {
+  "t": "否",
+  "h": "3b4a527f"
+ },
+ "ssr-ngay-tot.day.luuy": {
+  "t": "<strong>注意：</strong>{v}",
+  "h": "8d24b1aa"
+ },
+ "ssr-ngay-tot.day.next": {
+  "t": "{m}月{d}日 →",
+  "h": "40166884"
+ },
+ "ssr-ngay-tot.day.nhuan": {
+  "t": "（闰月）",
+  "h": "842d2b50"
+ },
+ "ssr-ngay-tot.day.p": {
+  "t": "国历{y}年{m}月{d}日详细分析（农历{ay}年{am}月{ad}日）。针对 10 类传统事项评分。",
+  "h": "4ae9f023"
+ },
+ "ssr-ngay-tot.day.prev": {
+  "t": "← {m}月{d}日",
+  "h": "0bba4672"
+ },
+ "ssr-ngay-tot.day.r-am": {
+  "t": "农历",
+  "h": "b0246c79"
+ },
+ "ssr-ngay-tot.day.r-canchi": {
+  "t": "日干支",
+  "h": "0efc9953"
+ },
+ "ssr-ngay-tot.day.r-chithang": {
+  "t": "月支",
+  "h": "e54f3f41"
+ },
+ "ssr-ngay-tot.day.r-chung": {
+  "t": "整体评价",
+  "h": "ae69d733"
+ },
+ "ssr-ngay-tot.day.r-duong": {
+  "t": "国历",
+  "h": "dfac44de"
+ },
+ "ssr-ngay-tot.day.r-duongcong": {
+  "t": "杨公忌日",
+  "h": "08b3a8ce"
+ },
+ "ssr-ngay-tot.day.r-saongay": {
+  "t": "日星",
+  "h": "83763a2c"
+ },
+ "ssr-ngay-tot.day.r-thu": {
+  "t": "星期",
+  "h": "f445a052"
+ },
+ "ssr-ngay-tot.day.r-truc": {
+  "t": "十二建星",
+  "h": "e075024d"
+ },
+ "ssr-ngay-tot.day.r-tu": {
+  "t": "二十八宿",
+  "h": "28486f82"
+ },
+ "ssr-ngay-tot.day.r-ynghia": {
+  "t": "意义",
+  "h": "1206aa20"
+ },
+ "ssr-ngay-tot.day.sec-top3": {
+  "t": "这天最适合的 3 类事项",
+  "h": "778a1834"
+ },
+ "ssr-ngay-tot.day.title": {
+  "t": "{y}年{m}月{d}日是好日子吗？ — {thu}、{canchi}",
+  "h": "9c0a1282"
+ },
+ "ssr-ngay-tot.day.toan-thang": {
+  "t": "{y}年{m}月全月",
+  "h": "0353135f"
+ },
+ "ssr-ngay-tot.day.top-head": {
+  "t": "{viec} ({score}/10 — {level})",
+  "h": "b118aa41"
+ },
+ "ssr-ngay-tot.day.tot": {
+  "t": "<strong>吉：</strong>{v}",
+  "h": "42c91bfb"
+ },
+ "ssr-ngay-tot.dg.binh": {
+  "t": "平",
+  "h": "3318401b"
+ },
+ "ssr-ngay-tot.dg.tot": {
+  "t": "吉",
+  "h": "a6f70ec0"
+ },
+ "ssr-ngay-tot.dg.xau": {
+  "t": "凶",
+  "h": "3efce654"
+ },
+ "ssr-ngay-tot.hd.hac": {
+  "t": "黑道",
+  "h": "35f44326"
+ },
+ "ssr-ngay-tot.hd.hoang": {
+  "t": "黄道",
+  "h": "3d6bc2ed"
+ },
+ "ssr-ngay-tot.home": {
+  "t": "首页",
+  "h": "fca04858"
+ },
+ "ssr-ngay-tot.hub.desc": {
+  "t": "依事项查找吉日：嫁娶、动土、开业、入宅、出行、求财、生产、安葬、打井、修宅。依古法十二建星、二十八宿、黄道推算。",
+  "h": "8aff5d21"
+ },
+ "ssr-ngay-tot.hub.eyebrow": {
+  "t": "万年历 · 传统历法",
+  "h": "f34cd19c"
+ },
+ "ssr-ngay-tot.hub.h1": {
+  "t": "查找<em>吉日</em> 2020–2036",
+  "h": "af666789"
+ },
+ "ssr-ngay-tot.hub.p": {
+  "t": "依 10 类事项查找好日子——依据十二建星、二十八宿、黄道黑道，以及三娘、月忌、杨公忌日。",
+  "h": "423bc3b7"
+ },
+ "ssr-ngay-tot.hub.sec-nam": {
+  "t": "依年份查找",
+  "h": "42f9bd36"
+ },
+ "ssr-ngay-tot.hub.sec-viec": {
+  "t": "依事项查找",
+  "h": "525ff9cc"
+ },
+ "ssr-ngay-tot.hub.title": {
+  "t": "查找吉日 — 万年历 2020-2036 | {brand}",
+  "h": "03b20f37"
+ },
+ "ssr-ngay-tot.join.list": {
+  "t": "{a}、{b}",
+  "h": "248bbe67"
+ },
+ "ssr-ngay-tot.join.ly": {
+  "t": "{a}；{b}",
+  "h": "bb5f9458"
+ },
+ "ssr-ngay-tot.ky.duongcong": {
+  "t": "杨公",
+  "h": "528f09a5"
+ },
+ "ssr-ngay-tot.ky.nguyetky": {
+  "t": "月忌",
+  "h": "3598b0c5"
+ },
+ "ssr-ngay-tot.ky.tamnuong": {
+  "t": "三娘",
+  "h": "a82168f4"
+ },
+ "ssr-ngay-tot.level.binh-thuong": {
+  "t": "平",
+  "h": "d45f4d1f"
+ },
+ "ssr-ngay-tot.level.rat-tot": {
+  "t": "大吉",
+  "h": "171ded25"
+ },
+ "ssr-ngay-tot.level.rat-xau": {
+  "t": "大凶",
+  "h": "e1932052"
+ },
+ "ssr-ngay-tot.level.tot": {
+  "t": "吉",
+  "h": "a6f70ec0"
+ },
+ "ssr-ngay-tot.level.xau": {
+  "t": "凶",
+  "h": "3efce654"
+ },
+ "ssr-ngay-tot.lichm.actlink": {
+  "t": "{m}月{viec}",
+  "h": "d47baeee"
+ },
+ "ssr-ngay-tot.lichm.desc": {
+  "t": "完整查找{y}年{m}月的吉日与凶日：干支、十二建星、黄道星、二十八宿，以及每日 10 类事项评分。",
+  "h": "b122370e"
+ },
+ "ssr-ngay-tot.lichm.eyebrow": {
+  "t": "万年历 · {y}年{m}月",
+  "h": "c9318386"
+ },
+ "ssr-ngay-tot.lichm.h1": {
+  "t": "<em>{y}年{m}月</em>吉日",
+  "h": "0328da50"
+ },
+ "ssr-ngay-tot.lichm.p": {
+  "t": "{y}年{m}月共 {n} 天的详细表：干支、十二建星、二十八宿、黄道星、忌日与 10 类事项评分。",
+  "h": "e03b9418"
+ },
+ "ssr-ngay-tot.lichm.rel": {
+  "t": "其他月份",
+  "h": "1c3f0f97"
+ },
+ "ssr-ngay-tot.lichm.sec-ngay": {
+  "t": "{y}年{m}月的 {n} 天",
+  "h": "bb9e4cd2"
+ },
+ "ssr-ngay-tot.lichm.sec-nhanh": {
+  "t": "依事项快速查看",
+  "h": "ae3b822b"
+ },
+ "ssr-ngay-tot.lichm.title": {
+  "t": "{y}年{m}月吉日 — 万年历 | {brand}",
+  "h": "3c04b37f"
+ },
+ "ssr-ngay-tot.lichm.toan-nam": {
+  "t": "{y}年全年",
+  "h": "93830066"
+ },
+ "ssr-ngay-tot.lichy.cell": {
+  "t": "查看{m}月吉日",
+  "h": "ee33b4db"
+ },
+ "ssr-ngay-tot.lichy.desc": {
+  "t": "{y}年万年历：依月份查找全部 12 个月的吉日。依古法十二建星、二十八宿、黄道黑道推算。",
+  "h": "25d80478"
+ },
+ "ssr-ngay-tot.lichy.eyebrow": {
+  "t": "万年历 · {y}年",
+  "h": "88716877"
+ },
+ "ssr-ngay-tot.lichy.h1": {
+  "t": "<em>{y}年</em>吉日历",
+  "h": "098d90e9"
+ },
+ "ssr-ngay-tot.lichy.p": {
+  "t": "选择月份，即可查看适合嫁娶、动土、开业、入宅等重大事项的吉日。",
+  "h": "79e02c37"
+ },
+ "ssr-ngay-tot.lichy.rel": {
+  "t": "其他年份",
+  "h": "f4d1f92b"
+ },
+ "ssr-ngay-tot.lichy.sec": {
+  "t": "{y}年的 12 个月",
+  "h": "88964a9e"
+ },
+ "ssr-ngay-tot.lichy.title": {
+  "t": "{y}年吉日历 — 依月份查找好日子 | {brand}",
+  "h": "05b707e6"
+ },
+ "ssr-ngay-tot.m.cap": {
+  "t": "{m}月",
+  "h": "1a19a1f3"
+ },
+ "ssr-ngay-tot.m.my": {
+  "t": "{y}年{m}月",
+  "h": "d45437d9"
+ },
+ "ssr-ngay-tot.meta.canchi": {
+  "t": "干支：<strong>{v}</strong>",
+  "h": "fdab5a61"
+ },
+ "ssr-ngay-tot.meta.giohd": {
+  "t": "<strong>黄道时辰：</strong>{v}",
+  "h": "13712772"
+ },
+ "ssr-ngay-tot.meta.ky": {
+  "t": "忌：{v}",
+  "h": "b4b994a1"
+ },
+ "ssr-ngay-tot.meta.luuy": {
+  "t": "<strong>注意：</strong>{v}",
+  "h": "8d24b1aa"
+ },
+ "ssr-ngay-tot.meta.lydo": {
+  "t": "<strong>吉利原因：</strong>{v}",
+  "h": "5b070ec2"
+ },
+ "ssr-ngay-tot.meta.sao": {
+  "t": "<strong>{sao}</strong>星（{hd}）",
+  "h": "7b460ac7"
+ },
+ "ssr-ngay-tot.meta.totcho": {
+  "t": "<strong>宜：</strong>{v}",
+  "h": "730497de"
+ },
+ "ssr-ngay-tot.meta.truc": {
+  "t": "十二建星：<strong>{v}</strong>",
+  "h": "ce07dd1e"
+ },
+ "ssr-ngay-tot.meta.tu": {
+  "t": "二十八宿：<strong>{v}</strong>",
+  "h": "da6d1fd9"
+ },
+ "ssr-ngay-tot.rel.other-days": {
+  "t": "其他日期",
+  "h": "540cfe27"
+ },
+ "ssr-ngay-tot.tc.binh": {
+  "t": "平",
+  "h": "3318401b"
+ },
+ "ssr-ngay-tot.tc.cat": {
+  "t": "吉",
+  "h": "70e9b769"
+ },
+ "ssr-ngay-tot.tc.hung": {
+  "t": "凶",
+  "h": "3baaa792"
+ },
+ "ssr-ngay-tot.y.label": {
+  "t": "{y}年",
+  "h": "8a3268fc"
+ },
  "ssr.laso.bc": {
   "t": "{canchi}年{gioi}命 — 命宫在{cung}",
   "h": "0094aee9"
