@@ -10647,6 +10647,38 @@
   "t": " では、その理由・表に出る時期・対処法を説明します。",
   "h": "2b510636"
  },
+ "js.luangiai.nt-bo": {
+  "t": "父",
+  "h": "dbbdf270"
+ },
+ "js.luangiai.nt-con": {
+  "t": "子ども",
+  "h": "f6b38904"
+ },
+ "js.luangiai.nt-desc": {
+  "t": "この鑑定を読み終えたら、配偶者・両親・子どもも — 一人ずつ別の鑑定で見られます。",
+  "h": "d76d2c28"
+ },
+ "js.luangiai.nt-me": {
+  "t": "母",
+  "h": "dfc6f90b"
+ },
+ "js.luangiai.nt-nguoi-khac": {
+  "t": "その他の人",
+  "h": "585a5df1"
+ },
+ "js.luangiai.nt-prompt": {
+  "t": "この人はどなたですか（例：上司、親友）：",
+  "h": "4f351258"
+ },
+ "js.luangiai.nt-title": {
+  "t": "家族の命盤を見る",
+  "h": "515da066"
+ },
+ "js.luangiai.nt-vo-chong": {
+  "t": "配偶者",
+  "h": "ee59b76c"
+ },
  "js.luangiai.p-ba-cham": {
   "t": "…",
   "h": "6eae3a5b"

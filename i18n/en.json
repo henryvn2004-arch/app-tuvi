@@ -10647,6 +10647,38 @@
   "t": " explains why, which stage it breaks out in, and how to resolve it.",
   "h": "2b510636"
  },
+ "js.luangiai.nt-bo": {
+  "t": "Father",
+  "h": "dbbdf270"
+ },
+ "js.luangiai.nt-con": {
+  "t": "Child",
+  "h": "f6b38904"
+ },
+ "js.luangiai.nt-desc": {
+  "t": "Done with this reading? Go on to your spouse, parents or children — a separate reading for each person.",
+  "h": "d76d2c28"
+ },
+ "js.luangiai.nt-me": {
+  "t": "Mother",
+  "h": "dfc6f90b"
+ },
+ "js.luangiai.nt-nguoi-khac": {
+  "t": "Someone else",
+  "h": "585a5df1"
+ },
+ "js.luangiai.nt-prompt": {
+  "t": "Who is this person (e.g. boss, best friend):",
+  "h": "4f351258"
+ },
+ "js.luangiai.nt-title": {
+  "t": "See charts for your family",
+  "h": "515da066"
+ },
+ "js.luangiai.nt-vo-chong": {
+  "t": "Spouse",
+  "h": "ee59b76c"
+ },
  "js.luangiai.p-ba-cham": {
   "t": "...",
   "h": "6eae3a5b"

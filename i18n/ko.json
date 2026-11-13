@@ -10647,6 +10647,38 @@
   "t": " 항목에서 그 이유와 언제 드러나는지, 어떻게 풀어 갈지 짚어 드려요.",
   "h": "2b510636"
  },
+ "js.luangiai.nt-bo": {
+  "t": "아버지",
+  "h": "dbbdf270"
+ },
+ "js.luangiai.nt-con": {
+  "t": "자녀",
+  "h": "f6b38904"
+ },
+ "js.luangiai.nt-desc": {
+  "t": "이 풀이를 다 읽었다면 배우자, 부모님, 자녀도 이어서 보세요 — 한 사람마다 따로 풀이합니다.",
+  "h": "d76d2c28"
+ },
+ "js.luangiai.nt-me": {
+  "t": "어머니",
+  "h": "dfc6f90b"
+ },
+ "js.luangiai.nt-nguoi-khac": {
+  "t": "다른 사람",
+  "h": "585a5df1"
+ },
+ "js.luangiai.nt-prompt": {
+  "t": "이 사람은 누구인가요 (예: 상사, 친한 친구):",
+  "h": "4f351258"
+ },
+ "js.luangiai.nt-title": {
+  "t": "가족의 명반 보기",
+  "h": "515da066"
+ },
+ "js.luangiai.nt-vo-chong": {
+  "t": "배우자",
+  "h": "ee59b76c"
+ },
  "js.luangiai.p-ba-cham": {
   "t": "...",
   "h": "6eae3a5b"
