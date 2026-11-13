@@ -5791,6 +5791,10 @@
   "t": "아홉 구간의 대운, 엔진 점수에 따른 높은 막대, 구간마다 하나의 키워드",
   "h": "6b87e20d"
  },
+ "js.chutrinh.chip-ca-doi": {
+  "t": "제 인생에서 오르막과 내리막 시기는 언제인가요?",
+  "h": "0fd14b86"
+ },
  "js.chutrinh.chu-trinh-cuoc-doi": {
   "t": "인생 사이클｜",
   "h": "c3a39296"
@@ -5815,6 +5819,22 @@
   "t": " ・현재 구간: ",
   "h": "3d0545d0"
  },
+ "js.chutrinh.lock-8-dv": {
+  "t": "나머지 8개 대운 — 단계마다 고법으로 개별 풀이",
+  "h": "4ec27b83"
+ },
+ "js.chutrinh.lock-cta": {
+  "t": "전체 풀이 열기",
+  "h": "f25984b4"
+ },
+ "js.chutrinh.lock-tieu-van": {
+  "t": "보는 해의 소운 — 고법으로 개별 풀이",
+  "h": "647e634b"
+ },
+ "js.chutrinh.lock-title": {
+  "t": "⊙ 전체 풀이가 아직 열리지 않았습니다",
+  "h": "58312cbd"
+ },
  "js.chutrinh.luan-giai": {
   "t": "풀이 →",
   "h": "a03abb8e"
@@ -5827,6 +5847,38 @@
   "t": "✦ 전체 풀이 열기 —",
   "h": "438bc666"
  },
+ "js.chutrinh.poster-loi": {
+  "t": "이미지를 만들지 못했습니다. 잠시 후 다시 시도해 주세요.",
+  "h": "f8055429"
+ },
+ "js.chutrinh.poster-qr": {
+  "t": "코드를 스캔해 — 나의 인생 사이클 보기",
+  "h": "9dc941f8"
+ },
+ "js.chutrinh.poster-quote": {
+  "t": "막대 높이는 엔진이 채점한 대운 점수 — 추측한 숫자가 아닙니다.",
+  "h": "961570c5"
+ },
+ "js.chutrinh.poster-title": {
+  "t": "인생의 9단계",
+  "h": "619cd7f3"
+ },
+ "js.chutrinh.rel-luan-giai": {
+  "t": "자미두수 풀이",
+  "h": "ab5a4607"
+ },
+ "js.chutrinh.rel-luan-giai-note": {
+  "t": "명반 총론과 12궁 각각의 개별 풀이 보기",
+  "h": "734368f8"
+ },
+ "js.chutrinh.rel-van-han": {
+  "t": "앞으로 12개월 운세",
+  "h": "f265e49d"
+ },
+ "js.chutrinh.rel-van-han-note": {
+  "t": "음력 달 구분에 맞춰 앞으로 12개월을 한 달씩 자세히 보기",
+  "h": "ce8ee944"
+ },
  "js.chutrinh.roi-vao-cung": {
   "t": " ’년은 ‘ ",
   "h": "d242aa04"
@@ -5834,6 +5886,14 @@
  "js.chutrinh.tieu-van-nam": {
   "t": "소한 ‘ ",
   "h": "1979c56a"
+ },
+ "js.chutrinh.viet-rieng": {
+  "t": "이 명반만을 위해 고법으로 쓰는 11개 항목: 대운 총론, 9개 대운 각각의 개별 풀이, 보는 해의 소운. PDF 다운로드 또는 이메일 발송 포함.",
+  "h": "38ebd1a1"
+ },
+ "js.chutrinh.xem-9-dai-van": {
+  "t": "9개 대운 보기 →",
+  "h": "ee069d41"
  },
  "js.cn.ai-cung-han-vao": {
   "t": "{ai}은(는) 함께 <b>{cung}</b>에 한이 들어요.",
@@ -10071,6 +10131,370 @@
   "t": "{n}세 (음력 기준)",
   "h": "cd4bc076"
  },
+ "js.lgcore.bai-tinh": {
+  "t": "패성: {sao}",
+  "h": "724a9aa9"
+ },
+ "js.lgcore.bd-ghi-chu": {
+  "t": "점은 점수, 금색 막대는 변동 폭입니다. 변동 폭 = 점수 × (1 ± 한궁 삼방사정에 있는 움직이는 별의 비율), 움직이는 별은 별의 등급에 따라 가중치를 둡니다.",
+  "h": "87d9e115"
+ },
+ "js.lgcore.bo-menh": {
+  "t": "명궁 성군: <span style=\"color:#aaa\">{a}</span> → 대운 성군: <span style=\"color:#aaa\">{b}</span>",
+  "h": "2fb64232"
+ },
+ "js.lgcore.cach-cuc-dac-biet": {
+  "t": "특별한 격국",
+  "h": "f0db7ce5"
+ },
+ "js.lgcore.cach-cuc-lien-quan": {
+  "t": "관련 격국",
+  "h": "9fcce5d2"
+ },
+ "js.lgcore.cat-tinh": {
+  "t": "길성: {sao}",
+  "h": "39744fd1"
+ },
+ "js.lgcore.cd-aria": {
+  "t": "9개 대운에 걸친 네 가지 주제의 흐름",
+  "h": "8de1a0f4"
+ },
+ "js.lgcore.cd-dang-di": {
+  "t": "지금은 {a}–{b}세 대운 (임시 명궁 {chi}): 가장 강한 것은 <b>{manh}</b>, 가장 약한 것은 <b>{yeu}</b>.",
+  "h": "ace243b1"
+ },
+ "js.lgcore.cd-ghi-chu": {
+  "t": "대운궁을 임시 명궁으로 삼고, 다른 궁도 따라 옮겨 옮겨 간 궁의 별을 빌립니다. 직업은 65세까지, 재물·연애는 성인 이후부터 그립니다.",
+  "h": "47b240d7"
+ },
+ "js.lgcore.cd-su-nghiep": {
+  "t": "직업",
+  "h": "6302fbab"
+ },
+ "js.lgcore.cd-suc-khoe": {
+  "t": "건강",
+  "h": "77e26a9a"
+ },
+ "js.lgcore.cd-tai-loc": {
+  "t": "재물",
+  "h": "5d21666f"
+ },
+ "js.lgcore.cd-tinh-duyen": {
+  "t": "연애·결혼",
+  "h": "818b8e8a"
+ },
+ "js.lgcore.cd-title": {
+  "t": "9개 대운에 걸친 인생의 네 가지 큰일",
+  "h": "45690f76"
+ },
+ "js.lgcore.cham-diem-dv": {
+  "t": "대운 채점 — {cung} ({chi})",
+  "h": "00eb81e5"
+ },
+ "js.lgcore.chinh-tinh-cung": {
+  "t": "궁의 주성",
+  "h": "2ff2de45"
+ },
+ "js.lgcore.chinh-tinh-dv": {
+  "t": "대운궁의 주성",
+  "h": "d424e884"
+ },
+ "js.lgcore.cn-binh-hoa": {
+  "t": "중화",
+  "h": "09ccb244"
+ },
+ "js.lgcore.cn-cuc-nhuoc": {
+  "t": "극약",
+  "h": "86e91daa"
+ },
+ "js.lgcore.cn-cuc-vuong": {
+  "t": "극왕",
+  "h": "442c349d"
+ },
+ "js.lgcore.cn-nhuoc": {
+  "t": "약",
+  "h": "64c831c7"
+ },
+ "js.lgcore.cn-vuong": {
+  "t": "왕",
+  "h": "0cd97e28"
+ },
+ "js.lgcore.dang-o-day": {
+  "t": "현재 위치",
+  "h": "28f89609"
+ },
+ "js.lgcore.danh-gia-6": {
+  "t": "6가지 기준 평가",
+  "h": "1dd610c0"
+ },
+ "js.lgcore.dia-loi": {
+  "t": "지리",
+  "h": "dd0f73a6"
+ },
+ "js.lgcore.dv9-title": {
+  "t": "9개 대운 — 점수 그래프",
+  "h": "a893e2f4"
+ },
+ "js.lgcore.hien-tai-dv": {
+  "t": "· 현재: 제{n}대운 ({cc}, {a}-{b}세)",
+  "h": "d3fab46a"
+ },
+ "js.lgcore.khoi-van": {
+  "t": "· 기운: {tuoi}세 · 방향: {huong}",
+  "h": "3f3b6343"
+ },
+ "js.lgcore.khong-sao-dong": {
+  "t": "움직이는 별 없음",
+  "h": "77575d09"
+ },
+ "js.lgcore.luan-doan": {
+  "t": "운세 판단",
+  "h": "d3b202d1"
+ },
+ "js.lgcore.luu-sao": {
+  "t": "유{sao}",
+  "h": "db80d9b7"
+ },
+ "js.lgcore.manh": {
+  "t": "강",
+  "h": "36090ada"
+ },
+ "js.lgcore.manh-nhat": {
+  "t": "가장 강함: {ds}",
+  "h": "aa4c3ac4"
+ },
+ "js.lgcore.manh-yeu": {
+  "t": "두드러진 강점 / 약점",
+  "h": "8f14d466"
+ },
+ "js.lgcore.menh-o": {
+  "t": "명궁 {chi}",
+  "h": "058ae0b9"
+ },
+ "js.lgcore.muoi-hai-thang": {
+  "t": "{cc}년({nam}) 음력 12개월",
+  "h": "3e050ead"
+ },
+ "js.lgcore.muoi-hai-thang-aria": {
+  "t": "{nam}년 음력 12개월의 점수와 변동 폭",
+  "h": "f09eedd4"
+ },
+ "js.lgcore.muoi-nam-aria": {
+  "t": "{a}년부터 {b}년까지의 점수와 변동 폭",
+  "h": "68dd4ba4"
+ },
+ "js.lgcore.muoi-nam-title": {
+  "t": "앞으로 10년 — 연 점수와 변동 폭",
+  "h": "43c9ff41"
+ },
+ "js.lgcore.muon-xung": {
+  "t": " — 대궁에서 차용: <span style=\"color:#5FA8D3\">{sao}</span>",
+  "h": "306f7570"
+ },
+ "js.lgcore.mv-ben-vung": {
+  "t": "견실",
+  "h": "aced35c7"
+ },
+ "js.lgcore.mv-binh-yen": {
+  "t": "평안",
+  "h": "4677d1ae"
+ },
+ "js.lgcore.mv-can-co": {
+  "t": "근기",
+  "h": "621afbd9"
+ },
+ "js.lgcore.mv-may-man": {
+  "t": "행운",
+  "h": "d56f590a"
+ },
+ "js.lgcore.mv-phu-tro": {
+  "t": "조력",
+  "h": "34da24cc"
+ },
+ "js.lgcore.mv-thien-van": {
+  "t": "천운",
+  "h": "4cede149"
+ },
+ "js.lgcore.nam-dong-nhat": {
+  "t": "가장 크게 흔들리는 해: <b>{nam}</b>년 (±{p}, 소한 {cung}) — {ds}.",
+  "h": "157f8832"
+ },
+ "js.lgcore.nam-xem-dong": {
+  "t": "<b>{nam}</b>년 ({cc}, 소한 {cung}): 점수 <b>{d}</b>, 변동 {lo}–{hi} (±{p}). 움직이는 별: {ds}.",
+  "h": "19369c2f"
+ },
+ "js.lgcore.nghich": {
+  "t": "역행",
+  "h": "3ccd4363"
+ },
+ "js.lgcore.nh-aria": {
+  "t": "사주 오행의 비율",
+  "h": "ab12e894"
+ },
+ "js.lgcore.nh-dung-than": {
+  "t": " 용신은 <b>{a}</b>",
+  "h": "04d37af8"
+ },
+ "js.lgcore.nh-ghi-chu": {
+  "t": "자평(사주명리) 엔진으로 계산: 천간은 하나당 1, 지지의 지장간은 지장간 비중에 따라 더합니다.",
+  "h": "52810c99"
+ },
+ "js.lgcore.nh-hy-than": {
+  "t": ", 희신은 {a}",
+  "h": "a4ea3273"
+ },
+ "js.lgcore.nh-than": {
+  "t": " 일간은 {can}, 신강약은 {cn}",
+  "h": "c0729f51"
+ },
+ "js.lgcore.nh-title": {
+  "t": "사주의 오행",
+  "h": "433df54e"
+ },
+ "js.lgcore.nh-vuong-thieu": {
+  "t": "가장 왕성한 것은 <b>{a}</b>, 가장 부족한 것은 <b>{b}</b>.",
+  "h": "08060d77"
+ },
+ "js.lgcore.nhan-hoa": {
+  "t": "인화",
+  "h": "2d5692ff"
+ },
+ "js.lgcore.nhat-chu": {
+  "t": "일주",
+  "h": "c60a7143"
+ },
+ "js.lgcore.phan-cung": {
+  "t": "{cung}",
+  "h": "7f204b89"
+ },
+ "js.lgcore.phan-dv": {
+  "t": "제{n}대운",
+  "h": "4969b7f0"
+ },
+ "js.lgcore.phan-dv-tuoi": {
+  "t": "제{n}대운 ({a}–{b}세)",
+  "h": "2a4b7cc3"
+ },
+ "js.lgcore.phan-tich-sao": {
+  "t": "별 분석",
+  "h": "c580881f"
+ },
+ "js.lgcore.phan-tieu-van": {
+  "t": "보는 해의 소운",
+  "h": "c0c9a816"
+ },
+ "js.lgcore.phan-tong-quan": {
+  "t": "명반 총론",
+  "h": "c65f03ec"
+ },
+ "js.lgcore.phan-tq-dv": {
+  "t": "대운 총론",
+  "h": "655ab451"
+ },
+ "js.lgcore.phi-nhap": {
+  "t": "{hoa}: <b>{sao}</b> → <b>{cung}</b>에 비입 ({chi})",
+  "h": "c1d3bd83"
+ },
+ "js.lgcore.radar-aria": {
+  "t": "12궁 레이더 — 축이 두꺼울수록 그 궁이 강함",
+  "h": "3e7f78f4"
+ },
+ "js.lgcore.sat-tinh": {
+  "t": "살성: {sao}",
+  "h": "7eaf46b7"
+ },
+ "js.lgcore.tam-phuong": {
+  "t": "삼방사정의 별",
+  "h": "6e974aa8"
+ },
+ "js.lgcore.th-ngan": {
+  "t": "{n}월",
+  "h": "b3fc323a"
+ },
+ "js.lgcore.thang-dong-nhat": {
+  "t": "가장 크게 흔들리는 달: <b>{t}월</b> (월한 {cung}, ±{p}) — {ds}.",
+  "h": "d96d074b"
+ },
+ "js.lgcore.thang-noi-suy": {
+  "t": "월 점수는 각 연 점수에서 보간했습니다. ",
+  "h": "ab0b95ef"
+ },
+ "js.lgcore.thang-yen-nhat": {
+  "t": "가장 잔잔한 달: <b>{t}월</b> (월한 {cung}, ±{p}).",
+  "h": "dc56896b"
+ },
+ "js.lgcore.thien-thoi": {
+  "t": "천시",
+  "h": "ebcbebc4"
+ },
+ "js.lgcore.thuan": {
+  "t": "순행",
+  "h": "ee315dcc"
+ },
+ "js.lgcore.tong": {
+  "t": "합계",
+  "h": "de995d83"
+ },
+ "js.lgcore.triet-cung": {
+  "t": "절공이 궁을 가로막음",
+  "h": "146d86f2"
+ },
+ "js.lgcore.triet-cung-dv": {
+  "t": "절공이 대운궁을 가로막음",
+  "h": "224bd87b"
+ },
+ "js.lgcore.tru-gio": {
+  "t": "시",
+  "h": "75f92388"
+ },
+ "js.lgcore.tru-nam": {
+  "t": "년",
+  "h": "98926c7e"
+ },
+ "js.lgcore.tru-ngay": {
+  "t": "일",
+  "h": "368c4575"
+ },
+ "js.lgcore.tru-thang": {
+  "t": "월",
+  "h": "0e2b3099"
+ },
+ "js.lgcore.tu-hoa": {
+  "t": "[자화]",
+  "h": "d151626d"
+ },
+ "js.lgcore.tuan-cung": {
+  "t": "순공이 궁을 가로막음",
+  "h": "4b4590e3"
+ },
+ "js.lgcore.tuan-cung-dv": {
+  "t": "순공이 대운궁을 가로막음",
+  "h": "2eba5ede"
+ },
+ "js.lgcore.tuhoa-title": {
+  "t": "사화비성 (궁간 {can})",
+  "h": "69ab67ee"
+ },
+ "js.lgcore.tuoi-khoang": {
+  "t": "{a}-{b}세",
+  "h": "f8dda7a6"
+ },
+ "js.lgcore.vo-chinh-dieu": {
+  "t": "무정요",
+  "h": "bb1c972d"
+ },
+ "js.lgcore.xem-co-so": {
+  "t": "계산 근거 보기",
+  "h": "0fb87c33"
+ },
+ "js.lgcore.yeu": {
+  "t": "약",
+  "h": "1a462424"
+ },
+ "js.lgcore.yeu-nhat": {
+  "t": "가장 약함: {ds}",
+  "h": "0d623c66"
+ },
  "js.lienhe.gui-email": {
   "t": "이메일 보내기",
   "h": "5901b176"
@@ -10139,6 +10563,10 @@
   "t": "▾ 명반 숨기기",
   "h": "9f28e998"
  },
+ "js.luangiai.anh-minh-hoa": {
+  "t": "예시 이미지",
+  "h": "f37e2fa9"
+ },
  "js.luangiai.bam-thu-lai-o-tung-phan": {
   "t": "— 항목마다 ↻ 다시 시도를 누른 뒤 페이지를 새로 불러오세요.",
   "h": "e7534682"
@@ -10162,6 +10590,10 @@
  "js.luangiai.chi-phi-su-dung": {
   "t": "이용 비용",
   "h": "c2d36be8"
+ },
+ "js.luangiai.chua-doc-gia": {
+  "t": "이 항목의 가격을 불러오지 못했습니다. 다시 시도해 주세요.",
+  "h": "86f02e35"
  },
  "js.luangiai.con-tiep-mo-khoa-de-doc": {
   "t": "이어지는 내용 — 잠금을 풀면 끝까지 읽을 수 있어요",
@@ -10195,6 +10627,10 @@
   "t": "현재 대운: ",
   "h": "7cf01e2f"
  },
+ "js.luangiai.dang-ky-luu": {
+  "t": "가입하고 저장 →",
+  "h": "b2ef6ce1"
+ },
  "js.luangiai.dang-lap-la-so": {
   "t": "명반 만드는 중…",
   "h": "fba688db"
@@ -10206,6 +10642,34 @@
  "js.luangiai.dang-luan-giai-phan-1": {
   "t": "풀이 중 · 항목 1 / ",
   "h": "559646ca"
+ },
+ "js.luangiai.dang-luan-phan": {
+  "t": "풀이 중인 항목",
+  "h": "6315d472"
+ },
+ "js.luangiai.doc-sau-hon": {
+  "t": "더 깊이 읽기",
+  "h": "2822ae47"
+ },
+ "js.luangiai.gate-11-cung": {
+  "t": "나머지 11궁 — 궁마다 고법에 따른 개별 풀이",
+  "h": "8b8167db"
+ },
+ "js.luangiai.gate-cach-cuc": {
+  "t": "각 궁의 격국·사화·규칙",
+  "h": "ab223e81"
+ },
+ "js.luangiai.gate-tieu-de": {
+  "t": "전체판은 '그래서 어떻게 할지'에 답합니다",
+  "h": "c7fe8199"
+ },
+ "js.luangiai.khoa": {
+  "t": "잠김",
+  "h": "393cb36a"
+ },
+ "js.luangiai.khong-du-luong": {
+  "t": "냥이 부족합니다 — 충전해 주세요.",
+  "h": "1d9e17da"
  },
  "js.luangiai.la-so": {
   "t": "명반",
@@ -10219,9 +10683,33 @@
   "t": "명반 만들고 바로 풀이 →",
   "h": "edbdb6fc"
  },
+ "js.luangiai.lap-la-so-luan-ngay": {
+  "t": "명반 세우고 바로 풀이 →",
+  "h": "7d7efd95"
+ },
+ "js.luangiai.lock-12-cung": {
+  "t": "나머지 12궁 — 궁마다 고법에 따른 개별 풀이",
+  "h": "c7949691"
+ },
+ "js.luangiai.lock-cta": {
+  "t": "전체 풀이 열기 →",
+  "h": "2ff464b0"
+ },
+ "js.luangiai.lock-pdf": {
+  "t": "전체 PDF — 몇 분 안에 다운로드 또는 이메일 발송",
+  "h": "28ae9177"
+ },
+ "js.luangiai.lock-title": {
+  "t": "⊙ 12개 항목이 아직 잠겨 있습니다",
+  "h": "19ab2722"
+ },
  "js.luangiai.loi-khi-luan-giai": {
   "t": "풀이 중 오류:",
   "h": "b251ca2c"
+ },
+ "js.luangiai.loi-mo-phan": {
+  "t": "이 항목을 여는 중 오류가 발생했습니다. 다시 시도해 주세요.",
+  "h": "8c34a861"
  },
  "js.luangiai.loi-phan": {
   "t": "항목 오류",
@@ -10238,6 +10726,10 @@
  "js.luangiai.luan-giai-tu-vi": {
   "t": "자미두수 풀이",
   "h": "ab5a4607"
+ },
+ "js.luangiai.luc-giac-menh": {
+  "t": "명궁 육각형",
+  "h": "e7542de0"
  },
  "js.luangiai.luong": {
   "t": "냥 →",
@@ -10275,9 +10767,45 @@
   "t": "무엇을 하면 좋을까요?",
   "h": "feedfe50"
  },
+ "js.luangiai.nhap-du-ngay": {
+  "t": "생년월일을 모두 입력해 주세요.",
+  "h": "075a6b15"
+ },
  "js.luangiai.noi-vi-sao-no-bung-ra": {
   "t": " 항목에서 그 이유와 언제 드러나는지, 어떻게 풀어 갈지 짚어 드려요.",
   "h": "2b510636"
+ },
+ "js.luangiai.nt-bo": {
+  "t": "아버지",
+  "h": "dbbdf270"
+ },
+ "js.luangiai.nt-con": {
+  "t": "자녀",
+  "h": "f6b38904"
+ },
+ "js.luangiai.nt-desc": {
+  "t": "이 풀이를 다 읽었다면 배우자, 부모님, 자녀도 이어서 보세요 — 한 사람마다 따로 풀이합니다.",
+  "h": "d76d2c28"
+ },
+ "js.luangiai.nt-me": {
+  "t": "어머니",
+  "h": "dfc6f90b"
+ },
+ "js.luangiai.nt-nguoi-khac": {
+  "t": "다른 사람",
+  "h": "585a5df1"
+ },
+ "js.luangiai.nt-prompt": {
+  "t": "이 사람은 누구인가요 (예: 상사, 친한 친구):",
+  "h": "4f351258"
+ },
+ "js.luangiai.nt-title": {
+  "t": "가족의 명반 보기",
+  "h": "515da066"
+ },
+ "js.luangiai.nt-vo-chong": {
+  "t": "배우자",
+  "h": "ee59b76c"
  },
  "js.luangiai.p-ba-cham": {
   "t": "...",
@@ -10299,6 +10827,82 @@
   "t": " 개 항목 오류 (번호: ",
   "h": "3d3d4b5b"
  },
+ "js.luangiai.phan-tong-the": {
+  "t": "이 항목은 명반 전체로 풀이합니다 — 아래 버튼을 눌러 선생님께 깊이 풀이받으세요.",
+  "h": "a10845f5"
+ },
+ "js.luangiai.rel-bat-trach": {
+  "t": "팔택 방위",
+  "h": "a9176f82"
+ },
+ "js.luangiai.rel-bat-trach-note": {
+  "t": "이 명궁에서 8방위의 길흉을 더 살펴보기",
+  "h": "eb903977"
+ },
+ "js.luangiai.rel-cdvc": {
+  "t": "부부 초상",
+  "h": "ed0abbb5"
+ },
+ "js.luangiai.rel-cdvc-note": {
+  "t": "이 궁에서 배우자의 초상을 그리기",
+  "h": "277f3e1b"
+ },
+ "js.luangiai.rel-chu-trinh": {
+  "t": "인생 사이클",
+  "h": "38c0c6ce"
+ },
+ "js.luangiai.rel-chu-trinh-note": {
+  "t": "9개 대운과 보는 해의 소운을 깊이 풀이 — 이 명반의 13개 항목과 별도인 11개 항목",
+  "h": "49d1879a"
+ },
+ "js.luangiai.rel-cong-so": {
+  "t": "자미두수 직장",
+  "h": "9d18a955"
+ },
+ "js.luangiai.rel-cong-so-note": {
+  "t": "같은 명반을 일의 언어로 다시 읽기",
+  "h": "c33dffa1"
+ },
+ "js.luangiai.rel-day-con": {
+  "t": "명반으로 보는 자녀 교육",
+  "h": "2013a771"
+ },
+ "js.luangiai.rel-day-con-note": {
+  "t": "아이에게 맞는 교육법은? 밀어줄지, 지켜볼지",
+  "h": "ac17fe75"
+ },
+ "js.luangiai.rel-duyen-no": {
+  "t": "전생 인연",
+  "h": "c6b0ccb5"
+ },
+ "js.luangiai.rel-duyen-no-note": {
+  "t": "전생에 두 사람은 서로 어떤 사이였나",
+  "h": "30e3786b"
+ },
+ "js.luangiai.rel-hnt": {
+  "t": "자녀 조기 진로",
+  "h": "2735212c"
+ },
+ "js.luangiai.rel-hnt-note": {
+  "t": "지금부터 아이에게 무엇을 접하게 하면 좋을까",
+  "h": "a9892440"
+ },
+ "js.luangiai.rel-phong-thuy": {
+  "t": "인테리어 풍수",
+  "h": "3f80b53f"
+ },
+ "js.luangiai.rel-phong-thuy-note": {
+  "t": "방 사진을 찍으면 배치를 채점",
+  "h": "f41bead6"
+ },
+ "js.luangiai.rel-xem-tuoi": {
+  "t": "부부 궁합 보기",
+  "h": "f3e7b1ed"
+ },
+ "js.luangiai.rel-xem-tuoi-note": {
+  "t": "상대의 명반과 맞대어 보기",
+  "h": "2f6b9398"
+ },
  "js.luangiai.trong-12-cung-cua-la-so": {
   "t": "이 명반의 12궁 중 <b> ",
   "h": "c69f5267"
@@ -10314,6 +10918,10 @@
  "js.luangiai.vi-sao-cung": {
   "t": "가장 약한 궁 ‘ ",
   "h": "32e135e7"
+ },
+ "js.luangiai.xem-la-so-12-cung": {
+  "t": "명반 12궁 보기 →",
+  "h": "e1cc82d1"
  },
  "js.luangiai.xem-la-so-day-du": {
   "t": "▸ 전체 명반 보기",
@@ -24991,6 +25599,10 @@
   "t": "냥이 부족해요 — 충전해 주세요.",
   "h": "1d9e17da"
  },
+ "js.vanhannam.khong-dung-khung": {
+  "t": "12개월 틀을 만들지 못했습니다.",
+  "h": "d749d844"
+ },
  "js.vanhannam.khung-12-thang-am": {
   "t": "앞으로 12개월(음력)",
   "h": "761916e9"
@@ -24998,6 +25610,38 @@
  "js.vanhannam.khung-12-thang-am-lich-toi": {
   "t": "**앞으로 12개월(음력)** 구간 (",
   "h": "5f685658"
+ },
+ "js.vanhannam.lb-dv": {
+  "t": "현재 대운",
+  "h": "96f5f4af"
+ },
+ "js.vanhannam.lb-dv-tuoi": {
+  "t": "현재 대운 ({a}–{b}세)",
+  "h": "09578f83"
+ },
+ "js.vanhannam.lb-hanh-trinh": {
+  "t": "인생 여정",
+  "h": "1e1b88c4"
+ },
+ "js.vanhannam.lb-tieu-van": {
+  "t": "올해의 소운",
+  "h": "7ddc6d12"
+ },
+ "js.vanhannam.lb-tong-quan": {
+  "t": "명반 총론",
+  "h": "84ed13e5"
+ },
+ "js.vanhannam.loai-tot": {
+  "t": "길",
+  "h": "a6f70ec0"
+ },
+ "js.vanhannam.loai-trung": {
+  "t": "중",
+  "h": "71889ba3"
+ },
+ "js.vanhannam.loai-xau": {
+  "t": "흉",
+  "h": "3efce654"
  },
  "js.vanhannam.lock-cta": {
   "t": "전체 풀이 열기",
@@ -25103,6 +25747,14 @@
   "t": "살성:",
   "h": "6db93931"
  },
+ "js.vanhannam.thang-al": {
+  "t": "음력 {n}월",
+  "h": "27aed2d5"
+ },
+ "js.vanhannam.thang-al-nhuan": {
+  "t": "음력 윤{n}월",
+  "h": "2b2df525"
+ },
  "js.vanhannam.thang-am-toi-moi-o-mot": {
   "t": " 개월(음력), 칸마다 하나의 키워드",
   "h": "33508d52"
@@ -25110,6 +25762,10 @@
  "js.vanhannam.tieu-han-cung": {
   "t": "｜소한궁: ",
   "h": "cb20c10d"
+ },
+ "js.vanhannam.to-hop-title": {
+  "t": "한궁에 모인 별의 조합",
+  "h": "2ef7afa1"
  },
  "js.vanhannam.toi-nen-tap-trung-viec-gi": {
   "t": " 에는 무엇에 집중해야 하나요?",
