@@ -68,6 +68,32 @@ export function nhanTruThang(thang: number, nam: number): string {
     .join(' → ');
 }
 
+/**
+ * Trụ NĂM của tháng dương `thang/nam` theo năm TIẾT KHÍ (đổi ở Lập Xuân, cùng quy ước
+ * ngày giờ VN với `nhanTruThang` — gom các đoạn trụ tháng theo `namCanChi` của engine,
+ * tức `_yearPillarBySolarYear`). Tháng 3–12 ⇒ một trụ, y như năm dương ("Bính Ngọ");
+ * tháng 1 ⇒ cả tháng thuộc năm trước ("Ất Tỵ"); tháng vắt Lập Xuân (tháng 2) ⇒ hai đoạn
+ * "Ất Tỵ (1–3/2) → Bính Ngọ (4–28/2, Lập Xuân 3:02 ngày 4/2)". Ngoài bảng ⇒ năm dương.
+ */
+export function nhanTruNam(thang: number, nam: number): string {
+  const doan = truThangTrongThangDuong(thang, nam);
+  if (!doan || !doan.length) return ccInfo(nam)?.canChi || '';
+  const nhom: { tu: number; den: number; cc: string; moc: (typeof doan)[number]['vaoTiet'] }[] = [];
+  for (const d of doan) {
+    const cuoi = nhom[nhom.length - 1];
+    if (cuoi && cuoi.cc === d.namCanChi) cuoi.den = d.denNgay;
+    else nhom.push({ tu: d.tuNgay, den: d.denNgay, cc: d.namCanChi, moc: d.vaoTiet });
+  }
+  if (nhom.length === 1) return nhom[0].cc;
+  return nhom
+    .map((n, k) => {
+      const ngay = n.tu === n.den ? `${n.tu}/${thang}` : `${n.tu}–${n.den}/${thang}`;
+      const lx = k > 0 ? `, Lập Xuân ${n.moc.gio}:${String(n.moc.phut).padStart(2, '0')} ngày ${n.moc.ngay}/${n.moc.thang}` : '';
+      return `${n.cc} (${ngay}${lx})`;
+    })
+    .join(' → ');
+}
+
 const inPair = (pairs: number[][], a: number, b: number) =>
   pairs.some((p) => (p[0] === a && p[1] === b) || (p[0] === b && p[1] === a));
 const inGroup = (groups: number[][], a: number, b: number) =>
@@ -124,7 +150,7 @@ export function computeChonNgay(input: Rec): Rec | null {
     canChi: info.canChi,
     napAm: info.napAm,
     thangCanChi: nhanTruThang(thangNum, namNum),
-    namCanChi: ccInfo(namNum)?.canChi || '',
+    namCanChi: nhanTruNam(thangNum, namNum),
     thangNum,
     namNum,
   };
