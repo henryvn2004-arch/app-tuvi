@@ -720,6 +720,47 @@ console.log('__KQ__' + JSON.stringify(out));
     );
   }
 
+  // ── Tổ hợp sao cung hạn (W32A-2): chữ `toHop[]` lấy NGUYÊN từ public/cach_cuc_all.json ⇒ liệt kê TRỌN file (không cần mẫu):
+  // mọi tên hiển thị + mọi tóm tắt chạy qua CHÍNH tools-shared/to-hop.js (+ cach-cuc.js) phải trúng khoá (cach-cuc trước, to-hop sau).
+  {
+    const vm = await import('node:vm');
+    const CC = nguon('cach-cuc');
+    const TH = nguon('to-hop');
+    const I18n = {
+      locale: 'xx',
+      loadLong() {},
+      long: (ns, k, vi) => {
+        const m = ns === 'cach-cuc' ? CC : ns === 'to-hop' ? TH : null;
+        return m && m.has(k) ? '\u0001' + m.get(k) : vi;
+      },
+    };
+    const ctx = vm.createContext({ window: { I18n } });
+    vm.runInContext(readFileSync(join(ROOT, 'public/tools-shared/cach-cuc.js'), 'utf8'), ctx);
+    vm.runInContext(readFileSync(join(ROOT, 'public/tools-shared/to-hop.js'), 'utf8'), ctx);
+    const T = ctx.window.TuviToHop;
+    const raw = JSON.parse(readFileSync(join(ROOT, 'public/cach_cuc_all.json'), 'utf8')).filter(
+      (c) => Array.isArray(c.sao) && c.sao.length >= 2
+    );
+    // displayName = lib/agent/vanHanCombos.ts (tên mã → danh sách sao)
+    const ten = (c) =>
+      !c.ten || /_{2,}|^[A-Z0-9_]+$/.test(c.ten) ? c.sao.join(' + ') : String(c.ten);
+    const hut = [];
+    for (const c of raw) {
+      if (T.ten(ten(c)) !== '\u0001' + ten(c)) hut.push('ten: ' + ten(c));
+      if (c.tomTat && T.tomTat(c.tomTat) !== '\u0001' + c.tomTat)
+        hut.push('tomTat: ' + c.tomTat.slice(0, 40));
+    }
+    bao(
+      hut.length === 0,
+      `to-hop — ${raw.length} combo cach_cuc_all.json (tên + tóm tắt) đều trúng khoá cach-cuc/to-hop: ${hut.slice(0, 3).join(' | ') || 'không hụt'}`
+    );
+    const vh = readFileSync(join(ROOT, 'lib/agent/vanHanCombos.ts'), 'utf8');
+    bao(
+      vh.includes("/_{2,}|^[A-Z0-9_]+$/.test(ten)) return sao.join(' + ')"),
+      'to-hop — displayName của vanHanCombos.ts còn đúng quy tắc nguồn dùng (đổi thì sửa loadToHop + khối này)'
+    );
+  }
+
   // ── GOLDEN: chữ Việt byte-giống engine cũ (nguồn độc lập với bảng khuôn)
   {
     const gold = JSON.parse(

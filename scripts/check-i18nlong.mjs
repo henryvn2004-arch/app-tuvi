@@ -233,6 +233,16 @@ for (const ns of Object.keys(ENGINE_NS)) {
     fail(
       'public/luan-giai-core.js: thiếu _rT(r.text) ở 4 nhóm luật đại vận (tốt/trung/xấu/cảnh báo)'
     );
+  // W32A-2: tổ hợp sao cung hạn (toHop) ở Vận Hạn 12 Tháng qua TuviToHop.
+  {
+    const vh = doc('public/app-van-han-nam.html');
+    if (!/\/tools-shared\/to-hop\.js\?v=\d+/.test(vh))
+      fail(
+        'public/app-van-han-nam.html: không nạp /tools-shared/to-hop.js (tổ hợp sao giữ chữ Việt)'
+      );
+    if (!vh.includes('TH.ten(c.ten)') || !vh.includes('TH.tomTat(c.tomTat)'))
+      fail('public/app-van-han-nam.html: renderThang không dịch toHop qua TuviToHop (ten/tomTat)');
+  }
   const lg = doc('public/luan-giai-core.js');
   if ((lg.match(/_ccT\(/g) || []).length < 5)
     fail(
