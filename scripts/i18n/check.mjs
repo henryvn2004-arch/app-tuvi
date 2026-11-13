@@ -221,6 +221,18 @@ for (const f of fs.readdirSync(PUBLIC).filter((x) => x.endsWith('.html'))) {
       : v && typeof v === 'object'
         ? Object.entries(v).flatMap(([k, x]) => chuoi(x, `${ten}.${k}`))
         : [[ten, String(v)]];
+  const OPTION_VALUES = new Set(
+    fs
+      .readdirSync(PUBLIC)
+      .filter((f) => f.endsWith('.html'))
+      .flatMap((f) =>
+        [
+          ...fs
+            .readFileSync(path.join(PUBLIC, f), 'utf8')
+            .matchAll(/<option\b[^>]*\bvalue="([^"]+)"/g),
+        ].map((m) => m[1].replace(/&amp;/g, '&'))
+      )
+  );
   for (const f of ds) {
     const vi = JSON.parse(fs.readFileSync(path.join(PUBLIC, 'samples', f), 'utf8'));
     const want = khung(vi);
@@ -237,10 +249,17 @@ for (const f of fs.readdirSync(PUBLIC).filter((x) => x.endsWith('.html'))) {
         fail(`public/samples/${l}/${f}: thiếu _meta ghi rõ đây là mẫu, nhân vật hư cấu`);
       if (khung(phan) !== want)
         fail(`public/samples/${l}/${f}: khung khoá lệch bản vi (${want.slice(0, 120)})`);
-      // `.input.*` = giá trị điền form (value <option> GỬI SERVER, giữ chữ Việt) — chỉ được miễn khi TRÙNG Y bản vi ở cùng chỗ.
+      // `.input.*` = giá trị điền form. Value `<option>` GỬI SERVER giữ chữ Việt ⇒ chuỗi vi là một option value có thật thì
+      // bản nước PHẢI trùng y (khác là form không chọn được); chuỗi khác (tên người…) vẫn phải theo nước như mọi chỗ.
       const viIn = new Map(chuoi(vi, ''));
       for (const [k, v] of chuoi(phan, '')) {
-        if (k.startsWith('.input.') && viIn.get(k) === v) continue;
+        if (k.startsWith('.input.') && OPTION_VALUES.has(viIn.get(k))) {
+          if (viIn.get(k) !== v)
+            fail(
+              `public/samples/${l}/${f} ${k}: value <option> phải trùng bản vi ("${viIn.get(k)}")`
+            );
+          continue;
+        }
         for (const line of v.split('\n')) {
           if (!line.startsWith('[')) {
             if (VI_RE.test(line))
