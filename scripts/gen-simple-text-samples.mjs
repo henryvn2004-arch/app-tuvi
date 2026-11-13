@@ -18,7 +18,13 @@
  *     hoá ra đã có sẵn export kép (window.* cho trình duyệt, module.exports
  *     cho Node) — import thẳng được, không chép lại công thức.
  *
- *   npx tsx scripts/gen-simple-text-samples.mjs [dat-ten-con|dat-ten-dn|chon-ngay-tot|xem-tuoi|--all]
+ *   npm run gen:simple-samples -- [dat-ten-con|dat-ten-dn|chon-ngay-tot|xem-tuoi|--all] [--dry]
+ *   (= node --experimental-strip-types --no-warnings --import ./scripts/ts-alias-hooks.mjs …)
+ *   `--dry`: dựng prompt, in ra, KHÔNG gọi LLM, KHÔNG ghi file (kiểm nhanh, không cần key).
+ *   ⚠️ KHÔNG chạy bằng `npx tsx`: tsx không nằm trong lockfile ⇒ npx kéo bản bất kỳ, và tsx
+ *   4.x nạp lib/agent/prompts.ts theo kiểu CJS (package.json không có "type") ⇒ lỗi
+ *   "does not provide an export named 'ARC_GIONG_NGU_HANH'". Hook của repo xử lý `@/…` +
+ *   import không đuôi, chạy bằng Node ≥22 có sẵn.
  */
 import { writeFileSync, mkdirSync } from 'fs';
 import { join, dirname } from 'path';
@@ -162,8 +168,20 @@ Phân tích và gợi ý các khoảng ngày tốt trong tháng này cho sự ki
 async function runOne(toolId) {
   const cfg = CONFIGS[toolId];
   console.log(`\n=== ${cfg.label} (${toolId}) ===`);
-  requireEnv('GEMINI_API_KEY');
   const { system, user, maxTokens } = cfg.build(cfg.sample);
+  if (DRY) {
+    console.log(
+      `  [dry] system ${system.length} ký tự · user ${user.length} ký tự · maxTokens ${maxTokens}`
+    );
+    console.log(
+      user
+        .split('\n')
+        .map((l) => '    | ' + l)
+        .join('\n')
+    );
+    return;
+  }
+  requireEnv('GEMINI_API_KEY');
   console.log('  đang gọi LLM…');
   const r = await llmTextFull({ system, prompt: user, maxTokens });
   const text = r.text.trim();
@@ -416,7 +434,7 @@ Viết 180-230 từ văn xuôi.${focusQ ? ' Tối thiểu phải trả lời đ�
 
 async function runXemTuoi() {
   console.log('\n=== Xem Tuổi (xem-tuoi) ===');
-  requireEnv('GEMINI_API_KEY');
+  if (!DRY) requireEnv('GEMINI_API_KEY');
   const rA = computeLaso(XT_A, XT_NAM_XEM);
   const rB = computeLaso(XT_B, XT_NAM_XEM);
   if (!rA.ok || !rA.ls)
@@ -430,12 +448,17 @@ async function runXemTuoi() {
   for (let idx = 0; idx < XT_PHAN_LABELS.length; idx++) {
     const m = idx === 0 ? null : result.items[idx - 1];
     const prompt = xtBuildPhanPrompt(idx, m, result);
+    if (DRY) {
+      console.log(`  [dry] phần ${idx} (${XT_PHAN_LABELS[idx]}): prompt ${prompt.length} ký tự`);
+      continue;
+    }
     console.log(`  phần ${idx} (${XT_PHAN_LABELS[idx]}): đang gọi LLM…`);
     const r = await llmTextFull({ system: XT_SYSTEM, prompt, maxTokens: 1800 });
     texts[idx] = r.text.trim();
     console.log(`  phần ${idx}: OK (${texts[idx].length} ký tự, model ${r.model})`);
   }
 
+  if (DRY) return;
   const outPath = join(ROOT, 'public/samples/xem-tuoi-sample.json');
   mkdirSync(dirname(outPath), { recursive: true });
   writeFileSync(
@@ -457,7 +480,8 @@ async function runXemTuoi() {
   console.log(`✓ Ghi ${outPath}`);
 }
 
-const argv = process.argv.slice(2);
+const DRY = process.argv.includes('--dry');
+const argv = process.argv.slice(2).filter((a) => a !== '--dry');
 const ALL_IDS = [...Object.keys(CONFIGS), 'xem-tuoi'];
 const ids = argv[0] === '--all' || !argv[0] ? ALL_IDS : [argv[0]];
 for (const id of ids) {
