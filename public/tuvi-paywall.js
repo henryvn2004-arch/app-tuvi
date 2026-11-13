@@ -99,6 +99,11 @@ const TuviPaywall = (() => {
   // Cache theo path cho `loadSampleJson` — nhiều phần khoá trên CÙNG một trang
   // (13 phan của laso chẳng hạn) đọc chung MỘT file *-dummy.json, chỉ fetch 1 lần.
   const _sampleCache = {};
+  // Văn mẫu THEO NƯỚC (W32A-3, Henry chốt 2026-11-13): mỗi ngôn ngữ một nhân vật HƯ CẤU riêng ở `/samples/<locale>/<file>`
+  // (không dịch bản Việt). Chỉ file có trong danh sách này mới có bộ riêng — file khác (hoặc locale vi) đọc bản gốc;
+  // bộ riêng hỏng/thiếu thì rơi về bản gốc. Thêm lô mới ⇒ thêm tên file vào đây + bump `tuvi-paywall.js?v=`.
+  const SAMPLE_THEO_NUOC = ['laso-dummy.json', 'chu-trinh-cuoc-doi-dummy.json', 'van-han-nam-dummy.json'];
+  const SAMPLE_LOCALES = ['en', 'ja', 'ko', 'zh-tw', 'zh-cn'];
 
   // ── Ý định mở khoá TRƯỚC khi rời trang đi nạp Lượng ─────────────
   // Đo trên Chu Trình Cuộc Đời (2026-08-30): 12 lượt bấm mở khoá → 1 signup →
@@ -1879,11 +1884,19 @@ hr.tpw-div{border:none;border-top:1.5px solid #f0f0f0;margin:3px 0}
    * gọi tự rơi về `placeholderHtml` (không có sample thì về đúng ô giữ chỗ cũ,
    * không chặn cả trang).
    */
+  function _fetchJson(path) {
+    return fetch(path)
+      .then(function (r) { return r.ok ? r.json() : null; })
+      .catch(function () { return null; });
+  }
   function loadSampleJson(path) {
     if (!_sampleCache[path]) {
-      _sampleCache[path] = fetch(path)
-        .then(function (r) { return r.ok ? r.json() : null; })
-        .catch(function () { return null; });
+      var loc = (window.I18n && window.I18n.locale) || 'vi';
+      var m = /^\/samples\/([\w.-]+\.json)$/.exec(path);
+      var rieng = loc !== 'vi' && m && SAMPLE_THEO_NUOC.indexOf(m[1]) !== -1 && SAMPLE_LOCALES.indexOf(loc) !== -1;
+      _sampleCache[path] = rieng
+        ? _fetchJson('/samples/' + loc + '/' + m[1]).then(function (j) { return j || _fetchJson(path); })
+        : _fetchJson(path);
     }
     return _sampleCache[path];
   }

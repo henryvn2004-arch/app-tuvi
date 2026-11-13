@@ -285,7 +285,7 @@ window.SHELL_INTRO={key:'van-han-nam'};</script>
 <script src="/tuvi-form.js?v=16"></script>
 <script src="/tools-shared/cung-ngay-sinh.js?v=4"></script>
 <script src="/auth.js?v=10"></script>
-<script src="/tuvi-paywall.js?v=44"></script>
+<script src="/tuvi-paywall.js?v=45"></script>
 <script src="/tools-shared/hook-charts.js?v=4"></script>
 <script src="/tools-shared/fbcard-topic.js?v=2"></script>
 <script src="/poster.js?v=5"></script>
@@ -410,7 +410,8 @@ function _loggedIn(){ return !!(window.Auth&&window.Auth.isLoggedIn&&window.Auth
 // không chặn luồng chính, tool vẫn chạy như trước khi có blur).
 function _loadDummyVH(){
   if(DUMMY_VH) return Promise.resolve(DUMMY_VH);
-  return fetch('/samples/van-han-nam-dummy.json').then(function(r){ return r.json(); })
+  // Qua TuviPaywall.loadSampleJson ⇒ /<locale>/ đọc bộ mẫu riêng của nước đó (W32A-3), thiếu thì rơi về bản vi.
+  return TuviPaywall.loadSampleJson('/samples/van-han-nam-dummy.json')
     .then(function(j){ DUMMY_VH=j||{}; return DUMMY_VH; })
     .catch(function(){ DUMMY_VH={}; return DUMMY_VH; });
 }

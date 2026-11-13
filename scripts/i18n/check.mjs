@@ -174,6 +174,82 @@ for (const f of fs.readdirSync(PUBLIC).filter((x) => x.endsWith('.html'))) {
   }
 }
 
+// ── 0d. văn mẫu THEO NƯỚC (W32A-3): public/samples/<locale>/<file> ─────────────────────────────────
+// Danh sách file có bộ riêng = SAMPLE_THEO_NUOC trong tuvi-paywall.js (client chỉ đọc file có tên ở đó). Mỗi file phải có
+// đủ 5 locale, cùng bộ khoá phần với bản vi (+ `_meta` ghi rõ nhân vật hư cấu), thẻ hook đúng khuôn trang đọc, không còn
+// chữ Việt ngoài 3 nhãn máy, và zh-cn = bản sinh từ zh-tw (scripts/i18n/samples-zhcn.mjs).
+{
+  const pw = fs.readFileSync(path.join(PUBLIC, 'tuvi-paywall.js'), 'utf8');
+  const mm = /const SAMPLE_THEO_NUOC = (\[[^\]]*\]);/.exec(pw);
+  if (!mm)
+    fail('public/tuvi-paywall.js: không thấy SAMPLE_THEO_NUOC (đổi tên thì sửa check.mjs 0d)');
+  const ds = mm ? JSON.parse(mm[1].replace(/'/g, '"')) : [];
+  const LOCS = ['en', 'ja', 'ko', 'zh-tw', 'zh-cn'];
+  const TOPIC = [
+    'ban-than',
+    'hon-nhan',
+    'su-nghiep',
+    'tai-chinh',
+    'con-cai',
+    'gia-dinh',
+    'nha-cua',
+    'suc-khoe',
+    'van-han',
+    'ten-goi',
+  ];
+  const VI_RE = /[ăâđêôơưàáảãạằắẳẵặầấẩẫậèéẻẽẹềếểễệìíỉĩịòóỏõọồốổỗộờớởỡợùúủũụừứửữựỳýỷỹỵ]/i;
+  const { buildSampleZhCn } = await import('./samples-zhcn.mjs');
+  const zhcn = buildSampleZhCn();
+  for (const f of ds) {
+    const vi = JSON.parse(fs.readFileSync(path.join(PUBLIC, 'samples', f), 'utf8'));
+    const want = Object.keys(vi).sort().join(',');
+    for (const l of LOCS) {
+      const fp = path.join(PUBLIC, 'samples', l, f);
+      if (!fs.existsSync(fp)) {
+        fail(`public/samples/${l}/${f}: thiếu (file nằm trong SAMPLE_THEO_NUOC)`);
+        continue;
+      }
+      const raw = fs.readFileSync(fp, 'utf8');
+      const j = JSON.parse(raw);
+      const { _meta, ...phan } = j;
+      if (!_meta || String(_meta).length < 20)
+        fail(`public/samples/${l}/${f}: thiếu _meta ghi rõ đây là mẫu, nhân vật hư cấu`);
+      if (Object.keys(phan).sort().join(',') !== want)
+        fail(`public/samples/${l}/${f}: bộ khoá phần lệch bản vi (${want})`);
+      for (const [k, v] of Object.entries(phan)) {
+        for (const line of String(v).split('\n')) {
+          if (!line.startsWith('[')) {
+            if (VI_RE.test(line))
+              fail(`public/samples/${l}/${f} phần ${k}: còn chữ Việt — ${line.slice(0, 50)}`);
+            continue;
+          }
+          const h =
+            /^\[(TỐT|CẢNH BÁO|TRUNG TÍNH)\|([^\]|]{1,40})\|([a-z-]+)\]\s*\*\*(.+?)\*\*/.exec(line);
+          if (!h || !TOPIC.includes(h[3]))
+            fail(
+              `public/samples/${l}/${f} phần ${k}: dòng hook sai khuôn [NHÃN|từ khoá|chủ đề] **…** — ${line.slice(0, 50)}`
+            );
+          else if (VI_RE.test(line.slice(h[0].length - h[4].length - 4)))
+            fail(
+              `public/samples/${l}/${f} phần ${k}: còn chữ Việt sau nhãn — ${line.slice(0, 50)}`
+            );
+        }
+      }
+      if (l === 'zh-cn' && zhcn[f] !== raw)
+        fail(`public/samples/zh-cn/${f}: lệch bản sinh từ zh-tw — chạy npm run i18n:samples-zhcn`);
+    }
+  }
+  for (const l of LOCS) {
+    const dir = path.join(PUBLIC, 'samples', l);
+    if (fs.existsSync(dir))
+      for (const f of fs.readdirSync(dir))
+        if (!ds.includes(f))
+          fail(
+            `public/samples/${l}/${f}: không có trong SAMPLE_THEO_NUOC — client không bao giờ đọc`
+          );
+  }
+}
+
 // ── 1. khoá phải có trong vi.json ───────────────────────────────────────────
 const htmlFiles = fs.readdirSync(PUBLIC).filter((f) => f.endsWith('.html'));
 for (const f of htmlFiles) {
