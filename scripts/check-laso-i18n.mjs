@@ -12,6 +12,9 @@
  *   6. Migration: idempotent, RLS bật không policy, REVOKE public/anon/authenticated, search_path, CHECK
  *      locale = LOCALES trừ vi.
  *   7. `laso_public_i18n` chỉ được nhắc trong code chạy ở ĐÚNG MỘT file (`lib/laso/luan-i18n.ts`).
+ *   8. (W33a) Ngôn ngữ/slug ĐÃ dịch theo từng bản ghi: chỉ luận KHÔNG rỗng, lọc vi/rác, có hạn giờ, fail an toàn.
+ *   9. (W33a) Route `/<locale>/la-so/<slug>`: câu Việt tại chỗ gọi `tx()` = vi.json, đủ bản dịch MỌI ngôn ngữ,
+ *      chỉ bản ghi có luận ở locale mới index; pregen/ISR luôn noindex; `/la-so/` tự quản, `/la-so` thì không.
  * Chạy trên Node 20 (CI): dịch .ts bằng `typescript` rồi nạp từ thư mục tạm.
  */
 import fs from 'node:fs';
@@ -298,10 +301,145 @@ for (const [p, fn] of [
   );
 }
 
+// 8. Hreflang/sitemap theo TỪNG bản ghi (W33a): listLuanLocales / slugsLuanI18n / localesCoLuanI18n
+{
+  const ROWS = [
+    { slug: 's1', locale: 'ja', luan_giai: { 1: '一' }, updated_at: '2026-10-03' },
+    { slug: 's1', locale: 'en', luan_giai: { 1: 'one' } },
+    { slug: 's1', locale: 'ko', luan_giai: {} }, // rỗng ⇒ KHÔNG tính là đã dịch
+    { slug: 's1', locale: 'vi', luan_giai: { 1: 'x' } }, // rác ⇒ bị lọc
+    { slug: 's2', locale: 'ja', luan_giai: { 1: '二' } },
+  ];
+  const calls = [];
+  const f = async (url, init = {}) => {
+    calls.push({ url, init });
+    const u = new URL(url);
+    if (u.pathname !== '/rest/v1/laso_public_i18n') return new Response('?', { status: 400 });
+    const q = (k) => (u.searchParams.get(k) || '').replace(/^(eq|neq)\./, '');
+    let rows = ROWS.filter(
+      (r) =>
+        (!u.searchParams.get('slug') || r.slug === q('slug')) &&
+        (!u.searchParams.get('locale') || r.locale === q('locale')) &&
+        (u.searchParams.get('luan_giai') !== 'neq.{}' || Object.keys(r.luan_giai).length > 0)
+    );
+    const off = Number(u.searchParams.get('offset') || 0);
+    const lim = Number(u.searchParams.get('limit') || 1e9);
+    rows = rows.slice(off, off + lim);
+    return Response.json(rows);
+  };
+  const e = { url: 'https://sb.test', key: 'service-key', fetch: f };
+  const ls = await lib.listLuanLocales('s1', e);
+  must(
+    JSON.stringify(ls) === '["en","ja"]',
+    `listLuanLocales: phải đúng ngôn ngữ có luận KHÔNG rỗng, theo thứ tự, lọc vi/rác (được ${JSON.stringify(ls)})`
+  );
+  must(
+    JSON.stringify(await lib.listLuanLocales('s9', e)) === '[]',
+    'listLuanLocales: không có ⇒ []'
+  );
+  const g = calls.find((c) => c.url.includes('select=locale'));
+  must(g?.init.cache === 'no-store', 'listLuanLocales: GET phải cache:no-store');
+  must(!!g?.init.signal, 'listLuanLocales: GET phải có hạn giờ (signal)');
+  const sl = await lib.slugsLuanI18n('ja', e);
+  must(
+    sl.map((r) => r.slug).join(',') === 's1,s2' && sl[0].updated_at === '2026-10-03',
+    `slugsLuanI18n: sai (${JSON.stringify(sl)})`
+  );
+  must((await lib.slugsLuanI18n('vi', e)).length === 0, 'slugsLuanI18n(vi) phải rỗng');
+  must(
+    (await lib.slugsLuanI18n('ko', e)).length === 0,
+    'slugsLuanI18n: luận rỗng không vào sitemap'
+  );
+  const co = await lib.localesCoLuanI18n(e);
+  must(JSON.stringify(co) === '["en","ja"]', `localesCoLuanI18n: sai (${JSON.stringify(co)})`);
+  await quiet(async () => {
+    const miss = fakeDb({ missing: true });
+    must(
+      (await lib.listLuanLocales('s1', env(miss))) === null,
+      'bảng chưa có: listLuanLocales phải null'
+    );
+    must((await lib.slugsLuanI18n('ja', env(miss))).length === 0, 'bảng chưa có: slugs phải []');
+    const boom = fakeDb({ throws: true });
+    must(
+      (await lib.listLuanLocales('s1', env(boom))) === null,
+      'mạng ném: listLuanLocales phải null'
+    );
+    must((await lib.localesCoLuanI18n(env(boom))).length === 0, 'mạng ném: localesCo phải []');
+  });
+}
+
+// 9. Route /la-so/<slug> theo ngôn ngữ (W33a)
+{
+  const r = read('app/la-so/[slug]/route.ts');
+  const vi = JSON.parse(read('i18n/vi.json'));
+  const calls = [
+    ...r.matchAll(/\btx\((?:L|'vi'), '(ssr\.laso\.[\w-]+)', ('(?:[^'\\]|\\.)*'|[A-Z_]+)/g),
+  ];
+  must(calls.length >= 7, `route la-so: chỉ thấy ${calls.length} lời gọi tx() (bộ dò đọc hụt?)`);
+  const consts = Object.fromEntries(
+    [...r.matchAll(/const ([A-Z_]+) = '((?:[^'\\]|\\.)*)';/g)].map((m) => [m[1], m[2]])
+  );
+  const used = new Set();
+  for (const [, k, raw] of calls) {
+    used.add(k);
+    const text = raw.startsWith("'") ? raw.slice(1, -1) : consts[raw];
+    must(text !== undefined, `route la-so: tx('${k}') dùng hằng ${raw} không đọc được`);
+    must(
+      vi[k] === text,
+      `route la-so: câu Việt tại chỗ gọi tx('${k}') lệch vi.json ("${text}" ≠ "${vi[k]}")`
+    );
+  }
+  const keys = Object.keys(vi).filter((k) => k.startsWith('ssr.laso.'));
+  for (const k of keys)
+    must(used.has(k), `vi.json: ${k} không còn chỗ gọi trong route la-so (mồ côi)`);
+  const { hashVi } = await import(pathToFileURL(path.join(root, 'lib/i18n/core.mjs')).href);
+  for (const l of ['en', 'ja', 'ko', 'zh-tw', 'zh-cn']) {
+    const d = JSON.parse(read(`i18n/${l}.json`));
+    for (const k of keys)
+      must(
+        d[k] && d[k].t && d[k].h === hashVi(vi[k]),
+        `i18n/${l}.json: ${k} thiếu hoặc CŨ — bản ${l} của trang lá số sẽ lộ chữ Việt`
+      );
+  }
+  must(
+    r.includes('const locale = localeFromHeaders(req.headers);'),
+    'route la-so: phải đọc ngôn ngữ bằng localeFromHeaders'
+  );
+  must(
+    r.includes('listLuanLocales(slug)'),
+    'route la-so: hreflang phải lấy từ listLuanLocales (theo bản ghi)'
+  );
+  must(
+    r.includes('withTimeout(readLuanI18n(slug, locale), SB_TIMEOUT_MS, null)'),
+    'route la-so: bản luận ngoại ngữ phải đọc qua readLuanI18n (có hạn giờ)'
+  );
+  must(
+    r.includes('return ngoaiNgu(html, alts || [], !!ban,'),
+    'route la-so: chỉ bản ghi CÓ bản luận ở locale mới được coi là đã dịch'
+  );
+  must(
+    (r.match(/ngoaiNgu\([^;]*, \[\], false,/g) || []).length === 2,
+    'route la-so: pregen + ISR ở locale ≠ vi phải luôn noindex (dich=false)'
+  );
+  must(
+    /if \(row\.rendered_html && !dich\)/.test(r),
+    'route la-so: bản đã dịch không được hiện rendered_html (bản Việt dựng sẵn)'
+  );
+  const sm = await import(pathToFileURL(path.join(root, 'lib/i18n/self-managed.mjs')).href);
+  must(
+    sm.isSelfManaged('/la-so/abc') && !sm.isSelfManaged('/la-so'),
+    'self-managed: /la-so/<slug> tự quản, /la-so (trang tĩnh) không'
+  );
+  must(
+    read('next.config.mjs').includes("'/la-so/[slug]': ['./i18n/*.json']"),
+    'next.config: /la-so/[slug] phải mang i18n/*.json (đọc bằng fs lúc chạy)'
+  );
+}
+
 if (errs.length) {
   console.error('✗ check:lasoi18n\n  ' + errs.join('\n  '));
   process.exit(1);
 }
 console.log(
-  '✓ check:lasoi18n — kho luận theo ngôn ngữ: vi không chạm, hụt→sinh→ghi→trúng, fail an toàn, hợp đồng save-laso/4 trang/migration'
+  '✓ check:lasoi18n — kho luận theo ngôn ngữ: vi không chạm, hụt→sinh→ghi→trúng, fail an toàn, hợp đồng save-laso/4 trang/migration, route /<locale>/la-so theo bản ghi'
 );

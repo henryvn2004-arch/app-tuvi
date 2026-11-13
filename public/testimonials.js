@@ -2,6 +2,11 @@
 // Tự detect page, inject slider HTML + JS, auto-play, responsive
 (function () {
 
+  // Lời khách là lời người Việt THẬT (tên + thành phố) — KHÔNG dịch, KHÔNG dựng bản ngoại ngữ (Henry chốt 2026-11-13, W31b).
+  // Trang /<locale>/ khác vi: không chèn slider, không xuất dữ liệu ⇒ trang chủ (`home-rv-host`) tự bỏ qua.
+  var _loc = (window.I18n && window.I18n.locale) || ((/^\/(en|ja|ko|zh-tw|zh-cn)(\/|$)/.exec(location.pathname) || [])[1]) || 'vi';
+  if (_loc !== 'vi') return;
+
   // ── Review data theo tool ─────────────────────────────────────
 
   var DATA = {
