@@ -1,6 +1,6 @@
 # Nhật ký phát triển — mục lục
 
-602 mục ghi chép từng PR, tách khỏi `CLAUDE.md` để nó thôi ngốn ~350k token mỗi lượt.
+603 mục ghi chép từng PR, tách khỏi `CLAUDE.md` để nó thôi ngốn ~350k token mỗi lượt.
 
 **Sáu file dưới đây KHÔNG được nạp tự động.** Cần thì tra:
 
@@ -28,6 +28,7 @@ Luật rút ra từ các mục này đã được cô đọng lên `CLAUDE.md`. 
 
 | # | tháng | file | mục |
 |---:|---|---|---|
+| 1 | 2026-11 | `2026-11.md` | 🎭 W32A-4 — Văn mẫu mờ THEO NƯỚC lô 2 (Chân Dung Tiền Kiếp · Vợ Chồng · Duyên Nợ): engine server qua `sample-locale-portrait.ts`, tên tiền kiếp theo ns `past-life-ten`, `banDoi` cho 2 lá số |
 | 1 | 2026-11 | `2026-11.md` | 🎭 W32A-3 — Văn mẫu mờ THEO NƯỚC lô 1 (Luận Giải · Chu Trình · Vận Hạn): nhân vật hư cấu ja/ko/zh-tw/zh-cn/en, số liệu engine thật (`sample-locale-data.mjs`), `/samples/<locale>/` + `loadSampleJson` rơi về vi, check:i18n 0d |
 | 1 | 2026-11 | `2026-11.md` | 💬 Bảng giá: nhãn/mô tả `rail-message` (ghi chú nội bộ hiện cho khách, "Luận Đường") → "Hỏi Thầy", khoá `js.tool-desc.rail-message` + dịch, DB prod đã UPDATE |
 | 1 | 2026-11 | `2026-11.md` | 🔎 W31 — Rà soát i18n đợt 7: 95 trang × 5 ngôn ngữ × desktop/mobile (chạy form, engine thật); 2.610 → 2.306 chuỗi Việt; DB_NS `nhom`, thẻ Hôm nay, Hỏi Thầy, PWA, trang nạp; lô A–F ở `docs/i18n/audit-2026-11.md` |

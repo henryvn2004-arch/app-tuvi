@@ -102,7 +102,14 @@ const TuviPaywall = (() => {
   // Văn mẫu THEO NƯỚC (W32A-3, Henry chốt 2026-11-13): mỗi ngôn ngữ một nhân vật HƯ CẤU riêng ở `/samples/<locale>/<file>`
   // (không dịch bản Việt). Chỉ file có trong danh sách này mới có bộ riêng — file khác (hoặc locale vi) đọc bản gốc;
   // bộ riêng hỏng/thiếu thì rơi về bản gốc. Thêm lô mới ⇒ thêm tên file vào đây + bump `tuvi-paywall.js?v=`.
-  const SAMPLE_THEO_NUOC = ['laso-dummy.json', 'chu-trinh-cuoc-doi-dummy.json', 'van-han-nam-dummy.json'];
+  const SAMPLE_THEO_NUOC = [
+    'laso-dummy.json',
+    'chu-trinh-cuoc-doi-dummy.json',
+    'van-han-nam-dummy.json',
+    'chan-dung-tien-kiep-dummy.json',
+    'chan-dung-vo-chong-dummy.json',
+    'duyen-no-tien-kiep-dummy.json',
+  ];
   const SAMPLE_LOCALES = ['en', 'ja', 'ko', 'zh-tw', 'zh-cn'];
 
   // ── Ý định mở khoá TRƯỚC khi rời trang đi nạp Lượng ─────────────
