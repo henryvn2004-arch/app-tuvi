@@ -28,6 +28,7 @@ Luật rút ra từ các mục này đã được cô đọng lên `CLAUDE.md`. 
 
 | # | tháng | file | mục |
 |---:|---|---|---|
+| 1 | 2026-11 | `2026-11.md` | 💬 Bảng giá: nhãn/mô tả `rail-message` (ghi chú nội bộ hiện cho khách, "Luận Đường") → "Hỏi Thầy", khoá `js.tool-desc.rail-message` + dịch, DB prod đã UPDATE |
 | 1 | 2026-11 | `2026-11.md` | ✏️ Sửa 2 lỗi gõ còn lại trong câu engine (Kỵ→Tỵ xung chiếu · tự tối→tự ải), dịch lại 3 câu, engine `?v=3` |
 | 1 | 2026-11 | `2026-11.md` | 🧿 W30f-9 — Rail Chân Dung/Duyên Nợ Tiền Kiếp: tên + danh xưng đã dịch vào USER message (`runAgent` `wrapNhanVat` + `khoiTenTheoNgonNgu(…,'rail')`; system giữ tên Việt; tracing `/api/v1/chat`; vi byte-giống) |
 | 1 | 2026-11 | `2026-11.md` | 🧿 W30f-8 — Chân Dung / Duyên Nợ Tiền Kiếp: tên nhân vật + danh xưng nghề theo ngôn ngữ (mã additive `characterMa`/`titleMa`/`tenMa`, BUMP `SHAPE` 5→6, ns `past-life-ten` 522; prompt truyện nhận tên đã dịch qua `long-server.ts`; sửa câu sai của W30f-7; `cacheshape` không thấy `pastLifeMeta`) |
