@@ -4,8 +4,8 @@
 export { computeNgayTot, computeMonth, jdFromDate } from './engine.js';
 export type { NgayTotInfo, GioInfo } from './engine.js';
 
-export { scoreActivity, scoreAllActivities, topDaysForActivity } from './activities.js';
-export type { ActivityScore } from './activities.js';
+export { scoreActivity, scoreAllActivities, topDaysForActivity, LY_DO } from './activities.js';
+export type { ActivityScore, LyDoMa } from './activities.js';
 
 export {
   ACTIVITY_LIST, ACTIVITY_META,

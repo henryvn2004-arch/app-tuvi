@@ -17,7 +17,7 @@ export const dynamic = 'force-dynamic';
 import { NextResponse } from 'next/server';
 import { dungMotNgay } from '@/lib/almanac/day';
 import { todayVN } from '@/lib/engine/van-ngay';
-import { BASE, esc, renderPage } from '../ngay-tot/_shared';
+import { BASE, esc, renderPage } from '@/lib/ngay-tot/shared';
 import { ORG_ID } from '@/lib/seo/entity';
 
 const MUC_PILL: Record<string, string> = { cat: 'good', hung: 'bad', binh: 'mid' };
@@ -128,7 +128,7 @@ export async function GET() {
   `;
 
   const html = renderPage({
-    title, desc, canonical: url,
+    title, desc, path: '/xem-ngay-hom-nay',
     schema: {
       '@context': 'https://schema.org', '@type': 'Article',
       headline: title, description: desc, datePublished: today.toISOString(),

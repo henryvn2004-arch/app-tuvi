@@ -30135,6 +30135,494 @@
   "t": "저장된 명반 — 명보 자미두수",
   "h": "183c05e5"
  },
+ "ssr-ngay-tot.act.desc": {
+  "t": "{viecl} 길일을 2020-2036년 월별로 조회하세요. {mota}. 십이직·황도·삼낭/월기/양공기일에 따른 전통 역법.",
+  "h": "2f9a4d12"
+ },
+ "ssr-ngay-tot.act.eyebrow": {
+  "t": "길일 · {viec}",
+  "h": "2c825163"
+ },
+ "ssr-ngay-tot.act.h1": {
+  "t": "<em>{viec}</em> 길일",
+  "h": "5022c74e"
+ },
+ "ssr-ngay-tot.act.lg-bad": {
+  "t": "대부분 흉일",
+  "h": "4d59e7ef"
+ },
+ "ssr-ngay-tot.act.lg-good": {
+  "t": "좋은 날 있음 (≥ 4)",
+  "h": "160d4413"
+ },
+ "ssr-ngay-tot.act.lg-great": {
+  "t": "좋은 날 많음 (≥ 8)",
+  "h": "b796981a"
+ },
+ "ssr-ngay-tot.act.lg-soso": {
+  "t": "좋은 날 적음",
+  "h": "0e54fb65"
+ },
+ "ssr-ngay-tot.act.mlabel": {
+  "t": "{m}월",
+  "h": "d52534dc"
+ },
+ "ssr-ngay-tot.act.p": {
+  "t": "{mota}. 연도와 월을 선택하면 십이직, 황도 별, 간지, 좋은 시간 등 상세 정보와 함께 상위 길일을 볼 수 있습니다.",
+  "h": "58e3b5d0"
+ },
+ "ssr-ngay-tot.act.rel": {
+  "t": "다른 용도",
+  "h": "3d6555a4"
+ },
+ "ssr-ngay-tot.act.sec": {
+  "t": "연도와 월 선택",
+  "h": "c2c91944"
+ },
+ "ssr-ngay-tot.act.tip": {
+  "t": "{y}년 {m}월: 길일 {good}일, 흉일 {bad}일 (총 {total}일)",
+  "h": "491d720c"
+ },
+ "ssr-ngay-tot.act.title": {
+  "t": "{viec} — 길일 2020-2036 | {brand}",
+  "h": "15ab65e5"
+ },
+ "ssr-ngay-tot.actm.all-years": {
+  "t": "전체 연도",
+  "h": "b97f711f"
+ },
+ "ssr-ngay-tot.actm.desc": {
+  "t": "{mota}. {y}년 {m}월 최고의 길일을 간지, 십이직, 황도 별, 좋은 시간, 선정 이유와 함께 소개합니다.",
+  "h": "d91d2389"
+ },
+ "ssr-ngay-tot.actm.eyebrow": {
+  "t": "길일 · {viec}",
+  "h": "2c825163"
+ },
+ "ssr-ngay-tot.actm.h1": {
+  "t": "<em>{viec}</em> 길일 {y}년 {m}월",
+  "h": "88d611d1"
+ },
+ "ssr-ngay-tot.actm.intro": {
+  "t": "아래는 {y}년 {m}월에 {viecl}을(를) 하기에 가장 좋은 <strong>{n}일</strong>입니다. 십이직, 28수, 황도·흑도 별, 전통 흉일(삼낭, 월기, 양공기일)을 바탕으로 점수를 매겼습니다.",
+  "h": "4fe2533e"
+ },
+ "ssr-ngay-tot.actm.link-viec": {
+  "t": "{y}년 {m}월 {viec}",
+  "h": "868c6acb"
+ },
+ "ssr-ngay-tot.actm.none-h": {
+  "t": "적합한 날이 없습니다",
+  "h": "fbacc2eb"
+ },
+ "ssr-ngay-tot.actm.none-p": {
+  "t": "{y}년 {m}월에는 {viecl}에서 6점 이상인 날이 없습니다. 다른 월을 살펴보세요.",
+  "h": "45d4b07c"
+ },
+ "ssr-ngay-tot.actm.p": {
+  "t": "{mota}. {y}년 {m}월 최고의 길일.",
+  "h": "049d3df2"
+ },
+ "ssr-ngay-tot.actm.rel-thang": {
+  "t": "다른 월의 {viec}",
+  "h": "d7afecfc"
+ },
+ "ssr-ngay-tot.actm.rel-viec": {
+  "t": "{y}년 {m}월의 다른 용도",
+  "h": "04c4de0b"
+ },
+ "ssr-ngay-tot.actm.score": {
+  "t": "{score}/10 · {level}",
+  "h": "59d603de"
+ },
+ "ssr-ngay-tot.actm.sec": {
+  "t": "{y}년 {m}월 {viecl} 최고의 길일",
+  "h": "9c9d5157"
+ },
+ "ssr-ngay-tot.actm.title": {
+  "t": "{seo} | {brand}",
+  "h": "c9d73e80"
+ },
+ "ssr-ngay-tot.bc.root": {
+  "t": "길일 보기",
+  "h": "8b0b6818"
+ },
+ "ssr-ngay-tot.brand": {
+  "t": "명보 자미두수",
+  "h": "33336b26"
+ },
+ "ssr-ngay-tot.date.al": {
+  "t": "음력 {m}월 {d}일",
+  "h": "b577a1c8"
+ },
+ "ssr-ngay-tot.date.dmy": {
+  "t": "{y}년 {m}월 {d}일",
+  "h": "51e959ba"
+ },
+ "ssr-ngay-tot.date.full": {
+  "t": "{y}년 {m}월 {d}일 ({thu})",
+  "h": "13d11d28"
+ },
+ "ssr-ngay-tot.day.c-gio": {
+  "t": "12시진 — 황도(초록) / 흑도(빨강)",
+  "h": "2b2d22a2"
+ },
+ "ssr-ngay-tot.day.c-ky": {
+  "t": "금기",
+  "h": "38427f1d"
+ },
+ "ssr-ngay-tot.day.c-sao": {
+  "t": "십이직·별·수",
+  "h": "3c6b13be"
+ },
+ "ssr-ngay-tot.day.c-tongquan": {
+  "t": "개요",
+  "h": "286a38e3"
+ },
+ "ssr-ngay-tot.day.c-viec": {
+  "t": "10가지 용도별 평가",
+  "h": "1195d1e2"
+ },
+ "ssr-ngay-tot.day.canhbao": {
+  "t": "<strong>⚠ 금기 경고:</strong> 이날은 {v}에 해당합니다 — 결혼, 개업, 입주, 장례 등 중요한 일은 피하세요.",
+  "h": "5fd0efc5"
+ },
+ "ssr-ngay-tot.day.co-daiky": {
+  "t": "해당 — 대금기",
+  "h": "5631a693"
+ },
+ "ssr-ngay-tot.day.co-ky": {
+  "t": "해당 — 금기",
+  "h": "d2480709"
+ },
+ "ssr-ngay-tot.day.desc": {
+  "t": "{y}년 {m}월 {d}일({canchi}, 음력 {am}월 {ad}일) 상세 분석: 십이직 {truc}, {sao}성, {tu}수, 10가지 용도별 평가.",
+  "h": "8dcd4b96"
+ },
+ "ssr-ngay-tot.day.eyebrow": {
+  "t": "{thu} · {canchi}",
+  "h": "b8dc00bb"
+ },
+ "ssr-ngay-tot.day.h1": {
+  "t": "<em>{y}년 {m}월 {d}일</em>은 좋은 날일까?",
+  "h": "45e976bb"
+ },
+ "ssr-ngay-tot.day.khong": {
+  "t": "없음",
+  "h": "3b4a527f"
+ },
+ "ssr-ngay-tot.day.luuy": {
+  "t": "<strong>유의:</strong> {v}",
+  "h": "8d24b1aa"
+ },
+ "ssr-ngay-tot.day.next": {
+  "t": "{m}월 {d}일 →",
+  "h": "40166884"
+ },
+ "ssr-ngay-tot.day.nhuan": {
+  "t": "(윤달)",
+  "h": "842d2b50"
+ },
+ "ssr-ngay-tot.day.p": {
+  "t": "양력 {y}년 {m}월 {d}일 상세 분석 (음력 {ay}년 {am}월 {ad}일). 전통적인 10가지 용도에 대해 평가합니다.",
+  "h": "4ae9f023"
+ },
+ "ssr-ngay-tot.day.prev": {
+  "t": "← {m}월 {d}일",
+  "h": "0bba4672"
+ },
+ "ssr-ngay-tot.day.r-am": {
+  "t": "음력",
+  "h": "b0246c79"
+ },
+ "ssr-ngay-tot.day.r-canchi": {
+  "t": "일진(날의 간지)",
+  "h": "0efc9953"
+ },
+ "ssr-ngay-tot.day.r-chithang": {
+  "t": "월지(달의 지지)",
+  "h": "e54f3f41"
+ },
+ "ssr-ngay-tot.day.r-chung": {
+  "t": "종합 평가",
+  "h": "ae69d733"
+ },
+ "ssr-ngay-tot.day.r-duong": {
+  "t": "양력",
+  "h": "dfac44de"
+ },
+ "ssr-ngay-tot.day.r-duongcong": {
+  "t": "양공기일",
+  "h": "08b3a8ce"
+ },
+ "ssr-ngay-tot.day.r-saongay": {
+  "t": "날의 별",
+  "h": "83763a2c"
+ },
+ "ssr-ngay-tot.day.r-thu": {
+  "t": "요일",
+  "h": "f445a052"
+ },
+ "ssr-ngay-tot.day.r-truc": {
+  "t": "십이직",
+  "h": "e075024d"
+ },
+ "ssr-ngay-tot.day.r-tu": {
+  "t": "28수",
+  "h": "28486f82"
+ },
+ "ssr-ngay-tot.day.r-ynghia": {
+  "t": "의미",
+  "h": "1206aa20"
+ },
+ "ssr-ngay-tot.day.sec-top3": {
+  "t": "이날 가장 적합한 3가지 일",
+  "h": "778a1834"
+ },
+ "ssr-ngay-tot.day.title": {
+  "t": "{y}년 {m}월 {d}일은 좋은 날일까? — {thu}, {canchi}",
+  "h": "9c0a1282"
+ },
+ "ssr-ngay-tot.day.toan-thang": {
+  "t": "{y}년 {m}월 전체",
+  "h": "0353135f"
+ },
+ "ssr-ngay-tot.day.top-head": {
+  "t": "{viec} ({score}/10 — {level})",
+  "h": "b118aa41"
+ },
+ "ssr-ngay-tot.day.tot": {
+  "t": "<strong>좋은 점:</strong> {v}",
+  "h": "42c91bfb"
+ },
+ "ssr-ngay-tot.dg.binh": {
+  "t": "보통",
+  "h": "3318401b"
+ },
+ "ssr-ngay-tot.dg.tot": {
+  "t": "좋음",
+  "h": "a6f70ec0"
+ },
+ "ssr-ngay-tot.dg.xau": {
+  "t": "나쁨",
+  "h": "3efce654"
+ },
+ "ssr-ngay-tot.hd.hac": {
+  "t": "흑도",
+  "h": "35f44326"
+ },
+ "ssr-ngay-tot.hd.hoang": {
+  "t": "황도",
+  "h": "3d6bc2ed"
+ },
+ "ssr-ngay-tot.home": {
+  "t": "홈",
+  "h": "fca04858"
+ },
+ "ssr-ngay-tot.hub.desc": {
+  "t": "용도별 길일 조회: 결혼, 착공, 개업, 입주, 출행, 재물운, 출산, 장례, 우물 파기, 집 수리. 십이직·28수·황도에 따른 전통 역법.",
+  "h": "8aff5d21"
+ },
+ "ssr-ngay-tot.hub.eyebrow": {
+  "t": "만세력 · 전통 역법",
+  "h": "f34cd19c"
+ },
+ "ssr-ngay-tot.hub.h1": {
+  "t": "<em>길일</em> 보기 2020–2036",
+  "h": "af666789"
+ },
+ "ssr-ngay-tot.hub.p": {
+  "t": "10가지 용도별로 좋은 날 조회 — 십이직, 28수, 황도·흑도와 삼낭·월기·양공기일에 근거합니다.",
+  "h": "423bc3b7"
+ },
+ "ssr-ngay-tot.hub.sec-nam": {
+  "t": "연도별 보기",
+  "h": "42f9bd36"
+ },
+ "ssr-ngay-tot.hub.sec-viec": {
+  "t": "용도별 보기",
+  "h": "525ff9cc"
+ },
+ "ssr-ngay-tot.hub.title": {
+  "t": "길일 보기 — 만세력 2020-2036 | {brand}",
+  "h": "03b20f37"
+ },
+ "ssr-ngay-tot.join.list": {
+  "t": "{a}, {b}",
+  "h": "248bbe67"
+ },
+ "ssr-ngay-tot.join.ly": {
+  "t": "{a}; {b}",
+  "h": "bb5f9458"
+ },
+ "ssr-ngay-tot.ky.duongcong": {
+  "t": "양공",
+  "h": "528f09a5"
+ },
+ "ssr-ngay-tot.ky.nguyetky": {
+  "t": "월기",
+  "h": "3598b0c5"
+ },
+ "ssr-ngay-tot.ky.tamnuong": {
+  "t": "삼낭",
+  "h": "a82168f4"
+ },
+ "ssr-ngay-tot.level.binh-thuong": {
+  "t": "보통",
+  "h": "d45f4d1f"
+ },
+ "ssr-ngay-tot.level.rat-tot": {
+  "t": "매우 좋음",
+  "h": "171ded25"
+ },
+ "ssr-ngay-tot.level.rat-xau": {
+  "t": "매우 나쁨",
+  "h": "e1932052"
+ },
+ "ssr-ngay-tot.level.tot": {
+  "t": "좋음",
+  "h": "a6f70ec0"
+ },
+ "ssr-ngay-tot.level.xau": {
+  "t": "나쁨",
+  "h": "3efce654"
+ },
+ "ssr-ngay-tot.lichm.actlink": {
+  "t": "{m}월 {viec}",
+  "h": "d47baeee"
+ },
+ "ssr-ngay-tot.lichm.desc": {
+  "t": "{y}년 {m}월의 길일·흉일 전체 조회: 간지, 십이직, 황도 별, 28수와 하루마다 10가지 용도별 평가.",
+  "h": "b122370e"
+ },
+ "ssr-ngay-tot.lichm.eyebrow": {
+  "t": "만세력 · {y}년 {m}월",
+  "h": "c9318386"
+ },
+ "ssr-ngay-tot.lichm.h1": {
+  "t": "<em>{y}년 {m}월</em> 길일",
+  "h": "0328da50"
+ },
+ "ssr-ngay-tot.lichm.p": {
+  "t": "{y}년 {m}월 {n}일간의 상세표: 간지, 십이직, 28수, 황도 별, 흉일, 10가지 용도별 평가.",
+  "h": "e03b9418"
+ },
+ "ssr-ngay-tot.lichm.rel": {
+  "t": "다른 월",
+  "h": "1c3f0f97"
+ },
+ "ssr-ngay-tot.lichm.sec-ngay": {
+  "t": "{y}년 {m}월의 {n}일",
+  "h": "bb9e4cd2"
+ },
+ "ssr-ngay-tot.lichm.sec-nhanh": {
+  "t": "용도별 바로 보기",
+  "h": "ae3b822b"
+ },
+ "ssr-ngay-tot.lichm.title": {
+  "t": "{y}년 {m}월 길일 — 만세력 | {brand}",
+  "h": "3c04b37f"
+ },
+ "ssr-ngay-tot.lichm.toan-nam": {
+  "t": "{y}년 전체",
+  "h": "93830066"
+ },
+ "ssr-ngay-tot.lichy.cell": {
+  "t": "{m}월 좋은 날 보기",
+  "h": "ee33b4db"
+ },
+ "ssr-ngay-tot.lichy.desc": {
+  "t": "{y}년 만세력: 12개월 전체의 길일을 월별로 조회하세요. 십이직·28수·황도/흑도에 따른 전통 역법.",
+  "h": "25d80478"
+ },
+ "ssr-ngay-tot.lichy.eyebrow": {
+  "t": "만세력 · {y}년",
+  "h": "88716877"
+ },
+ "ssr-ngay-tot.lichy.h1": {
+  "t": "<em>{y}년</em> 길일 달력",
+  "h": "098d90e9"
+ },
+ "ssr-ngay-tot.lichy.p": {
+  "t": "월을 선택하면 결혼, 착공, 개업, 입주 등 중요한 일에 좋은 날을 볼 수 있습니다.",
+  "h": "79e02c37"
+ },
+ "ssr-ngay-tot.lichy.rel": {
+  "t": "다른 연도",
+  "h": "f4d1f92b"
+ },
+ "ssr-ngay-tot.lichy.sec": {
+  "t": "{y}년 12개월",
+  "h": "88964a9e"
+ },
+ "ssr-ngay-tot.lichy.title": {
+  "t": "{y}년 길일 달력 — 월별 좋은 날 보기 | {brand}",
+  "h": "05b707e6"
+ },
+ "ssr-ngay-tot.m.cap": {
+  "t": "{m}월",
+  "h": "1a19a1f3"
+ },
+ "ssr-ngay-tot.m.my": {
+  "t": "{y}년 {m}월",
+  "h": "d45437d9"
+ },
+ "ssr-ngay-tot.meta.canchi": {
+  "t": "간지: <strong>{v}</strong>",
+  "h": "fdab5a61"
+ },
+ "ssr-ngay-tot.meta.giohd": {
+  "t": "<strong>황도 시간:</strong> {v}",
+  "h": "13712772"
+ },
+ "ssr-ngay-tot.meta.ky": {
+  "t": "금기: {v}",
+  "h": "b4b994a1"
+ },
+ "ssr-ngay-tot.meta.luuy": {
+  "t": "<strong>유의:</strong> {v}",
+  "h": "8d24b1aa"
+ },
+ "ssr-ngay-tot.meta.lydo": {
+  "t": "<strong>좋은 이유:</strong> {v}",
+  "h": "5b070ec2"
+ },
+ "ssr-ngay-tot.meta.sao": {
+  "t": "<strong>{sao}</strong>성 ({hd})",
+  "h": "7b460ac7"
+ },
+ "ssr-ngay-tot.meta.totcho": {
+  "t": "<strong>좋은 일:</strong> {v}",
+  "h": "730497de"
+ },
+ "ssr-ngay-tot.meta.truc": {
+  "t": "십이직: <strong>{v}</strong>",
+  "h": "ce07dd1e"
+ },
+ "ssr-ngay-tot.meta.tu": {
+  "t": "28수: <strong>{v}</strong>",
+  "h": "da6d1fd9"
+ },
+ "ssr-ngay-tot.rel.other-days": {
+  "t": "다른 날",
+  "h": "540cfe27"
+ },
+ "ssr-ngay-tot.tc.binh": {
+  "t": "평",
+  "h": "3318401b"
+ },
+ "ssr-ngay-tot.tc.cat": {
+  "t": "길",
+  "h": "70e9b769"
+ },
+ "ssr-ngay-tot.tc.hung": {
+  "t": "흉",
+  "h": "3baaa792"
+ },
+ "ssr-ngay-tot.y.label": {
+  "t": "{y}년",
+  "h": "8a3268fc"
+ },
  "ssr.laso.bc": {
   "t": "{canchi}년생 {gioi} — 명궁 {cung}궁",
   "h": "0094aee9"

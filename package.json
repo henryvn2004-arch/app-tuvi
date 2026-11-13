@@ -33,6 +33,7 @@
     "i18n:split-markup": "node scripts/i18n/split-markup.mjs",
     "i18n:fix-ns": "node scripts/i18n/fix-ns.mjs",
     "i18n:prune": "node scripts/i18n/prune.mjs",
+    "i18n:khung": "node scripts/i18n/sync-khung.mjs",
     "i18n:fonts": "node scripts/i18n/fonts.mjs",
     "pdf:fonts": "node scripts/pdf-fonts.mjs",
     "test:unit": "playwright test -c playwright.unit.config.ts",
