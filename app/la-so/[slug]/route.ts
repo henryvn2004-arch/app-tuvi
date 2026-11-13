@@ -15,6 +15,12 @@ import { PUBLISHED_ONLY } from '@/lib/content/publish-filter';
 import { ORG_ID } from '@/lib/seo/entity';
 import { usdLabel, usdPerCredit } from '@/lib/billing/packages';
 import { ASK_CSS, ASK_SCRIPT, askBarHTML, askBoxHTML, fetchThayCard, type AskChip, type ThayCard } from '@/lib/seo/ask-box';
+import { HREFLANG, localeFromHeaders, localePrefix, type Locale } from '@/lib/i18n/locales';
+import { term, localizeText, type GlossaryLocale } from '@/lib/i18n/glossary';
+import { loadAvailability, loadLocale, loadVi } from '@/lib/i18n/dict.mjs';
+import { renderLocalized } from '@/lib/i18n/render.mjs';
+import { FRAME } from '@/lib/pdf/i18n';
+import { listLuanLocales, readLuanI18n, type LuanStore } from '@/lib/laso/luan-i18n';
 
 // ⚠️ Module-level: must run before any request so that if loadEngine() sets
 // globalThis.window = globalThis, Next.js URL parsing (getLocationOrigin)
@@ -273,12 +279,75 @@ ${ASK_SCRIPT}
 </body></html>`;
 }
 
-function buildPublicHTML(row: Record<string,unknown>, slug: string): string {
+// ────────────────────────────────────────────────────────────────────────────
+// Đa ngôn ngữ (i18n W33a) — `/<locale>/la-so/<slug>`
+// proxy.ts bóc tiền tố rồi đưa THẲNG về đây kèm `x-tvmb-locale` (lib/i18n/self-managed.mjs, mục '/la-so/').
+// 🔑 "Đã dịch" là chuyện của TỪNG BẢN GHI: chỉ dòng laso_public có luận ở `laso_public_i18n` (cửa DUY NHẤT
+//    lib/laso/luan-i18n.ts) cho ngôn ngữ đó mới index + canonical tự trỏ + hreflang của đúng những ngôn ngữ
+//    bản ghi ấy có. Chưa có bản dịch / pregen / ISR ⇒ vẫn phục vụ (khách bấm link) nhưng noindex, không
+//    canonical/hreflang — chữ Việt dưới URL /ja không bao giờ được index.
+// Chữ khung: khoá `ssr.laso.*` của i18n/<locale>.json; câu Việt viết NGAY tại chỗ gọi `tx()` = bản vi (đường
+// vi không đọc file nào, byte-giống bản cũ) — `check:lasoi18n` canh câu tại chỗ gọi khớp vi.json và đủ bản
+// dịch. Tên can chi/địa chi/sao/nạp âm qua glossary. Lớp ngoài (nav, i18n.js, font CJK, lang, link nội bộ,
+// JSON-LD url/inLanguage) do `renderLocalized` lo — cùng hàm app/i18n-render dùng.
+// ────────────────────────────────────────────────────────────────────────────
+function tx(locale: Locale, key: string, vi: string, vars: Record<string, string> = {}): string {
+  let s = vi;
+  if (locale !== 'vi') {
+    const e = (loadLocale(locale) as Record<string, { t?: unknown } | undefined>)[key];
+    if (e && typeof e.t === 'string' && e.t) s = e.t;
+  }
+  return s.replace(/\{(\w+)\}/g, (m, k: string) => (k in vars ? vars[k] : m));
+}
+
+interface PubCtx {
+  locale: Locale;
+  /** Ngôn ngữ ≠ vi đã có bản luận của bản ghi này (hreflang). */
+  alts: Locale[];
+  /** Bản luận ở `locale` (null = chưa dịch ⇒ hiện bản Việt kèm lời báo, noindex). */
+  luan: LuanStore | null;
+}
+
+const PUB_VI: PubCtx = { locale: 'vi', alts: [], luan: null };
+
+/** Lớp ngoài cho bản `/<locale>/la-so/<slug>`. `dich` = nội dung của bản ghi đã ở đúng ngôn ngữ. */
+function localizeLaso(html: string, locale: Locale, slug: string, alts: Locale[], dich: boolean) {
+  const path = `/la-so/${slug}`;
+  const avail = { ...(loadAvailability() as Record<string, string[]>), [path]: dich ? alts : [] };
+  return renderLocalized({ html, locale, path, vi: loadVi(), dict: loadLocale(locale), avail, selfComplete: dich });
+}
+
+function buildPublicHTML(row: Record<string,unknown>, slug: string, ctx: PubCtx = PUB_VI): string {
+  const L     = ctx.locale;
+  const dich  = L !== 'vi' && !!ctx.luan;
+  const gl    = L as GlossaryLocale;
   const url   = `${BASE}/la-so/${slug}`;
   const gt    = row.gioi_tinh === 'nu' ? 'Nữ' : 'Nam';
-  const title = `Lá Số ${esc(row.can_chi_nam)} ${gt} — Cung ${esc(row.cung_menh)} — Tử Vi Minh Bảo`;
-  const desc  = `Lá số tử vi ${row.can_chi_nam} ${gt.toLowerCase()}, cung mệnh ${row.cung_menh}, chính tinh ${row.chinh_tinh || ''}, nạp âm ${row.nap_am || ''}.`;
-  const img   = ogImg(BASE, title, `Cung ${esc(row.cung_menh as string)}`);
+  // Bản vi giữ NGUYÊN phép ghép cũ (kể cả `${null}` ⇒ "null" ở mô tả) — biến dưới đây là đúng các mảnh đó.
+  const viVars = {
+    canchi: esc(row.can_chi_nam), cung: esc(row.cung_menh), gioi: gt,
+    canchi_raw: String(row.can_chi_nam), cung_raw: String(row.cung_menh), gioi_thuong: gt.toLowerCase(),
+    chinh: String(row.chinh_tinh || ''), napam: String(row.nap_am || ''),
+  };
+  const v = L === 'vi' ? viVars : (() => {
+    const canchi = row.can_chi_nam ? term(gl, 'canchi', String(row.can_chi_nam)) : '';
+    const cung   = row.cung_menh ? term(gl, 'chi', String(row.cung_menh)) : '';
+    const gioi   = row.gioi_tinh === 'nu' ? FRAME[L].female : FRAME[L].male;
+    return {
+      canchi: esc(canchi), cung: esc(cung), gioi,
+      canchi_raw: canchi, cung_raw: cung, gioi_thuong: gioi.toLowerCase(),
+      // "Tử Vi, Thiên Phủ" → ja/zh ngăn bằng 、 (dấu phẩy Latin giữa chữ Hán trông như lỗi gõ).
+      chinh: localizeText(gl, String(row.chinh_tinh || '')).replace(/,\s*/g, L === 'en' || L === 'ko' ? ', ' : '、'),
+      napam: localizeText(gl, String(row.nap_am || '')),
+    };
+  })();
+  const TITLE = 'Lá Số {canchi} {gioi} — Cung {cung} — Tử Vi Minh Bảo';
+  const title = tx(L, 'ssr.laso.title', TITLE, v);
+  const desc  = tx(L, 'ssr.laso.desc', 'Lá số tử vi {canchi_raw} {gioi_thuong}, cung mệnh {cung_raw}, chính tinh {chinh}, nạp âm {napam}.', v);
+  const home  = tx(L, 'ssr.laso.home', 'Trang Chủ');
+  const kho   = tx(L, 'ssr.laso.kho', 'Mệnh Khố');
+  // Ảnh OG giữ chữ VIỆT ở mọi ngôn ngữ: /api/og chỉ nạp font Be Vietnam Pro (chữ CJK sẽ thành ô vuông).
+  const img   = ogImg(BASE, tx('vi', 'ssr.laso.title', TITLE, viVars), `Cung ${esc(row.cung_menh as string)}`);
   const schema = JSON.stringify([
     {'@context':'https://schema.org','@type':'Article',headline:title,description:desc,url,inLanguage:'vi',
      datePublished:(row.created_at as string||'').slice(0,10)||undefined,
@@ -286,10 +355,19 @@ function buildPublicHTML(row: Record<string,unknown>, slug: string): string {
      publisher:{'@type':'Organization', '@id': ORG_ID,name:'Tử Vi Minh Bảo',url:BASE,logo:{'@type':'ImageObject',url:`${BASE}/seal.webp`}},
      image:{'@type':'ImageObject',url:img}},
     {'@context':'https://schema.org','@type':'BreadcrumbList',itemListElement:[
-      {'@type':'ListItem',position:1,name:'Trang Chủ',item:`${BASE}/`},
-      {'@type':'ListItem',position:2,name:'Mệnh Khố',item:`${BASE}/menh-kho.html`},
+      {'@type':'ListItem',position:1,name:home,item:`${BASE}/`},
+      {'@type':'ListItem',position:2,name:kho,item:`${BASE}/menh-kho.html`},
       {'@type':'ListItem',position:3,name:title,item:url}]},
   ]);
+  // Bản vi: hreflang tới ĐÚNG những ngôn ngữ bản ghi này đã có (bản ≠ vi do renderLocalized dựng).
+  const altsVi = L === 'vi' && ctx.alts.length
+    ? ['vi' as Locale, ...ctx.alts].map((l) => `\n<link rel="alternate" hreflang="${HREFLANG[l]}" href="${BASE}${localePrefix(l)}/la-so/${slug}">`).join('') +
+      `\n<link rel="alternate" hreflang="x-default" href="${url}">`
+    : '';
+  // Bản ≠ vi CHƯA dịch: nói thẳng phần dưới là tiếng Việt, kèm link bản gốc.
+  const chuaDich = L !== 'vi' && !dich
+    ? `<p style="background:#F9F4EB;border:1px solid #E8E0CF;border-radius:8px;padding:12px 16px;margin:16px 0;font-size:14px;color:#5a4a2a">${tx(L, 'ssr.laso.chi-tieng-viet', 'Bản luận giải của lá số này hiện chỉ có bằng tiếng Việt.')} <a href="/la-so/${slug}" hreflang="vi">${tx(L, 'ssr.laso.xem-ban-viet', 'Xem bản tiếng Việt')}</a></p>\n`
+    : '';
   const commonHead = `<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
 <title>${title}</title>
 <meta name="description" content="${esc(desc)}">
@@ -303,26 +381,26 @@ function buildPublicHTML(row: Record<string,unknown>, slug: string): string {
 <meta name="twitter:description" content="${esc(desc)}">
 <meta name="twitter:image" content="${esc(img)}">
 <meta name="robots" content="index, follow">
-<link rel="canonical" href="${url}">
+<link rel="canonical" href="${url}">${altsVi}
 <link rel="icon" type="image/webp" href="/seal.webp">
 <script type="application/ld+json">${schema}</script>`;
   const bcHTML = `<div style="background:#F4F2EC;border-bottom:1px solid #E8E8E8;padding:12px 40px;font-size:12px;color:#777;display:flex;gap:8px;align-items:center">
-  <a href="/" style="color:#777;text-decoration:none">Trang Chủ</a><span style="color:#CCC">›</span>
-  <a href="/menh-kho.html" style="color:#777;text-decoration:none">Mệnh Khố</a><span style="color:#CCC">›</span>
-  <span>${esc(row.can_chi_nam as string)} ${esc(gt)} — Cung ${esc(row.cung_menh as string)}</span>
+  <a href="/" style="color:#777;text-decoration:none">${home}</a><span style="color:#CCC">›</span>
+  <a href="/menh-kho.html" style="color:#777;text-decoration:none">${kho}</a><span style="color:#CCC">›</span>
+  <span>${tx(L, 'ssr.laso.bc', '{canchi} {gioi} — Cung {cung}', { ...v, gioi: esc(v.gioi) })}</span>
 </div>`;
-  if (row.rendered_html) {
+  if (row.rendered_html && !dich) {
     return `<!DOCTYPE html><html lang="vi"><head>
 ${commonHead}
 <script src="/auth.js" defer></script>
 </head><body>
 <div id="nav-ph" style="height:60px;background:#FBFAF6"></div>
 ${bcHTML}
-${row.rendered_html}
+${chuaDich}${L === 'vi' ? row.rendered_html : `<div lang="vi">${row.rendered_html}</div>`}
 <script src="/track.js?v=8" defer></script><script src="/nav.js?v=50" defer></script>
 </body></html>`;
   }
-  const luanGiai: Record<string,string> = (row.luan_giai as Record<string,string>) || {};
+  const luanGiai: Record<string,string> = ((dich ? ctx.luan : row.luan_giai) as Record<string,string>) || {};
   const sections = Object.entries(luanGiai).sort(([a],[b]) => Number(a)-Number(b));
   const bodyHTML = sections.map(([,v]) => `<div style="margin-bottom:24px">${String(v||'').split('\n').map(l=>`<p>${l}</p>`).join('')}</div>`).join('');
   return `<!DOCTYPE html><html lang="vi"><head>
@@ -334,7 +412,7 @@ ${commonHead}
 <div id="nav-ph" style="height:60px;background:#FBFAF6"></div>
 ${bcHTML}
 <h1>${title}</h1>
-<div>${bodyHTML}</div>
+${chuaDich}<div${L !== 'vi' && !dich ? ' lang="vi"' : ''}>${bodyHTML}</div>
 <script src="/track.js?v=8" defer></script><script src="/nav.js?v=50" defer></script>
 </body></html>`;
 }
@@ -1704,9 +1782,23 @@ window.addEventListener('load', function () {
 // ────────────────────────────────────────────────────────────────────────────
 // Route handler
 // ────────────────────────────────────────────────────────────────────────────
-export async function GET(_req: NextRequest, { params }: { params: Promise<{ slug: string }> }) {
+export async function GET(req: NextRequest, { params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
   if (!slug) return NextResponse.redirect(`${BASE}/menh-kho.html`);
+  // `/<locale>/la-so/<slug>` tới đây qua proxy (self-managed) kèm header. Đọc header ⇒ route động: response KHÔNG
+  // được cache theo đường dẫn nội bộ (chung cho mọi ngôn ngữ) — bộ nhớ đệm chỉ là Cache-Control (CDN theo URL ngoài).
+  const locale = localeFromHeaders(req.headers);
+  // Bản ≠ vi: lớp ngoài + robots theo bản ghi; cache không quá 1 ngày (bản ghi có thể được dịch sau).
+  const ngoaiNgu = (html: string, alts: Locale[], dich: boolean, cacheControl: string) => {
+    const r = localizeLaso(html, locale, slug, alts, dich);
+    const h: Record<string, string> = {
+      'Content-Type': 'text/html; charset=utf-8',
+      'Content-Language': locale,
+      'Cache-Control': cacheControl,
+    };
+    if (!r.complete) h['X-Robots-Tag'] = 'noindex, follow';
+    return new NextResponse(r.html, { headers: h });
+  };
 
   // 1+2. laso_public (bản người ĐÃ TRẢ TIỀN) và laso_pregen — hỏi SONG SONG.
   // Bản cũ chạy tuần tự: hai lượt đọc độc lập nhau mà cái sau phải đợi cái trước.
@@ -1716,7 +1808,20 @@ export async function GET(_req: NextRequest, { params }: { params: Promise<{ slu
   ]);
 
   if (pub.rows.length) {
-    return new NextResponse(buildPublicHTML(pub.rows[0], slug), {
+    // Ngôn ngữ đã có bản luận (hreflang theo TỪNG bản ghi) + bản luận của chính ngôn ngữ đang xem.
+    // `null` = không hỏi được kho ⇒ coi như chưa dịch nhưng chỉ cache 5 phút (đừng ghim noindex cả ngày).
+    const [alts, ban] = await Promise.all([
+      listLuanLocales(slug),
+      locale === 'vi' ? Promise.resolve(null) : withTimeout(readLuanI18n(slug, locale), SB_TIMEOUT_MS, null),
+    ]);
+    if (locale !== 'vi') {
+      const chacChan = alts !== null && alts.includes(locale) === !!ban;
+      const html = buildPublicHTML(pub.rows[0], slug, { locale, alts: alts || [], luan: ban?.luanGiai ?? null });
+      return ngoaiNgu(html, alts || [], !!ban,
+        chacChan ? 'public, s-maxage=86400, stale-while-revalidate=604800' : 'public, s-maxage=300');
+    }
+    // Bản vi giữ nguyên TTL cũ dù kho hỏng (alts null ⇒ chỉ thiếu hreflang, nội dung vẫn đúng).
+    return new NextResponse(buildPublicHTML(pub.rows[0], slug, { locale, alts: alts || [], luan: null }), {
       headers: {
         'Content-Type': 'text/html; charset=utf-8',
         'Cache-Control': 'public, s-maxage=86400, stale-while-revalidate=604800',
@@ -1725,6 +1830,9 @@ export async function GET(_req: NextRequest, { params }: { params: Promise<{ slu
   }
   if (pre.rows.length) {
     const thay = await fetchThayCard(THAY_LA_SO);
+    // laso_pregen không có bản dịch ⇒ bản ≠ vi luôn noindex (trang vi vốn cũng đã noindex).
+    if (locale !== 'vi')
+      return ngoaiNgu(buildPregenHTML(pre.rows[0], slug, thay), [], false, 'public, s-maxage=86400, stale-while-revalidate=604800');
     return new NextResponse(buildPregenHTML(pre.rows[0], slug, thay), {
       headers: {
         'Content-Type': 'text/html; charset=utf-8',
@@ -1753,7 +1861,7 @@ export async function GET(_req: NextRequest, { params }: { params: Promise<{ slu
       return new NextResponse(null, {
         status: 301,
         headers: {
-          'Location': `${BASE}/la-so/${canonical}`,
+          'Location': `${BASE}${localePrefix(locale)}/la-so/${canonical}`,
           'Cache-Control': 'public, s-maxage=31536000, stale-while-revalidate=86400',
         },
       });
@@ -1795,6 +1903,9 @@ export async function GET(_req: NextRequest, { params }: { params: Promise<{ slu
             ? await fetchThayCard(THAY_LA_SO)
             : { id: THAY_LA_SO, name: null, mon: null, greeting: null };
           const html = buildIsrHTML(ls, isrParams, slug, relatedArticles, nextStepTool, usdRate, thay);
+          // Lá số ISR là văn engine tiếng Việt, không có bản dịch ⇒ bản ≠ vi noindex.
+          if (locale !== 'vi')
+            return ngoaiNgu(html, [], false, publicKnown ? 'public, s-maxage=86400, stale-while-revalidate=86400' : 'public, s-maxage=300');
           return new NextResponse(html, { headers: {
             'Content-Type': 'text/html; charset=utf-8',
             'Cache-Control': publicKnown

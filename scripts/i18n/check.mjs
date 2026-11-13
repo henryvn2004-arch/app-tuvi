@@ -36,6 +36,7 @@ import {
 import { buildZhCn } from './zhcn.mjs';
 import { SINGLE_LOCALE_PAGES } from '../../lib/i18n/single-locale.mjs';
 import { SELF_MANAGED_PREFIXES, isSelfManaged } from '../../lib/i18n/self-managed.mjs';
+import { VI_ONLY_PREFIXES, isViOnly } from '../../lib/i18n/vi-only.mjs';
 import { REF_RE } from './ns-refs.mjs';
 
 const errors = [];
@@ -414,6 +415,29 @@ for (const f of htmlFiles) {
       fail(
         `public/${f}: khai hreflang="${g}" nhưng chưa có bản dịch đó — để server chèn hreflang (render.mjs), đừng viết tay`
       );
+}
+
+// ── 5b. route SSR chỉ tiếng Việt (W31b, lib/i18n/vi-only.mjs) ───────────────
+// (a) bản sao VI_ONLY ở tools-shared/i18n.js khớp nguồn; (b) không mục nào đè lên trang ĐÃ khai dịch
+// (I18n.href sẽ đưa khách từ /ja về bản vi của một trang có bản ja); (c) mỗi mục có route thật trong app/.
+{
+  const src = fs.readFileSync(path.join(PUBLIC, 'tools-shared/i18n.js'), 'utf8');
+  const m = /var VI_ONLY = (\[[^\]]*\])/.exec(src);
+  if (!m) fail('public/tools-shared/i18n.js: không thấy `var VI_ONLY = [...]`');
+  else if (strip(new Function('return ' + m[1])()) !== strip(VI_ONLY_PREFIXES))
+    fail('public/tools-shared/i18n.js: VI_ONLY lệch VI_ONLY_PREFIXES (lib/i18n/vi-only.mjs)');
+  for (const p of Object.keys(pages))
+    if (isViOnly(p))
+      fail(
+        `lib/i18n/vi-only.mjs: ${p} là trang đã đăng ký dịch (pages.json) nhưng rơi vào VI_ONLY`
+      );
+  for (const x of VI_ONLY_PREFIXES) {
+    const dir = path.join(ROOT, 'app', x.replace(/^\/|\/$/g, ''));
+    if (!fs.existsSync(dir))
+      fail(`lib/i18n/vi-only.mjs: ${x} không có thư mục route app/${x.replace(/^\/|\/$/g, '')}`);
+    if (isSelfManaged(x.replace(/\/$/, '')))
+      fail(`lib/i18n/vi-only.mjs: ${x} trùng route tự quản (self-managed.mjs)`);
+  }
 }
 
 // ── 6. hằng số trùng lặp khớp hợp đồng ──────────────────────────────────────
