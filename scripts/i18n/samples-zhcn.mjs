@@ -21,13 +21,16 @@ export function buildSampleZhCn(root = ROOT) {
     ? fs.readdirSync(dir).filter((x) => x.endsWith('.json'))
     : []) {
     const src = JSON.parse(fs.readFileSync(path.join(dir, f), 'utf8'));
-    const o = {};
-    for (const [k, v] of Object.entries(src)) {
+    // Đi SÂU vào mảng/object (mục `nenLam: [{viec, vidu}]`…): chỉ đổi chuỗi, giữ nguyên khung và tên khoá.
+    const doi = (v) => {
+      if (Array.isArray(v)) return v.map(doi);
+      if (v && typeof v === 'object')
+        return Object.fromEntries(Object.entries(v).map(([k, x]) => [k, doi(x)]));
       let t = conv(String(v));
       for (const [a, b] of thay) t = t.split(a).join(b);
-      o[k] = t;
-    }
-    out[f] = JSON.stringify(o, null, 1) + '\n';
+      return t;
+    };
+    out[f] = JSON.stringify(doi(src), null, 1) + '\n';
   }
   return out;
 }

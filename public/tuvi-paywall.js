@@ -109,6 +109,9 @@ const TuviPaywall = (() => {
     'chan-dung-tien-kiep-dummy.json',
     'chan-dung-vo-chong-dummy.json',
     'duyen-no-tien-kiep-dummy.json',
+    'day-con-dummy.json',
+    'huong-nghiep-tre-dummy.json',
+    'nguoi-khac-dummy.json',
   ];
   const SAMPLE_LOCALES = ['en', 'ja', 'ko', 'zh-tw', 'zh-cn'];
 

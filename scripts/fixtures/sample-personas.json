@@ -1,5 +1,5 @@
 {
-  "_ghiChu": "Nhân vật HƯ CẤU cho văn mẫu mờ theo từng ngôn ngữ (Henry chốt 2026-11-13: mỗi nước một bộ mẫu riêng, không dịch bản Việt). Số liệu lá số do engine thật sinh — scripts/sample-locale-data.mjs; văn mẫu viết thẳng bằng ngôn ngữ đó. zh-cn dùng CÙNG giờ sinh với zh-tw (văn sinh bằng OpenCC rồi thay tên/nơi sinh). `banDoi` = người thứ hai (hư cấu, khác giới) cho công cụ hai lá số (Duyên Nợ Tiền Kiếp).",
+  "_ghiChu": "Nhân vật HƯ CẤU cho văn mẫu mờ theo từng ngôn ngữ (Henry chốt 2026-11-13: mỗi nước một bộ mẫu riêng, không dịch bản Việt). Số liệu lá số do engine thật sinh — scripts/sample-locale-data.mjs; văn mẫu viết thẳng bằng ngôn ngữ đó. zh-cn dùng CÙNG giờ sinh với zh-tw (văn sinh bằng OpenCC rồi thay tên/nơi sinh). `banDoi` = người thứ hai (hư cấu, khác giới) cho công cụ hai lá số (Duyên Nợ Tiền Kiếp). `con` = đứa trẻ hư cấu cho Dạy Con / Hướng Nghiệp Sớm; Lá Số Người Khác dùng chính nhân vật chính làm \"sếp\".",
   "namXem": 2026,
   "khungTu": {
     "ngay": 13,
@@ -27,6 +27,17 @@
       "phut": 40,
       "gioIdx": 3,
       "lich": "jp"
+    },
+    "con": {
+      "ten": "佐藤 陽斗",
+      "gioitinh": "nam",
+      "ngay": 14,
+      "thang": 9,
+      "nam": 2016,
+      "gio": 7,
+      "phut": 30,
+      "gioIdx": 4,
+      "lich": "jp"
     }
   },
   "ko": {
@@ -49,6 +60,17 @@
       "gio": 23,
       "phut": 30,
       "gioIdx": 0,
+      "lich": "kr"
+    },
+    "con": {
+      "ten": "김하은",
+      "gioitinh": "nu",
+      "ngay": 2,
+      "thang": 4,
+      "nam": 2017,
+      "gio": 15,
+      "phut": 20,
+      "gioIdx": 8,
       "lich": "kr"
     }
   },
@@ -73,6 +95,17 @@
       "phut": 5,
       "gioIdx": 8,
       "lich": "cn"
+    },
+    "con": {
+      "ten": "林語彤",
+      "gioitinh": "nu",
+      "ngay": 20,
+      "thang": 1,
+      "nam": 2016,
+      "gio": 11,
+      "phut": 40,
+      "gioIdx": 6,
+      "lich": "cn"
     }
   },
   "zh-cn": {
@@ -90,7 +123,9 @@
       "林家豪": "陈家豪",
       "臺中市": "广州市",
       "台中": "广州",
-      "陳怡君": "王怡君"
+      "陳怡君": "王怡君",
+      "林語彤": "陈语彤",
+      "林經理": "陈经理"
     },
     "banDoi": {
       "ten": "王怡君",
@@ -101,6 +136,17 @@
       "gio": 16,
       "phut": 5,
       "gioIdx": 8,
+      "lich": "cn"
+    },
+    "con": {
+      "ten": "陈语彤",
+      "gioitinh": "nu",
+      "ngay": 20,
+      "thang": 1,
+      "nam": 2016,
+      "gio": 11,
+      "phut": 40,
+      "gioIdx": 6,
       "lich": "cn"
     }
   },
@@ -124,6 +170,17 @@
       "gio": 19,
       "phut": 45,
       "gioIdx": 10,
+      "lich": "vn"
+    },
+    "con": {
+      "ten": "Noah Carter",
+      "gioitinh": "nam",
+      "ngay": 8,
+      "thang": 10,
+      "nam": 2015,
+      "gio": 18,
+      "phut": 10,
+      "gioIdx": 9,
       "lich": "vn"
     }
   }
