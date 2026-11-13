@@ -31,10 +31,10 @@ window.I18n&&window.I18n.defineLong("van-ngay",{
 "vuc.Tử Tức":{"t":"子ども、出産","h":"e5619d87"},
 "vuc.Phu Thê":{"t":"恋愛、結婚、親密なパートナー","h":"d5091503"},
 "vuc.Huynh Đệ":{"t":"兄弟姉妹、親友","h":"c7ce7efb"},
-"gio.Thanh Long":{"t":"契約、金運、大事","h":"cdba2fc8"},
-"gio.Minh Đường":{"t":"面会、頼みごと、意見を聞く","h":"ea382a7c"},
-"gio.Kim Quỹ":{"t":"集金、成約、お金のこと","h":"99ded829"},
-"gio.Thiên Đức":{"t":"祈願、和解、家庭のこと","h":"146806bf"},
-"gio.Ngọc Đường":{"t":"試験、面接、お披露目","h":"c7cc360a"},
-"gio.Tư Mệnh":{"t":"着手、出発、長期的なこと","h":"76de2a82"}
+"gio.Thanh Long":{"t":"契約、金運","h":"cdba2fc8"},
+"gio.Minh Đường":{"t":"面会、相談","h":"ea382a7c"},
+"gio.Kim Quỹ":{"t":"集金、成約","h":"99ded829"},
+"gio.Thiên Đức":{"t":"祈願、和解","h":"146806bf"},
+"gio.Ngọc Đường":{"t":"試験、面接","h":"c7cc360a"},
+"gio.Tư Mệnh":{"t":"着手、出発","h":"76de2a82"}
 });
