@@ -180,9 +180,30 @@ for (const f of fs.readdirSync(PUBLIC).filter((x) => x.endsWith('.html'))) {
   const VI_RE = /[ăâđêôơưàáảãạằắẳẵặầấẩẫậèéẻẽẹềếểễệìíỉĩịòóỏõọồốổỗộờớởỡợùúủũụừứửữựỳýỷỹỵ]/i;
   const { buildSampleZhCn } = await import('./samples-zhcn.mjs');
   const zhcn = buildSampleZhCn();
+  // Mẫu có trường lồng (`nenLam: [{viec, vidu}]`…): KHUNG = khoá + khoá của mục trong mảng (số mục được khác), và trường
+  // vi để RỖNG (trang ẩn khối đó) thì bản nước cũng rỗng. `chuoi` duyệt MỌI chuỗi lồng — `String(mảng)` ra "[object Object]".
+  const khung = (v) =>
+    Array.isArray(v)
+      ? '[' + [...new Set(v.map(khung))].sort().join('|') + ']'
+      : v && typeof v === 'object'
+        ? '{' +
+          Object.keys(v)
+            .sort()
+            .map((k) => k + ':' + khung(v[k]))
+            .join(',') +
+          '}'
+        : v === ''
+          ? '∅'
+          : 's';
+  const chuoi = (v, ten) =>
+    Array.isArray(v)
+      ? v.flatMap((x, i) => chuoi(x, `${ten}[${i}]`))
+      : v && typeof v === 'object'
+        ? Object.entries(v).flatMap(([k, x]) => chuoi(x, `${ten}.${k}`))
+        : [[ten, String(v)]];
   for (const f of ds) {
     const vi = JSON.parse(fs.readFileSync(path.join(PUBLIC, 'samples', f), 'utf8'));
-    const want = Object.keys(vi).sort().join(',');
+    const want = khung(vi);
     for (const l of LOCS) {
       const fp = path.join(PUBLIC, 'samples', l, f);
       if (!fs.existsSync(fp)) {
@@ -194,10 +215,10 @@ for (const f of fs.readdirSync(PUBLIC).filter((x) => x.endsWith('.html'))) {
       const { _meta, ...phan } = j;
       if (!_meta || String(_meta).length < 20)
         fail(`public/samples/${l}/${f}: thiếu _meta ghi rõ đây là mẫu, nhân vật hư cấu`);
-      if (Object.keys(phan).sort().join(',') !== want)
-        fail(`public/samples/${l}/${f}: bộ khoá phần lệch bản vi (${want})`);
-      for (const [k, v] of Object.entries(phan)) {
-        for (const line of String(v).split('\n')) {
+      if (khung(phan) !== want)
+        fail(`public/samples/${l}/${f}: khung khoá lệch bản vi (${want.slice(0, 120)})`);
+      for (const [k, v] of chuoi(phan, '')) {
+        for (const line of v.split('\n')) {
           if (!line.startsWith('[')) {
             if (VI_RE.test(line))
               fail(`public/samples/${l}/${f} phần ${k}: còn chữ Việt — ${line.slice(0, 50)}`);
