@@ -9331,6 +9331,34 @@
   "t": "Your personal fortune",
   "h": "378b38f4"
  },
+ "js.home.viec-cuoi-hoi": {
+  "t": "Wedding",
+  "h": "04a2caa4"
+ },
+ "js.home.viec-di-xa": {
+  "t": "Travel",
+  "h": "07f707c7"
+ },
+ "js.home.viec-khai-truong": {
+  "t": "Business opening",
+  "h": "c86ca256"
+ },
+ "js.home.viec-ky-ket": {
+  "t": "Contracts",
+  "h": "de74d03a"
+ },
+ "js.home.viec-nha-moi": {
+  "t": "New home",
+  "h": "505e7857"
+ },
+ "js.home.viec-sua-nha": {
+  "t": "Home repairs",
+  "h": "0ef7e12d"
+ },
+ "js.home.viec-xay-nha": {
+  "t": "Building",
+  "h": "84154a71"
+ },
  "js.home.vo-chinh-dieu": {
   "t": " — no major star",
   "h": "44a2723b"
@@ -11362,6 +11390,82 @@
  "js.mshm.xem-mau-chinh": {
   "t": "See the main colors above to apply.",
   "h": "95e8229c"
+ },
+ "js.nap-am.chip-huong": {
+  "t": "Which house or desk direction suits me?",
+  "h": "e1e3d123"
+ },
+ "js.nap-am.chip-mau": {
+  "t": "Which colours suit me, which should I avoid?",
+  "h": "3af5cdfc"
+ },
+ "js.nap-am.chip-tuoi": {
+  "t": "Which birth years are compatible, which clash?",
+  "h": "06343f22"
+ },
+ "js.nap-am.chip-vatpham": {
+  "t": "Which feng shui items should I wear?",
+  "h": "024bffb6"
+ },
+ "js.nap-am.greeting": {
+  "t": "Year **{nam}** — your Na Yin element is **{na}** (element: {hanh}). What would you like me to read for you?",
+  "h": "e825090f"
+ },
+ "js.nap-am.hl-canchi": {
+  "t": "Stem-Branch",
+  "h": "8b784611"
+ },
+ "js.nap-am.hl-hanh": {
+  "t": "Element",
+  "h": "58608859"
+ },
+ "js.nap-am.hl-napam": {
+  "t": "Na Yin",
+  "h": "006a48d6"
+ },
+ "js.nap-am.label": {
+  "t": "Na Yin {cc} · {na}",
+  "h": "fa12a15b"
+ },
+ "js.nap-am.share-1": {
+  "t": "Na Yin (Five Elements) — year {nam} ({cc}, year of the {cg})",
+  "h": "8f377500"
+ },
+ "js.nap-am.share-2": {
+  "t": "Birth element: {na} — {hanh}",
+  "h": "682b9b66"
+ },
+ "js.nap-am.share-mauhop": {
+  "t": "Suitable colours: {v}",
+  "h": "1c21689f"
+ },
+ "js.nap-am.share-mauky": {
+  "t": "Colours to limit: {v}",
+  "h": "b6303d72"
+ },
+ "js.nap-am.share-pv": {
+  "t": "Direction of the element: {v}",
+  "h": "e30548a9"
+ },
+ "js.nap-am.share-so": {
+  "t": "Lucky numbers: {v}",
+  "h": "93258f0f"
+ },
+ "js.nap-am.share-title": {
+  "t": "Na Yin {na} — year {nam}",
+  "h": "e8151650"
+ },
+ "js.nap-am.share-tuoi": {
+  "t": "Compatible by Na Yin: {hop} people · to weigh carefully: {ky} people",
+  "h": "f382ceb9"
+ },
+ "js.nap-am.sheet-title": {
+  "t": "Na Yin {na} · year {nam}",
+  "h": "1862358a"
+ },
+ "js.nap-am.xem-day-du": {
+  "t": "See full reading →",
+  "h": "e330670d"
  },
  "js.nav.brand": {
   "t": "Minh Bao Zi Wei Dou Shu",

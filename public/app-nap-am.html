@@ -139,7 +139,7 @@
 // khong lat som luc boot, va vung ket qua khong tran o ca cot artifact 420px lan man 393px.
 window.SHELL_CHATFIRST=true;
 window.SHELL_INTRO={key:'nap-am'};</script>
-<script src="/tools-shared/nap-am.js?v=3"></script>
+<script src="/tools-shared/nap-am.js?v=4"></script>
 <script src="/auth.js?v=10"></script>
   <script src="/nav.js?v=50" data-icons-only></script>
 <script src="/shell.js?v=161"></script>
@@ -179,22 +179,25 @@ function calculate(){
   var _ctx={};for(var k in r.data)_ctx[k]=r.data[k];
   _ctx.mauHop=_u.mauHop;_ctx.mauKy=_u.mauKy;_ctx.phuongVi=_u.phuongVi;
   _ctx.tuoiHop=_u.hanhHop;_ctx.tuoiKy=_u.hanhKy;_ctx.soHop=_u.so;_ctx.chatLieu=_u.chatLieu;
+  // Chữ HIỂN THỊ (nhãn rail, lời chào, bản chia sẻ): tên can chi/nạp âm/hành qua glossary — `_ctx` (gửi rail/LLM) giữ chữ Việt.
+  var _nv={cc:_tvmbG('canchi',r.data.canChi),na:_tvmbG('napam',r.data.napAm),nam:r.data.nam,hanh:_tvmbG('hanh',r.data.hanh)};
   Shell.setContext({
     scenario:{type:'nap-am',data:_ctx},
-    label:'Nạp âm '+r.data.canChi+' · '+r.data.napAm,
-    greeting:'Năm **'+r.data.nam+'** — bản mệnh **'+r.data.napAm+'** (hành '+r.data.hanh+'). Bạn muốn tôi luận điều gì?',
-    chips:['Hợp màu gì, kỵ màu gì?','Hướng nhà/bàn làm việc nào hợp?','Tuổi nào hợp, tuổi nào khắc?','Vật phẩm phong thủy nào nên đeo?']
+    label:_tvmbT('js.nap-am.label','Nạp âm {cc} · {na}',_nv),
+    greeting:_tvmbT('js.nap-am.greeting','Năm **{nam}** — bản mệnh **{na}** (hành {hanh}). Bạn muốn tôi luận điều gì?',_nv),
+    chips:[_tvmbT('js.nap-am.chip-mau','Hợp màu gì, kỵ màu gì?'),_tvmbT('js.nap-am.chip-huong','Hướng nhà/bàn làm việc nào hợp?'),_tvmbT('js.nap-am.chip-tuoi','Tuổi nào hợp, tuổi nào khắc?'),_tvmbT('js.nap-am.chip-vatpham','Vật phẩm phong thủy nào nên đeo?')]
   });
-  var _naLines=['Nạp âm ngũ hành — năm '+r.data.nam+' ('+r.data.canChi+', năm '+r.data.conGiap+')'];
-  _naLines.push('Bản mệnh: '+r.data.napAm+' — hành '+r.data.hanh);
+  var _ud=NapAmTool.ungDungDisplay(r.data.hanh)||{};
+  var _naLines=[_tvmbT('js.nap-am.share-1','Nạp âm ngũ hành — năm {nam} ({cc}, năm {cg})',{nam:r.data.nam,cc:_nv.cc,cg:NapAmTool.conGiapDisplay(r.data.conGiap)})];
+  _naLines.push(_tvmbT('js.nap-am.share-2','Bản mệnh: {na} — hành {hanh}',_nv));
   if(_u.mauHop){
-    _naLines.push('Màu hợp: '+_u.mauHop);
-    _naLines.push('Màu nên hạn chế: '+_u.mauKy);
-    _naLines.push('Phương vị của hành: '+_u.phuongVi);
-    _naLines.push('Tuổi hợp theo nạp âm: mệnh '+_u.hanhHop+' · cần cân nhắc: mệnh '+_u.hanhKy);
-    _naLines.push('Số hợp: '+_u.so);
+    _naLines.push(_tvmbT('js.nap-am.share-mauhop','Màu hợp: {v}',{v:_ud.mauHop}));
+    _naLines.push(_tvmbT('js.nap-am.share-mauky','Màu nên hạn chế: {v}',{v:_ud.mauKy}));
+    _naLines.push(_tvmbT('js.nap-am.share-pv','Phương vị của hành: {v}',{v:_ud.phuongVi}));
+    _naLines.push(_tvmbT('js.nap-am.share-tuoi','Tuổi hợp theo nạp âm: mệnh {hop} · cần cân nhắc: mệnh {ky}',{hop:_ud.hanhHop,ky:_ud.hanhKy}));
+    _naLines.push(_tvmbT('js.nap-am.share-so','Số hợp: {v}',{v:_u.so}));
   }
-  Shell.setShareable({kind:'text',toolId:'nap-am',title:'Nạp âm '+r.data.napAm+' — năm '+r.data.nam,text:_naLines.join('\n')});
+  Shell.setShareable({kind:'text',toolId:'nap-am',title:_tvmbT('js.nap-am.share-title','Nạp âm {na} — năm {nam}',_nv),text:_naLines.join('\n')});
   document.querySelectorAll('#resPanel [data-ask]').forEach(function(el){ el.addEventListener('click',function(){ Shell.ask(el.getAttribute('data-ask')); }); });
   appendHighlightCard(r);
 }
@@ -206,15 +209,15 @@ function appendHighlightCard(r){
   var chat=document.getElementById('chat');
   if(!chat) return;
   var av=(function(){ var a=document.querySelector('.rail-ava'); return a?a.src:'/authors/thai-hu.jpg'; })();
-  var nums=[['Can Chi',r.data.canChi],['Nạp Âm',r.data.napAm],['Hành',r.data.hanh]];
+  var nums=[[_tvmbT('js.nap-am.hl-canchi','Can Chi'),_tvmbG('canchi',r.data.canChi)],[_tvmbT('js.nap-am.hl-napam','Nạp Âm'),_tvmbG('napam',r.data.napAm)],[_tvmbT('js.nap-am.hl-hanh','Hành'),_tvmbG('hanh',r.data.hanh)]];
   var rowHtml=nums.map(function(n){ return '<div class="chat-hl-n"><b>'+esc(n[1])+'</b><span>'+esc(n[0])+'</span></div>'; }).join('');
   var el=document.createElement('div'); el.className='msg a';
   el.innerHTML='<img class="msg-ava" src="'+av+'" alt="">'+
     '<div class="msg-body"><div class="chat-hl"><div class="chat-hl-row">'+rowHtml+'</div>'+
-    '<button type="button" class="chat-hl-cta" id="naOpenSheet">Xem đầy đủ →</button></div></div>';
+    '<button type="button" class="chat-hl-cta" id="naOpenSheet">'+_tvmbT('js.nap-am.xem-day-du','Xem đầy đủ →')+'</button></div></div>';
   chat.appendChild(el); chat.scrollTop=chat.scrollHeight;
   document.getElementById('naOpenSheet').addEventListener('click',function(){
-    Shell.openSheet(document.getElementById('resPanel').innerHTML, {title:'Nạp âm '+r.data.napAm+' · năm '+r.data.nam});
+    Shell.openSheet(document.getElementById('resPanel').innerHTML, {title:_tvmbT('js.nap-am.sheet-title','Nạp âm {na} · năm {nam}',{na:_tvmbG('napam',r.data.napAm),nam:r.data.nam})});
   });
 }
 function showForm(){
