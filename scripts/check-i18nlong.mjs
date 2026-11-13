@@ -232,6 +232,18 @@ for (const ns of Object.keys(ENGINE_NS)) {
     fail(
       'public/app-chan-dung-vo-chong.html: không gọi TuviCachCuc.t (cách cục · ý nghĩa cổ pháp giữ chữ Việt)'
     );
+  // W32A: luật đại vận (dv.rules[].text) vẽ ở luan-giai-core.js qua TuviDvRules — 3 trang nạp core phải nạp dv-rules.js.
+  for (const f of [
+    'public/app-luan-giai.html',
+    'public/app-chu-trinh-cuoc-doi.html',
+    'public/app-van-han-nam.html',
+  ])
+    if (!/\/tools-shared\/dv-rules\.js\?v=\d+/.test(doc(f)))
+      fail(`${f}: không nạp /tools-shared/dv-rules.js (Luận đoán vận hạn giữ chữ Việt)`);
+  if ((doc('public/luan-giai-core.js').match(/_rT\(r\.text\)/g) || []).length < 4)
+    fail(
+      'public/luan-giai-core.js: thiếu _rT(r.text) ở 4 nhóm luật đại vận (tốt/trung/xấu/cảnh báo)'
+    );
   const lg = doc('public/luan-giai-core.js');
   if ((lg.match(/_ccT\(/g) || []).length < 5)
     fail(

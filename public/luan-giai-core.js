@@ -17,8 +17,46 @@ function _ccT(s) {
   return typeof window !== 'undefined' && window.TuviCachCuc ? window.TuviCachCuc.t(s) : s;
 }
 
-/* global Chart */
+/* global Chart, _tvmbT, _tvmbG */
 (function (root) {
+  // ── Chữ HIỂN THỊ theo ngôn ngữ (W32A) — CHỈ ở chỗ vẽ; phanLabels/PHAN_LABELS_BASE (khoá phần, `description` sổ tiền)
+  // giữ chữ Việt. vi: _tv trả nguyên câu mặc định, _g trả nguyên tên engine ⇒ HTML byte-giống bản cũ.
+  function _vi() {
+    var l = root.I18n && root.I18n.locale;
+    return !l || l === 'vi';
+  }
+  function _tv(k, d, v) {
+    if (typeof _tvmbT === 'function') return _tvmbT(k, d, v);
+    return v ? String(d).replace(/\{(\w+)\}/g, function (x, n) { return v[n] !== undefined ? v[n] : x; }) : d;
+  }
+  function _g(kind, v) {
+    return typeof _tvmbG === 'function' && v ? _tvmbG(kind, v) : v;
+  }
+  // Tên ngắn (ô hẹp: trục radar, nhãn dưới cột).
+  function _gs(kind, v, viShort) {
+    var G = root.TuviGlossary;
+    if (_vi() || !G || !v) return viShort != null ? viShort : v;
+    return G.term(G.locale(), kind, v, { short: true });
+  }
+  var SANG_ALIAS = { 'Đắc địa': 'Đắc', 'Bình hòa': 'Bình', 'Bình hoà': 'Bình' };
+  function _sang(b) {
+    return _vi() || !b ? b : _g('sang', SANG_ALIAS[b] || b);
+  }
+  // Tên sao trần / "Hóa Kỵ (Sao)" / "Lưu Thiên Mã" / "Lưu Hóa Kỵ (Sao)" (bienDong của engine).
+  function _sao(t) {
+    if (_vi() || !t) return t;
+    var m = /^(.+?) \((.+)\)$/.exec(t);
+    if (m) return _sao(m[1]) + ' (' + _sao(m[2]) + ')';
+    if (/^Lưu /.test(t)) return _tv('js.lgcore.luu-sao', 'Lưu {sao}', { sao: _sao(t.slice(4)) });
+    return _g(['chinh', 'sao'], t);
+  }
+  function _saoList(arr) {
+    return arr.map(_sao).join(', ');
+  }
+  // Luật đại vận (`dv.rules[].text`, engine vanilla) → ns dv-rules (tools-shared/dv-rules.js); thiếu ⇒ nguyên câu.
+  function _rT(s) {
+    return root.TuviDvRules ? root.TuviDvRules.t(s) : s;
+  }
   var TONG_PHAN = 24;
   var CAN10 = ['Giáp', 'Ất', 'Bính', 'Đinh', 'Mậu', 'Kỷ', 'Canh', 'Tân', 'Nhâm', 'Quý'];
   var CHI12 = ['Tý', 'Sửu', 'Dần', 'Mão', 'Thìn', 'Tỵ', 'Ngọ', 'Mùi', 'Thân', 'Dậu', 'Tuất', 'Hợi'];
@@ -75,11 +113,11 @@ function _ccT(s) {
       return { hoa: hoa, star: star, target: target, self: target.cungName === cungForPhan };
     }).filter(Boolean);
     if (!rows.length) return '';
-    var h = '<div class="pregen-block"><div class="pregen-title"><span class="ic-inline" data-icon-emoji="🚀" style="display:inline-flex;width:1em;height:1em;vertical-align:-2px;color:#7C6942">🚀</span> Tứ Hóa Phi Tinh (can cung ' + canCung + ')</div>';
+    var h = '<div class="pregen-block"><div class="pregen-title"><span class="ic-inline" data-icon-emoji="🚀" style="display:inline-flex;width:1em;height:1em;vertical-align:-2px;color:#7C6942">🚀</span> ' + _tv('js.lgcore.tuhoa-title', 'Tứ Hóa Phi Tinh (can cung {can})', { can: _g('can', canCung) }) + '</div>';
     rows.forEach(function (r) {
       var cls = r.hoa === 'Kỵ' ? 'yn-hung' : 'yn-cat';
-      var selfBadge = r.self ? ' <span style="color:#7B3FA0;font-weight:700">[TỰ HÓA]</span>' : '';
-      h += '<div class="pregen-yn ' + cls + '">Hóa ' + r.hoa + ': <b>' + r.star + '</b> → phi nhập cung <b>' + r.target.cungName + '</b> (' + r.target.diaChi + ')' + selfBadge + '</div>';
+      var selfBadge = r.self ? ' <span style="color:#7B3FA0;font-weight:700">' + _tv('js.lgcore.tu-hoa', '[TỰ HÓA]') + '</span>' : '';
+      h += '<div class="pregen-yn ' + cls + '">' + _tv('js.lgcore.phi-nhap', '{hoa}: <b>{sao}</b> → phi nhập cung <b>{cung}</b> ({chi})', { hoa: _g('sao', 'Hóa ' + r.hoa), sao: _sao(r.star), cung: _g('cung', r.target.cungName), chi: _g('chi', r.target.diaChi) }) + selfBadge + '</div>';
     });
     h += '</div>';
     return h;
@@ -103,13 +141,13 @@ function _ccT(s) {
     if (!sc) return '';
     var dims = CUNG_TRUC.map(function (x) {
       var v = sc[x[0]] && sc[x[0]].tong;
-      return { label: x[1], value: typeof v === 'number' ? v : 0 };
+      return { label: _gs('cung', x[0], x[1]), value: typeof v === 'number' ? v : 0 };
     });
     if (!dims.some(function (d) { return d.value > 0; })) return '';
     return (
       '<div style="margin:6px 0 10px">' +
       HookCharts.hexRadar({ dims: dims, size: 260, max: 10,
-        ariaLabel: 'Vành mười hai cung, trục nào dày là cung đó mạnh hơn' }) +
+        ariaLabel: _tv('js.lgcore.radar-aria', 'Vành mười hai cung, trục nào dày là cung đó mạnh hơn') }) +
       '</div>'
     );
   }
@@ -137,6 +175,24 @@ function _ccT(s) {
     }
     return L;
   }
+  // Nhãn 24 phần để HIỂN THỊ (tiêu đề phần, chip hỏi rail). vi trả đúng phanLabels(ls).
+  function phanLabelsT(ls) {
+    var L = phanLabels(ls);
+    if (_vi()) return L;
+    return L.map(function (s, i) {
+      if (i === 1) return _tv('js.lgcore.phan-tong-quan', 'Tổng Quan Lá Số');
+      if (i >= 2 && i <= 13) return _tv('js.lgcore.phan-cung', 'Cung {cung}', { cung: _g('cung', s.slice(5)) });
+      if (i === 14) return _tv('js.lgcore.phan-tq-dv', 'Tổng quan đại vận');
+      if (i === 24) return _tv('js.lgcore.phan-tieu-van', 'Tiểu Vận Năm Xem');
+      if (i >= 15) {
+        var dv = ls && ls.daiVans && ls.daiVans[i - 15];
+        return dv
+          ? _tv('js.lgcore.phan-dv-tuoi', 'Đại Vận {n} ({a}–{b}t)', { n: i - 14, a: dv.tuoiStart, b: dv.tuoiEnd })
+          : _tv('js.lgcore.phan-dv', 'Đại Vận {n}', { n: i - 14 });
+      }
+      return s;
+    });
+  }
 
   // Sao ở CUNG BẢN MỆNH (phan 2–13): chính tinh cung + sao tam phương tứ chính —
   // deterministic, LUÔN có (không như "Phân tích sao"/cachCucTungCung có thể rỗng).
@@ -151,15 +207,15 @@ function _ccT(s) {
     let h = '';
     const majorStars = pal.majorStars || [];
     const allStars = pal.stars || [];
-    h += `<div class="pregen-block"><div class="pregen-title">✦ Chính tinh cung</div>`;
+    h += `<div class="pregen-block"><div class="pregen-title">✦ ${_tv('js.lgcore.chinh-tinh-cung', 'Chính tinh cung')}</div>`;
     if (majorStars.length === 0) {
       const xung = pal.xungChieuCung;
-      const xungStars = xung ? (xung.majorStars || []).map((s) => `${s.ten}(${s.brightness || ''})`).join(', ') : '';
-      h += `<div class="pregen-yn yn-neutral">Vô chính diệu${xungStars ? ` — mượn từ cung xung: <span style="color:#5FA8D3">${xungStars}</span>` : ''}</div>`;
+      const xungStars = xung ? (xung.majorStars || []).map((s) => `${_sao(s.ten)}(${_sang(s.brightness) || ''})`).join(', ') : '';
+      h += `<div class="pregen-yn yn-neutral">${_tv('js.lgcore.vo-chinh-dieu', 'Vô chính diệu')}${xungStars ? _tv('js.lgcore.muon-xung', ' — mượn từ cung xung: <span style="color:#5FA8D3">{sao}</span>', { sao: xungStars }) : ''}</div>`;
     } else {
       majorStars.forEach((s) => {
         const bCol = s.brightness === 'Miếu' || s.brightness === 'Vượng' ? '#4ade80' : s.brightness === 'Đắc' ? '#86efac' : s.brightness === 'Bình hòa' || s.brightness === 'Bình' ? '#60a5fa' : '#f87171';
-        h += `<div class="pregen-yn yn-neutral"><span style="font-weight:600;color:inherit">${s.ten}</span> <span style="color:${bCol};font-size:11px">(${s.brightness || ''})</span>${s.hoa ? ` <span style="color:#5FA8D3">[Hóa ${s.hoa}]</span>` : ''}</div>`;
+        h += `<div class="pregen-yn yn-neutral"><span style="font-weight:600;color:inherit">${_sao(s.ten)}</span> <span style="color:${bCol};font-size:11px">(${_sang(s.brightness) || ''})</span>${s.hoa ? ` <span style="color:#5FA8D3">[${_g('sao', 'Hóa ' + s.hoa)}]</span>` : ''}</div>`;
       });
     }
     h += `</div>`;
@@ -171,12 +227,12 @@ function _ccT(s) {
     const hasTuan = allStars.some((s) => s.ten === 'Tuần');
     const hasTriet = allStars.some((s) => s.ten === 'Triệt');
     if (catIn.length || satIn.length || baiIn.length || hasTuan || hasTriet) {
-      h += `<div class="pregen-block"><div class="pregen-title"><span class="ic-inline" data-icon-emoji="🔍" style="display:inline-flex;width:1em;height:1em;vertical-align:-2px;color:#7C6942">🔍</span> Sao tam phương tứ chính</div>`;
-      if (catIn.length) h += `<div class="pregen-yn yn-cat">Cát tinh: ${catIn.join(', ')}</div>`;
-      if (satIn.length) h += `<div class="pregen-yn yn-hung">Sát tinh: ${satIn.join(', ')}</div>`;
-      if (baiIn.length) h += `<div class="pregen-yn yn-hung" style="color:#fca5a5">Bại tinh: ${baiIn.join(', ')}</div>`;
-      if (hasTuan) h += `<div class="pregen-yn yn-tuan">Tuần án ngữ cung</div>`;
-      if (hasTriet) h += `<div class="pregen-yn yn-tuan">Triệt án ngữ cung</div>`;
+      h += `<div class="pregen-block"><div class="pregen-title"><span class="ic-inline" data-icon-emoji="🔍" style="display:inline-flex;width:1em;height:1em;vertical-align:-2px;color:#7C6942">🔍</span> ${_tv('js.lgcore.tam-phuong', 'Sao tam phương tứ chính')}</div>`;
+      if (catIn.length) h += `<div class="pregen-yn yn-cat">${_tv('js.lgcore.cat-tinh', 'Cát tinh: {sao}', { sao: _saoList(catIn) })}</div>`;
+      if (satIn.length) h += `<div class="pregen-yn yn-hung">${_tv('js.lgcore.sat-tinh', 'Sát tinh: {sao}', { sao: _saoList(satIn) })}</div>`;
+      if (baiIn.length) h += `<div class="pregen-yn yn-hung" style="color:#fca5a5">${_tv('js.lgcore.bai-tinh', 'Bại tinh: {sao}', { sao: _saoList(baiIn) })}</div>`;
+      if (hasTuan) h += `<div class="pregen-yn yn-tuan">${_tv('js.lgcore.tuan-cung', 'Tuần án ngữ cung')}</div>`;
+      if (hasTriet) h += `<div class="pregen-yn yn-tuan">${_tv('js.lgcore.triet-cung', 'Triệt án ngữ cung')}</div>`;
       h += `</div>`;
     }
     return h;
@@ -204,7 +260,7 @@ function _ccT(s) {
     if (phan === 1) {
       const cc = _astrolabe.cachCuc || [];
       if (cc.length > 0) {
-        preGenHtml += `<div class="pregen-block"><div class="pregen-title"><span class="ic-inline" data-icon-emoji="⚙" style="display:inline-flex;width:1em;height:1em;vertical-align:-2px;color:#7C6942">⚙</span> Cách cục đặc biệt</div>`;
+        preGenHtml += `<div class="pregen-block"><div class="pregen-title"><span class="ic-inline" data-icon-emoji="⚙" style="display:inline-flex;width:1em;height:1em;vertical-align:-2px;color:#7C6942">⚙</span> ${_tv('js.lgcore.cach-cuc-dac-biet', 'Cách cục đặc biệt')}</div>`;
         cc.forEach(c => { preGenHtml += `<div class="pregen-item"><span class="cc-label cc-${c.loai}">${_ccT(c.ten)}</span><span class="cc-mota">${_ccT(c.moTa)}</span></div>`; });
         preGenHtml += `</div>`;
       }
@@ -212,7 +268,7 @@ function _ccT(s) {
         const METRICS = ['thienVan','canCo','mayMan','phuTro','binhYen','benVung'];
         const top3 = Object.entries(_astrolabe.cungScores).map(([c,sc])=>[c,METRICS.reduce((s,m)=>s+sc[m],0)]).sort((a,b)=>b[1]-a[1]).slice(0,3);
         const bot3 = Object.entries(_astrolabe.cungScores).map(([c,sc])=>[c,METRICS.reduce((s,m)=>s+sc[m],0)]).sort((a,b)=>a[1]-b[1]).slice(0,3);
-        chartHtml += `<div class="pregen-block"><div class="pregen-title"><span class="ic-inline" data-icon-emoji="📊" style="display:inline-flex;width:1em;height:1em;vertical-align:-2px;color:#7C6942">📊</span> Điểm mạnh / yếu nổi bật</div>`;
+        chartHtml += `<div class="pregen-block"><div class="pregen-title"><span class="ic-inline" data-icon-emoji="📊" style="display:inline-flex;width:1em;height:1em;vertical-align:-2px;color:#7C6942">📊</span> ${_tv('js.lgcore.manh-yeu', 'Điểm mạnh / yếu nổi bật')}</div>`;
         // Vành 12 cung — CÙNG con số mà hai dòng "Mạnh nhất / Yếu nhất" ngay
         // dưới đang đọc (`cungScores[cung].tong`), chỉ đổi cách đọc: hai dòng
         // chữ nêu được 6/12 cung, hình nêu cả 12 và cho thấy KHOẢNG CÁCH giữa
@@ -225,8 +281,8 @@ function _ccT(s) {
         // QUAN — cung nào dày, cung nào mỏng — đúng vai của một cái radar.
         // Giữ hai dòng chữ: chúng GỌI TÊN cung, hình thì không.
         chartHtml += buildCungRadarHtml(_astrolabe);
-        chartHtml += `<div class="pregen-row"><span class="pregen-good">Mạnh nhất: ${top3.map(([c,s])=>`${c} (${s.toFixed(0)})`).join(', ')}</span></div>`;
-        chartHtml += `<div class="pregen-row"><span class="pregen-bad">Yếu nhất: ${bot3.map(([c,s])=>`${c} (${s.toFixed(0)})`).join(', ')}</span></div>`;
+        chartHtml += `<div class="pregen-row"><span class="pregen-good">${_tv('js.lgcore.manh-nhat', 'Mạnh nhất: {ds}', { ds: top3.map(([c,s])=>`${_g('cung', c)} (${s.toFixed(0)})`).join(', ') })}</span></div>`;
+        chartHtml += `<div class="pregen-row"><span class="pregen-bad">${_tv('js.lgcore.yeu-nhat', 'Yếu nhất: {ds}', { ds: bot3.map(([c,s])=>`${_g('cung', c)} (${s.toFixed(0)})`).join(', ') })}</span></div>`;
         chartHtml += `</div>`;
       }
       chartHtml += buildNguHanhHtml(_astrolabe);
@@ -239,7 +295,7 @@ function _ccT(s) {
       const ccItems = (_astrolabe.cachCuc||[]).filter(c => c.cung === cungForPhan);
       const sc = _astrolabe.cungScores?.[cungForPhan];
       if (ccItems.length > 0) {
-        preGenHtml += `<div class="pregen-block"><div class="pregen-title"><span class="ic-inline" data-icon-emoji="⚙" style="display:inline-flex;width:1em;height:1em;vertical-align:-2px;color:#7C6942">⚙</span> Cách cục đặc biệt</div>`;
+        preGenHtml += `<div class="pregen-block"><div class="pregen-title"><span class="ic-inline" data-icon-emoji="⚙" style="display:inline-flex;width:1em;height:1em;vertical-align:-2px;color:#7C6942">⚙</span> ${_tv('js.lgcore.cach-cuc-dac-biet', 'Cách cục đặc biệt')}</div>`;
         ccItems.forEach(c => { preGenHtml += `<div class="pregen-item"><span class="cc-label cc-${c.loai}">${_ccT(c.ten)}</span></div>`; });
         preGenHtml += `</div>`;
       }
@@ -247,7 +303,7 @@ function _ccT(s) {
       // tích sao" (ý nghĩa cách cục, có thể rỗng) để cung nào cũng đủ dữ liệu sao.
       preGenHtml += buildCungStarHtml(cungForPhan, _astrolabe);
       if (ynItems.length > 0) {
-        preGenHtml += `<div class="pregen-block"><div class="pregen-title"><span class="ic-inline" data-icon-emoji="📋" style="display:inline-flex;width:1em;height:1em;vertical-align:-2px;color:#7C6942">📋</span> Phân tích sao</div>`;
+        preGenHtml += `<div class="pregen-block"><div class="pregen-title"><span class="ic-inline" data-icon-emoji="📋" style="display:inline-flex;width:1em;height:1em;vertical-align:-2px;color:#7C6942">📋</span> ${_tv('js.lgcore.phan-tich-sao', 'Phân tích sao')}</div>`;
         ynItems.forEach(y => {
           const cls = y.includes('đại cát')||y.includes('đại phú') ? 'yn-great-cat'
             : y.includes('[cát]')||y.includes('phú quý')||y.includes('giàu sang') ? 'yn-cat'
@@ -261,8 +317,8 @@ function _ccT(s) {
       preGenHtml += buildTuHoaPhiTinhHtml(cungForPhan, _astrolabe);
       if (sc) {
         const METRICS = ['thienVan','canCo','mayMan','phuTro','binhYen','benVung'];
-        const MV = ['Thiên Vận','Căn Cơ','May Mắn','Phù Trợ','Bình Yên','Bền Vững'];
-        chartHtml += `<div class="pregen-block pregen-scores"><div class="pregen-title"><span class="ic-inline" data-icon-emoji="📈" style="display:inline-flex;width:1em;height:1em;vertical-align:-2px;color:#7C6942">📈</span> Đánh giá 6 chiều</div><div class="score-bars">`;
+        const MV = [_tv('js.lgcore.mv-thien-van', 'Thiên Vận'), _tv('js.lgcore.mv-can-co', 'Căn Cơ'), _tv('js.lgcore.mv-may-man', 'May Mắn'), _tv('js.lgcore.mv-phu-tro', 'Phù Trợ'), _tv('js.lgcore.mv-binh-yen', 'Bình Yên'), _tv('js.lgcore.mv-ben-vung', 'Bền Vững')];
+        chartHtml += `<div class="pregen-block pregen-scores"><div class="pregen-title"><span class="ic-inline" data-icon-emoji="📈" style="display:inline-flex;width:1em;height:1em;vertical-align:-2px;color:#7C6942">📈</span> ${_tv('js.lgcore.danh-gia-6', 'Đánh giá 6 chiều')}</div><div class="score-bars">`;
         METRICS.forEach((m,i) => {
           const v=sc[m]; const pct=v*10;
           const col=v>=7?'#1FA3D6':v>=5?'#2F5BEA':v>=3?'#233E99':'#C0392B';
@@ -287,13 +343,13 @@ function _ccT(s) {
         const curIdx = dvs.findIndex(d => cur && d.cungIdx === cur.cungIdx);
         const diff = dvs.length > 1 ? (((dvs[1].cungIdx - dvs[0].cungIdx) % 12) + 12) % 12 : 1;
         const thuan = diff === 1;
-        chartHtml += `<div class="pregen-block"><div class="pregen-title"><span class="ic-inline" data-icon-emoji="📈" style="display:inline-flex;width:1em;height:1em;vertical-align:-2px;color:#7C6942">📈</span> 9 đại vận — biểu đồ điểm số</div>`;
+        chartHtml += `<div class="pregen-block"><div class="pregen-title"><span class="ic-inline" data-icon-emoji="📈" style="display:inline-flex;width:1em;height:1em;vertical-align:-2px;color:#7C6942">📈</span> ${_tv('js.lgcore.dv9-title', '9 đại vận — biểu đồ điểm số')}</div>`;
         chartHtml += `<div style="position:relative;height:240px;margin-top:8px"><canvas id="chart-daivan-overview"></canvas></div>`;
         chartHtml += `<div style="font-size:11px;color:#666;margin-top:12px;line-height:1.5">`;
-        chartHtml += `· Khởi vận: ${dvs[0].tuoiStart} tuổi · Hướng: ${thuan ? 'thuận' : 'nghịch'}<br>`;
+        chartHtml += `${_tv('js.lgcore.khoi-van', '· Khởi vận: {tuoi} tuổi · Hướng: {huong}', { tuoi: dvs[0].tuoiStart, huong: thuan ? _tv('js.lgcore.thuan', 'thuận') : _tv('js.lgcore.nghich', 'nghịch') })}<br>`;
         if (curIdx >= 0) {
           const c = dvs[curIdx];
-          chartHtml += `· Hiện tại: ĐV${curIdx + 1} (${canChiDaiVan(_astrolabe, c)}, ${c.tuoiStart}-${c.tuoiEnd}t)${c.scoring ? ' · ' + c.scoring.tong + '/10' : ''}`;
+          chartHtml += `${_tv('js.lgcore.hien-tai-dv', '· Hiện tại: ĐV{n} ({cc}, {a}-{b}t)', { n: curIdx + 1, cc: _g(['canchi', 'chi'], canChiDaiVan(_astrolabe, c)), a: c.tuoiStart, b: c.tuoiEnd })}${c.scoring ? ' · ' + c.scoring.tong + '/10' : ''}`;
         }
         chartHtml += `</div></div>`;
         chartHtml += buildChuDeDaiVanHtml(_astrolabe);
@@ -312,25 +368,25 @@ function _ccT(s) {
             const ttScore=sc.thienThoi?.score??sc.thienThoi, dlScore=sc.diaLoi?.score??sc.diaLoi, nhScore=sc.nhanHoa?.score??sc.nhanHoa;
             const ttBar=(ttScore/5*100).toFixed(0), dlBar=(dlScore/1*100).toFixed(0), nhBar=(nhScore/4*100).toFixed(0), totBar=(sc.tong/10*100).toFixed(0);
             const totCol=sc.tong>=7?'#4ade80':sc.tong>=4?'#60a5fa':'#f87171';
-            chartHtml += `<div class="pregen-block"><div class="pregen-title"><span class="ic-inline" data-icon-emoji="📊" style="display:inline-flex;width:1em;height:1em;vertical-align:-2px;color:#7C6942">📊</span> Chấm điểm đại vận — Cung ${dvCungName} (${dvDC})</div><div class="score-bars">
-              <div class="score-bar-row"><span class="score-label">Thiên Thời</span><div class="score-bar-bg"><div class="score-bar-fill" style="width:${ttBar}%;background:#c9a84c"></div></div><span class="score-val">${ttScore}/5</span></div>
-              <div class="score-bar-row"><span class="score-label">Địa Lợi</span><div class="score-bar-bg"><div class="score-bar-fill" style="width:${dlBar}%;background:#0E7490"></div></div><span class="score-val">${dlScore}/1</span></div>
-              <div class="score-bar-row"><span class="score-label">Nhân Hòa</span><div class="score-bar-bg"><div class="score-bar-fill" style="width:${nhBar}%;background:#7B2FBE"></div></div><span class="score-val">${nhScore}/4</span></div>
-              <div class="score-bar-row" style="border-top:1px solid #1e2e42;padding-top:6px;margin-top:2px"><span class="score-label" style="font-weight:600;color:inherit">Tổng</span><div class="score-bar-bg"><div class="score-bar-fill" style="width:${totBar}%;background:${totCol}"></div></div><span class="score-val" style="color:${totCol};font-weight:600">${sc.tong}/10</span></div>
-            </div>${sc.nhanHoa?.boMenh?`<div style="font-size:11px;color:#666;margin-top:6px">Bộ Mệnh: <span style="color:#aaa">${sc.nhanHoa.boMenh}</span> → Bộ ĐV: <span style="color:#aaa">${sc.nhanHoa.boVan}</span></div>`:''}</div>`;
+            chartHtml += `<div class="pregen-block"><div class="pregen-title"><span class="ic-inline" data-icon-emoji="📊" style="display:inline-flex;width:1em;height:1em;vertical-align:-2px;color:#7C6942">📊</span> ${_tv('js.lgcore.cham-diem-dv', 'Chấm điểm đại vận — Cung {cung} ({chi})', { cung: _g('cung', dvCungName), chi: _g('chi', dvDC) })}</div><div class="score-bars">
+              <div class="score-bar-row"><span class="score-label">${_tv('js.lgcore.thien-thoi', 'Thiên Thời')}</span><div class="score-bar-bg"><div class="score-bar-fill" style="width:${ttBar}%;background:#c9a84c"></div></div><span class="score-val">${ttScore}/5</span></div>
+              <div class="score-bar-row"><span class="score-label">${_tv('js.lgcore.dia-loi', 'Địa Lợi')}</span><div class="score-bar-bg"><div class="score-bar-fill" style="width:${dlBar}%;background:#0E7490"></div></div><span class="score-val">${dlScore}/1</span></div>
+              <div class="score-bar-row"><span class="score-label">${_tv('js.lgcore.nhan-hoa', 'Nhân Hòa')}</span><div class="score-bar-bg"><div class="score-bar-fill" style="width:${nhBar}%;background:#7B2FBE"></div></div><span class="score-val">${nhScore}/4</span></div>
+              <div class="score-bar-row" style="border-top:1px solid #1e2e42;padding-top:6px;margin-top:2px"><span class="score-label" style="font-weight:600;color:inherit">${_tv('js.lgcore.tong', 'Tổng')}</span><div class="score-bar-bg"><div class="score-bar-fill" style="width:${totBar}%;background:${totCol}"></div></div><span class="score-val" style="color:${totCol};font-weight:600">${sc.tong}/10</span></div>
+            </div>${sc.nhanHoa?.boMenh?`<div style="font-size:11px;color:#666;margin-top:6px">${_tv('js.lgcore.bo-menh', 'Bộ Mệnh: <span style="color:#aaa">{a}</span> → Bộ ĐV: <span style="color:#aaa">{b}</span>', { a: sc.nhanHoa.boMenh, b: sc.nhanHoa.boVan })}</div>`:''}</div>`;
           }
           const majorStars=dvPalace.majorStars||[], allStars=dvPalace.stars||[];
           const SAT=['Kình Dương','Đà La','Hỏa Tinh','Linh Tinh','Địa Không','Địa Kiếp'];
           const BAI=['Thiên Khốc','Thiên Hư','Tang Môn','Bạch Hổ','Đại Hao','Tiểu Hao'];
           const CAT=['Văn Xương','Văn Khúc','Thiên Khôi','Thiên Việt','Tả Phù','Hữu Bật','Lộc Tồn','Hóa Lộc','Hóa Quyền','Hóa Khoa'];
-          preGenHtml += `<div class="pregen-block"><div class="pregen-title">✦ Chính tinh cung đại vận</div>`;
+          preGenHtml += `<div class="pregen-block"><div class="pregen-title">✦ ${_tv('js.lgcore.chinh-tinh-dv', 'Chính tinh cung đại vận')}</div>`;
           if (majorStars.length===0) {
-            const xung=dvPalace.xungChieuCung, xungStars=xung?(xung.majorStars||[]).map(s=>`${s.ten}(${s.brightness||''})`).join(', '):'';
-            preGenHtml += `<div class="pregen-yn yn-neutral">Vô chính diệu${xungStars?` — mượn từ cung xung: <span style="color:#5FA8D3">${xungStars}</span>`:''}</div>`;
+            const xung=dvPalace.xungChieuCung, xungStars=xung?(xung.majorStars||[]).map(s=>`${_sao(s.ten)}(${_sang(s.brightness)||''})`).join(', '):'';
+            preGenHtml += `<div class="pregen-yn yn-neutral">${_tv('js.lgcore.vo-chinh-dieu', 'Vô chính diệu')}${xungStars?_tv('js.lgcore.muon-xung', ' — mượn từ cung xung: <span style="color:#5FA8D3">{sao}</span>', { sao: xungStars }):''}</div>`;
           } else {
             majorStars.forEach(s => {
               const bCol=s.brightness==='Miếu'||s.brightness==='Vượng'?'#4ade80':s.brightness==='Đắc'?'#86efac':s.brightness==='Bình hòa'||s.brightness==='Bình'?'#60a5fa':'#f87171';
-              preGenHtml += `<div class="pregen-yn yn-neutral"><span style="font-weight:600;color:inherit">${s.ten}</span> <span style="color:${bCol};font-size:11px">(${s.brightness||''})</span>${s.hoa?` <span style="color:#5FA8D3">[Hóa ${s.hoa}]</span>`:''}</div>`;
+              preGenHtml += `<div class="pregen-yn yn-neutral"><span style="font-weight:600;color:inherit">${_sao(s.ten)}</span> <span style="color:${bCol};font-size:11px">(${_sang(s.brightness)||''})</span>${s.hoa?` <span style="color:#5FA8D3">[${_g('sao', 'Hóa ' + s.hoa)}]</span>`:''}</div>`;
             });
           }
           preGenHtml += `</div>`;
@@ -339,17 +395,17 @@ function _ccT(s) {
           const satIn=SAT.filter(s=>tptcNames.includes(s)), baiIn=BAI.filter(s=>tptcNames.includes(s)), catIn=CAT.filter(s=>tptcNames.includes(s));
           const hasTuan=allStars.some(s=>s.ten==='Tuần'), hasTriet=allStars.some(s=>s.ten==='Triệt');
           if (catIn.length||satIn.length||baiIn.length||hasTuan||hasTriet) {
-            preGenHtml += `<div class="pregen-block"><div class="pregen-title"><span class="ic-inline" data-icon-emoji="🔍" style="display:inline-flex;width:1em;height:1em;vertical-align:-2px;color:#7C6942">🔍</span> Sao tam phương tứ chính</div>`;
-            if (catIn.length) preGenHtml += `<div class="pregen-yn yn-cat">Cát tinh: ${catIn.join(', ')}</div>`;
-            if (satIn.length) preGenHtml += `<div class="pregen-yn yn-hung">Sát tinh: ${satIn.join(', ')}</div>`;
-            if (baiIn.length) preGenHtml += `<div class="pregen-yn yn-hung" style="color:#fca5a5">Bại tinh: ${baiIn.join(', ')}</div>`;
-            if (hasTuan) preGenHtml += `<div class="pregen-yn yn-tuan">Tuần án ngữ cung đại vận</div>`;
-            if (hasTriet) preGenHtml += `<div class="pregen-yn yn-tuan">Triệt án ngữ cung đại vận</div>`;
+            preGenHtml += `<div class="pregen-block"><div class="pregen-title"><span class="ic-inline" data-icon-emoji="🔍" style="display:inline-flex;width:1em;height:1em;vertical-align:-2px;color:#7C6942">🔍</span> ${_tv('js.lgcore.tam-phuong', 'Sao tam phương tứ chính')}</div>`;
+            if (catIn.length) preGenHtml += `<div class="pregen-yn yn-cat">${_tv('js.lgcore.cat-tinh', 'Cát tinh: {sao}', { sao: _saoList(catIn) })}</div>`;
+            if (satIn.length) preGenHtml += `<div class="pregen-yn yn-hung">${_tv('js.lgcore.sat-tinh', 'Sát tinh: {sao}', { sao: _saoList(satIn) })}</div>`;
+            if (baiIn.length) preGenHtml += `<div class="pregen-yn yn-hung" style="color:#fca5a5">${_tv('js.lgcore.bai-tinh', 'Bại tinh: {sao}', { sao: _saoList(baiIn) })}</div>`;
+            if (hasTuan) preGenHtml += `<div class="pregen-yn yn-tuan">${_tv('js.lgcore.tuan-cung-dv', 'Tuần án ngữ cung đại vận')}</div>`;
+            if (hasTriet) preGenHtml += `<div class="pregen-yn yn-tuan">${_tv('js.lgcore.triet-cung-dv', 'Triệt án ngữ cung đại vận')}</div>`;
             preGenHtml += `</div>`;
           }
           const ccDV=(_astrolabe.cachCuc||[]).filter(c=>c.cung===dvCungName||c.cung==='');
           if (ccDV.length>0) {
-            preGenHtml += `<div class="pregen-block"><div class="pregen-title"><span class="ic-inline" data-icon-emoji="⚙" style="display:inline-flex;width:1em;height:1em;vertical-align:-2px;color:#7C6942">⚙</span> Cách cục liên quan</div>`;
+            preGenHtml += `<div class="pregen-block"><div class="pregen-title"><span class="ic-inline" data-icon-emoji="⚙" style="display:inline-flex;width:1em;height:1em;vertical-align:-2px;color:#7C6942">⚙</span> ${_tv('js.lgcore.cach-cuc-lien-quan', 'Cách cục liên quan')}</div>`;
             ccDV.forEach(c=>{ preGenHtml += `<div class="pregen-item"><span class="cc-label cc-${c.loai}">${_ccT(c.ten)}</span><span class="cc-mota">${_ccT(c.moTa)}</span></div>`; });
             preGenHtml += `</div>`;
           }
@@ -357,11 +413,11 @@ function _ccT(s) {
           if (dvRules.length>0) {
             const totR=dvRules.filter(r=>r.type==='tot'), xauR=dvRules.filter(r=>r.type==='xau');
             const cbR=dvRules.filter(r=>r.type==='canh_bao'), trungR=dvRules.filter(r=>r.type==='trung');
-            preGenHtml += `<div class="pregen-block"><div class="pregen-title"><span class="ic-inline" data-icon-emoji="🔮" style="display:inline-flex;width:1em;height:1em;vertical-align:-2px;color:#7C6942">🔮</span> Luận đoán vận hạn</div>`;
-            if (totR.length) { preGenHtml += `<div class="rules-group">`; totR.forEach(r=>{ preGenHtml += `<div class="pregen-yn yn-cat">✦ ${r.text}</div>`; }); preGenHtml += `</div>`; }
-            if (trungR.length) { preGenHtml += `<div class="rules-group">`; trungR.forEach(r=>{ preGenHtml += `<div class="pregen-yn yn-neutral">◆ ${r.text}</div>`; }); preGenHtml += `</div>`; }
-            if (xauR.length) { preGenHtml += `<div class="rules-group">`; xauR.forEach(r=>{ preGenHtml += `<div class="pregen-yn yn-hung">▼ ${r.text}</div>`; }); preGenHtml += `</div>`; }
-            if (cbR.length) { preGenHtml += `<div class="rules-group rules-canh-bao">`; cbR.forEach(r=>{ preGenHtml += `<div class="pregen-yn yn-great-hung">⚠ ${r.text}</div>`; }); preGenHtml += `</div>`; }
+            preGenHtml += `<div class="pregen-block"><div class="pregen-title"><span class="ic-inline" data-icon-emoji="🔮" style="display:inline-flex;width:1em;height:1em;vertical-align:-2px;color:#7C6942">🔮</span> ${_tv('js.lgcore.luan-doan', 'Luận đoán vận hạn')}</div>`;
+            if (totR.length) { preGenHtml += `<div class="rules-group">`; totR.forEach(r=>{ preGenHtml += `<div class="pregen-yn yn-cat">✦ ${_rT(r.text)}</div>`; }); preGenHtml += `</div>`; }
+            if (trungR.length) { preGenHtml += `<div class="rules-group">`; trungR.forEach(r=>{ preGenHtml += `<div class="pregen-yn yn-neutral">◆ ${_rT(r.text)}</div>`; }); preGenHtml += `</div>`; }
+            if (xauR.length) { preGenHtml += `<div class="rules-group">`; xauR.forEach(r=>{ preGenHtml += `<div class="pregen-yn yn-hung">▼ ${_rT(r.text)}</div>`; }); preGenHtml += `</div>`; }
+            if (cbR.length) { preGenHtml += `<div class="rules-group rules-canh-bao">`; cbR.forEach(r=>{ preGenHtml += `<div class="pregen-yn yn-great-hung">⚠ ${_rT(r.text)}</div>`; }); preGenHtml += `</div>`; }
             preGenHtml += `</div>`;
           }
         }
@@ -382,7 +438,7 @@ function _ccT(s) {
   // mở hết nhờ `beforeprint` của shell.js. Không có gì để hiện → `''`.
   function buildCalcSectionHtml(phan, ls) {
     var p = buildPreGenParts(phan, ls);
-    return p.charts + (p.calc ? '<details class="lg-calc"><summary>Xem cơ sở tính toán</summary>' + p.calc + '</details>' : '');
+    return p.charts + (p.calc ? '<details class="lg-calc"><summary>' + _tv('js.lgcore.xem-co-so', 'Xem cơ sở tính toán') + '</summary>' + p.calc + '</details>' : '');
   }
 
   // Vẽ canvas #chart-daivan-overview mà buildPreGenHtml(14, ls) đã dựng HTML —
@@ -412,7 +468,7 @@ function _ccT(s) {
         var cc = vi ? canChiDaiVan(ls, dv) : G.t('canchi', canChiDaiVan(ls, dv));
         return [
           (palace ? (vi ? 'Cung ' + palace.cungName : G.t('cung', palace.cungName)) + ' (' + cc + ')' : cc),
-          dv.tuoiStart + '-' + dv.tuoiEnd + ' tuổi',
+          _tv('js.lgcore.tuoi-khoang', '{a}-{b} tuổi', { a: dv.tuoiStart, b: dv.tuoiEnd }),
         ];
       },
     });
@@ -431,10 +487,10 @@ function _ccT(s) {
   // trên nền sáng. Cùng quy ước với các khối pregen khác (màu viết thẳng).
   var BD = { ink: '#1a1a1a', mute: '#666', grid: '#e0e0e0', band: '#C8A96A', bandDark: '#7C6942', cur: '#FFF1D6', red: '#C0392B' };
   var CHU_DE_MAU = { su_nghiep: '#1455A4', tai_loc: '#2E7D5B', tinh_duyen: '#C0392B', suc_khoe: '#A8843A' };
-  function bdF(n) { return (Math.round(n * 10) / 10).toFixed(1).replace('.', ','); }
+  function bdF(n) { var s = (Math.round(n * 10) / 10).toFixed(1); return _vi() ? s.replace('.', ',') : s; }
   function bdPct(p) { return Math.round(p * 100) + '%'; }
   function bdEsc(t) { return String(t == null ? '' : t).replace(/[&<>"]/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]; }); }
-  function bdCanChiNam(nam) { return CAN10[((nam - 4) % 10 + 10) % 10] + ' ' + CHI12[((nam - 4) % 12 + 12) % 12]; }
+  function bdCanChiNam(nam) { return _g('canchi', CAN10[((nam - 4) % 10 + 10) % 10] + ' ' + CHI12[((nam - 4) % 12 + 12) % 12]); }
   function bdText(x, y, t, a) {
     a = a || {};
     return '<text x="' + x.toFixed(1) + '" y="' + y.toFixed(1) + '" font-size="' + (a.size || 11) + '"' +
@@ -478,8 +534,8 @@ function _ccT(s) {
   }
   function bdSaoDong(list) {
     var seen = {}, out = [];
-    list.forEach(function (d) { if (!seen[d.ten]) { seen[d.ten] = 1; out.push(d.ten); } });
-    return out.length ? out.join(', ') : 'không có sao động';
+    list.forEach(function (d) { if (!seen[d.ten]) { seen[d.ten] = 1; out.push(_sao(d.ten)); } });
+    return out.length ? out.join(', ') : _tv('js.lgcore.khong-sao-dong', 'không có sao động');
   }
   function bdTieuVanNamXem(ls) {
     var tvs = ls && ls.tieuVanScores;
@@ -490,7 +546,7 @@ function _ccT(s) {
     var p = (ls.palaces || []).find(function (x) { return x.cungName === ten; });
     return p ? p.idx : -1;
   }
-  var BD_GHI_CHU = 'Chấm là điểm, thanh vàng là khoảng dao động. Biên = điểm × (1 ± tỉ lệ sao động trong tam phương tứ chính của cung hạn), sao động có trọng số theo hạng sao.';
+  function bdGhiChu() { return _tv('js.lgcore.bd-ghi-chu', 'Chấm là điểm, thanh vàng là khoảng dao động. Biên = điểm × (1 ± tỉ lệ sao động trong tam phương tứ chính của cung hạn), sao động có trọng số theo hạng sao.'); }
 
   /** Phần 24 — 10 năm kể từ năm xem: điểm năm (nội suy từ đại vận) + biên. */
   function buildVanNamHtml(ls) {
@@ -499,15 +555,15 @@ function _ccT(s) {
     var tvs = ls.tieuVanScores.slice(i0, i0 + 10);
     var dsOf = function (t) { var c = bdCungIdx(ls, t.tieuHanCung); return ((c >= 0 && ls.bienDongGoc[c]) ? ls.bienDongGoc[c].ds : []).concat(t.bienDong.luu || []); };
     var rows = tvs.map(function (t, i) {
-      return { diem: t.mainScore, lo: t.bienDong.lo, hi: t.bienDong.hi, pct: t.bienDong.pct, l1: String(t.nam), l2: t.tieuHanCung, cur: i === 0 };
+      return { diem: t.mainScore, lo: t.bienDong.lo, hi: t.bienDong.hi, pct: t.bienDong.pct, l1: String(t.nam), l2: _gs('cung', t.tieuHanCung), cur: i === 0 };
     });
     var x = tvs[0], dong = tvs.reduce(function (a, b) { return b.bienDong.pct > a.bienDong.pct ? b : a; });
-    var h = '<div class="pregen-block"><div class="pregen-title">Mười năm tới — điểm năm và biên dao động</div>';
-    h += bdBandSvg(rows, 'Điểm và biên dao động ' + tvs[0].nam + ' đến ' + tvs[tvs.length - 1].nam);
+    var h = '<div class="pregen-block"><div class="pregen-title">' + _tv('js.lgcore.muoi-nam-title', 'Mười năm tới — điểm năm và biên dao động') + '</div>';
+    h += bdBandSvg(rows, _tv('js.lgcore.muoi-nam-aria', 'Điểm và biên dao động {a} đến {b}', { a: tvs[0].nam, b: tvs[tvs.length - 1].nam }));
     h += '<div style="font-size:13px;line-height:1.55;margin-top:8px;color:#1a1a1a">';
-    h += '<div>Năm <b>' + x.nam + '</b> (' + bdCanChiNam(x.nam) + ', tiểu hạn ' + bdEsc(x.tieuHanCung) + '): điểm <b>' + bdF(x.mainScore) + '</b>, dao động ' + bdF(x.bienDong.lo) + '–' + bdF(x.bienDong.hi) + ' (±' + bdPct(x.bienDong.pct) + '). Sao động: ' + bdEsc(bdSaoDong(dsOf(x))) + '.</div>';
-    if (dong !== x) h += '<div>Động nhất: <b>' + dong.nam + '</b> (±' + bdPct(dong.bienDong.pct) + ', tiểu hạn ' + bdEsc(dong.tieuHanCung) + ') — ' + bdEsc(bdSaoDong(dsOf(dong))) + '.</div>';
-    h += '</div><div style="font-size:11px;color:#666;margin-top:6px">' + BD_GHI_CHU + '</div></div>';
+    h += '<div>' + _tv('js.lgcore.nam-xem-dong', 'Năm <b>{nam}</b> ({cc}, tiểu hạn {cung}): điểm <b>{d}</b>, dao động {lo}–{hi} (±{p}). Sao động: {ds}.', { nam: x.nam, cc: bdCanChiNam(x.nam), cung: bdEsc(_g('cung', x.tieuHanCung)), d: bdF(x.mainScore), lo: bdF(x.bienDong.lo), hi: bdF(x.bienDong.hi), p: bdPct(x.bienDong.pct), ds: bdEsc(bdSaoDong(dsOf(x))) }) + '</div>';
+    if (dong !== x) h += '<div>' + _tv('js.lgcore.nam-dong-nhat', 'Động nhất: <b>{nam}</b> (±{p}, tiểu hạn {cung}) — {ds}.', { nam: dong.nam, p: bdPct(dong.bienDong.pct), cung: bdEsc(_g('cung', dong.tieuHanCung)), ds: bdEsc(bdSaoDong(dsOf(dong))) }) + '</div>';
+    h += '</div><div style="font-size:11px;color:#666;margin-top:6px">' + bdGhiChu() + '</div></div>';
     return h;
   }
 
@@ -519,16 +575,16 @@ function _ccT(s) {
     var ms = root.tinhVanThang(ls, nam);
     if (!ms || ms.length !== 12) return '';
     var ten = function (m) { var p = (ls.palaces || []).find(function (x) { return x.idx === m.cungIdx; }); return p ? p.cungName : ''; };
-    var rows = ms.map(function (m) { return { diem: m.diem, lo: m.lo, hi: m.hi, pct: m.pct, l1: 'Th ' + m.thang, l2: ten(m) }; });
+    var rows = ms.map(function (m) { return { diem: m.diem, lo: m.lo, hi: m.hi, pct: m.pct, l1: _tv('js.lgcore.th-ngan', 'Th {n}', { n: m.thang }), l2: _gs('cung', ten(m)) }; });
     var dong = ms.reduce(function (a, b) { return b.pct > a.pct ? b : a; });
     var yen = ms.reduce(function (a, b) { return b.pct < a.pct ? b : a; });
     var dsOf = function (m) { return ((ls.bienDongGoc && ls.bienDongGoc[m.cungIdx]) ? ls.bienDongGoc[m.cungIdx].ds : []).concat(m.luu || []); };
-    var h = '<div class="pregen-block"><div class="pregen-title">Mười hai tháng âm lịch năm ' + bdEsc(bdCanChiNam(nam)) + ' ' + nam + '</div>';
-    h += bdBandSvg(rows, 'Điểm và biên dao động 12 tháng âm lịch năm ' + nam);
+    var h = '<div class="pregen-block"><div class="pregen-title">' + _tv('js.lgcore.muoi-hai-thang', 'Mười hai tháng âm lịch năm {cc} {nam}', { cc: bdEsc(bdCanChiNam(nam)), nam: nam }) + '</div>';
+    h += bdBandSvg(rows, _tv('js.lgcore.muoi-hai-thang-aria', 'Điểm và biên dao động 12 tháng âm lịch năm {nam}', { nam: nam }));
     h += '<div style="font-size:13px;line-height:1.55;margin-top:8px;color:#1a1a1a">';
-    h += '<div>Động nhất: <b>tháng ' + dong.thang + '</b> (nguyệt hạn ' + bdEsc(ten(dong)) + ', ±' + bdPct(dong.pct) + ') — ' + bdEsc(bdSaoDong(dsOf(dong))) + '.</div>';
-    h += '<div>Yên nhất: <b>tháng ' + yen.thang + '</b> (nguyệt hạn ' + bdEsc(ten(yen)) + ', ±' + bdPct(yen.pct) + ').</div>';
-    h += '</div><div style="font-size:11px;color:#666;margin-top:6px">Điểm tháng nội suy từ điểm các năm. ' + BD_GHI_CHU + '</div></div>';
+    h += '<div>' + _tv('js.lgcore.thang-dong-nhat', 'Động nhất: <b>tháng {t}</b> (nguyệt hạn {cung}, ±{p}) — {ds}.', { t: dong.thang, cung: bdEsc(_g('cung', ten(dong))), p: bdPct(dong.pct), ds: bdEsc(bdSaoDong(dsOf(dong))) }) + '</div>';
+    h += '<div>' + _tv('js.lgcore.thang-yen-nhat', 'Yên nhất: <b>tháng {t}</b> (nguyệt hạn {cung}, ±{p}).', { t: yen.thang, cung: bdEsc(_g('cung', ten(yen))), p: bdPct(yen.pct) }) + '</div>';
+    h += '</div><div style="font-size:11px;color:#666;margin-top:6px">' + _tv('js.lgcore.thang-noi-suy', 'Điểm tháng nội suy từ điểm các năm. ') + bdGhiChu() + '</div></div>';
     return h;
   }
 
@@ -542,14 +598,17 @@ function _ccT(s) {
     var W = 640, H = 240, L = 36, R = 632, T = 22, B = 196;
     var sy = function (v) { return B - (Math.max(0, Math.min(10, v)) / 10) * (B - T); };
     var cw = (R - L) / cd.length, sx = function (i) { return L + (i + 0.5) * cw; };
-    var h = '<div class="pregen-block"><div class="pregen-title">Bốn chuyện lớn qua 9 đại vận</div>';
+    // Tên chủ đề engine (`chuDe[k].ten`) → nhãn theo KHOÁ chủ đề (vi: nguyên chữ engine).
+    var TEN = _vi() ? null : { su_nghiep: _tv('js.lgcore.cd-su-nghiep', 'Sự nghiệp'), tai_loc: _tv('js.lgcore.cd-tai-loc', 'Tài lộc'), tinh_duyen: _tv('js.lgcore.cd-tinh-duyen', 'Tình duyên'), suc_khoe: _tv('js.lgcore.cd-suc-khoe', 'Sức khỏe') };
+    var tenCd = function (k, x) { return TEN ? TEN[k] : x.ten; };
+    var h = '<div class="pregen-block"><div class="pregen-title">' + _tv('js.lgcore.cd-title', 'Bốn chuyện lớn qua 9 đại vận') + '</div>';
     h += '<div style="display:flex;flex-wrap:wrap;gap:4px 14px;font-size:12px;margin-bottom:4px;color:#1a1a1a">' + KEYS.map(function (k) {
-      return '<span><i style="display:inline-block;width:10px;height:10px;border-radius:50%;margin-right:5px;vertical-align:-1px;background:' + CHU_DE_MAU[k] + '"></i>' + bdEsc(cd[0].chuDe[k].ten) + '</span>';
+      return '<span><i style="display:inline-block;width:10px;height:10px;border-radius:50%;margin-right:5px;vertical-align:-1px;background:' + CHU_DE_MAU[k] + '"></i>' + bdEsc(tenCd(k, cd[0].chuDe[k])) + '</span>';
     }).join('') + '</div>';
-    h += '<svg viewBox="0 0 ' + W + ' ' + H + '" role="img" aria-label="Bốn đường chủ đề qua 9 đại vận" style="width:100%;height:auto;display:block">';
+    h += '<svg viewBox="0 0 ' + W + ' ' + H + '" role="img" aria-label="' + bdEsc(_tv('js.lgcore.cd-aria', 'Bốn đường chủ đề qua 9 đại vận')) + '" style="width:100%;height:auto;display:block">';
     if (ci >= 0) {
       h += '<rect x="' + (sx(ci) - cw / 2).toFixed(1) + '" y="' + (T - 18) + '" width="' + cw.toFixed(1) + '" height="' + (B - T + 18) + '" rx="4" style="fill:' + BD.cur + '"/>';
-      h += bdText(sx(ci), T - 6, 'Đang ở đây', { anchor: 'middle', size: 9.5, bold: true, color: BD.red });
+      h += bdText(sx(ci), T - 6, _tv('js.lgcore.dang-o-day', 'Đang ở đây'), { anchor: 'middle', size: 9.5, bold: true, color: BD.red });
     }
     // Trục KHÔNG in số (Henry chốt: điểm chủ đề suy từ điểm cung, không đưa
     // ra cho người xem — chỉ điểm đại vận mới được hiện số). Chỉ ghi mạnh/yếu.
@@ -557,7 +616,7 @@ function _ccT(s) {
       var gy = B - (gv / 10) * (B - T);
       h += '<line x1="' + L + '" x2="' + R + '" y1="' + gy.toFixed(1) + '" y2="' + gy.toFixed(1) + '" style="stroke:' + BD.grid + '" stroke-width="1"/>';
     }
-    h += bdText(L - 4, T + 4, 'mạnh', { anchor: 'end', size: 10, color: BD.mute }) + bdText(L - 4, B, 'yếu', { anchor: 'end', size: 10, color: BD.mute });
+    h += bdText(L - 4, T + 4, _tv('js.lgcore.manh', 'mạnh'), { anchor: 'end', size: 10, color: BD.mute }) + bdText(L - 4, B, _tv('js.lgcore.yeu', 'yếu'), { anchor: 'end', size: 10, color: BD.mute });
     // Chỉ vẽ đại vận trong độ tuổi CÓ NGHĨA của chủ đề (engine `trongTuoi`;
     // engine cũ thiếu cờ ⇒ coi là có). Ra/vào khoảng tuổi thì đường đứt.
     var co = function (d, k) { return d.chuDe[k].trongTuoi !== false; };
@@ -572,16 +631,15 @@ function _ccT(s) {
     });
     cd.forEach(function (d, i) {
       h += bdText(sx(i), B + 16, d.tuoiStart + '–' + d.tuoiEnd, { anchor: 'middle', size: 11, bold: i === ci, color: i === ci ? BD.red : BD.ink });
-      h += bdText(sx(i), B + 30, 'Mệnh ở ' + d.diaChi, { anchor: 'middle', size: 9.5, color: BD.mute });
+      h += bdText(sx(i), B + 30, _tv('js.lgcore.menh-o', 'Mệnh ở {chi}', { chi: _gs('chi', d.diaChi) }), { anchor: 'middle', size: 9.5, color: BD.mute });
     });
     h += '</svg>';
     if (ci >= 0) {
       var c = cd[ci];
-      var xs = KEYS.filter(function (k) { return co(c, k); }).map(function (k) { return c.chuDe[k]; }).sort(function (a, b) { return b.diem - a.diem; });
-      if (xs.length >= 2) h += '<div style="font-size:13px;line-height:1.55;margin-top:8px;color:#1a1a1a">Đang đi đại vận ' + c.tuoiStart + '–' + c.tuoiEnd + ' (Mệnh tạm ở ' + bdEsc(c.diaChi) + '): ' +
-        'mạnh nhất <b>' + bdEsc(xs[0].ten.toLowerCase()) + '</b>, yếu nhất <b>' + bdEsc(xs[xs.length - 1].ten.toLowerCase()) + '</b>.</div>';
+      var xs = KEYS.filter(function (k) { return co(c, k); }).map(function (k) { return { ten: tenCd(k, c.chuDe[k]), diem: c.chuDe[k].diem }; }).sort(function (a, b) { return b.diem - a.diem; });
+      if (xs.length >= 2) h += '<div style="font-size:13px;line-height:1.55;margin-top:8px;color:#1a1a1a">' + _tv('js.lgcore.cd-dang-di', 'Đang đi đại vận {a}–{b} (Mệnh tạm ở {chi}): mạnh nhất <b>{manh}</b>, yếu nhất <b>{yeu}</b>.', { a: c.tuoiStart, b: c.tuoiEnd, chi: bdEsc(_g('chi', c.diaChi)), manh: bdEsc(xs[0].ten.toLowerCase()), yeu: bdEsc(xs[xs.length - 1].ten.toLowerCase()) }) + '</div>';
     }
-    h += '<div style="font-size:11px;color:#666;margin-top:6px">Cung đại vận làm Mệnh tạm, các cung khác dời theo và mượn sao của cung dời tới. Sự nghiệp vẽ đến 65 tuổi; tài lộc, tình duyên vẽ từ tuổi trưởng thành.</div></div>';
+    h += '<div style="font-size:11px;color:#666;margin-top:6px">' + _tv('js.lgcore.cd-ghi-chu', 'Cung đại vận làm Mệnh tạm, các cung khác dời theo và mượn sao của cung dời tới. Sự nghiệp vẽ đến 65 tuổi; tài lộc, tình duyên vẽ từ tuổi trưởng thành.') + '</div></div>';
     return h;
   }
 
@@ -595,7 +653,7 @@ function _ccT(s) {
     if (!du || !du.d || !du.m || !du.y || typeof document === 'undefined') return '';
     var id = 'lg-nguhanh-' + (++_nhSeq);
     setTimeout(function () { mountNguHanh(id, ls, 0); }, 0);
-    return '<div class="pregen-block" id="' + id + '"><div class="pregen-title">Ngũ hành theo Tứ Trụ</div><div data-nh-body style="min-height:180px"></div></div>';
+    return '<div class="pregen-block" id="' + id + '"><div class="pregen-title">' + _tv('js.lgcore.nh-title', 'Ngũ hành theo Tứ Trụ') + '</div><div data-nh-body style="min-height:180px"></div></div>';
   }
   function mountNguHanh(id, ls, tries) {
     var host = document.getElementById(id);
@@ -617,37 +675,39 @@ function _ccT(s) {
     var N = [['Mộc', '#2E7D5B'], ['Hỏa', '#C0392B'], ['Thổ', '#A8843A'], ['Kim', '#8C8C8C'], ['Thủy', '#1455A4']];
     var tot = N.reduce(function (a, x) { return a + (W[x[0]] || 0); }, 0);
     if (!tot) { host.parentNode.removeChild(host); return; }
-    var a0 = -Math.PI / 2, svg = '<svg viewBox="-110 -110 220 220" role="img" aria-label="Tỉ lệ ngũ hành Tứ Trụ" style="width:100%;max-width:190px;height:auto;display:block;margin:0 auto">';
+    var a0 = -Math.PI / 2, svg = '<svg viewBox="-110 -110 220 220" role="img" aria-label="' + bdEsc(_tv('js.lgcore.nh-aria', 'Tỉ lệ ngũ hành Tứ Trụ')) + '" style="width:100%;max-width:190px;height:auto;display:block;margin:0 auto">';
     var P = function (r, a) { return (r * Math.cos(a)).toFixed(2) + ',' + (r * Math.sin(a)).toFixed(2); };
     N.forEach(function (x) {
       var v = W[x[0]] || 0;
       if (!v) return;
       var a1 = a0 + v / tot * 2 * Math.PI, lg = a1 - a0 > Math.PI ? 1 : 0;
       svg += '<path d="M' + P(100, a0) + ' A100,100 0 ' + lg + ' 1 ' + P(100, a1) + ' L' + P(62, a1) + ' A62,62 0 ' + lg + ' 0 ' + P(62, a0) + 'Z" style="fill:' + x[1] + ';stroke:#F5F5F5" stroke-width="2"/>';
-      if (a1 - a0 > 0.35) { var am = (a0 + a1) / 2; svg += bdText(81 * Math.cos(am), 81 * Math.sin(am) + 4, x[0], { anchor: 'middle', size: 11, bold: true, color: '#fff' }); }
+      if (a1 - a0 > 0.35) { var am = (a0 + a1) / 2; svg += bdText(81 * Math.cos(am), 81 * Math.sin(am) + 4, _g('hanh', x[0]), { anchor: 'middle', size: 11, bold: true, color: '#fff' }); }
       a0 = a1;
     });
-    svg += bdText(0, -2, bt.nhatCan || '', { anchor: 'middle', size: 22, bold: true }) + bdText(0, 18, 'nhật chủ', { anchor: 'middle', size: 11, color: BD.mute }) + '</svg>';
+    svg += bdText(0, -2, _g('can', bt.nhatCan) || '', { anchor: 'middle', size: 22, bold: true }) + bdText(0, 18, _tv('js.lgcore.nhat-chu', 'nhật chủ'), { anchor: 'middle', size: 11, color: BD.mute }) + '</svg>';
     var sorted = N.slice().sort(function (a, b) { return (W[b[0]] || 0) - (W[a[0]] || 0); });
     var mx = W[sorted[0][0]] || 1;
-    var tru = bt.tuTru.map(function (t, i) { return '<div style="border:1px solid #e0e0e0;border-radius:6px;background:#fff;padding:4px 10px;text-align:center"><div style="font-size:10px;color:#666">' + ['Năm', 'Tháng', 'Ngày', 'Giờ'][i] + '</div><b>' + bdEsc(t.can + ' ' + t.chi) + '</b></div>'; }).join('');
+    var tru = bt.tuTru.map(function (t, i) { return '<div style="border:1px solid #e0e0e0;border-radius:6px;background:#fff;padding:4px 10px;text-align:center"><div style="font-size:10px;color:#666">' + [_tv('js.lgcore.tru-nam', 'Năm'), _tv('js.lgcore.tru-thang', 'Tháng'), _tv('js.lgcore.tru-ngay', 'Ngày'), _tv('js.lgcore.tru-gio', 'Giờ')][i] + '</div><b>' + bdEsc(_g('canchi', t.can + ' ' + t.chi)) + '</b></div>'; }).join('');
     var bars = sorted.map(function (x) {
       var v = W[x[0]] || 0;
-      return '<div style="display:grid;grid-template-columns:42px 1fr 74px;gap:8px;align-items:center;font-size:12.5px"><b>' + x[0] + '</b><span style="display:block;height:10px;border-radius:2px;width:' + (v / mx * 100).toFixed(0) + '%;background:' + x[1] + '"></span><span>' + bdF(v) + ' · ' + Math.round(v / tot * 100) + '%</span></div>';
+      return '<div style="display:grid;grid-template-columns:42px 1fr 74px;gap:8px;align-items:center;font-size:12.5px"><b>' + _g('hanh', x[0]) + '</b><span style="display:block;height:10px;border-radius:2px;width:' + (v / mx * 100).toFixed(0) + '%;background:' + x[1] + '"></span><span>' + bdF(v) + ' · ' + Math.round(v / tot * 100) + '%</span></div>';
     }).join('');
     var cn = bt.cuongNhuoc, dt = bt.dungThan;
-    var ket = 'Vượng nhất <b>' + bdEsc(nh.dominant) + '</b>, thiếu nhất <b>' + bdEsc(nh.deficient) + '</b>.' +
-      (cn && cn.label ? ' Nhật chủ ' + bdEsc(bt.nhatCan) + ', thân ' + bdEsc(String(cn.label).toLowerCase()) + (typeof cn.score === 'number' ? ' (' + bdF(cn.score) + '/10)' : '') + '.' : '') +
-      (dt && dt.primary ? ' Dụng thần <b>' + bdEsc(dt.primary) + '</b>' + (dt.secondary ? ', hỷ thần ' + bdEsc(dt.secondary) : '') + '.' : '');
+    // Nhãn thân vượng/nhược của engine Tử Bình (5 mức cố định) → khoá; nhãn lạ giữ nguyên.
+    var CN = _vi() ? null : { 'Cực vượng': _tv('js.lgcore.cn-cuc-vuong', 'cực vượng'), 'Vượng': _tv('js.lgcore.cn-vuong', 'vượng'), 'Bình hòa': _tv('js.lgcore.cn-binh-hoa', 'bình hòa'), 'Nhược': _tv('js.lgcore.cn-nhuoc', 'nhược'), 'Cực nhược': _tv('js.lgcore.cn-cuc-nhuoc', 'cực nhược') };
+    var ket = _tv('js.lgcore.nh-vuong-thieu', 'Vượng nhất <b>{a}</b>, thiếu nhất <b>{b}</b>.', { a: bdEsc(_g('hanh', nh.dominant)), b: bdEsc(_g('hanh', nh.deficient)) }) +
+      (cn && cn.label ? _tv('js.lgcore.nh-than', ' Nhật chủ {can}, thân {cn}', { can: bdEsc(_g('can', bt.nhatCan)), cn: bdEsc((CN && CN[cn.label]) || String(cn.label).toLowerCase()) }) + (typeof cn.score === 'number' ? ' (' + bdF(cn.score) + '/10)' : '') + '.' : '') +
+      (dt && dt.primary ? _tv('js.lgcore.nh-dung-than', ' Dụng thần <b>{a}</b>', { a: bdEsc(_g('hanh', dt.primary)) }) + (dt.secondary ? _tv('js.lgcore.nh-hy-than', ', hỷ thần {a}', { a: bdEsc(_g('hanh', dt.secondary)) }) : '') + '.' : '');
     var body = host.querySelector('[data-nh-body]');
     body.style.minHeight = '';
     body.innerHTML = '<div style="display:flex;flex-wrap:wrap;gap:14px;align-items:center;color:#1a1a1a"><div style="flex:0 1 190px;min-width:150px">' + svg + '</div>' +
       '<div style="flex:1 1 240px;min-width:0;display:flex;flex-direction:column;gap:8px"><div style="display:flex;flex-wrap:wrap;gap:6px">' + tru + '</div>' + bars +
       '<div style="font-size:13px;line-height:1.5">' + ket + '</div></div></div>' +
-      '<div style="font-size:11px;color:#666;margin-top:6px">Tính bằng engine Tử Bình: can lộ mỗi can 1, tàng can trong chi theo trọng số tàng can.</div>';
+      '<div style="font-size:11px;color:#666;margin-top:6px">' + _tv('js.lgcore.nh-ghi-chu', 'Tính bằng engine Tử Bình: can lộ mỗi can 1, tàng can trong chi theo trọng số tàng can.') + '</div>';
   }
 
-  var API = { TONG_PHAN: TONG_PHAN, buildVanNamHtml: buildVanNamHtml, buildVanThangHtml: buildVanThangHtml, buildChuDeDaiVanHtml: buildChuDeDaiVanHtml, buildNguHanhHtml: buildNguHanhHtml, PHAN_LABELS_BASE: PHAN_LABELS_BASE, phanLabels: phanLabels, buildPreGenHtml: buildPreGenHtml, buildCalcSectionHtml: buildCalcSectionHtml, buildCungStarHtml: buildCungStarHtml, buildTuHoaPhiTinhHtml: buildTuHoaPhiTinhHtml, renderInlineDaiVanLineChart: renderInlineDaiVanLineChart };
+  var API = { TONG_PHAN: TONG_PHAN, buildVanNamHtml: buildVanNamHtml, buildVanThangHtml: buildVanThangHtml, buildChuDeDaiVanHtml: buildChuDeDaiVanHtml, buildNguHanhHtml: buildNguHanhHtml, PHAN_LABELS_BASE: PHAN_LABELS_BASE, phanLabels: phanLabels, phanLabelsT: phanLabelsT, buildPreGenHtml: buildPreGenHtml, buildCalcSectionHtml: buildCalcSectionHtml, buildCungStarHtml: buildCungStarHtml, buildTuHoaPhiTinhHtml: buildTuHoaPhiTinhHtml, renderInlineDaiVanLineChart: renderInlineDaiVanLineChart };
   if (typeof module !== 'undefined' && module.exports) module.exports = API;
   else root.LuanGiaiCore = API;
 })(typeof window !== 'undefined' ? window : globalThis);
