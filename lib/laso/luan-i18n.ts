@@ -125,3 +125,93 @@ export async function mergeLuanI18n(
     return false;
   }
 }
+
+// ── Hreflang / sitemap theo TỪNG bản ghi (i18n W33a, route `/<locale>/la-so/<slug>`) ─────────────────
+// Chỉ bản ≠ vi có luận KHÔNG rỗng mới được coi là "đã dịch": trang `/ja/la-so/<slug>` của bản ghi chưa có
+// bản ja phải noindex và không vào hreflang/sitemap. Đọc có hạn giờ (route lá số từng chết vì Supabase treo).
+
+const NGOAI_NGU = ['en', 'ja', 'ko', 'zh-tw', 'zh-cn'] as const;
+const READ_TIMEOUT_MS = 4000;
+const NON_EMPTY = 'luan_giai=neq.%7B%7D';
+
+function isNgoaiNgu(v: unknown): v is Locale {
+  return typeof v === 'string' && (NGOAI_NGU as readonly string[]).includes(v);
+}
+
+async function readRows<T>(c: NonNullable<ReturnType<typeof conn>>, q: string, tag: string): Promise<T[] | null> {
+  try {
+    const r = await c.f(`${c.url}/rest/v1/${TABLE}?${q}`, {
+      headers: { apikey: c.key, Authorization: `Bearer ${c.key}` },
+      cache: 'no-store',
+      signal: AbortSignal.timeout(READ_TIMEOUT_MS),
+    });
+    if (!r.ok) {
+      console.error(`[luan-i18n] ${tag}`, r.status, (await r.text().catch(() => '')).slice(0, 200));
+      return null;
+    }
+    const rows = (await r.json()) as T[];
+    return Array.isArray(rows) ? rows : null;
+  } catch (err) {
+    console.error(`[luan-i18n] ${tag}`, err);
+    return null;
+  }
+}
+
+/**
+ * Các ngôn ngữ ≠ vi đã có bản luận không rỗng của `slug` (theo thứ tự `NGOAI_NGU`). `[]` = đã hỏi, chưa có
+ * bản nào; `null` = KHÔNG hỏi được (bảng chưa có, mạng, thiếu env) — bên gọi coi như chưa dịch.
+ */
+export async function listLuanLocales(slug: string, e?: LuanI18nEnv): Promise<Locale[] | null> {
+  if (!slug) return [];
+  const c = conn(e);
+  if (!c) return null;
+  const rows = await readRows<{ locale?: unknown }>(
+    c,
+    `slug=eq.${encodeURIComponent(slug)}&${NON_EMPTY}&select=locale`,
+    'locales'
+  );
+  if (!rows) return null;
+  const co = new Set(rows.map((r) => r.locale).filter(isNgoaiNgu));
+  return NGOAI_NGU.filter((l) => co.has(l));
+}
+
+export interface LuanI18nSlugRow {
+  slug: string;
+  created_at?: string;
+  updated_at?: string;
+}
+
+/** Mọi slug đã có bản luận không rỗng ở `locale` (cho `sitemap-la-so.xml?lang=`). Lỗi ⇒ `[]`. */
+export async function slugsLuanI18n(locale: Locale, e?: LuanI18nEnv): Promise<LuanI18nSlugRow[]> {
+  if (!isNgoaiNgu(locale)) return [];
+  const c = conn(e);
+  if (!c) return [];
+  const out: LuanI18nSlugRow[] = [];
+  const PAGE = 1000;
+  for (let off = 0; off < 100 * PAGE; off += PAGE) {
+    const rows = await readRows<LuanI18nSlugRow>(
+      c,
+      `locale=eq.${encodeURIComponent(locale)}&${NON_EMPTY}&select=slug,created_at,updated_at` +
+        `&order=slug.asc&limit=${PAGE}&offset=${off}`,
+      'slugs'
+    );
+    if (!rows) break;
+    out.push(...rows.filter((r) => r && typeof r.slug === 'string' && r.slug));
+    if (rows.length < PAGE) break;
+  }
+  return out;
+}
+
+/** Các ngôn ngữ ≠ vi có ít nhất MỘT bản luận không rỗng (để sitemap index chỉ khai file không rỗng). */
+export async function localesCoLuanI18n(e?: LuanI18nEnv): Promise<Locale[]> {
+  const c = conn(e);
+  if (!c) return [];
+  const co = await Promise.all(
+    NGOAI_NGU.map((l) =>
+      readRows<{ slug?: unknown }>(c, `locale=eq.${l}&${NON_EMPTY}&select=slug&limit=1`, 'co').then(
+        (r) => !!r && r.length > 0
+      )
+    )
+  );
+  return NGOAI_NGU.filter((_, i) => co[i]);
+}

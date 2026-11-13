@@ -30135,6 +30135,34 @@
   "t": "已儲存的命盤——明寶紫微斗數",
   "h": "183c05e5"
  },
+ "ssr.laso.bc": {
+  "t": "{canchi}年{gioi}命 — 命宮在{cung}",
+  "h": "0094aee9"
+ },
+ "ssr.laso.chi-tieng-viet": {
+  "t": "此命盤的論斷目前僅有越南語版本。",
+  "h": "05845ed0"
+ },
+ "ssr.laso.desc": {
+  "t": "{canchi_raw}年{gioi_thuong}命的紫微斗數命盤：命宮在{cung_raw}，主星{chinh}，納音{napam}。",
+  "h": "cf210ec9"
+ },
+ "ssr.laso.home": {
+  "t": "首頁",
+  "h": "fca04858"
+ },
+ "ssr.laso.kho": {
+  "t": "命庫",
+  "h": "2de2772c"
+ },
+ "ssr.laso.title": {
+  "t": "{canchi}年生{gioi}命盤 — 命宮在{cung} — 明寶紫微斗數",
+  "h": "ec5b3b65"
+ },
+ "ssr.laso.xem-ban-viet": {
+  "t": "查看越南語版本",
+  "h": "d0a972c9"
+ },
  "taikhoan.add-mcp-server-chon-streamable-http": {
   "t": "<strong>Add MCP server</strong> → 選擇 <strong>Streamable HTTP</strong>。",
   "h": "f63db93e"
