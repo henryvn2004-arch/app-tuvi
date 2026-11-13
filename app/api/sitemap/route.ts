@@ -26,6 +26,7 @@ import availability from '@/i18n/availability.json';
 import { danhMuc } from '@/lib/nghiem-chung/store';
 import { dbDanhMucDich } from '@/lib/nghiem-chung/i18n/db';
 import type { NcLocale } from '@/lib/nghiem-chung/i18n/prose';
+import { localesCoLuanI18n } from '@/lib/laso/luan-i18n';
 
 const CHILDREN = [
   '/sitemap-trang.xml',
@@ -65,5 +66,9 @@ async function ncLocaleSitemaps(): Promise<string[]> {
 export async function GET() {
   const translated = new Set(Object.values(availability as Record<string, string[]>).flat());
   const i18n = I18N_LOCALES.filter((l) => translated.has(l)).map((l) => `/sitemap-i18n-${l}.xml`);
-  return xmlResponse(xmlSitemapIndex([...CHILDREN, ...i18n, ...(await ncLocaleSitemaps())].map((p) => BASE_URL + p)));
+  // Lá số người dùng có bản luận dịch (i18n W33a) — chỉ ngôn ngữ đã có ít nhất một bản; lỗi kho ⇒ [].
+  const laso = (await localesCoLuanI18n()).map((l) => `/sitemap-la-so.xml?lang=${l}`);
+  return xmlResponse(
+    xmlSitemapIndex([...CHILDREN, ...i18n, ...(await ncLocaleSitemaps()), ...laso].map((p) => BASE_URL + p))
+  );
 }
