@@ -1,6 +1,6 @@
 # Nhật ký phát triển — mục lục
 
-609 mục ghi chép từng PR, tách khỏi `CLAUDE.md` để nó thôi ngốn ~350k token mỗi lượt.
+610 mục ghi chép từng PR, tách khỏi `CLAUDE.md` để nó thôi ngốn ~350k token mỗi lượt.
 
 **Sáu file dưới đây KHÔNG được nạp tự động.** Cần thì tra:
 
@@ -28,6 +28,7 @@ Luật rút ra từ các mục này đã được cô đọng lên `CLAUDE.md`. 
 
 | # | tháng | file | mục |
 |---:|---|---|---|
+| 1 | 2026-11 | `2026-11.md` | 🎭 W32A-6 — Văn mẫu THEO NƯỚC lô 4: nút "Xem bản mẫu" Chọn Ngày Tốt + Đặt Tên DN mở 5 nước (`hasLocaleSample`); sửa nút cũ luôn hiện ở /<locale>/ và mở văn Việt; `dat-ten-con` vi-only có chủ đích |
 | 1 | 2026-11 | `2026-11.md` | 🎭 W32A-5 — Văn mẫu mờ THEO NƯỚC lô 3 (Dạy Con · Hướng Nghiệp Sớm · Người Khác): bộ dò 0d + zh-cn đi sâu vào trường lồng (trước đó `String(mảng)` làm bộ dò đỏ oan và mù phần bên trong), nhân vật `con` |
 | 1 | 2026-11 | `2026-11.md` | 🎭 W32A-4 — Văn mẫu mờ THEO NƯỚC lô 2 (Chân Dung Tiền Kiếp · Vợ Chồng · Duyên Nợ): engine server qua `sample-locale-portrait.ts`, tên tiền kiếp theo ns `past-life-ten`, `banDoi` cho 2 lá số |
 | 1 | 2026-11 | `2026-11.md` | 🎭 W32A-3 — Văn mẫu mờ THEO NƯỚC lô 1 (Luận Giải · Chu Trình · Vận Hạn): nhân vật hư cấu ja/ko/zh-tw/zh-cn/en, số liệu engine thật (`sample-locale-data.mjs`), `/samples/<locale>/` + `loadSampleJson` rơi về vi, check:i18n 0d |

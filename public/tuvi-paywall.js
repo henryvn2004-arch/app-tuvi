@@ -112,6 +112,8 @@ const TuviPaywall = (() => {
     'day-con-dummy.json',
     'huong-nghiep-tre-dummy.json',
     'nguoi-khac-dummy.json',
+    'chon-ngay-tot-sample.json',
+    'dat-ten-dn-sample.json',
   ];
   const SAMPLE_LOCALES = ['en', 'ja', 'ko', 'zh-tw', 'zh-cn'];
 
@@ -1899,6 +1901,14 @@ hr.tpw-div{border:none;border-top:1.5px solid #f0f0f0;margin:3px 0}
       .then(function (r) { return r.ok ? r.json() : null; })
       .catch(function () { return null; });
   }
+  // Trang chỉ MỜI xem bản mẫu khi ngôn ngữ đang xem CÓ bản mẫu: vi luôn có; nước khác chỉ khi file nằm trong
+  // SAMPLE_THEO_NUOC (bản Việt rơi về không phải bản mẫu của nước đó — trang tự ẩn nút thay vì mời đọc chữ Việt).
+  function hasLocaleSample(path) {
+    var loc = (window.I18n && window.I18n.locale) || 'vi';
+    if (loc === 'vi') return true;
+    var m = /^\/samples\/([\w.-]+\.json)$/.exec(path);
+    return !!(m && SAMPLE_THEO_NUOC.indexOf(m[1]) !== -1 && SAMPLE_LOCALES.indexOf(loc) !== -1);
+  }
   function loadSampleJson(path) {
     if (!_sampleCache[path]) {
       var loc = (window.I18n && window.I18n.locale) || 'vi';
@@ -2004,7 +2014,7 @@ hr.tpw-div{border:none;border-top:1.5px solid #f0f0f0;margin:3px 0}
     init, getProduct, requireCredits, requireCreditsCached, requireCreditsCachedQuery,
     generateToolSlug, ensureCredits, deductSilent, getBalance, fillPriceSlots,
     mountCostHints, refreshCostHints, lockPreview, isFreeRerun, lockBadge, placeholderHtml,
-    loadSampleJson, sampleBlurHtml,
+    loadSampleJson, hasLocaleSample, sampleBlurHtml,
     previewAnonId, dummyPortraitUrl,
     sectionLockHtml, wireSectionLocks, resumeIfPending,
     _banner, _close, _closeLock, _login, showRefundNotice,

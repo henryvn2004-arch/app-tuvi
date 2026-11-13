@@ -174,11 +174,11 @@ window.SHELL_CHATFIRST=true;
 window.SHELL_INTRO={key:'dat-ten'};</script>
 <script src="/can-chi.js?v=1"></script>
 <script src="/auth.js?v=10"></script>
-<script src="/tuvi-paywall.js?v=47"></script>
+<script src="/tuvi-paywall.js?v=48"></script>
 <script src="/tools-shared/hook-layer.js?v=8"></script>
   <script src="/nav.js?v=50" data-icons-only></script>
 <script src="/tools-shared/sample-hint.js?v=2"></script>
-<script src="/shell.js?v=159"></script>
+<script src="/shell.js?v=160"></script>
 <script src="/tools-shared/shell-soft-nav.js?v=49"></script>
 <script src="/tools-shared/glossary.js?v=5"></script>
 <script>
@@ -331,7 +331,11 @@ TuviPaywall.fillPriceSlots(document).then(function(){ _fillVndSlots(document,'da
     });
   };
   try {
-    // Bản mẫu là văn LLM đã lưu sẵn tiếng Việt ⇒ chỉ mời xem ở bản vi (xem app-chon-ngay.html).
+    // `.samp-cta` mặc định display:flex (shell.css) ⇒ cổng dưới chỉ BẬT được, không TẮT được: phải tự ẩn nút ở ngôn ngữ
+    // không có bản mẫu, nếu không khách /<locale>/ bấm vào là mở văn tiếng Việt. vi không qua nhánh này (giữ nguyên).
+    if (!TuviPaywall.hasLocaleSample(SAMPLE_URL)) { var c0 = document.getElementById('sampCta'); if (c0) c0.style.display = 'none'; }
+    // Bản mẫu chỉ mời xem ở bản vi — CỐ Ý (W32A-6): công cụ dựng quanh tên Việt (họ + tên đệm + Hán Việt), bộ mẫu theo
+    // nước sẽ phải bịa tên Việt cho người nước ngoài; mở cho nước khác là quyết định sản phẩm (Henry), không phải việc dịch.
     if ((!window.I18n || I18n.locale === 'vi') &&
         !(window.Shell && Shell.autoRun && Shell.autoRun()) &&
         !(window.Shell && Shell.getRememberedBirth && Shell.getRememberedBirth())) {

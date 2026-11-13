@@ -182,11 +182,11 @@ window.SHELL_CHATFIRST=true;
 window.SHELL_INTRO={key:'chon-ngay'};</script>
 <script src="/can-chi.js?v=1"></script>
 <script src="/auth.js?v=10"></script>
-<script src="/tuvi-paywall.js?v=47"></script>
+<script src="/tuvi-paywall.js?v=48"></script>
 <script src="/tools-shared/hook-layer.js?v=8"></script>
   <script src="/nav.js?v=50" data-icons-only></script>
 <script src="/tools-shared/sample-hint.js?v=2"></script>
-<script src="/shell.js?v=159"></script>
+<script src="/shell.js?v=160"></script>
 <script src="/tools-shared/shell-soft-nav.js?v=49"></script>
 <script src="/tools-shared/glossary.js?v=5"></script>
 <script>
@@ -330,15 +330,15 @@ TuviPaywall.fillPriceSlots(document).then(function(){ _fillVndSlots(document,'ch
     document.getElementById('sampBarClose').onclick = function () {
       var b = document.getElementById('sampBar'); if (b) b.remove();
       showForm();
-      var cta = document.getElementById('sampCta'); if (cta && (!window.I18n || I18n.locale === 'vi')) cta.style.display = 'flex';
+      var cta = document.getElementById('sampCta'); if (cta && TuviPaywall.hasLocaleSample(SAMPLE_URL)) cta.style.display = 'flex';
     };
   }
   window.SampleHint.open = function (btn) {
     if (btn) { btn.disabled = true; btn.textContent = _tvmbT('js.chonngay.dang-mo','Đang mở…'); }
-    var p = _cache ? Promise.resolve(_cache) : fetch(SAMPLE_URL).then(function (r) {
-      if (!r.ok) throw new Error('HTTP ' + r.status);
-      return r.json();
-    }).then(function (j) { _cache = j; return j; });
+    var p = _cache ? Promise.resolve(_cache) : TuviPaywall.loadSampleJson(SAMPLE_URL).then(function (j) {
+      if (!j) throw new Error('sample: ' + SAMPLE_URL);
+      _cache = j; return j;
+    });
     p.then(function (data) {
       var s = data.input;
       document.getElementById('inpSuKien').value = s.suKien;
@@ -358,8 +358,11 @@ TuviPaywall.fillPriceSlots(document).then(function(){ _fillVndSlots(document,'ch
     });
   };
   try {
-    // Bản mẫu là văn LLM đã lưu sẵn bằng tiếng Việt (samples/*.json) ⇒ chỉ mời xem ở bản vi; /<locale>/ không hiện nút.
-    if ((!window.I18n || I18n.locale === 'vi') &&
+    // `.samp-cta` mặc định display:flex (shell.css) ⇒ cổng dưới chỉ BẬT được, không TẮT được: phải tự ẩn nút ở ngôn ngữ
+    // không có bản mẫu, nếu không khách /<locale>/ bấm vào là mở văn tiếng Việt. vi không qua nhánh này (giữ nguyên).
+    if (!TuviPaywall.hasLocaleSample(SAMPLE_URL)) { var c0 = document.getElementById('sampCta'); if (c0) c0.style.display = 'none'; }
+    // Bản mẫu theo NƯỚC (W32A-6): vi đọc bản gốc, nước có bộ riêng (`/samples/<locale>/`, SAMPLE_THEO_NUOC) đọc bộ đó; nước khác ẩn nút.
+    if (TuviPaywall.hasLocaleSample(SAMPLE_URL) &&
         !(window.Shell && Shell.autoRun && Shell.autoRun()) &&
         !(window.Shell && Shell.getRememberedBirth && Shell.getRememberedBirth())) {
       var c = document.getElementById('sampCta'); if (c) c.style.display = 'flex';

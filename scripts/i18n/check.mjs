@@ -237,7 +237,10 @@ for (const f of fs.readdirSync(PUBLIC).filter((x) => x.endsWith('.html'))) {
         fail(`public/samples/${l}/${f}: thiếu _meta ghi rõ đây là mẫu, nhân vật hư cấu`);
       if (khung(phan) !== want)
         fail(`public/samples/${l}/${f}: khung khoá lệch bản vi (${want.slice(0, 120)})`);
+      // `.input.*` = giá trị điền form (value <option> GỬI SERVER, giữ chữ Việt) — chỉ được miễn khi TRÙNG Y bản vi ở cùng chỗ.
+      const viIn = new Map(chuoi(vi, ''));
       for (const [k, v] of chuoi(phan, '')) {
+        if (k.startsWith('.input.') && viIn.get(k) === v) continue;
         for (const line of v.split('\n')) {
           if (!line.startsWith('[')) {
             if (VI_RE.test(line))
