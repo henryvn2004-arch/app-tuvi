@@ -549,6 +549,8 @@
 <script src="/tuvi-form.js?v=16"></script>
 <script src="/poster.js?v=5" defer></script>
 <script src="/tool-prices.js?v=12"></script>
+<script src="/tools-shared/cach-cuc.js?v=1"></script>
+<script src="/tools-shared/to-hop.js?v=1"></script>
 <script src="/auth.js?v=10"></script>
   <script src="/nav.js?v=50" data-icons-only></script>
 <script src="/tools-shared/tool-icons.js?v=1"></script>
@@ -800,6 +802,24 @@ if (window.ToolPrices) ToolPrices.load().then(function (d) { if (d) renderBanner
   function wdT(i){ return _tvmbT('js.home.wd-'+i, WD[i]); }
   function wdOf(y,m,d){ return wdT(new Date(y,m-1,d).getDay()); }
   // Tính chất ngày ('tốt'/'xấu'/'bình' — giá trị engine) khi chèn vào câu hiển thị.
+  /* Văn engine thẻ Hôm nay (W34c) — CHỈ để HIỂN THỊ. `/api/van-ngay` vẫn trả chữ Việt (rail/poster-prompt/push giữ nguyên) +
+     mã additive `danhGia.ma`; tên ngày kỵ/màu/lĩnh vực cung tra theo CHÍNH chữ engine (ns `van-ngay`), tên sao ngày dùng
+     lại `sao.<tên>.ten` của ns `ngay-tot`. Thiếu mã/bản dịch ⇒ chữ Việt (payload cũ trong CDN vẫn chạy). */
+  if(window.I18n&&window.I18n.loadLong){ window.I18n.loadLong('van-ngay'); window.I18n.loadLong('ngay-tot'); }
+  function vnL(k,vi,vars){ return window.I18n&&window.I18n.long?window.I18n.long('van-ngay',k,vi,vars):vi; }
+  function vnKy(arr){ return (arr||[]).map(function(n){ return vnL('ky.'+n,n); }).join(' + '); }
+  function vnMau(m){ return vnL('mau.'+m,m); }
+  function vnNhan(v){
+    var d=v&&v.danhGia, ma=d&&d.ma, I=window.I18n;
+    if(!d) return '';
+    if(!ma||typeof ma.k!=='string'||ma.k.indexOf('nhan.')!==0) return d.nhan;
+    var b=ma.k==='nhan.ky'?{ky:vnKy(v.ngayKy)}
+      :{truc:_tvmbG('truc',ma.v.truc),sao:(I&&I.long?window.I18n.long('ngay-tot','sao.'+ma.v.sao+'.ten',ma.v.sao):ma.v.sao)};
+    return vnL(ma.k,d.nhan,b);
+  }
+  /* Lĩnh vực cung Nhật Hạn: bản dịch là cả cụm ("tiền bạc, tài chính"); nhãn ngắn = vế đầu trước dấu phẩy/、. */
+  function vnVuc(cung,vi){ return cung&&vi?vnL('vuc.'+cung,vi):vi; }
+  function vnVucNgan(cung,vi){ var f=vnVuc(cung,vi); return f?String(f).split(/[,、，]/)[0].trim():''; }
   function tcT(t){ return t==='tốt'?_tvmbT('js.home.tc-tot','tốt'):t==='xấu'?_tvmbT('js.home.tc-xau','xấu'):t==='bình'?_tvmbT('js.home.tc-binh','bình'):t; }
   function vnToday(){
     try{ var s=new Date().toLocaleString('en-CA',{timeZone:'Asia/Ho_Chi_Minh',year:'numeric',month:'2-digit',day:'2-digit'});
@@ -959,6 +979,11 @@ if (window.ToolPrices) ToolPrices.load().then(function (d) { if (d) renderBanner
     'Nhập trạch':'Nhà mới','Khởi công xây dựng':'Xây nhà',
     'Xuất hành':'Đi xa','Cầu tài':'Ký kết','Sửa nhà':'Sửa nhà',
     'An táng':null,'Đào giếng':null,'Sinh con':null};
+  /* Nhãn việc ở ô "Nên làm" — CHỈ để hiển thị (khoá `VIEC_ICON`/rail giữ chữ Việt). */
+  var VIEC_T={'Cưới hỏi':_tvmbT('js.home.viec-cuoi-hoi', 'Cưới hỏi'),'Khai trương':_tvmbT('js.home.viec-khai-truong', 'Khai trương'),
+    'Nhà mới':_tvmbT('js.home.viec-nha-moi', 'Nhà mới'),'Xây nhà':_tvmbT('js.home.viec-xay-nha', 'Xây nhà'),
+    'Đi xa':_tvmbT('js.home.viec-di-xa', 'Đi xa'),'Ký kết':_tvmbT('js.home.viec-ky-ket', 'Ký kết'),
+    'Sửa nhà':_tvmbT('js.home.viec-sua-nha', 'Sửa nhà')};
   /* Khoá bằng nhãn ĐÃ đổi — `vietChoThe()` chạy trước mọi lượt vẽ. */
   var VIEC_ICON={'Cưới hỏi':'heart','Khai trương':'store','Nhà mới':'home',
     'Xây nhà':'landmark','Đi xa':'compass','Ký kết':'briefcase',
@@ -1070,12 +1095,12 @@ if (window.ToolPrices) ToolPrices.load().then(function (d) { if (d) renderBanner
     var badge=el('todayHanh');
     badge.textContent=_tvmbT(BADGE[key][2], BADGE[key][0]);
     badge.className='today-hanh'+BADGE[key][1];
-    el('todaySub').textContent=v.danhGia.nhan;
+    el('todaySub').textContent=vnNhan(v);
 
     /* ── Ô CẦN TRÁNH — mục ai cũng đọc vì nó gọi tên trực tiếp một nhóm người ── */
     var yrs=(v.xung&&v.xung.namSinh||[]).slice(-3).join(', ');
     var badNote=yrs?_tvmbT('js.home.sinh-nam','Sinh ')+yrs+_tvmbT('js.home.tranh-viec-lon-hom-nay', ' — tránh việc lớn hôm nay.'):_tvmbT('js.home.tranh-viec-lon-trong-hom-nay', 'Tránh việc lớn trong hôm nay.');
-    var badKy=(v.ngayKy&&v.ngayKy.length)?_tvmbT('js.home.trung', 'Trùng ')+v.ngayKy.join(' + ')+_tvmbT('js.home.co-phap-kieng-khoi-su', ' — cổ pháp kiêng khởi sự.'):'';
+    var badKy=(v.ngayKy&&v.ngayKy.length)?_tvmbT('js.home.trung', 'Trùng ')+vnKy(v.ngayKy)+_tvmbT('js.home.co-phap-kieng-khoi-su', ' — cổ pháp kiêng khởi sự.'):'';
     var boxBad=('<div class="tbox bad"><div class="tbox-h"><span class="ic" data-icon="alert-triangle"></span>' + _tvmbT('js.home.can-tranh', 'Cần tránh') + '</div>')
       +('<div class="tbad-main">' + _tvmbT('js.home.xung-tuoi', 'Xung tuổi') + ' ')+esc(v.xung?_tvmbG('chi',v.xung.chi):'—')+'</div>'
       +'<div class="tbad-note">'+esc(badNote)+(badKy?'<br>'+esc(badKy):'')+'</div></div>';
@@ -1095,7 +1120,7 @@ if (window.ToolPrices) ToolPrices.load().then(function (d) { if (d) renderBanner
        cạnh đã đủ để người đọc tự cân. */
     var boxGood=('<div class="tbox good"><div class="tbox-h"><span class="ic" data-icon="check-circle"></span>' + _tvmbT('js.home.nen-lam', 'Nên làm') + '</div>')
       +(key==='ky'
-        ? '<div class="tbox-empty">'+esc(_tvmbT('js.home.ngay', 'Ngày ')+(v.ngayKy||[]).join(' + ')+_tvmbT('js.home.co-phap-kieng-khoi-su-viec', ' — cổ pháp kiêng khởi sự. Việc thường ngày vẫn làm bình thường.'))+'</div>'
+        ? '<div class="tbox-empty">'+esc(_tvmbT('js.home.ngay', 'Ngày ')+vnKy(v.ngayKy)+_tvmbT('js.home.co-phap-kieng-khoi-su-viec', ' — cổ pháp kiêng khởi sự. Việc thường ngày vẫn làm bình thường.'))+'</div>'
         :(v.nen&&v.nen.length)
         ? '<div class="tdo">'+v.nen.map(function(x){
             // Điểm hiện KÈM tên việc. Engine hạ ngưỡng xuống 5 để ô này bớt
@@ -1104,7 +1129,7 @@ if (window.ToolPrices) ToolPrices.load().then(function (d) { if (d) renderBanner
             // thẻ đang khuyên quá tay.
             // `x.ten` ở đây đã là nhãn của `vietChoThe()`, không phải tên engine.
             return '<div class="tdo-row"><span class="ic" data-icon="'+(VIEC_ICON[x.ten]||'check-circle')
-              +'"></span><span class="tdo-ten">'+esc(x.ten)+'</span>'
+              +'"></span><span class="tdo-ten">'+esc(VIEC_T[x.ten]||x.ten)+'</span>'
               +(x.diem?'<b class="tdo-diem">'+x.diem+'</b>':'')+'</div>'; }).join('')+'</div>'
         : ('<div class="tbox-empty">' + _tvmbT('js.home.hom-nay-khong-viec-lon-nao', 'Hôm nay không việc lớn nào được điểm cao — để dành sang ngày khác.') + '</div>'))
       +'</div>';
@@ -1151,13 +1176,13 @@ if (window.ToolPrices) ToolPrices.load().then(function (d) { if (d) renderBanner
       var avImg=cungSlug?'/img/van-rieng/'+cungSlug+'-'+sacThai+'.webp':'';
       // Nhãn đầu dòng: mảng đời sống NGẮN (vế đầu trước dấu phẩy của `linhVuc`,
       // vd "tiền bạc, tài chính" → "Tiền bạc") — không hiện tên cung/sao gốc.
-      var vucNgan=c.linhVuc?c.linhVuc.split(',')[0]:'';
+      var vucNgan=c.linhVuc?vnVucNgan(c.cungNhatHan,c.linhVuc):'';
       var vucHoa=vucNgan?vucNgan.charAt(0).toUpperCase()+vucNgan.slice(1):c.cungNhatHan;
       // `linhVuc` dịch tên cung sang mảng đời sống người thường đọc được (vd
       // Tài Bạch → "tiền bạc, tài chính") — KHÔNG đổi ý nghĩa cổ pháp của cung,
       // chỉ thêm chữ. Nguồn: `CUNG_LINH_VUC` trong lib/engine/van-ngay.ts.
-      plain.push(_tvmbT('js.home.ngay-hom-nay-roi-vao-cung', 'Ngày hôm nay rơi vào cung ')+_tvmbG('cung', c.cungNhatHan)+(c.linhVuc?' ('+c.linhVuc+')':'')
-        +(c.diaChiNhatHan?' ('+c.diaChiNhatHan+')':'')
+      plain.push(_tvmbT('js.home.ngay-hom-nay-roi-vao-cung', 'Ngày hôm nay rơi vào cung ')+_tvmbG('cung', c.cungNhatHan)+(c.linhVuc?' ('+vnVuc(c.cungNhatHan,c.linhVuc)+')':'')
+        +(c.diaChiNhatHan?' ('+_tvmbG('chi',c.diaChiNhatHan)+')':'')
         +(c.chinhTinh&&c.chinhTinh.length?_tvmbT('js.home.chinh-tinh', ' — chính tinh ')+c.chinhTinh.map(function(s){return _tvmbG(['chinh','sao'],s);}).join(', '):_tvmbT('js.home.vo-chinh-dieu', ' — vô chính diệu')));
       if(c.bixung) plain.push(_tvmbT('js.home.ngay-xung-chinh-tuoi-ban-nen', 'Ngày xung chính tuổi bạn — nên giữ nhịp, tránh quyết định lớn.'));
       else if(isKy) plain.push(_tvmbT('js.home.hom-nay-la-ngay-ky-khoi', 'Hôm nay là ngày kỵ khởi sự — hoãn việc lớn, việc thường ngày vẫn làm bình thường.'));
@@ -1165,7 +1190,7 @@ if (window.ToolPrices) ToolPrices.load().then(function (d) { if (d) renderBanner
       // chiếu, engine đã tính sẵn — xem `cachCucChoCung` trong van-ngay.ts) —
       // lớp chi tiết SÂU hơn hẳn câu ngũ hành chung bên dưới, vì đọc thẳng cách
       // cục thật của đúng cung đang được chiếu, không phải suy diễn ngũ hành.
-      if(c.cachCuc&&c.cachCuc.tomTat) plain.push(_tvmbT('js.battu.cach-cuc-j8la', 'Cách cục: ')+c.cachCuc.tomTat);
+      if(c.cachCuc&&c.cachCuc.tomTat) plain.push(_tvmbT('js.battu.cach-cuc-j8la', 'Cách cục: ')+(window.TuviToHop?TuviToHop.tomTat(c.cachCuc.tomTat):c.cachCuc.tomTat));
       var QH={'duoc-sinh':_tvmbT('js.home.hanh-ngay-sinh-cho-ban-menh', 'hành ngày sinh cho bản mệnh — thuận, dễ được giúp'),
               'hoa':_tvmbT('js.home.hanh-ngay-cung-hanh-ban-menh', 'hành ngày cùng hành bản mệnh — hòa, tự chủ được'),
               'sinh':_tvmbT('js.home.ban-menh-sinh-cho-hanh-ngay', 'bản mệnh sinh cho hành ngày — hao lực, nên giữ sức'),
@@ -1174,8 +1199,8 @@ if (window.ToolPrices) ToolPrices.load().then(function (d) { if (d) renderBanner
       // Ngày kỵ thì gắn rõ QH chỉ nói về việc thường ngày, không phải cổ vũ
       // khởi sự lớn.
       if(c.quanHeHanh&&QH[c.quanHeHanh]) plain.push((isKy&&!c.bixung?_tvmbT('js.home.rieng-viec-thuong-ngay', 'Riêng việc thường ngày, '):'')+QH[c.quanHeHanh]+_tvmbT('js.home.p-cham', '.'));
-      var mau=(c.mauCaNhan||[]).slice(0,2);
-      if(mau.length) plain.push(_tvmbT('js.home.mau-hop-ban-menh', 'Màu hợp bản mệnh: ')+mau.join(', ')+_tvmbT('js.home.p-cham', '.'));
+      var mau=(c.mauCaNhan||[]).slice(0,2), mauT=mau.map(vnMau);
+      if(mau.length) plain.push(_tvmbT('js.home.mau-hop-ban-menh', 'Màu hợp bản mệnh: ')+mauT.join(', ')+_tvmbT('js.home.p-cham', '.'));
       // Bản CHỮ THUẦN cho poster — poster vẽ trên canvas nên không dùng lại
       // được chuỗi có thẻ; dựng song song ngay tại đây để hai bên không bao
       // giờ nói khác nhau.
@@ -1191,7 +1216,7 @@ if (window.ToolPrices) ToolPrices.load().then(function (d) { if (d) renderBanner
         +('<span class="tme-b"><span class="tme-h">' + _tvmbT('js.home.van-rieng-cua-ban', 'Vận riêng của bạn') + '</span>')
         +'<span class="tme-t">'+esc(vucHoa)
         +(tail?' <span class="lt">– '+esc(tail)+'</span>':'')+'</span>'
-        +(mau.length?('<span class="tme-s">' + _tvmbT('js.home.mau-hop', 'Màu hợp:') + ' ')+esc(mau.join(', '))+'<span class="tme-swatch">'
+        +(mau.length?('<span class="tme-s">' + _tvmbT('js.home.mau-hop', 'Màu hợp:') + ' ')+esc(mauT.join(', '))+'<span class="tme-swatch">'
           +mau.map(function(m){ return '<i style="background:'+(MAU_HEX[m]||'#999')+'"></i>'; }).join('')
           +'</span></span>':'')
         +('<span class="tme-src"><span class="ic" data-icon="calendar"></span><span>' + _tvmbT('js.home.theo-la-so', 'Theo lá số: <b>'))+esc(srcLine||_tvmbT('js.home.da-luu-tren-may-nay', 'đã lưu trên máy này'))+'</b></span>'
@@ -1389,7 +1414,7 @@ if (window.ToolPrices) ToolPrices.load().then(function (d) { if (d) renderBanner
     var xung=nm?(', '+nm):'';
     var sao=(cn.chinhTinh||[]).slice(0,2).map(function(s){return _tvmbG(['chinh','sao'],s);}).join(', ');
     return _tvmbT('js.home.van-hom-nay-ca-nhan', 'Con lại ghé rồi{comma_name}. Hôm nay ngày **{cc}**, nhật hạn của con đang ở cung **{cung}**', {comma_name:xung, cc:_tvmbG('canchi', cc), cung:_tvmbG('cung', cn.cungNhatHan)})
-      + (cn.linhVuc?_tvmbT('js.home.linh-vuc', ' ({linh_vuc})', {linh_vuc:cn.linhVuc}):'') + (sao?_tvmbT('js.home.co-sao', ' — có {sao}', {sao:sao}):'') + _tvmbT('js.home.p-cham', '.')
+      + (cn.linhVuc?_tvmbT('js.home.linh-vuc', ' ({linh_vuc})', {linh_vuc:vnVuc(cn.cungNhatHan,cn.linhVuc)}):'') + (sao?_tvmbT('js.home.co-sao', ' — có {sao}', {sao:sao}):'') + _tvmbT('js.home.p-cham', '.')
       + (cn.bixung?_tvmbT('js.home.ngay-xung-tuoi-can-than', ' Ngày xung tuổi, con cẩn thận việc lớn nhé.'):'') + _tvmbT('js.home.con-muon-hoi-them', ' Con muốn hỏi thêm gì không?');
   }
 
@@ -1572,17 +1597,17 @@ if (window.ToolPrices) ToolPrices.load().then(function (d) { if (d) renderBanner
         var yrs=(v.xung.namSinh||[]).slice(-4).join(', ');
         warn.push(_tvmbT('js.home.xung-tuoi-29rp', 'Xung tuổi ')+_tvmbG('chi', v.xung.chi)+(yrs?_tvmbT('js.home.sinh-nam-xung', ' (sinh ')+yrs+_tvmbT('js.home.p-dong-ngoac', ')'):''));
       }
-      if(v.ngayKy&&v.ngayKy.length) warn.push(_tvmbT('js.home.trung', 'Trùng ')+v.ngayKy.join(' + ')+_tvmbT('js.home.co-phap-kieng-khoi-su-cqsv', ' — cổ pháp kiêng khởi sự'));
+      if(v.ngayKy&&v.ngayKy.length) warn.push(_tvmbT('js.home.trung', 'Trùng ')+vnKy(v.ngayKy)+_tvmbT('js.home.co-phap-kieng-khoi-su-cqsv', ' — cổ pháp kiêng khởi sự'));
       // Dòng tra cứu ĐỦ như thẻ: thêm tú, màu hợp, tài thần (bản cũ bỏ cả ba).
       var sub=[v.ngay.am,'hành '+v.ngay.canHanh,'trực '+v.truc.ten,'sao '+v.saoNgay.ten,'tú '+v.tu.ten];
-      if(v.mau&&v.mau.list&&v.mau.list.length) sub.push(_tvmbT('js.home.mau-hop-plgt', 'màu hợp ')+v.mau.list.slice(0,2).join(', '));
+      if(v.mau&&v.mau.list&&v.mau.list.length) sub.push(_tvmbT('js.home.mau-hop-plgt', 'màu hợp ')+v.mau.list.slice(0,2).map(vnMau).join(', '));
       if(v.huong&&v.huong.taiThan) sub.push(_tvmbT('js.home.tai-than', 'tài thần ')+v.huong.taiThan);
       Poster.downloadDay({
         verdict:v.danhGia.tinhChat,
         verdictLabel:(v.danhGia.tinhChat==='tốt'?_tvmbT('js.home.ngay-tot', 'Ngày tốt'):v.danhGia.tinhChat==='xấu'?_tvmbT('js.home.ngay-xau', 'Ngày xấu'):_tvmbT('js.home.ngay-binh', 'Ngày bình')),
         title:v.ngay.thu+' · '+td.d+'/'+td.mo+_tvmbT('js.home.ngay-cwjn', ' — Ngày ')+_tvmbG('canchi', v.ngay.canChi),
         subtitle:sub.join(' · '),
-        quote:v.danhGia.nhan,
+        quote:vnNhan(v),
         warn:warn,
         me:_meText,
         rows:rows,
