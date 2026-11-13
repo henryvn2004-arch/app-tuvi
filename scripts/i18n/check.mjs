@@ -183,7 +183,7 @@ for (const f of fs.readdirSync(PUBLIC).filter((x) => x.endsWith('.html'))) {
   const mm = /const SAMPLE_THEO_NUOC = (\[[^\]]*\]);/.exec(pw);
   if (!mm)
     fail('public/tuvi-paywall.js: không thấy SAMPLE_THEO_NUOC (đổi tên thì sửa check.mjs 0d)');
-  const ds = mm ? JSON.parse(mm[1].replace(/'/g, '"')) : [];
+  const ds = mm ? JSON.parse(mm[1].replace(/'/g, '"').replace(/,\s*\]$/, ']')) : [];
   const LOCS = ['en', 'ja', 'ko', 'zh-tw', 'zh-cn'];
   const TOPIC = [
     'ban-than',

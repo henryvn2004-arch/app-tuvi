@@ -1,6 +1,6 @@
 # Nhật ký phát triển — mục lục
 
-607 mục ghi chép từng PR, tách khỏi `CLAUDE.md` để nó thôi ngốn ~350k token mỗi lượt.
+608 mục ghi chép từng PR, tách khỏi `CLAUDE.md` để nó thôi ngốn ~350k token mỗi lượt.
 
 **Sáu file dưới đây KHÔNG được nạp tự động.** Cần thì tra:
 
@@ -28,6 +28,7 @@ Luật rút ra từ các mục này đã được cô đọng lên `CLAUDE.md`. 
 
 | # | tháng | file | mục |
 |---:|---|---|---|
+| 1 | 2026-11 | `2026-11.md` | 🎭 W32A-4 — Văn mẫu mờ THEO NƯỚC lô 2 (Chân Dung Tiền Kiếp · Vợ Chồng · Duyên Nợ): engine server qua `sample-locale-portrait.ts`, tên tiền kiếp theo ns `past-life-ten`, `banDoi` cho 2 lá số |
 | 1 | 2026-11 | `2026-11.md` | 🎭 W32A-3 — Văn mẫu mờ THEO NƯỚC lô 1 (Luận Giải · Chu Trình · Vận Hạn): nhân vật hư cấu ja/ko/zh-tw/zh-cn/en, số liệu engine thật (`sample-locale-data.mjs`), `/samples/<locale>/` + `loadSampleJson` rơi về vi, check:i18n 0d |
 | 1 | 2026-11 | `2026-11.md` | 🔮 W32A-2 — Vận Hạn 12 Tháng: tổ hợp sao cung hạn theo ngôn ngữ (ns `to-hop` 746 mục từ `cach_cuc_all.json`, khoá fnv, tóm tắt tra `cach-cuc` trước; enginema canh trọn 643 combo) |
 | 1 | 2026-11 | `2026-11.md` | 📜 W32A — Họ Luận Giải: khối tính toán + nhãn 3 trang theo ngôn ngữ (ns `js.lgcore` 91, i18n-long `dv-rules` 183 câu luật đại vận khoá fnv; SERVER_BOUND `tuvi-laso-format`/`hook-facts`; `phanLabelsT`; vi byte-giống đo bằng bản cũ nạp cạnh) |
