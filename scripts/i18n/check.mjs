@@ -41,6 +41,7 @@ import {
   LOCALIZED_SSR,
 } from '../../lib/i18n/self-managed.mjs';
 import { KHUNG } from '../../lib/ngay-tot/khung.mjs';
+import { VI_ONLY_PREFIXES, isViOnly } from '../../lib/i18n/vi-only.mjs';
 import { REF_RE } from './ns-refs.mjs';
 
 const errors = [];
@@ -324,6 +325,29 @@ for (const f of htmlFiles) {
       );
 }
 
+// ── 5b. route SSR chỉ tiếng Việt (W31b, lib/i18n/vi-only.mjs) ───────────────
+// (a) bản sao VI_ONLY ở tools-shared/i18n.js khớp nguồn; (b) không mục nào đè lên trang ĐÃ khai dịch
+// (I18n.href sẽ đưa khách từ /ja về bản vi của một trang có bản ja); (c) mỗi mục có route thật trong app/.
+{
+  const src = fs.readFileSync(path.join(PUBLIC, 'tools-shared/i18n.js'), 'utf8');
+  const m = /var VI_ONLY = (\[[^\]]*\])/.exec(src);
+  if (!m) fail('public/tools-shared/i18n.js: không thấy `var VI_ONLY = [...]`');
+  else if (strip(new Function('return ' + m[1])()) !== strip(VI_ONLY_PREFIXES))
+    fail('public/tools-shared/i18n.js: VI_ONLY lệch VI_ONLY_PREFIXES (lib/i18n/vi-only.mjs)');
+  for (const p of Object.keys(pages))
+    if (isViOnly(p))
+      fail(
+        `lib/i18n/vi-only.mjs: ${p} là trang đã đăng ký dịch (pages.json) nhưng rơi vào VI_ONLY`
+      );
+  for (const x of VI_ONLY_PREFIXES) {
+    const dir = path.join(ROOT, 'app', x.replace(/^\/|\/$/g, ''));
+    if (!fs.existsSync(dir))
+      fail(`lib/i18n/vi-only.mjs: ${x} không có thư mục route app/${x.replace(/^\/|\/$/g, '')}`);
+    if (isSelfManaged(x.replace(/\/$/, '')))
+      fail(`lib/i18n/vi-only.mjs: ${x} trùng route tự quản (self-managed.mjs)`);
+  }
+}
+
 // ── 6. hằng số trùng lặp khớp hợp đồng ──────────────────────────────────────
 const tsLoc = fs.readFileSync(path.join(ROOT, 'lib/i18n/locales.ts'), 'utf8');
 const pick = (src, name) => {
@@ -416,6 +440,10 @@ if (
       fail(`vi.json: "${k}" mồ côi — không còn trong lib/ngay-tot/khung.mjs (npm run i18n:khung)`);
   for (const [x, dir] of Object.entries(LOCALIZED_SSR)) {
     if (isSelfManaged(x)) fail(`${x}: vừa tự quản vừa LOCALIZED_SSR — chọn một`);
+    if (isViOnly(x))
+      fail(
+        `${x}: vừa nằm trong vi-only.mjs vừa LOCALIZED_SSR — đã dịch thì gỡ khỏi danh sách giữ-vi (cả bản sao VI_ONLY ở tools-shared/i18n.js)`
+      );
     if (avail[x] || Object.keys(pages).some((u) => u === x || u.startsWith(x + '/')))
       fail(`${x}: route SSR đã dịch không được đăng ký trong pages.json/availability.json`);
     if (!fs.existsSync(path.join(ROOT, 'app', dir.slice(1), '[locale]')))
