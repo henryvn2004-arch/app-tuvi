@@ -4672,7 +4672,7 @@
   "h": "450e9cba"
  },
  "js.battu.cach-cuc-j8la": {
-  "t": "Structure: ",
+  "t": "Pattern: ",
   "h": "441c7a62"
  },
  "js.battu.con-muon-luan-van-nam-nao": {
@@ -8908,7 +8908,7 @@
   "h": "07132e46"
  },
  "js.home.chinh-tinh": {
-  "t": " — major stars ",
+  "t": " , main stars: ",
   "h": "595c5e1b"
  },
  "js.home.chu-dong-ton-cong": {
@@ -9176,7 +9176,7 @@
   "h": "5ecc6134"
  },
  "js.home.ngay-hom-nay-roi-vao-cung": {
-  "t": "Today falls in the palace: ",
+  "t": "Today falls in your ",
   "h": "567ca88d"
  },
  "js.home.ngay-ky": {
@@ -9412,7 +9412,7 @@
   "h": "84154a71"
  },
  "js.home.vo-chinh-dieu": {
-  "t": " — no major star",
+  "t": " , no main star",
   "h": "44a2723b"
  },
  "js.home.vo-chinh-dieu-pwt9": {

@@ -1191,9 +1191,17 @@ if (window.ToolPrices) ToolPrices.load().then(function (d) { if (d) renderBanner
       // `linhVuc` dịch tên cung sang mảng đời sống người thường đọc được (vd
       // Tài Bạch → "tiền bạc, tài chính") — KHÔNG đổi ý nghĩa cổ pháp của cung,
       // chỉ thêm chữ. Nguồn: `CUNG_LINH_VUC` trong lib/engine/van-ngay.ts.
-      plain.push(_tvmbT('js.home.ngay-hom-nay-roi-vao-cung', 'Ngày hôm nay rơi vào cung ')+_tvmbG('cung', c.cungNhatHan)+(c.linhVuc?' ('+vnVuc(c.cungNhatHan,c.linhVuc)+')':'')
-        +(c.diaChiNhatHan?' ('+vnChiNgan(c.diaChiNhatHan)+')':'')
-        +(c.chinhTinh&&c.chinhTinh.length?_tvmbT('js.home.chinh-tinh', ' — chính tinh ')+c.chinhTinh.map(function(s){return _tvmbG(['chinh','sao'],s);}).join(', '):_tvmbT('js.home.vo-chinh-dieu', ' — vô chính diệu')));
+      // ≠vi (W34f): gộp lĩnh vực + chi vào MỘT cặp ngoặc ("Life Palace (yourself, overall mood, Zi)") thay vì hai cặp liền nhau, và
+      // đóng câu bằng dấu chấm; vi giữ nguyên từng byte (hai cặp ngoặc, không dấu chấm).
+      var _nv=!!(window.I18n&&I18n.locale&&I18n.locale!=='vi');
+      // Khoảng trắng đầu/cuối của khoá dịch theo NGUỒN Việt (" — chính tinh ", "…cung ") ⇒ ≠vi bỏ khoảng trắng thừa trước dấu phẩy và sau chữ Hán/Nhật.
+      var _cjk=_nv&&/^(ja|zh)/.test(I18n.locale);
+      var _nvt=function(t){ return _nv?String(t).replace(/^\s+(?=[,，、])/,'').replace(_cjk?/\s+$/:/$^/,''):t; };
+      var _ext=[c.linhVuc?vnVuc(c.cungNhatHan,c.linhVuc):'', c.diaChiNhatHan?vnChiNgan(c.diaChiNhatHan):''].filter(Boolean);
+      plain.push(_nvt(_tvmbT('js.home.ngay-hom-nay-roi-vao-cung', 'Ngày hôm nay rơi vào cung '))+_tvmbG('cung', c.cungNhatHan)
+        +(_nv?(_ext.length?' ('+_ext.join(/^(ja|zh)/.test(I18n.locale)?'、':', ')+')':''):((c.linhVuc?' ('+vnVuc(c.cungNhatHan,c.linhVuc)+')':'')
+        +(c.diaChiNhatHan?' ('+vnChiNgan(c.diaChiNhatHan)+')':'')))
+        +(c.chinhTinh&&c.chinhTinh.length?_nvt(_tvmbT('js.home.chinh-tinh', ' — chính tinh '))+c.chinhTinh.map(function(s){return _tvmbG(['chinh','sao'],s);}).join(', '):_nvt(_tvmbT('js.home.vo-chinh-dieu', ' — vô chính diệu'))));
       if(c.bixung) plain.push(_tvmbT('js.home.ngay-xung-chinh-tuoi-ban-nen', 'Ngày xung chính tuổi bạn — nên giữ nhịp, tránh quyết định lớn.'));
       else if(isKy) plain.push(_tvmbT('js.home.hom-nay-la-ngay-ky-khoi', 'Hôm nay là ngày kỵ khởi sự — hoãn việc lớn, việc thường ngày vẫn làm bình thường.'));
       // Cách cục tại đúng cung Nhật Hạn hôm nay (đồng cung / tam hợp / xung
@@ -1214,6 +1222,7 @@ if (window.ToolPrices) ToolPrices.load().then(function (d) { if (d) renderBanner
       // Bản CHỮ THUẦN cho poster — poster vẽ trên canvas nên không dùng lại
       // được chuỗi có thẻ; dựng song song ngay tại đây để hai bên không bao
       // giờ nói khác nhau.
+      if(_nv) plain=plain.map(function(t){ return /[.。!?！？]$/.test(t)?t:t+_tvmbT('js.home.p-cham', '.'); });
       _meText=plain.join(' ');
       // Nói RÕ thẻ đang dựa trên lá số nào + cho đường sửa. Trước đây khối này
       // luận vận riêng mà không hé lộ nguồn, nên lá số sai (hoặc của người khác
