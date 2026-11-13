@@ -1,6 +1,6 @@
 # Nhật ký phát triển — mục lục
 
-605 mục ghi chép từng PR, tách khỏi `CLAUDE.md` để nó thôi ngốn ~350k token mỗi lượt.
+606 mục ghi chép từng PR, tách khỏi `CLAUDE.md` để nó thôi ngốn ~350k token mỗi lượt.
 
 **Sáu file dưới đây KHÔNG được nạp tự động.** Cần thì tra:
 
@@ -28,6 +28,7 @@ Luật rút ra từ các mục này đã được cô đọng lên `CLAUDE.md`. 
 
 | # | tháng | file | mục |
 |---:|---|---|---|
+| 1 | 2026-11 | `2026-11.md` | 🔮 W32A-2 — Vận Hạn 12 Tháng: tổ hợp sao cung hạn theo ngôn ngữ (ns `to-hop` 746 mục từ `cach_cuc_all.json`, khoá fnv, tóm tắt tra `cach-cuc` trước; enginema canh trọn 643 combo) |
 | 1 | 2026-11 | `2026-11.md` | 📜 W32A — Họ Luận Giải: khối tính toán + nhãn 3 trang theo ngôn ngữ (ns `js.lgcore` 91, i18n-long `dv-rules` 183 câu luật đại vận khoá fnv; SERVER_BOUND `tuvi-laso-format`/`hook-facts`; `phanLabelsT`; vi byte-giống đo bằng bản cũ nạp cạnh) |
 | 1 | 2026-11 | `2026-11.md` | 📅 W33b — Route SSR `/ngay-tot` có cơ chế dịch 6 ngôn ngữ: cây nội bộ `app/ngay-tot-i18n/[locale]` (ISR, vi không đổi) · `LOCALIZED_SSR` · khung `ssr-ngay-tot.*` + ns `ngay-tot` 86 mục + glossary · engine `LY_DO`/`reasonsMa` additive (62.100 điểm hash giống) · vi 55/55 byte-giống · sitemap ×6 |
 | 1 | 2026-11 | `2026-11.md` | 🌐 W33a — `/<locale>/la-so/<slug>`: route SSR lá số tự quản (`'/la-so/'`), khung `ssr.laso.*` + glossary + luận `laso_public_i18n`; index/hreflang/sitemap theo TỪNG bản ghi, chưa dịch/pregen/ISR noindex; `renderLocalized` cờ `selfComplete`; vi byte-giống (+hreflang) |
