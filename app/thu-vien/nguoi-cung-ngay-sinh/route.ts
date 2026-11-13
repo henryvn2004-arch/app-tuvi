@@ -145,7 +145,7 @@ body{font-family:Arial,sans-serif;background:var(--bg);color:var(--text);min-hei
 </style>
 <script src="/auth.js?v=10"></script>
 </head><body><div id="nav-ph" style="height:60px;background:#FBFAF6"></div>
-<script src="/track.js?v=8" defer></script><script src="/nav.js?v=49" defer></script>
+<script src="/track.js?v=8" defer></script><script src="/nav.js?v=50" defer></script>
 <div class="bc"><a href="/">Trang Chủ</a><span>›</span><a href="/thu-vien">Thư Viện</a><span>›</span><span>Người Cùng Ngày Sinh</span></div>
 
 <div class="bst-hero">

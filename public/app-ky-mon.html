@@ -160,8 +160,8 @@ window.SHELL_INTRO={key:'ky-mon'};</script>
 <script src="/tools-shared/ky-mon.js?v=6"></script>
 <script src="/poster.js?v=5"></script>
 <script src="/auth.js?v=10"></script>
-  <script src="/nav.js?v=49" data-icons-only></script>
-<script src="/shell.js?v=155"></script>
+  <script src="/nav.js?v=50" data-icons-only></script>
+<script src="/shell.js?v=156"></script>
 <script src="/tools-shared/shell-soft-nav.js?v=49"></script>
 <script>
 // Bàn dựng ở SERVER (/api/qimen). Trang chỉ gọi + vẽ, dùng chung module
@@ -209,7 +209,7 @@ function showResult() {
   document.getElementById('kmMeta').innerHTML =
     _tvmbT('js.kymon.cuc', '<div><span>Cục</span><b>') + KyMonTool.fmt.cuc(b.cuc) + '</b></div>' +
     _tvmbT('js.kymon.tiet-khi', '<div><span>Tiết khí</span><b>') + KyMonTool.fmt.tietKhi(b.tietKhi) + ' ' + KyMonTool.fmt.kymon(b.nguyen) + '</b></div>' +
-    _tvmbT('js.kymon.gio-ngay', '<div><span>Giờ · Ngày</span><b>') + b.canChi.gio + ' · ' + b.canChi.ngay + '</b></div>' +
+    _tvmbT('js.kymon.gio-ngay', '<div><span>Giờ · Ngày</span><b>') + _tvmbG('canchi', b.canChi.gio) + ' · ' + _tvmbG('canchi', b.canChi.ngay) + '</b></div>' +
     _tvmbT('js.kymon.truc-phu-truc-su', '<div><span>Trực phù · Trực sử</span><b>') + KyMonTool.fmt.kymon(b.trucPhu) + ' · ' + KyMonTool.fmt.kymon(b.trucSu) + '</b></div>';
   document.getElementById('kmBan').innerHTML = KyMonTool.boardHTML(b);
   document.getElementById('kmChiTiet').innerHTML = KyMonTool.chiTietHTML(b);
@@ -227,7 +227,7 @@ function showResult() {
   Shell.setContext({
     scenario: { type: 'ky-mon', data: d },
     restore: { t: b.luc, cauHoi: cHoi },
-    label: _tvmbT('js.kymon.ky-mon', 'Kỳ Môn · ') + KyMonTool.fmt.cuc(b.cuc) + _tvmbT('js.kymon.gio', ' · giờ ') + b.canChi.gio,
+    label: _tvmbT('js.kymon.ky-mon', 'Kỳ Môn · ') + KyMonTool.fmt.cuc(b.cuc) + _tvmbT('js.kymon.gio', ' · giờ ') + _tvmbG('canchi', b.canChi.gio),
     greeting: _tvmbT('js.kymon.ban-da-lap', 'Bàn đã lập — **') + KyMonTool.fmt.cuc(b.cuc) + _tvmbT('js.kymon.tiet', '**, tiết ') + KyMonTool.fmt.tietKhi(b.tietKhi) + ' ' + KyMonTool.fmt.kymon(b.nguyen) + _tvmbT('js.kymon.truc-phu', ', trực phù **') + KyMonTool.fmt.kymon(b.trucPhu) + _tvmbT('js.kymon.truc-su', '**, trực sử **') + KyMonTool.fmt.kymon(b.trucSu) + '**.' + (doNhat ? _tvmbT('js.kymon.huong-xep-hang-cao-nhat-la', ' Hướng xếp hạng cao nhất là **') + KyMonTool.fmt.huong(doNhat.huong) + '**.' : '') + _tvmbT('js.kymon.toi-se-luan-theo-viec-ban', ' Tôi sẽ luận theo việc bạn hỏi.'),
     chips: [_tvmbT('js.kymon.viec-cua-toi-nen-di-huong', 'Việc của tôi nên đi hướng nào?'), _tvmbT('js.kymon.gio-nay-hop-lam-viec-gi', 'Giờ này hợp làm việc gì nhất?'), _tvmbT('js.kymon.huong-nao-phai-tranh-va-vi', 'Hướng nào phải tránh và vì sao?'), _tvmbT('js.kymon.truc-phu-truc-su-noi-len', 'Trực phù trực sử nói lên điều gì?')]
   });

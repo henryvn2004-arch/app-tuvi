@@ -84,6 +84,7 @@ khác — cần thì báo điều phối.
 
 ## Quyết định đã chốt (2026-11-11)
 - **Thuật ngữ/giọng văn ở các mục W15b–W19 nhật ký 2026-11: Henry duyệt nguyên trạng 2026-11-12.**
+- **Thuật ngữ/giọng văn ở các mục 🔴 của W21–W30f nhật ký 2026-11: Henry duyệt nguyên trạng 2026-11-13.**
 - **Giá gói (USD, PayPal):** Khởi Đầu 350 L $19 · Phổ Thông 800 L $39 · Cao Cấp 1.750 L $79 ·
   VIP 3.800 L $159. 1 Lượng ≈ $0,04875 (gói bậc hai). Đã áp lên prod sau deploy #1209.
   ⚠️ `amount_vnd` CHƯA định giá lại — phải sửa trước khi bật `billing.vnd_rails_enabled`.

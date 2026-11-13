@@ -291,8 +291,8 @@ window.SHELL_INTRO={key:'van-han-nam'};</script>
 <script src="/poster.js?v=5"></script>
 <script src="/tools-shared/hook-facts.js?v=3"></script>
 <script src="/tools-shared/hook-layer.js?v=8"></script>
-<script src="/nav.js?v=49" data-icons-only></script>
-<script src="/shell.js?v=155"></script>
+<script src="/nav.js?v=50" data-icons-only></script>
+<script src="/shell.js?v=156"></script>
 <script src="/tools-shared/shell-soft-nav.js?v=49"></script>
 <script src="/tools-shared/ai-loading-steps.js?v=11"></script>
 <script src="/tools-shared/phan-pool.js?v=1"></script>
@@ -446,7 +446,7 @@ async function doXem(){
   var btn=document.getElementById('btnGo');
   var fdIn=TuviForm.getData();
   var name=fdIn.hoten,gioitinh=fdIn.gioitinh,dd=fdIn.ngay,mm=fdIn.thang,yyyy=fdIn.nam,hh=fdIn.gioHour,pp=fdIn.gioPhut,gioAmIdx=fdIn.gioIdx;
-  if(!dd||!mm||!yyyy){ alert('Vui lòng nhập đầy đủ ngày, tháng, năm sinh.'); return; }
+  if(!dd||!mm||!yyyy){ alert(_tvmbT('js.vanhannam.nhap-du-ngay','Vui lòng nhập đầy đủ ngày, tháng, năm sinh.')); return; }
   // Lưu lại NGAY để `?tpwResume=1` (quay về sau khi nạp Lượng, xem IIFE
   // `VH_RESUME_KEY` ở trên) khôi phục được đúng form này mà không cần bấm
   // "Xem vận hạn" lần hai — ghi mỗi lượt tính khung thành công, không riêng
@@ -553,8 +553,8 @@ function buildChips(){
   var c=[], t0=_khung.thangs[0], t1=_khung.thangs[1];
   if(t0&&!t0.loi) c.push(t0.nhanDay+_tvmbT('js.vanhannam.toi-nen-tap-trung-viec-gi', ' tôi nên tập trung việc gì?'));
   if(t1&&!t1.loi) c.push(t1.nhanDay+_tvmbT('js.vanhannam.co-gi-can-ne', ' có gì cần né?'));
-  c.push('Trong 12 tháng tới, tháng nào thuận nhất?');
-  c.push('Tiểu vận năm nay nói lên điều gì?');
+  c.push(_tvmbT('js.vanhannam.chip-thang-thuan','Trong 12 tháng tới, tháng nào thuận nhất?'));
+  c.push(_tvmbT('js.vanhannam.chip-tieu-van','Tiểu vận năm nay nói lên điều gì?'));
   return c;
 }
 
@@ -593,7 +593,7 @@ function render(ls){
       // Khối TÍNH TOÁN (deterministic — cách cục/điểm số/quy tắc).
       // 2026-10-01: chart đứng NGOÀI, khối chữ GẬP sẵn.
       // Xem app-luan-giai.html (buildPhanSection).
-      body=LuanGiaiCore.buildCalcSectionHtml(PRE[p],ls)||'<div class="phan-empty">Phần này luận theo tổng thể lá số — bấm nút dưới để Thầy luận sâu.</div>';
+      body=LuanGiaiCore.buildCalcSectionHtml(PRE[p],ls)||('<div class="phan-empty">'+_tvmbT('js.vanhannam.phan-tong-the','Phần này luận theo tổng thể lá số — bấm nút dưới để Thầy luận sâu.')+'</div>');
     }else{
       var t=_khung.thangs[p-5];
       body=illusBannerHtml(t,ls)+renderThang(t);
@@ -650,7 +650,7 @@ function mountHook(ls){
     // Giải Tử Vi, không phải hồi quy mới.
     var spec={
       tool:'van-han-nam',toolLabel:_tvmbT('js.vanhannam.van-han-12-thang', 'Vận Hạn 12 Tháng'),
-      charts:[{type:'lifeArc',data:{segments:HF.daiVanSegments(ls)},title:'Đường Đời Qua Các Đại Vận'}],
+      charts:[{type:'lifeArc',data:{segments:HF.daiVanSegments(ls)},title:_tvmbT('js.vanhannam.duong-doi-dai-van','Đường Đời Qua Các Đại Vận')}],
       facts:facts
     };
     window.HookLayer.run(host, spec);
@@ -668,7 +668,7 @@ function _dvHienTaiSo(ls){
 }
 
 function renderThang(t){
-  if(!t) return '<div class="phan-empty">Không có dữ liệu tháng này.</div>';
+  if(!t) return '<div class="phan-empty">'+_tvmbT('js.vanhannam.khong-du-lieu-thang','Không có dữ liệu tháng này.')+'</div>';
   if(t.loi) return '<div class="phan-empty">'+esc(t.loi)+'</div>';
   var h='<div class="vh-doan">';
   h+='<div class="vh-doan-hd"><b>'+esc(t.duongTu)+' – '+esc(t.duongDen)+_tvmbT('js.vanhannam.duong-lich-1y4k', '</b> dương lịch · ')+t.soNgay+_tvmbT('js.vanhannam.ngay', ' ngày')+(t.dangDienRa?_tvmbT('js.vanhannam.dang-dien-ra', ' · <b>đang diễn ra</b>'):'')+'</div>';
@@ -805,7 +805,7 @@ function _renderUnlockBlock(){
   _paintSecLocks(true);
   if(_loggedIn()){
     host.innerHTML=('<button class="btn-go" id="btnUnlock" onclick="initiateAI()"><span class="bg-label"><span class="ic" data-icon="sparkles"></span>' + _tvmbT('js.vanhannam.luan-van-han-12-thang', '<b>Luận vận hạn 12 tháng →</b>') + '</span>' + _tvmbT('js.vanhannam.ton', '<small>Tốn') + ' <span class="vnd" data-tvp-price-vnd="van-han-nam"></span> <span class="cb-sub">(<span data-tvp-price="van-han-nam">…</span> ' + _tvmbT('js.vanhannam.luong', 'Lượng)') + '</span></small></button>')+
-      '<p>Viết riêng cho lá số này: tổng quan, hành trình đại vận, đại vận và tiểu vận hiện tại, rồi từng tháng một trong 12 tháng tới.</p>';
+      '<p>'+_tvmbT('js.vanhannam.viet-rieng','Viết riêng cho lá số này: tổng quan, hành trình đại vận, đại vận và tiểu vận hiện tại, rồi từng tháng một trong 12 tháng tới.')+'</p>';
     TuviPaywall.fillPriceSlots(host).then(function(){ _fillVndSlots(host,'van-han-nam'); });
     // Vừa quay về từ lượt nạp Lượng thành công (đã đăng nhập nên KHÔNG còn đi
     // qua lockPreview nữa, nhánh này mới là nút thật) → tự chạy tiếp.
@@ -815,9 +815,9 @@ function _renderUnlockBlock(){
   host.innerHTML='';
   TuviPaywall.lockPreview({
     host:host,
-    title:'⊙ Bản luận vận hạn chưa mở',
-    items:['Luận riêng cho từng tháng trong 12 tháng tới','Tổng quan lá số, hành trình đại vận và tiểu vận năm nay'],
-    cta:'Mở bản luận đầy đủ',
+    title:_tvmbT('js.vanhannam.lock-title','⊙ Bản luận vận hạn chưa mở'),
+    items:[_tvmbT('js.vanhannam.lock-item-1','Luận riêng cho từng tháng trong 12 tháng tới'),_tvmbT('js.vanhannam.lock-item-2','Tổng quan lá số, hành trình đại vận và tiểu vận năm nay')],
+    cta:_tvmbT('js.vanhannam.lock-cta','Mở bản luận đầy đủ'),
     slug:function(){return _pendingSlug;},
     onUnlock:function(){ return _startAI(); },
   });
@@ -857,7 +857,7 @@ async function _unlockOnePart(p){
   await (window.ToolPrices&&window.ToolPrices.load?window.ToolPrices.load():Promise.resolve());
   var partPrice=window.ToolPrices?window.ToolPrices.partPrice('van-han-nam'):null;
   // Đọc hụt giá → TỪ CHỐI chạy, không đoán (luật cứng CLAUDE.md).
-  if(partPrice==null){ alert('Chưa đọc được giá phần này, vui lòng thử lại.'); return; }
+  if(partPrice==null){ alert(_tvmbT('js.vanhannam.chua-doc-gia','Chưa đọc được giá phần này, vui lòng thử lại.')); return; }
 
   var gate=await TuviPaywall.ensureCredits({product:'van-han-nam', cost:partPrice});
   if(!gate.ok) return; // ensureCredits đã tự hiện UI thiếu Lượng/giá chưa đọc được
@@ -871,13 +871,13 @@ async function _unlockOnePart(p){
         slug:slug, description:'Vận Hạn 12 Tháng Tới — '+labelForDesc})});
     var data=await res.json();
     if(!data.success){
-      alert(data.insufficientBalance?'Không đủ Lượng — vui lòng nạp thêm.':'Có lỗi khi mở phần này, thử lại.');
+      alert(data.insufficientBalance?_tvmbT('js.vanhannam.khong-du-luong','Không đủ Lượng — vui lòng nạp thêm.'):_tvmbT('js.vanhannam.loi-mo-phan','Có lỗi khi mở phần này, thử lại.'));
       return;
     }
     window.refreshNavCredits&&window.refreshNavCredits();
     _hideSecLock(p);
     await _runPhanVanHan(p);
-  }catch(e){ alert('Có lỗi khi mở phần này, thử lại.'); }
+  }catch(e){ alert(_tvmbT('js.vanhannam.loi-mo-phan','Có lỗi khi mở phần này, thử lại.')); }
 }
 
 async function initiateAI(){
@@ -917,7 +917,7 @@ async function _startAI(){
     total:_tongPhan,
     concurrency:PHAN_CONCURRENCY,
     progressEl:'vhProgress',
-    progressPrefix:'Đang luận phần',
+    progressPrefix:_tvmbT('js.vanhannam.dang-luan-phan','Đang luận phần'),
     pace:_pace,
     onProgress:function(done,total){ _reportHandle&&_reportHandle.tick(done,total); },
     // Phần 1 đã chạy ở lượt mồi trên — bể chỉ cần TRẢ LẠI kết quả đó, không
@@ -979,15 +979,15 @@ function taiAnhMap(){
   var T=(Poster.THEME)||{};
   Poster.download({
     svg:host.innerHTML,
-    title:'Vận hạn 12 tháng',
+    title:_tvmbT('js.vanhannam.poster-title','Vận hạn 12 tháng'),
     subtitle:(_hoTen||_tvmbT('js.shell.la-so', 'Lá số'))+' · '+_khung.tuNhan+' → '+_khung.denNhan+' ('+_khung.duongTu+' – '+_khung.duongDen+')',
-    quote:'Mỗi ô là một tháng ÂM LỊCH — quãng ngày dương ghi trong bản luận.',
+    quote:_tvmbT('js.vanhannam.poster-quote','Mỗi ô là một tháng ÂM LỊCH — quãng ngày dương ghi trong bản luận.'),
     qrUrl:Poster.qrLink('van-han-nam','/app/van-han-nam'),
-    qrCaption:'Quét mã — xem 12 tháng của bạn',
+    qrCaption:_tvmbT('js.vanhannam.poster-qr','Quét mã — xem 12 tháng của bạn'),
     fonts:['700 40px '+(T.SERIF||'serif'),'600 23px '+(T.SANS||'sans-serif')]
   },'van-han-12-thang-tuviminhbao.png')
    .then(function(){ if(window.Track)Track.event('poster_download',{tool_id:'van-han-nam'}); })
-   .catch(function(){ alert('Chưa dựng được ảnh. Thử lại sau ít giây.'); })
+   .catch(function(){ alert(_tvmbT('js.vanhannam.loi-anh','Chưa dựng được ảnh. Thử lại sau ít giây.')); })
    .then(function(){ btn.disabled=false; btn.textContent=old; });
 }
 
@@ -1136,7 +1136,7 @@ function showForm(){
 
 function _pageInit(){
   document.getElementById('fmSub').textContent=
-    'Xem 12 tháng tới theo tháng âm lịch: cung hạn, sao, cách cục từng tháng — kèm quãng ngày dương lịch tương ứng.';
+    _tvmbT('js.vanhannam.fm-sub','Xem 12 tháng tới theo tháng âm lịch: cung hạn, sao, cách cục từng tháng — kèm quãng ngày dương lịch tương ứng.');
   Shell.prefillForm();
   if(Shell.autoRun()&&document.getElementById('ngay').value)doXem();
 }

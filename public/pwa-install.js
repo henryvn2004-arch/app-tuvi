@@ -3,6 +3,8 @@
 // - iOS Safari: hiện hướng dẫn "Chia sẻ → Thêm vào MH chính"
 // - Dismiss → không hiện lại 14 ngày
 (function () {
+  // Chữ hiển thị qua từ điển namespace `js.nav` (file này chỉ được nav.js nạp ⇒ trang luôn có js.nav) — W31.
+  var T = function (k, d) { return window.TVMB_I18N ? window.TVMB_I18N.t(k, d) : d; };
   var STORAGE_KEY = 'pwa_install';
   var DISMISS_DAYS = 14;
 
@@ -68,10 +70,10 @@
       '<div style="position:fixed;bottom:' + bottom + 'px;left:0;right:0;background:#061A2E;color:#fff;padding:14px 16px;display:flex;align-items:center;gap:12px;z-index:9999;box-shadow:0 -2px 12px rgba(0,0,0,.3);font-family:Arial,sans-serif">'
       + '<img src="/seal.webp" style="width:40px;height:40px;border-radius:8px;flex-shrink:0" alt="">'
       + '<div style="flex:1;min-width:0">'
-      + '<div style="font-size:14px;font-weight:700;margin-bottom:2px">Tử Vi Minh Bảo</div>'
-      + '<div style="font-size:12px;color:rgba(255,255,255,.7)">Thêm vào màn hình chính để tra cứu nhanh hơn</div>'
+      + '<div style="font-size:14px;font-weight:700;margin-bottom:2px">' + T('js.nav.pwa-ten', 'Tử Vi Minh Bảo') + '</div>'
+      + '<div style="font-size:12px;color:rgba(255,255,255,.7)">' + T('js.nav.pwa-them-de-tra-nhanh', 'Thêm vào màn hình chính để tra cứu nhanh hơn') + '</div>'
       + '</div>'
-      + '<button id="pwa-install-btn" style="background:#9A7B3A;color:#fff;border:none;padding:9px 16px;border-radius:6px;font-size:13px;font-weight:700;cursor:pointer;flex-shrink:0">Thêm</button>'
+      + '<button id="pwa-install-btn" style="background:#9A7B3A;color:#fff;border:none;padding:9px 16px;border-radius:6px;font-size:13px;font-weight:700;cursor:pointer;flex-shrink:0">' + T('js.nav.pwa-them', 'Thêm') + '</button>'
       + '<button id="pwa-dismiss-btn" style="background:transparent;color:rgba(255,255,255,.5);border:none;font-size:20px;cursor:pointer;padding:4px;flex-shrink:0;line-height:1">×</button>'
       + '</div>';
     document.body.appendChild(banner);
@@ -99,11 +101,11 @@
     banner.innerHTML =
       '<div style="position:fixed;bottom:' + bottom + 'px;left:0;right:0;background:#061A2E;color:#fff;padding:14px 16px;z-index:9999;box-shadow:0 -2px 12px rgba(0,0,0,.3);font-family:Arial,sans-serif">'
       + '<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px">'
-      + '<div style="font-size:14px;font-weight:700">Thêm vào màn hình chính</div>'
+      + '<div style="font-size:14px;font-weight:700">' + T('js.nav.pwa-them-vao-mh', 'Thêm vào màn hình chính') + '</div>'
       + '<button id="pwa-dismiss-btn" style="background:transparent;color:rgba(255,255,255,.5);border:none;font-size:20px;cursor:pointer;padding:0;line-height:1">×</button>'
       + '</div>'
       + '<div style="font-size:13px;color:rgba(255,255,255,.8);line-height:1.6">'
-      + 'Nhấn <strong style="color:#9A7B3A">⎙ Chia sẻ</strong> ở thanh dưới → chọn <strong style="color:#9A7B3A">"Thêm vào MH chính"</strong>'
+      + T('js.nav.pwa-ios-huong-dan', 'Nhấn <strong style="color:#9A7B3A">⎙ Chia sẻ</strong> ở thanh dưới → chọn <strong style="color:#9A7B3A">"Thêm vào MH chính"</strong>')
       + '</div>'
       + '</div>';
     document.body.appendChild(banner);
