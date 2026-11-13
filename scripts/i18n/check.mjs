@@ -80,7 +80,15 @@ const SERVER_BOUND = {
   // phanLabels → `description` sổ tiền (labelForDesc) + khoá phần; nhãn hiển thị đi qua phanLabelsT.
   'luan-giai-core.js': ['phanLabels', 'PHAN_LABELS_BASE'],
   // facts → body POST /api/hook-narrative (prompt LLM + khoá cache); mọi trang dùng HookLayer.run (không vẽ fact) — W32A.
-  'tools-shared/hook-facts.js': ['_daiVanFact', '_cungExtreme', 'tongFactCung', 'cachCucHiem', 'cuongNhuocFact', 'nguHanhThieuFact', 'dungThanFact'],
+  'tools-shared/hook-facts.js': [
+    '_daiVanFact',
+    '_cungExtreme',
+    'tongFactCung',
+    'cachCucHiem',
+    'cuongNhuocFact',
+    'nguHanhThieuFact',
+    'dungThanFact',
+  ],
   // AUTHOR_ROSTER → authorName/authorStyle gửi /api/v1/chat; INVITE_MASTER_NAMES/TOPIC_CUNG khớp chữ người gõ
   // + so cung; TP_SINH/TP_KHAC so `===` với hành của engine (W13e: từng bọc T() ⇒ /ja sai quan hệ).
   // GUEST_MASTERS KHÔNG vào đây: `mon` là nhãn hiển thị (bọc đúng), chỉ `kw`/`cung` là dữ liệu.

@@ -153,11 +153,14 @@ for (let i = 0; i < 1200; i++) {
 }
 // Câu ý nghĩa từng cung (W30f-5): MỌI chuỗi trong ls.cachCucTungCung trên lưới lá số rộng (đủ tuổi để Tuần/Triệt bật + tắt).
 out.cc = [];
+out.dvr = [];
 for (let i = 0; i < 700; i++) {
   const l = ls(mk());
   for (const v of Object.values(l.cachCucTungCung || {})) for (const x of v) out.cc.push(x);
   // ls.cachCuc[] (cách cục có tên): hiện ten + moTa ở Chân Dung / Luận Giải
   for (const c of l.cachCuc || []) for (const x of [c.ten, c.moTa]) if (x) out.cc.push(x);
+  // W32A: luật đại vận (dv.rules[].text) — khối "Luận đoán vận hạn" của Luận Giải/Chu Trình/Vận Hạn 12 Tháng
+  for (const dv of l.daiVans || []) for (const r of dv.rules || []) out.dvr.push(r.text);
 }
 // GOLDEN: chữ Việt do engine TRƯỚC lô D dựng bằng chuỗi viết tay (scripts/fixtures/engine-ma-golden.json) — engine nay
 // dựng từ bảng khuôn và phải giữ từng byte (chữ còn vào prompt LLM + portrait_cache).
@@ -688,6 +691,32 @@ console.log('__KQ__' + JSON.stringify(out));
       cc.fnv('Tử Vi sáng: thân hình đẫy đà, thông minh, phúc thọ') ===
         fnvVi('Tử Vi sáng: thân hình đẫy đà, thông minh, phúc thọ'),
       'cach-cuc — fnv của trang == fnvVi của nguồn'
+    );
+  }
+
+  // ── Luật đại vận (W32A): chạy CHÍNH hàm tra của trang (public/tools-shared/dv-rules.js) — mọi câu engine thật sinh ra
+  // trên lưới 700 lá số phải trúng khoá `s.<fnv>` của nguồn (đọc bằng AST, kể cả 15 biến thể mẫu menhBo/dvBo).
+  {
+    const vm = await import('node:vm');
+    const S = nguon('dv-rules');
+    const I18n = {
+      locale: 'xx',
+      loadLong() {},
+      long: (ns, k, vi) => (ns === 'dv-rules' && S.has(k) ? '\u0001' + S.get(k) : vi),
+    };
+    const ctx = vm.createContext({ window: { I18n } });
+    vm.runInContext(readFileSync(join(ROOT, 'public/tools-shared/dv-rules.js'), 'utf8'), ctx);
+    const dr = ctx.window.TuviDvRules;
+    const duy = [...new Set(kq.dvr)];
+    const thieu = duy.filter((x) => dr.t(x) !== '\u0001' + x);
+    bao(
+      thieu.length === 0,
+      `dv-rules — ${duy.length} câu khác nhau từ ${kq.dvr.length} lượt (700 lá số), không câu nào hụt khoá: ${thieu.slice(0, 3).join(' | ') || 'không'}`
+    );
+    bao(duy.length >= 100, `dv-rules — mẫu chạm ${duy.length} câu khác nhau (cần ≥100; nguồn 183)`);
+    bao(
+      duy.some((x) => /^Mệnh (TPVT|CNDL|CN) — /.test(x)),
+      'dv-rules — mẫu chạm ít nhất một câu có biến menhBo/dvBo'
     );
   }
 
