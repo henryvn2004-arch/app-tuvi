@@ -28,7 +28,7 @@ Luật rút ra từ các mục này đã được cô đọng lên `CLAUDE.md`. 
 
 | # | tháng | file | mục |
 |---:|---|---|---|
-| 1 | 2026-11 | `2026-11.md` | 🎭 W32A-7 — Văn mẫu Chọn Ngày Tốt 5 nước viết lại theo trụ tháng tiết khí (Mậu Tuất → Kỷ Hợi, sau W35); bản vi chờ sinh lại bằng script LLM |
+| 1 | 2026-11 | `2026-11.md` | 🎭 W32A-7 — Văn mẫu Chọn Ngày Tốt 5 nước + bản vi viết lại theo trụ tháng tiết khí (Mậu Tuất → Kỷ Hợi, sau W35); script sinh mẫu vi lỗi ESM ghi treo |
 | 1 | 2026-11 | `2026-11.md` | 📆 W35 — Chọn Ngày Tốt: trụ tháng theo TIẾT (engine `truThangTheoNgay`/`truThangTrongThangDuong` đọc bảng tiết khí; ngày chứa giao tiết = tháng mới; route tự tính; tubinh-ansao-engine.js?v=7; check:tietkhi mục 7 đối chứng HKO) |
 | 1 | 2026-11 | `2026-11.md` | ✍️ W34f — Khối "Vận riêng" ≠vi: một cặp ngoặc, đóng câu, sửa khoá nối; soát `cach-cuc`/`to-hop` (không sửa mục nào; vi byte-giống) |
 | 1 | 2026-11 | `2026-11.md` | 🖼️ W34e — Poster "Hôm nay" theo ngôn ngữ (`ma` việc · `gio.<sao>` · 10 khoá `js.home.po-*` · poster.js?v=6 · shell.js?v=162; vi byte-giống) |
