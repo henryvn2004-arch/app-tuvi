@@ -1186,7 +1186,7 @@ hr.tpw-div{border:none;border-top:1.5px solid #f0f0f0;margin:3px 0}
     if (_bdlLoading) return _bdlLoading;
     _bdlLoading = new Promise((resolve) => {
       const s = document.createElement('script');
-      s.src = '/tools-shared/bank-deeplink.js?v=3';
+      s.src = '/tools-shared/bank-deeplink.js?v=4';
       s.onload = () => resolve();
       // Fail-open: tải lỗi thì đơn giản không hiện khối deep link, QR vẫn dùng được.
       s.onerror = () => resolve();

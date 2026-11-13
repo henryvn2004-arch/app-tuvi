@@ -1,9 +1,9 @@
 // SINH bởi npm run i18n:long (docs/i18n/QUY-UOC.md "Văn dài") — KHÔNG sửa tay. ns=van-ngay locale=en
 window.I18n&&window.I18n.defineLong("van-ngay",{
 "nhan.ky":{"t":"Day of {ky} — postpone major undertakings; everyday matters carry on as usual.","h":"42b5bae8"},
-"nhan.tot":{"t":"Day officer {truc} · star {sao} — a favourable day; good for sealing what you've been planning.","h":"cde89f49"},
-"nhan.xau":{"t":"Day officer {truc} · star {sao} — keep to your usual pace; don't start anything new.","h":"e2e7befe"},
-"nhan.binh":{"t":"Day officer {truc} · star {sao} — an ordinary day: small matters go smoothly; for big ones, pick your hour.","h":"3f02c08b"},
+"nhan.tot":{"t":"Officer {truc} · star {sao} — a favourable day to seal what you've been planning.","h":"cde89f49"},
+"nhan.xau":{"t":"Officer {truc} · star {sao} — keep your usual pace; start nothing new.","h":"e2e7befe"},
+"nhan.binh":{"t":"Officer {truc} · star {sao} — average day: small tasks fine, time big ones well.","h":"3f02c08b"},
 "ky.Tam Nương":{"t":"Tam Nuong","h":"a82168f4"},
 "ky.Nguyệt Kỵ":{"t":"Nguyet Ky (monthly taboo)","h":"3598b0c5"},
 "ky.Dương Công kỵ nhật":{"t":"Duong Cong taboo","h":"08b3a8ce"},
@@ -30,5 +30,11 @@ window.I18n&&window.I18n.defineLong("van-ngay",{
 "vuc.Tài Bạch":{"t":"money, finances","h":"c84bb817"},
 "vuc.Tử Tức":{"t":"children, childbirth","h":"e5619d87"},
 "vuc.Phu Thê":{"t":"romance, marriage, close partners","h":"d5091503"},
-"vuc.Huynh Đệ":{"t":"siblings, close friends","h":"c7ce7efb"}
+"vuc.Huynh Đệ":{"t":"siblings, close friends","h":"c7ce7efb"},
+"gio.Thanh Long":{"t":"contracts, wealth","h":"cdba2fc8"},
+"gio.Minh Đường":{"t":"meetings, advice","h":"ea382a7c"},
+"gio.Kim Quỹ":{"t":"money, deals","h":"99ded829"},
+"gio.Thiên Đức":{"t":"blessings, family","h":"146806bf"},
+"gio.Ngọc Đường":{"t":"exams, interviews","h":"c7cc360a"},
+"gio.Tư Mệnh":{"t":"new starts, travel","h":"76de2a82"}
 });

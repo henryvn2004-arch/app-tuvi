@@ -100,7 +100,7 @@
     if (_posterLoading) return _posterLoading;
     _posterLoading = new Promise(function (resolve, reject) {
       var s = document.createElement('script');
-      s.src = '/poster.js?v=5';
+      s.src = '/poster.js?v=6';
       s.onload = function () {
         if (root.Poster && root.Poster.qrMatrix) return resolve();
         _posterLoading = null; reject(new Error('poster.js không có qrMatrix'));

@@ -30,5 +30,11 @@ window.I18n&&window.I18n.defineLong("van-ngay",{
 "vuc.Tài Bạch":{"t":"돈, 재무","h":"c84bb817"},
 "vuc.Tử Tức":{"t":"자녀, 출산","h":"e5619d87"},
 "vuc.Phu Thê":{"t":"연애, 결혼, 가까운 파트너","h":"d5091503"},
-"vuc.Huynh Đệ":{"t":"형제자매, 절친","h":"c7ce7efb"}
+"vuc.Huynh Đệ":{"t":"형제자매, 절친","h":"c7ce7efb"},
+"gio.Thanh Long":{"t":"계약, 재물 구하기, 큰일","h":"cdba2fc8"},
+"gio.Minh Đường":{"t":"만남, 부탁, 조언 구하기","h":"ea382a7c"},
+"gio.Kim Quỹ":{"t":"수금, 거래 마무리, 금전 문제","h":"99ded829"},
+"gio.Thiên Đức":{"t":"복 기원, 화해, 가정사","h":"146806bf"},
+"gio.Ngọc Đường":{"t":"시험, 면접, 첫선","h":"c7cc360a"},
+"gio.Tư Mệnh":{"t":"시작, 출발, 장기적인 일","h":"76de2a82"}
 });

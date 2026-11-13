@@ -547,14 +547,14 @@
 <script src="/tools-shared/vn-timezone.js?v=1"></script>
 <script src="/tools-shared/noi-sinh.js?v=2"></script>
 <script src="/tuvi-form.js?v=16"></script>
-<script src="/poster.js?v=5" defer></script>
+<script src="/poster.js?v=6" defer></script>
 <script src="/tool-prices.js?v=12"></script>
 <script src="/tools-shared/cach-cuc.js?v=1"></script>
 <script src="/tools-shared/to-hop.js?v=1"></script>
 <script src="/auth.js?v=10"></script>
   <script src="/nav.js?v=50" data-icons-only></script>
 <script src="/tools-shared/tool-icons.js?v=1"></script>
-<script src="/shell.js?v=161"></script>
+<script src="/shell.js?v=162"></script>
 <script src="/tools-shared/shell-soft-nav.js?v=49"></script>
 <script>
 function esc(s){return String(s==null?'':s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
@@ -809,17 +809,27 @@ if (window.ToolPrices) ToolPrices.load().then(function (d) { if (d) renderBanner
   function vnL(k,vi,vars){ return window.I18n&&window.I18n.long?window.I18n.long('van-ngay',k,vi,vars):vi; }
   function vnKy(arr){ return (arr||[]).map(function(n){ return vnL('ky.'+n,n); }).join(' + '); }
   function vnMau(m){ return vnL('mau.'+m,m); }
-  function vnNhan(v){
+  function vnNhan(v,ngan){
     var d=v&&v.danhGia, ma=d&&d.ma, I=window.I18n;
     if(!d) return '';
     if(!ma||typeof ma.k!=='string'||ma.k.indexOf('nhan.')!==0) return d.nhan;
     var b=ma.k==='nhan.ky'?{ky:vnKy(v.ngayKy)}
-      :{truc:_tvmbG('truc',ma.v.truc),sao:(I&&I.long?window.I18n.long('ngay-tot','sao.'+ma.v.sao+'.ten',ma.v.sao):ma.v.sao)};
+      :{truc:_tvmbG('truc',ma.v.truc),sao:(I&&I.long?(ngan?vnBoNgoac:String)(window.I18n.long('ngay-tot','sao.'+ma.v.sao+'.ten',ma.v.sao)):ma.v.sao)};
     return vnL(ma.k,d.nhan,b);
   }
   /* Lĩnh vực cung Nhật Hạn: bản dịch là cả cụm ("tiền bạc, tài chính"); nhãn ngắn = vế đầu trước dấu phẩy/、. */
   function vnVuc(cung,vi){ return cung&&vi?vnL('vuc.'+cung,vi):vi; }
   function vnVucNgan(cung,vi){ var f=vnVuc(cung,vi); return f?String(f).split(/[,、，]/)[0].trim():''; }
+  /* Poster (W34e): ngày âm "21/6 ÂL" / "21/6 nhuận ÂL" dựng lại từ số; hướng cát thần qua glossary `huong`
+     (bảng chỉ có "Chính Nam/Bắc/Đông/Tây" cho hướng đơn — ở vi trả nguyên chữ engine). */
+  function vnAm(am){ var m=/^(\d+)\/(\d+)( nhuận)? ÂL$/.exec(am||''); if(!m) return am;
+    return m[3]?_tvmbT('js.home.po-am-nhuan', '{d}/{m} nhuận ÂL', {d:m[1],m:m[2]}):_tvmbT('js.home.po-am', '{d}/{m} ÂL', {d:m[1],m:m[2]}); }
+  function vnHuong(h){ var l=window.I18n&&I18n.locale; if(!l||l==='vi') return h;
+    return _tvmbG('huong',/^(Nam|Bắc|Đông|Tây)$/.test(h)?'Chính '+h:h); }
+  /* Poster hẹp chỗ: bỏ phần chú thích trong ngoặc của tên (vd "Xuan Wu (Black Tortoise)", "Nguyet Ky (monthly taboo)") và dùng chi bản NGẮN.
+     vi: tên engine không có ngoặc ⇒ trả nguyên. */
+  function vnBoNgoac(t){ return String(t==null?'':t).replace(/\s*[（(][^）)]*[）)]\s*$/,''); }
+  function vnChiNgan(c){ var g=window.TuviGlossary; return g&&g.t?g.t('chi',c,{short:true}):c; }
   function tcT(t){ return t==='tốt'?_tvmbT('js.home.tc-tot','tốt'):t==='xấu'?_tvmbT('js.home.tc-xau','xấu'):t==='bình'?_tvmbT('js.home.tc-binh','bình'):t; }
   function vnToday(){
     try{ var s=new Date().toLocaleString('en-CA',{timeZone:'Asia/Ho_Chi_Minh',year:'numeric',month:'2-digit',day:'2-digit'});
@@ -1182,7 +1192,7 @@ if (window.ToolPrices) ToolPrices.load().then(function (d) { if (d) renderBanner
       // Tài Bạch → "tiền bạc, tài chính") — KHÔNG đổi ý nghĩa cổ pháp của cung,
       // chỉ thêm chữ. Nguồn: `CUNG_LINH_VUC` trong lib/engine/van-ngay.ts.
       plain.push(_tvmbT('js.home.ngay-hom-nay-roi-vao-cung', 'Ngày hôm nay rơi vào cung ')+_tvmbG('cung', c.cungNhatHan)+(c.linhVuc?' ('+vnVuc(c.cungNhatHan,c.linhVuc)+')':'')
-        +(c.diaChiNhatHan?' ('+_tvmbG('chi',c.diaChiNhatHan)+')':'')
+        +(c.diaChiNhatHan?' ('+vnChiNgan(c.diaChiNhatHan)+')':'')
         +(c.chinhTinh&&c.chinhTinh.length?_tvmbT('js.home.chinh-tinh', ' — chính tinh ')+c.chinhTinh.map(function(s){return _tvmbG(['chinh','sao'],s);}).join(', '):_tvmbT('js.home.vo-chinh-dieu', ' — vô chính diệu')));
       if(c.bixung) plain.push(_tvmbT('js.home.ngay-xung-chinh-tuoi-ban-nen', 'Ngày xung chính tuổi bạn — nên giữ nhịp, tránh quyết định lớn.'));
       else if(isKy) plain.push(_tvmbT('js.home.hom-nay-la-ngay-ky-khoi', 'Hôm nay là ngày kỵ khởi sự — hoãn việc lớn, việc thường ngày vẫn làm bình thường.'));
@@ -1586,28 +1596,29 @@ if (window.ToolPrices) ToolPrices.load().then(function (d) { if (d) renderBanner
       if(!window.Poster||!Poster.downloadDay||!v.danhGia) return;
       posterBtn.disabled=true; flashIcon(posterBtn,'hourglass',60000);
       var rows=[];
-      if(v.nen&&v.nen.length) rows.push(['Nên hôm nay', v.nen.map(function(x){return x.ten;}).join(' · ')]);
-      if(v.kieng&&v.kieng.length) rows.push(['Nên kiêng', v.kieng.map(function(x){return x.ten;}).join(' · ')]);
+      if(v.nen&&v.nen.length) rows.push([_tvmbT('js.home.po-nen', 'Nên hôm nay'), v.nen.map(function(x){return VIEC_T[x.ten]||x.ten;}).join(' · ')]);
+      if(v.kieng&&v.kieng.length) rows.push([_tvmbT('js.home.po-kieng', 'Nên kiêng'), v.kieng.map(function(x){return x.ma&&window.I18n&&I18n.long?window.I18n.long('ngay-tot','act.'+x.ma+'.name',x.ten):x.ten;}).join(' · ')]);
       // Giờ tốt KÈM việc nên làm — trên web đã kèm, poster mà cắt đi thì người
       // đọc ảnh có giờ đẹp mà không biết để làm gì.
-      if(hours&&hours.length) rows.push(['Giờ tốt', hours.map(function(h){return h.chi+' '+h.range+(h.viec?' ('+h.viec+')':'');}).join(' · ')]);
+      if(hours&&hours.length) rows.push([_tvmbT('js.home.po-gio', 'Giờ tốt'), hours.map(function(h){return vnChiNgan(h.chi)+' '+h.range+(h.viec?' ('+vnL('gio.'+h.sao,h.viec)+')':'');}).join(' · ')]);
       // Cảnh báo: đúng hai dòng web đang hiện trong khung đỏ.
       var warn=[];
       if(v.xung&&v.xung.chi){
         var yrs=(v.xung.namSinh||[]).slice(-4).join(', ');
         warn.push(_tvmbT('js.home.xung-tuoi-29rp', 'Xung tuổi ')+_tvmbG('chi', v.xung.chi)+(yrs?_tvmbT('js.home.sinh-nam-xung', ' (sinh ')+yrs+_tvmbT('js.home.p-dong-ngoac', ')'):''));
       }
-      if(v.ngayKy&&v.ngayKy.length) warn.push(_tvmbT('js.home.trung', 'Trùng ')+vnKy(v.ngayKy)+_tvmbT('js.home.co-phap-kieng-khoi-su-cqsv', ' — cổ pháp kiêng khởi sự'));
+      if(v.ngayKy&&v.ngayKy.length) warn.push(_tvmbT('js.home.trung', 'Trùng ')+(v.ngayKy||[]).map(function(n){return vnBoNgoac(vnL('ky.'+n,n));}).join(' + ')+_tvmbT('js.home.co-phap-kieng-khoi-su-cqsv', ' — cổ pháp kiêng khởi sự'));
       // Dòng tra cứu ĐỦ như thẻ: thêm tú, màu hợp, tài thần (bản cũ bỏ cả ba).
-      var sub=[v.ngay.am,'hành '+v.ngay.canHanh,'trực '+v.truc.ten,'sao '+v.saoNgay.ten,'tú '+v.tu.ten];
+      var sub=[vnAm(v.ngay.am),_tvmbT('js.home.po-hanh', 'hành {x}', {x:_tvmbG('hanh',v.ngay.canHanh)}),_tvmbT('js.home.po-truc', 'trực {x}', {x:_tvmbG('truc',v.truc.ten)}),
+        _tvmbT('js.home.po-sao', 'sao {x}', {x:window.I18n&&I18n.long?vnBoNgoac(window.I18n.long('ngay-tot','sao.'+v.saoNgay.ten+'.ten',v.saoNgay.ten)):v.saoNgay.ten}),_tvmbT('js.home.po-tu', 'tú {x}', {x:_tvmbG('tu',v.tu.ten)})];
       if(v.mau&&v.mau.list&&v.mau.list.length) sub.push(_tvmbT('js.home.mau-hop-plgt', 'màu hợp ')+v.mau.list.slice(0,2).map(vnMau).join(', '));
-      if(v.huong&&v.huong.taiThan) sub.push(_tvmbT('js.home.tai-than', 'tài thần ')+v.huong.taiThan);
+      if(v.huong&&v.huong.taiThan) sub.push(_tvmbT('js.home.tai-than', 'tài thần ')+vnHuong(v.huong.taiThan));
       Poster.downloadDay({
         verdict:v.danhGia.tinhChat,
         verdictLabel:(v.danhGia.tinhChat==='tốt'?_tvmbT('js.home.ngay-tot', 'Ngày tốt'):v.danhGia.tinhChat==='xấu'?_tvmbT('js.home.ngay-xau', 'Ngày xấu'):_tvmbT('js.home.ngay-binh', 'Ngày bình')),
-        title:v.ngay.thu+' · '+td.d+'/'+td.mo+_tvmbT('js.home.ngay-cwjn', ' — Ngày ')+_tvmbG('canchi', v.ngay.canChi),
+        title:wdOf(td.y,td.mo,td.d)+' · '+td.d+'/'+td.mo+_tvmbT('js.home.ngay-cwjn', ' — Ngày ')+_tvmbG('canchi', v.ngay.canChi),
         subtitle:sub.join(' · '),
-        quote:vnNhan(v),
+        quote:vnNhan(v,true),
         warn:warn,
         me:_meText,
         rows:rows,
@@ -1615,7 +1626,8 @@ if (window.ToolPrices) ToolPrices.load().then(function (d) { if (d) renderBanner
         // tải ảnh → ai quét mã mà đăng ký thì người chia sẻ được thưởng, và
         // panel Vòng Lặp Viral tách được đường ẢNH khỏi đường LINK.
         qrUrl:qrLink(),
-        qrCaption:'Quét mã — xem vận ngày của riêng bạn'
+        qrCaption:_tvmbT('js.home.po-qr', 'Quét mã — xem vận ngày của riêng bạn'),
+        meLabel:_tvmbT('js.home.van-rieng-cua-ban', 'Vận riêng của bạn').toUpperCase()
       },'van-ngay-'+td.y+'-'+td.mo+'-'+td.d+'.png').then(function(){
         try{ window.Track&&Track.event('poster_download',{tool_id:'van-ngay'}); }catch(e){}
       }).catch(function(){
