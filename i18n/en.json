@@ -9331,6 +9331,34 @@
   "t": "Your personal fortune",
   "h": "378b38f4"
  },
+ "js.home.viec-cuoi-hoi": {
+  "t": "Wedding",
+  "h": "04a2caa4"
+ },
+ "js.home.viec-di-xa": {
+  "t": "Travel",
+  "h": "07f707c7"
+ },
+ "js.home.viec-khai-truong": {
+  "t": "Business opening",
+  "h": "c86ca256"
+ },
+ "js.home.viec-ky-ket": {
+  "t": "Contracts",
+  "h": "de74d03a"
+ },
+ "js.home.viec-nha-moi": {
+  "t": "New home",
+  "h": "505e7857"
+ },
+ "js.home.viec-sua-nha": {
+  "t": "Home repairs",
+  "h": "0ef7e12d"
+ },
+ "js.home.viec-xay-nha": {
+  "t": "Building",
+  "h": "84154a71"
+ },
  "js.home.vo-chinh-dieu": {
   "t": " — no major star",
   "h": "44a2723b"

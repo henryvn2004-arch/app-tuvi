@@ -30,6 +30,7 @@ import { solarToLunar } from '../../tuvi-engine/dist/lunar/convert.js';
 import { readFileSync } from 'fs';
 import { join } from 'path';
 import { resolveStar } from '../agent/vanHanCombos';
+import { dungMau } from './khuon';
 
 const CAN = ['Giáp', 'Ất', 'Bính', 'Đinh', 'Mậu', 'Kỷ', 'Canh', 'Tân', 'Nhâm', 'Quý'];
 const CHI = ['Tý', 'Sửu', 'Dần', 'Mão', 'Thìn', 'Tỵ', 'Ngọ', 'Mùi', 'Thân', 'Dậu', 'Tuất', 'Hợi'];
@@ -167,6 +168,8 @@ export interface VanNgayResult {
   danhGia: {
     tinhChat: 'tốt' | 'xấu' | 'bình';
     nhan: string;           // câu chốt ngắn
+    /** Mã tra bản dịch (additive, W34c): khoá khuôn `NHAN_VAN` + biến — client dịch ở chỗ vẽ, chữ Việt `nhan` giữ nguyên. */
+    ma?: { k: string; v: Record<string, string> };
   };
   truc: { ten: string; tinhChat: string };
   tu: { ten: string; tinhChat: string };
@@ -213,24 +216,38 @@ function canIdxOfDay(canChiNgay: string): number {
 }
 
 /**
+ * KHUÔN câu chốt của thẻ (W34c). Nguồn DUY NHẤT của chữ Việt — engine dựng bằng `dungMau`, bộ dò `check:i18nlong`
+ * đọc đúng bảng này làm nguồn dịch (ns `van-ngay`). Mỗi mục MỘT dòng, nháy đơn.
+ */
+const NHAN_VAN: Record<string, string> = {
+  'nhan.ky': 'Ngày {ky} — hoãn việc trọng đại, việc thường vẫn làm bình thường.',
+  'nhan.tot': 'Trực {truc} · sao {sao} — ngày thuận, nên chốt việc đã ấp ủ.',
+  'nhan.xau': 'Trực {truc} · sao {sao} — nên giữ nhịp cũ, đừng khởi sự mới.',
+  'nhan.binh': 'Trực {truc} · sao {sao} — ngày bình, việc nhỏ thuận, việc lớn nên chọn giờ.',
+};
+
+/**
  * Câu chốt cho thẻ. CỐ Ý viết bằng LUẬT (trực + sao ngày + ngày kỵ) chứ không
  * nhờ LLM: thẻ này hiện với mọi người mỗi ngày, một lượt model mỗi lượt xem là
  * chi phí thật, mà thứ cần nói ra chỉ là tổng hợp mấy tín hiệu đã có.
  */
-function nhanDanhGia(info: NgayTotInfo): string {
+function nhanDanhGia(info: NgayTotInfo): { nhan: string; ma: { k: string; v: Record<string, string> } } {
   const ky = [
     info.kyTamNuong ? 'Tam Nương' : '',
     info.kyNguyetKy ? 'Nguyệt Kỵ' : '',
     info.kyDuongCong ? 'Dương Công kỵ nhật' : '',
   ].filter(Boolean);
-  if (ky.length) return `Ngày ${ky.join(' + ')} — hoãn việc trọng đại, việc thường vẫn làm bình thường.`;
-  if (info.overallTinhChat === 'tốt') {
-    return `Trực ${info.truc} · sao ${info.saoNgay} — ngày thuận, nên chốt việc đã ấp ủ.`;
-  }
-  if (info.overallTinhChat === 'xấu') {
-    return `Trực ${info.truc} · sao ${info.saoNgay} — nên giữ nhịp cũ, đừng khởi sự mới.`;
-  }
-  return `Trực ${info.truc} · sao ${info.saoNgay} — ngày bình, việc nhỏ thuận, việc lớn nên chọn giờ.`;
+  // Chữ Việt dựng từ khuôn `NHAN_VAN` (byte-giống câu viết tay cũ); `ma` = {khoá khuôn, biến} để CLIENT dịch
+  // tại chỗ vẽ (ns `van-ngay`) — tên trực/sao ngày qua glossary, tên ngày kỵ tra `ky.<tên>` (docs/i18n/QUY-UOC.md).
+  const bien = { ky: ky.join(' + '), truc: info.truc, sao: info.saoNgay };
+  const k = ky.length
+    ? 'nhan.ky'
+    : info.overallTinhChat === 'tốt'
+      ? 'nhan.tot'
+      : info.overallTinhChat === 'xấu'
+        ? 'nhan.xau'
+        : 'nhan.binh';
+  return { nhan: dungMau(NHAN_VAN[k]!, bien), ma: { k, v: k === 'nhan.ky' ? {} : { truc: info.truc, sao: info.saoNgay } } };
 }
 
 /**
@@ -292,7 +309,7 @@ export function computeVanNgay(dd: number, mm: number, yy: number): VanNgayResul
       canChi: info.canChiNgay,
       canHanh,
     },
-    danhGia: { tinhChat, nhan: nhanDanhGia(info) },
+    danhGia: { tinhChat, ...nhanDanhGia(info) },
     truc: { ten: info.truc, tinhChat: info.trucTinhChat },
     tu: { ten: info.tu, tinhChat: info.tuTinhChat },
     saoNgay: { ten: info.saoNgay, yNghia: info.saoYNghia, hoangDao: info.hoangDao },
