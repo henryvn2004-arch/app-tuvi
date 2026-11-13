@@ -258,8 +258,8 @@ window.SHELL_INTRO={key:'cong-so'};</script>
 <script src="/tools-shared/hook-layer.js?v=8"></script>
 <script src="/poster.js?v=5"></script>
 <script src="/auth.js?v=10"></script>
-  <script src="/nav.js?v=49" data-icons-only></script>
-<script src="/shell.js?v=155"></script>
+  <script src="/nav.js?v=50" data-icons-only></script>
+<script src="/shell.js?v=156"></script>
 <script src="/tools-shared/shell-soft-nav.js?v=49"></script>
 <script>
 var _ho=null,_birth=null;
@@ -350,7 +350,7 @@ function doCongSo(){
       Shell.setContext({
         birth:{day:fd.ngay,month:fd.thang,year:fd.nam,hourBranch:fd.gioIdx,gender:fd.gioitinh,name:fd.hoten||undefined,lich:fd.lich,noiSinh:fd.noiSinh},
         scenario:{type:'cong-so',data:j.rail},
-        label:'Tử Vi Công Sở · '+ten+' · '+_ho.kieu.ten,
+        label:_tvmbT('js.cs.rail-nhan','Tử Vi Công Sở')+' · '+ten+' · '+CongSoTool.kieuTen(_ho.kieu),
         greeting:_tvmbT('js.cs.ho-so-cong-so-da-dung-full', 'Hồ sơ công sở đã dựng xong — bạn nghiêng về kiểu **{kieu}** ({tt}). Mạnh nhất đang là **{manh}**. Bạn muốn tôi đi sâu phần nào?', {kieu: CongSoTool.kieuTen(_ho.kieu), tt: _ho.kieu.tuTuong.split('(')[0].trim(), manh: manhNhat()}),
         chips:[_tvmbT('js.cs.trong-may-nganh-do-toi-nen', 'Trong mấy ngành đó tôi nên chọn ngành nào?'),_tvmbT('js.cs.toi-nen-tranh-moi-truong-nao', 'Tôi nên tránh môi trường nào?'),_tvmbT('js.cs.muoi-hai-thang-toi-nen-lam', 'Mười hai tháng tới nên làm gì?'),_tvmbT('js.cs.toi-hop-lam-viec-voi-kieu', 'Tôi hợp làm việc với kiểu người nào?'),_tvmbT('js.cs.chang-nghe-tiep-theo-cua-toi', 'Chặng nghề tiếp theo của tôi ra sao?')]
       });
@@ -371,7 +371,7 @@ function doCongSo(){
       Shell.setContext({
         birth:{day:fd.ngay,month:fd.thang,year:fd.nam,hourBranch:fd.gioIdx,gender:fd.gioitinh,name:fd.hoten||undefined,lich:fd.lich,noiSinh:fd.noiSinh},
         scenario:{type:'cong-so',data:{kieu:_ho.kieu.ten,tuTuong:_ho.kieu.tuTuong,motCau:_ho.kieu.motCau,daDangKy:false}},
-        label:'Tử Vi Công Sở · '+ten+' · '+_ho.kieu.ten,
+        label:_tvmbT('js.cs.rail-nhan','Tử Vi Công Sở')+' · '+ten+' · '+CongSoTool.kieuTen(_ho.kieu),
         greeting:_tvmbT('js.cs.ban-nghieng-ve-kieu-full', 'Bạn nghiêng về kiểu **{kieu}** ({tt}). Đăng ký tài khoản (được tặng Lượng miễn phí) để xem đủ 12 mặt, lộ trình 4 chặng và ghép đội — tôi sẽ đi sâu được sau khi bạn mở phần đó.', {kieu: CongSoTool.kieuTen(_ho.kieu), tt: _ho.kieu.tuTuong.split('(')[0].trim()}),
         chips:[_tvmbT('js.cs.kieu-nguoi-nay-la-gi', 'Kiểu người này là gì?'),_tvmbT('js.cs.vi-sao-la-so-lai-ra', 'Vì sao lá số lại ra kiểu này?')]
       });
@@ -517,7 +517,7 @@ function moNhanh(){
     Shell.setContext({
       birth:{day:_birth.ngay,month:_birth.thang,year:_birth.nam,hourBranch:_birth.gioIdx,gender:_birth.gioitinh,name:_birth.hoten||undefined,lich:_birth.lich,noiSinh:_birth.noiSinh},
       scenario:{type:'cong-so',data:r.data.rail},
-      label:'Tử Vi Công Sở · '+(_birth.hoten||'Hồ sơ')+' · '+_ho.kieu.ten,
+      label:_tvmbT('js.cs.rail-nhan','Tử Vi Công Sở')+' · '+(_birth.hoten||_tvmbT('js.cs.ho-so','Hồ sơ'))+' · '+CongSoTool.kieuTen(_ho.kieu),
       greeting:_tvmbT('js.cs.da-mo-phan-nhanh-nghe-ten', 'Đã mở phần nhánh nghề. Nhánh hợp nhất với bạn là **{ten}**. Bạn muốn tôi đi sâu nhánh nào, hay hỏi về một ngành cụ thể?', {ten: (_ho.nhanh.goiY[0]||{}).ten||'—'}),
       chips:[_tvmbT('js.cs.toi-co-hop-lam-nganh-x', 'Tôi có hợp làm ngành X không?'),_tvmbT('js.cs.nhanh-dau-tien-cu-the-phai', 'Nhánh đầu tiên cụ thể phải bắt đầu từ đâu?'),_tvmbT('js.cs.toi-con-thieu-gi-de-vao', 'Tôi còn thiếu gì để vào nhánh đó?'),_tvmbT('js.cs.ba-nhanh-nay-khac-nhau-o', 'Ba nhánh này khác nhau ở chỗ nào?'),_tvmbT('js.cs.neu-toi-dang-lam-nghe-khac', 'Nếu tôi đang làm nghề khác thì sao?')]
     });

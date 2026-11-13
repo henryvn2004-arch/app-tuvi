@@ -185,8 +185,8 @@ window.SHELL_INTRO={key:'mai-hoa'};</script>
 <script src="/tools-shared/mai-hoa.js?v=6"></script>
 <script src="/poster.js?v=5"></script>
 <script src="/auth.js?v=10"></script>
-  <script src="/nav.js?v=49" data-icons-only></script>
-<script src="/shell.js?v=155"></script>
+  <script src="/nav.js?v=50" data-icons-only></script>
+<script src="/shell.js?v=156"></script>
 <script src="/tools-shared/shell-soft-nav.js?v=49"></script>
 <script>
 // Ô giữa dùng CHUNG module /tools-shared/mai-hoa.js với trang standalone
@@ -238,8 +238,10 @@ function showResult() {
   document.getElementById('cauHoiDisplay').textContent = cHoi ? '"' + cHoi + '"' : '';
   document.getElementById('mhCard').innerHTML = MaiHoaTool.cardHTML(r);
   document.getElementById('mhChangs').innerHTML = MaiHoaTool.chungHTML(r);
+  // Nhãn + bạch thoại hào từ CHỈ để hiển thị (W31): `r.haoTu.viet`/`nhan` gốc vẫn đi rail/prompt bằng chữ Việt.
+  function _haoNhan(h) { var m = /^Hào (\d)$/.exec(h.nhan || ''); return m ? _tvmbT('js.shellui.kdx-hao-n', 'Hào {n}', { n: m[1] }) : h.nhan; }
   document.getElementById('mhHaoTu').innerHTML = r.haoTu
-    ? '<div class="mh-hao-tu"><div class="nhan">' + r.haoTu.nhan + _tvmbT('js.maihoa.cua-que-chinh-tham-khao-them', ' của quẻ chính — tham khảo thêm</div><div class="han">') + r.haoTu.han + '</div><div class="viet">' + r.haoTu.viet + '</div></div>'
+    ? '<div class="mh-hao-tu"><div class="nhan">' + _haoNhan(r.haoTu) + _tvmbT('js.maihoa.cua-que-chinh-tham-khao-them', ' của quẻ chính — tham khảo thêm</div><div class="han">') + r.haoTu.han + '</div><div class="viet">' + (window.KinhDichHao && KinhDichHao.vietHienThi ? KinhDichHao.vietHienThi(r.haoTu) : r.haoTu.viet) + '</div></div>'
     : '';
   document.getElementById('mhBuoc').innerHTML = _tvmbT('js.maihoa.cach-ra-que', '<div class="mh-buoc"><b>Cách ra quẻ:</b> ') + MaiHoaTool.moTaText(r.gieo.calc) + _tvmbT('js.maihoa.hao-dong-la-hao', ' Hào động là hào ') + r.dong + '.</div>';
   const kw = r.chinh.que ? r.chinh.que.kw : 0;

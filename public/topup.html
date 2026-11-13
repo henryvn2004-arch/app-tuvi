@@ -266,7 +266,7 @@ body{font-family:Arial,sans-serif;background:var(--bg-soft);color:var(--text);mi
 </head>
 <body>
 <div id="nav-ph" style="height:60px;background:#FBFAF6"></div>
-<script src="/nav.js?v=49"></script>
+<script src="/nav.js?v=50"></script>
 <script src="/tools-shared/tool-icons.js?v=1"></script>
 
 <main class="wrap">
@@ -501,6 +501,15 @@ const State = { method: 'paypal', packages: [], rateLabel: '', vndRails: false }
 // Nhãn từ DB (tool_pricing.label · credit_packages.label) theo ngôn ngữ trang — I18n.db dịch chỉ khi nhãn DB còn
 // trùng câu gốc (W27). Chỉ hiển thị: payPackage/đơn PayPal vẫn đi theo package_id.
 function dbLb(k, v) { return window.I18n && I18n.db ? I18n.db(k, v) : v; }
+// `tool_pricing.category` (chữ DB) chỉ dùng làm KHOÁ nhóm; nhãn hiển thị tra theo danh sách nhóm đã biết, lạ ⇒ giữ nguyên.
+const CAT_LB = {
+  'Luận Giải': () => _tvmbT('js.topup.cat-luan-giai', 'Luận Giải'),
+  'Phong Thủy': () => _tvmbT('js.topup.cat-phong-thuy', 'Phong Thủy'),
+  'Xem Tướng': () => _tvmbT('js.topup.cat-xem-tuong', 'Xem Tướng'),
+  'Đặt Tên & Ngày': () => _tvmbT('js.topup.cat-dat-ten-ngay', 'Đặt Tên & Ngày'),
+  'Phong Cách': () => _tvmbT('js.topup.cat-phong-cach', 'Phong Cách'),
+};
+function catLb(c) { return CAT_LB[c] ? CAT_LB[c]() : c; }
 function esc(s) {
   return String(s == null ? '' : s).replace(/[&<>"']/g, c =>
     ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[c]);
@@ -708,7 +717,7 @@ async function loadPackages() {
     return;
   }
   const ref = list[FEATURED_INDEX] || list[0];
-  State.rateLabel = ref.label;
+  State.rateLabel = dbLb('js.goi.' + ref.package_id, ref.label);  // chỉ để hiển thị (dòng quy đổi)
   renderPackages();
   renderHeaderRate();
   onCustomInput();
@@ -995,7 +1004,7 @@ async function loadToolPricing() {
       if (FREE_CATS.includes(cat)) return;
       const rows = groups[cat].filter(t => !isFree(t));
       if (!rows.length) return;
-      html += '<div class="cost-category">' + esc(cat) + '</div>';
+      html += '<div class="cost-category">' + esc(catLb(cat)) + '</div>';
       rows.forEach(t => {
         const moneyLbl = usdLabel ? usdLabel(Number(t.credits)) : '';
         html += '<div class="cost-row">'

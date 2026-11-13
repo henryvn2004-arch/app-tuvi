@@ -147,7 +147,7 @@
       });
       if (!items.length) return;
       items.forEach(function (r) { seen[r.tool_id] = 1; });
-      out.push({ group: g.title, open: false, items: items.map(toItem) });
+      out.push({ group: DB('js.nhom.' + g.key, g.title), open: false, items: items.map(toItem) });
     });
     // Công cụ không rơi vào nhóm nào vẫn phải NHÌN THẤY — tàng hình thì không
     // ai phát hiện ra là đã gán sai nhóm.

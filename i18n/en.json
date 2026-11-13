@@ -5643,6 +5643,30 @@
   "t": "Hello ",
   "h": "35004652"
  },
+ "js.chat.chip-dat-ten": {
+  "t": "Name my baby who's on the way",
+  "h": "67981026"
+ },
+ "js.chat.chip-hom-nay": {
+  "t": "What should I do or avoid today?",
+  "h": "6eabefa5"
+ },
+ "js.chat.chip-khai-truong": {
+  "t": "Pick a day to open my shop",
+  "h": "6e3668fd"
+ },
+ "js.chat.chip-nguoi-yeu": {
+  "t": "Is my partner truly sincere with me?",
+  "h": "73e51e72"
+ },
+ "js.chat.chip-nhay-viec": {
+  "t": "Should I change jobs this year?",
+  "h": "40bf460e"
+ },
+ "js.chat.hoi-thay": {
+  "t": "Ask the Master",
+  "h": "c9ffbbaf"
+ },
  "js.chat.hom-nay-ban-co-chuyen-gi": {
   "t": "What's on your mind today?",
   "h": "769148cd"
@@ -5650,6 +5674,10 @@
  "js.chat.hom-nay-co-chuyen-gi": {
   "t": ", what's on your mind today?",
   "h": "7674f1e6"
+ },
+ "js.chat.ke-chuyen": {
+  "t": "Tell me your story…",
+  "h": "1e5088ad"
  },
  "js.chat.ke-vai-dong-thoi-minh-bao": {
   "t": "Just a few lines is enough. Minh Bao will bring in the right Master from our team of 15 to look at it for you.",
@@ -6510,6 +6538,10 @@
  "js.cs.quy-mo-ganh-duoc-bac": {
   "t": "Scale you can carry — rank ",
   "h": "43f37473"
+ },
+ "js.cs.rail-nhan": {
+  "t": "Workplace Zi Wei",
+  "h": "9d18a955"
  },
  "js.cs.sao-quyet-dinh-linh-vuc": {
   "t": "Star that decides the field",
@@ -8759,6 +8791,26 @@
   "t": "Avoid",
   "h": "84eadc4e"
  },
+ "js.home.cc-chon-ngay": {
+  "t": "Pick a day for something big",
+  "h": "5c92148a"
+ },
+ "js.home.cc-cong-viec": {
+  "t": "Work and career",
+  "h": "89985ff5"
+ },
+ "js.home.cc-hom-nay": {
+  "t": "What should I do or avoid today?",
+  "h": "6eabefa5"
+ },
+ "js.home.cc-lap-la-so": {
+  "t": "Cast my chart and read my luck",
+  "h": "12ea021e"
+ },
+ "js.home.cc-tinh-duyen": {
+  "t": "Love and marriage",
+  "h": "ebe0f09d"
+ },
  "js.home.chao-con": {
   "t": "Hello{comma_name}. The Master is here — you can tell me anything: work, family, or just feeling tired today. And if you'd like to see the fortune for today's **{cc}** day, I'll look at it right away.",
   "h": "07132e46"
@@ -8935,6 +8987,10 @@
   "t": "Cancel",
   "h": "34ca764c"
  },
+ "js.home.ke-cho-thay-nghe": {
+  "t": "Tell the master…",
+  "h": "2f7af49a"
+ },
  "js.home.khong-chac-gio-sinh-sai-gio": {
   "t": "Not sure of your birth hour? A wrong hour shifts almost the whole chart — cross-check it once for peace of mind.",
   "h": "124df32a"
@@ -9087,6 +9143,10 @@
   "t": "As for everyday tasks, ",
   "h": "e7d64dd0"
  },
+ "js.home.sinh-nam": {
+  "t": "Born ",
+  "h": "6c03a564"
+ },
  "js.home.sinh-nam-xung": {
   "t": " (born ",
   "h": "dc7c4691"
@@ -9098,6 +9158,18 @@
  "js.home.tai-than": {
   "t": "wealth god ",
   "h": "e5ed4f68"
+ },
+ "js.home.tc-binh": {
+  "t": "neutral",
+  "h": "3318401b"
+ },
+ "js.home.tc-tot": {
+  "t": "good",
+  "h": "a6f70ec0"
+ },
+ "js.home.tc-xau": {
+  "t": "bad",
+  "h": "3efce654"
  },
  "js.home.thay-day": {
   "t": "The Master is here{comma_name}. Is there anything else you'd like to ask, or something on your mind?",
@@ -9191,6 +9263,34 @@
   "t": "✓ Just added <b>+",
   "h": "716106fa"
  },
+ "js.home.wd-0": {
+  "t": "Sunday",
+  "h": "5f78bbed"
+ },
+ "js.home.wd-1": {
+  "t": "Monday",
+  "h": "ac5e5917"
+ },
+ "js.home.wd-2": {
+  "t": "Tuesday",
+  "h": "eac69a92"
+ },
+ "js.home.wd-3": {
+  "t": "Wednesday",
+  "h": "9e958113"
+ },
+ "js.home.wd-4": {
+  "t": "Thursday",
+  "h": "aaf12f0c"
+ },
+ "js.home.wd-5": {
+  "t": "Friday",
+  "h": "b5ab06d1"
+ },
+ "js.home.wd-6": {
+  "t": "Saturday",
+  "h": "51daab33"
+ },
  "js.home.xau": {
   "t": "Poor",
   "h": "5a8d08f3"
@@ -9210,6 +9310,14 @@
  "js.home.xung-chinh-tuoi-ban": {
   "t": "clashes with your own sign",
   "h": "7fec1ccf"
+ },
+ "js.home.xung-hoa": {
+  "t": "Clash",
+  "h": "79ed9467"
+ },
+ "js.home.xung-thuong": {
+  "t": "clash",
+  "h": "c9f88395"
  },
  "js.home.xung-tuoi": {
   "t": "Zodiac clash",
@@ -10747,6 +10855,26 @@
   "t": "Method & Reliability",
   "h": "c16eaaee"
  },
+ "js.nav.pwa-ios-huong-dan": {
+  "t": "Tap <strong style=\"color:#9A7B3A\">⎙ Share</strong> in the bottom bar → choose <strong style=\"color:#9A7B3A\">\"Add to Home Screen\"</strong>",
+  "h": "1edab7e9"
+ },
+ "js.nav.pwa-ten": {
+  "t": "Minh Bao Zi Wei Dou Shu",
+  "h": "33336b26"
+ },
+ "js.nav.pwa-them": {
+  "t": "Add",
+  "h": "cc88682f"
+ },
+ "js.nav.pwa-them-de-tra-nhanh": {
+  "t": "Add to your home screen for quicker access",
+  "h": "e8f8a167"
+ },
+ "js.nav.pwa-them-vao-mh": {
+  "t": "Add to Home Screen",
+  "h": "0011d9c4"
+ },
  "js.nav.see-detail": {
   "t": "See details",
   "h": "e30c9371"
@@ -11274,6 +11402,78 @@
  "js.nguoikhac.xem-them": {
   "t": "<summary>See ",
   "h": "c5afdcd1"
+ },
+ "js.nhom.ban-than": {
+  "t": "Know yourself",
+  "h": "4f7993d5"
+ },
+ "js.nhom.ban-than.sub": {
+  "t": "Personality, strengths and weaknesses, how your life unfolds",
+  "h": "dc0d5911"
+ },
+ "js.nhom.chon-ngay": {
+  "t": "Good days & hours",
+  "h": "d0c8c0b0"
+ },
+ "js.nhom.chon-ngay.sub": {
+  "t": "Weddings, building, openings, signings",
+  "h": "7de86843"
+ },
+ "js.nhom.con-cai": {
+  "t": "Children & parenting",
+  "h": "dd5d8a75"
+ },
+ "js.nhom.con-cai.sub": {
+  "t": "Having a child, naming, how best to raise them",
+  "h": "bca2419b"
+ },
+ "js.nhom.hoi-nhanh": {
+  "t": "Ask one quick question",
+  "h": "4bfd4f46"
+ },
+ "js.nhom.hoi-nhanh.sub": {
+  "t": "Undecided? Cast a hexagram, draw a card",
+  "h": "e4045f43"
+ },
+ "js.nhom.nha-cua": {
+  "t": "Home feng shui",
+  "h": "e0fe823b"
+ },
+ "js.nhom.nha-cua.sub": {
+  "t": "House direction, room layout, shops",
+  "h": "8a0444da"
+ },
+ "js.nhom.su-nghiep": {
+  "t": "Career & colleagues",
+  "h": "21adebf8"
+ },
+ "js.nhom.su-nghiep.sub": {
+  "t": "Job changes, promotion, partnerships, teams",
+  "h": "cffc76ec"
+ },
+ "js.nhom.tinh-cam": {
+  "t": "Love & marriage",
+  "h": "402b538e"
+ },
+ "js.nhom.tinh-cam.sub": {
+  "t": "Age compatibility, partners, karmic ties",
+  "h": "1ae648e3"
+ },
+ "js.nhom.tuong-mao": {
+  "t": "Features & presence",
+  "h": "29eaf774"
+ },
+ "js.nhom.tuong-mao.sub": {
+  "t": "Face, eyes, hands, voice, complexion",
+  "h": "846d74e2"
+ },
+ "js.nhom.van-han": {
+  "t": "Luck over time",
+  "h": "ec1a65ef"
+ },
+ "js.nhom.van-han.sub": {
+  "t": "This year, this month, the next ten years",
+  "h": "43967279"
  },
  "js.nhtg.anh-mat-noi-len-dieu-gi": {
   "t": "What does a person's gaze reveal?",
@@ -23671,6 +23871,26 @@
   "t": "Updated automatically when new tools are added.",
   "h": "6d165b81"
  },
+ "js.topup.cat-dat-ten-ngay": {
+  "t": "Names & Dates",
+  "h": "e9af649e"
+ },
+ "js.topup.cat-luan-giai": {
+  "t": "Readings",
+  "h": "4e36b042"
+ },
+ "js.topup.cat-phong-cach": {
+  "t": "Style",
+  "h": "43486931"
+ },
+ "js.topup.cat-phong-thuy": {
+  "t": "Feng Shui",
+  "h": "181a3d4e"
+ },
+ "js.topup.cat-xem-tuong": {
+  "t": "Face & Features",
+  "h": "ae8ee50b"
+ },
  "js.topup.chi-cac-cong-cu-luan-giai": {
   "t": "Only the in-depth reading tools are charged.",
   "h": "9cf1c314"
@@ -24675,6 +24895,18 @@
   "t": "Major stars: ",
   "h": "aa58ba11"
  },
+ "js.vanhannam.chip-thang-thuan": {
+  "t": "Which of the next 12 months is the smoothest?",
+  "h": "a2e98d9a"
+ },
+ "js.vanhannam.chip-tieu-van": {
+  "t": "What does this year's minor cycle say?",
+  "h": "0aa6c153"
+ },
+ "js.vanhannam.chua-doc-gia": {
+  "t": "Couldn't read the price for this part — please try again.",
+  "h": "86f02e35"
+ },
  "js.vanhannam.co-gi-can-ne": {
   "t": " what should I avoid?",
   "h": "c9f61757"
@@ -24695,6 +24927,10 @@
   "t": "Reading ",
   "h": "31f99758"
  },
+ "js.vanhannam.dang-luan-phan": {
+  "t": "Reading part",
+  "h": "60eb13d1"
+ },
  "js.vanhannam.dang-luan-phan-1": {
   "t": "Reading part 1 / ",
   "h": "9020516d"
@@ -24702,6 +24938,10 @@
  "js.vanhannam.dang-tinh": {
   "t": "Calculating…",
   "h": "76a9d5f0"
+ },
+ "js.vanhannam.duong-doi-dai-van": {
+  "t": "Life Path Across the Major Cycles",
+  "h": "c5814252"
  },
  "js.vanhannam.duong-lich": {
   "t": " solar</div>",
@@ -24715,6 +24955,18 @@
   "t": " solar) is ready. Ask me about any month.",
   "h": "078774b9"
  },
+ "js.vanhannam.fm-sub": {
+  "t": "See the next 12 months by lunar month: the ruling palace, stars and star patterns for each month — with the matching solar date range.",
+  "h": "49d95950"
+ },
+ "js.vanhannam.khong-du-lieu-thang": {
+  "t": "No data for this month.",
+  "h": "a67ec748"
+ },
+ "js.vanhannam.khong-du-luong": {
+  "t": "Not enough credits — please top up.",
+  "h": "1d9e17da"
+ },
  "js.vanhannam.khung-12-thang-am": {
   "t": "Framework of 12 lunar months",
   "h": "761916e9"
@@ -24723,6 +24975,26 @@
   "t": "Framework of the **next 12 lunar months** (",
   "h": "5f685658"
  },
+ "js.vanhannam.lock-cta": {
+  "t": "Unlock the full reading",
+  "h": "f25984b4"
+ },
+ "js.vanhannam.lock-item-1": {
+  "t": "A separate reading for each of the next 12 months",
+  "h": "682af4b0"
+ },
+ "js.vanhannam.lock-item-2": {
+  "t": "Chart overview, the journey of major cycles and this year's minor cycle",
+  "h": "ddc12eae"
+ },
+ "js.vanhannam.lock-title": {
+  "t": "⊙ Your 12-month luck reading is still locked",
+  "h": "11dc1add"
+ },
+ "js.vanhannam.loi-anh": {
+  "t": "Couldn't build the image. Try again in a few seconds.",
+  "h": "f8055429"
+ },
  "js.vanhannam.loi-khi-luan-phan": {
   "t": "Error while reading part",
   "h": "1ea71e16"
@@ -24730,6 +25002,10 @@
  "js.vanhannam.loi-khi-tinh-van-han": {
   "t": "Error while calculating your luck:",
   "h": "831b40e0"
+ },
+ "js.vanhannam.loi-mo-phan": {
+  "t": "Something went wrong opening this part — please try again.",
+  "h": "8c34a861"
  },
  "js.vanhannam.luan-van-han-12-thang": {
   "t": "<b>Read next 12 months →</b>",
@@ -24767,6 +25043,10 @@
   "t": "Monthly limit: palace",
   "h": "13dbb374"
  },
+ "js.vanhannam.nhap-du-ngay": {
+  "t": "Please enter your full date of birth (day, month, year).",
+  "h": "075a6b15"
+ },
  "js.vanhannam.p-ba-cham": {
   "t": "...",
   "h": "6eae3a5b"
@@ -24778,6 +25058,22 @@
  "js.vanhannam.phan": {
   "t": "part ",
   "h": "291674f4"
+ },
+ "js.vanhannam.phan-tong-the": {
+  "t": "This part reads the chart as a whole — tap the button below for the master's in-depth reading.",
+  "h": "a10845f5"
+ },
+ "js.vanhannam.poster-qr": {
+  "t": "Scan — see your 12 months",
+  "h": "c222049e"
+ },
+ "js.vanhannam.poster-quote": {
+  "t": "Each cell is one LUNAR month — the solar date range is in the reading.",
+  "h": "ce58d28a"
+ },
+ "js.vanhannam.poster-title": {
+  "t": "12-month luck",
+  "h": "cbe43952"
  },
  "js.vanhannam.sat-tinh": {
   "t": "Malefic stars:",
@@ -24830,6 +25126,10 @@
  "js.vanhannam.van-han-12-thang-cua": {
   "t": "12-month outlook of ",
   "h": "afa6d79f"
+ },
+ "js.vanhannam.viet-rieng": {
+  "t": "Written for this chart alone: an overview, the journey of the major cycles, the current major and minor cycles, then each of the next 12 months one by one.",
+  "h": "7b419dd9"
  },
  "js.vanhannam.vo-chinh-dieu-muon-cung-xung": {
   "t": "no major star (borrowing the opposite palace)",
@@ -29132,7 +29432,7 @@
   "h": "58cc1874"
  },
  "sodep.xem-so-dep-tu-vi-minh": {
-  "t": "Lucky Numbers — Tử Vi Minh Bảo",
+  "t": "Lucky Numbers — Minh Bao Zi Wei Dou Shu",
   "h": "beb7ef68"
  },
  "solaso.chua-co-la-so-nao-trong": {
