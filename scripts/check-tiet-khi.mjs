@@ -538,6 +538,37 @@ let tdSo = 0;
     ky('8/10/2003 còn Tân Dậu', (E.truThangTheoNgay(8, 10, 2003) || {}).canChi === 'Tân Dậu');
     ky('9/10/2003 sang Nhâm Tuất', (E.truThangTheoNgay(9, 10, 2003) || {}).canChi === 'Nhâm Tuất');
     ky('ngoài bảng ⇒ null', E.truThangTrongThangDuong(1, 1899, 420) === null);
+    // Trụ NĂM theo năm tiết (W35b): tháng 3–12 = đúng năm dương (thẻ "Năm" giữ nguyên);
+    // tháng 1 = trọn năm trước; tháng 2 = hai năm, đổi ở ngày Lập Xuân — đối chứng HKO
+    // (ngày D của 315° đã sang năm mới, D−2 còn năm cũ, cùng lý lẽ trụ tháng ở trên).
+    const namDuong = (y) =>
+      CAN10[(((y - 4) % 10) + 10) % 10] + ' ' + CHI12[(((y - 4) % 12) + 12) % 12];
+    const lapXuan = new Map(
+      hko.filter((r) => r[1] === 315).map((r) => [Math.floor(r[0] / 1e4), r[0] % 100])
+    );
+    for (let y = 1901; y <= 2100; y++)
+      for (let m = 1; m <= 12; m++) {
+        const nams = [
+          ...new Set((E.truThangTrongThangDuong(m, y, 420) || []).map((d) => d.namCanChi)),
+        ];
+        const can =
+          m === 1 ? [namDuong(y - 1)] : m === 2 ? [namDuong(y - 1), namDuong(y)] : [namDuong(y)];
+        ky(
+          `năm tiết ${m}/${y}: ${nams.join('→')} ≠ ${can.join('→')}`,
+          nams.join('|') === can.join('|')
+        );
+        if (m === 2 && lapXuan.has(y)) {
+          const D = lapXuan.get(y);
+          ky(
+            `Lập Xuân ${D}/2/${y} phải đã sang ${namDuong(y)}`,
+            (E.truThangTheoNgay(D, 2, y) || {}).namCanChi === namDuong(y)
+          );
+          ky(
+            `${D - 2}/2/${y} phải còn ${namDuong(y - 1)}`,
+            (E.truThangTheoNgay(D - 2, 2, y) || {}).namCanChi === namDuong(y - 1)
+          );
+        }
+      }
   }
   // Trang/route Chọn Ngày không được quay lại công thức tháng ÂM (ccThangCanChi) cho tháng DƯƠNG.
   const trang = readFileSync(join(ROOT, 'public/app-chon-ngay.html'), 'utf-8');
@@ -552,6 +583,13 @@ let tdSo = 0;
     diachi.includes('thangCanChi: nhanTruThang(')
   );
   ky('diachi.ts không được còn ccThangCanChi', !diachi.includes('ccThangCanChi'));
+  ky('diachi.ts computeChonNgay phải dùng nhanTruNam', diachi.includes('namCanChi: nhanTruNam('));
+  ky(
+    'app-chon-ngay.html thẻ Năm phải gom theo d.namCanChi',
+    trang.includes('c.canChi===d.namCanChi')
+  );
+  const route = readFileSync(join(ROOT, 'app/api/xem-tuoi/route.ts'), 'utf-8');
+  ky('route xem-tuoi phải tự tính namCanChi', route.includes('const namCanChi = nhanTruNam('));
 }
 
 console.log(

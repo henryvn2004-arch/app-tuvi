@@ -2036,7 +2036,7 @@ function extractChonNgayContext(data: any): string {
   if (d.suKien)      ctx += `Sự kiện: ${d.suKien}\n`;
   if (d.hoTen)       ctx += `Người xem: ${d.hoTen}\n`;
   if (d.canChi)      ctx += `Tuổi: ${d.canChi} (${d.napAm || ''})\n`;
-  if (d.thangNum && d.namNum) ctx += `Tháng xem: ${d.thangNum}/${d.namNum} dương lịch, năm ${d.namCanChi || ''} — Trụ tháng theo tiết khí: ${d.thangCanChi || ''}\n`;
+  if (d.thangNum && d.namNum) ctx += `Tháng xem: ${d.thangNum}/${d.namNum} dương lịch — Trụ năm theo tiết khí: ${d.namCanChi || ''} — Trụ tháng theo tiết khí: ${d.thangCanChi || ''}\n`;
   return ctx;
 }
 

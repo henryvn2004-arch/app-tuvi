@@ -1,6 +1,6 @@
 # Nhật ký phát triển — mục lục
 
-616 mục ghi chép từng PR, tách khỏi `CLAUDE.md` để nó thôi ngốn ~350k token mỗi lượt.
+617 mục ghi chép từng PR, tách khỏi `CLAUDE.md` để nó thôi ngốn ~350k token mỗi lượt.
 
 **Sáu file dưới đây KHÔNG được nạp tự động.** Cần thì tra:
 
@@ -12,7 +12,7 @@ sed -n '120,190p' docs/nhat-ky/2026-08.md    # đọc đúng đoạn, đừng ca
 
 | file | số mục | dung lượng |
 |---|---:|---:|
-| `2026-11.md` | 75 | 285,921 B |
+| `2026-11.md` | 76 | 287,842 B |
 | `2026-10.md` | 16 | 39,635 B |
 | `2026-09.md` | 360 | 1,241,867 B |
 | `2026-08.md` | 148 | 1,024,027 B |
@@ -28,6 +28,7 @@ Luật rút ra từ các mục này đã được cô đọng lên `CLAUDE.md`. 
 
 | # | tháng | file | mục |
 |---:|---|---|---|
+| 1 | 2026-11 | `2026-11.md` | 📆 W35b — Chọn Ngày Tốt: thẻ "Năm" theo năm tiết (Lập Xuân) — `nhanTruNam` gom đoạn trụ tháng theo `namCanChi` engine; tháng 1 năm trước, tháng 2 hai đoạn; route tự tính; check:tietkhi +2.803 phép |
 | 1 | 2026-11 | `2026-11.md` | 📆 W35 — Chọn Ngày Tốt: trụ tháng theo TIẾT (engine `truThangTheoNgay`/`truThangTrongThangDuong` đọc bảng tiết khí; ngày chứa giao tiết = tháng mới; route tự tính; tubinh-ansao-engine.js?v=7; check:tietkhi mục 7 đối chứng HKO) |
 | 1 | 2026-11 | `2026-11.md` | ✍️ W34f — Khối "Vận riêng" ≠vi: một cặp ngoặc, đóng câu, sửa khoá nối; soát `cach-cuc`/`to-hop` (không sửa mục nào; vi byte-giống) |
 | 1 | 2026-11 | `2026-11.md` | 🖼️ W34e — Poster "Hôm nay" theo ngôn ngữ (`ma` việc · `gio.<sao>` · 10 khoá `js.home.po-*` · poster.js?v=6 · shell.js?v=162; vi byte-giống) |

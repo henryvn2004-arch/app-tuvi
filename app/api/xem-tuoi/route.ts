@@ -15,7 +15,7 @@ import { requestLocale, withLang, type LangLocale } from '@/lib/llm/locale';
 import { withToolOutcome } from '@/lib/ops/tool-outcome';
 import { LUAN_ARC, MAU_ARC, DOC_ARC_TUONG_HOP, ARC_GIONG_NGU_HANH, relevantPalaces } from '@/lib/agent/prompts';
 import { khoiChuDe } from '@/lib/agent/luan-chu-de';
-import { nhanTruThang } from '@/lib/engine/diachi';
+import { nhanTruThang, nhanTruNam } from '@/lib/engine/diachi';
 
 // ─── Chat system prompts ──────────────────────────────────────
 // ⚠️ ĐÂY LÀ BẢN CHÉP TAY, đứng ngoài `buildChatContext`. Nó phục vụ khung chat
@@ -273,11 +273,13 @@ Phân tích ngắn ngũ hành phù hợp cho lĩnh vực này, sau đó gợi ý
 // ─── Chọn ngày tốt ───────────────────────────────────────────
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 async function handleChonNgayTot(body: any, locale: LangLocale): Promise<Response> {
-  const { suKien, hoTen, namSinh, canChiNguoi, napAmNguoi, namCanChi, thangNum, namNum } = body;
+  const { suKien, hoTen, namSinh, canChiNguoi, napAmNguoi, thangNum, namNum } = body;
   if (!suKien || !namSinh || !thangNum || !namNum) return err('Thiếu thông tin', 400);
   // Trụ tháng theo TIẾT do server tính (engine Bát Tự) — không tin chuỗi client gửi
   // (bản trang cũ còn trong cache trình duyệt tính theo chỉ số tháng ÂM, W35).
   const thangCanChi = nhanTruThang(Number(thangNum), Number(namNum)) || String(body.thangCanChi || '');
+  // Trụ NĂM cũng theo năm tiết (Lập Xuân) — tháng 1 thuộc năm trước, tháng 2 vắt hai năm.
+  const namCanChi = nhanTruNam(Number(thangNum), Number(namNum)) || String(body.namCanChi || '');
 
   const system = `Bạn là chuyên gia tư vấn chọn ngày tốt theo nguyên lý Tứ Trụ và ngũ hành.
 
@@ -299,7 +301,7 @@ ${ARC_GIONG_NGU_HANH}`;
   const user = `Chọn ngày tốt cho sự kiện:
 - Sự kiện: ${suKien}
 - Người chính: ${hoTen} | Năm sinh: ${namSinh} (${canChiNguoi}) — Nạp âm: ${napAmNguoi}
-- Tháng cần chọn: tháng ${thangNum}/${namNum} dương lịch — năm ${namCanChi}
+- Tháng cần chọn: tháng ${thangNum}/${namNum} dương lịch — trụ năm theo tiết khí: ${namCanChi}
 - Trụ tháng theo tiết khí: ${thangCanChi}
 
 Phân tích và gợi ý các khoảng ngày tốt trong tháng này cho sự kiện trên.`;
