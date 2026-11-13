@@ -141,7 +141,8 @@
    "home.xem-ngay-tot-xau",
    "home.xem-tat-ca",
    "home.xem-tuoi-vo-chong",
-   "home.xem-tuong"
+   "home.xem-tuong",
+   "laso.tu-vi-minh-bao"
   ],
   "js": [
    "nav"
@@ -2890,7 +2891,8 @@
    "home.phong-thuy",
    "home.tu-vi-minh-bao-cong-menh-b1dq",
    "home.tu-vi-tu-binh-tuong-so",
-   "home.xem-tuong"
+   "home.xem-tuong",
+   "laso.tu-vi-minh-bao"
   ],
   "js": [
    "nav"
@@ -3394,6 +3396,7 @@
  "/sach-detail.html": {
   "file": "sach-detail.html",
   "keys": [
+   "laso.tu-vi-minh-bao",
    "sachdetail.dang-tai",
    "sachdetail.khong-tim-thay-tai-lieu",
    "sachdetail.tai-lieu-khong-ton-tai-hoac",
@@ -3456,6 +3459,7 @@
  "/tai-lieu.html": {
   "file": "tai-lieu.html",
   "keys": [
+   "laso.tu-vi-minh-bao",
    "tailieu.bai-viet-khong-ton-tai-hoac",
    "tailieu.bai-viet-lien-quan",
    "tailieu.dang-tai-bai-viet",

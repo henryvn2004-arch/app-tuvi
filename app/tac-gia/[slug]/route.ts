@@ -193,7 +193,7 @@ ${ask.css}
   </aside>
 </div>
 ${ask.tail}
-<script src="/track.js?v=8" defer></script><script src="/nav.js?v=49" defer></script>
+<script src="/track.js?v=8" defer></script><script src="/nav.js?v=50" defer></script>
 <script>(function(){var I=window.I18n;if(!I||!I.master)return;document.querySelectorAll('[data-master]').forEach(function(e){var id=e.getAttribute('data-master');e.textContent=I.master(id,e.textContent);});})();</script>
 </body></html>`;
 }
@@ -206,7 +206,7 @@ function buildNotFound() {
 </head><body style="font-family:sans-serif;text-align:center;padding:80px">
 <h1 style="color:#0F2A3D;font-family:Georgia,serif;margin-bottom:16px">Không tìm thấy tác giả</h1>
 <a href="/tac-gia" style="color:#1455A4">← Về danh sách tác giả</a>
-<script src="/track.js?v=8" defer></script><script src="/nav.js?v=49" defer></script>
+<script src="/track.js?v=8" defer></script><script src="/nav.js?v=50" defer></script>
 </body></html>`;
 }
 

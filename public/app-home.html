@@ -550,9 +550,9 @@
 <script src="/poster.js?v=5" defer></script>
 <script src="/tool-prices.js?v=12"></script>
 <script src="/auth.js?v=10"></script>
-  <script src="/nav.js?v=49" data-icons-only></script>
+  <script src="/nav.js?v=50" data-icons-only></script>
 <script src="/tools-shared/tool-icons.js?v=1"></script>
-<script src="/shell.js?v=155"></script>
+<script src="/shell.js?v=156"></script>
 <script src="/tools-shared/shell-soft-nav.js?v=49"></script>
 <script>
 function esc(s){return String(s==null?'':s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
@@ -757,7 +757,7 @@ function renderSpringboard(d) {
     var items = rest.filter(function (r) { return window.ToolPrices && ToolPrices.groupsOf(r, groups).indexOf(g.key) >= 0; });
     if (!items.length) return;
     items.forEach(function (r) { seen[r.tool_id] = 1; });
-    html += '<div class="grp-title">' + esc(g.title) + '</div><div class="grid">' + items.map(tileHtml).join('') + '</div>';
+    html += '<div class="grp-title">' + esc(window.I18n&&I18n.db?I18n.db('js.nhom.'+g.key,g.title):g.title) + '</div><div class="grid">' + items.map(tileHtml).join('') + '</div>';
   });
   var other = rest.filter(function (r) { return !seen[r.tool_id]; });
   if (other.length) html += ('<div class="grp-title">' + _tvmbT('js.shellui.khac', 'Khác') + '</div><div class="grid">') + other.map(tileHtml).join('') + '</div>';
@@ -796,6 +796,11 @@ if (window.ToolPrices) ToolPrices.load().then(function (d) { if (d) renderBanner
    lượt rail); chưa có → kịch bản hoang-dao. Gói/paywall GIỮ NGUYÊN. */
 (function(){
   var WD=['Chủ Nhật','Thứ Hai','Thứ Ba','Thứ Tư','Thứ Năm','Thứ Sáu','Thứ Bảy'];
+  // Thứ trong tuần để HIỂN THỊ (W31): tra theo chỉ số getDay(), không theo chuỗi `thu` engine trả về.
+  function wdT(i){ return _tvmbT('js.home.wd-'+i, WD[i]); }
+  function wdOf(y,m,d){ return wdT(new Date(y,m-1,d).getDay()); }
+  // Tính chất ngày ('tốt'/'xấu'/'bình' — giá trị engine) khi chèn vào câu hiển thị.
+  function tcT(t){ return t==='tốt'?_tvmbT('js.home.tc-tot','tốt'):t==='xấu'?_tvmbT('js.home.tc-xau','xấu'):t==='bình'?_tvmbT('js.home.tc-binh','bình'):t; }
   function vnToday(){
     try{ var s=new Date().toLocaleString('en-CA',{timeZone:'Asia/Ho_Chi_Minh',year:'numeric',month:'2-digit',day:'2-digit'});
       var m=s.match(/(\d{4})-(\d{2})-(\d{2})/); if(m) return {y:+m[1],mo:+m[2],d:+m[3]}; }catch(e){}
@@ -898,21 +903,21 @@ if (window.ToolPrices) ToolPrices.load().then(function (d) { if (d) renderBanner
     var host=el('todayNext'), head=el('todayNextH'), wk=el('todayWeek');
     if(!_week||!_week.length){ host.style.display='none'; head.style.display='none'; wk.hidden=true; return; }
     function cls(x){ return x.tinhChat==='tốt'?'v-tot':x.tinhChat==='xấu'?'v-xau':'v-binh'; }
-    function nhan(x){ return x.bixung?'Xung':x.ngayKy?_tvmbT('js.home.ngay-ky-lqyh', 'Ngày kỵ')
+    function nhan(x){ return x.bixung?_tvmbT('js.home.xung-hoa','Xung'):x.ngayKy?_tvmbT('js.home.ngay-ky-lqyh', 'Ngày kỵ')
       :x.tinhChat==='tốt'?_tvmbT('js.home.tot', 'Tốt'):x.tinhChat==='xấu'?_tvmbT('js.home.xau', 'Xấu'):_tvmbT('js.home.binh', 'Bình'); }
     function on(x){ return x.d===cur.d&&x.m===cur.mo&&x.y===cur.y; }
     host.innerHTML=_week.slice(0,3).map(function(x){
       return '<button type="button" class="tday '+cls(x)+(on(x)?' on':'')+'" data-iso="'+esc(x.iso)+'"'
-        +' title="'+esc(x.canChi)+'"><span class="dot"></span>'
+        +' title="'+esc(_tvmbG('canchi',x.canChi))+'"><span class="dot"></span>'
         +'<span class="tday-tx"><b>'+x.d+'/'+x.m+'</b><span>'+esc(nhan(x))+'</span></span></button>';
     }).join('')
       +'<button class="tall" id="todayAll" type="button" aria-expanded="false">'
       +('<span class="ic" data-icon="calendar-days"></span><span>' + _tvmbT('js.home.xem-ca-7-ngay', '<b>Xem cả</b><small>7 ngày</small>') + '</span></button>');
     wk.innerHTML=_week.map(function(x){
       return '<button type="button" class="tw-cell'+(x.tinhChat==='tốt'?' v-tot':x.tinhChat==='xấu'?' v-xau':'')
-        +(on(x)?' on':'')+'" data-iso="'+esc(x.iso)+'" title="'+esc(x.canChi+_tvmbT('js.home.ngay-6ia2', ' · ngày ')+x.tinhChat+(x.ngayKy?_tvmbT('js.home.ngay-ky', ' · ngày kỵ'):''))+'">'
-        +'<div class="tw-thu">'+esc(x.thu)+'</div><div class="tw-d">'+x.d+'/'+x.m+'</div>'
-        +'<div class="tw-dot"></div>'+(x.bixung?'<div class="tw-x">xung</div>':'')+'</button>';
+        +(on(x)?' on':'')+'" data-iso="'+esc(x.iso)+'" title="'+esc(_tvmbG('canchi',x.canChi)+_tvmbT('js.home.ngay-6ia2', ' · ngày ')+tcT(x.tinhChat)+(x.ngayKy?_tvmbT('js.home.ngay-ky', ' · ngày kỵ'):''))+'">'
+        +'<div class="tw-thu">'+esc(wdOf(x.y,x.m,x.d))+'</div><div class="tw-d">'+x.d+'/'+x.m+'</div>'
+        +'<div class="tw-dot"></div>'+(x.bixung?'<div class="tw-x">'+_tvmbT('js.home.xung-thuong','xung')+'</div>':'')+'</button>';
     }).join('');
     host.style.display=''; head.style.display='';
     var all=el('todayAll');
@@ -1015,8 +1020,8 @@ if (window.ToolPrices) ToolPrices.load().then(function (d) { if (d) renderBanner
      ngày. Việc đó để chữ nói: ô "Cần tránh" đã gọi tên rồi. */
   var ANH_BASE='/img/van-ngay/', ANH_V='?v=1';
   var TRIEN={tot:'福',binh:'平',xau:'忍',ky:'忌'};
-  var BADGE={tot:['Ngày tốt',' v-tot'],binh:['Ngày bình',''],
-             xau:['Ngày xấu',' v-xau'],ky:['Ngày kỵ',' v-ky']};
+  var BADGE={tot:['Ngày tốt',' v-tot','js.home.ngay-tot'],binh:['Ngày bình','','js.home.ngay-binh'],
+             xau:['Ngày xấu',' v-xau','js.home.ngay-xau'],ky:['Ngày kỵ',' v-ky','js.home.ngay-ky-lqyh']};
   function anhCho(v){
     if(v.ngayKy&&v.ngayKy.length) return 'ky';
     var t=v.danhGia&&v.danhGia.tinhChat;
@@ -1061,18 +1066,18 @@ if (window.ToolPrices) ToolPrices.load().then(function (d) { if (d) renderBanner
     el('todayArt').innerHTML=imgTranh(key);
     el('todaySeal').textContent=TRIEN[key];
 
-    el('todayDate').textContent=v.ngay.thu+' · '+td.d+'/'+td.mo;
+    el('todayDate').textContent=wdOf(td.y,td.mo,td.d)+' · '+td.d+'/'+td.mo;
     var badge=el('todayHanh');
-    badge.textContent=BADGE[key][0];
+    badge.textContent=_tvmbT(BADGE[key][2], BADGE[key][0]);
     badge.className='today-hanh'+BADGE[key][1];
     el('todaySub').textContent=v.danhGia.nhan;
 
     /* ── Ô CẦN TRÁNH — mục ai cũng đọc vì nó gọi tên trực tiếp một nhóm người ── */
     var yrs=(v.xung&&v.xung.namSinh||[]).slice(-3).join(', ');
-    var badNote=yrs?'Sinh '+yrs+_tvmbT('js.home.tranh-viec-lon-hom-nay', ' — tránh việc lớn hôm nay.'):_tvmbT('js.home.tranh-viec-lon-trong-hom-nay', 'Tránh việc lớn trong hôm nay.');
+    var badNote=yrs?_tvmbT('js.home.sinh-nam','Sinh ')+yrs+_tvmbT('js.home.tranh-viec-lon-hom-nay', ' — tránh việc lớn hôm nay.'):_tvmbT('js.home.tranh-viec-lon-trong-hom-nay', 'Tránh việc lớn trong hôm nay.');
     var badKy=(v.ngayKy&&v.ngayKy.length)?_tvmbT('js.home.trung', 'Trùng ')+v.ngayKy.join(' + ')+_tvmbT('js.home.co-phap-kieng-khoi-su', ' — cổ pháp kiêng khởi sự.'):'';
     var boxBad=('<div class="tbox bad"><div class="tbox-h"><span class="ic" data-icon="alert-triangle"></span>' + _tvmbT('js.home.can-tranh', 'Cần tránh') + '</div>')
-      +('<div class="tbad-main">' + _tvmbT('js.home.xung-tuoi', 'Xung tuổi') + ' ')+esc(v.xung?v.xung.chi:'—')+'</div>'
+      +('<div class="tbad-main">' + _tvmbT('js.home.xung-tuoi', 'Xung tuổi') + ' ')+esc(v.xung?_tvmbG('chi',v.xung.chi):'—')+'</div>'
       +'<div class="tbad-note">'+esc(badNote)+(badKy?'<br>'+esc(badKy):'')+'</div></div>';
 
     /* ── Ô NÊN LÀM — điểm từng loại việc lấy thẳng của engine, không tự xếp hạng.
@@ -1305,7 +1310,7 @@ if (window.ToolPrices) ToolPrices.load().then(function (d) { if (d) renderBanner
   function fallback(td,birth,hasBirth){
     if(!window.HoangDaoTool) return;
     var r=HoangDaoTool.compute(td.d,td.mo,td.y); if(!r||!r.ok) return;
-    var wd=WD[new Date(td.y,td.mo-1,td.d).getDay()];
+    var wd=wdOf(td.y,td.mo,td.d);
     var hours=(r.data.gioHoangDao||'').split(' · ').slice(0,3).map(function(h){
       var m=h.match(/^(\S+)\s*\(([^)]+)\)/); return m?{chi:m[1],range:m[2],sao:m[1]}:{chi:h,range:'',sao:''};
     });
@@ -1403,11 +1408,11 @@ if (window.ToolPrices) ToolPrices.load().then(function (d) { if (d) renderBanner
   // — đổi route ở admin thì phải sửa lại đây tay (không có API tra ở client
   // lúc build danh sách này).
   var CHIPS_CONCIERGE=[
-    {label:'Chuyện tình duyên, hôn nhân',href:'/app/xem-tuoi',toolId:'xem-tuoi'},
-    {label:'Công việc, sự nghiệp',href:'/app/cong-so',toolId:'cong-so'},
-    {label:'Chọn ngày làm việc lớn',href:'/app/chon-ngay',toolId:'chon-ngay-tot'},
-    {label:'Lập lá số xem vận riêng',href:'/app/luan-giai',toolId:'laso'},
-    'Hôm nay nên làm gì, tránh gì?'
+    {label:_tvmbT('js.home.cc-tinh-duyen','Chuyện tình duyên, hôn nhân'),href:'/app/xem-tuoi',toolId:'xem-tuoi'},
+    {label:_tvmbT('js.home.cc-cong-viec','Công việc, sự nghiệp'),href:'/app/cong-so',toolId:'cong-so'},
+    {label:_tvmbT('js.home.cc-chon-ngay','Chọn ngày làm việc lớn'),href:'/app/chon-ngay',toolId:'chon-ngay-tot'},
+    {label:_tvmbT('js.home.cc-lap-la-so','Lập lá số xem vận riêng'),href:'/app/luan-giai',toolId:'laso'},
+    _tvmbT('js.home.cc-hom-nay','Hôm nay nên làm gì, tránh gì?')
   ];
 
   /* ── Mồi rail + nút ────────────────────────────────────────────────────── */
@@ -1447,7 +1452,7 @@ if (window.ToolPrices) ToolPrices.load().then(function (d) { if (d) renderBanner
           Shell.setContext({
             birth:birth,
             label:_tvmbT('js.home.hoi-thay', 'Hỏi Thầy')+(nm?' · '+nm:''),
-            placeholder:'Kể cho thầy nghe…',
+            placeholder:_tvmbT('js.home.ke-cho-thay-nghe','Kể cho thầy nghe…'),
             greeting:greetingFor(cc,nm,away,worry,vanHomNay),
             chips:CHIPS_TAM_SU,
             passive:true

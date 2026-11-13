@@ -5643,6 +5643,30 @@
   "t": "こんにちは、",
   "h": "35004652"
  },
+ "js.chat.chip-dat-ten": {
+  "t": "生まれてくる子の名前をつけたい",
+  "h": "67981026"
+ },
+ "js.chat.chip-hom-nay": {
+  "t": "今日は何をして、何を避けるべき？",
+  "h": "6eabefa5"
+ },
+ "js.chat.chip-khai-truong": {
+  "t": "お店の開業日を選びたい",
+  "h": "6e3668fd"
+ },
+ "js.chat.chip-nguoi-yeu": {
+  "t": "恋人は本当に私に誠実？",
+  "h": "73e51e72"
+ },
+ "js.chat.chip-nhay-viec": {
+  "t": "今年は転職すべき？",
+  "h": "40bf460e"
+ },
+ "js.chat.hoi-thay": {
+  "t": "先生に聞く",
+  "h": "c9ffbbaf"
+ },
  "js.chat.hom-nay-ban-co-chuyen-gi": {
   "t": "今日はどうされましたか？",
   "h": "769148cd"
@@ -5650,6 +5674,10 @@
  "js.chat.hom-nay-co-chuyen-gi": {
   "t": "さん、今日はどうされましたか？",
   "h": "7674f1e6"
+ },
+ "js.chat.ke-chuyen": {
+  "t": "あなたのことを話してください…",
+  "h": "1e5088ad"
  },
  "js.chat.ke-vai-dong-thoi-minh-bao": {
   "t": "数行で大丈夫です。明宝が、15人の先生のチームからぴったりの先生をご案内します。",
@@ -6571,6 +6599,10 @@
   "t": "担える規模 — 等級 ",
   "h": "43f37473"
  },
+ "js.cs.rail-nhan": {
+  "t": "職場の紫微斗数",
+  "h": "9d18a955"
+ },
  "js.cs.sao-quyet-dinh-linh-vuc": {
   "t": "分野を決める星",
   "h": "31023c67"
@@ -6894,6 +6926,26 @@
  "js.ctk.quet-ma-xem-tien-kiep-cua": {
   "t": "QRコードを読み取って、あなたの前世を見る",
   "h": "fb7663cd"
+ },
+ "js.ctk.stage-0": {
+  "t": "少年期",
+  "h": "ff279531"
+ },
+ "js.ctk.stage-1": {
+  "t": "立身",
+  "h": "ee6c1f1b"
+ },
+ "js.ctk.stage-2": {
+  "t": "中年",
+  "h": "75ff45ff"
+ },
+ "js.ctk.stage-3": {
+  "t": "後半生",
+  "h": "21c8cf6b"
+ },
+ "js.ctk.stage-4": {
+  "t": "晩年",
+  "h": "732ca553"
  },
  "js.ctk.tai-lai": {
   "t": "再読み込み",
@@ -8819,6 +8871,26 @@
   "t": "避けるべきこと",
   "h": "84eadc4e"
  },
+ "js.home.cc-chon-ngay": {
+  "t": "大事な用事の日取り",
+  "h": "5c92148a"
+ },
+ "js.home.cc-cong-viec": {
+  "t": "仕事・キャリアのこと",
+  "h": "89985ff5"
+ },
+ "js.home.cc-hom-nay": {
+  "t": "今日は何をして、何を避けるべき？",
+  "h": "6eabefa5"
+ },
+ "js.home.cc-lap-la-so": {
+  "t": "命盤を立てて自分の運を見る",
+  "h": "12ea021e"
+ },
+ "js.home.cc-tinh-duyen": {
+  "t": "恋愛・結婚のこと",
+  "h": "ebe0f09d"
+ },
  "js.home.chao-con": {
   "t": "こんにちは{comma_name}。先生はここにいますよ。仕事のこと、家のこと、今日はちょっと疲れたということでも、何でもお話しください。今日 **{cc}** の日の運勢をご覧になりたければ、先生がすぐに見ます。",
   "h": "07132e46"
@@ -8995,6 +9067,10 @@
   "t": "キャンセル",
   "h": "34ca764c"
  },
+ "js.home.ke-cho-thay-nghe": {
+  "t": "先生に話してみて…",
+  "h": "2f7af49a"
+ },
  "js.home.khong-chac-gio-sinh-sai-gio": {
   "t": "出生時刻に自信がありませんか？時刻が違うと命盤のほとんどがずれます — 一度確認し直すと安心です。",
   "h": "124df32a"
@@ -9147,6 +9223,10 @@
   "t": "日常のことに限れば、",
   "h": "e7d64dd0"
  },
+ "js.home.sinh-nam": {
+  "t": "生まれ年 ",
+  "h": "6c03a564"
+ },
  "js.home.sinh-nam-xung": {
   "t": "（生年 ",
   "h": "dc7c4691"
@@ -9158,6 +9238,18 @@
  "js.home.tai-than": {
   "t": "財神方位 ",
   "h": "e5ed4f68"
+ },
+ "js.home.tc-binh": {
+  "t": "平",
+  "h": "3318401b"
+ },
+ "js.home.tc-tot": {
+  "t": "吉",
+  "h": "a6f70ec0"
+ },
+ "js.home.tc-xau": {
+  "t": "凶",
+  "h": "3efce654"
  },
  "js.home.thay-day": {
   "t": "先生です{comma_name}。ほかに聞きたいことや、お話ししたいことはありますか？",
@@ -9251,6 +9343,34 @@
   "t": "✓ <b>+",
   "h": "716106fa"
  },
+ "js.home.wd-0": {
+  "t": "日曜日",
+  "h": "5f78bbed"
+ },
+ "js.home.wd-1": {
+  "t": "月曜日",
+  "h": "ac5e5917"
+ },
+ "js.home.wd-2": {
+  "t": "火曜日",
+  "h": "eac69a92"
+ },
+ "js.home.wd-3": {
+  "t": "水曜日",
+  "h": "9e958113"
+ },
+ "js.home.wd-4": {
+  "t": "木曜日",
+  "h": "aaf12f0c"
+ },
+ "js.home.wd-5": {
+  "t": "金曜日",
+  "h": "b5ab06d1"
+ },
+ "js.home.wd-6": {
+  "t": "土曜日",
+  "h": "51daab33"
+ },
  "js.home.xau": {
   "t": "凶",
   "h": "5a8d08f3"
@@ -9270,6 +9390,14 @@
  "js.home.xung-chinh-tuoi-ban": {
   "t": "生まれ年と真正面から冲",
   "h": "7fec1ccf"
+ },
+ "js.home.xung-hoa": {
+  "t": "冲",
+  "h": "79ed9467"
+ },
+ "js.home.xung-thuong": {
+  "t": "冲",
+  "h": "c9f88395"
  },
  "js.home.xung-tuoi": {
   "t": "相冲",
@@ -11355,6 +11483,26 @@
   "t": "手法と信頼性",
   "h": "c16eaaee"
  },
+ "js.nav.pwa-ios-huong-dan": {
+  "t": "下のバーの<strong style=\"color:#9A7B3A\">⎙ 共有</strong>をタップ →<strong style=\"color:#9A7B3A\">「ホーム画面に追加」</strong>を選択",
+  "h": "1edab7e9"
+ },
+ "js.nav.pwa-ten": {
+  "t": "明宝紫微斗数",
+  "h": "33336b26"
+ },
+ "js.nav.pwa-them": {
+  "t": "追加",
+  "h": "cc88682f"
+ },
+ "js.nav.pwa-them-de-tra-nhanh": {
+  "t": "ホーム画面に追加すると、すぐに開けます",
+  "h": "e8f8a167"
+ },
+ "js.nav.pwa-them-vao-mh": {
+  "t": "ホーム画面に追加",
+  "h": "0011d9c4"
+ },
  "js.nav.see-detail": {
   "t": "詳細を見る",
   "h": "e30c9371"
@@ -11882,6 +12030,78 @@
  "js.nguoikhac.xem-them": {
   "t": "<summary>命盤の項目をさらに ",
   "h": "c5afdcd1"
+ },
+ "js.nhom.ban-than": {
+  "t": "自分を知る",
+  "h": "4f7993d5"
+ },
+ "js.nhom.ban-than.sub": {
+  "t": "性格、長所と短所、一生の流れ",
+  "h": "dc0d5911"
+ },
+ "js.nhom.chon-ngay": {
+  "t": "吉日と吉時",
+  "h": "d0c8c0b0"
+ },
+ "js.nhom.chon-ngay.sub": {
+  "t": "結婚、家づくり、開業、契約",
+  "h": "7de86843"
+ },
+ "js.nhom.con-cai": {
+  "t": "子どもと子育て",
+  "h": "dd5d8a75"
+ },
+ "js.nhom.con-cai.sub": {
+  "t": "出産、名付け、どんな育て方が合うか",
+  "h": "bca2419b"
+ },
+ "js.nhom.hoi-nhanh": {
+  "t": "ひとつだけ占う",
+  "h": "4bfd4f46"
+ },
+ "js.nhom.hoi-nhanh.sub": {
+  "t": "迷ったら卦を立てる、カードを一枚引く",
+  "h": "e4045f43"
+ },
+ "js.nhom.nha-cua": {
+  "t": "住まいの風水",
+  "h": "e0fe823b"
+ },
+ "js.nhom.nha-cua.sub": {
+  "t": "家の向き、部屋の配置、店舗",
+  "h": "8a0444da"
+ },
+ "js.nhom.su-nghiep": {
+  "t": "仕事と同僚",
+  "h": "21adebf8"
+ },
+ "js.nhom.su-nghiep.sub": {
+  "t": "転職、昇進、共同事業、チーム",
+  "h": "cffc76ec"
+ },
+ "js.nhom.tinh-cam": {
+  "t": "恋愛と結婚",
+  "h": "402b538e"
+ },
+ "js.nhom.tinh-cam.sub": {
+  "t": "相性、パートナー、縁",
+  "h": "1ae648e3"
+ },
+ "js.nhom.tuong-mao": {
+  "t": "人相と雰囲気",
+  "h": "29eaf774"
+ },
+ "js.nhom.tuong-mao.sub": {
+  "t": "顔、目、手、声、顔色",
+  "h": "846d74e2"
+ },
+ "js.nhom.van-han": {
+  "t": "時期ごとの運勢",
+  "h": "ec1a65ef"
+ },
+ "js.nhom.van-han.sub": {
+  "t": "今年、今月、これからの十年",
+  "h": "43967279"
  },
  "js.nhtg.anh-mat-noi-len-dieu-gi": {
   "t": "まなざしは何を表しますか？",
@@ -24279,6 +24499,26 @@
   "t": "ツールが追加されると自動で更新されます。",
   "h": "6d165b81"
  },
+ "js.topup.cat-dat-ten-ngay": {
+  "t": "名付け・日取り",
+  "h": "e9af649e"
+ },
+ "js.topup.cat-luan-giai": {
+  "t": "鑑定",
+  "h": "4e36b042"
+ },
+ "js.topup.cat-phong-cach": {
+  "t": "スタイル",
+  "h": "43486931"
+ },
+ "js.topup.cat-phong-thuy": {
+  "t": "風水",
+  "h": "181a3d4e"
+ },
+ "js.topup.cat-xem-tuong": {
+  "t": "人相",
+  "h": "ae8ee50b"
+ },
  "js.topup.chi-cac-cong-cu-luan-giai": {
   "t": "有料なのは、詳しい鑑定ツールのみです。",
   "h": "9cf1c314"
@@ -25283,6 +25523,18 @@
   "t": "主星：",
   "h": "aa58ba11"
  },
+ "js.vanhannam.chip-thang-thuan": {
+  "t": "これからの12か月で、いちばん順調な月は？",
+  "h": "a2e98d9a"
+ },
+ "js.vanhannam.chip-tieu-van": {
+  "t": "今年の小限は何を示している？",
+  "h": "0aa6c153"
+ },
+ "js.vanhannam.chua-doc-gia": {
+  "t": "この部分の価格を読み込めませんでした。もう一度お試しください。",
+  "h": "86f02e35"
+ },
  "js.vanhannam.co-gi-can-ne": {
   "t": " は何に気をつけるべきですか？",
   "h": "c9f61757"
@@ -25303,6 +25555,10 @@
   "t": "鑑定中：",
   "h": "31f99758"
  },
+ "js.vanhannam.dang-luan-phan": {
+  "t": "鑑定中の部分",
+  "h": "60eb13d1"
+ },
  "js.vanhannam.dang-luan-phan-1": {
   "t": "鑑定中：セクション 1 / ",
   "h": "9020516d"
@@ -25310,6 +25566,10 @@
  "js.vanhannam.dang-tinh": {
   "t": "計算中…",
   "h": "76a9d5f0"
+ },
+ "js.vanhannam.duong-doi-dai-van": {
+  "t": "大限ごとの人生の道のり",
+  "h": "c5814252"
  },
  "js.vanhannam.duong-lich": {
   "t": " 新暦</div>",
@@ -25322,6 +25582,18 @@
  "js.vanhannam.duong-lich-da-san-sang-hoi": {
   "t": " 新暦）の準備ができました。どの月でも私にお尋ねください。",
   "h": "078774b9"
+ },
+ "js.vanhannam.fm-sub": {
+  "t": "これからの12か月を旧暦の月ごとに：月ごとの限の宮・星・格局 — 対応する新暦の期間つき。",
+  "h": "49d95950"
+ },
+ "js.vanhannam.khong-du-lieu-thang": {
+  "t": "この月のデータはありません。",
+  "h": "a67ec748"
+ },
+ "js.vanhannam.khong-du-luong": {
+  "t": "両が足りません。チャージしてください。",
+  "h": "1d9e17da"
  },
  "js.vanhannam.khong-dung-khung": {
   "t": "12か月の枠を作成できませんでした。",
@@ -25367,6 +25639,26 @@
   "t": "凶",
   "h": "3efce654"
  },
+ "js.vanhannam.lock-cta": {
+  "t": "鑑定をすべて開く",
+  "h": "f25984b4"
+ },
+ "js.vanhannam.lock-item-1": {
+  "t": "これからの12か月、一か月ずつの個別鑑定",
+  "h": "682af4b0"
+ },
+ "js.vanhannam.lock-item-2": {
+  "t": "命盤の総論、大限の歩み、今年の小限",
+  "h": "ddc12eae"
+ },
+ "js.vanhannam.lock-title": {
+  "t": "⊙ 運勢鑑定はまだ開いていません",
+  "h": "11dc1add"
+ },
+ "js.vanhannam.loi-anh": {
+  "t": "画像を作成できませんでした。数秒後にもう一度お試しください。",
+  "h": "f8055429"
+ },
  "js.vanhannam.loi-khi-luan-phan": {
   "t": "エラー：セクション",
   "h": "1ea71e16"
@@ -25374,6 +25666,10 @@
  "js.vanhannam.loi-khi-tinh-van-han": {
   "t": "運勢の計算でエラーが発生しました：",
   "h": "831b40e0"
+ },
+ "js.vanhannam.loi-mo-phan": {
+  "t": "この部分を開く際にエラーが発生しました。もう一度お試しください。",
+  "h": "8c34a861"
  },
  "js.vanhannam.luan-van-han-12-thang": {
   "t": "<b>今後12か月の運勢を鑑定 →</b>",
@@ -25411,6 +25707,10 @@
   "t": "月限の宮：",
   "h": "13dbb374"
  },
+ "js.vanhannam.nhap-du-ngay": {
+  "t": "生年月日（日・月・年）をすべて入力してください。",
+  "h": "075a6b15"
+ },
  "js.vanhannam.p-ba-cham": {
   "t": "…",
   "h": "6eae3a5b"
@@ -25422,6 +25722,22 @@
  "js.vanhannam.phan": {
   "t": "セクション ",
   "h": "291674f4"
+ },
+ "js.vanhannam.phan-tong-the": {
+  "t": "この部分は命盤全体から読み解きます — 下のボタンで先生が詳しく鑑定します。",
+  "h": "a10845f5"
+ },
+ "js.vanhannam.poster-qr": {
+  "t": "スキャンして、あなたの12か月を見る",
+  "h": "c222049e"
+ },
+ "js.vanhannam.poster-quote": {
+  "t": "1マスが旧暦の1か月 — 新暦の期間は鑑定文に記載。",
+  "h": "ce58d28a"
+ },
+ "js.vanhannam.poster-title": {
+  "t": "12か月の運勢",
+  "h": "cbe43952"
  },
  "js.vanhannam.sat-tinh": {
   "t": "煞星：",
@@ -25486,6 +25802,10 @@
  "js.vanhannam.van-han-12-thang-cua": {
   "t": "今後12か月の運勢：",
   "h": "afa6d79f"
+ },
+ "js.vanhannam.viet-rieng": {
+  "t": "この命盤のためだけに書きます：総論、大限の歩み、現在の大限と小限、そしてこれからの12か月を一か月ずつ。",
+  "h": "7b419dd9"
  },
  "js.vanhannam.vo-chinh-dieu-muon-cung-xung": {
   "t": "無正曜（対宮から借星）",
@@ -29788,7 +30108,7 @@
   "h": "58cc1874"
  },
  "sodep.xem-so-dep-tu-vi-minh": {
-  "t": "吉数を見る — Tử Vi Minh Bảo",
+  "t": "吉数を見る — 明宝紫微斗数",
   "h": "beb7ef68"
  },
  "solaso.chua-co-la-so-nao-trong": {

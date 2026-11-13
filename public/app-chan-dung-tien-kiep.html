@@ -262,6 +262,7 @@ window.SHELL_CHATFIRST=true;
 window.SHELL_INTRO={key:'chan-dung-tien-kiep'};</script>
 <script src="/tools-shared/glossary.js?v=5"></script>
 <script src="/tools-shared/past-life-t.js?v=1"></script>
+<script src="/tools-shared/star-label.js?v=1"></script>
 <script src="/tools-shared/past-life-ten.js?v=1"></script>
 <script src="/tools-shared/i18n.js?v=7"></script>
 <script src="/laso-chart.js?v=13"></script>
@@ -273,9 +274,9 @@ window.SHELL_INTRO={key:'chan-dung-tien-kiep'};</script>
 <script src="/tools-shared/hook-facts.js?v=3"></script>
 <script src="/tools-shared/hook-layer.js?v=8"></script>
 <script src="/auth.js?v=10"></script>
-  <script src="/nav.js?v=49" data-icons-only></script>
+  <script src="/nav.js?v=50" data-icons-only></script>
 <script src="/tools-shared/sample-hint.js?v=2"></script>
-<script src="/shell.js?v=155"></script>
+<script src="/shell.js?v=156"></script>
 <script src="/tools-shared/shell-soft-nav.js?v=49"></script>
 <script src="/tools-shared/ai-loading-steps.js?v=11"></script>
 <script src="/tools-shared/portrait-recover.js?v=4"></script>
@@ -294,6 +295,11 @@ var _loadingCtl = null;
 var _imgWait = null;      // đồng hồ chờ trong khung ảnh — PHẢI stop ở mọi nhánh thoát
 var _imgRetryTimer = null;
 
+// W31 — chỉ để HIỂN THỊ: 5 chặng đời (engine `ACT_STAGES`, chữ Việt cố định) và nhãn sao có độ sáng
+// ("Thái Dương (Đắc)") — tra từng mảnh qua TuviStarLabel; payload/prompt giữ chữ Việt.
+var _STG = { 'Thiếu thời': 0, 'Lập thân': 1, 'Trung niên': 2, 'Hậu vận': 3, 'Cuối đời': 4 };
+function _stg(v) { return v in _STG ? _tvmbT('js.ctk.stage-' + _STG[v], v) : v; }
+function _starList(a) { return window.TuviStarLabel ? TuviStarLabel.list(a) : a.map(function (x) { return _tvmbG(['chinh', 'sao'], x); }).join(', '); }
 var ROLE_BADGE = {
   'dinh-cao': { cls: 'peak', label: _tvmbT('js.ctk.dinh-cao', '★ Đỉnh cao') },
   'bien-co': { cls: 'low', label: _tvmbT('js.ctk.bien-co', '▼ Biến cố') },
@@ -740,8 +746,8 @@ function renderMetaRest(data) {
     var badge = ROLE_BADGE[a.role];
     return '<div class="cdtk-act' + (badge ? ' ' + badge.cls : '') + (a.text ? '' : ' locked') + '">' +
       '<div class="cdtk-act-head">' +
-        '<span class="cdtk-act-title">' + esc(a.title || a.stage) + '</span>' +
-        (a.title ? '<span class="cdtk-act-age">' + esc(a.stage) + '</span>' : '') +
+        '<span class="cdtk-act-title">' + esc(a.title || _stg(a.stage)) + '</span>' +
+        (a.title ? '<span class="cdtk-act-age">' + esc(_stg(a.stage)) + '</span>' : '') +
         (badge ? '<span class="cdtk-badge ' + badge.cls + '">' + badge.label + '</span>' : '') +
       '</div>' + (a.text ? '<p>' + esc(a.text) + '</p>' : '') + '</div>';
   }).join('');
@@ -781,8 +787,8 @@ function renderBasis(data) {
   if (o.tierLabel) rows.push([_tvmbT('js.ctk.bac-chuc-phan-engine-cham', 'Bậc chức phận engine chấm'), TuviPastLife.tier(o)]);
   if (data.thanCungName) rows.push([_tvmbT('js.ctk.cung-an-than', 'Cung an Thân'), _tvmbG('cung', data.thanCungName)]);
   var menh = data.menh || {};
-  if ((menh.chinhTinh || []).length) rows.push([_tvmbT('js.ctk.chinh-tinh-tai-cung-menh', 'Chính tinh tại cung Mệnh'), menh.chinhTinh.map(function (x) { return _tvmbG(['chinh', 'sao'], x); }).join(', ')]);
-  if ((menh.phuTinh || []).length) rows.push([_tvmbT('js.ctk.phu-tinh-tai-cung-menh', 'Phụ tinh tại cung Mệnh'), menh.phuTinh.slice(0, 10).map(function (x) { return _tvmbG(['chinh', 'sao'], x); }).join(', ')]);
+  if ((menh.chinhTinh || []).length) rows.push([_tvmbT('js.ctk.chinh-tinh-tai-cung-menh', 'Chính tinh tại cung Mệnh'), _starList(menh.chinhTinh)]);
+  if ((menh.phuTinh || []).length) rows.push([_tvmbT('js.ctk.phu-tinh-tai-cung-menh', 'Phụ tinh tại cung Mệnh'), _starList(menh.phuTinh.slice(0, 10))]);
   if (data.portraitAge) rows.push([_tvmbT('js.ctk.tuoi-nhan-vat-trong-tranh', 'Tuổi nhân vật trong tranh'), _tvmbT('js.ctk.n-tuoi', '{n} tuổi', {n: data.portraitAge})]);
   if (!rows.length) { document.getElementById('basisBlock').style.display = 'none'; return; }
 
@@ -814,7 +820,7 @@ function publishShareable(imageUrl) {
   });
   var storyText = (d.acts || []).map(function (a) {
     var badge = ROLE_BADGE[a.role];
-    return a.title + ' (' + a.stage + ')' +
+    return a.title + ' (' + _stg(a.stage) + ')' +
       (badge ? ' — ' + badge.label : '') + '\n' + a.text;
   }).join('\n\n');
   if (storyText) blocks.push({ header: _tvmbT('js.ctk.mot-doi-nguoi-5-hoi', 'Một Đời Người — 5 Hồi'), text: storyText });
