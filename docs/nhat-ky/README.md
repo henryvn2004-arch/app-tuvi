@@ -1,6 +1,6 @@
 # Nhật ký phát triển — mục lục
 
-598 mục ghi chép từng PR, tách khỏi `CLAUDE.md` để nó thôi ngốn ~350k token mỗi lượt.
+599 mục ghi chép từng PR, tách khỏi `CLAUDE.md` để nó thôi ngốn ~350k token mỗi lượt.
 
 **Sáu file dưới đây KHÔNG được nạp tự động.** Cần thì tra:
 
@@ -28,6 +28,7 @@ Luật rút ra từ các mục này đã được cô đọng lên `CLAUDE.md`. 
 
 | # | tháng | file | mục |
 |---:|---|---|---|
+| 1 | 2026-11 | `2026-11.md` | 📜 W32A — Họ Luận Giải: khối tính toán + nhãn 3 trang theo ngôn ngữ (ns `js.lgcore` 91, i18n-long `dv-rules` 183 câu luật đại vận khoá fnv; SERVER_BOUND `tuvi-laso-format`/`hook-facts`; `phanLabelsT`; vi byte-giống đo bằng bản cũ nạp cạnh) |
 | 1 | 2026-11 | `2026-11.md` | 🧿 W30f-9 — Rail Chân Dung/Duyên Nợ Tiền Kiếp: tên + danh xưng đã dịch vào USER message (`runAgent` `wrapNhanVat` + `khoiTenTheoNgonNgu(…,'rail')`; system giữ tên Việt; tracing `/api/v1/chat`; vi byte-giống) |
 | 1 | 2026-11 | `2026-11.md` | 🧿 W30f-8 — Chân Dung / Duyên Nợ Tiền Kiếp: tên nhân vật + danh xưng nghề theo ngôn ngữ (mã additive `characterMa`/`titleMa`/`tenMa`, BUMP `SHAPE` 5→6, ns `past-life-ten` 522; prompt truyện nhận tên đã dịch qua `long-server.ts`; sửa câu sai của W30f-7; `cacheshape` không thấy `pastLifeMeta`) |
 | 1 | 2026-11 | `2026-11.md` | ✏️ Sửa 4 lỗi gõ trong câu engine lá số (Quý · sáng suốt · bất lợi · tai nạn về) + engine `?v=2` ở 19 trang; khoá dịch `cach-cuc` chuyển theo |
