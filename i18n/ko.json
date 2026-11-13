@@ -29475,6 +29475,34 @@
   "t": "저장된 명반 — 명보 자미두수",
   "h": "183c05e5"
  },
+ "ssr.laso.bc": {
+  "t": "{canchi}년생 {gioi} — 명궁 {cung}궁",
+  "h": "0094aee9"
+ },
+ "ssr.laso.chi-tieng-viet": {
+  "t": "이 명반의 해설은 현재 베트남어로만 제공됩니다.",
+  "h": "05845ed0"
+ },
+ "ssr.laso.desc": {
+  "t": "{canchi_raw}년생 {gioi_thuong}의 자미두수 명반. 명궁 {cung_raw}궁, 주성 {chinh}, 납음 {napam}.",
+  "h": "cf210ec9"
+ },
+ "ssr.laso.home": {
+  "t": "홈",
+  "h": "fca04858"
+ },
+ "ssr.laso.kho": {
+  "t": "명고",
+  "h": "2de2772c"
+ },
+ "ssr.laso.title": {
+  "t": "{canchi}년생 {gioi} 명반 — 명궁 {cung}궁 — 명보 자미두수",
+  "h": "ec5b3b65"
+ },
+ "ssr.laso.xem-ban-viet": {
+  "t": "베트남어판 보기",
+  "h": "d0a972c9"
+ },
  "taikhoan.add-mcp-server-chon-streamable-http": {
   "t": "<strong>Add MCP server</strong> → <strong>Streamable HTTP</strong> 선택.",
   "h": "f63db93e"

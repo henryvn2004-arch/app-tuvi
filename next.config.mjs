@@ -52,6 +52,8 @@ const nextConfig = {
     ],
     // Từ điển đa ngôn ngữ đọc bằng fs lúc chạy — app/i18n-render (lib/i18n/dict.mjs).
     '/i18n-render/[locale]/[[...path]]': ['./i18n/*.json'],
+    // W33a: `/<locale>/la-so/<slug>` dựng khung từ từ điển + lớp ngoài renderLocalized (cùng file).
+    '/la-so/[slug]': ['./i18n/*.json'],
     // W30f-8: prompt truyện tiền kiếp đọc bản dịch tên/danh xưng (file client trong `public/`) bằng fs lúc chạy — lib/i18n/long-server.ts.
     '/api/chan-dung-tien-kiep': ['./public/tools-shared/i18n-long/*/past-life-ten.js'],
     '/api/duyen-no-tien-kiep': ['./public/tools-shared/i18n-long/*/past-life-ten.js'],
