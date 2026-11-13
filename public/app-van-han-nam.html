@@ -374,7 +374,8 @@ function _loggedIn(){ return !!(window.Auth&&window.Auth.isLoggedIn&&window.Auth
 // không chặn luồng chính, tool vẫn chạy như trước khi có blur).
 function _loadDummyVH(){
   if(DUMMY_VH) return Promise.resolve(DUMMY_VH);
-  return fetch('/samples/van-han-nam-dummy.json').then(function(r){ return r.json(); })
+  // Qua TuviPaywall.loadSampleJson ⇒ /<locale>/ đọc bộ mẫu riêng của nước đó (W32A-3), thiếu thì rơi về bản vi.
+  return TuviPaywall.loadSampleJson('/samples/van-han-nam-dummy.json')
     .then(function(j){ DUMMY_VH=j||{}; return DUMMY_VH; })
     .catch(function(){ DUMMY_VH={}; return DUMMY_VH; });
 }
