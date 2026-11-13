@@ -257,10 +257,11 @@ window.SHELL_INTRO={key:'van-han-nam'};</script>
 <script src="/tools-shared/illus-match.js?v=2"></script>
 <script src="/tools-shared/glossary.js?v=5"></script>
 <script src="/tools-shared/cach-cuc.js?v=1"></script>
-<script src="/laso-chart.js?v=12"></script>
+<script src="/tools-shared/dv-rules.js?v=1"></script>
+<script src="/laso-chart.js?v=13"></script>
 <script src="/tools-shared/pchip.js?v=1"></script>
 <script src="/tools-shared/daivan-chart.js?v=1"></script>
-<script src="/luan-giai-core.js?v=12"></script>
+<script src="/luan-giai-core.js?v=13"></script>
 <!-- Engine Tử Bình cho khối "Ngũ hành theo Tứ Trụ" (phần 1). PHẢI là thẻ tĩnh,
      đúng URL `?v=5` như app-bat-tu.html: soft-nav chỉ khử trùng theo URL đã thấy
      trong DOM — chèn bằng JS thì sang trang Bát Tự sẽ nạp lại, trùng `const`. -->
@@ -353,6 +354,40 @@ function wsStepsSet(n){
 function esc(s){ return String(s==null?'':s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
 
 var _astrolabe=null,_hoTen='',_ngay=0,_thang=0,_nam=0,_gioitinh='nam',_laSoText=null,_reportHandle=null;
+// W32A: `/api/van-han-nam?action=khung` trả nhãn TIẾNG VIỆT (labels · nhan · nhanDay · tuNhan/denNhan) — chữ đó chỉ để HIỂN THỊ
+// (server tự dựng lại khung, không đọc lại từ client) NGOẠI TRỪ `description` sổ tiền ⇒ giữ bản Việt ở `_labelsVi`, còn
+// `_khung`/`_labels` được dịch tại chỗ một lần bằng `_vhLoc()`. vi: không đụng gì (byte-giống theo cấu tạo).
+var _labelsVi=null;
+function _vhViet(){ var l=window.I18n&&window.I18n.locale; return !l||l==='vi'; }
+function _vhNhan(t){ return t.isLeap?_tvmbT('js.vanhannam.thang-al-nhuan','Tháng {n} nhuận ÂL',{n:t.thangAL}):_tvmbT('js.vanhannam.thang-al','Tháng {n} ÂL',{n:t.thangAL}); }
+function _vhLoc(){
+  if(_vhViet()||!_khung) return;
+  var th=_khung.thangs||[];
+  th.forEach(function(t){
+    if(!t||t.thangAL==null) return;
+    var n=_vhNhan(t);
+    if(t.nhanDay&&t.nhan&&t.nhanDay.indexOf(t.nhan)===0) t.nhanDay=n+t.nhanDay.slice(t.nhan.length);
+    t.nhan=n;
+  });
+  if(th.length){ _khung.tuNhan=th[0].nhan; _khung.denNhan=th[th.length-1].nhan; }
+  _labels=(_labels||[]).map(function(lb,p){
+    if(p>=5&&th[p-5]) return th[p-5].nhanDay;
+    if(p===1) return _tvmbT('js.vanhannam.lb-tong-quan','Tổng quan lá số');
+    if(p===2) return _tvmbT('js.vanhannam.lb-hanh-trinh','Hành trình cuộc đời');
+    if(p===4) return _tvmbT('js.vanhannam.lb-tieu-van','Tiểu vận năm nay');
+    if(p===3){ var m=/\((\d+)–(\d+)t\)$/.exec(lb||''); return m?_tvmbT('js.vanhannam.lb-dv-tuoi','Đại vận hiện tại ({a}–{b}t)',{a:m[1],b:m[2]}):_tvmbT('js.vanhannam.lb-dv','Đại vận hiện tại'); }
+    return lb;
+  });
+}
+// Nhãn sao khung tháng ("Tên(sáng)[Hóa X]", lib/engine/van-han-12.ts chinhTinhOf) → glossary từng mảnh; vi trả nguyên.
+function _vhSao(x){
+  if(_vhViet()) return x;
+  var m=/^(.+?)(?:\((.+?)\))?(?:\[Hóa (.+?)\])?$/.exec(String(x||''));
+  if(!m) return x;
+  var SA={'Đắc địa':'Đắc','Bình hòa':'Bình'};
+  return _tvmbG(['chinh','sao'],m[1])+(m[2]?'('+_tvmbG('sang',SA[m[2]]||m[2])+')':'')+(m[3]?'['+_tvmbG('sao','Hóa '+m[3])+']':'');
+}
+function _vhSaoList(a){ return a.map(_vhSao).join(', '); }
 var _khung=null,_labels=null,_tongPhan=0,_pendingSlug=null,_store={};
 // Văn MẪU (dummy, 16 phần) — sinh sẵn bằng scripts/gen-tool-sample.mjs cho MỘT
 // lá số mẫu khác (public/samples/van-han-nam-dummy.json), khoá theo LOCAL p
@@ -437,8 +472,8 @@ async function doXem(){
     var kr=await fetch('/api/van-han-nam?action=khung',{method:'POST',headers:{'Content-Type':'application/json'},
       body:JSON.stringify({birth:_birthPayload(),tuNgay:TU_NGAY,tuThang:TU_THANG,tuNam:TU_NAM})});
     var kd=await kr.json();
-    if(!kd||!kd.khung) throw new Error((kd&&kd.error)||'Không dựng được khung 12 tháng.');
-    _khung=kd.khung;_labels=kd.labels;_tongPhan=kd.tongPhan;
+    if(!kd||!kd.khung) throw new Error((kd&&kd.error)||_tvmbT('js.vanhannam.khong-dung-khung','Không dựng được khung 12 tháng.'));
+    _khung=kd.khung;_labels=kd.labels;_tongPhan=kd.tongPhan;_labelsVi=_labels;_vhLoc();
     // Mount NGAY ĐÂY, không phải _pageInit — `_tongPhan` phụ thuộc lá số vừa
     // tính (khác app-chu-trinh-cuoc-doi.html: TONG_PHAN ở đó là hằng số 11,
     // biết trước khi mount). Mount ở _pageInit sẽ đóng băng `opts.total=0`
@@ -637,20 +672,23 @@ function renderThang(t){
   if(t.loi) return '<div class="phan-empty">'+esc(t.loi)+'</div>';
   var h='<div class="vh-doan">';
   h+='<div class="vh-doan-hd"><b>'+esc(t.duongTu)+' – '+esc(t.duongDen)+_tvmbT('js.vanhannam.duong-lich-1y4k', '</b> dương lịch · ')+t.soNgay+_tvmbT('js.vanhannam.ngay', ' ngày')+(t.dangDienRa?_tvmbT('js.vanhannam.dang-dien-ra', ' · <b>đang diễn ra</b>'):'')+'</div>';
-  h+=('<div class="vh-cung">' + _tvmbT('js.vanhannam.nguyet-han-cung-556b', 'Nguyệt hạn: cung') + ' ')+esc(t.cungNguyetHan)+'</div>';
+  h+=('<div class="vh-cung">' + _tvmbT('js.vanhannam.nguyet-han-cung-556b', 'Nguyệt hạn: cung') + ' ')+esc(_tvmbG('cung',t.cungNguyetHan))+'</div>';
   var st=[];
-  st.push(_tvmbT('js.vanhannam.chinh-tinh', 'Chính tinh: ')+(t.chinhTinh.length?esc(t.chinhTinh.join(', ')):_tvmbT('js.vanhannam.vo-chinh-dieu-muon-cung-xung', 'vô chính diệu (mượn cung xung chiếu)')));
-  if(t.catTinh.length) st.push(('<span class="cat">' + _tvmbT('js.vanhannam.cat-tinh', 'Cát tinh:') + ' ')+esc(t.catTinh.join(', '))+'</span>');
-  if(t.satTinh.length) st.push(('<span class="sat">' + _tvmbT('js.vanhannam.sat-tinh', 'Sát tinh:') + ' ')+esc(t.satTinh.join(', '))+'</span>');
-  if(t.baiTinh.length) st.push(('<span class="bai">' + _tvmbT('js.vanhannam.bai-tinh', 'Bại tinh:') + ' ')+esc(t.baiTinh.join(', '))+'</span>');
+  st.push(_tvmbT('js.vanhannam.chinh-tinh', 'Chính tinh: ')+(t.chinhTinh.length?esc(_vhSaoList(t.chinhTinh)):_tvmbT('js.vanhannam.vo-chinh-dieu-muon-cung-xung', 'vô chính diệu (mượn cung xung chiếu)')));
+  if(t.catTinh.length) st.push(('<span class="cat">' + _tvmbT('js.vanhannam.cat-tinh', 'Cát tinh:') + ' ')+esc(_vhSaoList(t.catTinh))+'</span>');
+  if(t.satTinh.length) st.push(('<span class="sat">' + _tvmbT('js.vanhannam.sat-tinh', 'Sát tinh:') + ' ')+esc(_vhSaoList(t.satTinh))+'</span>');
+  if(t.baiTinh.length) st.push(('<span class="bai">' + _tvmbT('js.vanhannam.bai-tinh', 'Bại tinh:') + ' ')+esc(_vhSaoList(t.baiTinh))+'</span>');
   h+='<div class="vh-stars">'+st.join('<br>')+'</div>';
-  h+=('<div class="vh-nen">' + _tvmbT('js.vanhannam.nen-nam-al', 'Nền năm ÂL') + ' ')+t.namAL+(t.tuoi?_tvmbT('js.vanhannam.tuoi', ' (tuổi ')+t.tuoi+_tvmbT('js.vanhannam.p-dong-ngoac', ')'):'')+_tvmbT('js.vanhannam.tieu-han-cung', ': tiểu hạn cung ')+esc(t.cungTieuHan)+_tvmbT('js.vanhannam.luu-nien-dai-han-cung', ' · lưu niên đại hạn cung ')+esc(t.cungLuuNien)+'</div>';
+  h+=('<div class="vh-nen">' + _tvmbT('js.vanhannam.nen-nam-al', 'Nền năm ÂL') + ' ')+t.namAL+(t.tuoi?_tvmbT('js.vanhannam.tuoi', ' (tuổi ')+t.tuoi+_tvmbT('js.vanhannam.p-dong-ngoac', ')'):'')+_tvmbT('js.vanhannam.tieu-han-cung', ': tiểu hạn cung ')+esc(_tvmbG('cung',t.cungTieuHan))+_tvmbT('js.vanhannam.luu-nien-dai-han-cung', ' · lưu niên đại hạn cung ')+esc(_tvmbG('cung',t.cungLuuNien))+'</div>';
   h+='</div>';
   if(t.toHop&&t.toHop.length){
-    h+='<div class="pregen-block"><div class="pregen-title"><span class="ic-inline" data-icon-emoji="🔮" style="display:inline-flex;width:1em;height:1em;vertical-align:-2px;color:#7C6942">🔮</span> Tổ hợp sao trong các cung hạn</div>';
+    h+='<div class="pregen-block"><div class="pregen-title"><span class="ic-inline" data-icon-emoji="🔮" style="display:inline-flex;width:1em;height:1em;vertical-align:-2px;color:#7C6942">🔮</span> '+_tvmbT('js.vanhannam.to-hop-title','Tổ hợp sao trong các cung hạn')+'</div>';
     t.toHop.forEach(function(c){
       var cls = c.loai==='tốt'?'yn-cat':c.loai==='xấu'?'yn-hung':'yn-neutral';
-      h+='<div class="pregen-yn '+cls+'">• ['+esc(c.loai)+'] '+esc(c.ten)+' — '+esc(c.tomTat)+'</div>';
+      // loai/tomTat theo ngôn ngữ (tomTat cùng câu với CACH_CUC_DATA ⇒ ns cach-cuc; câu không có trong đó giữ tiếng Việt).
+      var loaiT=_vhViet()?c.loai:(c.loai==='tốt'?_tvmbT('js.vanhannam.loai-tot','tốt'):c.loai==='xấu'?_tvmbT('js.vanhannam.loai-xau','xấu'):c.loai==='trung'?_tvmbT('js.vanhannam.loai-trung','trung'):c.loai);
+      var ttT=(!_vhViet()&&window.TuviCachCuc)?TuviCachCuc.t(c.tomTat):c.tomTat;
+      h+='<div class="pregen-yn '+cls+'">• ['+esc(loaiT)+'] '+esc(c.ten)+' — '+esc(ttT)+'</div>';
     });
     h+='</div>';
   }
@@ -825,7 +863,7 @@ async function _unlockOnePart(p){
   if(!gate.ok) return; // ensureCredits đã tự hiện UI thiếu Lượng/giá chưa đọc được
 
   var token=window.Auth.getSession&&window.Auth.getSession()&&window.Auth.getSession().access_token;
-  var labelForDesc=(_labels&&_labels[p])||('Phần '+p);
+  var labelForDesc=(_labelsVi&&_labelsVi[p])||('Phần '+p);
   try{
     var res=await fetch('/api/payment?action=deduct',{method:'POST',
       headers:{'Content-Type':'application/json','Authorization':'Bearer '+(token||'')},
