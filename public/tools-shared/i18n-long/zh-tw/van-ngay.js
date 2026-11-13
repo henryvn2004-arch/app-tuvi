@@ -30,5 +30,11 @@ window.I18n&&window.I18n.defineLong("van-ngay",{
 "vuc.Tài Bạch":{"t":"錢財、財務","h":"c84bb817"},
 "vuc.Tử Tức":{"t":"子女、生育","h":"e5619d87"},
 "vuc.Phu Thê":{"t":"感情、婚姻、親密伴侶","h":"d5091503"},
-"vuc.Huynh Đệ":{"t":"手足、摯友","h":"c7ce7efb"}
+"vuc.Huynh Đệ":{"t":"手足、摯友","h":"c7ce7efb"},
+"gio.Thanh Long":{"t":"簽約、求財、重大之事","h":"cdba2fc8"},
+"gio.Minh Đường":{"t":"會面、請託、徵詢意見","h":"ea382a7c"},
+"gio.Kim Quỹ":{"t":"收款、成交、錢財之事","h":"99ded829"},
+"gio.Thiên Đức":{"t":"祈福、和解、家務之事","h":"146806bf"},
+"gio.Ngọc Đường":{"t":"考試、面試、亮相","h":"c7cc360a"},
+"gio.Tư Mệnh":{"t":"起事、出行、長遠之事","h":"76de2a82"}
 });

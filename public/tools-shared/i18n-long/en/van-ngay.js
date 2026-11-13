@@ -30,5 +30,11 @@ window.I18n&&window.I18n.defineLong("van-ngay",{
 "vuc.Tài Bạch":{"t":"money, finances","h":"c84bb817"},
 "vuc.Tử Tức":{"t":"children, childbirth","h":"e5619d87"},
 "vuc.Phu Thê":{"t":"romance, marriage, close partners","h":"d5091503"},
-"vuc.Huynh Đệ":{"t":"siblings, close friends","h":"c7ce7efb"}
+"vuc.Huynh Đệ":{"t":"siblings, close friends","h":"c7ce7efb"},
+"gio.Thanh Long":{"t":"contracts, wealth-seeking, major undertakings","h":"cdba2fc8"},
+"gio.Minh Đường":{"t":"meetings, asking for help, seeking advice","h":"ea382a7c"},
+"gio.Kim Quỹ":{"t":"collecting money, closing deals, money matters","h":"99ded829"},
+"gio.Thiên Đức":{"t":"praying for blessings, reconciliation, family matters","h":"146806bf"},
+"gio.Ngọc Đường":{"t":"exams, interviews, debuts","h":"c7cc360a"},
+"gio.Tư Mệnh":{"t":"starting something, setting out, long-term matters","h":"76de2a82"}
 });

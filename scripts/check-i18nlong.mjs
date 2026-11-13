@@ -201,6 +201,7 @@ for (const ns of Object.keys(ENGINE_NS)) {
     ['dungMau(NHAN_VAN[k]!, bien)', 'câu chốt dựng từ khuôn NHAN_VAN'],
     ['ma: { k, v:', 'danhGia.ma'],
     ['danhGia: { tinhChat, ...nhanDanhGia(info) }', 'payload mang danhGia.ma'],
+    ['ma: s.activity as string', 'nen[]/kieng[].ma (poster, W34e)'],
   ])
     if (!eng.includes(snip)) fail(`${ENGINE_NS['van-ngay']}: thiếu ${y} — "${snip}"`);
   const page = fs.readFileSync(path.join(ROOT, LONG_MODULE['van-ngay']), 'utf8');
@@ -210,6 +211,9 @@ for (const ns of Object.keys(ENGINE_NS)) {
     "'vuc.'+cung",
     "ma.k.indexOf('nhan.')",
     'TuviToHop.tomTat',
+    "'gio.'+h.sao",
+    "'act.'+x.ma+'.name'",
+    'meLabel:',
   ])
     if (!page.includes(t)) fail(`${LONG_MODULE['van-ngay']}: trang không tra ${t}`);
 }

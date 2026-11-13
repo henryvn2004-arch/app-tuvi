@@ -178,8 +178,8 @@ export interface VanNgayResult {
   xung: { chi: string; namSinh: number[] };
   gio: VanNgayGio[];
   gioTot: VanNgayGio[];
-  nen: Array<{ ten: string; diem: number; vi: string }>;
-  kieng: Array<{ ten: string; diem: number; vi: string }>;
+  nen: Array<{ ten: string; diem: number; vi: string; ma?: string }>;
+  kieng: Array<{ ten: string; diem: number; vi: string; ma?: string }>;
   mau: { hanh: string; list: string[] };
   huong: { hyThan: string; taiThan: string };
   tuan?: VanNgayTuanItem[];
@@ -284,6 +284,8 @@ export function computeVanNgay(dd: number, mm: number, yy: number): VanNgayResul
     ten: ACTIVITY_META[s.activity as ActivityKey]?.name || String(s.activity),
     diem: s.score,
     vi: (reasons ? s.reasons[0] : s.warnings[0]) || '',
+    // `ma` (additive, W34e) = ActivityKey — client tra tên việc `act.<ma>.name` (ns `ngay-tot`) ở poster; `ten` vẫn chữ Việt.
+    ma: s.activity as string,
   });
 
   const gio: VanNgayGio[] = info.gio.map((g) => ({

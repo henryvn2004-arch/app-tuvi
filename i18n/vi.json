@@ -8115,5 +8115,15 @@
  "js.nap-am.sheet-title": "Nạp âm {na} · năm {nam}",
  "js.hnt.label-huong-nghiep-som-cho-con": "Hướng nghiệp sớm cho con",
  "js.hnt.pha": "pha",
- "js.hnt.con-ten-mac-dinh": "Con"
+ "js.hnt.con-ten-mac-dinh": "Con",
+ "js.home.po-am-nhuan": "{d}/{m} nhuận ÂL",
+ "js.home.po-am": "{d}/{m} ÂL",
+ "js.home.po-nen": "Nên hôm nay",
+ "js.home.po-kieng": "Nên kiêng",
+ "js.home.po-gio": "Giờ tốt",
+ "js.home.po-hanh": "hành {x}",
+ "js.home.po-truc": "trực {x}",
+ "js.home.po-sao": "sao {x}",
+ "js.home.po-tu": "tú {x}",
+ "js.home.po-qr": "Quét mã — xem vận ngày của riêng bạn"
 }

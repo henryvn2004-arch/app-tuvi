@@ -9231,6 +9231,46 @@
   "t": ")",
   "h": "e7064f0b"
  },
+ "js.home.po-am": {
+  "t": "음력 {m}월 {d}일",
+  "h": "19ce069e"
+ },
+ "js.home.po-am-nhuan": {
+  "t": "음력 윤{m}월 {d}일",
+  "h": "b005f6a3"
+ },
+ "js.home.po-gio": {
+  "t": "길한 시간",
+  "h": "13136a38"
+ },
+ "js.home.po-hanh": {
+  "t": "오행 {x}",
+  "h": "2971a02f"
+ },
+ "js.home.po-kieng": {
+  "t": "피할 일",
+  "h": "ab26c930"
+ },
+ "js.home.po-nen": {
+  "t": "오늘 좋은 일",
+  "h": "588c26c3"
+ },
+ "js.home.po-qr": {
+  "t": "QR 코드 스캔 — 나만의 오늘 운세 보기",
+  "h": "bcb82388"
+ },
+ "js.home.po-sao": {
+  "t": "일진 별 {x}",
+  "h": "2fe9ce39"
+ },
+ "js.home.po-truc": {
+  "t": "12직 {x}",
+  "h": "f1b50a94"
+ },
+ "js.home.po-tu": {
+  "t": "28수 {x}",
+  "h": "43147626"
+ },
  "js.home.rieng-viec-thuong-ngay": {
   "t": "일상적인 일만 놓고 보면, ",
   "h": "e7d64dd0"

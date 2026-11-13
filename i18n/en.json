@@ -9231,6 +9231,46 @@
   "t": ")",
   "h": "e7064f0b"
  },
+ "js.home.po-am": {
+  "t": "{d}/{m} lunar",
+  "h": "19ce069e"
+ },
+ "js.home.po-am-nhuan": {
+  "t": "{d}/{m} leap lunar",
+  "h": "b005f6a3"
+ },
+ "js.home.po-gio": {
+  "t": "Auspicious hours",
+  "h": "13136a38"
+ },
+ "js.home.po-hanh": {
+  "t": "element {x}",
+  "h": "2971a02f"
+ },
+ "js.home.po-kieng": {
+  "t": "Best avoided",
+  "h": "ab26c930"
+ },
+ "js.home.po-nen": {
+  "t": "Good today",
+  "h": "588c26c3"
+ },
+ "js.home.po-qr": {
+  "t": "Scan the code — see your own daily fortune",
+  "h": "bcb82388"
+ },
+ "js.home.po-sao": {
+  "t": "day star {x}",
+  "h": "2fe9ce39"
+ },
+ "js.home.po-truc": {
+  "t": "day officer {x}",
+  "h": "f1b50a94"
+ },
+ "js.home.po-tu": {
+  "t": "mansion {x}",
+  "h": "43147626"
+ },
  "js.home.rieng-viec-thuong-ngay": {
   "t": "As for everyday tasks, ",
   "h": "e7d64dd0"

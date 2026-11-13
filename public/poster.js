@@ -788,7 +788,7 @@
           panel(ctx, y, mh, 'rgba(201,168,76,0.10)', 'rgba(201,168,76,0.28)');
           ctx.font = '700 22px ' + SANS;
           ctx.fillStyle = GOLD;
-          drawTracked(ctx, 'VẬN RIÊNG CỦA BẠN', PAD + 30, y + 44, 3);
+          drawTracked(ctx, o.meLabel || 'VẬN RIÊNG CỦA BẠN', PAD + 30, y + 44, 3);
           ctx.font = '400 29px ' + SANS;
           ctx.fillStyle = 'rgba(255,255,255,0.90)';
           drawLines(ctx, mLines, PAD + 30, y + 88, 42);
