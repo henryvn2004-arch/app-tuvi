@@ -88,21 +88,22 @@ function cacheExtra(moiLo: string, namXem: number): string {
 // Thiên Lương, cùng lý do GIÁ TRỊ đổi, không phải cấu trúc.
 // P4 (2026-09): bump tiếp — La-Võng đổi từ 2 sao cố định Thìn/Tuất sang nhãn
 // theo Đà La, cùng lý do GIÁ TRỊ đổi, không phải cấu trúc.
-const SHAPE = 6;
+const SHAPE = 7;
 /* Lịch sử bump:
    1 → 2 (lượt vá tuổi thật, #475): thêm khoá `laTreEm` mà trang đọc để ẩn nhãn
    lứa, thêm `xungHo` cho từng lứa, thêm hẳn lứa `vaodoi` (19–25) kèm 9 khối
    hoạt động mới. 🐞 Lượt đó QUÊN bump — đúng thứ khối chú thích ngay trên dặn
    phải làm — nên dòng cache ghi trước bản vá vẫn được trả nguyên trạng: đo
    được trên prod một dòng `tuoi=43` mang `lop:"lon"` (kẹp tuổi cũ) và KHÔNG có
-   `laTreEm`. Quên bump là hỏng IM LẶNG, giống hệt ca `day-con` ở #465. */
+   `laTreEm`. Quên bump là hỏng IM LẶNG, giống hệt ca `day-con` ở #465.
+   6 → 7 (W34d): thêm mã tra bản dịch `huong[].viMa` + `chatNguoi[].ma` (chữ Việt không đổi; dòng cache cũ thiếu mã ⇒ /ja lùi về chữ Việt). */
 
 /**
  * Vân tay CẤU TRÚC của `hoSoDayDu(p)` — `npm run check:cacheshape` canh khớp.
  * Đổi/thêm/bớt khoá ⇒ bộ dò đỏ và in vân tay mới, buộc bump `SHAPE` CÙNG LÚC.
  * (Lời dặn ở khối trên đã có sẵn từ đầu mà tôi vẫn quên — nên phải có máy canh.)
  */
-const SHAPE_FINGERPRINT = '5242585a3d68';
+const SHAPE_FINGERPRINT = '2d0615e10524';
 
 /** Cửa DUY NHẤT vào cache của tool này; `shape` khai một lần tại đây. */
 const CACHE = cacheFor(TOOL_ID, SHAPE);

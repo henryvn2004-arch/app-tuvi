@@ -8635,6 +8635,10 @@
   "t": "My child has no clear likes and is lukewarm about everything",
   "h": "3c4412e1"
  },
+ "js.hnt.con-ten-mac-dinh": {
+  "t": "Your child",
+  "h": "f6b38904"
+ },
  "js.hnt.con-thich-huong-ma-minh-khong": {
   "t": "My child likes a direction I don't want",
   "h": "b2e58212"
@@ -8711,6 +8715,10 @@
   "t": "<b>This chart is already {tuoi}</b> — this is no longer a question of <i>early direction for a child</i>, so the direction section that parents read about their child is <b>not unlocked here</b> and <b>costs no credits</b>.<br><br>The leaning section above can still be read and stays free — it is read from the chart, so it holds at any age. To read career direction for an adult (field, role, scale, career branch), use {link}.",
   "h": "32842316"
  },
+ "js.hnt.label-huong-nghiep-som-cho-con": {
+  "t": "Early career direction for your child",
+  "h": "d3cdf53c"
+ },
  "js.hnt.lap-la-so-phan-kieu-nguoi": {
   "t": "Casting the chart and classifying the type",
   "h": "61f07874"
@@ -8762,6 +8770,10 @@
  "js.hnt.nu": {
   "t": "Female",
   "h": "feb92ccd"
+ },
+ "js.hnt.pha": {
+  "t": "with a touch of",
+  "h": "578e90d1"
  },
  "js.hnt.sap-phai-chon-mon-to-hop": {
   "t": "About to choose subjects / tracks / a school",

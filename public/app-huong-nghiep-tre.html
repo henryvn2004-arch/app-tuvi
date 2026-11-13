@@ -375,11 +375,28 @@ window.SHELL_INTRO={key:'huong-nghiep-tre'};</script>
 // thiếu mã/bản dịch (payload cũ trong cache) ⇒ chữ Việt, không vỡ. Chữ chỉ đi vào rail/prompt (`can`, `y`) KHÔNG dịch.
 if (window.I18n) I18n.loadLong('hntre');
 function _hl(k, vi, vars) { return window.I18n ? I18n.long('hntre', k, vi, vars) : vi; }
+// W34d — phần DƯ: `vi[]` · `chatNguoi[]` đọc từ CÙNG bảng Dạy Con (ns `day-con-assess`, "cha mẹ đọc về con") theo MÃ `viMa`/`ma`
+// của engine (`maChieu`); tên chất ở `khongDoiHoi[].ten` theo `ma` sẵn có; tên kiểu theo `kieu.id` (ns `cong-so`). Thiếu MỘT mảnh ⇒
+// trả nguyên câu Việt của engine, không ghép nửa vời. Chữ vào rail/prompt giữ Việt.
+if (window.I18n) { I18n.loadLong('day-con-assess'); I18n.loadLong('cong-so'); }
+function _dcl(k) { if (!window.I18n) return null; var s = I18n.long('day-con-assess', k, '\u0000'); return s === '\u0000' ? null : s; }
+function _csl(k, vi) { return window.I18n ? I18n.long('cong-so', k, vi) : vi; }
+function _hntChieu(ma) {
+  var m = /^(truc)\.([a-z-]+)\.(cao|thap)$/.exec(ma || '') || /^(khieu)\.([a-z-]+)$/.exec(ma || '');
+  if (!m) return null;
+  var ten = _dcl(m[1] + '.' + m[2] + '.ten'), mo;
+  if (m[1] === 'truc') {
+    var nhan = _dcl('truc.' + m[2] + '.' + m[3] + '.nhan'), bh = _dcl('truc.' + m[2] + '.' + m[3] + '.bieuHien');
+    mo = nhan !== null && bh !== null ? nhan + ' — ' + bh : null;
+  } else mo = _dcl('khieu.' + m[2] + '.motCau');
+  return ten !== null && mo !== null ? { ten: ten, mo: mo } : null;
+}
 function _hntLocHuong(h, lopId) {
   if (!h || !h.id) return h;
   var p = 'huong.' + h.id + '.';
   var o = Object.assign({}, h, { ten: _hl(p + 'ten', h.ten), chat: _hl(p + 'chat', h.chat) });
   if (h.dauHieu) o.dauHieu = h.dauHieu.map(function (v, i) { return _hl(p + 'dauHieu.' + i, v); });
+  if (h.vi && h.viMa) o.vi = h.vi.map(function (v, i) { var c = _hntChieu(h.viMa[i]); return c ? c.ten + ' — ' + c.mo : v; });
   if (h.hoatDong && lopId) o.hoatDong = h.hoatDong.map(function (v, i) { return _hl(p + 'hd.' + lopId + '.' + i, v); });
   ['chaMeNen', 'chaMeTranh', 'deBiHieuNham', 'chatViec'].forEach(function (f) { if (h[f]) o[f] = _hl(p + f, h[f]); });
   if (h.ngheViDu) o.ngheViDu = h.ngheViDu.map(function (v, i) { return _hl(p + 'nghe.' + i, v); });
@@ -399,7 +416,14 @@ function hntLoc(data) {
   if (d.moiLo && d.moiLo.id) d.moiLo = Object.assign({}, d.moiLo, { label: _hl('moilo.' + d.moiLo.id + '.label', d.moiLo.label) });
   var ai = d.laTreEm === false ? _hl('xungho.nguoi-lon', 'người này') : (d.lop ? d.lop.xungHo : '');
   if (d.khongDoiHoi) d.khongDoiHoi = d.khongDoiHoi.map(function (c) {
-    return c.ma ? Object.assign({}, c, { thap: _hl('kdh.' + c.ma, c.thap, { ai: ai }) }) : c;
+    return c.ma ? Object.assign({}, c, { ten: _dcl('khieu.' + c.ma + '.ten') || c.ten, thap: _hl('kdh.' + c.ma, c.thap, { ai: ai }) }) : c;
+  });
+  if (d.chatNguoi) d.chatNguoi = d.chatNguoi.map(function (c) {
+    var x = _hntChieu(c.ma);
+    return x ? Object.assign({}, c, { ten: x.ten, cao: x.mo }) : c;
+  });
+  ['kieu', 'kieuPhu'].forEach(function (f) {
+    if (d[f] && d[f].id) d[f] = Object.assign({}, d[f], { ten: _csl('kieu.' + d[f].id + '.ten', d[f].ten) });
   });
   if (d.matDoc) d.matDoc = d.matDoc.map(function (m) {
     return m.ma ? Object.assign({}, m, { nhan: _hl('matdoc.' + m.ma + '.nhan', m.nhan) }) : m;
@@ -794,7 +818,7 @@ async function _doGenerate(freeRerun, lo) {
       birth: _last,
       wrap: 'huong-nghiep-tre',
       wrapMoiLo: lo,
-      label: 'Hướng nghiệp sớm cho con',
+      label: _tvmbT('js.hnt.label-huong-nghiep-som-cho-con', 'Hướng nghiệp sớm cho con'),
       greeting: _tvmbT('js.hnt.day-la-ban-dinh-huong-som-ten', 'Đây là bản định hướng sớm cho **{ten}**. Bạn muốn hỏi thêm gì?', {ten: ten}),
       chips: [
         _tvmbT('js.hnt.cuoi-tuan-nay-toi-nen-cho-ten', 'Cuối tuần này tôi nên cho {ten} thử việc gì trước?', {ten: ten}),
@@ -902,7 +926,7 @@ function renderMetaHead(data) {
   document.getElementById('hnIllusHost').innerHTML = huongNghiepIllusHtml(data);
   // Bỏ trống ô tên thì tiêu đề rơi về một cách gọi — mà "Con" dán lên một lá số
   // 43 tuổi thì vẫn đúng chỗ Henry báo, chỉ khác một dòng.
-  var ten = data.ten || (data.laTreEm === false ? _tvmbT('js.hnt.la-so-nay', 'Lá số này') : 'Con');
+  var ten = data.ten || (data.laTreEm === false ? _tvmbT('js.hnt.la-so-nay', 'Lá số này') : _tvmbT('js.hnt.con-ten-mac-dinh', 'Con'));
   document.getElementById('heroName').textContent = ten;
   document.getElementById('heroRole').textContent =
     _xungHoVai(data) +
@@ -915,7 +939,7 @@ function renderMetaHead(data) {
   if (data.lop && data.laTreEm !== false)
     bd.push('<span class="hn-badge">' + esc(data.lop.ten) + ' · ' + esc(data.lop.tuoi) + '</span>');
   if (data.kieu) bd.push(('<span class="hn-badge alt">' + _tvmbT('js.hnt.kieu', 'Kiểu') + ' ') + esc(data.kieu.ten) + '</span>');
-  if (data.lai && data.kieuPhu) bd.push('<span class="hn-badge alt">pha ' + esc(data.kieuPhu.ten) + '</span>');
+  if (data.lai && data.kieuPhu) bd.push(('<span class="hn-badge alt">' + _tvmbT('js.hnt.pha', 'pha') + ' ') + esc(data.kieuPhu.ten) + '</span>');
   document.getElementById('heroBadges').innerHTML = bd.join('');
   // Dòng LÁ SỐ phải hiện ngay trên trang, không chỉ trong bản chia sẻ: cha mẹ
   // cần thấy bản đọc dựng trên lá số nào để đối chiếu (và để bắt được lúc mình

@@ -8112,5 +8112,8 @@
  "js.nap-am.hl-napam": "Nạp Âm",
  "js.nap-am.hl-hanh": "Hành",
  "js.nap-am.xem-day-du": "Xem đầy đủ →",
- "js.nap-am.sheet-title": "Nạp âm {na} · năm {nam}"
+ "js.nap-am.sheet-title": "Nạp âm {na} · năm {nam}",
+ "js.hnt.label-huong-nghiep-som-cho-con": "Hướng nghiệp sớm cho con",
+ "js.hnt.pha": "pha",
+ "js.hnt.con-ten-mac-dinh": "Con"
 }
