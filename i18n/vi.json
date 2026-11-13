@@ -7868,5 +7868,13 @@
  "js.vanhannam.to-hop-title": "Tổ hợp sao trong các cung hạn",
  "js.vanhannam.loai-tot": "tốt",
  "js.vanhannam.loai-xau": "xấu",
- "js.vanhannam.loai-trung": "trung"
+ "js.vanhannam.loai-trung": "trung",
+ "js.luangiai.nt-vo-chong": "Vợ/Chồng",
+ "js.luangiai.nt-bo": "Bố",
+ "js.luangiai.nt-me": "Mẹ",
+ "js.luangiai.nt-con": "Con",
+ "js.luangiai.nt-nguoi-khac": "Người khác",
+ "js.luangiai.nt-title": "Xem lá số cho người thân",
+ "js.luangiai.nt-desc": "Đọc xong bản này rồi thì xem tiếp cho vợ/chồng, bố mẹ hay con — mỗi người một bản riêng.",
+ "js.luangiai.nt-prompt": "Người này là ai (vd: Sếp, Bạn thân):"
 }

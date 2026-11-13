@@ -124,7 +124,7 @@ function renderCungCell(p, dvTuoi, canNamIdx, isCurVan) {
   // viết tắt "L." để không lẫn với sao gốc cùng tên. Engine cũ chưa có → rỗng.
   const luuH = (p.luuStars || []).map(s => {
     const xau = !!s.xau; // engine đánh dấu (`danhGiaSaoLuu`) — không giữ danh sách ở đây
-    const tip = s.sao ? _lcT('js.lasochart.luu-tip-sao','{ten} ({sao}) — chỉ tác dụng trong năm xem',{ten: _lcG(['sao', 'khai'], s.ten), sao: s.sao}) : _lcT('js.lasochart.luu-tip','{ten} — chỉ tác dụng trong năm xem',{ten: _lcG(['sao', 'khai'], s.ten)});
+    const tip = s.sao ? _lcT('js.lasochart.luu-tip-sao','{ten} ({sao}) — chỉ tác dụng trong năm xem',{ten: _lcG(['sao', 'khai'], s.ten), sao: _lcG(['chinh', 'sao'], s.sao)}) : _lcT('js.lasochart.luu-tip','{ten} — chỉ tác dụng trong năm xem',{ten: _lcG(['sao', 'khai'], s.ten)});
     return `<span class="v2-luu-item${xau ? ' luu-xau' : ''}" title="${esc(tip)}">${esc(_lcG(['sao', 'khai'], s.ten).replace(/^Lưu /, 'L.').toUpperCase())}</span>`;
   }).join('');
   // Khuôn Thiên Lương: can chi (màu hành của chi) + tên cung cùng một hàng; chân ô
