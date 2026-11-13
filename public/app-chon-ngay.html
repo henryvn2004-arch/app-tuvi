@@ -181,6 +181,7 @@
 window.SHELL_CHATFIRST=true;
 window.SHELL_INTRO={key:'chon-ngay'};</script>
 <script src="/can-chi.js?v=1"></script>
+<script src="/tubinh-ansao-engine.js?v=7"></script>
 <script src="/auth.js?v=10"></script>
 <script src="/tuvi-paywall.js?v=49"></script>
 <script src="/tools-shared/hook-layer.js?v=8"></script>
@@ -247,15 +248,20 @@ function doChonNgay(){
   btn.disabled=true;
   try{
     var info=CanChi.ccInfo(namSinh);
-    var thangCC=CanChi.ccThangCanChi(thangNum,namNum);
+    // Trụ tháng theo TIẾT (engine Bát Tự, giờ VN) — tháng DƯƠNG vắt qua 2 trụ, đổi ở
+    // ngày giao tiết. Từng dùng CanChi.ccThangCanChi = chỉ số tháng ÂM (11 ⇒ Canh Tý) — W35.
+    var segs=(typeof truThangTrongThangDuong==='function'&&truThangTrongThangDuong(thangNum,namNum,420))||[];
+    var thangCC=segs.map(function(d){return d.canChi+' ('+(d.tuNgay===d.denNgay?d.tuNgay:d.tuNgay+'–'+d.denNgay)+'/'+thangNum+')';}).join(' → ');
+    var thangCCHien=segs.map(function(d){return _tvmbG('canchi',d.canChi);}).join(' → ')||'—';
+    var thangNgayHien=segs.map(function(d){return (d.tuNgay===d.denNgay?d.tuNgay:d.tuNgay+'–'+d.denNgay)+'/'+thangNum;}).join(' · ');
     var namCC=(CanChi.ccInfo(namNum)||{}).canChi||'';
     document.getElementById('resHead').textContent=suLb+' · '+hoTen;
     function ccCard(who,cc,na){ return '<div class="cc-card"><div class="who">'+esc(who)+'</div><div class="cc">'+esc(cc)+'</div>'+(na?'<div class="na">'+esc(na)+'</div>':'')+'</div>'; }
     document.getElementById('ccRow').innerHTML=
       ccCard(_tvmbT('js.chonngay.tuoi-chu-su','Tuổi chủ sự'),_tvmbG('canchi',info.canChi),_tvmbG('napam',info.napAm)+' · '+_tvmbG('hanh',info.hanh))+
-      ccCard(_tvmbT('js.chonngay.thang-n-m','Tháng {t}/{n}',{t:thangNum,n:namNum}),_tvmbG('canchi',thangCC),'')+
+      ccCard(_tvmbT('js.chonngay.thang-n-m','Tháng {t}/{n}',{t:thangNum,n:namNum}),thangCCHien,thangNgayHien)+
       ccCard(_tvmbT('js.chonngay.nam-n','Năm {n}',{n:namNum}),_tvmbG('canchi',namCC),'');
-    document.getElementById('resNote').innerHTML=_tvmbT('js.chonngay.res-note','Chủ sự tuổi <b>{cc}</b> ({hanh}). Tháng dự định <b>{tcc}</b>, năm <b>{ncc}</b>. Ngày tốt cần <b>hợp</b> (lục hợp / tam hợp) với tuổi chủ sự và tránh <b>xung / hình</b>. Hỏi Thầy để có ngày &amp; giờ hoàng đạo cụ thể cho việc <b>{viec}</b>.',{cc:esc(_tvmbG('canchi',info.canChi)),hanh:esc(_tvmbG('hanh',info.hanh)),tcc:esc(_tvmbG('canchi',thangCC)),ncc:esc(_tvmbG('canchi',namCC)),viec:esc(suLb.toLowerCase())});
+    document.getElementById('resNote').innerHTML=_tvmbT('js.chonngay.res-note','Chủ sự tuổi <b>{cc}</b> ({hanh}). Tháng dự định <b>{tcc}</b>, năm <b>{ncc}</b>. Ngày tốt cần <b>hợp</b> (lục hợp / tam hợp) với tuổi chủ sự và tránh <b>xung / hình</b>. Hỏi Thầy để có ngày &amp; giờ hoàng đạo cụ thể cho việc <b>{viec}</b>.',{cc:esc(_tvmbG('canchi',info.canChi)),hanh:esc(_tvmbG('hanh',info.hanh)),tcc:esc(thangCCHien),ncc:esc(_tvmbG('canchi',namCC)),viec:esc(suLb.toLowerCase())});
     mountHook(info,thangCC,namCC);
     // Globals cho khối "Chọn ngày chuyên sâu AI" (gate+SSE, port từ tools/chon-ngay-tot.html)
     _dtSuKien=suKien; _dtHoTen=hoTen||'Chủ sự'; _dtNamSinh=namSinh; _dtInfo=info; _dtThangCC=thangCC; _dtNamCC=namCC; _dtThangNum=thangNum; _dtNamNum=namNum;

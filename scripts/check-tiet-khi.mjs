@@ -451,8 +451,111 @@ let khoaSo = 0;
   }
 }
 
+// ── 7. Trụ tháng theo NGÀY (Chọn Ngày, W35): `truThangTheoNgay` · `truThangTrongThangDuong` ──
+// Ngày CHỨA thời điểm giao tiết (giờ VN) thuộc tháng MỚI. Đối chứng HKO độc lập với bảng:
+// HKO ghi ngày UTC+8; giờ VN sớm hơn 1 giờ nên ngày VN của tiết là D hoặc D−1 ⇒ ngày D
+// LUÔN đã sang tháng mới, ngày D−2 LUÔN còn tháng cũ, bất kể tiết rơi giờ nào.
+let tdSo = 0;
+{
+  const ky = (m, c) => {
+    if (c) tdSo++;
+    else fail('truThang: ' + m);
+    return !!c;
+  };
+  if (typeof E.truThangTheoNgay !== 'function' || typeof E.truThangTrongThangDuong !== 'function')
+    fail('engine không còn export truThangTheoNgay/truThangTrongThangDuong');
+  else {
+    const chiCuaDo = (deg) => THANG[((((deg - 315) % 360) + 360) % 360) / 30];
+    const lui = (ymd, k) => {
+      const t = new Date(
+        Date.UTC(Math.floor(ymd / 1e4), (Math.floor(ymd / 100) % 100) - 1, (ymd % 100) + k)
+      );
+      return [t.getUTCDate(), t.getUTCMonth() + 1, t.getUTCFullYear()];
+    };
+    for (const [ymd, deg] of hko) {
+      if (deg % 30 !== 15) continue;
+      const moi = E.truThangTheoNgay(...lui(ymd, 0)),
+        cu = E.truThangTheoNgay(...lui(ymd, -2));
+      ky(
+        `HKO ${ymd} ${deg}°: ngày đó phải là tháng ${chiCuaDo(deg)}, ra ${moi && moi.chi}`,
+        moi && moi.chi === chiCuaDo(deg)
+      );
+      ky(
+        `HKO ${ymd} ${deg}°: 2 ngày trước phải còn tháng cũ, ra ${cu && cu.chi}`,
+        cu && cu.chi !== chiCuaDo(deg)
+      );
+    }
+    // Liên tục 60 hoa giáp + mỗi tháng dương đúng 2 đoạn, đổi ở ngày 3–9.
+    const CAN10 = ['Giáp', 'Ất', 'Bính', 'Đinh', 'Mậu', 'Kỷ', 'Canh', 'Tân', 'Nhâm', 'Quý'];
+    const CHI12 = [
+      'Tý',
+      'Sửu',
+      'Dần',
+      'Mão',
+      'Thìn',
+      'Tỵ',
+      'Ngọ',
+      'Mùi',
+      'Thân',
+      'Dậu',
+      'Tuất',
+      'Hợi',
+    ];
+    const i60 = (c, h) =>
+      [...Array(60).keys()].find((k) => CAN10[k % 10] === c && CHI12[k % 12] === h);
+    let truoc = null;
+    for (let y = 1901; y <= 2100; y++)
+      for (let m = 1; m <= 12; m++) {
+        const ds = E.truThangTrongThangDuong(m, y, 420);
+        if (
+          !ky(
+            `${m}/${y}: phải đúng 2 đoạn, ra ${JSON.stringify(ds)}`,
+            ds && ds.length === 2 && ds[1].tuNgay >= 3 && ds[1].tuNgay <= 9
+          )
+        )
+          continue;
+        for (const d of ds) {
+          const k = i60(d.can, d.chi);
+          if (truoc != null && k !== truoc)
+            ky(
+              `${d.tuNgay}/${m}/${y}: ${d.canChi} không đi tiếp +1 hoa giáp`,
+              k === (truoc + 1) % 60
+            );
+          truoc = k;
+        }
+      }
+    // Ca vàng (lịch vạn niên): 11/2026 = Mậu Tuất 1–6 · Kỷ Hợi 7–30 (Lập Đông 7/11 16:53 VN);
+    // Lập Xuân 4/2/2026 mở Canh Dần, 3/2 còn Kỷ Sửu năm Ất Tỵ; Hàn Lộ 2003 rơi 00:01 VN 9/10.
+    const n11 = E.truThangTrongThangDuong(11, 2026, 420) || [];
+    ky(
+      '11/2026 ' + JSON.stringify(n11),
+      n11.map((d) => `${d.canChi}@${d.tuNgay}-${d.denNgay}`).join('|') ===
+        'Mậu Tuất@1-6|Kỷ Hợi@7-30'
+    );
+    ky('4/2/2026 Canh Dần', (E.truThangTheoNgay(4, 2, 2026) || {}).canChi === 'Canh Dần');
+    const t32 = E.truThangTheoNgay(3, 2, 2026) || {};
+    ky('3/2/2026 Kỷ Sửu năm Ất Tỵ', t32.canChi === 'Kỷ Sửu' && t32.namCanChi === 'Ất Tỵ');
+    ky('8/10/2003 còn Tân Dậu', (E.truThangTheoNgay(8, 10, 2003) || {}).canChi === 'Tân Dậu');
+    ky('9/10/2003 sang Nhâm Tuất', (E.truThangTheoNgay(9, 10, 2003) || {}).canChi === 'Nhâm Tuất');
+    ky('ngoài bảng ⇒ null', E.truThangTrongThangDuong(1, 1899, 420) === null);
+  }
+  // Trang/route Chọn Ngày không được quay lại công thức tháng ÂM (ccThangCanChi) cho tháng DƯƠNG.
+  const trang = readFileSync(join(ROOT, 'public/app-chon-ngay.html'), 'utf-8');
+  const diachi = readFileSync(join(ROOT, 'lib/engine/diachi.ts'), 'utf-8');
+  ky(
+    'app-chon-ngay.html phải gọi truThangTrongThangDuong',
+    trang.includes('truThangTrongThangDuong(')
+  );
+  ky('app-chon-ngay.html không được gọi ccThangCanChi', !trang.includes('ccThangCanChi('));
+  ky(
+    'diachi.ts computeChonNgay phải dùng nhanTruThang',
+    diachi.includes('thangCanChi: nhanTruThang(')
+  );
+  ky('diachi.ts không được còn ccThangCanChi', !diachi.includes('ccThangCanChi'));
+}
+
 console.log(
-  `tiết khí: ${moc.length} mốc · NAOJ ${naojSo} tiết (lệch tối đa ${naojMax}′) · HKO ${hkoSo} tiết, ${hkoLech.length} lệch ngày đã ghim · engine ${engSo} mốc × trước/sau · ${vangSo} ca vàng · lasoKey ${khoaSo} ca`
+  `tiết khí: ${moc.length} mốc · NAOJ ${naojSo} tiết (lệch tối đa ${naojMax}′) · HKO ${hkoSo} tiết, ${hkoLech.length} lệch ngày đã ghim · engine ${engSo} mốc × trước/sau · ${vangSo} ca vàng · lasoKey ${khoaSo} ca · trụ tháng theo ngày ${tdSo} phép`
 );
 if (process.argv.includes('-v')) hkoLech.forEach((s) => console.log('  HKO≠', s));
 if (fails.length) {

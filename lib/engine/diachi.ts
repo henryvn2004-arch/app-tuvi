@@ -2,8 +2,9 @@
 // ============================================================
 // Server-compute cho 3 kịch bản NHẸ (Sprint 1.5): sinh con, chọn
 // ngày, đặt tên. Đây là logic ĐỊA CHI / CAN CHI / NẠP ÂM thuần —
-// KHÔNG nạp engine vanilla, chỉ port nguyên các hàm _cc* từ
-// public/tuvi-chat.html (parity tuyệt đối, cùng bảng hằng số).
+// port nguyên các hàm _cc* từ public/tuvi-chat.html (parity tuyệt đối,
+// cùng bảng hằng số). NGOẠI LỆ: trụ THÁNG của Chọn Ngày đi theo TIẾT nên
+// đọc từ engine Bát Tự (`truThangTrongThangDuong`, lib/engine/tubinh.ts).
 //
 // Mỗi compute* trả về CHÍNH shape mà extract*Context trong
 // lib/agent/prompts.ts đang đọc (một bộ não). Client gửi input thô
@@ -11,6 +12,7 @@
 // ============================================================
 
 import { currentNamXem } from '@/lib/engine/namxem';
+import { truThangTrongThangDuong } from '@/lib/engine/tubinh';
 
 const CAN = ['Giáp', 'Ất', 'Bính', 'Đinh', 'Mậu', 'Kỷ', 'Canh', 'Tân', 'Nhâm', 'Quý'];
 export const CHI = ['Tý', 'Sửu', 'Dần', 'Mão', 'Thìn', 'Tỵ', 'Ngọ', 'Mùi', 'Thân', 'Dậu', 'Tuất', 'Hợi'];
@@ -43,10 +45,27 @@ export function ccInfo(year: number): CanChiInfo | null {
   };
 }
 
-function ccThangCanChi(thang: number, nam: number): string {
-  const pos = (((nam - 1924) % 60) + 60) % 60;
-  const base = [2, 4, 6, 8, 0, 2, 4, 6, 8, 0][pos % 10];
-  return CAN[(base + (thang - 1) * 2) % 10] + ' ' + CHI[(2 + thang - 1) % 12];
+/**
+ * Trụ tháng của THÁNG DƯƠNG `thang/nam` theo tiết khí, thành MỘT câu cho prompt.
+ * Tháng dương luôn vắt qua hai trụ (đổi ở ngày giao tiết, ~4–8 hằng tháng), vd
+ * 11/2026: "Mậu Tuất (1–6/11) → Kỷ Hợi (7–30/11, giao tiết 16:53 ngày 7/11)".
+ * Đoạn thuộc năm tiết khí khác năm dương (tháng 1, đầu tháng 2 — trước Lập Xuân)
+ * ghi kèm năm đó. ⚠️ Từng tính theo CHỈ SỐ THÁNG ÂM (tháng 11 ⇒ Canh Tý) — sai
+ * với form nhập tháng DƯƠNG (W35, docs/nhat-ky/2026-11.md).
+ */
+export function nhanTruThang(thang: number, nam: number): string {
+  const doan = truThangTrongThangDuong(thang, nam);
+  if (!doan || !doan.length) return '';
+  const namCC = ccInfo(nam)?.canChi || '';
+  return doan
+    .map((d, k) => {
+      const ngay = d.tuNgay === d.denNgay ? `${d.tuNgay}/${thang}` : `${d.tuNgay}–${d.denNgay}/${thang}`;
+      const p2 = String(d.vaoTiet.phut).padStart(2, '0');
+      const tiet = k > 0 ? `, giao tiết ${d.vaoTiet.gio}:${p2} ngày ${d.vaoTiet.ngay}/${d.vaoTiet.thang}` : '';
+      const namTiet = d.namCanChi !== namCC ? `, thuộc năm ${d.namCanChi}` : '';
+      return `${d.canChi} (${ngay}${tiet}${namTiet})`;
+    })
+    .join(' → ');
 }
 
 const inPair = (pairs: number[][], a: number, b: number) =>
@@ -104,7 +123,7 @@ export function computeChonNgay(input: Rec): Rec | null {
     namSinh,
     canChi: info.canChi,
     napAm: info.napAm,
-    thangCanChi: ccThangCanChi(thangNum, namNum),
+    thangCanChi: nhanTruThang(thangNum, namNum),
     namCanChi: ccInfo(namNum)?.canChi || '',
     thangNum,
     namNum,

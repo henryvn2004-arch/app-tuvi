@@ -407,6 +407,52 @@ function _monthChiBySunLongitude(L) {
 }
 
 // ============================================================
+// TRỤ THÁNG CỦA MỘT NGÀY DÂN SỰ — cho CHỌN NGÀY (W35, 2026-11)
+// ============================================================
+// Trụ tháng đổi tại THỜI ĐIỂM giao tiết (Lập Xuân, Kinh Trập, …), không theo
+// tháng âm hay tháng dương. Một ngày trọn vẹn thuộc tháng của mốc tiết cuối cùng
+// rơi vào NGÀY ĐÓ hoặc trước nó, tính theo giờ dân sự `offPhut` (VN = 420): ngày
+// CHỨA thời điểm giao tiết là ngày đầu của tháng MỚI — lệ lịch vạn niên khi xem
+// ngày. Bảng mốc = <TIET_KHI_TABLE> ở trên; năm tiết khí (qua Lập Xuân) và Ngũ Hổ
+// Độn dùng lại đúng hai hàm của tứ trụ. KHÁC đường Bát Tự lịch vn (kinh độ lúc
+// 12:00 UT của ngày sinh): đó là THỜI ĐIỂM sinh, đây là cả NGÀY.
+// Ngoài bảng (≈ 1900–2100) ⇒ null.
+function truThangTheoNgay(dd, mm, yy, offPhut) {
+  const off = offPhut == null ? 420 : offPhut;
+  // Phút UTC (kể từ 1900) của 00:00 ngày HÔM SAU theo giờ dân sự — mốc < đó là đã vào trong ngày.
+  const cuoiNgay = (Date.UTC(yy, mm - 1, dd + 1) - _TK_EPOCH_MS) / 60000 - off;
+  const i = _tietKhiTruoc(cuoiNgay - 1);
+  if (i < 0) return null;
+  const solarYear = 1900 + Math.floor((i - 2) / 12);
+  const yearP = _yearPillarBySolarYear(solarYear);
+  const chi = _monthChiBySunLongitude((255 + 30 * i) % 360);
+  const p = _monthPillarByYearCanAndMonthChi(yearP.can, chi);
+  const moc = new Date(_TK_EPOCH_MS + (_tietKhiMoc()[i] + off) * 60000);
+  return {
+    can: p.can, chi: p.chi, canChi: p.can + ' ' + p.chi,
+    namCanChi: yearP.can + ' ' + yearP.chi,
+    // Thời điểm vào tiết của tháng này, giờ dân sự offPhut.
+    vaoTiet: { ngay: moc.getUTCDate(), thang: moc.getUTCMonth() + 1, nam: moc.getUTCFullYear(), gio: moc.getUTCHours(), phut: moc.getUTCMinutes() },
+  };
+}
+
+// Các đoạn trụ tháng trong MỘT tháng dương lịch: [{ tuNgay, denNgay, can, chi,
+// canChi, namCanChi, vaoTiet }] — thường 2 đoạn (đổi ở ngày giao tiết). null nếu
+// có ngày nằm ngoài bảng.
+function truThangTrongThangDuong(mm, yy, offPhut) {
+  const soNgay = new Date(Date.UTC(yy, mm, 0)).getUTCDate();
+  const out = [];
+  for (let d = 1; d <= soNgay; d++) {
+    const t = truThangTheoNgay(d, mm, yy, offPhut);
+    if (!t) return null;
+    const cuoi = out[out.length - 1];
+    if (cuoi && cuoi.canChi === t.canChi) cuoi.denNgay = d;
+    else out.push({ tuNgay: d, denNgay: d, ...t });
+  }
+  return out;
+}
+
+// ============================================================
 // MAIN ENTRY 1: convertDuongToBatTu
 // ============================================================
 // Input: dd, mm, yy (dương lịch), hour (0-23, default 12)
@@ -1941,6 +1987,8 @@ if (typeof module !== 'undefined') {
     convertDuongToBatTu,
     tinhBatTu,
     tietKhiCuaThoiDiem,
+    truThangTheoNgay,
+    truThangTrongThangDuong,
     tinhBatTuFromTuTru,
     thapThan,
     nhomThapThan,
