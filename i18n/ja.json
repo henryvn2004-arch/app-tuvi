@@ -29479,6 +29479,34 @@
   "t": "保存した命盤 — 明宝紫微斗数",
   "h": "183c05e5"
  },
+ "ssr.laso.bc": {
+  "t": "{canchi}年 {gioi} — 命宮・{cung}宮",
+  "h": "0094aee9"
+ },
+ "ssr.laso.chi-tieng-viet": {
+  "t": "この命盤の鑑定文は現在ベトナム語版のみです。",
+  "h": "05845ed0"
+ },
+ "ssr.laso.desc": {
+  "t": "{canchi_raw}年生まれ・{gioi_thuong}の紫微斗数命盤。命宮は{cung_raw}宮、主星は{chinh}、納音は{napam}。",
+  "h": "cf210ec9"
+ },
+ "ssr.laso.home": {
+  "t": "ホーム",
+  "h": "fca04858"
+ },
+ "ssr.laso.kho": {
+  "t": "命庫",
+  "h": "2de2772c"
+ },
+ "ssr.laso.title": {
+  "t": "{canchi}年 {gioi}の命盤 — 命宮・{cung}宮 — 明宝紫微斗数",
+  "h": "ec5b3b65"
+ },
+ "ssr.laso.xem-ban-viet": {
+  "t": "ベトナム語版を見る",
+  "h": "d0a972c9"
+ },
  "taikhoan.add-mcp-server-chon-streamable-http": {
   "t": "<strong>Add MCP server</strong> → <strong>Streamable HTTP</strong> を選択。",
   "h": "f63db93e"

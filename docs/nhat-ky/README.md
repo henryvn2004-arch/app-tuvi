@@ -1,6 +1,6 @@
 # Nhật ký phát triển — mục lục
 
-602 mục ghi chép từng PR, tách khỏi `CLAUDE.md` để nó thôi ngốn ~350k token mỗi lượt.
+603 mục ghi chép từng PR, tách khỏi `CLAUDE.md` để nó thôi ngốn ~350k token mỗi lượt.
 
 **Sáu file dưới đây KHÔNG được nạp tự động.** Cần thì tra:
 
@@ -12,7 +12,7 @@ sed -n '120,190p' docs/nhat-ky/2026-08.md    # đọc đúng đoạn, đừng ca
 
 | file | số mục | dung lượng |
 |---|---:|---:|
-| `2026-11.md` | 61 | 242,468 B |
+| `2026-11.md` | 62 | 245,682 B |
 | `2026-10.md` | 16 | 39,635 B |
 | `2026-09.md` | 360 | 1,241,867 B |
 | `2026-08.md` | 148 | 1,024,027 B |
@@ -28,6 +28,7 @@ Luật rút ra từ các mục này đã được cô đọng lên `CLAUDE.md`. 
 
 | # | tháng | file | mục |
 |---:|---|---|---|
+| 1 | 2026-11 | `2026-11.md` | 🌐 W33a — `/<locale>/la-so/<slug>`: route SSR lá số tự quản (`'/la-so/'`), khung `ssr.laso.*` + glossary + luận `laso_public_i18n`; index/hreflang/sitemap theo TỪNG bản ghi, chưa dịch/pregen/ISR noindex; `renderLocalized` cờ `selfComplete`; vi byte-giống (+hreflang) |
 | 1 | 2026-11 | `2026-11.md` | 🧭 W31b — 14 route SSR chỉ tiếng Việt: `I18n.href` giữ bản vi (`lib/i18n/vi-only.mjs` + bản sao trong `i18n.js`, check:i18n 5b) · `testimonials.js` tắt ở ≠vi |
 | 1 | 2026-11 | `2026-11.md` | 💬 Bảng giá: nhãn/mô tả `rail-message` (ghi chú nội bộ hiện cho khách, "Luận Đường") → "Hỏi Thầy", khoá `js.tool-desc.rail-message` + dịch, DB prod đã UPDATE |
 | 1 | 2026-11 | `2026-11.md` | 🔎 W31 — Rà soát i18n đợt 7: 95 trang × 5 ngôn ngữ × desktop/mobile (chạy form, engine thật); 2.610 → 2.306 chuỗi Việt; DB_NS `nhom`, thẻ Hôm nay, Hỏi Thầy, PWA, trang nạp; lô A–F ở `docs/i18n/audit-2026-11.md` |
