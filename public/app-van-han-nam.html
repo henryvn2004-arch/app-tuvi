@@ -258,6 +258,7 @@ window.SHELL_INTRO={key:'van-han-nam'};</script>
 <script src="/tools-shared/glossary.js?v=5"></script>
 <script src="/tools-shared/cach-cuc.js?v=1"></script>
 <script src="/tools-shared/dv-rules.js?v=1"></script>
+<script src="/tools-shared/to-hop.js?v=1"></script>
 <script src="/laso-chart.js?v=13"></script>
 <script src="/tools-shared/pchip.js?v=1"></script>
 <script src="/tools-shared/daivan-chart.js?v=1"></script>
@@ -685,10 +686,10 @@ function renderThang(t){
     h+='<div class="pregen-block"><div class="pregen-title"><span class="ic-inline" data-icon-emoji="🔮" style="display:inline-flex;width:1em;height:1em;vertical-align:-2px;color:#7C6942">🔮</span> '+_tvmbT('js.vanhannam.to-hop-title','Tổ hợp sao trong các cung hạn')+'</div>';
     t.toHop.forEach(function(c){
       var cls = c.loai==='tốt'?'yn-cat':c.loai==='xấu'?'yn-hung':'yn-neutral';
-      // loai/tomTat theo ngôn ngữ (tomTat cùng câu với CACH_CUC_DATA ⇒ ns cach-cuc; câu không có trong đó giữ tiếng Việt).
+      // loai theo khoá; ten/tomTat qua TuviToHop (tomTat trùng CACH_CUC_DATA ⇒ ns cach-cuc, còn lại ⇒ ns to-hop) — W32A-2.
       var loaiT=_vhViet()?c.loai:(c.loai==='tốt'?_tvmbT('js.vanhannam.loai-tot','tốt'):c.loai==='xấu'?_tvmbT('js.vanhannam.loai-xau','xấu'):c.loai==='trung'?_tvmbT('js.vanhannam.loai-trung','trung'):c.loai);
-      var ttT=(!_vhViet()&&window.TuviCachCuc)?TuviCachCuc.t(c.tomTat):c.tomTat;
-      h+='<div class="pregen-yn '+cls+'">• ['+esc(loaiT)+'] '+esc(c.ten)+' — '+esc(ttT)+'</div>';
+      var TH=window.TuviToHop;
+      h+='<div class="pregen-yn '+cls+'">• ['+esc(loaiT)+'] '+esc(TH?TH.ten(c.ten):c.ten)+' — '+esc(TH?TH.tomTat(c.tomTat):c.tomTat)+'</div>';
     });
     h+='</div>';
   }
