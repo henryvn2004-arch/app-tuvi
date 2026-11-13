@@ -29479,6 +29479,494 @@
   "t": "保存した命盤 — 明宝紫微斗数",
   "h": "183c05e5"
  },
+ "ssr-ngay-tot.act.desc": {
+  "t": "{viecl}の吉日を2020〜2036年の月ごとに検索。{mota}。十二直・黄道・三娘／月忌／楊公忌日による伝統暦法。",
+  "h": "2f9a4d12"
+ },
+ "ssr-ngay-tot.act.eyebrow": {
+  "t": "吉日 · {viec}",
+  "h": "2c825163"
+ },
+ "ssr-ngay-tot.act.h1": {
+  "t": "<em>{viec}</em>の吉日",
+  "h": "5022c74e"
+ },
+ "ssr-ngay-tot.act.lg-bad": {
+  "t": "ほとんどが忌日",
+  "h": "4d59e7ef"
+ },
+ "ssr-ngay-tot.act.lg-good": {
+  "t": "吉日あり（4日以上）",
+  "h": "160d4413"
+ },
+ "ssr-ngay-tot.act.lg-great": {
+  "t": "吉日が多い（8日以上）",
+  "h": "b796981a"
+ },
+ "ssr-ngay-tot.act.lg-soso": {
+  "t": "吉日が少ない",
+  "h": "0e54fb65"
+ },
+ "ssr-ngay-tot.act.mlabel": {
+  "t": "{m}月",
+  "h": "d52534dc"
+ },
+ "ssr-ngay-tot.act.p": {
+  "t": "{mota}。年と月を選んで、十二直・黄道の星・干支・吉時の詳細つきで上位の吉日を確認できます。",
+  "h": "58e3b5d0"
+ },
+ "ssr-ngay-tot.act.rel": {
+  "t": "他の用途",
+  "h": "3d6555a4"
+ },
+ "ssr-ngay-tot.act.sec": {
+  "t": "年と月を選ぶ",
+  "h": "c2c91944"
+ },
+ "ssr-ngay-tot.act.tip": {
+  "t": "{y}年{m}月：吉日{good}日、忌日{bad}日（全{total}日）",
+  "h": "491d720c"
+ },
+ "ssr-ngay-tot.act.title": {
+  "t": "{viec} — 吉日 2020-2036 | {brand}",
+  "h": "15ab65e5"
+ },
+ "ssr-ngay-tot.actm.all-years": {
+  "t": "すべての年",
+  "h": "b97f711f"
+ },
+ "ssr-ngay-tot.actm.desc": {
+  "t": "{mota}。{y}年{m}月の上位吉日を、干支・十二直・黄道の星・吉時・選定理由とともに掲載。",
+  "h": "d91d2389"
+ },
+ "ssr-ngay-tot.actm.eyebrow": {
+  "t": "吉日 · {viec}",
+  "h": "2c825163"
+ },
+ "ssr-ngay-tot.actm.h1": {
+  "t": "<em>{viec}</em>の吉日 {y}年{m}月",
+  "h": "88d611d1"
+ },
+ "ssr-ngay-tot.actm.intro": {
+  "t": "{y}年{m}月の{viecl}に最適な<strong>上位{n}日</strong>です。十二直、二十八宿、黄道・黒道の星、および伝統の忌日（三娘・月忌・楊公忌日）をもとに採点しています。",
+  "h": "4fe2533e"
+ },
+ "ssr-ngay-tot.actm.link-viec": {
+  "t": "{y}年{m}月の{viec}",
+  "h": "868c6acb"
+ },
+ "ssr-ngay-tot.actm.none-h": {
+  "t": "適した日がありません",
+  "h": "fbacc2eb"
+ },
+ "ssr-ngay-tot.actm.none-p": {
+  "t": "{y}年{m}月には、{viecl}で6点以上の日がありません。他の月もご検討ください。",
+  "h": "45d4b07c"
+ },
+ "ssr-ngay-tot.actm.p": {
+  "t": "{mota}。{y}年{m}月の上位吉日。",
+  "h": "049d3df2"
+ },
+ "ssr-ngay-tot.actm.rel-thang": {
+  "t": "他の月の{viec}",
+  "h": "d7afecfc"
+ },
+ "ssr-ngay-tot.actm.rel-viec": {
+  "t": "{y}年{m}月の他の用途",
+  "h": "04c4de0b"
+ },
+ "ssr-ngay-tot.actm.score": {
+  "t": "{score}/10 · {level}",
+  "h": "59d603de"
+ },
+ "ssr-ngay-tot.actm.sec": {
+  "t": "{y}年{m}月 {viecl}の上位吉日",
+  "h": "9c9d5157"
+ },
+ "ssr-ngay-tot.actm.title": {
+  "t": "{seo} | {brand}",
+  "h": "c9d73e80"
+ },
+ "ssr-ngay-tot.bc.root": {
+  "t": "吉日を調べる",
+  "h": "8b0b6818"
+ },
+ "ssr-ngay-tot.brand": {
+  "t": "明宝紫微斗数",
+  "h": "33336b26"
+ },
+ "ssr-ngay-tot.date.al": {
+  "t": "旧暦{m}月{d}日",
+  "h": "b577a1c8"
+ },
+ "ssr-ngay-tot.date.dmy": {
+  "t": "{y}年{m}月{d}日",
+  "h": "51e959ba"
+ },
+ "ssr-ngay-tot.date.full": {
+  "t": "{y}年{m}月{d}日（{thu}）",
+  "h": "13d11d28"
+ },
+ "ssr-ngay-tot.day.c-gio": {
+  "t": "12の時刻 — 黄道（緑）／黒道（赤）",
+  "h": "2b2d22a2"
+ },
+ "ssr-ngay-tot.day.c-ky": {
+  "t": "禁忌",
+  "h": "38427f1d"
+ },
+ "ssr-ngay-tot.day.c-sao": {
+  "t": "十二直・星・宿",
+  "h": "3c6b13be"
+ },
+ "ssr-ngay-tot.day.c-tongquan": {
+  "t": "概要",
+  "h": "286a38e3"
+ },
+ "ssr-ngay-tot.day.c-viec": {
+  "t": "10種類の用途別評価",
+  "h": "1195d1e2"
+ },
+ "ssr-ngay-tot.day.canhbao": {
+  "t": "<strong>⚠ 禁忌の警告：</strong>この日は{v}に当たります — 結婚・開業・入居・埋葬などの重要な行事は避けましょう。",
+  "h": "5fd0efc5"
+ },
+ "ssr-ngay-tot.day.co-daiky": {
+  "t": "該当 — 大忌",
+  "h": "5631a693"
+ },
+ "ssr-ngay-tot.day.co-ky": {
+  "t": "該当 — 忌",
+  "h": "d2480709"
+ },
+ "ssr-ngay-tot.day.desc": {
+  "t": "{y}年{m}月{d}日（旧暦{am}月{ad}日、{canchi}）の詳細分析：十二直 {truc}、{sao}星、{tu}宿、10種類の用途別評価。",
+  "h": "8dcd4b96"
+ },
+ "ssr-ngay-tot.day.eyebrow": {
+  "t": "{thu} · {canchi}",
+  "h": "b8dc00bb"
+ },
+ "ssr-ngay-tot.day.h1": {
+  "t": "<em>{y}年{m}月{d}日</em>は吉日？",
+  "h": "45e976bb"
+ },
+ "ssr-ngay-tot.day.khong": {
+  "t": "なし",
+  "h": "3b4a527f"
+ },
+ "ssr-ngay-tot.day.luuy": {
+  "t": "<strong>注意：</strong>{v}",
+  "h": "8d24b1aa"
+ },
+ "ssr-ngay-tot.day.next": {
+  "t": "{m}月{d}日 →",
+  "h": "40166884"
+ },
+ "ssr-ngay-tot.day.nhuan": {
+  "t": "（閏月）",
+  "h": "842d2b50"
+ },
+ "ssr-ngay-tot.day.p": {
+  "t": "{y}年{m}月{d}日（新暦）の詳細分析（旧暦 {ay}年{am}月{ad}日）。伝統的な10種類の用途について評価します。",
+  "h": "4ae9f023"
+ },
+ "ssr-ngay-tot.day.prev": {
+  "t": "← {m}月{d}日",
+  "h": "0bba4672"
+ },
+ "ssr-ngay-tot.day.r-am": {
+  "t": "旧暦",
+  "h": "b0246c79"
+ },
+ "ssr-ngay-tot.day.r-canchi": {
+  "t": "日の干支",
+  "h": "0efc9953"
+ },
+ "ssr-ngay-tot.day.r-chithang": {
+  "t": "月の地支",
+  "h": "e54f3f41"
+ },
+ "ssr-ngay-tot.day.r-chung": {
+  "t": "総合評価",
+  "h": "ae69d733"
+ },
+ "ssr-ngay-tot.day.r-duong": {
+  "t": "新暦",
+  "h": "dfac44de"
+ },
+ "ssr-ngay-tot.day.r-duongcong": {
+  "t": "楊公忌日",
+  "h": "08b3a8ce"
+ },
+ "ssr-ngay-tot.day.r-saongay": {
+  "t": "日の星",
+  "h": "83763a2c"
+ },
+ "ssr-ngay-tot.day.r-thu": {
+  "t": "曜日",
+  "h": "f445a052"
+ },
+ "ssr-ngay-tot.day.r-truc": {
+  "t": "十二直",
+  "h": "e075024d"
+ },
+ "ssr-ngay-tot.day.r-tu": {
+  "t": "二十八宿",
+  "h": "28486f82"
+ },
+ "ssr-ngay-tot.day.r-ynghia": {
+  "t": "意味",
+  "h": "1206aa20"
+ },
+ "ssr-ngay-tot.day.sec-top3": {
+  "t": "この日に最も適した3つの用途",
+  "h": "778a1834"
+ },
+ "ssr-ngay-tot.day.title": {
+  "t": "{y}年{m}月{d}日は吉日？ — {thu}、{canchi}",
+  "h": "9c0a1282"
+ },
+ "ssr-ngay-tot.day.toan-thang": {
+  "t": "{y}年{m}月の全体",
+  "h": "0353135f"
+ },
+ "ssr-ngay-tot.day.top-head": {
+  "t": "{viec} ({score}/10 — {level})",
+  "h": "b118aa41"
+ },
+ "ssr-ngay-tot.day.tot": {
+  "t": "<strong>吉：</strong>{v}",
+  "h": "42c91bfb"
+ },
+ "ssr-ngay-tot.dg.binh": {
+  "t": "平",
+  "h": "3318401b"
+ },
+ "ssr-ngay-tot.dg.tot": {
+  "t": "吉",
+  "h": "a6f70ec0"
+ },
+ "ssr-ngay-tot.dg.xau": {
+  "t": "凶",
+  "h": "3efce654"
+ },
+ "ssr-ngay-tot.hd.hac": {
+  "t": "黒道",
+  "h": "35f44326"
+ },
+ "ssr-ngay-tot.hd.hoang": {
+  "t": "黄道",
+  "h": "3d6bc2ed"
+ },
+ "ssr-ngay-tot.home": {
+  "t": "ホーム",
+  "h": "fca04858"
+ },
+ "ssr-ngay-tot.hub.desc": {
+  "t": "用途別に吉日を検索：結婚、着工、開業、入居、旅行・出発、金運、出産、埋葬、井戸掘り、家の修繕。十二直・二十八宿・黄道を用いた伝統の暦法。",
+  "h": "8aff5d21"
+ },
+ "ssr-ngay-tot.hub.eyebrow": {
+  "t": "万年暦 · 伝統暦法",
+  "h": "f34cd19c"
+ },
+ "ssr-ngay-tot.hub.h1": {
+  "t": "<em>吉日</em>を調べる 2020–2036",
+  "h": "af666789"
+ },
+ "ssr-ngay-tot.hub.p": {
+  "t": "10種類の用途別に吉日を検索 — 十二直、二十八宿、黄道・黒道、三娘・月忌・楊公忌日に基づきます。",
+  "h": "423bc3b7"
+ },
+ "ssr-ngay-tot.hub.sec-nam": {
+  "t": "年から探す",
+  "h": "42f9bd36"
+ },
+ "ssr-ngay-tot.hub.sec-viec": {
+  "t": "用途から探す",
+  "h": "525ff9cc"
+ },
+ "ssr-ngay-tot.hub.title": {
+  "t": "吉日を調べる — 万年暦 2020-2036 | {brand}",
+  "h": "03b20f37"
+ },
+ "ssr-ngay-tot.join.list": {
+  "t": "{a}、{b}",
+  "h": "248bbe67"
+ },
+ "ssr-ngay-tot.join.ly": {
+  "t": "{a}；{b}",
+  "h": "bb5f9458"
+ },
+ "ssr-ngay-tot.ky.duongcong": {
+  "t": "楊公",
+  "h": "528f09a5"
+ },
+ "ssr-ngay-tot.ky.nguyetky": {
+  "t": "月忌",
+  "h": "3598b0c5"
+ },
+ "ssr-ngay-tot.ky.tamnuong": {
+  "t": "三娘",
+  "h": "a82168f4"
+ },
+ "ssr-ngay-tot.level.binh-thuong": {
+  "t": "平",
+  "h": "d45f4d1f"
+ },
+ "ssr-ngay-tot.level.rat-tot": {
+  "t": "大吉",
+  "h": "171ded25"
+ },
+ "ssr-ngay-tot.level.rat-xau": {
+  "t": "大凶",
+  "h": "e1932052"
+ },
+ "ssr-ngay-tot.level.tot": {
+  "t": "吉",
+  "h": "a6f70ec0"
+ },
+ "ssr-ngay-tot.level.xau": {
+  "t": "凶",
+  "h": "3efce654"
+ },
+ "ssr-ngay-tot.lichm.actlink": {
+  "t": "{m}月の{viec}",
+  "h": "d47baeee"
+ },
+ "ssr-ngay-tot.lichm.desc": {
+  "t": "{y}年{m}月の吉日・凶日を完全収録：干支、十二直、黄道の星、二十八宿、10種類の用途別評価を毎日掲載。",
+  "h": "b122370e"
+ },
+ "ssr-ngay-tot.lichm.eyebrow": {
+  "t": "万年暦 · {y}年{m}月",
+  "h": "c9318386"
+ },
+ "ssr-ngay-tot.lichm.h1": {
+  "t": "<em>{y}年{m}月</em>の吉日",
+  "h": "0328da50"
+ },
+ "ssr-ngay-tot.lichm.p": {
+  "t": "{y}年{m}月の{n}日間の詳細表：干支、十二直、二十八宿、黄道の星、忌日、10種類の用途別評価。",
+  "h": "e03b9418"
+ },
+ "ssr-ngay-tot.lichm.rel": {
+  "t": "他の月",
+  "h": "1c3f0f97"
+ },
+ "ssr-ngay-tot.lichm.sec-ngay": {
+  "t": "{y}年{m}月の{n}日間",
+  "h": "bb9e4cd2"
+ },
+ "ssr-ngay-tot.lichm.sec-nhanh": {
+  "t": "用途からすばやく探す",
+  "h": "ae3b822b"
+ },
+ "ssr-ngay-tot.lichm.title": {
+  "t": "{y}年{m}月の吉日 — 万年暦 | {brand}",
+  "h": "3c04b37f"
+ },
+ "ssr-ngay-tot.lichm.toan-nam": {
+  "t": "{y}年の全体",
+  "h": "93830066"
+ },
+ "ssr-ngay-tot.lichy.cell": {
+  "t": "{m}月の吉日を見る",
+  "h": "ee33b4db"
+ },
+ "ssr-ngay-tot.lichy.desc": {
+  "t": "{y}年の万年暦：12か月すべての吉日を月ごとに検索。十二直・二十八宿・黄道／黒道による伝統暦法。",
+  "h": "25d80478"
+ },
+ "ssr-ngay-tot.lichy.eyebrow": {
+  "t": "万年暦 · {y}年",
+  "h": "88716877"
+ },
+ "ssr-ngay-tot.lichy.h1": {
+  "t": "<em>{y}年</em>の吉日カレンダー",
+  "h": "098d90e9"
+ },
+ "ssr-ngay-tot.lichy.p": {
+  "t": "月を選んで、結婚・着工・開業・入居などの重要な行事に適した吉日を確認できます。",
+  "h": "79e02c37"
+ },
+ "ssr-ngay-tot.lichy.rel": {
+  "t": "他の年",
+  "h": "f4d1f92b"
+ },
+ "ssr-ngay-tot.lichy.sec": {
+  "t": "{y}年の12か月",
+  "h": "88964a9e"
+ },
+ "ssr-ngay-tot.lichy.title": {
+  "t": "{y}年の吉日カレンダー — 月ごとに吉日を調べる | {brand}",
+  "h": "05b707e6"
+ },
+ "ssr-ngay-tot.m.cap": {
+  "t": "{m}月",
+  "h": "1a19a1f3"
+ },
+ "ssr-ngay-tot.m.my": {
+  "t": "{y}年{m}月",
+  "h": "d45437d9"
+ },
+ "ssr-ngay-tot.meta.canchi": {
+  "t": "干支：<strong>{v}</strong>",
+  "h": "fdab5a61"
+ },
+ "ssr-ngay-tot.meta.giohd": {
+  "t": "<strong>黄道の時刻：</strong>{v}",
+  "h": "13712772"
+ },
+ "ssr-ngay-tot.meta.ky": {
+  "t": "忌：{v}",
+  "h": "b4b994a1"
+ },
+ "ssr-ngay-tot.meta.luuy": {
+  "t": "<strong>注意：</strong>{v}",
+  "h": "8d24b1aa"
+ },
+ "ssr-ngay-tot.meta.lydo": {
+  "t": "<strong>吉となる理由：</strong>{v}",
+  "h": "5b070ec2"
+ },
+ "ssr-ngay-tot.meta.sao": {
+  "t": "<strong>{sao}</strong>星（{hd}）",
+  "h": "7b460ac7"
+ },
+ "ssr-ngay-tot.meta.totcho": {
+  "t": "<strong>適した事柄：</strong>{v}",
+  "h": "730497de"
+ },
+ "ssr-ngay-tot.meta.truc": {
+  "t": "十二直：<strong>{v}</strong>",
+  "h": "ce07dd1e"
+ },
+ "ssr-ngay-tot.meta.tu": {
+  "t": "二十八宿：<strong>{v}</strong>",
+  "h": "da6d1fd9"
+ },
+ "ssr-ngay-tot.rel.other-days": {
+  "t": "他の日",
+  "h": "540cfe27"
+ },
+ "ssr-ngay-tot.tc.binh": {
+  "t": "平",
+  "h": "3318401b"
+ },
+ "ssr-ngay-tot.tc.cat": {
+  "t": "吉",
+  "h": "70e9b769"
+ },
+ "ssr-ngay-tot.tc.hung": {
+  "t": "凶",
+  "h": "3baaa792"
+ },
+ "ssr-ngay-tot.y.label": {
+  "t": "{y}年",
+  "h": "8a3268fc"
+ },
  "ssr.laso.bc": {
   "t": "{canchi}年 {gioi} — 命宮・{cung}宮",
   "h": "0094aee9"

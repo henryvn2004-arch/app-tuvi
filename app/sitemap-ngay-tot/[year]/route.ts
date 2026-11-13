@@ -1,13 +1,13 @@
 // app/sitemap-ngay-tot/[year]/route.ts
 // Per-year URLs: 12 month overview + 12*10 activity-month + ~365 day-detail
-// Total: ~497 URLs/năm × 17 năm = ~8,449 URLs
+// Total: ~497 URL/năm × 17 năm = ~8,449 URL, mỗi URL × 6 ngôn ngữ (W33b) ⇒ ~2.982 mục/file (< trần 50.000)
 export const revalidate = false;
 
 import { NextRequest, NextResponse } from 'next/server';
 import { ACTIVITY_LIST } from '../../../tuvi-engine/dist/ngay-tot/index.js';
-import { lastmodLine, revOf } from '@/lib/seo/lastmod';
+import { revOf } from '@/lib/seo/lastmod';
+import { URLSET_OPEN, urlEntries } from '@/lib/ngay-tot/sitemap';
 
-const BASE = 'https://www.tuviminhbao.com';
 const YEAR_FROM = 2020;
 const YEAR_TO = 2036;
 const YEARS = Array.from({ length: YEAR_TO - YEAR_FROM + 1 }, (_, i) => YEAR_FROM + i);
@@ -20,12 +20,6 @@ function daysInMonth(m: number, y: number): number {
 // lastmod ở đây là MỐC ĐỔI ENGINE (`CONTENT_REV['ngay-tot']`), không phải ngày
 // hôm nay: nội dung mỗi trang là kết quả tra bảng ngày-tốt, nó chỉ đổi khi
 // engine đổi. Bump ở đó khi sửa luật chấm ngày.
-function urlEntry(loc: string, lastmod?: string | null): string {
-  return `  <url>
-    <loc>${loc}</loc>${lastmodLine(lastmod)}
-  </url>`;
-}
-
 export async function GET(
   _req: NextRequest,
   { params }: { params: Promise<{ year: string }> },
@@ -41,13 +35,13 @@ export async function GET(
 
   // 12 month overview pages
   for (let m = 1; m <= 12; m++) {
-    entries.push(urlEntry(`${BASE}/ngay-tot/lich/${year}/thang-${m}`, rev));
+    entries.push(...urlEntries(`/ngay-tot/lich/${year}/thang-${m}`, rev));
   }
 
   // 12 × 10 = 120 activity × month pages (the SEO long-tail targets)
   for (const act of ACTIVITY_LIST) {
     for (let m = 1; m <= 12; m++) {
-      entries.push(urlEntry(`${BASE}/ngay-tot/${act}/${year}/thang-${m}`, rev));
+      entries.push(...urlEntries(`/ngay-tot/${act}/${year}/thang-${m}`, rev));
     }
   }
 
@@ -55,12 +49,12 @@ export async function GET(
   for (let m = 1; m <= 12; m++) {
     const dim = daysInMonth(m, year);
     for (let d = 1; d <= dim; d++) {
-      entries.push(urlEntry(`${BASE}/ngay-tot/ngay/${year}/${m}/${d}`, rev));
+      entries.push(...urlEntries(`/ngay-tot/ngay/${year}/${m}/${d}`, rev));
     }
   }
 
   const xml = `<?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+${URLSET_OPEN}
 ${entries.join('\n')}
 </urlset>`;
 
