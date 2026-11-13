@@ -33,7 +33,21 @@ let engineCache: {
   hanhCan: Record<string, string>;
   hanhChi: Record<string, string>;
   tietKhiCuaThoiDiem: (d: number, m: number, y: number, h: number, p: number, lich: string) => { i: number; gan: boolean } | null;
+  truThangTrongThangDuong: (mm: number, yy: number, offPhut?: number) => DoanTruThang[] | null;
 } | null = null;
+
+/** Một đoạn ngày cùng trụ tháng trong một tháng dương lịch (engine `truThangTrongThangDuong`). */
+export interface DoanTruThang {
+  tuNgay: number;
+  denNgay: number;
+  can: string;
+  chi: string;
+  canChi: string;
+  /** Năm tiết khí (đổi ở Lập Xuân) mà trụ tháng này thuộc về. */
+  namCanChi: string;
+  /** Thời điểm vào tiết của trụ tháng này, giờ VN. */
+  vaoTiet: { ngay: number; thang: number; nam: number; gio: number; phut: number };
+}
 
 function loadEngine() {
   if (engineCache) return engineCache;
@@ -56,8 +70,18 @@ function loadEngine() {
     hanhCan: (exp.NGU_HANH_CAN_TB || {}) as Record<string, string>,
     hanhChi: (exp.NGU_HANH_CHI_TB || {}) as Record<string, string>,
     tietKhiCuaThoiDiem: exp.tietKhiCuaThoiDiem as NonNullable<typeof engineCache>['tietKhiCuaThoiDiem'],
+    truThangTrongThangDuong: exp.truThangTrongThangDuong as NonNullable<typeof engineCache>['truThangTrongThangDuong'],
   };
   return engineCache!;
+}
+
+/**
+ * Trụ tháng (theo TIẾT, giờ VN) của từng đoạn ngày trong tháng dương `thang/nam` —
+ * thường 2 đoạn, đổi ở ngày giao tiết. Ngoài bảng tiết khí (≈1900–2100) ⇒ null.
+ */
+export function truThangTrongThangDuong(thang: number, nam: number): DoanTruThang[] | null {
+  if (!Number.isInteger(thang) || thang < 1 || thang > 12 || !Number.isInteger(nam)) return null;
+  return loadEngine().truThangTrongThangDuong(thang, nam, 420);
 }
 
 /** Ngũ hành của một thiên can / địa chi — đọc bảng của CHÍNH engine (tô màu ảnh tứ trụ). */

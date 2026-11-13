@@ -21,6 +21,8 @@
       napAm: NA_TEN[Math.floor(pos / 2)],
     };
   }
+  // ⚠️ `thang` là chỉ số THÁNG ÂM (tháng 1 = Dần). KHÔNG dùng cho tháng DƯƠNG lịch:
+  // trụ tháng đổi theo TIẾT ⇒ engine Bát Tự `truThangTrongThangDuong` (W35).
   function ccThangCanChi(thang, nam) {
     thang = Number(thang); nam = Number(nam);
     if (!thang || !nam) return '';

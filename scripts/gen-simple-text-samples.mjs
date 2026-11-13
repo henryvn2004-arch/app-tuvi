@@ -26,6 +26,7 @@ import { fileURLToPath } from 'url';
 import { llmTextFull } from '../lib/llm/complete.ts';
 import { ARC_GIONG_NGU_HANH, DOC_ARC_TUONG_HOP } from '../lib/agent/prompts.ts';
 import { computeLaso } from '../lib/engine/laso.ts';
+import { nhanTruThang } from '../lib/engine/diachi.ts';
 // `public/can-chi.js`/`public/tuong-hop.js` xuất kép (window.* ở trình duyệt,
 // module.exports ở Node) — CÙNG MỘT nguồn cho cả hai phía, không chép công
 // thức sang đây.
@@ -127,7 +128,8 @@ Phân tích ngắn ngũ hành phù hợp cho lĩnh vực này, sau đó gợi ý
     outPath: join(ROOT, 'public/samples/chon-ngay-tot-sample.json'),
     build(s) {
       const info = CanChi.ccInfo(s.namSinh);
-      const thangCC = CanChi.ccThangCanChi(s.thangNum, s.namNum);
+      // Trụ tháng theo TIẾT — CÙNG hàm route dùng (W35; ccThangCanChi là tháng ÂM).
+      const thangCC = nhanTruThang(s.thangNum, s.namNum);
       const namCC = (CanChi.ccInfo(s.namNum) || {}).canChi || '';
       const system = `Bạn là chuyên gia tư vấn chọn ngày tốt theo nguyên lý Tứ Trụ và ngũ hành.
 
@@ -148,7 +150,8 @@ ${ARC_GIONG_NGU_HANH}`;
       const user = `Chọn ngày tốt cho sự kiện:
 - Sự kiện: ${s.suKien}
 - Người chính: ${s.hoTen} | Năm sinh: ${s.namSinh} (${info.canChi}) — Nạp âm: ${info.napAm}
-- Tháng cần chọn: tháng ${s.thangNum}/${s.namNum} (${thangCC} — năm ${namCC})
+- Tháng cần chọn: tháng ${s.thangNum}/${s.namNum} dương lịch — năm ${namCC}
+- Trụ tháng theo tiết khí: ${thangCC}
 
 Phân tích và gợi ý các khoảng ngày tốt trong tháng này cho sự kiện trên.`;
       return { system, user, maxTokens: 5000 };

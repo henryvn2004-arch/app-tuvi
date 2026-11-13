@@ -1,6 +1,6 @@
 # Nhật ký phát triển — mục lục
 
-614 mục ghi chép từng PR, tách khỏi `CLAUDE.md` để nó thôi ngốn ~350k token mỗi lượt.
+615 mục ghi chép từng PR, tách khỏi `CLAUDE.md` để nó thôi ngốn ~350k token mỗi lượt.
 
 **Sáu file dưới đây KHÔNG được nạp tự động.** Cần thì tra:
 
@@ -12,7 +12,7 @@ sed -n '120,190p' docs/nhat-ky/2026-08.md    # đọc đúng đoạn, đừng ca
 
 | file | số mục | dung lượng |
 |---|---:|---:|
-| `2026-11.md` | 73 | 279,425 B |
+| `2026-11.md` | 74 | 283,742 B |
 | `2026-10.md` | 16 | 39,635 B |
 | `2026-09.md` | 360 | 1,241,867 B |
 | `2026-08.md` | 148 | 1,024,027 B |
@@ -28,6 +28,7 @@ Luật rút ra từ các mục này đã được cô đọng lên `CLAUDE.md`. 
 
 | # | tháng | file | mục |
 |---:|---|---|---|
+| 1 | 2026-11 | `2026-11.md` | 📆 W35 — Chọn Ngày Tốt: trụ tháng theo TIẾT (engine `truThangTheoNgay`/`truThangTrongThangDuong` đọc bảng tiết khí; ngày chứa giao tiết = tháng mới; route tự tính; tubinh-ansao-engine.js?v=7; check:tietkhi mục 7 đối chứng HKO) |
 | 1 | 2026-11 | `2026-11.md` | 🖼️ W34e — Poster "Hôm nay" theo ngôn ngữ (`ma` việc · `gio.<sao>` · 10 khoá `js.home.po-*` · poster.js?v=6 · shell.js?v=162; vi byte-giống) |
 | 1 | 2026-11 | `2026-11.md` | 🎭 W32A-6 — Văn mẫu THEO NƯỚC lô 4: nút "Xem bản mẫu" Chọn Ngày Tốt + Đặt Tên DN mở 5 nước (`hasLocaleSample`); sửa nút cũ luôn hiện ở /<locale>/ và mở văn Việt; `dat-ten-con` vi-only có chủ đích |
 | 1 | 2026-11 | `2026-11.md` | 📅 W34c — Thẻ "Hôm nay": văn engine `van-ngay.ts` theo ngôn ngữ (ns `van-ngay` 31 mục · `danhGia.ma` additive · khuôn `NHAN_VAN`; vi byte-giống 400 ngày) |
