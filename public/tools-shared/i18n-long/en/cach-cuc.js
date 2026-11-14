@@ -835,7 +835,7 @@ window.I18n&&window.I18n.defineLong("cach-cuc",{
 "s.e4f7e233":{"t":"There is improper sexual conduct within the household.","h":"471298e8"},
 "s.e814e3df":{"t":"Finds helpful supporters and has wealth.","h":"599c2f64"},
 "s.96338efa":{"t":"Away from home one profits and is safer than at home; prospers in trade.","h":"77c96c68"},
-"s.0c9080e3":{"t":"Out in the world one always finds helpful supporters who lend support and everything goes smoothly; the farther from home, the more one's wishes are fulfilled.","h":"bc6d7d27"},
+"s.0c9080e3":{"t":"Out in the world one always finds helpful supporters who lend a hand and everything goes smoothly; the farther from home, the more one's wishes are fulfilled.","h":"bc6d7d27"},
 "s.fdba94f3":{"t":"Out in the world is more profitable than at home; wealth comes easily and supporters are many.","h":"8a95a246"},
 "s.4ff22c80":{"t":"Meets helpful supporters, is respected by many, and wealth flourishes.","h":"c9964303"},
 "s.78eaadc0":{"t":"Respected by many and earns money easily.","h":"99026477"},
