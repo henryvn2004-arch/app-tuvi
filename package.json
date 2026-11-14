@@ -102,7 +102,8 @@
     "check:enginema": "node scripts/check-engine-ma.mjs",
     "check:masters": "node scripts/check-masters-i18n.mjs",
     "check:assetv": "node scripts/check-asset-v.mjs",
-    "i18n:samples-zhcn": "node scripts/i18n/samples-zhcn.mjs"
+    "i18n:samples-zhcn": "node scripts/i18n/samples-zhcn.mjs",
+    "gen:simple-samples": "node --experimental-strip-types --no-warnings --import ./scripts/ts-alias-hooks.mjs scripts/gen-simple-text-samples.mjs"
   },
   "dependencies": {
     "@react-pdf/renderer": "^4.9.0",
