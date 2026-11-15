@@ -250,6 +250,8 @@
       "Thiên Thượng Hỏa": ["Tian Shang Huo","天上火","天上火","天上火","천상화"],
       "Thạch Lựu Mộc": ["Shi Liu Mu","石榴木","石榴木","石榴木","석류목"],
       "Đại Hải Thủy": ["Da Hai Shui","大海水","大海水","大海水","대해수"],
+      "Lò Trung Hỏa": ["Lu Zhong Huo","爐中火","炉中火","炉中火","노중화"],
+      "Kim Bạc Kim": ["Jin Bo Jin","金箔金","金箔金","金箔金","금박금"],
     },
     "kymon": {
       "Kỳ Môn Độn Giáp": ["Qi Men Dun Jia","奇門遁甲","奇门遁甲","奇門遁甲","기문둔갑"],

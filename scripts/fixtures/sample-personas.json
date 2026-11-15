@@ -128,6 +128,11 @@
       "林經理": "陈经理",
       "林先生": "陈先生"
     },
+    "tuZhTwTheoFile": {
+      "dat-ten-con-sample.json": {
+        "林": "陈"
+      }
+    },
     "banDoi": {
       "ten": "王怡君",
       "gioitinh": "nu",

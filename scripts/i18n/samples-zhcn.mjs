@@ -15,19 +15,23 @@ export function buildSampleZhCn(root = ROOT) {
     fs.readFileSync(path.join(root, 'scripts/fixtures/sample-personas.json'), 'utf8')
   );
   const thay = Object.entries(P['zh-cn'].tuZhTw || {}).map(([a, b]) => [conv(a), b]);
+  // Thay RIÊNG theo file (W36): chỉ áp cho đúng file đó, SAU bảng chung — dùng khi phải thay một chữ đơn (họ 林 → 陈 của
+  // bản Đặt Tên Con) mà thay toàn cục sẽ đụng chữ khác ở file khác (森林, 大林木…).
+  const theoFile = P['zh-cn'].tuZhTwTheoFile || {};
   const dir = path.join(root, 'public/samples/zh-tw');
   const out = {};
   for (const f of fs.existsSync(dir)
     ? fs.readdirSync(dir).filter((x) => x.endsWith('.json'))
     : []) {
     const src = JSON.parse(fs.readFileSync(path.join(dir, f), 'utf8'));
+    const thayF = [...thay, ...Object.entries(theoFile[f] || {}).map(([a, b]) => [conv(a), b])];
     // Đi SÂU vào mảng/object (mục `nenLam: [{viec, vidu}]`…): chỉ đổi chuỗi, giữ nguyên khung và tên khoá.
     const doi = (v) => {
       if (Array.isArray(v)) return v.map(doi);
       if (v && typeof v === 'object')
         return Object.fromEntries(Object.entries(v).map(([k, x]) => [k, doi(x)]));
       let t = conv(String(v));
-      for (const [a, b] of thay) t = t.split(a).join(b);
+      for (const [a, b] of thayF) t = t.split(a).join(b);
       return t;
     };
     out[f] = JSON.stringify(doi(src), null, 1) + '\n';
