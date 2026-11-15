@@ -205,12 +205,67 @@ async function streamAnthropicResponse(system: string, user: string, maxTokens: 
 }
 
 // ─── Đặt tên con ─────────────────────────────────────────────
+// W36 (Henry duyệt): khách /ja /ko /zh-tw /zh-cn /en nhận tên THEO VĂN HOÁ NƯỚC ĐÓ, không phải tên Việt. System của vi
+// giữ nguyên từng byte (nhánh `locale === 'vi'` bên dưới); nước khác dùng `datTenConNuocSystem` — đúng MỘT nguồn bố cục
+// (dòng Format + MỘT dòng mẫu của nước đó). Câu chỉ định ngôn ngữ vẫn qua `withLang` ở USER như mọi tool khác.
+// Mẫu dạy bằng VÍ DỤ, không bảng luật; số nét trong mẫu đã đếm tay (新字体 cho ja, 康熙 cho zh).
+interface TenNuoc {
+  nuoc: string; // tập quán đặt tên, viết bằng tiếng Việt cho khớp ngôn ngữ của system
+  coSo: string; // cơ sở thứ hai (sau ngũ hành nạp âm): chữ/âm/nghĩa/số nét theo nước
+  mau: string; // MỘT dòng tên mẫu — nhãn bằng ngôn ngữ đích
+}
+const TEN_THEO_NUOC: Record<Exclude<LangLocale, 'vi'>, TenNuoc> = {
+  ja: {
+    nuoc: 'Nhật Bản',
+    coSo:
+      'Tên Nhật (名) 1–2 chữ kanji quen dùng đặt tên, kèm cách đọc hiragana; nghĩa từng chữ; hành của chữ theo nghĩa/bộ. Số nét kiểu 姓名判断 (総画 · 人格, đếm theo 新字体) chỉ ghi để tham khảo — trường phái đếm khác nhau, không phán cát hung.',
+    mau: '**田中 湊（たなか みなと）** — 漢字: 湊「人と船が集まる港」 · 意味: 人が自然と集まってくる子に · 五行: 水 · 画数: 総画21（人格16） · 合う理由: 水の一字が本命の水を厚くする',
+  },
+  ko: {
+    nuoc: 'Hàn Quốc',
+    coSo:
+      'Tên Hàn 2 âm tiết, mỗi âm có Hán tự quen dùng trong tên; ghi hangeul + Hán tự + 훈음 từng chữ; hành theo 자원오행 (bộ/nghĩa của chữ). Có thể xen một tên thuần Hàn (không Hán tự) nếu nghĩa hợp hành. Cuối bài một câu: nếu nhà có 돌림자 thì đặt nó vào chữ cùng hành.',
+    mau: '**정윤하 (鄭潤河)** — 한자: 潤 윤택할 윤 · 河 물 하 · 뜻: 큰 강처럼 넉넉하게 주변을 적셔 주는 사람 · 자원오행: 水 · 水 · 맞는 이유: 두 글자 모두 물이라 본명의 수를 두텁게 해요',
+  },
+  'zh-tw': {
+    nuoc: 'người Hoa (Đài Loan), chữ PHỒN THỂ',
+    coSo:
+      'Tên 1–2 chữ Hán phồn thể quen dùng đặt tên; nghĩa từng chữ; 五行 của chữ theo bộ/nghĩa. Số nét theo 康熙字典 chỉ của phần TÊN (họ cố định) — ghi để tham khảo theo tập quán, không phán cát hung.',
+    mau: '**王沐晴** — 字義：沐「潤澤」・晴「雨後放晴」 · 寓意：被滋潤、心性開朗 · 五行：水・火 · 筆畫（康熙）：沐8 晴12 · 適合原因：水為本命之氣，晴字再添一分暖',
+  },
+  'zh-cn': {
+    nuoc: 'người Hoa (Đại lục), chữ GIẢN THỂ',
+    coSo:
+      'Tên 1–2 chữ Hán giản thể quen dùng đặt tên; nghĩa từng chữ; 五行 của chữ theo bộ/nghĩa. Số nét theo 康熙字典 chỉ của phần TÊN (họ cố định) — ghi để tham khảo theo tập quán, không phán cát hung.',
+    mau: '**王沐晴** — 字义：沐「润泽」・晴「雨后放晴」 · 寓意：被滋润、心性开朗 · 五行：水・火 · 笔画（康熙）：沐8 晴12 · 适合原因：水为本命之气，晴字再添一分暖',
+  },
+  en: {
+    nuoc: 'tiếng Anh',
+    coSo:
+      'Tên riêng tiếng Anh thông dụng (first name); gốc (Latin, Hebrew, Gaelic…) và nghĩa; hành liên hệ qua nghĩa/hình ảnh của tên (cây, biển, đá quý, lửa…). Không chắc gốc tên thì chọn tên khác, không bịa.',
+    mau: '**Rowan Hale** — Origin: Gaelic · Meaning: the rowan tree, "little red one" · Element: Wood · Why it fits: wood takes in the child\'s water and passes it on as warmth',
+  },
+};
+const datTenConNuocSystem = (n: TenNuoc) => `Bạn là chuyên gia đặt tên con theo ngũ hành và theo tập quán đặt tên của ${n.nuoc}. Tên gợi ý là tên thật của nước đó, người bản xứ nghe thấy tự nhiên — KHÔNG phải tên Việt, không kèm âm Hán-Việt. Họ giữ đúng chữ khách nhập.
+
+Cơ sở luận tên (chỉ dùng các cơ sở sau):
+1. Ngũ hành nạp âm — Lục Thập Hoa Giáp: xác định hành cần bổ trợ dựa trên sinh khắc giữa con, bố, mẹ
+2. ${n.coSo}
+
+Ngũ hành sinh: Mộc→Hỏa→Thổ→Kim→Thủy→Mộc
+Ngũ hành khắc: Mộc→Thổ, Thổ→Thủy, Thủy→Hỏa, Hỏa→Kim, Kim→Mộc
+
+Format: Trả về 3 nhóm (mỗi nhóm 4 tên), tiêu đề nhóm theo mức ưu tiên ngũ hành. Mỗi tên ĐÚNG MỘT dòng, nhãn và thứ tự như mẫu (mẫu là họ khác, đừng chép tên):
+${n.mau}
+
+${ARC_GIONG_NGU_HANH}`;
+
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 async function handleDatTenCon(body: any, locale: LangLocale): Promise<Response> {
   const { ho, gioiTinh, namSinhCon, canChiCon, napAmCon, canChiBo, napAmBo, canChiMe, napAmMe } = body;
   if (!ho || !namSinhCon || !canChiCon) return err('Thiếu thông tin', 400);
 
-  const system = `Bạn là chuyên gia đặt tên con theo ngũ hành và Hán Việt học cổ điển.
+  const system = locale !== 'vi' ? datTenConNuocSystem(TEN_THEO_NUOC[locale]) : `Bạn là chuyên gia đặt tên con theo ngũ hành và Hán Việt học cổ điển.
 
 Cơ sở luận tên (chỉ dùng các cơ sở sau):
 1. Ngũ hành nạp âm — Lục Thập Hoa Giáp: xác định hành cần bổ trợ dựa trên sinh khắc giữa con, bố, mẹ

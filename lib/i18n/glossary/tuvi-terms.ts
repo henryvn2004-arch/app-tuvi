@@ -287,6 +287,11 @@ export const TERMS: readonly TermRow[] = [
   ['napam', 'Thiên Thượng Hỏa', '天上火'],
   ['napam', 'Thạch Lựu Mộc', '石榴木'],
   ['napam', 'Đại Hải Thủy', '大海水'],
+  //    Bí danh CHÍNH TẢ: `can-chi.js` · `xem-tuoi-sinh-con.js` · `lib/engine/diachi.ts` viết "Lò"/"Bạc" (khác hai bảng trên)
+  //    — không có dòng này thì thẻ nạp âm năm 1986/87 · 2022/23 ở /ja… hiện chữ Việt. Engine giữ nguyên chữ (vi byte-giống).
+  //    Cờ 'v': "Lò" là âm Nôm của 爐 (Unihan ghi lô) — kiểm âm bỏ qua đúng một dòng này; en giữ như dòng "Lô".
+  ['napam', 'Lò Trung Hỏa', '爐中火', 'Lu Zhong Huo', 'v'],
+  ['napam', 'Kim Bạc Kim', '金箔金'],
 
   // ── Kỳ Môn (W15b) — engine lib/qimen trả chữ Hán 值符/值使; trùng tên Việt với sao Trực Phù (直符) của Tử Vi
   //    nên cờ 'x' (chỉ tra chính xác theo loại, không dò trong văn — văn có "Trực Phù" thì không biết là môn nào).

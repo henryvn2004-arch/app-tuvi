@@ -114,6 +114,7 @@ const TuviPaywall = (() => {
     'nguoi-khac-dummy.json',
     'chon-ngay-tot-sample.json',
     'dat-ten-dn-sample.json',
+    'dat-ten-con-sample.json',
   ];
   const SAMPLE_LOCALES = ['en', 'ja', 'ko', 'zh-tw', 'zh-cn'];
 
