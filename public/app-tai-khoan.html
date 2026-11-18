@@ -84,14 +84,6 @@
 @media(hover:hover){.profile-signout:hover{background:rgba(192,57,43,.45);color:#fff;border-color:rgba(220,80,60,.8)}}
 .profile-actions{display:flex;align-items:center;gap:.65rem;flex-wrap:wrap;justify-content:flex-end}
 .provider-badge{display:inline-flex;align-items:center;gap:.3rem;font-size:.7rem;color:rgba(255,255,255,.45);background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.1);border-radius:20px;padding:.15rem .6rem;margin-top:.35rem;width:fit-content}
-.credit-progress-wrap{margin:.85rem 0 .5rem}
-.credit-progress-label{display:flex;justify-content:space-between;font-size:.74rem;color:rgba(255,255,255,.5);margin-bottom:.45rem}
-.credit-progress-track{background:rgba(255,255,255,.1);border-radius:20px;height:7px;overflow:hidden}
-.credit-progress-fill{height:100%;border-radius:20px;background:linear-gradient(90deg,#c9a84c,#f0d080);transition:width .7s cubic-bezier(.4,0,.2,1)}
-.credit-hero{background:var(--navy);border-radius:12px;padding:1.5rem 2rem;margin-bottom:1.25rem}
-.credit-hero-bal{color:#c9a84c;font-family:'Noto Serif',serif;font-size:2rem;font-weight:700}
-.credit-hero-top{display:flex;align-items:flex-start;justify-content:space-between;flex-wrap:wrap;gap:1rem;margin-bottom:.25rem}
-.credit-hero-btn{background:#c9a84c;color:#061A2E;padding:.75rem 1.5rem;border-radius:8px;font-size:.88rem;font-weight:700;text-decoration:none;align-self:flex-start;display:inline-flex;align-items:center;gap:.4rem}
 
 /* ── TABS ── */
 .tabs{display:flex;gap:0;border-bottom:2px solid var(--border);margin-bottom:1.75rem;background:var(--bg);border-radius:8px 8px 0 0;overflow:hidden}
@@ -148,24 +140,21 @@
   .acct-scope .tab-btn.active .tab-ic{color:#c9a84c}
   .acct-scope .empty-state{padding:2rem .5rem}
 
-  .acct-scope .credit-hero{padding:1.1rem;border-radius:16px;margin-bottom:1rem}
-  .acct-scope .credit-hero-top{flex-wrap:nowrap;align-items:center}
-  .acct-scope .credit-hero-bal{font-size:1.6rem;white-space:nowrap}
-  .acct-scope .credit-hero-btn{flex:none;align-self:center;padding:.6rem 1rem;border-radius:999px;font-size:.84rem}
   .acct-scope .account-section{padding:1rem;border-radius:14px}
   .acct-scope .account-section h3{margin-bottom:.8rem}
-  .acct-scope #tab-credits .vilu-filters select{flex:1 1 100%}
+  .acct-scope #tab-credits .lh-tools select{flex:1 1 40%}
+  .acct-scope #tab-credits .lh-exp{flex:1 1 100%}
   .acct-scope #tab-credits .vilu-tbl-wrap{border:none;overflow:visible}
-  .acct-scope #tab-credits table.vilu-tbl,.acct-scope #tab-credits table.vilu-tbl tbody{display:block;min-width:0}
-  .acct-scope #tab-credits table.vilu-tbl thead{display:none}
-  .acct-scope #tab-credits table.vilu-tbl tr{display:grid;grid-template-columns:1fr auto;grid-template-areas:"nd amt" "time ma";gap:.15rem .75rem;padding:.65rem 0;border-bottom:1px solid var(--border-lt)}
-  .acct-scope #tab-credits table.vilu-tbl tr:last-child{border-bottom:none}
-  .acct-scope #tab-credits table.vilu-tbl td{padding:0;border:none}
-  .acct-scope #tab-credits table.vilu-tbl td:nth-child(1),.acct-scope #tab-credits table.vilu-tbl td:nth-child(3){display:none}
-  .acct-scope #tab-credits table.vilu-tbl td:nth-child(2){grid-area:time;font-size:.74rem;color:var(--text-lt)}
-  .acct-scope #tab-credits table.vilu-tbl td:nth-child(4){grid-area:nd;font-weight:600;min-width:0}
-  .acct-scope #tab-credits table.vilu-tbl td:nth-child(5){grid-area:amt;text-align:right}
-  .acct-scope #tab-credits table.vilu-tbl td:nth-child(6){grid-area:ma;text-align:right}
+  .acct-scope #tab-credits table.vilu-tbl:not(.lh-usage),.acct-scope #tab-credits table.vilu-tbl:not(.lh-usage) tbody{display:block;min-width:0}
+  .acct-scope #tab-credits table.vilu-tbl:not(.lh-usage) thead{display:none}
+  .acct-scope #tab-credits table.vilu-tbl:not(.lh-usage) tr{display:grid;grid-template-columns:1fr auto;grid-template-areas:"ft amt" "note note" "time time";gap:.15rem .75rem;padding:.65rem 0;border-bottom:1px solid var(--border-lt)}
+  .acct-scope #tab-credits table.vilu-tbl:not(.lh-usage) tr:last-child{border-bottom:none}
+  .acct-scope #tab-credits table.vilu-tbl:not(.lh-usage) td{padding:0;border:none}
+  .acct-scope #tab-credits table.vilu-tbl:not(.lh-usage) td:nth-child(1),.acct-scope #tab-credits table.vilu-tbl:not(.lh-usage) td:nth-child(5),.acct-scope #tab-credits table.vilu-tbl:not(.lh-usage) td:nth-child(7),.acct-scope #tab-credits table.vilu-tbl:not(.lh-usage) td:empty{display:none}
+  .acct-scope #tab-credits table.vilu-tbl:not(.lh-usage) td:nth-child(2){grid-area:time;font-size:.74rem;color:var(--text-lt)}
+  .acct-scope #tab-credits table.vilu-tbl:not(.lh-usage) td:nth-child(3){grid-area:ft;min-width:0}
+  .acct-scope #tab-credits table.vilu-tbl:not(.lh-usage) td:nth-child(4){grid-area:amt;text-align:right}
+  .acct-scope #tab-credits table.vilu-tbl:not(.lh-usage) td:nth-child(6){grid-area:note;max-width:none;white-space:normal}
   .acct-scope #tab-account .setnav-btn{justify-content:center;padding:.55rem .2rem;font-size:.8rem;white-space:nowrap}
   .acct-scope #tab-account .setnav-btn [data-icon]{display:none}
 }
@@ -252,44 +241,98 @@
 
     <!-- Tab: Credits -->
     <div class="tab-content active" id="tab-credits">
-      <div class="credit-hero">
-        <div class="credit-hero-top">
-          <div>
-            <div data-i18n="taikhoan.so-du-luong" style="color:rgba(255,255,255,.55);font-size:.75rem;text-transform:uppercase;letter-spacing:.06em;margin-bottom:.35rem">Số Dư Lượng</div>
-            <div id="tabCreditBalance" class="credit-hero-bal">…</div>
-            <div data-i18n="taikhoan.khong-het-han" style="color:rgba(255,255,255,.4);font-size:.75rem;margin-top:.3rem">Không hết hạn</div>
-          </div>
-          <a data-i18n="taikhoan.nap-luong" href="/topup.html" class="credit-hero-btn"><span data-icon="wallet" style="width:16px;height:16px"></span> Nạp Lượng</a>
-        </div>
-        <div class="credit-progress-wrap">
-          <div data-i18n="taikhoan.da-dung-thang-nay-0-luong" class="credit-progress-label">
-            <span>Đã dùng tháng này</span>
-            <span id="monthlyUsageLabel">0 lượng</span>
-          </div>
-          <div class="credit-progress-track">
-            <div class="credit-progress-fill" id="monthlyUsageBar" style="width:0%"></div>
-          </div>
-        </div>
-      </div>
       <style>
-        #tab-credits .vilu-filters{display:flex;gap:.5rem;flex-wrap:wrap;margin-bottom:1rem}
-        #tab-credits .vilu-filters select,#tab-credits .vilu-filters input{border:1px solid var(--border-lt);border-radius:8px;padding:.5rem .7rem;font-size:.82rem;color:var(--text);background:var(--surface);font-family:inherit}
-        #tab-credits .vilu-filters input{flex:1;min-width:180px}
+        #tab-credits .lh-head{display:flex;align-items:center;justify-content:space-between;gap:1rem;flex-wrap:wrap;margin-bottom:1.1rem}
+        #tab-credits .lh-head h2{font-family:'Noto Serif',serif;font-size:1.35rem;font-weight:700;color:var(--heading);margin:0}
+        #tab-credits .lh-head p{font-size:.85rem;color:var(--text-lt);margin:.2rem 0 0}
+        #tab-credits .lh-cta{background:var(--navy);color:#fff;padding:.65rem 1.1rem;border-radius:10px;font-size:.85rem;font-weight:700;text-decoration:none;white-space:nowrap}
+        #tab-credits .lh-stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:.85rem;margin-bottom:1.25rem}
+        #tab-credits .lh-stat{display:flex;align-items:center;gap:.85rem;background:var(--surface);border:1px solid var(--border-lt);border-radius:14px;padding:1rem 1.1rem;min-width:0}
+        #tab-credits .lh-ic{width:44px;height:44px;border-radius:12px;background:var(--chip-blue);color:var(--blue);display:flex;align-items:center;justify-content:center;flex:none}
+        #tab-credits .lh-ic [data-icon]{width:20px;height:20px;display:inline-flex}
+        #tab-credits .lh-ic [data-icon] svg{width:100%;height:100%}
+        #tab-credits .lh-l{font-size:.76rem;color:var(--text-lt)}
+        #tab-credits .lh-v{font-size:1.25rem;font-weight:800;color:var(--heading);font-variant-numeric:tabular-nums;line-height:1.25}
+        #tab-credits .lh-v-sm{font-size:.95rem;font-weight:700}
+        #tab-credits .lh-sub{font-size:.72rem;color:var(--text-lt)}
+        #tab-credits .lh-top{display:flex;align-items:flex-end;justify-content:space-between;gap:.75rem;flex-wrap:wrap;border-bottom:1px solid var(--border-lt);margin-bottom:1rem}
+        #tab-credits .lh-tabs{display:flex;gap:1.5rem;overflow-x:auto;scrollbar-width:none}
+        #tab-credits .lh-tabs::-webkit-scrollbar{display:none}
+        #tab-credits .lh-tab{background:none;border:none;border-bottom:2px solid transparent;padding:.8rem .1rem;margin-bottom:-1px;font-size:.85rem;font-weight:600;color:var(--text-lt);cursor:pointer;white-space:nowrap;font-family:inherit}
+        #tab-credits .lh-tab.active{color:var(--heading);border-bottom-color:var(--tx-gold)}
+        #tab-credits .lh-tools{display:flex;gap:.5rem;flex-wrap:wrap;padding-bottom:.6rem}
+        #tab-credits .lh-tools select,#tab-credits .lh-exp{border:1px solid var(--border-lt);border-radius:8px;padding:.5rem .7rem;font-size:.82rem;font-weight:600;color:var(--text);background:var(--surface);font-family:inherit;cursor:pointer}
+        #tab-credits .lh-exp:disabled{opacity:.45;cursor:default}
         #tab-credits .vilu-tbl-wrap{overflow-x:auto;border:1px solid var(--border-lt);border-radius:10px}
-        #tab-credits table.vilu-tbl{width:100%;border-collapse:collapse;font-size:.82rem;min-width:560px}
+        #tab-credits table.vilu-tbl{width:100%;border-collapse:collapse;font-size:.82rem;min-width:640px}
+        #tab-credits table.vilu-tbl.lh-usage{min-width:0}
+        #tab-credits table.vilu-tbl thead{background:var(--bg-soft)}
         #tab-credits table.vilu-tbl th{text-align:left;color:var(--text-lt);font-size:.7rem;text-transform:uppercase;letter-spacing:.04em;font-weight:700;padding:.7rem .85rem;border-bottom:1px solid var(--border-lt);white-space:nowrap}
         #tab-credits table.vilu-tbl td{padding:.7rem .85rem;border-bottom:1px solid var(--border-lt);color:var(--text);vertical-align:middle}
         #tab-credits table.vilu-tbl tr:last-child td{border-bottom:none}
-        #tab-credits .vilu-amt{font-weight:700;font-variant-numeric:tabular-nums;white-space:nowrap}
+        #tab-credits .lh-cb{width:34px;padding-right:0!important}
+        #tab-credits .lh-cb input{accent-color:var(--tx-gold);cursor:pointer}
+        #tab-credits .lh-ft{display:inline-flex;align-items:center;gap:.55rem;font-weight:600;color:var(--heading)}
+        #tab-credits .lh-ft [data-icon]{width:16px;height:16px;display:inline-flex;flex:none;color:var(--text-mid)}
+        #tab-credits .lh-ft [data-icon] svg{width:100%;height:100%}
+        #tab-credits .lh-num{text-align:right}
+        #tab-credits .lh-note{color:var(--text-mid);max-width:260px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+        #tab-credits .vilu-amt{font-weight:700;font-variant-numeric:tabular-nums;white-space:nowrap;color:var(--heading)}
         #tab-credits .vilu-amt.pos{color:var(--green)}
-        #tab-credits .vilu-amt.neg{color:var(--red)}
-        #tab-credits .vilu-mono{font-family:ui-monospace,Menlo,Consolas,monospace;font-size:.74rem;color:var(--text-lt)}
+        #tab-credits .lh-more{min-width:34px;height:28px;border:1px solid var(--border-lt);background:var(--surface);border-radius:8px;color:var(--text-mid);cursor:pointer;font-size:.9rem;font-family:inherit}
+        #tab-credits .lh-share{display:flex;align-items:center;gap:.6rem;min-width:120px}
+        #tab-credits .lh-share i{display:block;height:6px;border-radius:6px;background:var(--tx-gold);min-width:2px}
         #tab-credits .vilu-pager{display:flex;align-items:center;justify-content:space-between;margin-top:.85rem;font-size:.8rem;color:var(--text-lt);flex-wrap:wrap;gap:.5rem}
-        #tab-credits .vilu-pgbtns{display:flex;gap:.3rem}
-        #tab-credits .vilu-pgbtn{min-width:28px;height:28px;padding:0 .4rem;border:1px solid var(--border-lt);background:var(--surface);border-radius:6px;font-size:.8rem;color:var(--text-mid);cursor:pointer;font-family:inherit}
-        #tab-credits .vilu-pgbtn.active{background:var(--navy);color:#fff;border-color:var(--navy)}
+        #tab-credits .vilu-pgbtns{display:flex;gap:.3rem;align-items:center}
+        #tab-credits .vilu-pgbtn{min-width:30px;height:30px;padding:0 .4rem;border:1px solid var(--border-lt);background:var(--surface);border-radius:8px;font-size:.8rem;color:var(--text-mid);cursor:pointer;font-family:inherit}
+        #tab-credits .vilu-pgbtn.active{background:var(--navy);color:#fff;border-color:var(--tx-gold)}
         #tab-credits .vilu-pgbtn:disabled{opacity:.4;cursor:default}
       </style>
+
+      <div class="lh-head">
+        <div>
+          <h2 data-i18n="taikhoan.ls-lich-su-luong">Lịch sử Lượng</h2>
+          <p data-i18n="taikhoan.ls-ghi-chep-chi-tiet">Ghi chép chi tiết việc dùng Lượng và số dư của bạn.</p>
+        </div>
+        <a data-i18n="taikhoan.ls-nap-luong" href="/topup.html" class="lh-cta">Nạp Lượng →</a>
+      </div>
+
+      <div class="lh-stats">
+        <div class="lh-stat">
+          <div class="lh-ic"><span data-icon="wallet"></span></div>
+          <div><div data-i18n="taikhoan.ls-so-du-hien-tai" class="lh-l">Số dư hiện tại</div><div id="tabCreditBalance" class="lh-v">…</div></div>
+        </div>
+        <div class="lh-stat">
+          <div class="lh-ic"><span data-icon="trending-up"></span></div>
+          <div><div data-i18n="taikhoan.ls-da-dung-thang-nay" class="lh-l">Đã dùng tháng này</div><div id="monthlyUsageLabel" class="lh-v">…</div></div>
+        </div>
+        <div class="lh-stat">
+          <div class="lh-ic"><span data-icon="calendar"></span></div>
+          <div><div data-i18n="taikhoan.ls-giao-dich-gan-nhat" class="lh-l">Giao dịch gần nhất</div><div id="lastTxnLabel" class="lh-v lh-v-sm">…</div></div>
+        </div>
+      </div>
+
+      <div class="account-section">
+        <div class="lh-top">
+          <div class="lh-tabs" role="tablist">
+            <button type="button" data-i18n="taikhoan.ls-tat-ca-giao-dich" class="lh-tab active" data-lt="all" role="tab" aria-selected="true">Tất cả giao dịch</button>
+            <button type="button" data-i18n="taikhoan.ls-dung-theo-tinh-nang" class="lh-tab" data-lt="feature" role="tab" aria-selected="false">Dùng theo tính năng</button>
+            <button type="button" data-i18n="taikhoan.ls-lich-su-nap" class="lh-tab" data-lt="topup" role="tab" aria-selected="false">Lịch sử nạp</button>
+          </div>
+          <div class="lh-tools">
+            <select id="viluRange" data-i18n-attr="aria-label:taikhoan.ls-khoang-thoi-gian" aria-label="Khoảng thời gian">
+              <option data-i18n="taikhoan.ls-moi-thoi-diem" value="">Mọi thời điểm</option>
+              <option data-i18n="taikhoan.ls-7-ngay" value="7">7 ngày qua</option>
+              <option data-i18n="taikhoan.ls-30-ngay" value="30">30 ngày qua</option>
+              <option data-i18n="taikhoan.ls-90-ngay" value="90">90 ngày qua</option>
+            </select>
+            <select id="viluTypeFilter" data-i18n-attr="aria-label:taikhoan.ls-loc-tinh-nang" aria-label="Lọc theo tính năng"><option data-i18n="taikhoan.ls-moi-tinh-nang" value="">Mọi tính năng</option></select>
+            <button type="button" id="viluExport" data-i18n="taikhoan.ls-xuat" class="lh-exp">Xuất CSV</button>
+          </div>
+        </div>
+        <div id="transactionList"><div data-i18n="taikhoan.dang-tai" style="color:var(--text-lt);font-size:.85rem">Đang tải...</div></div>
+        <div class="vilu-pager" id="viluPager" style="display:none"></div>
+      </div>
 
       <style>
         #tab-credits .qt-top{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:.5rem;margin-bottom:.65rem}
@@ -357,15 +400,6 @@
             Đã nhận: <strong id="refEarnedCount" style="color:var(--tx-gold)">0</strong> Lượng
           </div>
         </div>
-      </div>
-      <div class="account-section">
-        <h3 data-i18n="taikhoan.lich-su-giao-dich">Lịch Sử Giao Dịch</h3>
-        <div class="vilu-filters">
-          <select id="viluTypeFilter"><option data-i18n="taikhoan.tat-ca-loai-giao-dich" value="">Tất cả loại giao dịch</option></select>
-          <input data-i18n-attr="placeholder:taikhoan.tim-theo-noi-dung" id="viluSearch" placeholder="Tìm theo nội dung…">
-        </div>
-        <div id="transactionList"><div data-i18n="taikhoan.dang-tai" style="color:var(--text-lt);font-size:.85rem">Đang tải...</div></div>
-        <div class="vilu-pager" id="viluPager" style="display:none"></div>
       </div>
       <div class="account-section" id="spCard">
         <h3 data-i18n="taikhoan.chia-se-lich-su"><span data-icon="share-2" style="width:15px;height:15px;vertical-align:-2px;color:var(--tx-gold)"></span> Chia Sẻ — Lịch Sử</h3>
@@ -655,6 +689,6 @@ window.iconHtml=window.iconHtml||function(k){return (window.ICONS&&window.ICONS[
   <script src="/nav.js?v=50" data-icons-only></script>
 <script src="/shell.js?v=162"></script>
 <script src="/tools-shared/shell-soft-nav.js?v=49"></script>
-<script src="/account-core.js?v=16"></script>
+<script src="/account-core.js?v=17"></script>
 </body>
 </html>
