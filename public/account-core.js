@@ -747,35 +747,15 @@ function renderMyShares(list) {
 async function loadCredits() {
   if (!_pUser || !(await _tok())) return;
   // Số dư là điểm neo: credit_transactions không lưu "số dư sau" từng dòng nên
-  // bảng suy ngược từ số dư hiện tại (mới → cũ).
-  const bal = await loadHeaderBalance();
+  // cột đó suy ngược từ số dư hiện tại qua bản tóm tắt (viluLoadSummary).
+  _viluBal = await loadHeaderBalance();
   loadReferralPanel();
-  try {
-    const res = await fetch(
-      SUPABASE_URL + '/rest/v1/credit_transactions?user_id=eq.' + encodeURIComponent(_pUser.id) +
-      '&order=created_at.desc&limit=500&select=*',
-      { headers: { apikey: SUPABASE_ANON, Authorization: 'Bearer ' + (await _tok()) } }
-    );
-    const txns = res.ok ? await res.json() : [];
-    let run = typeof bal === 'number' ? bal : null;
-    txns.forEach(t => { t._after = run; if (run !== null) run -= t.amount; });
-
-    const monthStart = new Date();
-    monthStart.setDate(1); monthStart.setHours(0, 0, 0, 0);
-    const monthUsed = txns
-      .filter(tx => tx.amount < 0 && new Date(tx.created_at) >= monthStart)
-      .reduce((sum, tx) => sum + Math.abs(tx.amount), 0);
-    const label = document.getElementById('monthlyUsageLabel');
-    if (label) label.textContent = _tvmbT('js.taikhoan.n-luong-thuong', '{n} lượng', { n: monthUsed });
-    const last = document.getElementById('lastTxnLabel');
-    if (last) last.textContent = txns.length ? viluDate(txns[0].created_at, false) : '—';
-
-    renderTransactions(txns);
-  } catch (e) {
-    console.error('[loadCredits]', e);
-    const tl = document.getElementById('transactionList');
-    if (tl) tl.innerHTML = ('<div style="color:var(--text-lt);font-size:.85rem">' + _tvmbT('js.taikhoan.khong-the-tai-lich-su', 'Không thể tải lịch sử.') + '</div>');
-  }
+  viluBind();
+  // Bản tóm tắt (nhẹ, ≤5000 dòng) chạy song song: nuôi 2 thẻ số, danh sách tính năng,
+  // cột "Số dư sau" và tab "Dùng theo tính năng". Bảng chính KHÔNG đợi nó.
+  _viluSumP = viluLoadSummary().catch(e => { console.error('[viluLoadSummary]', e); });
+  _viluPage = 1;
+  await viluFetchPage();
 }
 
 var VILU_LABELS = { topup:_tvmbT('js.taikhoan.nap-luong', 'Nạp Lượng'), use_laso:_tvmbT('js.taikhoan.luan-giai-la-so', 'Luận Giải Lá Số'), use_xem_tuoi:_tvmbT('js.taikhoan.xem-tuoi-vo-chong', 'Xem Tuổi Vợ Chồng'), use_xem_lam_an:_tvmbT('js.taikhoan.xem-tuoi-lam-an', 'Xem Tuổi Làm Ăn'), admin_grant:_tvmbT('js.taikhoan.cap-luong-quan-tri', 'Cấp Lượng (quản trị)'), chat:_tvmbT('js.taikhoan.hoi-thay', 'Hỏi Thầy'), refund:_tvmbT('js.taikhoan.hoan-luong', 'Hoàn Lượng') };
@@ -797,71 +777,175 @@ function viluDate(iso, withSec) {
 }
 function viluNum(n) { return Number(n).toLocaleString(_dateLoc()); }
 
-var _viluTxns = [];
-var _viluPage = 1;
-var _viluBound = false;
-var _viluTab = 'all';   // all | feature | topup
-var _viluSel = {};      // id → true (dòng đang tick)
 var VILU_PAGE_SIZE = 10;
+var VILU_SUM_PAGE = 1000;   // PostgREST của Supabase cắt mỗi lượt ở 1000 dòng
+var VILU_SUM_CAP = 5000;    // trần bản tóm tắt: vượt thì cột "Số dư sau"/tab tính năng chỉ phủ 5000 dòng mới nhất
+var _viluBound = false;
+var _viluTab = 'all';       // all | feature | topup
+var _viluPage = 1;
+var _viluRows = [];         // trang hiện tại — lấy từ server
+var _viluTotal = 0;         // tổng dòng khớp bộ lọc — server đếm (Content-Range)
+var _viluReq = 0;           // số thứ tự lượt gọi: bỏ phản hồi cũ về muộn
+var _viluSel = {};          // id → dòng đang tick (giữ qua các trang)
+var _viluBal = null;        // số dư hiện tại
+var _viluSum = [];          // bản tóm tắt: id,type,amount,description,created_at (mới → cũ)
+var _viluSumReady = false;
+var _viluSumCut = false;
+var _viluSumP = null;
+var _viluAfter = {};        // id → số dư sau giao dịch
 
-function renderTransactions(list) {
-  _viluTxns = list || [];
-  _viluPage = 1;
-  _viluSel = {};
+function viluHeaders(tok, extra) {
+  return Object.assign({ apikey: SUPABASE_ANON, Authorization: 'Bearer ' + tok }, extra || {});
+}
+function viluBase() {
+  return SUPABASE_URL + '/rest/v1/credit_transactions?user_id=eq.' + encodeURIComponent(_pUser.id);
+}
+// Mọi bộ lọc đi MỘT đường: server lọc (bảng chính) và client lọc bản tóm tắt (tab tính năng, xuất CSV).
+function viluCriteria() {
+  return {
+    feat: document.getElementById('viluTypeFilter')?.value || '',
+    days: Number(document.getElementById('viluRange')?.value) || 0,
+  };
+}
+function viluFilterQs() {
+  const c = viluCriteria();
+  let qs = '';
+  if (_viluTab === 'topup') qs += '&amount=gt.0';
+  if (c.feat) qs += '&type=eq.' + encodeURIComponent(c.feat);
+  if (c.days) qs += '&created_at=gte.' + encodeURIComponent(new Date(Date.now() - c.days * 864e5).toISOString());
+  return qs;
+}
+function viluHasFilter() { const c = viluCriteria(); return _viluTab === 'topup' || !!c.feat || !!c.days; }
+function viluSumFiltered() {
+  const c = viluCriteria();
+  const since = c.days ? Date.now() - c.days * 864e5 : 0;
+  return _viluSum.filter(t => {
+    if (_viluTab === 'topup' && !(t.amount > 0)) return false;
+    if (_viluTab === 'feature' && !(t.amount < 0)) return false;
+    if (c.feat && t.type !== c.feat) return false;
+    if (since && new Date(t.created_at).getTime() < since) return false;
+    return true;
+  });
+}
+
+// Một trang của bảng chính: server lọc + cắt trang + đếm tổng (Prefer: count=exact).
+async function viluFetchPage() {
+  const el = document.getElementById('transactionList');
+  if (!el || !_pUser) return;
+  const mine = ++_viluReq;
+  el.style.opacity = '.55';
+  try {
+    const tok = await _tok();
+    if (!tok) return;
+    const off = (_viluPage - 1) * VILU_PAGE_SIZE;
+    const res = await fetch(
+      viluBase() + viluFilterQs() + '&order=created_at.desc,id.desc&select=*&limit=' + VILU_PAGE_SIZE + '&offset=' + off,
+      { cache: 'no-store', headers: viluHeaders(tok, { Prefer: 'count=exact' }) }
+    );
+    if (mine !== _viluReq) return;
+    if (!res.ok) throw new Error('HTTP ' + res.status);
+    const m = /\/(\d+)$/.exec(res.headers.get('Content-Range') || '');
+    const rows = await res.json();
+    if (mine !== _viluReq) return;
+    _viluRows = rows;
+    _viluTotal = m ? Number(m[1]) : off + rows.length;
+    // Dữ liệu co lại giữa hai lượt (trang cuối biến mất) ⇒ lùi về trang cuối rồi gọi lại.
+    if (!rows.length && _viluTotal > 0 && _viluPage > 1) {
+      _viluPage = Math.ceil(_viluTotal / VILU_PAGE_SIZE);
+      return viluFetchPage();
+    }
+    el.style.opacity = '';
+    renderViluTable();
+  } catch (e) {
+    if (mine !== _viluReq) return;
+    console.error('[viluFetchPage]', e);
+    el.style.opacity = '';
+    el.innerHTML = ('<div style="color:var(--text-lt);font-size:.85rem">' + _tvmbT('js.taikhoan.khong-the-tai-lich-su', 'Không thể tải lịch sử.') + '</div>');
+  }
+}
+
+// Bản tóm tắt: chỉ 5 cột nhẹ, phân khúc 1000 dòng/lượt.
+async function viluLoadSummary() {
+  const rows = [];
+  while (rows.length < VILU_SUM_CAP) {
+    const tok = await _tok();
+    if (!tok) return;
+    const res = await fetch(
+      viluBase() + '&order=created_at.desc,id.desc&select=id,type,amount,description,created_at&limit=' + VILU_SUM_PAGE + '&offset=' + rows.length,
+      { cache: 'no-store', headers: viluHeaders(tok) }
+    );
+    if (!res.ok) throw new Error('HTTP ' + res.status);
+    const part = await res.json();
+    rows.push.apply(rows, part);
+    if (part.length < VILU_SUM_PAGE) break;
+  }
+  _viluSum = rows;
+  _viluSumCut = rows.length >= VILU_SUM_CAP;
+  // Suy ngược từ số dư hiện tại: dòng mới nhất = số dư hiện tại, mỗi dòng cũ hơn trừ đi giao dịch của dòng liền trước.
+  let run = typeof _viluBal === 'number' ? _viluBal : null;
+  _viluAfter = {};
+  rows.forEach(t => { if (run !== null) { _viluAfter[t.id] = run; run -= t.amount; } });
+  _viluSumReady = true;
+
+  const monthStart = new Date();
+  monthStart.setDate(1); monthStart.setHours(0, 0, 0, 0);
+  const monthUsed = rows
+    .filter(tx => tx.amount < 0 && new Date(tx.created_at) >= monthStart)
+    .reduce((sum, tx) => sum + Math.abs(tx.amount), 0);
+  const label = document.getElementById('monthlyUsageLabel');
+  if (label) label.textContent = _tvmbT('js.taikhoan.n-luong-thuong', '{n} lượng', { n: monthUsed });
+  const last = document.getElementById('lastTxnLabel');
+  if (last) last.textContent = rows.length ? viluDate(rows[0].created_at, false) : '—';
 
   // Dropdown lọc theo tính năng — liệt kê đúng các `type` có trong dữ liệu, không bịa nhóm.
   const typeSel = document.getElementById('viluTypeFilter');
   if (typeSel) {
     const seen = {}, cur = typeSel.value;
     let opts = ('<option value="">' + _tvmbT('js.taikhoan.moi-tinh-nang', 'Mọi tính năng') + '</option>');
-    _viluTxns.forEach(t => {
+    rows.forEach(t => {
       if (t.type && !seen[t.type]) { seen[t.type] = 1; opts += `<option value="${escHtml(t.type)}">${escHtml(viluLabel(t))}</option>`; }
     });
     typeSel.innerHTML = opts;
     typeSel.value = cur;
   }
-
-  if (!_viluBound) {
-    _viluBound = true;
-    const redraw = () => { _viluPage = 1; _viluSel = {}; renderViluTable(); };
-    if (typeSel) typeSel.addEventListener('change', redraw);
-    const range = document.getElementById('viluRange');
-    if (range) range.addEventListener('change', redraw);
-    document.querySelectorAll('#tab-credits .lh-tab').forEach(b => b.addEventListener('click', () => { _viluTab = b.dataset.lt; redraw(); }));
-    const exp = document.getElementById('viluExport');
-    if (exp) exp.addEventListener('click', viluExport);
-    // Bảng dựng lại bằng innerHTML mỗi lần vẽ ⇒ nghe uỷ quyền trên khung cha.
-    const host = document.getElementById('transactionList');
-    if (host) {
-      host.addEventListener('change', e => {
-        const el = e.target;
-        if (el.id === 'viluAll') {
-          host.querySelectorAll('.lh-pick').forEach(c => { c.checked = el.checked; if (el.checked) _viluSel[c.dataset.id] = true; else delete _viluSel[c.dataset.id]; });
-        } else if (el.classList && el.classList.contains('lh-pick')) {
-          if (el.checked) _viluSel[el.dataset.id] = true; else delete _viluSel[el.dataset.id];
-          const all = document.getElementById('viluAll');
-          if (all) all.checked = Array.prototype.every.call(host.querySelectorAll('.lh-pick'), c => c.checked);
-        } else return;
-        viluSyncExport();
-      });
-      host.addEventListener('click', e => { const b = e.target.closest && e.target.closest('.lh-more'); if (b) viluCopyId(b); });
-    }
-  }
-
-  renderViluTable();
+  renderViluTable();   // điền cột "Số dư sau" / dựng tab tính năng
 }
 
-function viluFiltered() {
-  const feat = document.getElementById('viluTypeFilter')?.value || '';
-  const days = Number(document.getElementById('viluRange')?.value) || 0;
-  const since = days ? Date.now() - days * 864e5 : 0;
-  return _viluTxns.filter(t => {
-    if (_viluTab === 'topup' && !(t.amount > 0)) return false;
-    if (_viluTab === 'feature' && !(t.amount < 0)) return false;
-    if (feat && t.type !== feat) return false;
-    if (since && new Date(t.created_at).getTime() < since) return false;
-    return true;
+function viluBind() {
+  if (_viluBound) return;
+  _viluBound = true;
+  const redraw = () => {
+    _viluPage = 1; _viluSel = {};
+    if (_viluTab === 'feature') renderViluTable(); else viluFetchPage();
+  };
+  const typeSel = document.getElementById('viluTypeFilter');
+  if (typeSel) typeSel.addEventListener('change', redraw);
+  const range = document.getElementById('viluRange');
+  if (range) range.addEventListener('change', redraw);
+  document.querySelectorAll('#tab-credits .lh-tab').forEach(b => b.addEventListener('click', () => { _viluTab = b.dataset.lt; redraw(); }));
+  const exp = document.getElementById('viluExport');
+  if (exp) exp.addEventListener('click', viluExport);
+  // Bảng dựng lại bằng innerHTML mỗi lần vẽ ⇒ nghe uỷ quyền trên khung cha.
+  const host = document.getElementById('transactionList');
+  if (!host) return;
+  host.addEventListener('change', e => {
+    const el = e.target;
+    const byId = id => _viluRows.filter(r => String(r.id) === id)[0];
+    if (el.id === 'viluAll') {
+      host.querySelectorAll('.lh-pick').forEach(c => {
+        c.checked = el.checked;
+        const r = byId(c.dataset.id);
+        if (r) { if (el.checked) _viluSel[r.id] = r; else delete _viluSel[r.id]; }
+      });
+    } else if (el.classList && el.classList.contains('lh-pick')) {
+      const r = byId(el.dataset.id);
+      if (r) { if (el.checked) _viluSel[r.id] = r; else delete _viluSel[r.id]; }
+      const all = document.getElementById('viluAll');
+      if (all) all.checked = Array.prototype.every.call(host.querySelectorAll('.lh-pick'), c => c.checked);
+    } else return;
+    viluSyncExport();
   });
+  host.addEventListener('click', e => { const b = e.target.closest && e.target.closest('.lh-more'); if (b) viluCopyId(b); });
 }
 
 function viluSyncExport() {
@@ -876,15 +960,17 @@ function viluCopyId(b) {
   if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(b.dataset.id).then(done).catch(e => console.error('[viluCopyId]', e));
 }
 
-// Xuất CSV: dòng đã tick nếu có, nếu không thì TOÀN BỘ kết quả sau lọc (mọi trang).
-function viluExport() {
+// Xuất CSV: dòng đã tick nếu có, nếu không thì TOÀN BỘ kết quả sau lọc (mọi trang, từ bản tóm tắt).
+async function viluExport() {
   const picked = Object.keys(_viluSel).length;
-  const rows = picked ? _viluTxns.filter(t => _viluSel[t.id]) : viluFiltered();
+  let rows;
+  if (picked) rows = Object.keys(_viluSel).map(k => _viluSel[k]).sort((a, b) => (a.created_at < b.created_at ? 1 : -1));
+  else { await _viluSumP; rows = viluSumFiltered(); }
   if (!rows.length) return;
   // Ô chữ do người dùng/ứng dụng ghi (mô tả) có thể mở đầu bằng = + - @ ⇒ Excel hiểu là công thức.
   const q = v => { let s = v == null ? '' : String(v); if (/^[=+\-@\t\r]/.test(s)) s = "'" + s; return '"' + s.replace(/"/g, '""') + '"'; };
   const lines = [_tvmbT('js.taikhoan.csv-cot', 'Thời gian,Tính năng,Lượng,Số dư sau,Ghi chú,Mã giao dịch')].concat(rows.map(t =>
-    [q(t.created_at), q(viluLabel(t)), t.amount, t._after == null ? '' : t._after, q(viluNote(t)), q(t.id)].join(',')
+    [q(t.created_at), q(viluLabel(t)), t.amount, _viluAfter[t.id] == null ? '' : _viluAfter[t.id], q(viluNote(t)), q(t.id)].join(',')
   ));
   const a = document.createElement('a');
   a.href = URL.createObjectURL(new Blob(['﻿' + lines.join('\r\n')], { type: 'text/csv;charset=utf-8' }));
@@ -902,6 +988,7 @@ function viluPages(cur, total) {
   return out;
 }
 
+// Vẽ thuần từ trạng thái (không gọi mạng): bảng chính theo `_viluRows`/`_viluTotal`, tab tính năng theo `_viluSum`.
 function renderViluTable() {
   const el = document.getElementById('transactionList');
   const pager = document.getElementById('viluPager');
@@ -913,23 +1000,25 @@ function renderViluTable() {
   });
   viluSyncExport();
   if (pager) pager.style.display = 'none';
-  if (!_viluTxns.length) {
-    el.innerHTML = ('<div style="color:var(--text-lt);font-size:.85rem">' + _tvmbT('js.taikhoan.chua-co-giao-dich-nao', 'Chưa có giao dịch nào.') + '</div>');
+
+  if (_viluTab === 'feature') {
+    if (!_viluSumReady) { el.innerHTML = ('<div style="color:var(--text-lt);font-size:.85rem">' + _tvmbT('js.taikhoan.dang-tai', 'Đang tải…') + '</div>'); return; }
+    const rows = viluSumFiltered();
+    if (!rows.length) { el.innerHTML = ('<div style="color:var(--text-lt);font-size:.85rem">' + _tvmbT('js.taikhoan.khong-co-giao-dich-khop-bo', 'Không có giao dịch khớp bộ lọc.') + '</div>'); return; }
+    renderViluUsage(el, rows);
     return;
   }
 
-  const filtered = viluFiltered();
-  if (!filtered.length) {
-    el.innerHTML = ('<div style="color:var(--text-lt);font-size:.85rem">' + _tvmbT('js.taikhoan.khong-co-giao-dich-khop-bo', 'Không có giao dịch khớp bộ lọc.') + '</div>');
+  if (!_viluTotal) {
+    el.innerHTML = viluHasFilter()
+      ? ('<div style="color:var(--text-lt);font-size:.85rem">' + _tvmbT('js.taikhoan.khong-co-giao-dich-khop-bo', 'Không có giao dịch khớp bộ lọc.') + '</div>')
+      : ('<div style="color:var(--text-lt);font-size:.85rem">' + _tvmbT('js.taikhoan.chua-co-giao-dich-nao', 'Chưa có giao dịch nào.') + '</div>');
     return;
   }
 
-  if (_viluTab === 'feature') { renderViluUsage(el, filtered); return; }
-
-  const totalPages = Math.max(1, Math.ceil(filtered.length / VILU_PAGE_SIZE));
-  _viluPage = Math.min(_viluPage, totalPages);
+  const totalPages = Math.max(1, Math.ceil(_viluTotal / VILU_PAGE_SIZE));
   const start = (_viluPage - 1) * VILU_PAGE_SIZE;
-  const pageItems = filtered.slice(start, start + VILU_PAGE_SIZE);
+  const pageItems = _viluRows;
   const pick = _tvmbT('js.taikhoan.chon-giao-dich', 'Chọn giao dịch');
   const copyTip = _tvmbT('js.taikhoan.sao-chep-ma', 'Sao chép mã giao dịch');
 
@@ -938,11 +1027,12 @@ function renderViluTable() {
     '</tr></thead><tbody>' + pageItems.map(t => {
       const isAdd = t.amount > 0;
       const id = t.id == null ? '' : escHtml(String(t.id));
+      const after = _viluAfter[t.id];
       return '<tr><td class="lh-cb">' + (id ? '<input type="checkbox" class="lh-pick" data-id="' + id + '" aria-label="' + escHtml(pick) + '"' + (_viluSel[t.id] ? ' checked' : '') + '>' : '') + '</td>' +
         '<td>' + escHtml(viluDate(t.created_at, true)) + '</td>' +
         '<td><span class="lh-ft"><span data-icon="' + viluIcon(t) + '"></span>' + escHtml(viluLabel(t)) + '</span></td>' +
         '<td class="vilu-amt ' + (isAdd ? 'pos' : 'neg') + '">' + (isAdd ? '+' : '') + escHtml(viluNum(t.amount)) + '</td>' +
-        '<td>' + (t._after == null ? '—' : escHtml(viluNum(t._after))) + '</td>' +
+        '<td>' + (after == null ? '—' : escHtml(viluNum(after))) + '</td>' +
         '<td class="lh-note" title="' + escHtml(viluNote(t)) + '">' + escHtml(viluNote(t)) + '</td>' +
         '<td>' + (id ? '<button type="button" class="lh-more" data-id="' + id + '" title="' + escHtml(copyTip) + '" aria-label="' + escHtml(copyTip) + '">⋯</button>' : '') + '</td></tr>';
     }).join('') + '</tbody></table></div>';
@@ -963,8 +1053,8 @@ function renderViluTable() {
           '<button type="button" class="vilu-pgbtn' + (p === _viluPage ? ' active' : '') + '" data-p="' + p + '">' + p + '</button>').join('') +
         '<button type="button" class="vilu-pgbtn" data-p="' + (_viluPage + 1) + '"' + (_viluPage === totalPages ? ' disabled' : '') + ' aria-label="' + escHtml(_tvmbT('js.taikhoan.trang-sau', 'Trang sau')) + '">→</button>';
     }
-    pager.innerHTML = '<span>' + _tvmbT('js.taikhoan.hien-thi-giao-dich', 'Hiển thị {a}–{b} / {n} giao dịch', { a: start + 1, b: Math.min(start + VILU_PAGE_SIZE, filtered.length), n: filtered.length }) + '</span><div class="vilu-pgbtns">' + btns + '</div>';
-    pager.querySelectorAll('.vilu-pgbtn').forEach(b => b.addEventListener('click', () => { _viluPage = parseInt(b.dataset.p, 10); renderViluTable(); }));
+    pager.innerHTML = '<span>' + _tvmbT('js.taikhoan.hien-thi-giao-dich', 'Hiển thị {a}–{b} / {n} giao dịch', { a: start + 1, b: start + pageItems.length, n: viluNum(_viluTotal) }) + '</span><div class="vilu-pgbtns">' + btns + '</div>';
+    pager.querySelectorAll('.vilu-pgbtn').forEach(b => b.addEventListener('click', () => { _viluPage = parseInt(b.dataset.p, 10); viluFetchPage(); }));
   }
 }
 
