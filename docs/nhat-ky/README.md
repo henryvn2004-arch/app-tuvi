@@ -1,6 +1,6 @@
 # Nhật ký phát triển — mục lục
 
-619 mục ghi chép từng PR, tách khỏi `CLAUDE.md` để nó thôi ngốn ~350k token mỗi lượt.
+620 mục ghi chép từng PR, tách khỏi `CLAUDE.md` để nó thôi ngốn ~350k token mỗi lượt.
 
 **Sáu file dưới đây KHÔNG được nạp tự động.** Cần thì tra:
 
@@ -12,7 +12,7 @@ sed -n '120,190p' docs/nhat-ky/2026-08.md    # đọc đúng đoạn, đừng ca
 
 | file | số mục | dung lượng |
 |---|---:|---:|
-| `2026-11.md` | 78 | 291,072 B |
+| `2026-11.md` | 79 | 293,898 B |
 | `2026-10.md` | 16 | 39,635 B |
 | `2026-09.md` | 360 | 1,241,867 B |
 | `2026-08.md` | 148 | 1,024,027 B |
@@ -28,6 +28,7 @@ Luật rút ra từ các mục này đã được cô đọng lên `CLAUDE.md`. 
 
 | # | tháng | file | mục |
 |---:|---|---|---|
+| 1 | 2026-11 | `2026-11.md` | 🧾 Lịch sử Lượng dựng lại theo mẫu Credit history — 3 thẻ số, 3 tab, lọc thời gian/tính năng, xuất CSV, "Số dư sau" suy ngược từ số dư hiện tại; lọc/đếm/cắt trang ở server (`count=exact`), bản tóm tắt ≤5000 dòng cho cột số dư/tab tính năng; account-core.js?v=18 |
 | 1 | 2026-11 | `2026-11.md` | 🔧 Script sinh văn mẫu chạy lại: `npm run gen:simple-samples` qua `ts-alias-hooks.mjs` (bỏ `npx tsx` ngoài lockfile), thêm `--dry` |
 | 1 | 2026-11 | `2026-11.md` | 🎭 W32A-7 — Văn mẫu Chọn Ngày Tốt 5 nước + bản vi viết lại theo trụ tháng tiết khí (Mậu Tuất → Kỷ Hợi, sau W35); script sinh mẫu vi lỗi ESM ghi treo |
 | 1 | 2026-11 | `2026-11.md` | 📆 W35b — Chọn Ngày Tốt: thẻ "Năm" theo năm tiết (Lập Xuân) — `nhanTruNam` gom đoạn trụ tháng theo `namCanChi` engine; tháng 1 năm trước, tháng 2 hai đoạn; route tự tính; check:tietkhi +2.803 phép |
