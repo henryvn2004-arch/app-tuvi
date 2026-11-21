@@ -44,7 +44,7 @@ export async function validateKey(key: string): Promise<ValidateResult> {
     return { ok: false, error: 'Máy chủ chưa cấu hình kết nối dữ liệu. Vui lòng thử lại sau.' };
   }
   try {
-    const res = await fetch(GET_KEY_URL(k), { headers: SB_HEADERS });
+    const res = await fetch(GET_KEY_URL(k), { headers: SB_HEADERS, signal: AbortSignal.timeout(4000) });
     if (!res.ok) return { ok: false, error: HUONG_DAN_LAY_KEY };
     const rows = (await res.json()) as McpKeyInfo[];
     const info = rows[0];

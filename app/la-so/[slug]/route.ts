@@ -6,7 +6,7 @@
 //   4. Redirect to menh-kho
 // ⚠️ KHÔNG dùng revalidate/ISR: URL đuôi dài ⇒ mỗi slug mới = 1 ISR Write (hoá đơn 11/2026: 36,75 USD). Cache do Cache-Control s-maxage của response lo.
 export const dynamic = 'force-dynamic';
-export const maxDuration = 30;     // allow 30s for engine on cold start
+export const maxDuration = 15;     // đã có SB_TIMEOUT_MS=4s/lượt + RELATED_BUDGET 5s; 30s chỉ giữ 2 GB lâu hơn khi Supabase nghẽn
 
 import { NextRequest, NextResponse } from 'next/server';
 import { readFileSync } from 'fs';
@@ -1889,20 +1889,18 @@ export async function GET(req: NextRequest, { params }: { params: Promise<{ slug
           //    thêm cho một khối TRANG TRÍ — đo được nó kéo lượt hỏng từ 4,1s
           //    lên 9,1s mà chắc chắn trả về rỗng.
           const sbAlive = pub.ok || pre.ok;
-          const relatedArticles = sbAlive ? await fetchRelatedArticles(cungMenh, chinhTinh) : [];
-          // Cùng gate `sbAlive` — Supabase vừa không trả lời được thì đừng hỏi
-          // thêm cho một khối TRANG TRÍ khác; thẻ chat vẫn hiện (không cần DB).
-          const nextStepTool = sbAlive
-            ? await withTimeout(fetchNextStepTool('chu-trinh-cuoc-doi'), SB_TIMEOUT_MS, null)
-            : null;
-          // Hụt giờ / Supabase chết ⇒ `null` ⇒ thẻ chỉ nói Lượng. Trước đây rơi về
-          // hằng số 500 — một đơn giá ĐOÁN in vào trang ISR giữ cả năm.
-          const usdRate = sbAlive ? await withTimeout<number | null>(usdPerCredit(), SB_TIMEOUT_MS, null) : null;
-          // Thẻ thầy chỉ là trang trí cho ô Hỏi Thầy — Supabase chết thì ô vẫn
-          // dựng (thiếu tên), không hỏi thêm.
-          const thay = sbAlive
-            ? await fetchThayCard(THAY_LA_SO)
-            : { id: THAY_LA_SO, name: null, mon: null, greeting: null };
+          // 4 khối TRANG TRÍ hỏi SONG SONG (trước: tuần tự — mỗi miss giữ 2 GB qua 3–4 vòng
+          // Supabase liên tiếp). Nội dung/hạn giờ từng khối GIỮ NGUYÊN, chỉ đổi thứ tự chờ.
+          //  · related: bài liên quan (ngân sách riêng RELATED_BUDGET_MS).
+          //  · nextStep/usdRate: hụt giờ ⇒ `null` ⇒ thẻ chỉ nói Lượng (không rơi về hằng số 500 đoán mò).
+          //  · thay: Supabase chết thì ô Hỏi Thầy vẫn dựng (thiếu tên).
+          const thayRong: ThayCard = { id: THAY_LA_SO, name: null, mon: null, greeting: null };
+          const [relatedArticles, nextStepTool, usdRate, thay] = await Promise.all([
+            sbAlive ? fetchRelatedArticles(cungMenh, chinhTinh) : Promise.resolve([] as Awaited<ReturnType<typeof fetchRelatedArticles>>),
+            sbAlive ? withTimeout(fetchNextStepTool('chu-trinh-cuoc-doi'), SB_TIMEOUT_MS, null) : Promise.resolve(null),
+            sbAlive ? withTimeout<number | null>(usdPerCredit(), SB_TIMEOUT_MS, null) : Promise.resolve<number | null>(null),
+            sbAlive ? fetchThayCard(THAY_LA_SO) : Promise.resolve(thayRong),
+          ]);
           const html = buildIsrHTML(ls, isrParams, slug, relatedArticles, nextStepTool, usdRate, thay);
           // Lá số ISR là văn engine tiếng Việt, không có bản dịch ⇒ bản ≠ vi noindex.
           if (locale !== 'vi')
