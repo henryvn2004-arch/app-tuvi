@@ -14,7 +14,8 @@
 // `ngay` khớp NGUYÊN VĂN giá trị `key_t0` ("MM-DD", tháng trước ngày sau) —
 // cố ý giữ đúng định dạng cột DB, không đảo thành "DD-MM" để tránh lỗi hoán
 // đổi ngày/tháng khi đọc lại.
-export const revalidate = 604800; // dữ liệu celeb_births gần như tĩnh — 7 ngày
+// ⚠️ KHÔNG dùng revalidate/ISR: URL đuôi dài ⇒ mỗi slug mới = 1 ISR Write (hoá đơn 11/2026: 36,75 USD). Cache do Cache-Control s-maxage của response lo.
+export const dynamic = 'force-dynamic';
 
 import { NextRequest, NextResponse } from 'next/server';
 import { ORG_ID } from '@/lib/seo/entity';

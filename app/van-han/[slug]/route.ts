@@ -1,7 +1,8 @@
 // app/van-han/[slug]/route.ts
 // Level 1 (36 pages):  tuoi-[chi]-nam-[namXem]    — tất cả năm sinh cùng chi
 // Level 2 (180 pages): [can-chi]-nam-[namXem]      — can-chi cụ thể
-export const revalidate = false;
+// ⚠️ KHÔNG dùng revalidate/ISR: URL đuôi dài ⇒ mỗi slug mới = 1 ISR Write (hoá đơn 11/2026: 36,75 USD). Cache do Cache-Control s-maxage của response lo.
+export const dynamic = 'force-dynamic';
 
 import { NextRequest, NextResponse } from 'next/server';
 import { readFileSync } from 'fs';
