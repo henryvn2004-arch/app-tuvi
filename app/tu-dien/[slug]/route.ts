@@ -1,5 +1,6 @@
 // app/tu-dien/[slug]/route.ts
-export const revalidate = 86400;
+// ⚠️ KHÔNG dùng revalidate/ISR: URL đuôi dài ⇒ mỗi slug mới = 1 ISR Write (hoá đơn 11/2026: 36,75 USD). Cache do Cache-Control s-maxage của response lo.
+export const dynamic = 'force-dynamic';
 import { NextRequest, NextResponse } from 'next/server';
 import { ORG_ID } from '@/lib/seo/entity';
 import { THAY_THEO_CHUYEN_MUC, fetchThayCard, seoAsk } from '@/lib/seo/ask-box';

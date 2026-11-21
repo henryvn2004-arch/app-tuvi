@@ -1,7 +1,8 @@
 // app/menh-kho/[year]/[day]/route.ts
 // Day hub: /menh-kho/1990/06-15 → 24 links (12 giờ × 2 giới) → /la-so/[slug]
 // ~18,250 pages, ISR cache vĩnh viễn
-export const revalidate = false;
+// ⚠️ KHÔNG dùng revalidate/ISR: URL đuôi dài ⇒ mỗi slug mới = 1 ISR Write (hoá đơn 11/2026: 36,75 USD). Cache do Cache-Control s-maxage của response lo.
+export const dynamic = 'force-dynamic';
 
 import { NextRequest, NextResponse } from 'next/server';
 // 18.628 trang day hub — 49% số URL đã nộp, xếp hạng ~1,4 mà 0 nhấp. Xem

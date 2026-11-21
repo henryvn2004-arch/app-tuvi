@@ -58,3 +58,11 @@ Không có số log để chứng minh. Các manh mối ✅ trong repo: nhật k
 ## Phụ lục — việc cần Henry/Founder (code không làm thay được)
 - Chạy #1 (log) và #2/#5 trên dashboard Vercel.
 - Quyết định chính sách `/la-so/*` algorithmic: giữ `noindex,follow` (hiện tại) hay chuyển sang `410/404` cho phần chưa từng có hiển thị (đòn mạnh nhất nhưng đổi hành vi SEO).
+
+## ĐÍNH CHÍNH (21/11, sau khi có hoá đơn thật)
+Phần 1/3 ở trên nói "không ISR, chỉ header CDN" là **SAI**. `export const revalidate = …` trong route handler có tham số động
+(`/la-so/[slug]`, `/menh-kho/[year]/[day]`, `/van-han/[slug]`, `/luan-giai/[slug]`, `/thu-vien/*`, `/tu-dien/[slug]`) khiến Next/Vercel coi là **ISR**:
+mỗi slug mới = 1 **ISR Write** (+ Fast Origin Transfer). Hoá đơn chu kỳ 18/11: ISR Writes 36,75 USD + Fast Origin Transfer 37,59 USD — lớn hơn Memory (6,05).
+Bản vá trong PR này: 8 route đó chuyển sang `dynamic = 'force-dynamic'` (đúng bài học bizdirectasia), **giữ nguyên** `Cache-Control: s-maxage` sẵn có
+trong response nên CDN vẫn cache. Ngoại lệ cần để ý: nhánh 404 của `luan-giai/[slug]` không có Cache-Control (trước đây ISR cache hộ) — nếu thấy bot đập slug rác thì thêm `s-maxage` cho 404.
+Chưa đụng: `ngay-tot/*`, `sitemap-*`, `van-han`, `kim-lau`… (ít URL hoặc không header) — xem lại sau 48h theo số ISR Writes.
