@@ -134,6 +134,19 @@ for (const n of new Set([...eng.matchAll(/cuc:\s*'([^']+Cục)'/g)].map((m) => m
   if (!has('cuc', n)) bad(`glossary thiếu cục "${n}" (LAP_CUC_RULES của engine)`);
 for (const n of ['Thủy Nhị Cục', 'Mộc Tam Cục', 'Kim Tứ Cục', 'Thổ Ngũ Cục', 'Hỏa Lục Cục'])
   if (!eng.includes(`'${n}'`)) bad(`engine không còn cục "${n}" — bộ dò lạc hậu`);
+// Tên NẠP ÂM: mỗi nguồn tự chép một mảng 30 tên và CHÍNH TẢ KHÁC NHAU ("Lò/Lô Trung Hỏa", "Kim Bạc/Bạch Kim") — glossary
+// dựng từ một nguồn thì chỉ phủ nguồn đó ⇒ thẻ nạp âm ở /ja… in chữ Việt (W36). Đọc TRỌN mảng của từng nguồn, chốt 30 mục.
+for (const f of [
+  'public/can-chi.js',
+  'public/tools-shared/xem-tuoi-sinh-con.js',
+  'lib/engine/diachi.ts',
+]) {
+  const m = readFileSync(join(ROOT, f), 'utf8').match(/\[('Hải Trung Kim'[^\]]+)\]/);
+  const ten = m ? [...m[1].matchAll(/'([^']+)'/g)].map((x) => x[1]) : [];
+  if (ten.length !== 30) bad(`${f}: dò được ${ten.length}/30 tên nạp âm — đổi cấu trúc? sửa bộ dò`);
+  for (const n of ten)
+    if (!has('napam', n)) bad(`glossary thiếu nạp âm "${n}" (mảng tên của ${f})`);
+}
 const canchi = G.filter((t) => t.k === 'canchi').length;
 if (canchi !== 60) bad(`glossary có ${canchi} cặp can-chi (cần 60)`);
 
