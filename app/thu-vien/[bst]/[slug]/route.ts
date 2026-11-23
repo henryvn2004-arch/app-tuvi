@@ -3,7 +3,8 @@
 // Bố cục theo đúng thiết kế AEO đã chốt: `tra_loi_ngan` (đoạn passage-first,
 // 40-60 từ) đặt NGAY dưới H1 — đây là đoạn máy tìm kiếm/LLM khác trích dẫn —
 // rồi mới tới `than` (thân giải thích) và `hoi_dap` (FAQPage thật).
-export const revalidate = 86400;
+// ⚠️ KHÔNG dùng revalidate/ISR: URL đuôi dài ⇒ mỗi slug mới = 1 ISR Write (hoá đơn 11/2026: 36,75 USD). Cache do Cache-Control s-maxage của response lo.
+export const dynamic = 'force-dynamic';
 
 import { NextRequest, NextResponse } from 'next/server';
 import { ORG_ID } from '@/lib/seo/entity';

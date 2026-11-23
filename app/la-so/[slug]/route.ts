@@ -4,7 +4,8 @@
 //   2. laso_pregen  (old pre-generated batch)
 //   3. ISR compute  (new 438K pages: {can-chi}-{dd}-{mm}-{yyyy}-gio-{gio}-{gioi}-{namXem})
 //   4. Redirect to menh-kho
-export const revalidate = false;   // cache forever on CDN after first compute
+// ⚠️ KHÔNG dùng revalidate/ISR: URL đuôi dài ⇒ mỗi slug mới = 1 ISR Write (hoá đơn 11/2026: 36,75 USD). Cache do Cache-Control s-maxage của response lo.
+export const dynamic = 'force-dynamic';
 export const maxDuration = 30;     // allow 30s for engine on cold start
 
 import { NextRequest, NextResponse } from 'next/server';
