@@ -1,7 +1,8 @@
 // app/menh-kho/[year]/route.ts
 // Hub page: /menh-kho/1990 → list 365 ngày → /menh-kho/1990/[mm-dd]
 // 50 pages (1960–2010), ISR cache vĩnh viễn
-export const revalidate = false;
+// ⚠️ KHÔNG dùng revalidate/ISR: URL đuôi dài ⇒ mỗi slug mới = 1 ISR Write (hoá đơn 11/2026: 36,75 USD). Cache do Cache-Control s-maxage của response lo.
+export const dynamic = 'force-dynamic';
 
 import { NextRequest, NextResponse } from 'next/server';
 import { ORG_ID } from '@/lib/seo/entity';

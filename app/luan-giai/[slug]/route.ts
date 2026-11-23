@@ -1,7 +1,8 @@
 // app/luan-giai/[slug]/route.ts
 // ISR page: luận giải tóm tắt (teaser free) + CTA đăng nhập để xem đầy đủ
 // Slug format: {can}-{chi}-{dd}-{mm}-{yyyy}-gio-{gio}-{gioi}-{namXem}
-export const revalidate = false;
+// ⚠️ KHÔNG dùng revalidate/ISR: URL đuôi dài ⇒ mỗi slug mới = 1 ISR Write (hoá đơn 11/2026: 36,75 USD). Cache do Cache-Control s-maxage của response lo.
+export const dynamic = 'force-dynamic';
 export const maxDuration = 30;
 
 import { NextRequest, NextResponse } from 'next/server';
