@@ -45,3 +45,11 @@ export const INDEX_FOLLOW = '<meta name="robots" content="index, follow">';
  * `/la-so/*` tính tại chỗ (họ ISR).
  */
 export const NOINDEX_FOLLOW = '<meta name="robots" content="noindex, follow">';
+
+/**
+ * Như `NOINDEX_FOLLOW` nhưng KHÔNG cho bot đi theo liên kết. Chỉ dùng cho `/la-so/*` tính tại chỗ (họ ISR):
+ * ~587K trang, mỗi trang có khối "Xem thêm lá số liên quan" nối sang giờ/ngày/giới kề nên một crawler đi theo
+ * liên kết sẽ bò hết cả đồ thị, mỗi trang là một lần chạy engine. Trang đã noindex nên không có xếp hạng để mất;
+ * trang dựng sẵn và trang người dùng chia sẻ KHÔNG dùng hằng này (đang cần được bò lại để Google đọc `noindex`).
+ */
+export const NOINDEX_NOFOLLOW = '<meta name="robots" content="noindex, nofollow">';
