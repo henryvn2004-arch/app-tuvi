@@ -1,7 +1,8 @@
 // app/api/search/route.ts
 export const maxDuration = 30;
 import { NextRequest } from 'next/server';
-import { ok, err, options, parseBody } from '@/lib/cors';
+import { ok, options, parseBody } from '@/lib/cors';
+import { checkRouteRate, rateLimitedResponse, requestIp } from '@/lib/ops/rate-limit';
 
 const OPENAI_API_KEY    = process.env.OPENAI_API_KEY!;
 const SUPABASE_URL      = process.env.SUPABASE_URL!;
@@ -9,10 +10,18 @@ const SUPABASE_ANON_KEY = process.env.SUPABASE_ANON_KEY!;
 
 export async function OPTIONS() { return options(); }
 
+// Endpoint công khai (chatbot.js gọi mỗi câu hỏi) mà mỗi lượt gọi OpenAI + một RPC pgvector:
+// giới hạn theo IP; chatbot bỏ qua RAG khi lỗi nên 429 không làm hỏng cuộc chat.
+const SEARCH_PER_MIN = 60;
+const MATCH_MAX = 10;
+
 export async function POST(request: NextRequest) {
-  const body = await parseBody(request) as { query?: string; matchCount?: number };
-  const { query, matchCount = 7 } = body;
-  if (!query) return ok({ docs: '' });
+  if (!checkRouteRate('search', requestIp(request), SEARCH_PER_MIN).allowed) return rateLimitedResponse();
+  const body = await parseBody(request) as { query?: unknown; matchCount?: unknown };
+  const { query } = body;
+  if (typeof query !== 'string' || !query) return ok({ docs: '' });
+  // `match_count` đi thẳng vào RPC: chặn trần để một request không kéo cả bảng.
+  const matchCount = Math.min(Math.max(Math.floor(Number(body.matchCount)) || 7, 1), MATCH_MAX);
 
   try {
     const embResp = await fetch('https://api.openai.com/v1/embeddings', {
