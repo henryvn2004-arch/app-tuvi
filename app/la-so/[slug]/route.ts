@@ -11,7 +11,7 @@ export const maxDuration = 30;     // allow 30s for engine on cold start
 import { NextRequest, NextResponse } from 'next/server';
 import { readFileSync } from 'fs';
 import { join } from 'path';
-import { NOINDEX_FOLLOW } from '@/lib/seo/index-policy';
+import { NOINDEX_FOLLOW, NOINDEX_NOFOLLOW } from '@/lib/seo/index-policy';
 import { PUBLISHED_ONLY } from '@/lib/content/publish-filter';
 import { ORG_ID } from '@/lib/seo/entity';
 import { usdLabel, usdPerCredit } from '@/lib/billing/packages';
@@ -1423,7 +1423,7 @@ function buildRelatedLinks(params: IsrParams): string {
 <div style="max-width:1000px;margin:0 auto">
   <div style="font-size:11px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:#888;margin-bottom:16px">Xem thêm lá số liên quan</div>
   <div style="display:flex;flex-wrap:wrap;gap:8px">
-    ${links.map(l=>`<a href="${l.url}" style="font-size:12px;padding:5px 12px;border:1px solid #CCC;border-radius:14px;text-decoration:none;color:#444;background:#fff;white-space:nowrap">${esc(l.label)}</a>`).join('')}
+    ${links.map(l=>`<a href="${l.url}" rel="nofollow" style="font-size:12px;padding:5px 12px;border:1px solid #CCC;border-radius:14px;text-decoration:none;color:#444;background:#fff;white-space:nowrap">${esc(l.label)}</a>`).join('')}
   </div>
 </div>
 </div>`;
@@ -1600,7 +1600,7 @@ function buildIsrHTML(ls: Rec, params: IsrParams, slug: string, relatedArticles:
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:image" content="${esc(ogUrl)}">
 <link rel="canonical" href="${esc(url)}">
-${NOINDEX_FOLLOW}
+${NOINDEX_NOFOLLOW}
 <link rel="icon" type="image/webp" href="/seal.webp">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preload" href="https://fonts.googleapis.com/css2?family=Noto+Serif:wght@0,400;0,700&display=swap" as="style" onload="this.rel='stylesheet'"><noscript><link href="https://fonts.googleapis.com/css2?family=Noto+Serif:wght@0,400;0,700&display=swap" rel="stylesheet"></noscript>
