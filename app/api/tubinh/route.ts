@@ -8,6 +8,7 @@ import { ok, err, options, parseBody } from '@/lib/cors';
 import { llmText, llmStreamResponse } from '@/lib/llm/complete';
 import { requestLocale, withLang, type LangLocale } from '@/lib/llm/locale';
 import { withToolOutcome } from '@/lib/ops/tool-outcome';
+import { checkRouteRate, rateLimitedResponse, requestIp } from '@/lib/ops/rate-limit';
 import { chuanHoaDauThanh } from '@/lib/vn-text';
 import { LUAN_ARC_CHUNG, MAU_ARC_CHUNG, DOC_ARC_TUBINH } from '@/lib/agent/prompts';
 
@@ -661,7 +662,13 @@ Văn phong: trầm tĩnh, có chiều sâu, giọng người từng trải nhìn
 // ─── Route handlers ────────────────────────────────────────────
 export async function OPTIONS() { return options(); }
 
+// Route công khai, mỗi lượt đốt token LLM (luận giải 16 phần tuần tự, chat, tra RAG).
+// Một lần luận giải đủ = ~16 lượt nhưng mỗi lượt stream hàng chục giây nên ≈ 1–2 lượt/phút;
+// 30/phút/IP dư cho người thật (kể cả vài người chung IP nhà mạng) mà cắt vòng lặp/script.
+const TUBINH_PER_MIN = 30;
+
 async function runPost(request: NextRequest) {
+  if (!checkRouteRate('tubinh', requestIp(request), TUBINH_PER_MIN).allowed) return rateLimitedResponse();
   const { searchParams } = new URL(request.url);
   const action = searchParams.get('action');
   const body = await parseBody(request);
