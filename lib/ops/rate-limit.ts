@@ -21,7 +21,9 @@
 // nên thấy được đúng cái mà bộ đếm cục bộ này bỏ lọt.
 // ============================================================
 
+import type { NextResponse } from 'next/server';
 import { getConfigValue } from '@/lib/config/appConfig';
+import { err } from '@/lib/cors';
 
 interface RateCfg {
   enabled: boolean;
@@ -101,6 +103,40 @@ export async function checkTrackRate(identity: string, cost: number): Promise<Ra
   }
   b.n += cost;
   return { allowed: b.n <= cfg.perMinute, count: b.n, limit: cfg.perMinute };
+}
+
+/** IP của client theo header Vercel/proxy; 'unknown' khi không có (mọi request đó chung một xô). */
+export function requestIp(req: Request): string {
+  return req.headers.get('x-forwarded-for')?.split(',')[0].trim() || req.headers.get('x-real-ip') || 'unknown';
+}
+
+/**
+ * Giới hạn theo ROUTE cho endpoint công khai (không đăng nhập) mà mỗi lượt tốn tiền
+ * thật (OpenAI/LLM). Đếm 1 lượt cho `identity` trong cửa sổ `windowMs`.
+ *
+ * Cùng giới hạn như `checkTrackRate`: bộ đếm nằm trong RAM từng instance nên chặn được
+ * vòng lặp loạn, script một máy, curl thử — KHÔNG chặn được kẻ tấn công phân tán nhiều
+ * IP. Muốn tường thành thật thì thêm rule rate-limit ở Vercel Firewall theo path; bộ
+ * này là lớp rẻ không tốn thêm vòng mạng nào. Đồng bộ (không đọc config) vì đường nóng.
+ */
+export function checkRouteRate(route: string, identity: string, limit: number, windowMs = 60_000): RateVerdict {
+  const now = Date.now();
+  sweep(now);
+  const key = `${route}|${identity}`;
+  let b = buckets.get(key);
+  if (!b || b.resetAt <= now) {
+    b = { n: 0, resetAt: now + windowMs };
+    buckets.set(key, b);
+  }
+  b.n += 1;
+  return { allowed: b.n <= limit, count: b.n, limit };
+}
+
+/** 429 chuẩn cho các route công khai: kèm Retry-After và CORS như mọi route khác. */
+export function rateLimitedResponse(message = 'Quá nhiều yêu cầu, thử lại sau ít phút.', retryAfterSec = 60): NextResponse {
+  const res = err(message, 429);
+  res.headers.set('Retry-After', String(retryAfterSec));
+  return res;
 }
 
 /** Chỉ dùng cho test — xoá trạng thái giữa các ca. */
