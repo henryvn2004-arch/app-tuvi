@@ -28,6 +28,7 @@ Luật rút ra từ các mục này đã được cô đọng lên `CLAUDE.md`. 
 
 | # | tháng | file | mục |
 |---:|---|---|---|
+| 1 | 2026-11 | `2026-11.md` | 🔒 Khoá 3 route công khai tốn tiền — bỏ `/api/embed` (không xác thực, ghi `tuvi_docs`), giới hạn tốc độ `/api/tubinh` 30/phút + `/api/search` 60/phút theo IP (`checkRouteRate`, 429 + `Retry-After`); bộ đếm trong RAM từng instance |
 | 1 | 2026-11 | `2026-11.md` | 👶 W36 — Đặt Tên Con theo văn hoá từng nước: prompt `TEN_THEO_NUOC` 5 nước (vi byte-giống) · văn mẫu 5 nước viết tay · bí danh glossary "Lò Trung Hỏa"/"Kim Bạc Kim" (glossary.js?v=6 · tuvi-paywall.js?v=50 · shell.js?v=163) |
 | 1 | 2026-11 | `2026-11.md` | 🗣️ W37 — Giọng en hiện đại cho `cach-cuc` + `to-hop`: 146/2.217 mục sửa (benefactor→helpful supporter, concubine→secondary partner, lewd/wanton→unrestrained…), bảng đủ ở `docs/i18n/en-giong-2026-11.md` |
 | 1 | 2026-11 | `2026-11.md` | 🧾 Lịch sử Lượng dựng lại theo mẫu Credit history — 3 thẻ số, 3 tab, lọc thời gian/tính năng, xuất CSV, "Số dư sau" suy ngược từ số dư hiện tại; lọc/đếm/cắt trang ở server (`count=exact`), bản tóm tắt ≤5000 dòng cho cột số dư/tab tính năng; account-core.js?v=18 |
