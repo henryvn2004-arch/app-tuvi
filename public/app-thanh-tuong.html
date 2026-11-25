@@ -373,10 +373,24 @@ async function startCountdown() {
 async function startRecording() {
   const errEl = document.getElementById('error-msg');
   errEl.classList.remove('active');
+  let micErr = null;
   try {
     _stream = await navigator.mediaDevices.getUserMedia({ audio: { echoCancellation: true, noiseSuppression: true, sampleRate: 44100 }, video: false });
   } catch(e) {
-    errEl.textContent = _tvmbT('js.thtg.khong-the-truy-cap-microphone-vui', 'Không thể truy cập microphone. Vui lòng cho phép quyền trong trình duyệt.');
+    micErr = e;
+    // Thiết bị từ chối bộ ràng buộc (sampleRate…) hoặc báo không thấy → thử lại KHÔNG ràng buộc trước khi báo lỗi.
+    if (e && (e.name === 'OverconstrainedError' || e.name === 'NotFoundError')) {
+      try { _stream = await navigator.mediaDevices.getUserMedia({ audio: true }); micErr = null; } catch (e2) { micErr = e2; }
+    }
+  }
+  if (!_stream) {
+    const n = micErr && micErr.name;
+    errEl.textContent =
+      (n === 'NotFoundError' || n === 'DevicesNotFoundError')
+        ? _tvmbT('js.thtg.khong-thay-mic', 'Không tìm thấy micro. Hãy cắm hoặc bật micro (kiểm tra mục Âm thanh → Đầu vào của máy), rồi bấm lại nút Thu Âm.')
+      : (n === 'NotReadableError' || n === 'TrackStartError' || n === 'AbortError')
+        ? _tvmbT('js.thtg.mic-dang-ban', 'Micro đang được ứng dụng khác dùng hoặc không mở được. Hãy đóng ứng dụng đó, rồi bấm lại nút Thu Âm.')
+        : _tvmbT('js.thtg.khong-the-truy-cap-microphone-vui', 'Không thể truy cập microphone. Vui lòng cho phép quyền trong trình duyệt.');
     errEl.classList.add('active');
     return;
   }

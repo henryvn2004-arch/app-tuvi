@@ -1,6 +1,6 @@
 # Nhật ký phát triển — mục lục
 
-626 mục ghi chép từng PR, tách khỏi `CLAUDE.md` để nó thôi ngốn ~350k token mỗi lượt.
+627 mục ghi chép từng PR, tách khỏi `CLAUDE.md` để nó thôi ngốn ~350k token mỗi lượt.
 
 **Sáu file dưới đây KHÔNG được nạp tự động.** Cần thì tra:
 
@@ -12,7 +12,7 @@ sed -n '120,190p' docs/nhat-ky/2026-08.md    # đọc đúng đoạn, đừng ca
 
 | file | số mục | dung lượng |
 |---|---:|---:|
-| `2026-11.md` | 85 | 303,311 B |
+| `2026-11.md` | 86 | 303,311 B |
 | `2026-10.md` | 16 | 39,635 B |
 | `2026-09.md` | 360 | 1,241,867 B |
 | `2026-08.md` | 148 | 1,024,027 B |
@@ -28,6 +28,7 @@ Luật rút ra từ các mục này đã được cô đọng lên `CLAUDE.md`. 
 
 | # | tháng | file | mục |
 |---:|---|---|---|
+| 1 | 2026-11 | `2026-11.md` | 🎤 Thanh Tướng Pro: màn hình thu âm (overlay + chữ karaoke), lỗi micro tiếng Việt (NotFound/NotAllowed/NotReadable), đường dự phòng MediaRecorder khi ScriptProcessor không chạy; bản thường cùng cách báo lỗi micro |
 | 1 | 2026-11 | `2026-11.md` | 🍎 Thanh Tướng Pro treo trên iPhone: `AudioContext` tạo ngoài cú chạm ⇒ `resume()` không xong; `unlockAudio()` đồng bộ + trần chờ 1,5s có báo lỗi; Chromium không lộ lỗi này (bẫy ở `luat/bay.md`) |
 | 1 | 2026-11 | `2026-11.md` | 🎙️ Thanh Tướng Pro + Thanh Tướng: thêm Tên + Liên hệ, khối hồ sơ + chỉ số đo trong kết quả, nút Tải PDF (`Shell.printNow`); tên/liên hệ không vào prompt/chia sẻ/lịch sử; bản thường khoá nút Thu Âm tới khi nhập đủ |
 | 1 | 2026-11 | `2026-11.md` | 🕸️ `/la-so/*` tính tại chỗ: `noindex, nofollow` + `rel="nofollow"` ở khối "Xem thêm lá số liên quan" (`NOINDEX_NOFOLLOW`); gom bot bò đồ thị ~587K trang; pregen và trang chia sẻ giữ nguyên |
