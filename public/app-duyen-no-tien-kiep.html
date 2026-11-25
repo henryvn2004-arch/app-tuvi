@@ -592,7 +592,17 @@ document.getElementById('personGrid').addEventListener('change', _scheduleHookCh
 // ai-loading-steps.js, xem docs/luat/spa-nav.md). Cờ này chặn continuation
 // ghi DOM sau khi đã rời trang — không cần huỷ fetch, chỉ cần không dùng
 // kết quả của nó.
-document.addEventListener('tvmb:softnav', function () { _hookLeftPage = true; clearTimeout(_hookTimer); });
+// ⚠️ `shell-soft-nav.js` bắn `tvmb:softnav` SAU KHI script trang đích đã chạy —
+// kể cả khi trang đích CHÍNH LÀ trang này: listener vừa gắn nhận luôn sự kiện
+// "vào trang" của chính nó, cờ thành true ngay và hook bị bỏ. Chỉ tính khi
+// đường đích KHÁC trang này, rồi tự gỡ để không rò sang lần vào lại.
+function _onSoftNavLeave(e) {
+  if (e && e.detail && e.detail.path === '/app/duyen-no-tien-kiep') return;
+  _hookLeftPage = true;
+  clearTimeout(_hookTimer);
+  document.removeEventListener('tvmb:softnav', _onSoftNavLeave);
+}
+document.addEventListener('tvmb:softnav', _onSoftNavLeave);
 
 async function _maybeMountHook() {
   var births = [];
