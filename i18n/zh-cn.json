@@ -23211,6 +23211,10 @@
   "t": "适中",
   "h": "e3fa9054"
  },
+ "js.thtp.12-chi-so-do-giong": {
+  "t": "12 项声音指针",
+  "h": "a337ea4b"
+ },
  "js.thtp.am-s": {
   "t": " 音节/秒",
   "h": "49ed1880"
@@ -23258,6 +23262,10 @@
  "js.thtp.cham-diem-dam": {
   "t": "偏慢——沉稳。",
   "h": "1761f7f1"
+ },
+ "js.thtp.chi-so": {
+  "t": "指针",
+  "h": "3b41d652"
  },
  "js.thtp.co-bien-dong": {
   "t": "略有变动。",
@@ -23347,6 +23355,10 @@
   "t": "F0 平均",
   "h": "36f5bf55"
  },
+ "js.thtp.gioi-tinh": {
+  "t": "性别",
+  "h": "80bbce55"
+ },
  "js.thtp.giong-cao-bat-thuong-cho-nam": {
   "t": "ℹ 以男性而言，声音异常偏高。可能是在用假音说话，或数据不稳定。",
   "h": "a3164510"
@@ -23395,6 +23407,14 @@
   "t": "HNR 偏低代表什么？",
   "h": "c0db1713"
  },
+ "js.thtp.ho-so-nguoi-do": {
+  "t": "受测者数据",
+  "h": "4fc5dc44"
+ },
+ "js.thtp.ho-va-ten": {
+  "t": "姓名",
+  "h": "ad9f2994"
+ },
  "js.thtp.hoi-lech-dau-hieu-khi-khong": {
   "t": "略有偏差——气不均匀的征兆。",
   "h": "7392dcf4"
@@ -23410,6 +23430,10 @@
  "js.thtp.jitter-va-shimmer-la-gi": {
   "t": "Jitter 和 Shimmer 是什么？",
   "h": "0fc478fd"
+ },
+ "js.thtp.ket-qua": {
+  "t": "结果",
+  "h": "c9f95514"
  },
  "js.thtp.khac-gi-ban-thanh-tuong-thuong": {
   "t": "和一般的声相有什么不同？",
@@ -23455,6 +23479,14 @@
   "t": "无法使用麦克风",
   "h": "a07b8893"
  },
+ "js.thtp.lien-he": {
+  "t": "联系方式",
+  "h": "603522f1"
+ },
+ "js.thtp.lien-he-khong-hop-le": {
+  "t": "请输入有效的电话号码（9–15 位数字）或电子邮件。",
+  "h": "887d0fe1"
+ },
  "js.thtp.loi": {
   "t": "错误：",
   "h": "471c0087"
@@ -23479,6 +23511,10 @@
   "t": "{n} 秒",
   "h": "4b5fecbd"
  },
+ "js.thtp.nam": {
+  "t": "男",
+  "h": "b580ba1b"
+ },
  "js.thtp.ngan-am-a-bai-do-khi": {
   "t": "拉长「啊」音——气力测量",
   "h": "df9c2325"
@@ -23490,6 +23526,14 @@
  "js.thtp.ngan-dai-shimmer": {
   "t": "长音 <strong>{d}s</strong>，shimmer {sh}dB——<em>{q}</em>。",
   "h": "e8a19bff"
+ },
+ "js.thtp.ngay-do": {
+  "t": "测量日期",
+  "h": "f731d6e6"
+ },
+ "js.thtp.ngu-am-uoc-tinh": {
+  "t": "推估五音",
+  "h": "1692714f"
  },
  "js.thtp.ngu-am-uoc-tinh-n": {
   "t": "推估五音：{n}",
@@ -23507,9 +23551,17 @@
   "t": "{x}（浊）",
   "h": "8f9cb8cf"
  },
+ "js.thtp.nhan-dinh": {
+  "t": "评语",
+  "h": "af3b1813"
+ },
  "js.thtp.nhanh-linh-hoat": {
   "t": "偏快——灵活。",
   "h": "f8f7c567"
+ },
+ "js.thtp.nu": {
+  "t": "女",
+  "h": "feb92ccd"
  },
  "js.thtp.on-dinh": {
   "t": "稳定。",
@@ -23626,6 +23678,10 @@
  "js.thtp.trung-binh-vung-kim": {
   "t": "中等——金之域。",
   "h": "7f4bb46d"
+ },
+ "js.thtp.tuoi": {
+  "t": "年龄",
+  "h": "3a6fc33f"
  },
  "js.thtp.uyen-chuyen-vung-thuy": {
   "t": "灵活——水之域。",
@@ -31723,6 +31779,10 @@
   "t": "步骤 3 · 测量结果",
   "h": "3541b2e4"
  },
+ "thtp.chi-de-in-vao-ban-pdf": {
+  "t": "仅用于打印在结果 PDF 上，不会纳入解读内容。",
+  "h": "7d497e40"
+ },
  "thtp.chua-muon-ghi-am-ban-co": {
   "t": "<b>还不想录音吗？</b><span>您可以先看一份范例，预先体验。</span>",
   "h": "468bb930"
@@ -31746,6 +31806,14 @@
  "thtp.giong-noi-mang-nhieu-thong-tin": {
   "t": "声音蕴含的信息比我们想像的更多——4 项深度测量得出的 12 项声学指针，描绘出最完整的五音与气力全貌。适合想比一般声相看得更深的人。",
   "h": "f907ddc6"
+ },
+ "thtp.ho-va-ten": {
+  "t": "姓名",
+  "h": "ad9f2994"
+ },
+ "thtp.lien-he-sdt-hoac-email": {
+  "t": "联系方式（电话或电子邮件）",
+  "h": "e190b41f"
  },
  "thtp.luan-giai-thanh-tuong-ton-luong": {
   "t": "<span class=\"bg-label\"><span class=\"ic\" data-icon=\"music\"></span><b id=\"analyzeBtnLabel\">解读声相 →</b></span> <small>需 <span class=\"vnd\" data-tvp-price-vnd=\"thanh-tuong-pro\"></span> <span class=\"cb-sub\">(<span data-tvp-price=\"thanh-tuong-pro\">…</span> 两)</span></small>",
@@ -31775,6 +31843,14 @@
   "t": "声相深度分析",
   "h": "1e2230b3"
  },
+ "thtp.so-dien-thoai-hoac-email": {
+  "t": "电话号码或电子邮件",
+  "h": "8bd29fd7"
+ },
+ "thtp.tai-pdf-ket-qua": {
+  "t": "下载结果 PDF",
+  "h": "7b1b8ded"
+ },
  "thtp.thanh-tuong-pro": {
   "t": "声相 Pro",
   "h": "b2e5a151"
@@ -31798,6 +31874,10 @@
  "thtp.vi-du-32": {
   "t": "例如：32",
   "h": "dc9bd965"
+ },
+ "thtp.vi-du-nguyen-van-a": {
+  "t": "例如：阮文 A",
+  "h": "eafae45a"
  },
  "thtp.xem-ban-mau": {
   "t": "查看范例 →",

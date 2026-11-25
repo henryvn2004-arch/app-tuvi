@@ -23211,6 +23211,10 @@
   "t": "ほどよい",
   "h": "e3fa9054"
  },
+ "js.thtp.12-chi-so-do-giong": {
+  "t": "声の12指標",
+  "h": "a337ea4b"
+ },
  "js.thtp.am-s": {
   "t": " 音節/秒",
   "h": "49ed1880"
@@ -23258,6 +23262,10 @@
  "js.thtp.cham-diem-dam": {
   "t": "ゆっくり — 落ち着いた印象。",
   "h": "1761f7f1"
+ },
+ "js.thtp.chi-so": {
+  "t": "指標",
+  "h": "3b41d652"
  },
  "js.thtp.co-bien-dong": {
   "t": "多少の変動あり。",
@@ -23347,6 +23355,10 @@
   "t": "F0平均",
   "h": "36f5bf55"
  },
+ "js.thtp.gioi-tinh": {
+  "t": "性別",
+  "h": "80bbce55"
+ },
  "js.thtp.giong-cao-bat-thuong-cho-nam": {
   "t": "ℹ 男性にしては異常に高い声です。裏声で話しているか、データが不安定な可能性があります。",
   "h": "a3164510"
@@ -23395,6 +23407,14 @@
   "t": "HNRが低いと何がわかりますか？",
   "h": "c0db1713"
  },
+ "js.thtp.ho-so-nguoi-do": {
+  "t": "測定者プロフィール",
+  "h": "4fc5dc44"
+ },
+ "js.thtp.ho-va-ten": {
+  "t": "氏名",
+  "h": "ad9f2994"
+ },
  "js.thtp.hoi-lech-dau-hieu-khi-khong": {
   "t": "やや乱れ — 気が不均一な兆し。",
   "h": "7392dcf4"
@@ -23410,6 +23430,10 @@
  "js.thtp.jitter-va-shimmer-la-gi": {
   "t": "ジッターとシマーとは？",
   "h": "0fc478fd"
+ },
+ "js.thtp.ket-qua": {
+  "t": "結果",
+  "h": "c9f95514"
  },
  "js.thtp.khac-gi-ban-thanh-tuong-thuong": {
   "t": "通常の声相とどう違いますか？",
@@ -23455,6 +23479,14 @@
   "t": "マイクにアクセスできません",
   "h": "a07b8893"
  },
+ "js.thtp.lien-he": {
+  "t": "連絡先",
+  "h": "603522f1"
+ },
+ "js.thtp.lien-he-khong-hop-le": {
+  "t": "有効な電話番号（9〜15桁）またはメールアドレスを入力してください。",
+  "h": "887d0fe1"
+ },
  "js.thtp.loi": {
   "t": "エラー: ",
   "h": "471c0087"
@@ -23479,6 +23511,10 @@
   "t": "{n}秒",
   "h": "4b5fecbd"
  },
+ "js.thtp.nam": {
+  "t": "男性",
+  "h": "b580ba1b"
+ },
  "js.thtp.ngan-am-a-bai-do-khi": {
   "t": "「アー」を伸ばす — 気の測定",
   "h": "df9c2325"
@@ -23490,6 +23526,14 @@
  "js.thtp.ngan-dai-shimmer": {
   "t": "持続 <strong>{d}s</strong>、シマー {sh}dB — <em>{q}</em>。",
   "h": "e8a19bff"
+ },
+ "js.thtp.ngay-do": {
+  "t": "測定日",
+  "h": "f731d6e6"
+ },
+ "js.thtp.ngu-am-uoc-tinh": {
+  "t": "推定される五音",
+  "h": "1692714f"
  },
  "js.thtp.ngu-am-uoc-tinh-n": {
   "t": "推定される五音: {n}",
@@ -23507,9 +23551,17 @@
   "t": "{x}（濁）",
   "h": "8f9cb8cf"
  },
+ "js.thtp.nhan-dinh": {
+  "t": "所見",
+  "h": "af3b1813"
+ },
  "js.thtp.nhanh-linh-hoat": {
   "t": "速い — 機敏。",
   "h": "f8f7c567"
+ },
+ "js.thtp.nu": {
+  "t": "女性",
+  "h": "feb92ccd"
  },
  "js.thtp.on-dinh": {
   "t": "安定。",
@@ -23626,6 +23678,10 @@
  "js.thtp.trung-binh-vung-kim": {
   "t": "中程度 — 金の領域。",
   "h": "7f4bb46d"
+ },
+ "js.thtp.tuoi": {
+  "t": "年齢",
+  "h": "3a6fc33f"
  },
  "js.thtp.uyen-chuyen-vung-thuy": {
   "t": "滑らか — 水の領域。",
@@ -31723,6 +31779,10 @@
   "t": "ステップ3 · 測定結果",
   "h": "3541b2e4"
  },
+ "thtp.chi-de-in-vao-ban-pdf": {
+  "t": "結果のPDFに印字するためだけに使用し、鑑定文には含まれません。",
+  "h": "7d497e40"
+ },
  "thtp.chua-muon-ghi-am-ban-co": {
   "t": "<b>録音はまだ気が進みませんか？</b><span>先にサンプルを見て、雰囲気を確かめられます。</span>",
   "h": "468bb930"
@@ -31746,6 +31806,14 @@
  "thtp.giong-noi-mang-nhieu-thong-tin": {
   "t": "声には思っている以上の情報があります — 4つの詳細な課題から得た12の音響指標が、五音と気力の最も完全な姿を描き出します。通常の声相より深く知りたい方向けです。",
   "h": "f907ddc6"
+ },
+ "thtp.ho-va-ten": {
+  "t": "氏名",
+  "h": "ad9f2994"
+ },
+ "thtp.lien-he-sdt-hoac-email": {
+  "t": "連絡先（電話番号またはメール）",
+  "h": "e190b41f"
  },
  "thtp.luan-giai-thanh-tuong-ton-luong": {
   "t": "<span class=\"bg-label\"><span class=\"ic\" data-icon=\"music\"></span><b id=\"analyzeBtnLabel\">声相を鑑定する →</b></span> <small><span class=\"vnd\" data-tvp-price-vnd=\"thanh-tuong-pro\"></span> <span class=\"cb-sub\">(<span data-tvp-price=\"thanh-tuong-pro\">…</span> 両)</span> 必要</small>",
@@ -31775,6 +31843,14 @@
   "t": "声相の詳細分析",
   "h": "1e2230b3"
  },
+ "thtp.so-dien-thoai-hoac-email": {
+  "t": "電話番号またはメール",
+  "h": "8bd29fd7"
+ },
+ "thtp.tai-pdf-ket-qua": {
+  "t": "結果をPDFでダウンロード",
+  "h": "7b1b8ded"
+ },
  "thtp.thanh-tuong-pro": {
   "t": "声相 Pro",
   "h": "b2e5a151"
@@ -31798,6 +31874,10 @@
  "thtp.vi-du-32": {
   "t": "例: 32",
   "h": "dc9bd965"
+ },
+ "thtp.vi-du-nguyen-van-a": {
+  "t": "例：グエン・ヴァン・A",
+  "h": "eafae45a"
  },
  "thtp.xem-ban-mau": {
   "t": "サンプルを見る →",

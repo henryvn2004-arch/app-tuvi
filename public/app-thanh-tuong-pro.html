@@ -21,6 +21,9 @@
 .gender-opt.selected{background:var(--navy);border-color:var(--navy);color:#fff}
 .age-input{width:100%;padding:10px 14px;border:1.5px solid var(--line-2);border-radius:8px;font-size:14px;font-family:inherit;background:var(--paper);color:var(--text)}
 .age-input:focus{border-color:var(--gold);outline:none}
+.text-input.bad{border-color:#C0392B}
+.setup-hint{font-size:11.5px;color:var(--text-lt);margin:6px 0 0;line-height:1.5}
+.setup-hint.err{color:#C0392B}
 .setup-label{font-size:10.5px;font-weight:600;color:var(--text-lt);letter-spacing:.04em;text-transform:uppercase;margin-bottom:8px}
 .task-progress{display:flex;gap:6px;margin:0 0 16px}
 .task-pip{flex:1;height:6px;background:var(--border-lt);border-radius:3px;position:relative;overflow:hidden}
@@ -68,6 +71,23 @@
 .btn-cancel{background:none;border:1px solid var(--line-2);border-radius:8px;padding:10px 18px;font-size:13px;color:var(--text-mid);cursor:pointer;font-family:inherit}
 .loading-dots::after{content:'…';display:inline-block;animation:dots 1.5s steps(4,end) infinite}
 @keyframes dots{0%,20%{content:''}40%{content:'.'}60%{content:'..'}80%,100%{content:'…'}}
+.rp-box{margin:6px 0 14px;padding:14px 16px;background:var(--paper);border:1px solid var(--border-lt);border-radius:10px}
+.rp-title{font-family:var(--serif);font-size:14.5px;font-weight:700;color:var(--heading);margin:0 0 8px}
+.rp-title+.rp-grid{margin-bottom:14px}
+.rp-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:6px 18px;margin:0}
+.rp-grid div{font-size:13px;line-height:1.5;color:var(--text)}
+.rp-grid dt{display:inline;font-weight:700;color:var(--text-lt);font-size:11px;letter-spacing:.04em;text-transform:uppercase;margin-right:2px}
+.rp-grid dd{display:inline;margin:0;word-break:break-word}
+.rp-table{width:100%;border-collapse:collapse;font-size:12.5px}
+.rp-table th,.rp-table td{text-align:left;padding:6px 8px;border-bottom:1px solid var(--border-lt);vertical-align:top}
+.rp-table th{font-size:10.5px;letter-spacing:.04em;text-transform:uppercase;color:var(--text-lt)}
+.rp-table td:nth-child(2){white-space:nowrap;font-weight:700;color:var(--heading)}
+.rp-table tr{break-inside:avoid;page-break-inside:avoid}
+.rp-actions{display:none;margin:0 0 14px}
+.rp-actions.visible{display:block}
+.btn-pdf{display:inline-flex;align-items:center;gap:8px;padding:10px 22px;background:var(--navy);color:#fff;border:none;border-radius:50px;font-size:13px;font-weight:700;cursor:pointer;font-family:inherit}
+.btn-pdf:hover{background:var(--navy-3)}
+.btn-pdf .ic{width:16px;height:16px;display:inline-flex}
 .dt-result{margin-top:8px}
 .dt-result h2{font-family:var(--serif);font-size:17px;font-weight:600;margin:18px 0 10px;color:var(--heading)}
 .dt-result h3{font-family:var(--serif);font-size:14.5px;font-weight:600;margin:14px 0 8px;color:var(--heading)}
@@ -127,7 +147,12 @@
       <div class="dt-card" id="setupCard">
         <div class="fc-head"><span class="fc-ic" data-icon="mic"></span><h2 data-i18n="thtp.buoc-1-thong-tin-co-ban">Bước 1 · Thông Tin Cơ Bản</h2></div>
         <p data-i18n="thtp.ghi-am-du-4-bai-do" class="sub">Ghi âm đủ 4 bài đo theo giới tính và tuổi của bạn. Hệ thống phân tích chuyên sâu, luận khí, tính cách, vận mệnh và cách dưỡng thanh dưỡng khí.</p>
-        <div data-i18n="laso.gioi-tinh" class="setup-label">Giới Tính</div>
+        <div data-i18n="thtp.ho-va-ten" class="setup-label">Họ và tên</div>
+        <input data-i18n-attr="placeholder:thtp.vi-du-nguyen-van-a" type="text" class="age-input text-input" id="nameInput" placeholder="Ví dụ: Nguyễn Văn A" maxlength="80" autocomplete="name">
+        <div data-i18n="thtp.lien-he-sdt-hoac-email" class="setup-label" style="margin-top:14px">Liên hệ (SĐT hoặc email)</div>
+        <input data-i18n-attr="placeholder:thtp.so-dien-thoai-hoac-email" type="text" class="age-input text-input" id="contactInput" placeholder="Số điện thoại hoặc email" maxlength="120" inputmode="email" autocomplete="email" aria-describedby="contactHint">
+        <div data-i18n="thtp.chi-de-in-vao-ban-pdf" class="setup-hint" id="contactHint">Chỉ dùng để in vào bản PDF kết quả, không đưa vào phần luận giải.</div>
+        <div data-i18n="laso.gioi-tinh" class="setup-label" style="margin-top:14px">Giới Tính</div>
         <div class="gender-opts" id="genderOpts">
           <div class="gender-opt" data-gender="nam">Nam</div>
           <div data-i18n="laso.nu" class="gender-opt" data-gender="nu">Nữ</div>
@@ -229,6 +254,8 @@
       <div class="dt-card" id="resultsCard" data-ws-result style="display:none">
         <h2 data-i18n="thtp.phan-tich-thanh-tuong-chuyen-sau">Phân Tích Thanh Tướng Chuyên Sâu</h2>
         <p data-i18n="thtp.ngu-am-co-phap-ma-y" class="sub">Ngũ Âm Cổ Pháp · Ma Y · Thần Tướng Toàn Biên · Thủy Kính Tập</p>
+        <div class="rp-box" id="reportProfile" style="display:none"></div>
+        <div class="rp-actions" id="pdfBar"><button type="button" class="btn-pdf" id="pdfBtn"><span class="ic" data-icon="file-text"></span><span data-i18n="thtp.tai-pdf-ket-qua">Tải PDF kết quả</span></button></div>
         <div class="dt-result" id="resultsPanel"></div>
       </div>
     </div>
@@ -300,8 +327,11 @@ var TASKS = [
 ];
 
 var state = {
+  name: '',
+  contact: '',
   gender: null,
   age: null,
+  items: null,
   currentIdx: 0,
   results: {},
   audioCtx: null,
@@ -329,6 +359,13 @@ function wsStepsSet(n){
 var $ = id => document.getElementById(id);
 var genderOpts = $('genderOpts');
 var ageInput = $('ageInput');
+var nameInput = $('nameInput');
+var contactInput = $('contactInput');
+var contactHint = $('contactHint');
+var contactHintDefault = contactHint ? contactHint.textContent : '';
+var pdfBar = $('pdfBar');
+var pdfBtn = $('pdfBtn');
+var reportProfile = $('reportProfile');
 var startBtn = $('startBtn');
 var tasksSection = $('tasksSection');
 var taskCard = $('taskCard');
@@ -370,8 +407,37 @@ ageInput.addEventListener('input', () => {
   state.age = parseInt(ageInput.value) || null;
   checkSetup();
 });
+// Tên + liên hệ CHỈ để in vào bản PDF kết quả — không vào geoNote (prompt gửi
+// model), không vào Shell.setShareable, không vào _saveTuongReading.
+function validName(v) { return String(v || '').trim().length >= 2; }
+// Email hợp lệ, hoặc SĐT 9–15 chữ số (cho phép + đầu, bỏ khoảng trắng . - ( ) khi đếm).
+function validContact(v) {
+  v = String(v || '').trim();
+  if (/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(v)) return true;
+  return /^\+?\d{9,15}$/.test(v.replace(/[\s.\-()]/g, ''));
+}
+function paintContactErr(show) {
+  contactInput.classList.toggle('bad', show);
+  contactInput.setAttribute('aria-invalid', show ? 'true' : 'false');
+  contactHint.classList.toggle('err', show);
+  contactHint.textContent = show
+    ? _tvmbT('js.thtp.lien-he-khong-hop-le', 'Nhập số điện thoại (9–15 số) hoặc email hợp lệ.')
+    : contactHintDefault;
+}
+nameInput.addEventListener('input', () => {
+  state.name = nameInput.value.trim();
+  checkSetup();
+});
+contactInput.addEventListener('input', () => {
+  state.contact = contactInput.value.trim();
+  if (contactInput.classList.contains('bad') && validContact(state.contact)) paintContactErr(false);
+  checkSetup();
+});
+contactInput.addEventListener('blur', () => {
+  paintContactErr(!!state.contact && !validContact(state.contact));
+});
 function checkSetup() {
-  startBtn.disabled = !(state.gender && state.age && state.age >= 10 && state.age <= 100);
+  startBtn.disabled = !(validName(state.name) && validContact(state.contact) && state.gender && state.age && state.age >= 10 && state.age <= 100);
 }
 startBtn.addEventListener('click', () => {
   tasksSection.style.display = 'block';
@@ -977,6 +1043,7 @@ function compileAndShowFeatures() {
     { name: _tvmbT('js.thtp.do-on-dinh-f0', 'Độ Ổn Định F0'), value: (b.f0Std / (b.f0Mean || 1) * 100).toFixed(1) + ' %', interp: interpStability(b.f0Std / (b.f0Mean || 1)), bar: 1 - clamp(b.f0Std / (b.f0Mean || 1) / 0.4, 0, 1) }
   ];
 
+  state.items = items;
   featuresGrid.innerHTML = items.map(it => `
     <div class="feature-item">
       <div class="feature-name">${it.name}</div>
@@ -1214,6 +1281,40 @@ Phân tích theo đúng 6 phần quy định. Bắt buộc dẫn nguyên văn ki
 
 var _currentSlug = '';
 
+// Khối "Hồ sơ người đo + 12 chỉ số" nằm TRONG #resultsCard (mốc data-ws-result) nên
+// bản in/PDF của shell mang theo — #featuresPanel/#setupCard nằm ngoài, bị ẩn khi in.
+function _rpEsc(v) {
+  return String(v == null ? '' : v).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+}
+function renderReportProfile() {
+  if (!reportProfile) return;
+  const nguam = estimateNguAm(state.results, state.gender);
+  const lang = document.documentElement.lang || 'vi';
+  let when;
+  try { when = new Date().toLocaleString(lang, { dateStyle: 'short', timeStyle: 'short' }); } catch (e) { when = new Date().toLocaleString(); }
+  const rows = [
+    [_tvmbT('js.thtp.ho-va-ten', 'Họ và tên'), state.name],
+    [_tvmbT('js.thtp.lien-he', 'Liên hệ'), state.contact],
+    [_tvmbT('js.thtp.gioi-tinh', 'Giới tính'), state.gender === 'nam' ? _tvmbT('js.thtp.nam', 'Nam') : _tvmbT('js.thtp.nu', 'Nữ')],
+    [_tvmbT('js.thtp.tuoi', 'Tuổi'), state.age],
+    [_tvmbT('js.thtp.ngay-do', 'Ngày đo'), when],
+    [_tvmbT('js.thtp.ngu-am-uoc-tinh', 'Ngũ Âm ước tính'), nguam.shown],
+  ];
+  const grid = rows.map(r => '<div><dt>' + _rpEsc(r[0]) + '</dt> <dd>' + _rpEsc(r[1]) + '</dd></div>').join('');
+  const trs = (state.items || []).map(it =>
+    '<tr><td>' + _rpEsc(it.name) + '</td><td>' + _rpEsc(it.value) + '</td><td>' + _rpEsc(it.interp) + '</td></tr>').join('');
+  reportProfile.innerHTML =
+    '<div class="rp-title">' + _rpEsc(_tvmbT('js.thtp.ho-so-nguoi-do', 'Hồ sơ người đo')) + '</div>' +
+    '<dl class="rp-grid">' + grid + '</dl>' +
+    '<div class="rp-title">' + _rpEsc(_tvmbT('js.thtp.12-chi-so-do-giong', '12 chỉ số đo giọng')) + '</div>' +
+    '<table class="rp-table"><thead><tr><th>' + _rpEsc(_tvmbT('js.thtp.chi-so', 'Chỉ số')) + '</th><th>' + _rpEsc(_tvmbT('js.thtp.ket-qua', 'Kết quả')) + '</th><th>' + _rpEsc(_tvmbT('js.thtp.nhan-dinh', 'Nhận định')) + '</th></tr></thead><tbody>' + trs + '</tbody></table>';
+  reportProfile.style.display = 'block';
+}
+
+pdfBtn.addEventListener('click', () => {
+  if (window.Shell && Shell.printNow) Shell.printNow(); else window.print();
+});
+
 analyzeBtn.addEventListener('click', async () => {
   wsStepsSet(3); // Thanh toán — chốt tường trước khi gọi model
   _currentSlug = TuviPaywall.generateToolSlug('thanh-tuong-pro');
@@ -1227,6 +1328,8 @@ async function _doThanhTuongAnalyze() {
   analyzeBtn.disabled = true;
   var _analyzeBtnLb = document.getElementById('analyzeBtnLabel'); if (_analyzeBtnLb) _analyzeBtnLb.textContent = _tvmbT('js.thtp.dang-luan-giai', 'Đang luận giải…');
   resultsCard.style.display = 'block';
+  pdfBar.classList.remove('visible');
+  renderReportProfile();
   resultsPanel.innerHTML = '<p class="loading-dots" style="text-align:center;color:var(--text-lt);padding:30px 0">' + _tvmbT('js.thtp.dang-phan-tich-theo-co-phap', 'Đang phân tích theo cổ pháp') + '</p>';
   resultsCard.scrollIntoView({behavior:'smooth',block:'nearest'});
 
@@ -1283,6 +1386,7 @@ async function _doThanhTuongAnalyze() {
     if (!content) {
       resultsPanel.innerHTML = '<p style="color:#C0392B;padding:20px;text-align:center">' + _tvmbT('js.thtp.khong-nhan-duoc-noi-dung-tra', 'Không nhận được nội dung trả về. Thử lại.') + '</p>';
     } else {
+      pdfBar.classList.add('visible');
       _saveTuongReading('thanh-tuong-pro', content, null, null);
       // Chia sẻ CHỈ text luận giải của AI — KHÔNG đính kèm bản ghi âm giọng
       // nói thật của user (riêng tư).
