@@ -46,6 +46,7 @@
 .rp-table tr{break-inside:avoid;page-break-inside:avoid}
 .rp-actions{display:none;margin:0 0 14px}
 .rp-actions.visible{display:block}
+.rp-actions.bottom{margin:18px 0 4px;text-align:center}
 .btn-pdf{display:inline-flex;align-items:center;gap:8px;padding:10px 22px;background:var(--navy);color:#fff;border:none;border-radius:50px;font-size:13px;font-weight:700;cursor:pointer;font-family:inherit}
 .btn-pdf:hover{background:var(--navy-3)}
 .btn-pdf .ic{width:16px;height:16px;display:inline-flex}
@@ -236,6 +237,7 @@ body.chat-first-live .features-grid{grid-template-columns:1fr}
         <div class="rp-box" id="reportProfile" style="display:none"></div>
         <div class="rp-actions" id="pdfBar"><button type="button" class="btn-pdf" id="pdfBtn" onclick="Shell.printNow()"><span class="ic" data-icon="file-text"></span><span data-i18n="thtp.tai-pdf-ket-qua">Tải PDF kết quả</span></button></div>
         <div id="aiResult" class="dt-result"></div>
+        <div class="rp-actions bottom" id="pdfBarBottom"><button type="button" class="btn-pdf" onclick="Shell.printNow()"><span class="ic" data-icon="file-text"></span><span data-i18n="thtp.tai-pdf-ket-qua">Tải PDF kết quả</span></button></div>
         <div style="text-align:center;margin-top:8px">
           <button data-i18n="thtg.thu-am-lai" class="btn-cancel" onclick="resetTool()">Thu Âm Lại</button>
         </div>
@@ -766,7 +768,7 @@ async function analyze() {
 
 async function _doAnalyze() {
   document.getElementById('resultCard').style.display = 'block';
-  document.getElementById('pdfBar').classList.remove('visible');
+  setPdfBar(false);
   renderReportProfile();
   wsStepsSet(3); // Nhận kết quả — đã trả tiền, bắt đầu luận giải
   const aiResultEl = document.getElementById('aiResult');
@@ -810,7 +812,7 @@ async function _doAnalyze() {
     }
     if (!full) throw new Error(_tvmbT('js.thtg.khong-co-ket-qua', 'Không có kết quả.'));
     el.innerHTML = renderMd(full);
-    document.getElementById('pdfBar').classList.add('visible');
+    setPdfBar(true);
     _saveTuongReading('thanh-tuong', full, null, null);
     // Chia sẻ CHỈ text luận giải của AI — KHÔNG đính kèm bản ghi âm giọng nói
     // thật của user (riêng tư, và cũng chưa có cơ chế lưu audio public).
@@ -848,7 +850,7 @@ function resetTool() {
   document.getElementById('analyzeBtn').disabled = true;
   document.getElementById('resultCard').style.display = 'none';
   document.getElementById('aiResult').innerHTML = '';
-  document.getElementById('pdfBar').classList.remove('visible');
+  setPdfBar(false);
   document.getElementById('reportProfile').style.display = 'none';
   document.getElementById('error-msg').classList.remove('active');
   document.getElementById('countdownBadge').classList.remove('visible');
@@ -865,6 +867,10 @@ function resetTool() {
 
 // Khối "Hồ sơ + chỉ số đo" nằm TRONG #resultCard (mốc data-ws-result) nên bản
 // in/PDF của shell mang theo — #inputCard nằm trong `.ws-intake`, bị ẩn khi in.
+function setPdfBar(on) {
+  document.getElementById('pdfBar').classList.toggle('visible', on);
+  document.getElementById('pdfBarBottom').classList.toggle('visible', on);
+}
 function _rpEsc(v) {
   return String(v == null ? '' : v).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
 }

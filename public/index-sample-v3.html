@@ -139,7 +139,6 @@ button { font: inherit; cursor: pointer; }
 .sec-head .more { font-size: 13.5px; font-weight: 700; color: var(--ink-soft); white-space: nowrap; }
 
 /* ── Tool grid ──────────────────────────────────────────────── */
-.tools-sec { padding: 24px 0 8px; }
 .tools-grid { display: grid; grid-template-columns: repeat(6, 1fr); gap: 14px; }
 .tool-card { display: flex; flex-direction: column; align-items: center; gap: 8px; text-align: center; }
 .tool-ic { width: 56px; height: 56px; border-radius: 16px; display: flex; align-items: center; justify-content: center; background: #f4f2ec; overflow: hidden; }
@@ -152,21 +151,40 @@ button { font: inherit; cursor: pointer; }
 
 @media (max-width: 680px) {
   .tools-grid { grid-template-columns: repeat(4, 1fr); gap: 12px 8px; }
-  .tools-grid > .tool-card:nth-child(n+9) { display: none; }
+  .tools-grid > .tool-card:nth-child(n+12):not(.tool-all) { display: none; }
+  .hero-tools { padding: 22px 0 4px; }
+  .hero-tools h1 { font-size: 26px; }
+  .hero-sub { font-size: 14px; margin-bottom: 16px; }
+  .hero-grid .tool-card { padding: 10px 4px 8px; border-radius: 14px; }
   .tool-ic { width: 50px; height: 50px; border-radius: 14px; }
   .tool-card span { font-size: 11.5px; }
 }
 
-/* ── Hỏi thầy — màn hình đầu (trang chủ chat, 2026-09-26) ──────────
+/* ── Công cụ — màn hình đầu (2026-11-25): thẻ to, chạm phát vào thẳng công cụ ── */
+.hero-tools { padding: 34px 0 6px; }
+.hero-tools h1 { font-size: 36px; line-height: 1.2; font-weight: 800; margin: 0 0 10px; text-align: center; color: var(--ink); text-wrap: balance; }
+.hero-sub { font-size: 15px; line-height: 1.6; color: var(--ink-soft); margin: 0 auto 22px; max-width: 58ch; text-align: center; }
+.hero-grid { gap: 12px; }
+.hero-grid .tool-card { background: var(--card); border: 1px solid var(--line); border-radius: 16px; padding: 14px 8px 12px; transition: border-color .15s, box-shadow .15s, transform .15s; }
+.hero-grid .tool-card:hover { border-color: var(--gold); box-shadow: 0 6px 18px rgba(15,42,61,.08); transform: translateY(-2px); }
+.hero-grid .tool-card:focus-visible { outline: 2px solid var(--gold); outline-offset: 2px; }
+.tool-all .tool-ic { background: var(--navy); color: #fff; }
+.tool-all .tool-ic .ic { width: 26px; height: 26px; display: inline-flex; color: #fff; } /* `.tool-card span` (chữ đậm) cũng khớp thẻ span của icon ⇒ phải đặt màu ngay trên icon */
+.hero-more { text-align: center; margin: 20px 0 0; }
+.btn-primary { display: inline-block; padding: 13px 30px; border-radius: 999px; background: var(--navy); color: #fff; font-weight: 700; font-size: 15px; }
+.btn-primary:hover { opacity: .92; }
+@media (prefers-reduced-motion: reduce) { .hero-grid .tool-card { transition: none; } .hero-grid .tool-card:hover { transform: none; } }
+
+/* ── Hỏi thầy — ô hỏi ngay dưới công cụ (trang chủ chat, 2026-09-26) ──────────
    Nhìn vào là biết đây là chỗ HỎI: lời chào + ô hỏi + vài câu gợi ý, không
    carousel, không tranh. Khách gõ → /api/thay-hoi chọn thầy theo chủ đề →
    /app?q=…&thay=…#chat (rail của app-home.html gửi luôn câu đó). */
-.ask-sec { padding: 56px 0 36px; }
+.ask-sec { padding: 28px 0 28px; }
 .ask-wrap { max-width: 760px; display: flex; flex-direction: column; align-items: center; gap: 18px; text-align: center; }
 .ask-host { display: flex; align-items: center; gap: 10px; font-size: 13px; color: var(--ink-soft); }
 .ask-host img { width: 44px; height: 44px; border-radius: 50%; object-fit: cover; box-shadow: 0 0 0 1px var(--line); }
 .ask-host b { color: var(--ink); }
-.ask-sec h1 { font-size: 40px; line-height: 1.2; font-weight: 800; margin: 0; color: var(--ink); text-wrap: balance; }
+.ask-sec h2 { font-size: 30px; line-height: 1.2; font-weight: 800; margin: 0; color: var(--ink); text-wrap: balance; }
 .ask-sub { font-size: 15.5px; line-height: 1.65; color: var(--ink-soft); margin: 0; max-width: 54ch; }
 .ask-box { width: 100%; background: var(--card); border: 1px solid var(--line); border-radius: 20px; box-shadow: 0 1px 2px rgba(15,42,61,.05), 0 10px 30px rgba(15,42,61,.07); padding: 14px 14px 10px 18px; text-align: left; }
 .ask-box:focus-within { border-color: var(--gold); }
@@ -180,8 +198,6 @@ button { font: inherit; cursor: pointer; }
 .ask-chips { display: flex; flex-wrap: wrap; justify-content: center; gap: 8px; }
 .ask-chip { font-size: 13.5px; color: var(--ink); background: var(--card); border: 1px solid var(--line); border-radius: 999px; padding: 7px 14px; }
 .ask-chip:hover { border-color: var(--gold); }
-.ask-tools { font-size: 13px; color: var(--ink-soft); margin: 0; line-height: 1.9; }
-.ask-tools a { color: var(--ink); border-bottom: 1px solid var(--line); margin: 0 4px; }
 .sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
 
 /* ── Nhóm 15 thầy ────────────────────────────────────────── */
@@ -194,8 +210,8 @@ button { font: inherit; cursor: pointer; }
 .council-grid span { font-size: 12px; color: var(--ink-soft); line-height: 1.35; }
 
 @media (max-width: 680px) {
-  .ask-sec { padding: 32px 0 24px; }
-  .ask-sec h1 { font-size: 29px; }
+  .ask-sec { padding: 20px 0 20px; }
+  .ask-sec h2 { font-size: 24px; }
   .ask-sub { font-size: 14.5px; }
   .council-grid { grid-template-columns: repeat(3, 1fr); }
   .council-grid img { width: 60px; height: 60px; }
@@ -323,6 +339,38 @@ button { font: inherit; cursor: pointer; }
 <div id="nav-ph" style="height:60px;background:#FBFAF6"></div>
 
 <!-- ═══════════════ HỎI THẦY — màn hình đầu ═══════════════ -->
+<!-- ═══════════════ CÔNG CỤ — màn hình đầu (2026-11-25) ═══════════════
+     Đích khách cần tới là công cụ: bấm thẻ nào là VÀO THẲNG công cụ đó trong app
+     (`/app/<tên>`, không đi qua trang trung gian). Link cũ `/app-*.html` đã đổi sang URL
+     chuẩn trong app để thanh bên sáng đúng mục. Nút "Tất cả công cụ" → `/app/cong-cu`.
+     Ô "Hỏi Thầy" (kể chuyện cho thầy) hạ xuống ngay bên dưới, không bị bỏ. -->
+<section class="hero-tools">
+  <div class="wrap">
+    <h1 data-i18n="home.chon-cong-cu-ban-can" class="serif">Chọn công cụ bạn cần</h1>
+    <p data-i18n="home.bam-vao-cong-cu-de-xem" class="hero-sub">Bấm vào công cụ là vào xem ngay: lá số Tử Vi, Bát Tự, xem tuổi, ngày tốt, tướng số, phong thủy.</p>
+    <div class="tools-grid hero-grid">
+      <a class="tool-card" href="/app/luan-giai"><div class="tool-ic"><img width="56" height="56" src="/mascot/tool-icons/luan-giai.webp" alt="" decoding="async"></div><span data-i18n="home.luan-giai-la-so">Luận Giải<br>Lá Số</span></a>
+      <a class="tool-card" href="/app/chu-trinh-cuoc-doi"><div class="tool-ic"><img width="56" height="56" src="/mascot/tool-icons/chu-trinh-cuoc-doi.webp" alt="" decoding="async"></div><span data-i18n="home.chu-trinh-cuoc-doi">Chu Trình<br>Cuộc Đời</span></a>
+      <a class="tool-card" href="/app/bat-tu"><div class="tool-ic"><img width="56" height="56" src="/mascot/tool-icons/tu-binh-bat-tu.webp" alt="" decoding="async"></div><span data-i18n="home.tu-binh-bat-tu">Tử Bình<br>Bát Tự</span></a>
+      <a class="tool-card" href="/app/than-so-hoc"><div class="tool-ic"><img width="56" height="56" src="/mascot/tool-icons/than-so-hoc.webp" alt="" decoding="async"></div><span data-i18n="home.than-so-hoc">Thần Số<br>Học</span></a>
+      <a class="tool-card" href="/app/xem-tuoi"><div class="tool-ic"><img width="56" height="56" src="/mascot/tool-icons/xem-tuoi.webp" alt="" decoding="async"></div><span data-i18n="home.xem-tuoi-vo-chong">Xem Tuổi<br>Vợ Chồng</span></a>
+      <a class="tool-card" href="/app/gio-sinh"><div class="tool-ic"><img width="56" height="56" src="/mascot/tool-icons/gio-sinh.webp" alt="" decoding="async"></div><span data-i18n="home.xac-dinh-gio-sinh-632h">Xác Định<br>Giờ Sinh</span></a>
+      <a class="tool-card" href="/app/van-han-nam"><div class="tool-ic"><img width="56" height="56" src="/mascot/tool-icons/van-han-nam.webp" alt="" decoding="async"></div><span data-i18n="home.van-han-12-thang-toi">Vận Hạn<br>12 Tháng Tới</span></a>
+      <a class="tool-card" href="/app/ngay-tot"><div class="tool-ic"><img width="56" height="56" src="/mascot/tool-icons/ngay-tot.webp" alt="" decoding="async"></div><span data-i18n="home.xem-ngay-tot-xau">Xem Ngày<br>Tốt Xấu</span></a>
+      <a class="tool-card" href="/app/cong-so"><div class="tool-ic"><img width="56" height="56" src="/mascot/tool-icons/cong-so.webp" alt="" decoding="async"></div><span data-i18n="home.tu-vi-cong-so-hn">Tử Vi<br>Công Sở &amp; HN</span></a>
+      <a class="tool-card" href="/app/phong-thuy"><div class="tool-ic"><img width="56" height="56" src="/mascot/tool-icons/phong-thuy.webp" alt="" decoding="async"></div><span data-i18n="home.phong-thuy-ung-dung">Phong Thủy<br>Ứng Dụng</span></a>
+      <a class="tool-card" href="/app/xem-lam-an"><div class="tool-ic"><img width="56" height="56" src="/mascot/tool-icons/hop-tac-lam-an.webp" alt="" decoding="async"></div><span data-i18n="home.hop-tac-lam-an">Hợp Tác<br>Làm Ăn</span></a>
+      <a class="tool-card" href="/app/dien-tuong"><div class="tool-ic"><img width="56" height="56" src="/mascot/tool-icons/dien-tuong.webp" alt="" decoding="async"></div><span data-i18n="home.dien-tuong-xem-tuong-mat">Diện Tướng<br>Xem Tướng Mặt</span></a>
+      <a class="tool-card" href="/app/nhan-tuong"><div class="tool-ic"><img width="56" height="56" src="/mascot/tool-icons/nhan-tuong.webp" alt="" loading="lazy"></div><span data-i18n="home.nhan-tuong-xem-tuong-mat">Nhãn Tướng<br>Xem Tướng Mắt</span></a>
+      <a class="tool-card" href="/app/thu-tuong"><div class="tool-ic"><img width="56" height="56" src="/mascot/tool-icons/thu-tuong.webp" alt="" loading="lazy"></div><span data-i18n="home.thu-tuong-xem-chi-tay">Thủ Tướng<br>Xem Chỉ Tay</span></a>
+      <a class="tool-card" href="/app/thanh-tuong"><div class="tool-ic"><img width="56" height="56" src="/mascot/tool-icons/thanh-tuong.webp" alt="" loading="lazy"></div><span data-i18n="home.thanh-tuong-xem-giong-noi">Thanh Tướng<br>Xem Giọng Nói</span></a>
+      <a class="tool-card" href="/app/khi-sac"><div class="tool-ic"><img width="56" height="56" src="/mascot/tool-icons/khi-sac.webp" alt="" loading="lazy"></div><span data-i18n="home.khi-sac-van-khi-ngan-han">Khí Sắc<br>Vận Khí Ngắn Hạn</span></a>
+      <a class="tool-card tool-all" href="/app/cong-cu"><div class="tool-ic"><span class="ic" data-icon="layout-grid"></span></div><span data-i18n="home.tat-ca-cong-cu">Tất cả<br>công cụ</span></a>
+    </div>
+    <p class="hero-more"><a data-i18n="home.xem-tat-ca-cong-cu" class="btn-primary" href="/app/cong-cu">Xem tất cả công cụ →</a></p>
+  </div>
+</section>
+
 <!-- Minh Bảo là NHÓM 15 thầy (master_profiles). Thầy Thái Hư tiếp khách;
      câu hỏi tự do đi qua /api/thay-hoi để chuyển đúng thầy theo chủ đề. Form
      vẫn chạy khi không có JS (GET /app?q=…). Mỗi câu gợi ý đã gắn sẵn thầy. -->
@@ -332,7 +380,7 @@ button { font: inherit; cursor: pointer; }
       <img data-i18n-attr="alt:home.thay-thai-hu" src="/authors/thai-hu.jpg" alt="Thầy Thái Hư" width="44" height="44" fetchpriority="high">
       <span data-i18n="home.thay-thai-hu-tiep-chuyen-nhom"><b>Thầy Thái Hư</b> tiếp chuyện · Nhóm Minh Bảo</span>
     </div>
-    <h1 data-i18n="home.ban-dang-ban-khoan-dieu-gi" class="serif">Bạn đang băn khoăn điều gì?</h1>
+    <h2 data-i18n="home.ban-dang-ban-khoan-dieu-gi" class="serif">Bạn đang băn khoăn điều gì?</h2>
     <p data-i18n="home.ke-cho-thay-nghe-cau-hoi" class="ask-sub">Kể cho thầy nghe. Câu hỏi của bạn sẽ đến đúng thầy phụ trách trong nhóm 15 thầy, mỗi thầy một môn, luận theo lá số của riêng bạn.</p>
     <form class="ask-box" id="askForm" action="/app" method="get">
       <label data-i18n="home.cau-hoi-cua-ban" for="askInput" class="sr-only">Câu hỏi của bạn</label>
@@ -348,7 +396,6 @@ button { font: inherit; cursor: pointer; }
       <a class="ask-chip" href="/app?q=Th%C3%A1ng%20n%C3%A0o%20t%E1%BB%91t%20%C4%91%E1%BB%83%20chuy%E1%BB%83n%20nh%C3%A0%3F&amp;thay=nhat-nguyen#chat">Tháng nào tốt để chuyển nhà?</a>
       <a class="ask-chip" href="/app?q=%C4%90%E1%BA%B7t%20t%C3%AAn%20con%20th%E1%BA%BF%20n%C3%A0o%20cho%20h%E1%BB%A3p%20m%E1%BB%87nh%3F&amp;thay=thien-an#chat">Đặt tên con thế nào cho hợp mệnh?</a>
     </div>
-    <p data-i18n="home.hoac-mo-thang-la-so-tu" class="ask-tools">Hoặc mở thẳng:<a href="/app-luan-giai.html">Lá số tử vi</a><a href="/app-bat-tu.html">Bát Tự</a><a href="/app-xem-tuoi.html">Xem tuổi vợ chồng</a><a href="/app-ngay-tot.html">Ngày tốt</a><a href="/cong-cu">Tất cả công cụ</a></p>
   </div>
 </section>
 
@@ -466,34 +513,6 @@ button { font: inherit; cursor: pointer; }
   </div>
 </section>
 
-<!-- ═══════════════ CÔNG CỤ CHÍNH ═══════════════ -->
-<section class="tools-sec">
-  <div class="wrap">
-    <div class="sec-head">
-      <span class="ic" data-icon="leaf"></span>
-      <h2 data-i18n="home.cong-cu-chinh">Công cụ chính</h2>
-      <a data-i18n="home.xem-tat-ca" class="more" href="/app">Xem tất cả →</a>
-    </div>
-    <div class="tools-grid">
-      <a class="tool-card" href="/app-luan-giai.html"><div class="tool-ic"><img src="/mascot/tool-icons/luan-giai.webp" alt="" loading="lazy"></div><span data-i18n="home.luan-giai-la-so">Luận Giải<br>Lá Số</span></a>
-      <a class="tool-card" href="/app-chu-trinh-cuoc-doi.html"><div class="tool-ic"><img src="/mascot/tool-icons/chu-trinh-cuoc-doi.webp" alt="" loading="lazy"></div><span data-i18n="home.chu-trinh-cuoc-doi">Chu Trình<br>Cuộc Đời</span></a>
-      <a class="tool-card" href="/app-bat-tu.html"><div class="tool-ic"><img src="/mascot/tool-icons/tu-binh-bat-tu.webp" alt="" loading="lazy"></div><span data-i18n="home.tu-binh-bat-tu">Tử Bình<br>Bát Tự</span></a>
-      <a class="tool-card" href="/app-than-so-hoc.html"><div class="tool-ic"><img src="/mascot/tool-icons/than-so-hoc.webp" alt="" loading="lazy"></div><span data-i18n="home.than-so-hoc">Thần Số<br>Học</span></a>
-      <a class="tool-card" href="/app-xem-tuoi.html"><div class="tool-ic"><img src="/mascot/tool-icons/xem-tuoi.webp" alt="" loading="lazy"></div><span data-i18n="home.xem-tuoi-vo-chong">Xem Tuổi<br>Vợ Chồng</span></a>
-      <a class="tool-card" href="/app-gio-sinh.html"><div class="tool-ic"><img src="/mascot/tool-icons/gio-sinh.webp" alt="" loading="lazy"></div><span data-i18n="home.xac-dinh-gio-sinh-632h">Xác Định<br>Giờ Sinh</span></a>
-      <a class="tool-card" href="/app-van-han-nam.html"><div class="tool-ic"><img src="/mascot/tool-icons/van-han-nam.webp" alt="" loading="lazy"></div><span data-i18n="home.van-han-12-thang-toi">Vận Hạn<br>12 Tháng Tới</span></a>
-      <a class="tool-card" href="/app-ngay-tot.html"><div class="tool-ic"><img src="/mascot/tool-icons/ngay-tot.webp" alt="" loading="lazy"></div><span data-i18n="home.xem-ngay-tot-xau">Xem Ngày<br>Tốt Xấu</span></a>
-      <a class="tool-card" href="/app-cong-so.html"><div class="tool-ic"><img src="/mascot/tool-icons/cong-so.webp" alt="" loading="lazy"></div><span data-i18n="home.tu-vi-cong-so-hn">Tử Vi<br>Công Sở &amp; HN</span></a>
-      <a class="tool-card" href="/app-phong-thuy.html"><div class="tool-ic"><img src="/mascot/tool-icons/phong-thuy.webp" alt="" loading="lazy"></div><span data-i18n="home.phong-thuy-ung-dung">Phong Thủy<br>Ứng Dụng</span></a>
-      <a class="tool-card" href="/app/xem-lam-an"><div class="tool-ic"><img src="/mascot/tool-icons/hop-tac-lam-an.webp" alt="" loading="lazy"></div><span data-i18n="home.hop-tac-lam-an">Hợp Tác<br>Làm Ăn</span></a>
-      <a class="tool-card" href="/app-dien-tuong.html"><div class="tool-ic"><img src="/mascot/tool-icons/dien-tuong.webp" alt="" loading="lazy"></div><span data-i18n="home.dien-tuong-xem-tuong-mat">Diện Tướng<br>Xem Tướng Mặt</span></a>
-      <a class="tool-card" href="/app-nhan-tuong.html"><div class="tool-ic"><img src="/mascot/tool-icons/nhan-tuong.webp" alt="" loading="lazy"></div><span data-i18n="home.nhan-tuong-xem-tuong-mat">Nhãn Tướng<br>Xem Tướng Mắt</span></a>
-      <a class="tool-card" href="/app-thu-tuong.html"><div class="tool-ic"><img src="/mascot/tool-icons/thu-tuong.webp" alt="" loading="lazy"></div><span data-i18n="home.thu-tuong-xem-chi-tay">Thủ Tướng<br>Xem Chỉ Tay</span></a>
-      <a class="tool-card" href="/app-thanh-tuong.html"><div class="tool-ic"><img src="/mascot/tool-icons/thanh-tuong.webp" alt="" loading="lazy"></div><span data-i18n="home.thanh-tuong-xem-giong-noi">Thanh Tướng<br>Xem Giọng Nói</span></a>
-      <a class="tool-card" href="/app-khi-sac.html"><div class="tool-ic"><img src="/mascot/tool-icons/khi-sac.webp" alt="" loading="lazy"></div><span data-i18n="home.khi-sac-van-khi-ngan-han">Khí Sắc<br>Vận Khí Ngắn Hạn</span></a>
-    </div>
-  </div>
-</section>
 
 <!-- ═══════════════ CÁC THẦY (15 thầy) — bấm là vào chat thẳng với thầy đó (Shell.meetThay) ═══════════════ -->
 <!-- Tên + môn chép từ `master_profiles` (display_name, discipline, sort_order)

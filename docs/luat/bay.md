@@ -86,6 +86,18 @@
   `getUserMedia` phải đổi sang câu tiếng Việt: `NotFoundError` ("Requested device not found") là máy
   KHÔNG có micro, không phải bug — đừng để khách đọc nguyên chữ tiếng Anh.
 
+- 🪤 **Soft-nav (`shell-soft-nav.js`) — ba bẫy, test mở THẲNG URL không bắt được cái nào** (Thanh Tướng
+  Pro, "bấm nút không chạy gì" trên iPhone, 2026-11-25): (1) nó chỉ chép `main#ws` + các `<script>` cuối
+  trang ⇒ phần tử đặt ở `<body>` (overlay, modal) MẤT khi vào trang qua menu; `getElementById` → null, dòng
+  `.addEventListener` đầu tiên ném TypeError, cả phần script còn lại (kể cả `TuviPaywall.init`) không chạy ⇒
+  nút "chết" im lặng. Dựng overlay bằng JS. (2) `tvmb:softnav` bắn SAU KHI script trang đích chạy, kể cả khi
+  đích là CHÍNH trang có listener ⇒ listener vừa gắn nhận luôn sự kiện "vào trang" của mình (bản gốc đặt
+  `state._leftPage=true` ⇒ mọi lần ghi âm bị huỷ im lặng; đo trên bản trước mọi thay đổi: mở thẳng URL → `false`,
+  vào bằng soft-nav → `true`). Kiểm `e.detail.path`, tự gỡ listener khi rời, buộc vào state của chính lần chạy.
+  (3) nội dung cũ được cất vào "nghĩa địa" cuối `<body>` ⇒ `document.getElementById('x')` có thể trả phần tử của
+  TRANG TRƯỚC; test dùng `main#ws #x`. Cách test: mở trang khác rồi BẤM LINK sang trang cần thử (kể cả vào lại
+  lần hai). Còn nợ cùng kiểu: `app-duyen-no-tien-kiep.html` (`_hookLeftPage`).
+
 ## CI
 
 - **`tsc --noEmit` xanh KHÔNG chứng minh `next build` chạy** — TS 7 gỡ hẳn compiler
