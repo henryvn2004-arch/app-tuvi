@@ -22983,6 +22983,14 @@
   "t": "음높이(피치)",
   "h": "d81eb36d"
  },
+ "js.thtg.chi-so": {
+  "t": "지표",
+  "h": "3b41d652"
+ },
+ "js.thtg.chi-so-do-giong": {
+  "t": "목소리 지표",
+  "h": "b7a9f6aa"
+ },
  "js.thtg.chuan-bi-giong-noi": {
   "t": "목소리를 준비하세요…",
   "h": "f2647a9c"
@@ -23019,6 +23027,18 @@
   "t": "낮은 목소리는 무엇을 뜻하나요?",
   "h": "93f12462"
  },
+ "js.thtg.ho-so-nguoi-do": {
+  "t": "측정자 정보",
+  "h": "4fc5dc44"
+ },
+ "js.thtg.ho-va-ten": {
+  "t": "이름",
+  "h": "ad9f2994"
+ },
+ "js.thtg.ket-qua": {
+  "t": "결과",
+  "h": "c9f95514"
+ },
  "js.thtg.kha-to": {
   "t": "꽤 큼",
   "h": "089b5f63"
@@ -23043,6 +23063,14 @@
   "t": "음성을 처리할 수 없어요: {e}. 다시 시도해 주세요.",
   "h": "96163473"
  },
+ "js.thtg.lien-he": {
+  "t": "연락처",
+  "h": "603522f1"
+ },
+ "js.thtg.lien-he-khong-hop-le": {
+  "t": "올바른 전화번호(9~15자리) 또는 이메일을 입력하세요.",
+  "h": "887d0fe1"
+ },
  "js.thtg.loi-e": {
   "t": "오류: {e}",
   "h": "a7267203"
@@ -23051,6 +23079,10 @@
   "t": "오류 {s}",
   "h": "c406c72b"
  },
+ "js.thtg.ngay-do": {
+  "t": "측정일",
+  "h": "f731d6e6"
+ },
  "js.thtg.ngu-am": {
   "t": "오음",
   "h": "bc7a6d13"
@@ -23058,6 +23090,10 @@
  "js.thtg.ngu-am-la-gi": {
   "t": "오음이 뭐예요?",
   "h": "ed2678e3"
+ },
+ "js.thtg.ngu-am-uoc-tinh": {
+  "t": "추정 오음",
+  "h": "1692714f"
  },
  "js.thtg.nguam-hoa": {
   "t": "화(火)의 소리(치) — 높고 힘 있게 울림",
@@ -23102,6 +23138,10 @@
  "js.thtg.nhan-de-bat-dau-thu-am": {
   "t": "눌러서 녹음 시작 · 브라우저가 물어보면 마이크 사용을 허용해 주세요",
   "h": "74465b56"
+ },
+ "js.thtg.nhap-ten-lien-he-truoc": {
+  "t": "계속하려면 위에 이름과 연락처를 입력하세요.",
+  "h": "38754cf6"
  },
  "js.thtg.nho-yeu": {
   "t": "작고 약함",
@@ -23211,6 +23251,10 @@
   "t": "적당함",
   "h": "e3fa9054"
  },
+ "js.thtp.12-chi-so-do-giong": {
+  "t": "목소리 12개 지표",
+  "h": "a337ea4b"
+ },
  "js.thtp.am-s": {
   "t": " 음절/초",
   "h": "49ed1880"
@@ -23258,6 +23302,10 @@
  "js.thtp.cham-diem-dam": {
   "t": "느림 — 차분함.",
   "h": "1761f7f1"
+ },
+ "js.thtp.chi-so": {
+  "t": "지표",
+  "h": "3b41d652"
  },
  "js.thtp.co-bien-dong": {
   "t": "변동이 있어요.",
@@ -23347,6 +23395,10 @@
   "t": "F0 평균",
   "h": "36f5bf55"
  },
+ "js.thtp.gioi-tinh": {
+  "t": "성별",
+  "h": "80bbce55"
+ },
  "js.thtp.giong-cao-bat-thuong-cho-nam": {
   "t": "ℹ 남성치고 비정상적으로 높은 목소리예요. 가성으로 말했거나 데이터가 불안정할 수 있어요.",
   "h": "a3164510"
@@ -23395,6 +23447,14 @@
   "t": "HNR이 낮으면 무엇을 뜻하나요?",
   "h": "c0db1713"
  },
+ "js.thtp.ho-so-nguoi-do": {
+  "t": "측정자 정보",
+  "h": "4fc5dc44"
+ },
+ "js.thtp.ho-va-ten": {
+  "t": "이름",
+  "h": "ad9f2994"
+ },
  "js.thtp.hoi-lech-dau-hieu-khi-khong": {
   "t": "약간 흔들림 — 기가 고르지 않다는 신호.",
   "h": "7392dcf4"
@@ -23410,6 +23470,10 @@
  "js.thtp.jitter-va-shimmer-la-gi": {
   "t": "지터와 시머가 뭐예요?",
   "h": "0fc478fd"
+ },
+ "js.thtp.ket-qua": {
+  "t": "결과",
+  "h": "c9f95514"
  },
  "js.thtp.khac-gi-ban-thanh-tuong-thuong": {
   "t": "일반 성상과 무엇이 다른가요?",
@@ -23455,6 +23519,14 @@
   "t": "마이크에 접근할 수 없어요",
   "h": "a07b8893"
  },
+ "js.thtp.lien-he": {
+  "t": "연락처",
+  "h": "603522f1"
+ },
+ "js.thtp.lien-he-khong-hop-le": {
+  "t": "올바른 전화번호(9~15자리) 또는 이메일을 입력하세요.",
+  "h": "887d0fe1"
+ },
  "js.thtp.loi": {
   "t": "오류: ",
   "h": "471c0087"
@@ -23479,6 +23551,10 @@
   "t": "{n}초",
   "h": "4b5fecbd"
  },
+ "js.thtp.nam": {
+  "t": "남성",
+  "h": "b580ba1b"
+ },
  "js.thtp.ngan-am-a-bai-do-khi": {
   "t": "'아' 소리 길게 내기 — 기 측정",
   "h": "df9c2325"
@@ -23490,6 +23566,14 @@
  "js.thtp.ngan-dai-shimmer": {
   "t": "지속 <strong>{d}s</strong>, 시머 {sh}dB — <em>{q}</em>.",
   "h": "e8a19bff"
+ },
+ "js.thtp.ngay-do": {
+  "t": "측정일",
+  "h": "f731d6e6"
+ },
+ "js.thtp.ngu-am-uoc-tinh": {
+  "t": "추정 오음",
+  "h": "1692714f"
  },
  "js.thtp.ngu-am-uoc-tinh-n": {
   "t": "추정 오음: {n}",
@@ -23507,9 +23591,17 @@
   "t": "{x}(탁함)",
   "h": "8f9cb8cf"
  },
+ "js.thtp.nhan-dinh": {
+  "t": "판단",
+  "h": "af3b1813"
+ },
  "js.thtp.nhanh-linh-hoat": {
   "t": "빠름 — 민첩함.",
   "h": "f8f7c567"
+ },
+ "js.thtp.nu": {
+  "t": "여성",
+  "h": "feb92ccd"
  },
  "js.thtp.on-dinh": {
   "t": "안정적이에요.",
@@ -23626,6 +23718,10 @@
  "js.thtp.trung-binh-vung-kim": {
   "t": "보통 — 금의 영역.",
   "h": "7f4bb46d"
+ },
+ "js.thtp.tuoi": {
+  "t": "나이",
+  "h": "3a6fc33f"
  },
  "js.thtp.uyen-chuyen-vung-thuy": {
   "t": "유연함 — 수의 영역.",
@@ -31723,6 +31819,10 @@
   "t": "3단계 · 측정 결과",
   "h": "3541b2e4"
  },
+ "thtp.chi-de-in-vao-ban-pdf": {
+  "t": "결과 PDF에 인쇄하는 용도로만 사용되며 풀이에는 포함되지 않습니다.",
+  "h": "7d497e40"
+ },
  "thtp.chua-muon-ghi-am-ban-co": {
   "t": "<b>아직 녹음하고 싶지 않으신가요?</b><span>먼저 샘플을 보며 어떤 느낌인지 체험해 볼 수 있어요.</span>",
   "h": "468bb930"
@@ -31746,6 +31846,14 @@
  "thtp.giong-noi-mang-nhieu-thong-tin": {
   "t": "목소리에는 생각보다 많은 정보가 담겨 있어요 — 4개의 심층 과제에서 얻은 12개 음향 지표가 오음과 기력의 가장 완전한 모습을 그려 줘요. 일반 성상보다 더 깊이 알고 싶은 분께 알맞아요.",
   "h": "f907ddc6"
+ },
+ "thtp.ho-va-ten": {
+  "t": "이름",
+  "h": "ad9f2994"
+ },
+ "thtp.lien-he-sdt-hoac-email": {
+  "t": "연락처(전화번호 또는 이메일)",
+  "h": "e190b41f"
  },
  "thtp.luan-giai-thanh-tuong-ton-luong": {
   "t": "<span class=\"bg-label\"><span class=\"ic\" data-icon=\"music\"></span><b id=\"analyzeBtnLabel\">성상 풀이하기 →</b></span> <small><span class=\"vnd\" data-tvp-price-vnd=\"thanh-tuong-pro\"></span> <span class=\"cb-sub\">(<span data-tvp-price=\"thanh-tuong-pro\">…</span> 냥)</span> 필요</small>",
@@ -31775,6 +31883,14 @@
   "t": "성상 심층 분석",
   "h": "1e2230b3"
  },
+ "thtp.so-dien-thoai-hoac-email": {
+  "t": "전화번호 또는 이메일",
+  "h": "8bd29fd7"
+ },
+ "thtp.tai-pdf-ket-qua": {
+  "t": "결과 PDF 다운로드",
+  "h": "7b1b8ded"
+ },
  "thtp.thanh-tuong-pro": {
   "t": "성상 Pro",
   "h": "b2e5a151"
@@ -31798,6 +31914,10 @@
  "thtp.vi-du-32": {
   "t": "예: 32",
   "h": "dc9bd965"
+ },
+ "thtp.vi-du-nguyen-van-a": {
+  "t": "예: 응우옌 반 A",
+  "h": "eafae45a"
  },
  "thtp.xem-ban-mau": {
   "t": "샘플 보기 →",

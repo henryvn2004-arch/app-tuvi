@@ -24,6 +24,31 @@
 .record-wrap{text-align:center;padding:20px 0 14px}
 .btn-record{display:inline-flex;align-items:center;gap:10px;padding:15px 34px;background:var(--navy);color:#fff;border:none;border-radius:50px;font-size:14.5px;font-weight:700;cursor:pointer;font-family:inherit;transition:all .2s;letter-spacing:.5px}
 .btn-record:hover{background:var(--navy-3);transform:scale(1.02)}
+.btn-record:disabled{opacity:.55;cursor:not-allowed;transform:none;background:var(--navy)}
+.info-block{margin:0 0 16px}
+.setup-label{font-size:10.5px;font-weight:600;color:var(--text-lt);letter-spacing:.04em;text-transform:uppercase;margin-bottom:8px}
+.text-input{width:100%;padding:10px 14px;border:1.5px solid var(--line-2);border-radius:8px;font-size:14px;font-family:inherit;background:var(--paper);color:var(--text)}
+.text-input:focus{border-color:var(--gold);outline:none}
+.text-input.bad{border-color:#C0392B}
+.setup-hint{font-size:11.5px;color:var(--text-lt);margin:6px 0 0;line-height:1.5}
+.setup-hint.err{color:#C0392B}
+.rp-box{margin:6px 0 14px;padding:14px 16px;background:var(--paper);border:1px solid var(--border-lt);border-radius:10px}
+.rp-title{font-family:var(--serif);font-size:14.5px;font-weight:700;color:var(--heading);margin:0 0 8px}
+.rp-title+.rp-grid{margin-bottom:14px}
+.rp-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:6px 18px;margin:0}
+.rp-grid div{font-size:13px;line-height:1.5;color:var(--text)}
+.rp-grid dt{display:inline;font-weight:700;color:var(--text-lt);font-size:11px;letter-spacing:.04em;text-transform:uppercase;margin-right:2px}
+.rp-grid dd{display:inline;margin:0;word-break:break-word}
+.rp-table{width:100%;border-collapse:collapse;font-size:12.5px}
+.rp-table th,.rp-table td{text-align:left;padding:6px 8px;border-bottom:1px solid var(--border-lt);vertical-align:top}
+.rp-table th{font-size:10.5px;letter-spacing:.04em;text-transform:uppercase;color:var(--text-lt)}
+.rp-table td:nth-child(2){font-weight:700;color:var(--heading)}
+.rp-table tr{break-inside:avoid;page-break-inside:avoid}
+.rp-actions{display:none;margin:0 0 14px}
+.rp-actions.visible{display:block}
+.btn-pdf{display:inline-flex;align-items:center;gap:8px;padding:10px 22px;background:var(--navy);color:#fff;border:none;border-radius:50px;font-size:13px;font-weight:700;cursor:pointer;font-family:inherit}
+.btn-pdf:hover{background:var(--navy-3)}
+.btn-pdf .ic{width:16px;height:16px;display:inline-flex}
 .btn-record.recording{background:var(--red);animation:pulse-red 1.2s ease-in-out infinite}
 .btn-record.processing{background:#888;cursor:not-allowed}
 @keyframes pulse-red{0%,100%{box-shadow:0 0 0 0 rgba(192,57,43,0.4)}50%{box-shadow:0 0 0 12px rgba(192,57,43,0)}}
@@ -122,6 +147,13 @@ body.chat-first-live .features-grid{grid-template-columns:1fr}
       <div class="dt-card" id="inputCard">
         <div class="fc-head"><span class="fc-ic" data-icon="mic"></span><h2 data-i18n="thtg.ghi-am-giong-noi">Ghi Âm Giọng Nói</h2></div>
         <p data-i18n="thtg.doc-thanh-tieng-doan-mau-ben" class="sub">Đọc thành tiếng đoạn mẫu bên dưới để hệ thống ghi âm và đo chỉ số âm học, đối chiếu với Ngũ Âm cổ pháp.</p>
+        <div class="info-block">
+          <div data-i18n="thtp.ho-va-ten" class="setup-label">Họ và tên</div>
+          <input data-i18n-attr="placeholder:thtp.vi-du-nguyen-van-a" type="text" class="text-input" id="nameInput" placeholder="Ví dụ: Nguyễn Văn A" maxlength="80" autocomplete="name">
+          <div data-i18n="thtp.lien-he-sdt-hoac-email" class="setup-label" style="margin-top:14px">Liên hệ (SĐT hoặc email)</div>
+          <input data-i18n-attr="placeholder:thtp.so-dien-thoai-hoac-email" type="text" class="text-input" id="contactInput" placeholder="Số điện thoại hoặc email" maxlength="120" inputmode="email" autocomplete="email" aria-describedby="contactHint">
+          <div data-i18n="thtp.chi-de-in-vao-ban-pdf" class="setup-hint" id="contactHint">Chỉ dùng để in vào bản PDF kết quả, không đưa vào phần luận giải.</div>
+        </div>
         <div class="dt-privacy"><span class="ic" data-icon="lock"></span><div data-i18n="thtg.am-thanh-xu-ly-hoan-toan">Âm thanh xử lý hoàn toàn trong trình duyệt. Chỉ gửi các chỉ số đo được (không gửi file audio) lên server để máy chủ phân tích.</div></div>
 
         <div class="passage-card">
@@ -137,7 +169,7 @@ body.chat-first-live .features-grid{grid-template-columns:1fr}
 
         <div class="record-wrap">
           <div class="countdown-badge" id="countdownBadge"></div>
-          <button data-i18n="thtg.bat-dau-thu-am" class="btn-record" id="recordBtn" onclick="toggleRecord()">
+          <button data-i18n="thtg.bat-dau-thu-am" class="btn-record" id="recordBtn" onclick="toggleRecord()" disabled>
             <span id="recordIcon" class="ic" data-icon="mic"></span>
             <span id="recordLabel">Bắt Đầu Thu Âm</span>
           </button>
@@ -201,6 +233,8 @@ body.chat-first-live .features-grid{grid-template-columns:1fr}
       <div class="dt-card" id="resultCard" data-ws-result style="display:none;margin-top:16px">
         <h2 data-i18n="thtg.phan-tich-thanh-tuong-hoc">Phân Tích Thanh Tướng Học</h2>
         <p data-i18n="thtg.ngu-am-co-phap-ma-moi" class="sub">Ngũ Âm Cổ Pháp · Mã Môi · Đạt Ma</p>
+        <div class="rp-box" id="reportProfile" style="display:none"></div>
+        <div class="rp-actions" id="pdfBar"><button type="button" class="btn-pdf" id="pdfBtn" onclick="Shell.printNow()"><span class="ic" data-icon="file-text"></span><span data-i18n="thtp.tai-pdf-ket-qua">Tải PDF kết quả</span></button></div>
         <div id="aiResult" class="dt-result"></div>
         <div style="text-align:center;margin-top:8px">
           <button data-i18n="thtg.thu-am-lai" class="btn-cancel" onclick="resetTool()">Thu Âm Lại</button>
@@ -240,7 +274,58 @@ var _recordTimer = null;
 var _countdownTimer = null;
 var _animFrame = null;
 var _features = null;
+var _featureItems = null;
 var _currentSlug = '';
+
+// ── Thông tin cơ bản: CHỈ để in vào bản PDF kết quả ────────────────────────
+// Không vào buildFeaturesText (prompt gửi model), không vào Shell.setShareable,
+// _saveTuongReading hay Shell.setContext. Chưa nhập đủ thì nút Thu Âm bị khoá.
+var _info = { name: '', contact: '' };
+var nameInput = document.getElementById('nameInput');
+var contactInput = document.getElementById('contactInput');
+var contactHint = document.getElementById('contactHint');
+var contactHintDefault = contactHint ? contactHint.textContent : '';
+var statusDefault = document.getElementById('statusMsg').textContent;
+function validName(v) { return String(v || '').trim().length >= 2; }
+// Email hợp lệ, hoặc SĐT 9–15 chữ số (cho phép + đầu, bỏ khoảng trắng . - ( ) khi đếm).
+function validContact(v) {
+  v = String(v || '').trim();
+  if (/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(v)) return true;
+  return /^\+?\d{9,15}$/.test(v.replace(/[\s.\-()]/g, ''));
+}
+function infoOk() { return validName(_info.name) && validContact(_info.contact); }
+function paintContactErr(show) {
+  contactInput.classList.toggle('bad', show);
+  contactInput.setAttribute('aria-invalid', show ? 'true' : 'false');
+  contactHint.classList.toggle('err', show);
+  contactHint.textContent = show
+    ? _tvmbT('js.thtg.lien-he-khong-hop-le', 'Nhập số điện thoại (9–15 số) hoặc email hợp lệ.')
+    : contactHintDefault;
+}
+// Khoá/mở nút Thu Âm theo thông tin; không đụng khi đang đếm ngược/thu/xử lý
+// (nút lúc đó là "Dừng Lại" và phải bấm được).
+function syncInfoGate() {
+  var btn = document.getElementById('recordBtn');
+  var st = document.getElementById('statusMsg');
+  var busy = _isRecording || btn.classList.contains('processing') ||
+    document.getElementById('countdownBadge').classList.contains('visible');
+  var ok = infoOk();
+  btn.disabled = !ok && !busy;
+  if (_features || busy) return;
+  var gateMsg = _tvmbT('js.thtg.nhap-ten-lien-he-truoc', 'Nhập họ tên và liên hệ ở trên để tiếp tục.');
+  if (!ok && st.textContent === statusDefault) st.textContent = gateMsg;
+  else if (ok && st.textContent === gateMsg) st.textContent = statusDefault;
+}
+nameInput.addEventListener('input', function () { _info.name = nameInput.value.trim(); syncInfoGate(); });
+contactInput.addEventListener('input', function () {
+  _info.contact = contactInput.value.trim();
+  if (contactInput.classList.contains('bad') && validContact(_info.contact)) paintContactErr(false);
+  syncInfoGate();
+});
+contactInput.addEventListener('blur', function () {
+  paintContactErr(!!_info.contact && !validContact(_info.contact));
+});
+syncInfoGate();
 
 // Thanh tiến trình (`.ws-steps`, xem shell.css) — chỉ phản ánh trạng thái đã
 // có sẵn trong flow cũ (ghi âm → thanh toán → kết quả), không tạo trạng thái
@@ -262,6 +347,7 @@ var COUNTDOWN = 3;
 
 async function toggleRecord() {
   if (_isRecording) { stopRecording(); return; }
+  if (!infoOk()) { syncInfoGate(); return; }
   const btn = document.getElementById('recordBtn');
   if (btn.classList.contains('processing')) return;
   await startCountdown();
@@ -583,6 +669,7 @@ function showFeatures(f) {
     { label: _tvmbT('js.thtg.thoi-luong', 'Thời Lượng'), value: `${f.duration}s`, fill: Math.min(100, f.duration / 15 * 100), color: '#534AB7' },
   ];
 
+  _featureItems = items;
   grid.innerHTML = items.map(it => `
     <div class="feature-item">
       <div class="feature-label">${it.label}</div>
@@ -648,6 +735,12 @@ async function analyze() {
   if (!_features) return;
   const errEl = document.getElementById('error-msg');
   errEl.classList.remove('active');
+  if (!infoOk()) {
+    errEl.textContent = _tvmbT('js.thtg.nhap-ten-lien-he-truoc', 'Nhập họ tên và liên hệ ở trên để tiếp tục.');
+    errEl.classList.add('active');
+    nameInput.focus();
+    return;
+  }
   document.getElementById('analyzeBtn').disabled = true;
   wsStepsSet(2); // Thanh toán — chốt tường trước khi gọi model
   _currentSlug = TuviPaywall.generateToolSlug('thanh-tuong');
@@ -659,6 +752,8 @@ async function analyze() {
 
 async function _doAnalyze() {
   document.getElementById('resultCard').style.display = 'block';
+  document.getElementById('pdfBar').classList.remove('visible');
+  renderReportProfile();
   wsStepsSet(3); // Nhận kết quả — đã trả tiền, bắt đầu luận giải
   const aiResultEl = document.getElementById('aiResult');
   aiResultEl.innerHTML = '<div class="dt-loading"><span class="dt-loading-icon ic" data-icon="music"></span><div class="dt-loading-text">' + _tvmbT('js.thtg.dang-luan-giai-thanh-tuong', 'Đang luận giải thanh tướng...') + '<br><span style="font-size:12px;opacity:.7">' + _tvmbT('js.thtg.thuong-mat-10-15-giay', 'Thường mất 10–15 giây') + '</span></div></div>';
@@ -701,6 +796,7 @@ async function _doAnalyze() {
     }
     if (!full) throw new Error(_tvmbT('js.thtg.khong-co-ket-qua', 'Không có kết quả.'));
     el.innerHTML = renderMd(full);
+    document.getElementById('pdfBar').classList.add('visible');
     _saveTuongReading('thanh-tuong', full, null, null);
     // Chia sẻ CHỈ text luận giải của AI — KHÔNG đính kèm bản ghi âm giọng nói
     // thật của user (riêng tư, và cũng chưa có cơ chế lưu audio public).
@@ -738,6 +834,8 @@ function resetTool() {
   document.getElementById('analyzeBtn').disabled = true;
   document.getElementById('resultCard').style.display = 'none';
   document.getElementById('aiResult').innerHTML = '';
+  document.getElementById('pdfBar').classList.remove('visible');
+  document.getElementById('reportProfile').style.display = 'none';
   document.getElementById('error-msg').classList.remove('active');
   document.getElementById('countdownBadge').classList.remove('visible');
   document.getElementById('waveWrap').classList.remove('visible');
@@ -748,6 +846,36 @@ function resetTool() {
   document.getElementById('inputCard').scrollIntoView({ behavior: 'smooth', block: 'start' });
   wsStepsSet(1); // về lại Ghi âm giọng nói
   Shell.setShareable(null);
+  syncInfoGate();
+}
+
+// Khối "Hồ sơ + chỉ số đo" nằm TRONG #resultCard (mốc data-ws-result) nên bản
+// in/PDF của shell mang theo — #inputCard nằm trong `.ws-intake`, bị ẩn khi in.
+function _rpEsc(v) {
+  return String(v == null ? '' : v).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+}
+function renderReportProfile() {
+  const host = document.getElementById('reportProfile');
+  if (!host || !_features) return;
+  const nguAm = estimateNguAm(_features);
+  const lang = document.documentElement.lang || 'vi';
+  let when;
+  try { when = new Date().toLocaleString(lang, { dateStyle: 'short', timeStyle: 'short' }); } catch (e) { when = new Date().toLocaleString(); }
+  const rows = [
+    [_tvmbT('js.thtg.ho-va-ten', 'Họ và tên'), _info.name],
+    [_tvmbT('js.thtg.lien-he', 'Liên hệ'), _info.contact],
+    [_tvmbT('js.thtg.ngay-do', 'Ngày đo'), when],
+    [_tvmbT('js.thtg.ngu-am-uoc-tinh', 'Ngũ Âm ước tính'), nguAm.shown],
+  ];
+  const grid = rows.map(r => '<div><dt>' + _rpEsc(r[0]) + '</dt> <dd>' + _rpEsc(r[1]) + '</dd></div>').join('');
+  const trs = (_featureItems || []).map(it =>
+    '<tr><td>' + _rpEsc(it.label) + '</td><td>' + _rpEsc(it.value) + '</td></tr>').join('');
+  host.innerHTML =
+    '<div class="rp-title">' + _rpEsc(_tvmbT('js.thtg.ho-so-nguoi-do', 'Hồ sơ người đo')) + '</div>' +
+    '<dl class="rp-grid">' + grid + '</dl>' +
+    '<div class="rp-title">' + _rpEsc(_tvmbT('js.thtg.chi-so-do-giong', 'Chỉ số đo giọng')) + '</div>' +
+    '<table class="rp-table"><thead><tr><th>' + _rpEsc(_tvmbT('js.thtg.chi-so', 'Chỉ số')) + '</th><th>' + _rpEsc(_tvmbT('js.thtg.ket-qua', 'Kết quả')) + '</th></tr></thead><tbody>' + trs + '</tbody></table>';
+  host.style.display = 'block';
 }
 
 // Nhãn tính chất model tự gắn NGAY TRƯỚC câu hook mỗi đoạn (khối "NHÃN TÍNH

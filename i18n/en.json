@@ -22983,6 +22983,14 @@
   "t": "Pitch",
   "h": "d81eb36d"
  },
+ "js.thtg.chi-so": {
+  "t": "Metric",
+  "h": "3b41d652"
+ },
+ "js.thtg.chi-so-do-giong": {
+  "t": "Voice metrics",
+  "h": "b7a9f6aa"
+ },
  "js.thtg.chuan-bi-giong-noi": {
   "t": "Get your voice ready…",
   "h": "f2647a9c"
@@ -23019,6 +23027,18 @@
   "t": "What does a deep voice say about a person?",
   "h": "93f12462"
  },
+ "js.thtg.ho-so-nguoi-do": {
+  "t": "Participant profile",
+  "h": "4fc5dc44"
+ },
+ "js.thtg.ho-va-ten": {
+  "t": "Full name",
+  "h": "ad9f2994"
+ },
+ "js.thtg.ket-qua": {
+  "t": "Result",
+  "h": "c9f95514"
+ },
  "js.thtg.kha-to": {
   "t": "Fairly loud",
   "h": "089b5f63"
@@ -23043,6 +23063,14 @@
   "t": "Can't process the audio: {e}. Please try again.",
   "h": "96163473"
  },
+ "js.thtg.lien-he": {
+  "t": "Contact",
+  "h": "603522f1"
+ },
+ "js.thtg.lien-he-khong-hop-le": {
+  "t": "Enter a valid phone number (9–15 digits) or email.",
+  "h": "887d0fe1"
+ },
  "js.thtg.loi-e": {
   "t": "Error: {e}",
   "h": "a7267203"
@@ -23051,6 +23079,10 @@
   "t": "Error {s}",
   "h": "c406c72b"
  },
+ "js.thtg.ngay-do": {
+  "t": "Date measured",
+  "h": "f731d6e6"
+ },
  "js.thtg.ngu-am": {
   "t": "Five Tones",
   "h": "bc7a6d13"
@@ -23058,6 +23090,10 @@
  "js.thtg.ngu-am-la-gi": {
   "t": "What are the Five Tones?",
   "h": "ed2678e3"
+ },
+ "js.thtg.ngu-am-uoc-tinh": {
+  "t": "Estimated Five Tones",
+  "h": "1692714f"
  },
  "js.thtg.nguam-hoa": {
   "t": "Fire voice (Zhi) — high, with a forceful edge",
@@ -23102,6 +23138,10 @@
  "js.thtg.nhan-de-bat-dau-thu-am": {
   "t": "Tap to start recording · Allow microphone access when your browser asks",
   "h": "74465b56"
+ },
+ "js.thtg.nhap-ten-lien-he-truoc": {
+  "t": "Enter your name and contact above to continue.",
+  "h": "38754cf6"
  },
  "js.thtg.nho-yeu": {
   "t": "Soft, weak",
@@ -23211,6 +23251,10 @@
   "t": "Moderate",
   "h": "e3fa9054"
  },
+ "js.thtp.12-chi-so-do-giong": {
+  "t": "12 voice metrics",
+  "h": "a337ea4b"
+ },
  "js.thtp.am-s": {
   "t": " syl/s",
   "h": "49ed1880"
@@ -23258,6 +23302,10 @@
  "js.thtp.cham-diem-dam": {
   "t": "Slow — composed.",
   "h": "1761f7f1"
+ },
+ "js.thtp.chi-so": {
+  "t": "Metric",
+  "h": "3b41d652"
  },
  "js.thtp.co-bien-dong": {
   "t": "Some fluctuation.",
@@ -23347,6 +23395,10 @@
   "t": "Mean F0",
   "h": "36f5bf55"
  },
+ "js.thtp.gioi-tinh": {
+  "t": "Gender",
+  "h": "80bbce55"
+ },
  "js.thtp.giong-cao-bat-thuong-cho-nam": {
   "t": "ℹ Unusually high for a male voice. You may be using a falsetto, or the data may be unstable.",
   "h": "a3164510"
@@ -23395,6 +23447,14 @@
   "t": "What does a low HNR mean?",
   "h": "c0db1713"
  },
+ "js.thtp.ho-so-nguoi-do": {
+  "t": "Participant profile",
+  "h": "4fc5dc44"
+ },
+ "js.thtp.ho-va-ten": {
+  "t": "Full name",
+  "h": "ad9f2994"
+ },
  "js.thtp.hoi-lech-dau-hieu-khi-khong": {
   "t": "Slightly off — a sign of uneven qi.",
   "h": "7392dcf4"
@@ -23410,6 +23470,10 @@
  "js.thtp.jitter-va-shimmer-la-gi": {
   "t": "What are jitter and shimmer?",
   "h": "0fc478fd"
+ },
+ "js.thtp.ket-qua": {
+  "t": "Result",
+  "h": "c9f95514"
  },
  "js.thtp.khac-gi-ban-thanh-tuong-thuong": {
   "t": "How is this different from the regular Voice Reading?",
@@ -23455,6 +23519,14 @@
   "t": "can't access the microphone",
   "h": "a07b8893"
  },
+ "js.thtp.lien-he": {
+  "t": "Contact",
+  "h": "603522f1"
+ },
+ "js.thtp.lien-he-khong-hop-le": {
+  "t": "Enter a valid phone number (9–15 digits) or email.",
+  "h": "887d0fe1"
+ },
  "js.thtp.loi": {
   "t": "Error: ",
   "h": "471c0087"
@@ -23479,6 +23551,10 @@
   "t": "{n} sec",
   "h": "4b5fecbd"
  },
+ "js.thtp.nam": {
+  "t": "Male",
+  "h": "b580ba1b"
+ },
  "js.thtp.ngan-am-a-bai-do-khi": {
   "t": "Hold the \"Ah\" — qi test",
   "h": "df9c2325"
@@ -23490,6 +23566,14 @@
  "js.thtp.ngan-dai-shimmer": {
   "t": "Sustained <strong>{d}s</strong>, shimmer {sh}dB — <em>{q}</em>.",
   "h": "e8a19bff"
+ },
+ "js.thtp.ngay-do": {
+  "t": "Date measured",
+  "h": "f731d6e6"
+ },
+ "js.thtp.ngu-am-uoc-tinh": {
+  "t": "Estimated Five Tones",
+  "h": "1692714f"
  },
  "js.thtp.ngu-am-uoc-tinh-n": {
   "t": "Estimated Five Tones: {n}",
@@ -23507,9 +23591,17 @@
   "t": "Muddy {x}",
   "h": "8f9cb8cf"
  },
+ "js.thtp.nhan-dinh": {
+  "t": "Assessment",
+  "h": "af3b1813"
+ },
  "js.thtp.nhanh-linh-hoat": {
   "t": "Fast — agile.",
   "h": "f8f7c567"
+ },
+ "js.thtp.nu": {
+  "t": "Female",
+  "h": "feb92ccd"
  },
  "js.thtp.on-dinh": {
   "t": "Stable.",
@@ -23626,6 +23718,10 @@
  "js.thtp.trung-binh-vung-kim": {
   "t": "Average — Metal range.",
   "h": "7f4bb46d"
+ },
+ "js.thtp.tuoi": {
+  "t": "Age",
+  "h": "3a6fc33f"
  },
  "js.thtp.uyen-chuyen-vung-thuy": {
   "t": "Flexible — Water range.",
@@ -31723,6 +31819,10 @@
   "t": "Step 3 · Measurements",
   "h": "3541b2e4"
  },
+ "thtp.chi-de-in-vao-ban-pdf": {
+  "t": "Used only to print on your PDF report, not included in the reading.",
+  "h": "7d497e40"
+ },
  "thtp.chua-muon-ghi-am-ban-co": {
   "t": "<b>Not ready to record?</b><span>You can look at a sample first to get a feel for it.</span>",
   "h": "468bb930"
@@ -31746,6 +31846,14 @@
  "thtp.giong-noi-mang-nhieu-thong-tin": {
   "t": "Your voice carries more information than you'd think — 12 acoustic metrics from 4 in-depth tasks paint the fullest picture of your Five Tones and qi strength. For those who want to go deeper than the regular Voice Reading.",
   "h": "f907ddc6"
+ },
+ "thtp.ho-va-ten": {
+  "t": "Full name",
+  "h": "ad9f2994"
+ },
+ "thtp.lien-he-sdt-hoac-email": {
+  "t": "Contact (phone or email)",
+  "h": "e190b41f"
  },
  "thtp.luan-giai-thanh-tuong-ton-luong": {
   "t": "<span class=\"bg-label\"><span class=\"ic\" data-icon=\"music\"></span><b id=\"analyzeBtnLabel\">Read My Voice →</b></span> <small>Costs <span class=\"vnd\" data-tvp-price-vnd=\"thanh-tuong-pro\"></span> <span class=\"cb-sub\">(<span data-tvp-price=\"thanh-tuong-pro\">…</span> credits)</span></small>",
@@ -31775,6 +31883,14 @@
   "t": "In-Depth Voice Reading Analysis",
   "h": "1e2230b3"
  },
+ "thtp.so-dien-thoai-hoac-email": {
+  "t": "Phone number or email",
+  "h": "8bd29fd7"
+ },
+ "thtp.tai-pdf-ket-qua": {
+  "t": "Download result PDF",
+  "h": "7b1b8ded"
+ },
  "thtp.thanh-tuong-pro": {
   "t": "Voice Reading Pro",
   "h": "b2e5a151"
@@ -31798,6 +31914,10 @@
  "thtp.vi-du-32": {
   "t": "e.g. 32",
   "h": "dc9bd965"
+ },
+ "thtp.vi-du-nguyen-van-a": {
+  "t": "e.g. Nguyen Van A",
+  "h": "eafae45a"
  },
  "thtp.xem-ban-mau": {
   "t": "See a sample →",
