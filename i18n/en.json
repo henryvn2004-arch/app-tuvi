@@ -23307,6 +23307,10 @@
   "t": "Metric",
   "h": "3b41d652"
  },
+ "js.thtp.chua-bat-duoc-am-thanh": {
+  "t": "Your browser has not allowed audio processing. Tap the \"Try again\" button to record.",
+  "h": "bcc75f6e"
+ },
  "js.thtp.co-bien-dong": {
   "t": "Some fluctuation.",
   "h": "bb657503"
