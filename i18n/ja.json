@@ -3491,6 +3491,10 @@
   "t": "記事・基礎知識",
   "h": "0080f09e"
  },
+ "home.bam-vao-cong-cu-de-xem": {
+  "t": "ツールをタップするとすぐに開きます。紫微斗数、四柱推命、相性、吉日、人相、風水。",
+  "h": "5c51ce91"
+ },
  "home.ban-dang-ban-khoan-dieu-gi": {
   "t": "今、何が気になっていますか？",
   "h": "a58b1a75"
@@ -3510,6 +3514,10 @@
  "home.chiem-tinh-tay": {
   "t": "西洋占星術",
   "h": "d690a059"
+ },
+ "home.chon-cong-cu-ban-can": {
+  "t": "必要なツールを選んでください",
+  "h": "f9cb6f65"
  },
  "home.chu-trinh-cuoc-doi": {
   "t": "人生の<br>サイクル",
@@ -3811,6 +3819,10 @@
   "t": "タロット・数秘術",
   "h": "8cd4677e"
  },
+ "home.tat-ca-cong-cu": {
+  "t": "すべての<br>ツール",
+  "h": "8b0b1588"
+ },
  "home.thai-hu": {
   "t": "太虚",
   "h": "8164408e"
@@ -4018,6 +4030,10 @@
  "home.xem-tat-ca": {
   "t": "すべて見る →",
   "h": "cc902292"
+ },
+ "home.xem-tat-ca-cong-cu": {
+  "t": "すべてのツールを見る →",
+  "h": "c7f06278"
  },
  "home.xem-tuoi-vo-chong": {
   "t": "夫婦の<br>相性を見る",

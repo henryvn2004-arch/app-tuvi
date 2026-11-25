@@ -3491,6 +3491,10 @@
   "t": "글 · 지식",
   "h": "0080f09e"
  },
+ "home.bam-vao-cong-cu-de-xem": {
+  "t": "도구를 누르면 바로 열립니다. 자미두수, 사주, 궁합, 길일, 관상, 풍수.",
+  "h": "5c51ce91"
+ },
  "home.ban-dang-ban-khoan-dieu-gi": {
   "t": "요즘 어떤 점이 궁금하세요?",
   "h": "a58b1a75"
@@ -3510,6 +3514,10 @@
  "home.chiem-tinh-tay": {
   "t": "서양 점성술",
   "h": "d690a059"
+ },
+ "home.chon-cong-cu-ban-can": {
+  "t": "필요한 도구를 선택하세요",
+  "h": "f9cb6f65"
  },
  "home.chu-trinh-cuoc-doi": {
   "t": "인생<br>사이클",
@@ -3811,6 +3819,10 @@
   "t": "타로 · 수비학",
   "h": "8cd4677e"
  },
+ "home.tat-ca-cong-cu": {
+  "t": "모든<br>도구",
+  "h": "8b0b1588"
+ },
  "home.thai-hu": {
   "t": "태허",
   "h": "8164408e"
@@ -4018,6 +4030,10 @@
  "home.xem-tat-ca": {
   "t": "모두 보기 →",
   "h": "cc902292"
+ },
+ "home.xem-tat-ca-cong-cu": {
+  "t": "모든 도구 보기 →",
+  "h": "c7f06278"
  },
  "home.xem-tuoi-vo-chong": {
   "t": "부부<br>궁합",
