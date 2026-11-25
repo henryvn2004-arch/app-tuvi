@@ -85,6 +85,7 @@
 .rp-table tr{break-inside:avoid;page-break-inside:avoid}
 .rp-actions{display:none;margin:0 0 14px}
 .rp-actions.visible{display:block}
+.rp-actions.bottom{margin:18px 0 4px;text-align:center}
 .btn-pdf{display:inline-flex;align-items:center;gap:8px;padding:10px 22px;background:var(--navy);color:#fff;border:none;border-radius:50px;font-size:13px;font-weight:700;cursor:pointer;font-family:inherit}
 .btn-pdf:hover{background:var(--navy-3)}
 .btn-pdf .ic{width:16px;height:16px;display:inline-flex}
@@ -286,31 +287,12 @@
         <div class="rp-box" id="reportProfile" style="display:none"></div>
         <div class="rp-actions" id="pdfBar"><button type="button" class="btn-pdf" id="pdfBtn"><span class="ic" data-icon="file-text"></span><span data-i18n="thtp.tai-pdf-ket-qua">Tải PDF kết quả</span></button></div>
         <div class="dt-result" id="resultsPanel"></div>
+        <div class="rp-actions bottom" id="pdfBarBottom"><button type="button" class="btn-pdf" id="pdfBtnBottom"><span class="ic" data-icon="file-text"></span><span data-i18n="thtp.tai-pdf-ket-qua">Tải PDF kết quả</span></button></div>
       </div>
     </div>
   </main>
 
   <aside class="rail" id="shell-rail"></aside>
-</div>
-
-<div class="rec-ov" id="recOv" role="dialog" aria-modal="true" aria-labelledby="recOvTitle">
-  <div class="rec-ov-in">
-    <div class="rec-ov-top"><span id="recOvNum"></span><span id="recOvTime"></span></div>
-    <h3 id="recOvTitle"></h3>
-    <p class="rec-ov-ins" id="recOvIns"></p>
-    <div class="rec-ov-stage">
-      <div class="rec-ov-text" id="recOvText"></div>
-      <div class="rec-ov-count" id="recOvCount" aria-hidden="true"></div>
-    </div>
-    <div class="rec-ov-bar"><div id="recOvBar"></div></div>
-    <canvas class="rec-ov-wave" id="recOvWave" height="64"></canvas>
-    <div class="rec-ov-status" id="recOvStatus" role="status" aria-live="polite"></div>
-    <div class="rec-ov-diag" id="recOvDiag"></div>
-    <div class="rec-ov-btns">
-      <button type="button" class="rec-ov-btn pri" id="recOvRetry" style="display:none"></button>
-      <button type="button" class="rec-ov-btn" id="recOvCancel"></button>
-    </div>
-  </div>
 </div>
 
 <script>window.SHELL_ACTIVE='thanh-tuong-pro';window.SHELL_HISTORY=true;
@@ -414,6 +396,9 @@ var contactHint = $('contactHint');
 var contactHintDefault = contactHint ? contactHint.textContent : '';
 var pdfBar = $('pdfBar');
 var pdfBtn = $('pdfBtn');
+var pdfBarBottom = $('pdfBarBottom');
+var pdfBtnBottom = $('pdfBtnBottom');
+function setPdfBar(on) { pdfBar.classList.toggle('visible', on); pdfBarBottom.classList.toggle('visible', on); }
 var reportProfile = $('reportProfile');
 var startBtn = $('startBtn');
 var tasksSection = $('tasksSection');
@@ -538,7 +523,36 @@ nextBtn.addEventListener('click', () => {
 // ── Màn hình thu âm (overlay) ──────────────────────────────────────────────
 // Mọi bước đều hiện chữ ngay trên overlay (kể cả lỗi) — trước đây trên iPhone bấm nút mà
 // không thấy gì và không biết kẹt ở đâu. `recOvDiag` là dòng kỹ thuật nhỏ để chụp màn hình báo lỗi.
-var recOv = $('recOv'), recOvNum = $('recOvNum'), recOvTime = $('recOvTime'), recOvTitle = $('recOvTitle');
+// 🪤 Overlay dựng bằng JS, KHÔNG viết tĩnh trong HTML: soft-nav (shell-soft-nav.js) chỉ chép
+// `main#ws` + các `<script>` cuối trang — phần tử nằm ở <body> bị MẤT khi vào trang qua menu,
+// `$('recOv')` thành null, dòng `.addEventListener` đầu tiên ném TypeError và cả phần script còn lại
+// (kể cả TuviPaywall.init) không chạy: bấm nút không có phản ứng gì. Mở thẳng URL thì lại chạy
+// bình thường nên test E2E mở trực tiếp không bắt được (xem e2e soft-nav, docs/luat/bay.md).
+function ensureRecOverlay() {
+  var old = document.getElementById('recOv');
+  if (old && old.parentNode) old.parentNode.removeChild(old); // bản của lần chạy script trước
+  var d = document.createElement('div');
+  d.className = 'rec-ov';
+  d.id = 'recOv';
+  d.setAttribute('role', 'dialog');
+  d.setAttribute('aria-modal', 'true');
+  d.setAttribute('aria-labelledby', 'recOvTitle');
+  d.innerHTML =
+    '<div class="rec-ov-in">' +
+      '<div class="rec-ov-top"><span id="recOvNum"></span><span id="recOvTime"></span></div>' +
+      '<h3 id="recOvTitle"></h3>' +
+      '<p class="rec-ov-ins" id="recOvIns"></p>' +
+      '<div class="rec-ov-stage"><div class="rec-ov-text" id="recOvText"></div><div class="rec-ov-count" id="recOvCount" aria-hidden="true"></div></div>' +
+      '<div class="rec-ov-bar"><div id="recOvBar"></div></div>' +
+      '<canvas class="rec-ov-wave" id="recOvWave" height="64"></canvas>' +
+      '<div class="rec-ov-status" id="recOvStatus" role="status" aria-live="polite"></div>' +
+      '<div class="rec-ov-diag" id="recOvDiag"></div>' +
+      '<div class="rec-ov-btns"><button type="button" class="rec-ov-btn pri" id="recOvRetry" style="display:none"></button><button type="button" class="rec-ov-btn" id="recOvCancel"></button></div>' +
+    '</div>';
+  document.body.appendChild(d);
+  return d;
+}
+var recOv = ensureRecOverlay(), recOvNum = $('recOvNum'), recOvTime = $('recOvTime'), recOvTitle = $('recOvTitle');
 var recOvIns = $('recOvIns'), recOvText = $('recOvText'), recOvCount = $('recOvCount'), recOvBar = $('recOvBar');
 var recOvWave = $('recOvWave'), recOvStatus = $('recOvStatus'), recOvDiag = $('recOvDiag');
 var recOvRetry = $('recOvRetry'), recOvCancel = $('recOvCancel');
@@ -610,7 +624,13 @@ function ovCancel() {
 }
 recOvCancel.addEventListener('click', ovCancel);
 recOvRetry.addEventListener('click', () => startRecording());
-document.addEventListener('keydown', e => { if (e.key === 'Escape' && recOv.classList.contains('open')) ovCancel(); });
+if (!window.__thtpEsc) {
+  window.__thtpEsc = true; // gắn MỘT lần cho cả phiên — script trang chạy lại mỗi lần soft-nav vào
+  document.addEventListener('keydown', e => {
+    const o = document.getElementById('recOv');
+    if (e.key === 'Escape' && o && o.classList.contains('open')) ovCancel();
+  });
+}
 
 // 🍎 iOS Safari: AudioContext CHỈ chạy được nếu tạo/resume NGAY trong cú chạm. Tạo sau
 // `await getUserMedia` + đếm ngược ⇒ kẹt `suspended`, `await ac.resume()` treo VĨNH VIỄN.
@@ -682,9 +702,9 @@ async function startRecording() {
   state._busy = true;
   state._cancel = false;
   unlockAudio(); // đồng bộ, trong cú chạm — xem chú thích ở trên
-  ovOpen(t);
-  recordBtn.disabled = true;
   try {
+    ovOpen(t); // trong try: nếu ném lỗi thì catch báo ra, không để nút "chết" im lặng
+    recordBtn.disabled = true;
     if (!state.stream) {
       ovStatus(_tvmbT('js.thtp.xin-quyen-mic', 'Đang xin quyền micro — hãy chọn "Cho phép".'));
       state.stream = await getMic();
@@ -883,11 +903,23 @@ function releaseMic(){
 // `timerBar`/`waveWrap` — các id này DÙNG CHUNG với app-thanh-tuong.html
 // (đã ở SOFT_PAGES); không chặn thì một phiên ghi âm dở dang có thể ghi
 // nhầm vào DOM của trang đó sau khi soft-nav qua.
-document.addEventListener('tvmb:softnav', () => {
-  state._leftPage = true;
-  releaseMic();
-  if (recOv) recOv.classList.remove('open', 'live'); // overlay là của riêng trang này
-});
+// 🪤 `tvmb:softnav` bắn SAU KHI script của trang đích đã chạy — kể cả khi trang đích CHÍNH LÀ trang này.
+// Bản cũ không phân biệt nên ngay khi vào trang bằng soft-nav, listener vừa gắn nhận luôn sự kiện
+// "vào trang" của chính nó, bật `_leftPage` ⇒ mọi lần ghi âm bị huỷ IM LẶNG. Nay: bỏ qua nếu đích là
+// trang này; chỉ tác động lên state của CHÍNH lần chạy này; tự gỡ sau khi rời để không rò sang lần vào lại.
+(function () {
+  var S = state, ov = recOv;
+  function onLeave(e) {
+    var to = e && e.detail && e.detail.path;
+    if (to === '/app/thanh-tuong-pro') return; // sự kiện của chính lần vào trang này
+    document.removeEventListener('tvmb:softnav', onLeave);
+    S._leftPage = true;
+    if (S.stream) { S.stream.getTracks().forEach(function (t) { t.stop(); }); S.stream = null; }
+    if (S.audioCtx) { S.audioCtx.close().catch(function () {}); S.audioCtx = null; }
+    if (ov && ov.parentNode) ov.parentNode.removeChild(ov); // overlay nằm ở <body>, không tự biến mất theo #ws
+  }
+  document.addEventListener('tvmb:softnav', onLeave);
+})();
 
 function vadTrim(buf, fs, thrFactor=0.05) {
   const frame = Math.floor(fs * 0.025);
@@ -1571,9 +1603,11 @@ function renderReportProfile() {
   reportProfile.style.display = 'block';
 }
 
-pdfBtn.addEventListener('click', () => {
+function printResult() {
   if (window.Shell && Shell.printNow) Shell.printNow(); else window.print();
-});
+}
+pdfBtn.addEventListener('click', printResult);
+pdfBtnBottom.addEventListener('click', printResult);
 
 analyzeBtn.addEventListener('click', async () => {
   wsStepsSet(3); // Thanh toán — chốt tường trước khi gọi model
@@ -1588,7 +1622,7 @@ async function _doThanhTuongAnalyze() {
   analyzeBtn.disabled = true;
   var _analyzeBtnLb = document.getElementById('analyzeBtnLabel'); if (_analyzeBtnLb) _analyzeBtnLb.textContent = _tvmbT('js.thtp.dang-luan-giai', 'Đang luận giải…');
   resultsCard.style.display = 'block';
-  pdfBar.classList.remove('visible');
+  setPdfBar(false);
   renderReportProfile();
   resultsPanel.innerHTML = '<p class="loading-dots" style="text-align:center;color:var(--text-lt);padding:30px 0">' + _tvmbT('js.thtp.dang-phan-tich-theo-co-phap', 'Đang phân tích theo cổ pháp') + '</p>';
   resultsCard.scrollIntoView({behavior:'smooth',block:'nearest'});
@@ -1646,7 +1680,7 @@ async function _doThanhTuongAnalyze() {
     if (!content) {
       resultsPanel.innerHTML = '<p style="color:#C0392B;padding:20px;text-align:center">' + _tvmbT('js.thtp.khong-nhan-duoc-noi-dung-tra', 'Không nhận được nội dung trả về. Thử lại.') + '</p>';
     } else {
-      pdfBar.classList.add('visible');
+      setPdfBar(true);
       _saveTuongReading('thanh-tuong-pro', content, null, null);
       // Chia sẻ CHỈ text luận giải của AI — KHÔNG đính kèm bản ghi âm giọng
       // nói thật của user (riêng tư).
