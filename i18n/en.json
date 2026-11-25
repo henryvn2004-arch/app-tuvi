@@ -22983,6 +22983,14 @@
   "t": "Pitch",
   "h": "d81eb36d"
  },
+ "js.thtg.chi-so": {
+  "t": "Metric",
+  "h": "3b41d652"
+ },
+ "js.thtg.chi-so-do-giong": {
+  "t": "Voice metrics",
+  "h": "b7a9f6aa"
+ },
  "js.thtg.chuan-bi-giong-noi": {
   "t": "Get your voice ready…",
   "h": "f2647a9c"
@@ -23019,6 +23027,18 @@
   "t": "What does a deep voice say about a person?",
   "h": "93f12462"
  },
+ "js.thtg.ho-so-nguoi-do": {
+  "t": "Participant profile",
+  "h": "4fc5dc44"
+ },
+ "js.thtg.ho-va-ten": {
+  "t": "Full name",
+  "h": "ad9f2994"
+ },
+ "js.thtg.ket-qua": {
+  "t": "Result",
+  "h": "c9f95514"
+ },
  "js.thtg.kha-to": {
   "t": "Fairly loud",
   "h": "089b5f63"
@@ -23043,6 +23063,14 @@
   "t": "Can't process the audio: {e}. Please try again.",
   "h": "96163473"
  },
+ "js.thtg.lien-he": {
+  "t": "Contact",
+  "h": "603522f1"
+ },
+ "js.thtg.lien-he-khong-hop-le": {
+  "t": "Enter a valid phone number (9–15 digits) or email.",
+  "h": "887d0fe1"
+ },
  "js.thtg.loi-e": {
   "t": "Error: {e}",
   "h": "a7267203"
@@ -23051,6 +23079,10 @@
   "t": "Error {s}",
   "h": "c406c72b"
  },
+ "js.thtg.ngay-do": {
+  "t": "Date measured",
+  "h": "f731d6e6"
+ },
  "js.thtg.ngu-am": {
   "t": "Five Tones",
   "h": "bc7a6d13"
@@ -23058,6 +23090,10 @@
  "js.thtg.ngu-am-la-gi": {
   "t": "What are the Five Tones?",
   "h": "ed2678e3"
+ },
+ "js.thtg.ngu-am-uoc-tinh": {
+  "t": "Estimated Five Tones",
+  "h": "1692714f"
  },
  "js.thtg.nguam-hoa": {
   "t": "Fire voice (Zhi) — high, with a forceful edge",
@@ -23102,6 +23138,10 @@
  "js.thtg.nhan-de-bat-dau-thu-am": {
   "t": "Tap to start recording · Allow microphone access when your browser asks",
   "h": "74465b56"
+ },
+ "js.thtg.nhap-ten-lien-he-truoc": {
+  "t": "Enter your name and contact above to continue.",
+  "h": "38754cf6"
  },
  "js.thtg.nho-yeu": {
   "t": "Soft, weak",

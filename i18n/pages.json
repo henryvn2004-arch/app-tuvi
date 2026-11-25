@@ -2548,8 +2548,14 @@
    "thtg.thanh-tuong-tu-vi-minh-bao",
    "thtg.thanh-tuong-xem-tuong-giong-noi",
    "thtg.thu-am-lai",
+   "thtp.chi-de-in-vao-ban-pdf",
    "thtp.chua-muon-ghi-am-ban-co",
+   "thtp.ho-va-ten",
+   "thtp.lien-he-sdt-hoac-email",
    "thtp.ngu-am-tuong-phap-la-mot",
+   "thtp.so-dien-thoai-hoac-email",
+   "thtp.tai-pdf-ket-qua",
+   "thtp.vi-du-nguyen-van-a",
    "thtp.xem-ban-mau"
   ],
   "js": [

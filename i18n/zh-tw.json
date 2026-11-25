@@ -22983,6 +22983,14 @@
   "t": "音高（Pitch）",
   "h": "d81eb36d"
  },
+ "js.thtg.chi-so": {
+  "t": "指標",
+  "h": "3b41d652"
+ },
+ "js.thtg.chi-so-do-giong": {
+  "t": "聲音指標",
+  "h": "b7a9f6aa"
+ },
  "js.thtg.chuan-bi-giong-noi": {
   "t": "請準備好嗓音…",
   "h": "f2647a9c"
@@ -23019,6 +23027,18 @@
   "t": "低沉的聲音代表什麼？",
   "h": "93f12462"
  },
+ "js.thtg.ho-so-nguoi-do": {
+  "t": "受測者資料",
+  "h": "4fc5dc44"
+ },
+ "js.thtg.ho-va-ten": {
+  "t": "姓名",
+  "h": "ad9f2994"
+ },
+ "js.thtg.ket-qua": {
+  "t": "結果",
+  "h": "c9f95514"
+ },
  "js.thtg.kha-to": {
   "t": "偏大",
   "h": "089b5f63"
@@ -23043,6 +23063,14 @@
   "t": "無法處理聲音：{e}。請再試一次。",
   "h": "96163473"
  },
+ "js.thtg.lien-he": {
+  "t": "聯絡方式",
+  "h": "603522f1"
+ },
+ "js.thtg.lien-he-khong-hop-le": {
+  "t": "請輸入有效的電話號碼（9–15 位數字）或電子郵件。",
+  "h": "887d0fe1"
+ },
  "js.thtg.loi-e": {
   "t": "錯誤：{e}",
   "h": "a7267203"
@@ -23051,6 +23079,10 @@
   "t": "錯誤 {s}",
   "h": "c406c72b"
  },
+ "js.thtg.ngay-do": {
+  "t": "測量日期",
+  "h": "f731d6e6"
+ },
  "js.thtg.ngu-am": {
   "t": "五音",
   "h": "bc7a6d13"
@@ -23058,6 +23090,10 @@
  "js.thtg.ngu-am-la-gi": {
   "t": "什麼是五音？",
   "h": "ed2678e3"
+ },
+ "js.thtg.ngu-am-uoc-tinh": {
+  "t": "推估五音",
+  "h": "1692714f"
  },
  "js.thtg.nguam-hoa": {
   "t": "火聲（徵）——高亢有力",
@@ -23102,6 +23138,10 @@
  "js.thtg.nhan-de-bat-dau-thu-am": {
   "t": "點擊開始錄音 · 瀏覽器詢問時請允許使用麥克風",
   "h": "74465b56"
+ },
+ "js.thtg.nhap-ten-lien-he-truoc": {
+  "t": "請先在上方輸入姓名與聯絡方式，再繼續。",
+  "h": "38754cf6"
  },
  "js.thtg.nho-yeu": {
   "t": "小而弱",

@@ -28,7 +28,7 @@ Luật rút ra từ các mục này đã được cô đọng lên `CLAUDE.md`. 
 
 | # | tháng | file | mục |
 |---:|---|---|---|
-| 1 | 2026-11 | `2026-11.md` | 🎙️ Thanh Tướng Pro: thêm Tên + Liên hệ ở Bước 1, khối hồ sơ + 12 chỉ số trong kết quả, nút Tải PDF (`Shell.printNow`); tên/liên hệ không vào prompt/chia sẻ/lịch sử |
+| 1 | 2026-11 | `2026-11.md` | 🎙️ Thanh Tướng Pro + Thanh Tướng: thêm Tên + Liên hệ, khối hồ sơ + chỉ số đo trong kết quả, nút Tải PDF (`Shell.printNow`); tên/liên hệ không vào prompt/chia sẻ/lịch sử; bản thường khoá nút Thu Âm tới khi nhập đủ |
 | 1 | 2026-11 | `2026-11.md` | 🕸️ `/la-so/*` tính tại chỗ: `noindex, nofollow` + `rel="nofollow"` ở khối "Xem thêm lá số liên quan" (`NOINDEX_NOFOLLOW`); gom bot bò đồ thị ~587K trang; pregen và trang chia sẻ giữ nguyên |
 | 1 | 2026-11 | `2026-11.md` | 🔒 Khoá 3 route công khai tốn tiền — bỏ `/api/embed` (không xác thực, ghi `tuvi_docs`), giới hạn tốc độ `/api/tubinh` 30/phút + `/api/search` 60/phút theo IP (`checkRouteRate`, 429 + `Retry-After`); bộ đếm trong RAM từng instance |
 | 1 | 2026-11 | `2026-11.md` | 👶 W36 — Đặt Tên Con theo văn hoá từng nước: prompt `TEN_THEO_NUOC` 5 nước (vi byte-giống) · văn mẫu 5 nước viết tay · bí danh glossary "Lò Trung Hỏa"/"Kim Bạc Kim" (glossary.js?v=6 · tuvi-paywall.js?v=50 · shell.js?v=163) |
