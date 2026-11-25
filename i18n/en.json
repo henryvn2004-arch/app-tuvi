@@ -23051,6 +23051,10 @@
   "t": "Unclear",
   "h": "988a61b5"
  },
+ "js.thtg.khong-thay-mic": {
+  "t": "No microphone found. Plug in or enable a microphone (check Sound → Input in your system settings), then tap the Record button again.",
+  "h": "5bda011f"
+ },
  "js.thtg.khong-the-ket-noi": {
   "t": "Can't connect.",
   "h": "3dc4d8cb"
@@ -23078,6 +23082,10 @@
  "js.thtg.loi-s": {
   "t": "Error {s}",
   "h": "c406c72b"
+ },
+ "js.thtg.mic-dang-ban": {
+  "t": "The microphone is in use by another app or cannot be opened. Close that app, then tap the Record button again.",
+  "h": "ef5c178b"
  },
  "js.thtg.ngay-do": {
   "t": "Date measured",
@@ -23311,6 +23319,10 @@
   "t": "Your browser has not allowed audio processing. Tap the \"Try again\" button to record.",
   "h": "bcc75f6e"
  },
+ "js.thtp.chuan-bi": {
+  "t": "Get ready…",
+  "h": "9a6997e2"
+ },
  "js.thtp.co-bien-dong": {
   "t": "Some fluctuation.",
   "h": "bb657503"
@@ -23386,6 +23398,10 @@
  "js.thtp.doc-ngan-theo-huong-dan": {
   "t": "Read or hold the sound as instructed.",
   "h": "3c680985"
+ },
+ "js.thtp.doc-theo-chu-sang": {
+  "t": "Read aloud along with the glowing words.",
+  "h": "a071a4ec"
  },
  "js.thtp.doc-tho-bai-do-pitch-range": {
   "t": "Recite a poem — pitch range test",
@@ -23467,6 +23483,10 @@
   "t": "Slight tremor — possibly tension.",
   "h": "a544df6f"
  },
+ "js.thtp.huy": {
+  "t": "Cancel",
+  "h": "33639e92"
+ },
  "js.thtp.jitter-ngan": {
   "t": "Jitter (sustained)",
   "h": "6ca69280"
@@ -23515,9 +23535,17 @@
   "t": "Average qi.",
   "h": "29600da0"
  },
+ "js.thtp.khong-ho-tro-mic": {
+  "t": "This browser does not support recording. Open the page in Safari or Chrome.",
+  "h": "d74039f0"
+ },
  "js.thtp.khong-nhan-duoc-noi-dung-tra": {
   "t": "No result was returned. Please try again.",
   "h": "a80badc4"
+ },
+ "js.thtp.khong-thay-mic": {
+  "t": "No microphone found. Plug in or enable a microphone (check Sound → Input in your system settings), then tap \"Try again\".",
+  "h": "7c87a053"
  },
  "js.thtp.khong-truy-cap-duoc-microphone": {
   "t": "can't access the microphone",
@@ -23547,6 +23575,14 @@
   "t": "Read again",
   "h": "11d43587"
  },
+ "js.thtp.mic-bi-chan": {
+  "t": "Your browser is blocking the microphone. Allow Microphone for this page in the browser settings (the lock icon or \"aA\" next to the address), then tap \"Try again\".",
+  "h": "d2ee08f4"
+ },
+ "js.thtp.mic-dang-ban": {
+  "t": "The microphone is in use by another app or cannot be opened. Close that app, then tap \"Try again\".",
+  "h": "4f811679"
+ },
  "js.thtp.mot-hai-ba-bon-nam-sau": {
   "t": "One, two, three, four, five, six,\nseven, eight, nine, ten, eleven,\ntwelve, thirteen, fourteen, fifteen.",
   "h": "6b26e8a7"
@@ -23566,6 +23602,10 @@
  "js.thtp.ngan-am-qua-ngan-2-5s": {
   "t": "⚠ Sustained sound too short (<2.5s) — insufficient qi, or the mic didn't capture it fully. Unless intentional, re-record task 2.",
   "h": "608e2941"
+ },
+ "js.thtp.ngan-chu-a-deu": {
+  "t": "Hold the \"A\" sound steady for as long as you can.",
+  "h": "fa87b0fd"
  },
  "js.thtp.ngan-dai-shimmer": {
   "t": "Sustained <strong>{d}s</strong>, shimmer {sh}dB — <em>{q}</em>.",
@@ -23746,6 +23786,10 @@
  "js.thtp.xep-theo-12-chi-so-am": {
   "t": "Classified from the 12 measured acoustic metrics (HNR, sustain, jitter, centroid…). The full meaning by the classical Five Tones method is in the in-depth analysis.",
   "h": "0c3c0a37"
+ },
+ "js.thtp.xin-quyen-mic": {
+  "t": "Requesting microphone access — choose \"Allow\".",
+  "h": "91722146"
  },
  "js.thtu.anh-qua-lon": {
   "t": "The image is too large.",

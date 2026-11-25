@@ -89,6 +89,35 @@
 .btn-pdf:hover{background:var(--navy-3)}
 .btn-pdf .ic{width:16px;height:16px;display:inline-flex}
 .dt-result{margin-top:8px}
+/* Màn hình thu âm (toàn màn hình, nổi trên mọi thứ): đếm ngược → chữ sáng dần kiểu karaoke. */
+.rec-ov{position:fixed;inset:0;z-index:2000;display:none;overflow-y:auto;-webkit-overflow-scrolling:touch;overscroll-behavior:contain;background:linear-gradient(160deg,var(--navy-2),var(--navy) 60%,#04121D);color:#fff}
+.rec-ov.open{display:block}
+.rec-ov-in{min-height:100vh;min-height:100dvh;max-width:560px;margin:0 auto;box-sizing:border-box;display:flex;flex-direction:column;gap:14px;padding:max(18px,env(safe-area-inset-top)) 20px max(22px,env(safe-area-inset-bottom))}
+.rec-ov-top{display:flex;justify-content:space-between;align-items:center;font-size:11px;font-weight:800;letter-spacing:2px;text-transform:uppercase;color:var(--gold)}
+.rec-ov-top span:last-child{color:rgba(255,255,255,.6);letter-spacing:.5px;font-weight:600}
+.rec-ov h3{font-family:var(--serif);font-size:21px;font-weight:700;margin:0;color:#fff}
+.rec-ov-ins{margin:0;font-size:13px;line-height:1.6;color:rgba(255,255,255,.78)}
+.rec-ov-stage{position:relative;flex:1 1 auto;display:flex;align-items:center;justify-content:center;min-height:190px}
+.rec-ov-text{font-family:var(--serif);font-size:25px;line-height:1.75;text-align:center;color:rgba(255,255,255,.42)}
+.rec-ov-line{margin:2px 0}
+.rec-ov-text .kw{transition:color .18s,text-shadow .18s}
+.rec-ov-text .kw.on{color:var(--gold)}
+.rec-ov-text .kw.cur{color:#fff;text-shadow:0 0 16px rgba(201,168,76,.75)}
+.rec-ov-a{font-family:var(--serif);font-size:128px;font-weight:700;line-height:1;color:rgba(255,255,255,.5);letter-spacing:8px}
+.rec-ov.live .rec-ov-a{color:var(--gold);animation:rec-pulse 1.6s ease-in-out infinite}
+@keyframes rec-pulse{0%,100%{transform:scale(1);text-shadow:0 0 0 rgba(201,168,76,0)}50%{transform:scale(1.07);text-shadow:0 0 28px rgba(201,168,76,.7)}}
+.rec-ov-count{position:absolute;inset:0;display:none;align-items:center;justify-content:center;font-family:var(--serif);font-size:120px;font-weight:700;color:var(--gold);background:rgba(6,26,46,.82)}
+.rec-ov-count.show{display:flex}
+.rec-ov-bar{height:6px;border-radius:3px;background:rgba(255,255,255,.16);overflow:hidden}
+.rec-ov-bar>div{height:100%;width:0;background:var(--gold);border-radius:3px}
+.rec-ov-wave{width:100%;height:64px;display:block;border-radius:8px;background:rgba(255,255,255,.06)}
+.rec-ov-status{min-height:22px;text-align:center;font-size:14px;line-height:1.5;color:#fff}
+.rec-ov-status.err{color:#FFB4A8;font-weight:600}
+.rec-ov-diag{min-height:14px;text-align:center;font-size:10.5px;color:rgba(255,255,255,.4);font-family:ui-monospace,Menlo,monospace}
+.rec-ov-btns{display:flex;gap:10px;justify-content:center}
+.rec-ov-btn{padding:12px 26px;border-radius:50px;font-size:14px;font-weight:700;font-family:inherit;cursor:pointer;border:1.5px solid rgba(255,255,255,.35);background:transparent;color:#fff}
+.rec-ov-btn.pri{background:var(--gold);border-color:var(--gold);color:var(--navy)}
+@media (prefers-reduced-motion:reduce){.rec-ov.live .rec-ov-a{animation:none}.rec-ov-text .kw{transition:none}}
 .dt-result h2{font-family:var(--serif);font-size:17px;font-weight:600;margin:18px 0 10px;color:var(--heading)}
 .dt-result h3{font-family:var(--serif);font-size:14.5px;font-weight:600;margin:14px 0 8px;color:var(--heading)}
 .dt-result p{color:var(--text-mid);line-height:1.75;margin-bottom:12px;font-size:13.5px}
@@ -262,6 +291,26 @@
   </main>
 
   <aside class="rail" id="shell-rail"></aside>
+</div>
+
+<div class="rec-ov" id="recOv" role="dialog" aria-modal="true" aria-labelledby="recOvTitle">
+  <div class="rec-ov-in">
+    <div class="rec-ov-top"><span id="recOvNum"></span><span id="recOvTime"></span></div>
+    <h3 id="recOvTitle"></h3>
+    <p class="rec-ov-ins" id="recOvIns"></p>
+    <div class="rec-ov-stage">
+      <div class="rec-ov-text" id="recOvText"></div>
+      <div class="rec-ov-count" id="recOvCount" aria-hidden="true"></div>
+    </div>
+    <div class="rec-ov-bar"><div id="recOvBar"></div></div>
+    <canvas class="rec-ov-wave" id="recOvWave" height="64"></canvas>
+    <div class="rec-ov-status" id="recOvStatus" role="status" aria-live="polite"></div>
+    <div class="rec-ov-diag" id="recOvDiag"></div>
+    <div class="rec-ov-btns">
+      <button type="button" class="rec-ov-btn pri" id="recOvRetry" style="display:none"></button>
+      <button type="button" class="rec-ov-btn" id="recOvCancel"></button>
+    </div>
+  </div>
 </div>
 
 <script>window.SHELL_ACTIVE='thanh-tuong-pro';window.SHELL_HISTORY=true;
@@ -486,11 +535,87 @@ nextBtn.addEventListener('click', () => {
   }
 });
 
-// 🍎 iOS Safari: AudioContext CHỈ chạy được nếu tạo/resume NGAY trong cú chạm. Trước
-// đây nó được tạo ở `recordBuffer` — sau `await getUserMedia` + 3 giây đếm ngược, tức
-// đã ngoài cú chạm ⇒ context kẹt `suspended`, `await ac.resume()` treo VĨNH VIỄN: mic
-// bật (chấm cam), nút mờ, không báo lỗi, không đếm giờ. Nên mở khoá ở đây, đồng bộ,
-// TRƯỚC mọi `await` của handler bấm nút. Chromium dễ tính hơn nên desktop không lộ.
+// ── Màn hình thu âm (overlay) ──────────────────────────────────────────────
+// Mọi bước đều hiện chữ ngay trên overlay (kể cả lỗi) — trước đây trên iPhone bấm nút mà
+// không thấy gì và không biết kẹt ở đâu. `recOvDiag` là dòng kỹ thuật nhỏ để chụp màn hình báo lỗi.
+var recOv = $('recOv'), recOvNum = $('recOvNum'), recOvTime = $('recOvTime'), recOvTitle = $('recOvTitle');
+var recOvIns = $('recOvIns'), recOvText = $('recOvText'), recOvCount = $('recOvCount'), recOvBar = $('recOvBar');
+var recOvWave = $('recOvWave'), recOvStatus = $('recOvStatus'), recOvDiag = $('recOvDiag');
+var recOvRetry = $('recOvRetry'), recOvCancel = $('recOvCancel');
+var CANCELLED = { cancelled: true };
+state._kw = [];
+
+function ovStatus(msg, isErr) { recOvStatus.textContent = msg || ''; recOvStatus.classList.toggle('err', !!isErr); }
+function ovDiag(msg) { recOvDiag.textContent = msg || ''; }
+function ovCount(n) { recOvCount.textContent = n == null ? '' : n; recOvCount.classList.toggle('show', n != null); }
+// Chữ sáng dần theo thời gian đã ghi (karaoke): từ thứ k sáng khi qua k/N tiến độ.
+function ovKaraoke(p) {
+  const n = state._kw.length;
+  if (!n) return;
+  const k = Math.floor(Math.min(1, Math.max(0, p)) * n);
+  for (let i = 0; i < n; i++) {
+    state._kw[i].classList.toggle('on', i < k);
+    state._kw[i].classList.toggle('cur', i === k);
+  }
+}
+function ovBuildText(t) {
+  recOvText.textContent = '';
+  state._kw = [];
+  if (t.vowel) {
+    const a = document.createElement('div');
+    a.className = 'rec-ov-a';
+    a.textContent = t.text;
+    recOvText.appendChild(a);
+    return;
+  }
+  String(t.text).split('\n').forEach(line => {
+    const d = document.createElement('div');
+    d.className = 'rec-ov-line';
+    const words = line.split(/\s+/).filter(Boolean);
+    words.forEach((w, i) => {
+      const sp = document.createElement('span');
+      sp.className = 'kw';
+      sp.textContent = w;
+      d.appendChild(sp);
+      if (i < words.length - 1) d.appendChild(document.createTextNode(' '));
+      state._kw.push(sp);
+    });
+    recOvText.appendChild(d);
+  });
+}
+function ovOpen(t) {
+  recOvNum.textContent = _tvmbT('js.thtp.bai-n', 'Bài {n}', { n: t.num });
+  recOvTime.textContent = _tvmbT('js.thtp.n-giay', '{n} giây', { n: t.duration });
+  recOvTitle.textContent = t.title;
+  recOvIns.textContent = t.instruction;
+  ovBuildText(t);
+  recOvBar.style.width = '0%';
+  recOvCancel.textContent = _tvmbT('js.thtp.huy', 'Huỷ');
+  recOvRetry.textContent = _tvmbT('js.thtp.thu-lai', 'Thử Lại');
+  recOvRetry.style.display = 'none';
+  recOv.classList.remove('live');
+  ovCount(null);
+  ovStatus('');
+  ovDiag('');
+  recOv.classList.add('open');
+  const dpr = window.devicePixelRatio || 1;
+  recOvWave.width = Math.max(300, Math.round((recOvWave.clientWidth || 320) * dpr));
+  recOvWave.height = Math.round(64 * dpr);
+  recOvWave.getContext('2d').clearRect(0, 0, recOvWave.width, recOvWave.height);
+}
+function ovClose() { recOv.classList.remove('open', 'live'); ovCount(null); }
+function ovCancel() {
+  state._cancel = true;
+  if (!state._busy) ovClose(); // đang hiện lỗi (không còn tiến trình chạy) → chỉ đóng
+}
+recOvCancel.addEventListener('click', ovCancel);
+recOvRetry.addEventListener('click', () => startRecording());
+document.addEventListener('keydown', e => { if (e.key === 'Escape' && recOv.classList.contains('open')) ovCancel(); });
+
+// 🍎 iOS Safari: AudioContext CHỈ chạy được nếu tạo/resume NGAY trong cú chạm. Tạo sau
+// `await getUserMedia` + đếm ngược ⇒ kẹt `suspended`, `await ac.resume()` treo VĨNH VIỄN.
+// Nên mở khoá ở đây, đồng bộ, TRƯỚC mọi `await` của handler bấm nút. Chromium desktop dễ
+// tính hơn nên không lộ — test iOS phải bỏ cờ autoplay và giả AudioContext (docs/luat/bay.md).
 function unlockAudio() {
   try {
     if (!state.audioCtx) state.audioCtx = new (window.AudioContext || window.webkitAudioContext)();
@@ -498,36 +623,92 @@ function unlockAudio() {
   } catch (e) { console.error(e); }
 }
 
+// Xin mic + đổi lỗi kỹ thuật của trình duyệt ("Requested device not found"…) thành câu
+// tiếng Việt nói rõ phải làm gì. NotFound/Overconstrained thì thử lại KHÔNG ràng buộc trước:
+// một số thiết bị từ chối bộ ràng buộc tắt echo/noise nhưng vẫn thu bình thường.
+function micError(e) {
+  const n = e && e.name;
+  let msg;
+  if (n === 'NotFoundError' || n === 'DevicesNotFoundError') {
+    msg = _tvmbT('js.thtp.khong-thay-mic', 'Không tìm thấy micro. Hãy cắm hoặc bật micro (kiểm tra mục Âm thanh → Đầu vào của máy), rồi bấm "Thử Lại".');
+  } else if (n === 'NotAllowedError' || n === 'PermissionDeniedError' || n === 'SecurityError') {
+    msg = _tvmbT('js.thtp.mic-bi-chan', 'Trình duyệt đang chặn micro. Hãy cho phép Micro cho trang này trong cài đặt trình duyệt (biểu tượng ổ khoá hoặc "aA" cạnh địa chỉ), rồi bấm "Thử Lại".');
+  } else if (n === 'NotReadableError' || n === 'TrackStartError' || n === 'AbortError') {
+    msg = _tvmbT('js.thtp.mic-dang-ban', 'Micro đang được ứng dụng khác dùng hoặc không mở được. Hãy đóng ứng dụng đó, rồi bấm "Thử Lại".');
+  } else {
+    msg = (e && e.message) || _tvmbT('js.thtp.khong-truy-cap-duoc-microphone', 'không truy cập được microphone');
+  }
+  const err = new Error(msg);
+  err.name = n || 'Error';
+  return err;
+}
+async function getMic() {
+  const md = navigator.mediaDevices;
+  if (!md || !md.getUserMedia) {
+    throw new Error(_tvmbT('js.thtp.khong-ho-tro-mic', 'Trình duyệt này không hỗ trợ ghi âm. Hãy mở trang bằng Safari hoặc Chrome.'));
+  }
+  try {
+    return await md.getUserMedia({ audio: { echoCancellation: false, noiseSuppression: false, autoGainControl: false } });
+  } catch (e) {
+    if (e && (e.name === 'OverconstrainedError' || e.name === 'NotFoundError')) {
+      try { return await md.getUserMedia({ audio: true }); } catch (e2) { throw micError(e2); }
+    }
+    throw micError(e);
+  }
+}
+// Dòng kỹ thuật khi xin mic hỏng: máy thấy bao nhiêu thiết bị thu âm (0 = chưa cắm/đã tắt).
+function diagDevices() {
+  try {
+    if (!navigator.mediaDevices || !navigator.mediaDevices.enumerateDevices) return;
+    navigator.mediaDevices.enumerateDevices().then(d => {
+      ovDiag('audioinput: ' + d.filter(x => x.kind === 'audioinput').length);
+    }).catch(() => {});
+  } catch (e) { /* chỉ là chẩn đoán */ }
+}
+
+// Chờ có thể huỷ: trả về false nếu bị huỷ/rời trang.
+async function waitC(ms) {
+  const end = performance.now() + ms;
+  while (performance.now() < end) {
+    if (state._cancel || state._leftPage) return false;
+    await wait(Math.min(100, end - performance.now()));
+  }
+  return !(state._cancel || state._leftPage);
+}
+
 async function startRecording() {
   const t = TASKS[state.currentIdx];
-  if (state.isRecording) return;
-  unlockAudio();
+  if (state.isRecording || state._busy) return;
+  state._busy = true;
+  state._cancel = false;
+  unlockAudio(); // đồng bộ, trong cú chạm — xem chú thích ở trên
+  ovOpen(t);
+  recordBtn.disabled = true;
   try {
     if (!state.stream) {
-      state.stream = await navigator.mediaDevices.getUserMedia({
-        audio: { echoCancellation:false, noiseSuppression:false, autoGainControl:false }
-      });
+      ovStatus(_tvmbT('js.thtp.xin-quyen-mic', 'Đang xin quyền micro — hãy chọn "Cho phép".'));
+      state.stream = await getMic();
+      if (state._cancel) { releaseMic(); throw CANCELLED; }
     }
-    if (state._leftPage) return;
-    recordBtn.disabled = true;
-    countdown.classList.add('visible');
+    if (state._leftPage) throw CANCELLED;
+    ovDiag('mic ok');
+    ovStatus(_tvmbT('js.thtp.chuan-bi', 'Chuẩn bị…'));
     for (let i = 3; i >= 1; i--) {
-      if (state._leftPage) return;
-      countdown.textContent = i;
-      await wait(900);
+      ovCount(i);
+      if (!(await waitC(900))) throw CANCELLED;
     }
-    if (state._leftPage) return;
-    countdown.classList.remove('visible');
-    await recordBuffer(t.duration);
-    if (state._leftPage) return;
+    ovCount(null);
+    await recordBuffer(t);
+    ovStatus(_tvmbT('js.thtp.dang-phan-tich', 'Đang phân tích…'));
     recordBtn.classList.remove('recording');
     recordBtn.classList.add('processing');
     recordBtn.textContent = _tvmbT('js.thtp.dang-phan-tich', 'Đang phân tích…');
     recordStatus.textContent = _tvmbT('js.thtp.dang-tinh-toan-dac-trung-am', 'Đang tính toán đặc trưng âm học…');
     await wait(60);
-    if (state._leftPage) return;
+    if (state._leftPage) throw CANCELLED;
     const features = analyzeTask(t.id, state._lastBuffer, state._sampleRate);
     state.results[t.id] = features;
+    ovClose();
     recordBtn.classList.remove('processing');
     recordBtn.disabled = true;
     recordBtn.textContent = _tvmbT('js.thtp.da-ghi-xong', 'Đã ghi xong');
@@ -542,86 +723,145 @@ async function startRecording() {
     timerWrap.classList.remove('visible');
     waveWrap.classList.remove('visible');
     updateProgressPips();
+    taskDone.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
   } catch (err) {
-    console.error(err);
-    recordStatus.textContent = _tvmbT('js.thtp.loi', 'Lỗi: ') + (err.message || _tvmbT('js.thtp.khong-truy-cap-duoc-microphone', 'không truy cập được microphone'));
     recordBtn.disabled = false;
+    recordBtn.classList.remove('recording', 'processing');
+    if (err === CANCELLED) {
+      ovClose();
+      recordBtn.textContent = _tvmbT('js.thtp.bat-dau-thu-am', 'Bắt Đầu Thu Âm');
+      return;
+    }
+    console.error(err);
+    const msg = _tvmbT('js.thtp.loi', 'Lỗi: ') + (err && err.message ? err.message : _tvmbT('js.thtp.khong-truy-cap-duoc-microphone', 'không truy cập được microphone'));
+    // Overlay GIỮ MỞ để thấy lỗi + có nút Thử Lại (chạm mới = cú chạm mới cho iOS).
+    recOv.classList.remove('live');
+    ovCount(null);
+    ovStatus(msg, true);
+    recOvRetry.style.display = '';
+    diagDevices();
+    recordStatus.textContent = msg;
     recordBtn.textContent = _tvmbT('js.thtp.thu-lai', 'Thử Lại');
-    recordBtn.classList.remove('recording','processing');
+  } finally {
+    state._busy = false;
   }
 }
 
-async function recordBuffer(durationSec) {
+// Giải mã blob MediaRecorder → AudioBuffer (hỗ trợ cả bản Safari cũ chưa có dạng promise).
+function decodeBlob(ac, blob) {
+  return blob.arrayBuffer().then(buf => new Promise((res, rej) => {
+    const p = ac.decodeAudioData(buf, res, rej);
+    if (p && p.catch) p.catch(rej);
+  }));
+}
+
+async function recordBuffer(t) {
+  const durationSec = t.duration;
   state.audioCtx = state.audioCtx || new (window.AudioContext || window.webkitAudioContext)();
   const ac = state.audioCtx;
-  if (ac.state !== 'running') {
-    // Có trần chờ: nếu trình duyệt vẫn không cho chạy thì BÁO LỖI thay vì treo im lặng.
-    await Promise.race([ac.resume().catch(() => {}), wait(1500)]);
-    if (ac.state !== 'running') {
-      throw new Error(_tvmbT('js.thtp.chua-bat-duoc-am-thanh', 'Trình duyệt chưa cho bật xử lý âm thanh. Hãy chạm lại nút "Thử Lại" để ghi âm.'));
-    }
-  }
-  const source = ac.createMediaStreamSource(state.stream);
-  const bufferSize = 4096;
-  const processor = ac.createScriptProcessor(bufferSize, 1, 1);
-  const chunks = [];
+  if (ac.state !== 'running') await Promise.race([ac.resume().catch(() => {}), wait(800)]);
+  let live = ac.state === 'running';
   state._sampleRate = ac.sampleRate;
 
-  const analyser = ac.createAnalyser();
-  analyser.fftSize = 2048;
-  const waveData = new Uint8Array(analyser.fftSize);
-  source.connect(analyser);
-  source.connect(processor);
-  processor.connect(ac.destination);
-  waveWrap.classList.add('visible');
-  timerWrap.classList.add('visible');
+  // Đường DỰ PHÒNG: MediaRecorder thu song song. iOS có thể không cho ScriptProcessor chạy
+  // (context suspended/interrupted) — khi đó dùng bản này, giải mã lại bằng decodeAudioData.
+  let rec = null;
+  const mchunks = [];
+  try {
+    if (window.MediaRecorder) {
+      rec = new MediaRecorder(state.stream);
+      rec.ondataavailable = e => { if (e.data && e.data.size) mchunks.push(e.data); };
+      rec.start(250);
+    }
+  } catch (e) { rec = null; }
+
+  // Đường CHÍNH: PCM thô qua ScriptProcessor (đo jitter/shimmer chính xác hơn bản nén).
+  let source = null, processor = null, analyser = null, waveData = null;
+  const chunks = [];
+  if (live) {
+    try {
+      source = ac.createMediaStreamSource(state.stream);
+      processor = ac.createScriptProcessor(4096, 1, 1);
+      analyser = ac.createAnalyser();
+      analyser.fftSize = 2048;
+      waveData = new Uint8Array(analyser.fftSize);
+      source.connect(analyser);
+      source.connect(processor);
+      processor.connect(ac.destination);
+      processor.onaudioprocess = e => { chunks.push(new Float32Array(e.inputBuffer.getChannelData(0))); };
+    } catch (e) {
+      console.error(e);
+      live = false;
+      try { if (processor) processor.disconnect(); if (source) source.disconnect(); } catch (_) {}
+      analyser = null;
+    }
+  }
+
   recordBtn.classList.add('recording');
   recordBtn.textContent = _tvmbT('js.thtp.dang-ghi-am', 'Đang ghi âm…');
-  recordStatus.textContent = _tvmbT('js.thtp.doc-ngan-theo-huong-dan', 'Đọc/ngân theo hướng dẫn.');
+  recOv.classList.add('live');
+  ovStatus(t.vowel
+    ? _tvmbT('js.thtp.ngan-chu-a-deu', 'Ngân chữ "A" đều và dài nhất có thể.')
+    : _tvmbT('js.thtp.doc-theo-chu-sang', 'Đọc to theo chữ đang sáng.'));
   state.isRecording = true;
-
-  processor.onaudioprocess = e => {
-    const input = e.inputBuffer.getChannelData(0);
-    chunks.push(new Float32Array(input));
-  };
 
   const startTime = performance.now();
   let stopRAF = false;
+  const wctx = recOvWave.getContext('2d');
   function draw() {
     if (stopRAF || state._leftPage) return;
-    analyser.getByteTimeDomainData(waveData);
-    const ctx = waveCanvas.getContext('2d');
-    const w = waveCanvas.width, h = waveCanvas.height;
-    ctx.fillStyle = '#fff';
-    ctx.fillRect(0,0,w,h);
-    ctx.strokeStyle = '#C0392B';
-    ctx.lineWidth = 1.5;
-    ctx.beginPath();
-    const sliceW = w / waveData.length;
-    for (let i = 0; i < waveData.length; i++) {
-      const v = waveData[i] / 128.0;
-      const y = v * h / 2;
-      if (i === 0) ctx.moveTo(0, y);
-      else ctx.lineTo(i * sliceW, y);
-    }
-    ctx.stroke();
     const elapsed = (performance.now() - startTime) / 1000;
-    const pct = Math.min(100, elapsed / durationSec * 100);
-    timerBar.style.width = pct + '%';
-    if (elapsed < durationSec) requestAnimationFrame(draw);
+    recOvBar.style.width = Math.min(100, elapsed / durationSec * 100) + '%';
+    ovKaraoke(elapsed / (durationSec * 0.92));
+    const w = recOvWave.width, h = recOvWave.height;
+    wctx.clearRect(0, 0, w, h);
+    wctx.strokeStyle = '#c9a84c';
+    wctx.lineWidth = 2;
+    wctx.beginPath();
+    if (analyser) {
+      analyser.getByteTimeDomainData(waveData);
+      const sliceW = w / waveData.length;
+      for (let i = 0; i < waveData.length; i++) {
+        const y = (waveData[i] / 128.0) * h / 2;
+        if (i === 0) wctx.moveTo(0, y); else wctx.lineTo(i * sliceW, y);
+      }
+    } else { wctx.moveTo(0, h / 2); wctx.lineTo(w, h / 2); }
+    wctx.stroke();
+    requestAnimationFrame(draw);
   }
   requestAnimationFrame(draw);
 
-  await wait(durationSec * 1000);
+  await waitC(durationSec * 1000);
   stopRAF = true;
   state.isRecording = false;
+  recOv.classList.remove('live');
+  try { if (processor) processor.disconnect(); if (source) source.disconnect(); if (analyser) analyser.disconnect(); } catch (_) {}
+  await Promise.race([
+    new Promise(res => { if (!rec || rec.state === 'inactive') return res(); rec.onstop = res; try { rec.stop(); } catch (e) { res(); } }),
+    wait(1500),
+  ]);
+  if (state._cancel || state._leftPage) throw CANCELLED;
 
-  processor.disconnect(); source.disconnect(); analyser.disconnect();
   let total = 0;
   chunks.forEach(c => total += c.length);
-  const out = new Float32Array(total);
+  let out = new Float32Array(total);
   let off = 0;
   chunks.forEach(c => { out.set(c, off); off += c.length; });
+  let via = 'pcm';
+  if (!live || out.length < durationSec * ac.sampleRate * 0.5) {
+    // ScriptProcessor không cấp đủ dữ liệu → dùng bản MediaRecorder.
+    if (!mchunks.length) {
+      throw new Error(_tvmbT('js.thtp.chua-bat-duoc-am-thanh', 'Trình duyệt chưa cho bật xử lý âm thanh. Hãy chạm lại nút "Thử Lại" để ghi âm.'));
+    }
+    ovStatus(_tvmbT('js.thtp.dang-phan-tich', 'Đang phân tích…'));
+    const blob = new Blob(mchunks, { type: (rec && rec.mimeType) || mchunks[0].type || 'audio/mp4' });
+    const ab = await decodeBlob(ac, blob);
+    out = new Float32Array(ab.getChannelData(0));
+    state._sampleRate = ab.sampleRate;
+    via = 'rec';
+  }
+  state._via = via; // 'pcm' | 'rec' — để test/chẩn đoán biết đường nào đã dùng
+  ovDiag('mic ok · ctx ' + ac.state + ' · ' + via + ' ' + (out.length / state._sampleRate).toFixed(1) + 's');
   state._lastBuffer = out;
 }
 
@@ -646,6 +886,7 @@ function releaseMic(){
 document.addEventListener('tvmb:softnav', () => {
   state._leftPage = true;
   releaseMic();
+  if (recOv) recOv.classList.remove('open', 'live'); // overlay là của riêng trang này
 });
 
 function vadTrim(buf, fs, thrFactor=0.05) {

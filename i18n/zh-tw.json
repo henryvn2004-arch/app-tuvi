@@ -23051,6 +23051,10 @@
   "t": "不明",
   "h": "988a61b5"
  },
+ "js.thtg.khong-thay-mic": {
+  "t": "找不到麥克風。請接上或啟用麥克風（檢查系統「音訊」→「輸入」），然後再點一次錄音按鈕。",
+  "h": "5bda011f"
+ },
  "js.thtg.khong-the-ket-noi": {
   "t": "無法連線。",
   "h": "3dc4d8cb"
@@ -23078,6 +23082,10 @@
  "js.thtg.loi-s": {
   "t": "錯誤 {s}",
   "h": "c406c72b"
+ },
+ "js.thtg.mic-dang-ban": {
+  "t": "麥克風正被其他應用程式使用，或無法開啟。請關閉該應用程式，然後再點一次錄音按鈕。",
+  "h": "ef5c178b"
  },
  "js.thtg.ngay-do": {
   "t": "測量日期",
@@ -23311,6 +23319,10 @@
   "t": "瀏覽器尚未允許處理音訊。請再點一次「重試」按鈕開始錄音。",
   "h": "bcc75f6e"
  },
+ "js.thtp.chuan-bi": {
+  "t": "請準備…",
+  "h": "9a6997e2"
+ },
  "js.thtp.co-bien-dong": {
   "t": "略有變動。",
   "h": "bb657503"
@@ -23386,6 +23398,10 @@
  "js.thtp.doc-ngan-theo-huong-dan": {
   "t": "請依指示朗讀／拉長聲音。",
   "h": "3c680985"
+ },
+ "js.thtp.doc-theo-chu-sang": {
+  "t": "請跟著發亮的文字大聲朗讀。",
+  "h": "a071a4ec"
  },
  "js.thtp.doc-tho-bai-do-pitch-range": {
   "t": "朗誦詩歌——音域測量",
@@ -23467,6 +23483,10 @@
   "t": "略有顫抖——可能是緊張。",
   "h": "a544df6f"
  },
+ "js.thtp.huy": {
+  "t": "取消",
+  "h": "33639e92"
+ },
  "js.thtp.jitter-ngan": {
   "t": "Jitter（長音）",
   "h": "6ca69280"
@@ -23515,9 +23535,17 @@
   "t": "氣力中等。",
   "h": "29600da0"
  },
+ "js.thtp.khong-ho-tro-mic": {
+  "t": "此瀏覽器不支援錄音。請改用 Safari 或 Chrome 開啟。",
+  "h": "d74039f0"
+ },
  "js.thtp.khong-nhan-duoc-noi-dung-tra": {
   "t": "未收到結果，請再試一次。",
   "h": "a80badc4"
+ },
+ "js.thtp.khong-thay-mic": {
+  "t": "找不到麥克風。請接上或啟用麥克風（檢查系統「音訊」→「輸入」），然後點「重試」。",
+  "h": "7c87a053"
  },
  "js.thtp.khong-truy-cap-duoc-microphone": {
   "t": "無法使用麥克風",
@@ -23547,6 +23575,14 @@
   "t": "重新解讀",
   "h": "11d43587"
  },
+ "js.thtp.mic-bi-chan": {
+  "t": "瀏覽器正在封鎖麥克風。請在瀏覽器設定中允許此頁面使用麥克風（網址旁的鎖頭圖示或「aA」），然後點「重試」。",
+  "h": "d2ee08f4"
+ },
+ "js.thtp.mic-dang-ban": {
+  "t": "麥克風正被其他應用程式使用，或無法開啟。請關閉該應用程式，然後點「重試」。",
+  "h": "4f811679"
+ },
  "js.thtp.mot-hai-ba-bon-nam-sau": {
   "t": "一、二、三、四、五、六，\n七、八、九、十、十一，\n十二、十三、十四、十五。",
   "h": "6b26e8a7"
@@ -23566,6 +23602,10 @@
  "js.thtp.ngan-am-qua-ngan-2-5s": {
   "t": "⚠ 長音過短（<2.5s）——可能是氣不足，或麥克風未能完整收音。若非刻意，建議重錄第 2 項。",
   "h": "608e2941"
+ },
+ "js.thtp.ngan-chu-a-deu": {
+  "t": "請盡量平穩、持久地發出「啊」聲。",
+  "h": "fa87b0fd"
  },
  "js.thtp.ngan-dai-shimmer": {
   "t": "長音 <strong>{d}s</strong>，shimmer {sh}dB——<em>{q}</em>。",
@@ -23746,6 +23786,10 @@
  "js.thtp.xep-theo-12-chi-so-am": {
   "t": "依據測得的 12 項聲學指標（HNR、持續時間、jitter、頻譜重心…）歸類。依五音古法的完整意涵，收錄於深度分析中。",
   "h": "0c3c0a37"
+ },
+ "js.thtp.xin-quyen-mic": {
+  "t": "正在請求麥克風權限，請選擇「允許」。",
+  "h": "91722146"
  },
  "js.thtu.anh-qua-lon": {
   "t": "圖片過大。",

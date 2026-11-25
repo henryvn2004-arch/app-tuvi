@@ -82,6 +82,9 @@
   activation" và bài test còn bật `--autoplay-policy=no-user-gesture-required`. Muốn thấy
   lỗi: KHÔNG bật cờ đó và giả `AudioContext` (state `suspended` + `resume()` treo nếu gọi
   ngoài sự kiện click). Mọi `await` chờ thứ có thể không bao giờ xong cần trần chờ + báo lỗi.
+  Thanh Tướng Pro nay còn có đường dự phòng `MediaRecorder` (nhật ký 2026-11 "màn hình thu âm"). Lỗi
+  `getUserMedia` phải đổi sang câu tiếng Việt: `NotFoundError` ("Requested device not found") là máy
+  KHÔNG có micro, không phải bug — đừng để khách đọc nguyên chữ tiếng Anh.
 
 ## CI
 
