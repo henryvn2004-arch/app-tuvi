@@ -486,9 +486,22 @@ nextBtn.addEventListener('click', () => {
   }
 });
 
+// 🍎 iOS Safari: AudioContext CHỈ chạy được nếu tạo/resume NGAY trong cú chạm. Trước
+// đây nó được tạo ở `recordBuffer` — sau `await getUserMedia` + 3 giây đếm ngược, tức
+// đã ngoài cú chạm ⇒ context kẹt `suspended`, `await ac.resume()` treo VĨNH VIỄN: mic
+// bật (chấm cam), nút mờ, không báo lỗi, không đếm giờ. Nên mở khoá ở đây, đồng bộ,
+// TRƯỚC mọi `await` của handler bấm nút. Chromium dễ tính hơn nên desktop không lộ.
+function unlockAudio() {
+  try {
+    if (!state.audioCtx) state.audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    if (state.audioCtx.state !== 'running') state.audioCtx.resume().catch(() => {});
+  } catch (e) { console.error(e); }
+}
+
 async function startRecording() {
   const t = TASKS[state.currentIdx];
   if (state.isRecording) return;
+  unlockAudio();
   try {
     if (!state.stream) {
       state.stream = await navigator.mediaDevices.getUserMedia({
@@ -541,7 +554,13 @@ async function startRecording() {
 async function recordBuffer(durationSec) {
   state.audioCtx = state.audioCtx || new (window.AudioContext || window.webkitAudioContext)();
   const ac = state.audioCtx;
-  if (ac.state === 'suspended') await ac.resume();
+  if (ac.state !== 'running') {
+    // Có trần chờ: nếu trình duyệt vẫn không cho chạy thì BÁO LỖI thay vì treo im lặng.
+    await Promise.race([ac.resume().catch(() => {}), wait(1500)]);
+    if (ac.state !== 'running') {
+      throw new Error(_tvmbT('js.thtp.chua-bat-duoc-am-thanh', 'Trình duyệt chưa cho bật xử lý âm thanh. Hãy chạm lại nút "Thử Lại" để ghi âm.'));
+    }
+  }
   const source = ac.createMediaStreamSource(state.stream);
   const bufferSize = 4096;
   const processor = ac.createScriptProcessor(bufferSize, 1, 1);

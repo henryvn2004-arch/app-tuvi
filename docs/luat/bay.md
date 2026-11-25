@@ -75,6 +75,13 @@
   event vẫn rỗng.
 - Chạy spec từ scratchpad thì `playwright` không resolve — chạy trong cây repo.
 - `waitUntil:'networkidle'` treo vĩnh viễn vì container chặn Google Fonts.
+- 🍎 **iOS Safari: `AudioContext` phải tạo/`resume()` ĐỒNG BỘ trong cú chạm — Chromium
+  desktop KHÔNG lộ lỗi này.** Tạo sau `await getUserMedia` hoặc sau đếm ngược ⇒ context
+  kẹt `suspended`, `await ac.resume()` treo VĨNH VIỄN: mic bật (chấm cam), nút mờ, không
+  báo lỗi (Thanh Tướng Pro, Henry báo 2026-11-25). Test E2E xanh vì Chromium dùng "sticky
+  activation" và bài test còn bật `--autoplay-policy=no-user-gesture-required`. Muốn thấy
+  lỗi: KHÔNG bật cờ đó và giả `AudioContext` (state `suspended` + `resume()` treo nếu gọi
+  ngoài sự kiện click). Mọi `await` chờ thứ có thể không bao giờ xong cần trần chờ + báo lỗi.
 
 ## CI
 
